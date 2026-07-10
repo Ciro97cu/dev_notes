@@ -1,0 +1,422 @@
+/* ============================================================
+   TypeScript Guide — tema personalizzato
+   Brand TypeScript: blu #3178c6. Tema chiaro + scuro.
+   Override del tema "vue" di docsify.
+   ============================================================ */
+
+:root {
+  --ts-blue: #3178c6;
+  --ts-blue-dark: #235a97;
+  --ts-blue-light: #4a90d9;
+
+  --theme-color: var(--ts-blue);
+
+  --bg: #ffffff;
+  --bg-soft: #f6f8fa;
+  --text: #24292f;
+  --text-soft: #57606a;
+  --border: #e4e8ec;
+  --sidebar-bg: #fafbfc;
+  --code-bg: #f3f5f7;
+  --code-inline-bg: #eef1f4;
+  --code-inline-text: #1f6feb;
+  --link: var(--ts-blue);
+  --quote-bg: #eef4fb;
+  --quote-border: var(--ts-blue);
+  --details-bg: #f6f8fa;
+  --details-border: #e4e8ec;
+  --table-head-bg: #eef1f4;
+}
+
+html.dark {
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --text: #c9d1d9;
+  --text-soft: #8b949e;
+  --border: #21262d;
+  --sidebar-bg: #0b0f14;
+  --code-bg: #161b22;
+  --code-inline-bg: #1c2330;
+  --code-inline-text: #79c0ff;
+  --link: #58a6ff;
+  --quote-bg: #11203a;
+  --quote-border: #3178c6;
+  --details-bg: #11161d;
+  --details-border: #21262d;
+  --table-head-bg: #161b22;
+  --theme-color: #58a6ff;
+}
+
+/* ---------- Base ---------- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.markdown-section {
+  max-width: 860px;
+}
+
+.markdown-section p,
+.markdown-section li {
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.content,
+.markdown-section {
+  color: var(--text);
+}
+
+/* ---------- Titoli ---------- */
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.markdown-section h1 {
+  border-bottom: 3px solid var(--ts-blue);
+  padding-bottom: 0.3em;
+}
+
+.markdown-section h2 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.25em;
+  margin-top: 2.2rem;
+}
+
+.markdown-section a {
+  color: var(--link);
+  font-weight: 600;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+}
+
+.sidebar-nav {
+  line-height: 1.9;
+}
+
+.sidebar ul li a {
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+.sidebar ul li a:hover {
+  color: var(--ts-blue);
+}
+
+.sidebar-nav > ul > p,
+.sidebar-nav strong {
+  color: var(--text);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 1rem;
+  display: block;
+}
+
+.sidebar-nav li.active > a {
+  color: var(--link);
+  border-left: 4px solid var(--ts-blue);
+  background: color-mix(in srgb, var(--ts-blue) 14%, var(--bg));
+  padding-left: 0.5rem;
+  font-weight: 700;
+}
+
+.app-name-link {
+  color: var(--ts-blue) !important;
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.sidebar .app-name {
+  margin-top: 1.2rem;
+}
+
+/* ---------- Codice ---------- */
+.markdown-section code {
+  background: var(--code-inline-bg);
+  color: var(--code-inline-text);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: "SF Mono", "Fira Code", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.markdown-section pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.markdown-section pre > code {
+  background: transparent;
+  color: var(--text);
+  font-size: 0.86em;
+}
+
+/* ---------- Citazioni / note ---------- */
+.markdown-section blockquote {
+  background: var(--quote-bg);
+  border-left: 4px solid var(--quote-border);
+  border-radius: 0 6px 6px 0;
+  color: var(--text);
+  padding: 0.6em 1em;
+}
+
+.markdown-section blockquote p {
+  color: var(--text);
+}
+
+/* ---------- Tabelle ---------- */
+.markdown-section table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.markdown-section tr {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.markdown-section th {
+  background: var(--table-head-bg);
+  color: var(--text);
+}
+
+.markdown-section td,
+.markdown-section th {
+  border: 1px solid var(--border);
+}
+
+/* ---------- Quiz collassabili (<details>) ---------- */
+.markdown-section details {
+  background: var(--details-bg);
+  border: 1px solid var(--details-border);
+  border-left: 4px solid var(--ts-blue);
+  border-radius: 6px;
+  padding: 0.6em 1em;
+  margin: 0.8em 0;
+}
+
+.markdown-section details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+}
+
+.markdown-section details[open] summary {
+  margin-bottom: 0.6em;
+  color: var(--ts-blue);
+}
+
+/* ---------- Ricerca ---------- */
+.search input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.search .results-panel {
+  background: var(--bg);
+}
+
+.search h2,
+.search .matching-post h2 {
+  color: var(--ts-blue);
+}
+
+.search p {
+  color: var(--text-soft);
+}
+
+/* ---------- Paginazione ---------- */
+.docsify-pagination-container {
+  border-top: 1px solid var(--border);
+  color: var(--text-soft);
+}
+
+.pagination-item-label,
+.pagination-item-title {
+  color: var(--ts-blue);
+}
+
+/* ---------- Copy code ---------- */
+.docsify-copy-code-button {
+  background: var(--ts-blue) !important;
+  color: #fff !important;
+}
+
+/* ---------- Coverpage ---------- */
+section.cover {
+  background: linear-gradient(135deg, #235a97 0%, #3178c6 60%, #4a90d9 100%) !important;
+}
+
+section.cover .cover-main > p,
+section.cover .cover-main > h1,
+section.cover .cover-main blockquote p {
+  color: #ffffff;
+}
+
+section.cover .cover-main > p a {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+section.cover .cover-main > p a:hover {
+  background: #ffffff;
+  color: var(--ts-blue);
+}
+
+section.cover.show ~ .sidebar,
+section.cover.show ~ .content {
+  display: none;
+}
+
+/* ---------- Callout (flexible-alerts) — box tintati, uniformi tra le sezioni ---------- */
+:root {
+  --cl-warn-bg: #fdf3e2;  --cl-warn-bd: #efd6a4;  --cl-warn-tx: #7a5600;
+  --cl-tip-bg:  #e8f6f0;  --cl-tip-bd:  #bfe6d4;  --cl-tip-tx:  #0a6e49;
+  --cl-note-bg: #eaf2fd;  --cl-note-bd: #cfe0fa;  --cl-note-tx: #0a5bb5;
+}
+html.dark {
+  --cl-warn-bg: #241d0e; --cl-warn-bd: #4a3d18; --cl-warn-tx: #e3b341;
+  --cl-tip-bg:  #0f241c; --cl-tip-bd:  #1f4838; --cl-tip-tx:  #56d4a0;
+  --cl-note-bg: #0f1d2e; --cl-note-bd: #1f3a5a; --cl-note-tx: #6cb6ff;
+}
+.markdown-section .alert.callout {
+  border: 1px solid var(--border);
+  border-left: 1px solid var(--border) !important; /* annulla la barra 4px del plugin */
+  border-radius: 10px;
+  background: var(--bg-soft);
+  padding: .85em 1.1em;
+  margin: 1.1em 0;
+  box-shadow: none;
+}
+.markdown-section .alert.callout > p { color: var(--text); }
+.markdown-section .alert.callout .title {
+  font-weight: 700; display: flex; align-items: center; gap: .5em; margin: 0 0 .4em;
+}
+.markdown-section .alert.callout .title .icon { opacity: .95; }
+.markdown-section .alert.callout.warning { background: var(--cl-warn-bg); border-color: var(--cl-warn-bd) !important; }
+.markdown-section .alert.callout.warning .title { color: var(--cl-warn-tx); }
+.markdown-section .alert.callout.tip { background: var(--cl-tip-bg); border-color: var(--cl-tip-bd) !important; }
+.markdown-section .alert.callout.tip .title { color: var(--cl-tip-tx); }
+.markdown-section .alert.callout.note { background: var(--cl-note-bg); border-color: var(--cl-note-bd) !important; }
+.markdown-section .alert.callout.note .title { color: var(--cl-note-tx); }
+
+/* ---------- Titoli — banda tinta soft, colore brand (uniforme tra le sezioni) ---------- */
+.markdown-section h1 {
+  color: var(--link);
+  border-bottom: 3px solid var(--theme-color);
+  padding-bottom: .3em;
+  border-left: 0;
+  padding-left: 0;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
+.markdown-section h2 {
+  color: var(--link);
+  background: color-mix(in srgb, var(--theme-color) 12%, var(--bg));
+  border-left: 4px solid var(--theme-color);
+  border-bottom: 0;
+  border-radius: 0 8px 8px 0;
+  padding: .42em .7em;
+  margin-top: 2.2rem;
+}
+.markdown-section h3 {
+  color: var(--link);
+  font-weight: 700;
+}
+.markdown-section h4 {
+  color: var(--link);
+  font-weight: 600;
+}
+.markdown-section h5,
+.markdown-section h6 {
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .95rem;
+}
+/* prefisso hash "###" — segnala livello e gerarchia (brand attenuato, mono) */
+.markdown-section h3::before,
+.markdown-section h4::before,
+.markdown-section h5::before,
+.markdown-section h6::before {
+  font-family: var(--font-mono, "SFMono-Regular", Menlo, Consolas, monospace);
+  color: var(--theme-color);
+  opacity: .5;
+  font-weight: 700;
+  margin-right: .5em;
+}
+.markdown-section h3::before { content: "###"; }
+.markdown-section h4::before { content: "####"; }
+.markdown-section h5::before { content: "#####"; opacity: .4; }
+.markdown-section h6::before { content: "######"; opacity: .4; }
+/* i titoli non ereditano lo stile link: niente doppio underline, niente 600 su <a>/<span> */
+.markdown-section h1 a, .markdown-section h1 a:hover, .markdown-section h1 a span,
+.markdown-section h2 a, .markdown-section h2 a:hover, .markdown-section h2 a span,
+.markdown-section h3 a, .markdown-section h3 a:hover, .markdown-section h3 a span,
+.markdown-section h4 a, .markdown-section h4 a:hover, .markdown-section h4 a span,
+.markdown-section h5 a, .markdown-section h5 a:hover, .markdown-section h5 a span,
+.markdown-section h6 a, .markdown-section h6 a:hover, .markdown-section h6 a span {
+  color: inherit;
+  font-weight: inherit;
+  border-bottom: 0;
+  text-decoration: none;
+}
+
+/* ---------- Font caricati (Hanken Grotesk + JetBrains Mono) — pesi reali fino a 900 ---------- */
+:root {
+  --font-sans: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+}
+body { font-family: var(--font-sans); }
+.markdown-section code,
+.markdown-section pre,
+.markdown-section pre > code { font-family: var(--font-mono); }
+
+/* ---------- Pulsante toggle tema ---------- */
+#theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.08);
+  background: var(--ts-blue);
+}
+
+@media (max-width: 768px) {
+  #theme-toggle {
+    top: 10px;
+    right: 56px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}

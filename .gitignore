@@ -1,0 +1,21 @@
+# Materiale sorgente pesante / copyright (tenuto locale, non pubblicato)
+*.pdf
+
+# Build interno / cache
+.build/
+node_modules/
+
+# Obsidian workspace cache / config per-macchina
+.obsidian/workspace*
+.obsidian/cache
+.obsidian/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# OS / log
+.DS_Store
+Thumbs.db
+*.log
