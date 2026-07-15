@@ -363,6 +363,31 @@ export class App {
 > [!warning]
 > Spegnere lo spinner solo su `NavigationEnd` **non basta**: vanno gestiti anche `NavigationError` e `NavigationCancel`, altrimenti l'overlay resta appeso quando un guard blocca o c'è un errore.
 
+### `withDebugTracing()`
+
+In fase di sviluppo è possibile loggare **tutti** gli eventi del router in console — inclusi quelli intermedi che `router.events` non espone esplicitamente, come `GuardsCheckStart`, `ResolveStart`, `ActivationEnd` — con una sola riga nella configurazione:
+
+```ts
+// src/app/app.config.ts
+import { provideRouter, withDebugTracing } from '@angular/router';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes, withDebugTracing()),
+  ],
+};
+```
+
+`withDebugTracing()` è una **feature** di `provideRouter` (pattern `RouterFeature`): non è un servizio separato né una sottoscrizione manuale, si compone direttamente come argomento accanto ad altre feature (`withComponentInputBinding()`, `withViewTransitions()`, ecc.).
+
+In console appare ogni evento nell'ordine reale di emissione, con il relativo `url` e stato. Utile per capire esattamente dove una navigazione si blocca (es. quale guard sta restituendo `false`) senza dover aggiungere `console.log` manuali in ogni guard/resolver.
+
+> [!warning]
+> Da usare **solo in sviluppo**: in produzione genera un log verboso ad ogni cambio rotta. Condizionarlo all'environment è buona norma:
+> ```ts
+> provideRouter(routes, ...(isDevMode() ? [withDebugTracing()] : []))
+> ```
+
 ## Resolver
 > 📖 pp.352-354
 
