@@ -298,25 +298,24 @@ Per reagire all'attività di routing, il router pubblica **eventi** su `router.e
 Sequenza tipica di una navigazione che va a buon fine (o che viene interrotta):
 
 ```mermaid
-sequenceDiagram
-    participant U as Utente
-    participant R as Router
-    participant G as Guards / Resolver
-    participant C as Componente
-    U->>R: navigazione (click / navigate())
-    R-->>R: NavigationStart
-    R-->>R: RoutesRecognized
-    R->>G: CanActivate / Resolve
-    alt guard nega (false / UrlTree)
-        G-->>R: blocco
-        R-->>R: NavigationCancel
-    else guard ok + resolver completati
-        G-->>R: ok + dati risolti
-        R->>C: attiva rotta
-        R-->>R: NavigationEnd
+graph TD
+    U["Utente: click / navigate()"] --> NS(["NavigationStart"])
+    NS --> RR(["RoutesRecognized"])
+    RR --> CD
+
+    subgraph FASE["guard → resolver (in ordine)"]
+        CD{"canDeactivate?<br/>uscita corrente"} -->|ok| CA{"canActivate?<br/>ingresso nuova"}
+        CA -->|ok| RS["Resolver: pre-carica dati"]
     end
-    Note over R: in caso di eccezione → NavigationError
+
+    CD -->|nega| NC(["NavigationCancel"])
+    CA -->|"nega: false / UrlTree"| NC
+    RS --> AC["attiva Componente"]
+    AC --> NE(["NavigationEnd"])
+    FASE -.->|eccezione| ERR(["NavigationError"])
 ```
+
+> Le forme distinguono gli **eventi** su `router.events` (arrotondati) dalle **fasi** interne (rettangoli) e dai **guard** (rombi). I guard girano **prima** dei resolver, e `canDeactivate` (uscita dalla rotta corrente) precede `canActivate` (ingresso nella nuova). Un `false`/`UrlTree` da un guard → `NavigationCancel`; un'eccezione in guard o resolver → `NavigationError`.
 
 Uso classico: mostrare un **loading indicator** durante i cambi rotta. Il root `App` inietta il `Router` e si sottoscrive all'observable degli eventi:
 
