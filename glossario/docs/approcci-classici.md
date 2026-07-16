@@ -51,6 +51,28 @@ Un componente **invia** (dispatch) un'azione per notificare che è successo qual
 
 Questa separazione (actions incapsulano l'intento, reducer decidono il *come* dello stato, selector interrogano, effect isolano i side effect) favorisce modularità, testabilità e scalabilità.
 
+```ts
+// action — cosa è successo
+const loadFlights = createAction('[Flights] Load', props<{ from: string }>());
+const loadOk = createAction('[Flights] Load Success', props<{ flights: Flight[] }>());
+
+// reducer — come cambia lo stato (funzione pura, nuovo oggetto)
+const reducer = createReducer(initial,
+  on(loadOk, (state, { flights }) => ({ ...state, flights }))
+);
+
+// effect — side effect async, poi invia una nuova azione
+loadFlights$ = createEffect(() => this.actions$.pipe(
+  ofType(loadFlights),
+  switchMap(({ from }) => this.http.getFlights(from).pipe(
+    map((flights) => loadOk({ flights }))
+  ))
+));
+
+// selector — interroga una porzione di stato
+const selectFlights = createSelector(selectFlightState, (s) => s.flights);
+```
+
 ### `dispatch: false`
 
 Per **default** NgRx interpreta il valore emesso da un effect come un'**azione da inviare**. Se un effect esegue solo un side effect e **non** deve produrre una nuova azione (es. scrive su `localStorage` e basta), va dichiarato con `{ dispatch: false }`:

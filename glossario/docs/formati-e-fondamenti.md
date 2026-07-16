@@ -49,3 +49,6 @@ Con 256 combinazioni un byte rappresenta tutti i caratteri di uno standard come 
 
 - 3 bit → 2³ = 8 combinazioni → valore massimo `7` (da 0 a 7).
 - 8 bit → 2⁸ = 256 combinazioni → valore massimo `255` (da 0 a 255).
+
+> [!tip]
+> **Dai byte ai caratteri.** ASCII usa 1 byte per carattere (128 caratteri base, 256 con le estensioni): sufficiente per l'alfabeto latino. Per alfabeti non latini ed emoji serve **Unicode**, tipicamente con codifica **UTF-8**, che usa da 1 a 4 byte per carattere restando compatibile con ASCII sui primi 128 codici.

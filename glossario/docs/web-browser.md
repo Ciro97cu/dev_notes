@@ -28,6 +28,9 @@ La cache è una memoria temporanea in cui si conservano dati usati di frequente,
 
 Blink è il **motore di rendering** che trasforma HTML, CSS e JavaScript in ciò che appare a schermo. È usato dai browser basati su Chromium: Google Chrome, Microsoft Edge (versioni recenti), Opera, Brave, Vivaldi. Safari usa invece WebKit (da cui Blink deriva come fork) e Firefox usa Gecko.
 
+> [!tip]
+> A grandi linee la **pipeline di rendering**: il markup diventa **DOM**, il CSS diventa **CSSOM**, i due si combinano nel *render tree*; seguono **layout** (posizione e dimensioni di ogni elemento), **paint** (riempimento dei pixel) e **composite** (composizione dei layer). Il motore JavaScript (in Chromium è **V8**) è un componente separato dal motore di rendering, ma collabora con esso.
+
 ## Debugger (Chrome DevTools)
 
 Il debugger integrato in Chrome (scheda *Sources* dei DevTools) permette di fermare l'esecuzione del codice e ispezionarlo passo passo, invece di disseminare `console.log`.
