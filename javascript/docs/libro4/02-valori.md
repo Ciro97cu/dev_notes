@@ -294,6 +294,9 @@ Per passare un array **per valore** (impedire modifiche dall'esterno): copiarlo 
 foo(a.slice()); /* foo riceve un nuovo array — a è al sicuro */
 ```
 
+> [!tip]
+> **Modello di memoria (Stack e Heap).** Sotto il cofano il motore tiene i **primitivi** (dimensione fissa) e i **riferimenti** sullo *Stack* — memoria veloce, gestita in modo LIFO; gli oggetti, array e funzioni (dimensione dinamica) vivono invece nello *Heap*. Una variabile compound contiene sullo Stack l'**indirizzo** del valore nello Heap: è quell'indirizzo a essere copiato nel reference-copy. Copiare un indirizzo costa molto meno che duplicare un intero oggetto — da qui l'efficienza. È un modello mentale utile, ma resta sotto la superficie: JS non espone questi indirizzi, non esistono puntatori manipolabili come in C.
+
 ---
 
 ## ⚡ Ripasso veloce

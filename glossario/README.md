@@ -1,0 +1,27 @@
+# Glossario
+
+Raccolta di termini di sviluppo **trasversali**: concetti che non appartengono a uno dei vault tematici dell'hub ([Git](../git/), [JavaScript](../javascript/), [TypeScript](../typescript/), [Angular](../angular/)) e che quindi trovano casa qui.
+
+Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** invece di duplicarlo (una fonte di verità).
+
+## Indice
+
+**[Web, browser e rete](docs/web-browser.md)**
+Dominio · Sottodominio · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
+
+**[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
+CSV · XML · Bit e Byte
+
+**[Tooling (ecosistema JavaScript)](docs/tooling-javascript.md)**
+Babel · SWC · NPM · NPX · Yarn · NVM · module.exports
+
+**[React](docs/react.md)**
+Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
+
+**[Concetti di programmazione](docs/concetti-programmazione.md)**
+Interoperabilità · Funzione pura · Immutabilità
+
+**[Approcci classici e alternativi](docs/approcci-classici.md)**
+Micro frontend con single-spa (Import Map · SystemJS) · NgRx classico (Store, Effects, `dispatch: false`, shallow comparison)
+
+> Fonte originale: glossario personale (Google Docs), rivisto in registro impersonale e con le definizioni verificate/aggiornate.

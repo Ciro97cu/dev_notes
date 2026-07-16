@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Glossario — Termini di sviluppo</title>
+  <meta name="description" content="Glossario generico di termini di sviluppo: web, browser, tooling, React e concetti di programmazione." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+  <meta name="theme-color" content="#6366f1" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script>
+    // Imposta il tema il prima possibile per evitare il flash bianco al caricamento.
+    (function () {
+      try {
+        var saved = localStorage.getItem('dev-notes-theme');
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', dark);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <!-- Ritorno all'hub Dev Notes (fuori da #app: docsify non lo intercetta) -->
+  <a href="../" title="Torna a Dev Notes" aria-label="Torna a Dev Notes" style="position:fixed;right:16px;bottom:16px;z-index:2147483000;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#fff;color:#24292e;font-size:20px;line-height:1;text-decoration:none;box-shadow:0 2px 10px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.08)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+  <div id="app">Caricamento del glossario…</div>
+  <script>
+    window.$docsify = {
+      name: 'Glossario',
+      nameLink: '#/',
+      loadSidebar: true,
+      loadNavbar: false,
+      coverpage: true,
+      onlyCover: false,
+      auto2top: true,
+      maxLevel: 3,
+      subMaxLevel: 2,
+      homepage: 'README.md',
+      notFoundPage: true,
+      search: {
+        placeholder: 'Cerca un termine…',
+        noData: 'Nessun risultato.',
+        depth: 4
+      },
+      pagination: {
+        previousText: 'Precedente',
+        nextText: 'Successivo',
+        crossChapter: true,
+        crossChapterText: true
+      },
+      copyCode: {
+        buttonText: 'Copia',
+        errorText: 'Errore',
+        successText: 'Copiato'
+      },
+      'flexible-alerts': {
+        style: 'callout',
+        note:    { label: 'Nota' },
+        tip:     { label: 'Suggerimento' },
+        warning: { label: 'Attenzione' },
+        info:    { label: 'Info', className: 'note', icon: 'icon-note' }
+      },
+      plugins: [
+        function (hook) {
+          // Toggle tema chiaro/scuro, persistito in localStorage.
+          hook.mounted(function () {
+            var KEY = 'dev-notes-theme';
+            var btn = document.createElement('button');
+            btn.id = 'theme-toggle';
+            btn.type = 'button';
+            btn.setAttribute('aria-label', 'Cambia tema chiaro/scuro');
+            var saved = localStorage.getItem(KEY);
+            var dark = saved
+              ? saved === 'dark'
+              : window.matchMedia('(prefers-color-scheme: dark)').matches;
+            function apply() {
+              document.documentElement.classList.toggle('dark', dark);
+              btn.textContent = dark ? '☀️' : '🌙';
+              btn.title = dark ? 'Passa al tema chiaro' : 'Passa al tema scuro';
+            }
+            apply();
+            btn.addEventListener('click', function () {
+              dark = !dark;
+              localStorage.setItem(KEY, dark ? 'dark' : 'light');
+              apply();
+            });
+            document.body.appendChild(btn);
+          });
+        }
+      ]
+    };
+  </script>
+
+  <!-- Core docsify -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <!-- Ricerca full-text -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <!-- Copia codice -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <!-- Navigazione Precedente/Successivo -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <!-- Callout / box (info, tip, warning) -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts"></script>
+  <!-- Evidenziazione sintassi (Prism) -->
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-typescript.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-jsx.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
+</body>
+</html>

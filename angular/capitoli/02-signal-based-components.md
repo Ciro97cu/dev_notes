@@ -225,6 +225,9 @@ Tipi di binding:
 - **Interpolation** `{{ expr }}` con le **pipe** per trasformare/formattare: `| date` (accetta `Date` o stringhe ISO; parametrizzabile con `| date:'dd.MM.yyyy HH:mm'`), `| json`, `| number:'1.2'` (almeno 1 cifra intera e 2 decimali — richiede l'import di `DecimalPipe` da `@angular/common`).
 - **Conditional styling**: `[class.selected]="cond"` aggiunge la classe quando la condizione è vera; `[style.color]="..."` imposta uno stile inline dinamico.
 
+> [!warning]
+> **Evitare di legare metodi o getter nei binding.** Un'espressione come `[value]="calcolaTotale()"` o `{{ getNome() }}` viene rivalutata a **ogni ciclo di change detection**, non solo quando i dati cambiano: con molte espressioni, o con metodi costosi, degrada le performance. In un componente signal-based la soluzione idiomatica è esporre un `computed()` — rivalutato solo quando cambiano i signal da cui dipende — e legare quello: `[value]="totale()"`.
+
 **Control flow built-in** (`@if`, `@for`, `@switch`, prefisso `@`, sintassi vicina a quella di JavaScript). Il `@for` ha anche una clausola `@empty`:
 
 ```html

@@ -2,7 +2,7 @@
 
 Hub unico degli appunti di sviluppo. Sito statico, **zero dipendenze**, pubblicato con GitHub Pages.
 
-L'hub (`index.html`) raggiunge quattro raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
+L'hub (`index.html`) raggiunge cinque raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
 
 | Sezione | Cartella | Contenuto |
 |---|---|---|
@@ -10,10 +10,11 @@ L'hub (`index.html`) raggiunge quattro raccolte, ognuna un sito [docsify](https:
 | JavaScript | [`javascript/`](javascript/) | Guida completa (basata su *You Don't Know JS*) |
 | TypeScript | [`typescript/`](typescript/) | Guida completa (TypeScript 6.0) |
 | Angular | [`angular/`](angular/) | Modern Angular 2ª ed. — signals e oltre |
+| Glossario | [`glossario/`](glossario/) | Termini trasversali: web, tooling, React, concetti |
 
 ## Come funziona
 
-- La root serve una landing HTML statica con quattro card.
+- La root serve una landing HTML statica con cinque card.
 - Ogni sottocartella mantiene il **proprio** `index.html` docsify, tema e plugin: nessuna configurazione condivisa da riconciliare.
 - Docsify usa hash-routing, quindi ogni sottocartella è una SPA autonoma servita sotto lo stesso repo/URL.
 - Un link 🏠 in ogni sezione riporta all'hub.
