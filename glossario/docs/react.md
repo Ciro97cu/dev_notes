@@ -7,7 +7,12 @@ Termini dell'ecosistema React. Il repo non ha (ancora) un vault dedicato a React
 In React si scrive codice **dichiarativo**: si descrive *cosa* deve mostrare l'interfaccia, non *come* renderizzarla passo passo (approccio *imperativo*). È React a occuparsi del "come".
 
 ```jsx
-// Dichiarativo: si dichiara il risultato voluto
+// Imperativo (DOM vanilla): si descrive OGNI passo
+const btn = document.createElement('button');
+btn.textContent = 'Clicca qui';
+document.body.appendChild(btn);
+
+// Dichiarativo (React): si dichiara solo il risultato voluto
 function Button() {
   return <button>Clicca qui</button>;
 }
@@ -20,6 +25,15 @@ Vantaggi: maggiore **leggibilità** (il codice descrive l'intento), **manutenibi
 Gli **Hooks** sono funzioni speciali che permettono ai componenti **funzionali** di "agganciare" funzionalità di React come stato e ciclo di vita — cose che prima erano possibili solo nei componenti a classe. Permettono di riusare la logica di stato tra componenti senza modificare la gerarchia.
 
 Esempi: `useState` (stato locale), `useEffect` (effetti collaterali, es. fetch dei dati).
+
+```jsx
+import { useState } from 'react';
+
+function Contatore() {
+  const [count, setCount] = useState(0); // [valore corrente, funzione per aggiornarlo]
+  return <button onClick={() => setCount(count + 1)}>Cliccato {count} volte</button>;
+}
+```
 
 **Regole degli Hooks:**
 1. Vanno chiamati **solo** dentro componenti funzionali o dentro altri Hook (custom hook).

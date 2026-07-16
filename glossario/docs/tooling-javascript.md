@@ -6,6 +6,14 @@ Strumenti da riga di comando e di build che accompagnano lo sviluppo in JavaScri
 
 Babel è un **transpiler** JavaScript: converte codice scritto con sintassi moderne (ES2015+) in una versione precedente (es. ES5) compatibile con i browser più datati. Permette quindi di usare le funzionalità recenti del linguaggio senza rinunciare alla compatibilità.
 
+```js
+// input: sintassi moderna (arrow function + const)
+const somma = (a, b) => a + b;
+
+// output Babel (ES5): funzione classica + var, equivalente
+var somma = function (a, b) { return a + b; };
+```
+
 Concetti chiave:
 - **Transpilazione** — traduce da un linguaggio di alto livello a un altro (qui: JS moderno → JS più vecchio ma equivalente). Diverso dalla **compilazione**, che traduce verso il linguaggio macchina.
 - **Plugin e preset** — un *plugin* trasforma una singola funzionalità (es. le arrow function); un *preset* è un insieme di plugin (es. `preset-env` per lo standard più recente).
@@ -24,6 +32,14 @@ Funzioni: transpilazione JS moderno → ES5, rimozione dei tipi da TypeScript, m
 ## NPM
 
 NPM (*Node Package Manager*) è lo strumento per gestire i **pacchetti** in Node.js. Installa pacchetti da un registro online (npm registry), li aggiunge come dipendenze del progetto e li mantiene aggiornati. Viene installato insieme a Node.js.
+
+```bash
+npm install lodash            # aggiunge lodash a "dependencies" e lo scarica in node_modules
+npm install --save-dev vitest # dipendenza di solo sviluppo → "devDependencies"
+npm run build                 # esegue lo script "build" dichiarato in package.json
+```
+
+Dipendenze e script vivono in `package.json`; le versioni **esatte** installate sono bloccate in `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze.
 
 ## NPX
 
