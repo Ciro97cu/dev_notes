@@ -7,9 +7,9 @@ L'hub (`index.html`) raggiunge quattro raccolte, ognuna un sito [docsify](https:
 | Sezione | Cartella | Contenuto |
 |---|---|---|
 | Git | [`git/`](git/) | Controllo di versione, da zero ad avanzato |
-| JavaScript | [`js/`](js/) | Guida completa (basata su *You Don't Know JS*) |
+| JavaScript | [`javascript/`](javascript/) | Guida completa (basata su *You Don't Know JS*) |
 | TypeScript | [`typescript/`](typescript/) | Guida completa (TypeScript 6.0) |
-| Angular | [`modern_angular/`](modern_angular/) | Modern Angular 2ª ed. — signals e oltre |
+| Angular | [`angular/`](angular/) | Modern Angular 2ª ed. — signals e oltre |
 
 ## Come funziona
 
