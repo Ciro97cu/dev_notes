@@ -49,4 +49,3 @@
 
 - **🛠️ Meta**
   - [📖 Glossario](/_meta/glossario.md)
-  - [Convenzioni del vault](/_meta/conventions.md)

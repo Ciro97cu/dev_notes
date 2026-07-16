@@ -21,7 +21,6 @@
   - [16 · SemVer](16-semver.md)
 
 - **Supporto**
-  - [Regole](REGOLE.md)
   - [Glossario](glossario.md)
   - [Playbook](playbook.md)
   - [Errori comuni](errori.md)

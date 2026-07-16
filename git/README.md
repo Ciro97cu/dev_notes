@@ -6,7 +6,7 @@ ma usabili anche come reference rapida durante il lavoro.
 ## Come sono organizzati
 
 - File numerati per topic (`01-*.md`, `02-*.md`, ...) da leggere in ordine.
-- Ogni file segue lo stesso scheletro (vedi [REGOLE.md](REGOLE.md)).
+- Ogni file segue lo stesso scheletro.
 - Termini tecnici e comandi restano in inglese; il testo è in italiano semplice.
 
 ## Indice topic
@@ -32,7 +32,6 @@ ma usabili anche come reference rapida durante il lavoro.
 
 ## File di supporto
 
-- [REGOLE.md](REGOLE.md) — le regole di qualità che ogni appunto deve rispettare.
 - [glossario.md](glossario.md) — termini Git (EN) spiegati in italiano semplice.
 - [playbook.md](playbook.md) — ricette pronte: problema reale → comandi esatti.
 - [errori.md](errori.md) — messaggi di errore di Git → causa e fix.

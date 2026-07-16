@@ -63,4 +63,4 @@ Vault di studio in italiano sul libro **_Modern Angular_ (2ª edizione, v2.0.0 �
 `tipo/capitolo` · `tipo/concetto` · `signals` · `reactivity` · `components` · `routing` · `di` · `services` · `state-management` · `ngrx` · `forms` · `testing` · `architecture` · `directives` · `templates` · `ssr` · `security` · `micro-frontends` · `i18n` · `ai` · `monorepo`
 
 ---
-*Fonte: `modern-angular_v2_0_0.pdf`. Convenzioni del vault in [[conventions]] (cartella `_meta/`).*
+*Fonte: `modern-angular_v2_0_0.pdf`.*

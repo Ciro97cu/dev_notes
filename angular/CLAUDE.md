@@ -1,25 +1,19 @@
-# Convenzioni del vault — Modern Angular (appunti IT)
+# angular/ — regole specifiche
 
-Vault Obsidian. Scopo: **studio personale / ripasso**. Fonte: `modern-angular_v2_0_0.pdf` (libro "Modern Angular", **2ª edizione** v2.0.0, aggiornata ad **Angular 22**). I numeri di pagina dei riferimenti `📖` puntano a questo PDF.
+**Vault Obsidian**. Appunti di studio sul libro *Modern Angular* (**2ª edizione**, v2.0.0 — aggiornata ad **Angular 22**). Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
+
+Fonte: `modern-angular_v2_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagina dei riferimenti 📖 puntano a questo PDF.
 
 > [!info] Versioning del vault
 > Gli appunti seguono la **v2.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info] Angular 22+` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
-
-## Lingua
-- **Prosa in italiano**, diretta, senza fronzoli.
-- **Filename, titoli di sezione e nomi delle API in inglese** (es. `signal()`, `computed`, `effect`, `inject`, `httpResource`, `linkedSignal`, `withComponentInputBinding`). Non tradurre i termini tecnici Angular.
-- Codice in inglese, **re-indentato** fedelmente alle convenzioni Angular/TS (l'estrazione dal PDF appiattisce l'indentazione).
-
-### Regola keyword (precisione contestuale)
-Quando la prosa descrive un **meccanismo di codice**, cita il costrutto esatto in backtick invece di parafrasarlo con una parola italiana. Vale soprattutto per le **keyword JS/TS** (`this`, `super`, `new`, ...) che è facile fondere in un dimostrativo: non scrivere *"questo tab"* quando il codice fa `currentTab() === this` → scrivi che è un **confronto d'identità con `this`** (l'istanza corrente). I dimostrativi italiani normali restano dove non c'è collisione con una keyword. Obiettivo: prosa fluida **e** ancorata al codice.
 
 ## Struttura
 ```
 00-index.md          home/MOC: mappa dei 19 capitoli + concetti cardine
 capitoli/            1 nota-hub per capitolo (filename inglesi numerati a 2 cifre)
 concetti/            note atomiche sui concetti cardine ricorrenti
-assets/              eventuali immagini
-_meta/               book-outline.txt + queste convenzioni (non sono appunti)
+assets/              immagini
+_meta/               book-outline.txt + glossario.md (meta, non sono appunti)
 ```
 Modello **ibrido**: la nota-capitolo è l'hub e contiene il grosso; le note atomiche (`concetti/`) esistono solo per i concetti davvero centrali e ricorrenti, e si linkano da più capitoli.
 
@@ -93,7 +87,7 @@ Collegamenti: [[concetto]], [[NN-altro-capitolo]]
 **In sintesi:** <2-4 bullet con i punti chiave.>
 ```
 
-## Template nota atomica (concetti/)
+## Template nota atomica (`concetti/`)
 ```markdown
 ---
 titolo: "<nome API/concetto>"
@@ -117,7 +111,7 @@ aliases: [<sinonimi/varianti>]
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) vanno **senza titolo custom** — niente "Gotcha"/"Take-away": Obsidian mostra l'etichetta di default.
 - `> [!info]` mantiene il titolo quando è informativo (es. `[!info] Angular 22+`, `[!info] Versioning del vault`).
-- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **Ripasso lampo**.
+- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **🔁 Ripasso lampo**.
 - La sezione di chiusura del capitolo si chiama **In sintesi:** (non "Take-away").
 
 ## Tag controllati
@@ -126,10 +120,17 @@ aliases: [<sinonimi/varianti>]
 - versione: `angular-22` (note che trattano feature gated ad Angular 21.1/21.2/22)
 
 ## Diagrammi
-Mermaid dove rende davvero: reactive flow / signal graph, gerarchia DI, child routes, flussi OAuth/OIDC, architecture matrix, unidirectional data flow. Non ovunque.
+Mermaid dove rende davvero: reactive flow / signal graph, gerarchia DI, child routes, flussi OAuth/OIDC, architecture matrix, unidirectional data flow.
 
 ## Note operative sull'estrazione PDF
 - Testo via `pypdf` (`python3` con `from pypdf import PdfReader`). Pagina i-esima = `r.pages[i-1].extract_text()` (0-based).
 - Il codice estratto **perde indentazione** → ricostruirla.
 - Ogni pagina ha un watermark `ciro.cu97@gmail.com <data>` → **ignorarlo**.
-- I numeri pagina nel testo estratto sono +1 rispetto al numero stampato sulla pagina (offset frontmatter), ma `r.pages[N-1]` usa il numero del PDF reader = quello dell'outline. Usare l'outline in `book-outline.txt`.
+- I numeri pagina nel testo estratto sono +1 rispetto al numero stampato sulla pagina (offset frontmatter), ma `r.pages[N-1]` usa il numero del PDF reader = quello dell'outline. Usare l'outline in `_meta/book-outline.txt`.
+
+## Checklist manutenzione (quando aggiungi/rinomini una nota)
+- [ ] `_sidebar.md` — voce nell'ordine giusto.
+- [ ] `00-index.md` (MOC) — link al capitolo/concetto.
+- [ ] Frontmatter completo (`capitolo`/`titolo`/`pagine`/`tags`), col tag `angular-22` se la nota tratta feature gated.
+- [ ] `concetti/` — se introduci un concetto cardine ricorrente, valuta una nota atomica + backlink `[[nome]]`.
+- [ ] Sezioni **🔁 Ripasso lampo** e **In sintesi:** a fine capitolo.
