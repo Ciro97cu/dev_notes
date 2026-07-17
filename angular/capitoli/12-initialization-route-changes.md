@@ -365,6 +365,8 @@ export class App {
 
 ### `withDebugTracing()`
 
+*(Fuori dal libro Modern Angular — feature standard di Angular, aggiunta qui perché utile per il debug del routing.)*
+
 In fase di sviluppo è possibile loggare **tutti** gli eventi del router in console — inclusi quelli intermedi che `router.events` non espone esplicitamente, come `GuardsCheckStart`, `ResolveStart`, `ActivationEnd` — con una sola riga nella configurazione:
 
 ```ts
