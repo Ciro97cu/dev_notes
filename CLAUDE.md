@@ -17,7 +17,7 @@ Quando la prosa descrive un **meccanismo di codice**, citare il costrutto esatto
 - **Niente comandi, API o flag inventati**: solo sintassi reale e verificata della tecnologia trattata.
 - **Claim non ovvi con fonte**: un'affermazione non banale ha un link alla documentazione ufficiale.
 - **Codice funzionante e re-indentato** fedelmente alle convenzioni del linguaggio (l'estrazione da PDF appiattisce l'indentazione → ricostruirla).
-- **Aggiunte oltre la fonte**: contenuto non presente nel libro/serie del vault va segnalato con una nota prefissata dall'icona ➕ e colorata con l'accent del tema, così si distingue a colpo d'occhio (anche in dark mode). Usare le **variabili del tema**, non colori hardcoded: `<span style="color:var(--theme-color,var(--text-accent))">➕ *(Fuori dal libro …)*</span>` (`--theme-color` per il sito docsify, `--text-accent` come fallback per Obsidian).
+- **Aggiunte oltre la fonte**: contenuto non presente nel libro/serie del vault va segnalato con una nota in corsivo prefissata dall'icona ➕ (es. *➕ Fuori dal libro …*), così si distingue a colpo d'occhio da ciò che viene dalla fonte.
 
 ## Organizzazione
 - **Una fonte di verità**: un concetto è spiegato in un solo punto; gli altri file rimandano con un link, non riscrivono.
