@@ -311,6 +311,45 @@ export const appConfig: ApplicationConfig = {
 > [!tip]
 > Una provider function può restituire un **array** di provider; Angular **appiattisce** automaticamente gli array annidati nella property `providers`, quindi il nesting non è un problema.
 
+## InjectionToken — token per valori non-classe
+
+*(Fuori dal libro Modern Angular — DI standard di Angular, aggiunta qui perché completa il caso `useValue`/`API_URL` visto sopra.)*
+
+Un token può essere una classe (come `LanguageService`), ma per i **valori non-classe** — stringhe, numeri, oggetti di configurazione, funzioni — non esiste una classe da usare come identificatore. Serve un `InjectionToken<T>`, un token tipizzato creato a mano:
+
+```ts
+// src/app/domains/shared/util-common/tokens.ts
+import { InjectionToken } from '@angular/core';
+
+export const API_URL = new InjectionToken<string>('API_URL');
+```
+
+Si fornisce e si inietta come qualsiasi altro token:
+
+```ts
+// provider (in app.config.ts, oppure a livello di componente/rotta)
+{ provide: API_URL, useValue: 'https://api.example.io' }
+
+// consumo
+private apiUrl = inject(API_URL); // tipo inferito: string
+```
+
+La stringa passata al costruttore (`'API_URL'`) è solo una **descrizione** per i messaggi d'errore, non l'identità del token: l'identità è l'istanza di `InjectionToken` stessa.
+
+**Token tree-shakable.** Con `providedIn` + `factory` il token si auto-registra con un valore di default, senza doverlo elencare in un array `providers`:
+
+```ts
+export const API_URL = new InjectionToken<string>('API_URL', {
+  providedIn: 'root',
+  factory: () => 'https://api.example.io',
+});
+```
+
+> [!tip]
+> **Tree-shaking.** Un service con `@Service()` — o un token con `providedIn` + `factory` — si registra **da sé**: se nessuno lo inietta, il bundler può eliminarlo dal bundle finale. Un provider elencato a mano in un array `providers` **non** è tree-shakable, perché il bundler non può sapere se è davvero usato. Per questo la registrazione self-service è la forma preferita.
+
+Collegamenti: [[providers]] · [[inject]].
+
 ## Component-local Services
 > 📖 pp.142-144
 
@@ -424,6 +463,54 @@ export const appConfig: ApplicationConfig = {
 > Come dice il nome, `withExperimentalAutoCleanupInjectors` è ancora **sperimentale**: cautela negli ambienti di produzione.
 
 Collegamenti: [[04-router-navigation-lazy-loading]] · [[providers]].
+
+## Gerarchia degli injector e risoluzione
+
+*(Fuori dal libro Modern Angular — DI standard di Angular: mostra come Angular sceglie l'injector che risolve una dipendenza.)*
+
+Gli injector non sono piatti: formano una **gerarchia** su due alberi paralleli.
+
+- **Element injector tree** (o *node injector*): ogni componente/direttiva ha il proprio injector e l'albero ricalca quello dei componenti. Lo popolano le property `providers`/`viewProviders` di `@Component`/`@Directive` ([[#Component-local Services]]).
+- **Environment injector tree**: gli injector d'ambiente — `platform` (condiviso tra le app nella stessa pagina), `root` (dove stanno quasi tutti i service), più quelli di **rotta** e dei **lazy chunk**. Li popolano `app.config.ts`, i `providers` delle rotte ([[#Route-local Services & Auto Cleanup]]) e le provider function.
+
+Chiamando `inject(X)`, la **risoluzione** parte dall'injector del componente corrente e risale, in quest'ordine:
+
+```mermaid
+graph TD
+    CUR["inject(X): injector del componente corrente"] --> HOST["risale gli element injector dei componenti padre"]
+    HOST --> ROUTE["environment injector di rotta (se presente)"]
+    ROUTE --> ROOT["root injector"]
+    ROOT --> PLAT["platform injector"]
+    PLAT --> NULL(["null injector → NullInjectorError, o null con optional"])
+```
+
+Vince il **primo** injector che conosce il token: per questo un provider a livello di componente **oscura** (shadowing) quello di livello app. Se la risalita arriva fino al **null injector** senza trovare nulla, Angular lancia un `NullInjectorError` — a meno che la richiesta non sia `optional`.
+
+### Resolution modifiers
+
+Modificano *dove* Angular cerca, come opzioni di `inject()`:
+
+| Opzione | Effetto |
+|---|---|
+| `optional: true` | ritorna `null` invece di lanciare, se il token non c'è |
+| `self: true` | cerca **solo** nell'injector corrente, senza risalire |
+| `skipSelf: true` | **salta** l'injector corrente, parte dal parent |
+| `host: true` | si ferma all'injector del componente **host** (tipico nelle direttive) |
+
+```ts
+private a = inject(MyService, { optional: true });   // null se assente
+private b = inject(MyService, { self: true });        // solo l'injector locale
+private c = inject(MyService, { skipSelf: true });    // ignora il locale, parte dal padre
+private d = inject(MyService, { self: true, optional: true }); // combinabili
+```
+
+> [!tip]
+> Nel codice pre-`inject()` gli stessi modificatori erano **decoratori** sul parametro del costruttore: `@Optional()`, `@Self()`, `@SkipSelf()`, `@Host()`. Ricorrono spesso nelle direttive (es. una direttiva che vuole il `NgControl` del **solo** host).
+
+> [!tip]
+> **Approfondimento visivo.** L'infografica *Angular Dependency Injection* di Chris Kohler ([christiankohler.net](https://christiankohler.net)) mappa bene i due alberi e i modificatori. È però del **2023 (Angular 15)**: diversi esempi usano `@NgModule` e la constructor injection, mentre qui sopra tutto è nella forma **Angular 22** (`inject()`, standalone).
+
+Collegamenti: [[injection-context]] · [[providers]].
 
 ## Lazy Service Injection con `injectAsync`
 > 📖 pp.146-148
