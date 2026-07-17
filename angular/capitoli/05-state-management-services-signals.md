@@ -228,7 +228,7 @@ export const appConfig: ApplicationConfig = {
 
 Così `inject(LanguageService)` restituisce un `BrowserLanguageService`; cambiando solo questa riga si passano **tutti** i consumer a `DefaultLanguageService` senza toccarli.
 
-Oltre a `useClass`, lo stesso token può essere risolto con altre strategie di provider. ➕ *(Fuori dal libro Modern Angular — il libro mostra solo `useClass` + il concetto di token; le altre tre strategie sono DI standard di Angular, aggiunte qui perché utili da conoscere.)*
+Oltre a `useClass`, lo stesso token può essere risolto con altre strategie di provider. <span style="color:var(--theme-color,var(--text-accent))">➕ *(Fuori dal libro Modern Angular — il libro mostra solo `useClass` + il concetto di token; le altre tre strategie sono DI standard di Angular, aggiunte qui perché utili da conoscere.)*</span>
 
 ```ts
 providers: [
@@ -313,7 +313,7 @@ export const appConfig: ApplicationConfig = {
 
 ## InjectionToken — token per valori non-classe
 
-➕ *(Fuori dal libro Modern Angular — DI standard di Angular, aggiunta qui perché completa il caso `useValue`/`API_URL` visto sopra.)*
+<span style="color:var(--theme-color,var(--text-accent))">➕ *(Fuori dal libro Modern Angular — DI standard di Angular, aggiunta qui perché completa il caso `useValue`/`API_URL` visto sopra.)*</span>
 
 Un token può essere una classe (come `LanguageService`), ma per i **valori non-classe** — stringhe, numeri, oggetti di configurazione, funzioni — non esiste una classe da usare come identificatore. Serve un `InjectionToken<T>`, un token tipizzato creato a mano:
 
@@ -466,7 +466,7 @@ Collegamenti: [[04-router-navigation-lazy-loading]] · [[providers]].
 
 ## Gerarchia degli injector e risoluzione
 
-➕ *(Fuori dal libro Modern Angular — DI standard di Angular: mostra come Angular sceglie l'injector che risolve una dipendenza.)*
+<span style="color:var(--theme-color,var(--text-accent))">➕ *(Fuori dal libro Modern Angular — DI standard di Angular: mostra come Angular sceglie l'injector che risolve una dipendenza.)*</span>
 
 Gli injector non sono piatti: formano una **gerarchia** su due alberi paralleli.
 

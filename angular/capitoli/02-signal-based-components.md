@@ -228,7 +228,7 @@ Tipi di binding:
 > [!warning]
 > **Evitare di legare metodi o getter nei binding.** Un'espressione come `[value]="calcolaTotale()"` o `{{ getNome() }}` viene rivalutata a **ogni ciclo di change detection**, non solo quando i dati cambiano: con molte espressioni, o con metodi costosi, degrada le performance. In un componente signal-based la soluzione idiomatica è esporre un `computed()` — rivalutato solo quando cambiano i signal da cui dipende — e legare quello: `[value]="totale()"`.
 >
-> ➕ *(Fuori dal libro Modern Angular — buona pratica standard di Angular.)*
+> <span style="color:var(--theme-color,var(--text-accent))">➕ *(Fuori dal libro Modern Angular — buona pratica standard di Angular.)*</span>
 
 **Control flow built-in** (`@if`, `@for`, `@switch`, prefisso `@`, sintassi vicina a quella di JavaScript). Il `@for` ha anche una clausola `@empty`:
 
