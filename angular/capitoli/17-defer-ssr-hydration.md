@@ -165,7 +165,7 @@ Trigger di hydration disponibili:
 ### Event Replay
 > 📖 p.428
 
-Il periodo tra FMP e *Time to Interactive* (il momento in cui la pagina risponde davvero alle interazioni) — la **Uncanny Valley** — è quando l'utente già vede la pagina ma il JavaScript che gestisce le interazioni non è ancora caricato: i click e gli altri eventi andrebbero persi. L'**[[glossario#event-replay|Event Replay]]** lo evita: un piccolo script incluso nell'HTML server-rendered si carica con la risposta iniziale e **registra** le interazioni (click, input nei form, ecc.) avvenute prima del termine dell'hydration. Quando l'app è interattiva, Angular **rigioca** gli eventi registrati, così nulla va perso.
+Il periodo tra FMP e *Time to Interactive* (il momento in cui la pagina risponde davvero alle interazioni) è la **Uncanny Valley**: l'utente già vede la pagina, ma il JavaScript che gestisce le interazioni non è ancora caricato, quindi i click e gli altri eventi andrebbero persi. L'**[[glossario#event-replay|Event Replay]]** lo evita: un piccolo script incluso nell'HTML server-rendered si carica con la risposta iniziale e **registra** le interazioni (click, input nei form, ecc.) avvenute prima del termine dell'hydration. Quando l'app è interattiva, Angular **rigioca** gli eventi registrati, così nulla va perso.
 
 Si abilita passando `withEventReplay()` a `provideClientHydration`, come nel listato di `app.config.ts` sopra.
 

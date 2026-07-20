@@ -40,7 +40,7 @@ export class FlightEdit {
 }
 ```
 
-- `form(signal, schema)` riceve il `linkedSignal` e uno **schema** con le regole. Validatori built-in: `required`, `minLength`, `maxLength`, `min`, `max`, `pattern` (regex).
+- `form(signal, schema)` riceve il `linkedSignal` e uno **schema** con le regole. I validatori built-in disponibili sono `required`, `minLength`, `maxLength`, `min`, `max` e `pattern` (che valida contro una regex).
 - Il parametro `path` (tipo `SchemaPathTree`) referenzia le singole proprietà da validare (`path.from`, `path.to`, ...).
 - `form()` ritorna un **FieldTree**, da legare ai controlli del template.
 
@@ -359,7 +359,7 @@ protected async requestApproval(): Promise<void> {
 ## Custom Validators
 > 📖 pp.174-185
 
-Logica di validazione oltre i built-in. Si usa `validate(path, lambda)`: la lambda riceve un `ctx` e ritorna `null` (nessun errore), un `ValidationError`, oppure un array di `ValidationError`. Ogni errore è identificato dalla stringa `kind` (il "tipo" dell'errore) e può avere proprietà libere (campi extra che decidi tu, per portarti dietro dati utili, es. il valore rifiutato).
+I custom validator servono per la logica di validazione che va oltre i built-in (`required`, `minLength`, ...): possono verificare regole di business e confrontare valori tra loro. Si scrivono con `validate(path, lambda)`: la lambda riceve un `ctx` e ritorna `null` (nessun errore), un `ValidationError`, oppure un array di `ValidationError`. Ogni errore è identificato dalla stringa `kind` (il "tipo" dell'errore) e può avere proprietà libere (campi extra che decidi tu, per portarti dietro dati utili, es. il valore rifiutato).
 
 ```ts
 // validatore inline nello schema
@@ -422,7 +422,7 @@ required(path.from, { message: 'Please enter a value!' });
 <app-validation-errors-pane [errors]="flightForm.from().errors()" />
 ```
 
-**Conditional Validation** — `applyWhenValue(path, predicate, schema)` applica uno schema solo se il predicato è `true`:
+**Conditional Validation** — alcune regole valgono solo in certe condizioni: nell'esempio `delay` va validato solo quando `delayed` è `true`. `applyWhenValue(path, predicate, schema)` applica uno schema solo se il predicato (di solito una lambda) ritorna `true`:
 
 ```ts
 applyWhenValue(path, (flight) => flight.delayed, delayedFlight);

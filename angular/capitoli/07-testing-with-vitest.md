@@ -106,7 +106,7 @@ ng test                      # esegue i test (watch mode di default)
 ng test --configuration=ci   # usa la configurazione "ci"
 ```
 
-Nella UI di Vitest: a sinistra l'elenco dei test eseguiti (spunta verde = passato), a destra le info per ogni run (stack trace in caso di errore), al centro Vitest **monta** i componenti (di solito solo un lampo, ma in debug riflette lo stato corrente). Vari IDE supportano il debug dei test; come ultima spiaggia si possono sempre debuggare nei dev tools del browser.
+La UI di Vitest si divide in tre aree. A sinistra c'è l'elenco dei test eseguiti (spunta verde = passato); a destra le informazioni su ogni run, con lo stack trace in caso di errore; al centro Vitest **monta** i componenti — di solito lo si vede solo per un lampo, ma in debug l'area riflette lo stato corrente. Vari IDE supportano il debug dei test; come ultima spiaggia si possono sempre debuggare nei dev tools del browser.
 
 ## Angular and Vitest: Preparing the TestBed
 > 📖 pp.208-210
@@ -327,7 +327,7 @@ Questo ha effetto sul componente, sui suoi figli e sugli altri servizi allo stes
 ## Mocking Child Components & Shallow Testing
 > 📖 pp.216-217
 
-Per evitare test cross-componente (`FlightSearch` testato insieme a `FlightCard`) e concentrarsi su un solo componente — **shallow testing** — si mocka il figlio con uno **stub** che ha **stesso selector, stessi input e stessi output** dell'originale. Poi si scambiano gli `imports` nei metadati del componente sotto test:
+Finora `FlightSearch` è stato testato insieme al figlio `FlightCard`. Per evitare questi test cross-componente e concentrarsi su un solo componente si ricorre allo **shallow testing**: si mocka il figlio con uno **stub** che ha **stesso selector, stessi input e stessi output** dell'originale. Poi si scambiano gli `imports` nei metadati del componente sotto test:
 
 ```ts
 TestBed.overrideComponent(FlightSearch, {

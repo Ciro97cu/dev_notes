@@ -7,7 +7,7 @@ tags: [tipo/capitolo, architecture, state-management, angular-22]
 # 08 · Sustainable Architectures for Modern Angular
 > 📖 cap.8 · pp.231-253 — *Modern Angular* v2.0.0
 
-Le soluzioni enterprise devono restare **manutenibili nel lungo periodo**. Il capitolo raccoglie approcci architetturali collaudati: aspetti statici e dinamici, pattern e tecniche, e soprattutto come **far rispettare** l'architettura definita (enforcing via linting, cioè impedire automaticamente con un analizzatore di codice gli import che violano le regole). Tre blocchi: come tagliare il sistema in **verticali**, come strutturarli (Architecture Matrix + [[glossario#modulith|modulith]] con Sheriff/Detective) e come collocare i **lightweight [[glossario#store|store]]** (piccoli contenitori di stato, semplici service Angular) dentro un flusso dati unidirezionale.
+Le soluzioni enterprise devono restare **manutenibili nel lungo periodo**. Il capitolo raccoglie approcci architetturali collaudati: aspetti statici e dinamici, pattern e tecniche, e soprattutto come **far rispettare** l'architettura definita (enforcing via linting, cioè impedire automaticamente con un analizzatore di codice gli import che violano le regole). Si articola in tre blocchi: come tagliare il sistema in **verticali**, come strutturarli (Architecture Matrix + [[glossario#modulith|modulith]] con Sheriff/Detective) e come collocare i **lightweight [[glossario#store|store]]** (piccoli contenitori di stato, semplici service Angular) dentro un flusso dati unidirezionale.
 
 ## Vertical Slicing — perché
 > 📖 pp.231-232
@@ -286,9 +286,9 @@ L'import a tre parti riflette la posizione nella matrice: **workspace** (`@fligh
 ## Lightweight Stores & architettura — Unidirectional Data Flow
 > 📖 pp.249-250
 
-Le app frontend moderne usano **più store fine-grained e leggeri** (a grana fine, cioè piccoli e con responsabilità mirata); a differenza del classico Redux (lo store unico e centralizzato), lo stato è **sparso** in più punti → dove metterli? quanto grandi? possono accedersi a vicenda?
+Le app frontend moderne usano **più store fine-grained e leggeri** (a grana fine, cioè piccoli e con responsabilità mirata); a differenza del classico Redux (lo store unico e centralizzato), lo stato è quindi **sparso** in più punti. Questo apre subito qualche domanda: dove metterli? quanto devono essere grandi? possono accedersi a vicenda?
 
-Nei sistemi reattivi un cambiamento ne innesca un altro, e così via: catene di aggiornamenti a catena (cascate) difficili da capire e mantenere. Il **flusso dati unidirezionale** previene questo: i dati scorrono in **una sola direzione** e per ogni evento (utente) esiste un percorso chiaro. Gli store sono ideali per implementarlo.
+Nei sistemi reattivi un cambiamento ne innesca un altro, che a sua volta ne innesca un altro ancora: sono cascate di aggiornamenti difficili da capire e mantenere. Il **flusso dati unidirezionale** previene questo: i dati scorrono in **una sola direzione** e per ogni evento (utente) esiste un percorso chiaro. Gli store sono ideali per implementarlo.
 
 ```mermaid
 graph LR
