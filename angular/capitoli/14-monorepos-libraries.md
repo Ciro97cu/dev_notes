@@ -228,7 +228,7 @@ npm install @my/util-logger --registry http://localhost:4873
 ## Faster Builds and More Convenience with Nx
 > 📖 pp.393-394
 
-Il limite della soluzione CLI: gli sviluppatori devono **sapere quali app sono cambiate** e lanciare a mano la build giusta; e il build server, per sicurezza, finisce comunque per ricostruire e testare tutto. Meglio lasciare che sia il **tooling** (gli strumenti di build) a capire cosa è cambiato — p.es. calcolando un **hash** dei file sorgente che confluiscono in ogni app (l'hash è una specie di "impronta digitale": un codice breve calcolato dai file, che cambia appena cambia anche un solo file). Se l'hash cambia, quell'app va ricostruita o ritestata.
+Il limite della soluzione CLI: gli sviluppatori devono **sapere quali app sono cambiate** e lanciare a mano la build giusta; e il build server, per sicurezza, finisce comunque per ricostruire e testare tutto. Meglio lasciare che sia il **tooling** (gli strumenti di build) a capire cosa è cambiato — per esempio calcolando un **hash** dei file sorgente che confluiscono in ogni app. L'hash è una specie di "impronta digitale": un codice breve calcolato dai file, che cambia appena cambia anche un solo file. Se l'hash cambia, quell'app va ricostruita o ritestata.
 
 **Nx** implementa questa idea e aggiunge molto altro. Oltre ad Angular supporta React e backend Node.js, e integra senza setup manuale i tool comuni dello sviluppo web: i testing tool Jest, Cypress e Playwright, il server npm Verdaccio e Storybook per la documentazione interattiva dei componenti. Per gli sviluppatori Angular è naturale: la **Nx CLI** si usa come la Angular CLI, basta sostituire `ng` con `nx` e gli argomenti restano in gran parte gli stessi (`nx build`, `nx serve`, `nx g app`, `nx g lib`, ...).
 

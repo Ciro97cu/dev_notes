@@ -40,7 +40,7 @@ export class FlightSearch {
 
 Quando l'utente cambia i criteri di ricerca via form, `filter` cambia, `flightRoute` si ricalcola e Angular aggiorna la rotta mostrata.
 
-I computed sono **lazy**: ricalcolano solo quando qualcuno li legge (cioè quando servono davvero — il template o un getter nel codice), non a ogni cambio della dipendenza. Se un mattone osserva un signal per i cambiamenti, si dice che lo **traccia** (track). Per leggere un signal *senza* tracciarlo, dentro un `computed`, si usa [[untracked]]:
+I computed sono **lazy**: ricalcolano solo quando qualcuno li legge — dal template o tramite il getter nel codice, cioè quando il valore serve davvero — non a ogni cambio della dipendenza. Quando un mattone osserva un signal per i suoi cambiamenti, si dice che lo **traccia** (track). A volte, però, conviene leggere un signal dentro un `computed` *senza* tracciarlo: per questo Angular offre [[untracked]].
 
 ```ts
 protected readonly from = computed(() => this.filter().from);
@@ -70,7 +70,7 @@ I computed derivano valori **sincroni** (disponibili subito); per i dati **asinc
 > Tutte e tre le resource hanno **lasciato lo stato experimental con Angular 22** e fanno ora parte della Signal API stabile.
 
 ### httpResource
-Già vista nel [[02-signal-based-components|cap.2]]: API di alto livello per il caso più comune (richiesta HTTP). La prima funzione ritorna la richiesta da eseguire ed è convertita internamente in un computed → traccia i signal letti al suo interno e ri-fetcha quando cambiano (e parte subito alla creazione). Ritornando `undefined` la si **disattiva**.
+Già vista nel [[02-signal-based-components|cap.2]], è l'API di alto livello per il caso più comune, la richiesta HTTP. La prima funzione ritorna la richiesta da eseguire; internamente Angular la converte in un computed, così traccia i signal letti al suo interno e ri-fetcha ogni volta che cambiano (e parte subito alla creazione). Ritornando `undefined`, la funzione **disattiva** la resource.
 
 ```ts
 import { httpResource } from '@angular/common/http';
@@ -116,7 +116,7 @@ protected readonly flightsResource = rxResource({
 });
 ```
 
-Come per `httpResource`, `params` diventa un computed: cambia un signal letto lì → il loader si ri-triggera (e parte alla creazione; ritornando `undefined` da `params` lo si disattiva). Al loader i parametri arrivano come **dati ordinari**, non come signal. È l'ideale quando hai già un servizio basato su Observable o ti serve la potenza di RxJS per comporre stream complessi. Dal punto di vista del consumer è una resource come `httpResource`; internamente delega a uno stream Observable.
+Come per `httpResource`, `params` diventa un computed: quando cambia un signal letto lì, il loader si ri-triggera (e parte alla creazione; ritornando `undefined` da `params` lo si disattiva). Al loader i parametri arrivano come **dati ordinari**, non come signal. È l'ideale quando hai già un servizio basato su Observable o ti serve la potenza di RxJS per comporre stream complessi. Dal punto di vista del consumer resta una resource come `httpResource`; internamente, però, delega a uno stream Observable.
 
 ```ts
 // il loader delega a un metodo che usa HttpClient
@@ -167,7 +167,7 @@ findPromise(
 }
 ```
 
-Quando l'`AbortSignal` emette l'evento `abort`, `takeUntil(aborted)` completa l'Observable → unsubscribe → richiesta HTTP cancellata. `firstValueFrom` converte l'Observable in Promise (necessario perché `HttpClient` ritorna sempre un Observable).
+Quando l'`AbortSignal` emette l'evento `abort`, `takeUntil(aborted)` completa l'Observable: questo provoca l'unsubscribe e quindi la cancellazione della richiesta HTTP in corso. `firstValueFrom` converte poi l'Observable in Promise (necessario perché `HttpClient` ritorna sempre un Observable).
 
 > [!warning]
 > `AbortSignal` non è un signal Angular: è l'API del browser per cancellare operazioni async. Non confondere i due "signal".
@@ -177,7 +177,7 @@ Quando l'`AbortSignal` emette l'evento `abort`, `takeUntil(aborted)` completa l'
 
 ### Comporre resource: Snapshots
 > [!info] Angular 21.2+
-> Coi computed derivare un valore è facile: leggi altri signal dentro un `computed` e ottieni un nuovo signal. Per le **resource** prima no: potevi proiettare solo singole proprietà (`value`/`error`/`isLoading`), non lo stato intero. Da **Angular 21.2** ogni resource espone il signal **`snapshot()`**, che racchiude `status` + `value` in un singolo oggetto signal-aware. Lo leggi con un [[linked-signal]], lo trasformi, e ottieni uno snapshot derivato; **`resourceFromSnapshots`** lo ri-converte in resource. La resource di partenza mantiene la sua logica di load; quella derivata ci applica sopra solo una trasformazione.
+> Coi computed derivare un valore è facile: leggi altri signal dentro un `computed` e ottieni un nuovo signal. Con le **resource**, invece, prima non era possibile: potevi proiettare solo singole proprietà (`value`/`error`/`isLoading`), non lo stato intero. Da **Angular 21.2** ogni resource espone il signal **`snapshot()`**, che racchiude `status` + `value` in un singolo oggetto signal-aware. Lo leggi con un [[linked-signal]], lo trasformi, e ottieni uno snapshot derivato; **`resourceFromSnapshots`** lo ri-converte in resource. La resource di partenza mantiene la sua logica di load; quella derivata ci applica sopra solo una trasformazione.
 
 ```ts
 // src/app/domains/luggage/data/with-min-weight.ts
@@ -236,7 +236,7 @@ constructor() {
 }
 ```
 
-Gli effect vanno creati in un **injection context** ([[injection-context|cap.5]]): costruttore e field initializer (l'assegnazione di valore iniziale a una proprietà di classe) del componente lo sono sempre. Il costruttore è il posto giusto (metafora: cabli la casa quando la costruisci, poi la usi). Vanno usati con **parsimonia**: una catena di effect che si attivano a vicenda è un incubo da debuggare → preferisci i computed.
+Gli effect vanno creati in un **injection context** ([[injection-context|cap.5]]): il costruttore e i field initializer (l'assegnazione del valore iniziale a una proprietà di classe) del componente lo sono sempre. Il costruttore è il posto giusto, un po' come cablare una casa quando la si costruisce per poi limitarsi a usarla. Vanno però usati con **parsimonia**: una catena di effect che si attivano a vicenda è un incubo da debuggare, quindi dove puoi preferisci i computed.
 
 Regola pratica: usa gli effect per il **rendering** non esprimibile via data binding — toast, disegno su canvas, librerie ignare dei signal. Esempio reale: mostrare un toast d'errore con `MatSnackBar` di Angular Material.
 

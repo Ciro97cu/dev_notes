@@ -7,7 +7,7 @@ tags: [tipo/capitolo, i18n]
 # 15 · Internationalization
 > 📖 cap.15 · pp.400-411 — *Modern Angular* v2.0.0
 
-Adattare un'app a regioni e lingue diverse va previsto **in fase di implementazione**: testi intercambiabili, ma anche formati di data e numero. Questo è l'obiettivo dell'**internationalization** (abbreviata **I18N**). L'adattamento alle singole lingue/regioni che ne consegue si chiama **localization** (**L10N**). La combinazione di regione + lingua è il **locale**: `de-DE` (tedesco standard, Germania), `de-AT` (tedesco austriaco); i **locale generici** ignorano la regione (es. `de`).
+Adattare un'app a regioni e lingue diverse va previsto **in fase di implementazione**, per esempio rendendo intercambiabili i testi — e lo stesso vale per i formati di data e numero. Questo è l'obiettivo dell'**internationalization** (abbreviata **I18N**). L'adattamento alle singole lingue/regioni che ne consegue si chiama **localization** (**L10N**). La combinazione di regione + lingua è il **locale**: `de-DE` (tedesco standard, Germania), `de-AT` (tedesco austriaco); i **locale generici** ignorano la regione (es. `de`).
 
 La soluzione I18N integrata in Angular è in primo luogo una soluzione **compile-time**: il compiler estrae i testi, li sostituisce con le traduzioni e produce **un set di bundle per ogni lingua**. Vantaggio: nessun costo a runtime per caricare o mostrare i testi (sono parte integrante del bundle). Prezzo: devi distribuire più versioni linguistiche e cambiare lingua significa **caricare una nuova app** via hyperlink, perdendo lo stato di quella precedente.
 
@@ -71,7 +71,7 @@ Si possono includere **data binding** nei testi marcati:
 ## Marking Strings in the Component Class ($localize)
 > 📖 pp.402-403
 
-Inizialmente la I18N del compiler era limitata ai testi nei template, ma per alcuni casi d'uso è troppo riduttivo: a volte i messaggi (info/errore) nascono nella **component class** e vengono mostrati via data binding. Dalla v9 si possono adattare alle varie lingue con `$localize`, anche se con una sintassi insolita:
+Inizialmente la I18N del compiler era limitata ai testi nei template, ma per alcuni casi d'uso era troppo riduttivo: a volte i messaggi (info/errore) nascono nella **component class** e vengono mostrati via data binding. Dalla v9 si possono adattare alle varie lingue con `$localize`, anche se con una sintassi insolita:
 
 ```ts
 @Component({ /* ... */ })
@@ -85,7 +85,7 @@ export class FlightSearchComponent {
 }
 ```
 
-È una **tagged string**: una stringa racchiusa in backtick e preceduta dalla funzione tag `$localize`, che la adatta. Il contenuto inizia con i metadati (racchiusi tra **due `:`**), poi viene il valore di default. La sintassi è questa perché il compiler sostituisce i testi direttamente nei bundle per performance → non si possono caricare a runtime quando servono.
+È una **tagged string**: una stringa racchiusa in backtick e preceduta dalla funzione tag `$localize`, che la adatta. Il contenuto inizia con i metadati (racchiusi tra **due `:`**), poi viene il valore di default. La sintassi è così particolare perché il compiler sostituisce i testi direttamente nei bundle per motivi di performance, quindi non è possibile caricarli a runtime quando servono.
 
 ## Extracting Texts (extract-i18n)
 > 📖 pp.403-405
@@ -98,7 +98,7 @@ ng extract-i18n --format xmb
 ng extract-i18n --format arb
 ```
 
-I file finiscono nella **root del progetto**. Per ordine si crea una sottocartella `compiler-i18n` e ci si sposta `messages.xlf`; lo si **duplica** dentro la stessa cartella rinominando il duplicato `messages.de.xlf` (uno per lingua). Ogni testo estratto è una **`trans-unit`**:
+I file finiscono nella **root del progetto**. Per ordine si crea una sottocartella `compiler-i18n` e vi si sposta `messages.xlf`; poi lo si **duplica** nella stessa cartella, rinominando il duplicato `messages.de.xlf` (uno per lingua). Ogni testo estratto è una **`trans-unit`**:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -173,7 +173,7 @@ Poi si buildano le versioni per ogni lingua:
 ng build --localize
 ```
 
-Nella `dist` compare **una sottocartella per locale** (es. `de`, `en-US`), ognuna con l'intera app tradotta. Si possono provare con un web server da riga di comando, es. il pacchetto npm `serve` (`npm i -g serve`, poi `serve` dentro la `dist` che contiene le due sottocartelle): il listing mostra le cartelle delle lingue, cliccabili per provare la versione desiderata.
+Nella `dist` compare **una sottocartella per locale** (es. `de`, `en-US`), ognuna con l'intera app tradotta. Si possono provare con un web server da riga di comando, per esempio il pacchetto npm `serve`: dopo `npm i -g serve`, si lancia `serve` dentro la `dist` che contiene le due sottocartelle. Il listing mostra le cartelle delle lingue, cliccabili per provare la versione desiderata.
 
 Collegamenti: build e packaging approfonditi in [[14-monorepos-libraries]].
 
@@ -255,7 +255,7 @@ ng extract-i18n --format json   # genera messages.json con le espressioni
 ## Taking Grammatical Forms into Account (ICU: plural / select)
 > 📖 pp.408-410
 
-Scambiare i testi è solo uno dei compiti dell'internazionalizzazione: vanno gestite anche le **forme grammaticali** come il genere e la distinzione singolare/plurale (lingue diverse hanno numeri diversi di generi e di forme plurali). Il compiler I18N offre una grammatica dedicata nel template (sintassi ICU — Unicode "International Components for Unicode", lo standard per esprimere plurali e generi nei messaggi tradotti).
+Scambiare i testi è solo uno dei compiti dell'internazionalizzazione: vanno gestite anche le **forme grammaticali** come il genere e la distinzione singolare/plurale (lingue diverse hanno numeri diversi di generi e di forme plurali). Il compiler I18N offre una grammatica dedicata nel template: la sintassi ICU (*International Components for Unicode*, lo standard per esprimere plurali e generi nei messaggi tradotti).
 
 **Plural** — "1 flight" vs "3 flights":
 
@@ -266,7 +266,7 @@ Scambiare i testi è solo uno dei compiti dell'internazionalizzazione: vanno ges
 </div>
 ```
 
-Si definisce un testo per il valore `=1` e uno per tutti gli altri (`other`); il `#` riporta il valore. La CLI e il compiler estraggono l'**intera espressione** nei file di lingua, così tradurre verso una lingua con più forme plurali permette di specificare testi anche per ulteriori valori (es. da 2 a 5). Oltre ai valori concreti (`=1`), Angular supporta le categorie: `zero`, `one`, `two`, `few`, `many`, `other`.
+Si definisce un testo per il valore `=1` e uno per tutti gli altri (`other`); il `#` riporta il valore. La CLI e il compiler estraggono l'**intera espressione** nei file di lingua, così, traducendo verso una lingua con più forme plurali, si possono specificare testi anche per ulteriori valori (es. da 2 a 5). Oltre ai valori concreti (`=1`), Angular supporta le categorie: `zero`, `one`, `two`, `few`, `many`, `other`.
 
 **Select** — genere grammaticale. Si estende il `PassengerSearchComponent` con una proprietà `passenger`:
 

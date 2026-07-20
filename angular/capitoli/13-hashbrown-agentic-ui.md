@@ -332,7 +332,7 @@ Per renderizzare i componenti scelti dall'LLM si usa `hb-render-message`:
 }
 ```
 
-`hb-render-message` serve solo per le risposte dell'assistant (ruolo `assistant`). Le richieste utente, qui, sono puramente testuali e stanno in `content`. Siccome `content` può essere anche un number o JSON, va convertito in stringa prima che `app-message` lo mostri; questa "proiezione" (cioè il rimappare ogni messaggio in una forma pronta da mostrare, scegliendo anche l'icona per ogni ruolo) si fa con un [[computed]]:
+`hb-render-message` serve solo per le risposte dell'assistant (ruolo `assistant`). Le richieste utente, qui, sono puramente testuali e stanno in `content`. Siccome `content` può essere anche un number o JSON, va convertito in stringa prima che `app-message` lo mostri. Questa conversione, insieme alla scelta dell'icona per ogni ruolo, è una "proiezione": ogni messaggio viene rimappato in una forma pronta da mostrare, tramite un [[computed]]:
 
 ```ts
 // Listing 13-10
@@ -392,7 +392,7 @@ export class FlightWidgetComponent {
 }
 ```
 
-Il wrapper inoltra i suoi [[signal-input|input]] al dumb component wrappato e ne gestisce gli eventi, scatenando azioni negli store delle feature o cambi rotta. Punto chiave: l'input `status` (`'booked' | 'other'`) — l'LLM deve **derivarne il valore dalla storia della conversazione**; in base al valore il widget sceglie il pulsante da mostrare sul flight card: "Check in" per i voli prenotati, "Select"/"Remove" per i voli trovati in ricerca (aggiungi/rimuovi dal carrello). Come si vedrà a fine sezione, i modelli più piccoli ed economici (es. Gemini Flash) hanno bisogno di un aiuto per questo compito.
+Il wrapper inoltra i suoi [[signal-input|input]] al dumb component wrappato e ne gestisce gli eventi, scatenando azioni negli store delle feature o cambi rotta. Il punto chiave è l'input `status` (`'booked' | 'other'`): l'LLM deve **derivarne il valore dalla storia della conversazione**, e in base a quel valore il widget sceglie il pulsante da mostrare sul flight card — "Check in" per i voli prenotati, "Select"/"Remove" per i voli trovati in ricerca (aggiungi/rimuovi dal carrello). Come si vedrà a fine sezione, i modelli più piccoli ed economici (es. Gemini Flash) hanno bisogno di un aiuto per questo compito.
 
 ## Describing Components
 > 📖 pp.371-372
@@ -547,7 +547,7 @@ uiChatResource({
 
 Si va ancora oltre la selezione da un catalogo di componenti: l'app **genera codice** per fornire parti completamente dinamiche. Scenario: l'utente descrive a parole un report ("% di voli in ritardo vs. totale per giorno, ignorando l'orario, ordinati per data"), l'app trasforma i dati e mostra un chart. Per non compromettere la sicurezza, il codice generato gira in **sandbox** (un ambiente isolato e recintato, dove il codice può fare solo le poche cose permesse e non tocca il resto dell'app).
 
-A prima vista lo scenario sembra risolvibile con i concetti già visti (carica i dati via tool calling, scegli un componente chart, renderizzalo). Il punto cruciale che però sfugge: tra il **recupero** dei dati e la **visualizzazione** serve una **trasformazione** (qui: aggregare totale voli e voli in ritardo per giorno e metterli in relazione). Gli LLM sono addestrati a continuare testo e rispondere, **non** a fare calcoli — però sono ottimi nel **descrivere cosa va fatto**. Quindi: lasciamo che l'LLM derivi i passi di elaborazione dalla richiesta, espressi come **codice JavaScript**.
+A prima vista lo scenario sembra risolvibile con i concetti già visti (carica i dati via tool calling, scegli un componente chart, renderizzalo). Il punto cruciale che però sfugge è un altro: tra il **recupero** dei dati e la **visualizzazione** serve una **trasformazione** (qui: aggregare totale voli e voli in ritardo per giorno e metterli in relazione). Gli LLM sono addestrati a continuare testo e rispondere, **non** a fare calcoli — però sono ottimi nel **descrivere cosa va fatto**. Ed è proprio da qui che si parte: si lascia che l'LLM derivi i passi di elaborazione dalla richiesta, espressi come **codice JavaScript**.
 
 ```js
 // Listing 13-19 — codice GENERATO dall'LLM per preparare i dati del chart

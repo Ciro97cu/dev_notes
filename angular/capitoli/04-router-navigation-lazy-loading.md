@@ -434,7 +434,7 @@ provideRouter(
 `PreloadAllModules` (built-in) precarica **tutte** le route lazy subito dopo lo startup: l'app parte veloce (senza i lazy) e poi li scarica in background, così è molto probabile che siano pronti al bisogno. Se l'utente attiva una route lazy prima che il preloading la carichi, si torna al lazy loading classico.
 
 > [!tip]
-> Strategie out-of-the-box (già pronte, incluse in Angular senza installare nulla): `NoPreloading` (default) e `PreloadAllModules`. Per logiche custom implementa un service che soddisfa l'interfaccia `PreloadingStrategy` — ma prima verifica se le due built-in (o soluzioni di terze parti come `ngx-quicklink`, che precarica le route i cui link entrano nel viewport, o `guess.js`, che usa il machine learning per predire la prossima route che l'utente visiterà) bastano già.
+> Strategie out-of-the-box (già pronte, incluse in Angular senza installare nulla): `NoPreloading` (default) e `PreloadAllModules`. Per logiche custom si implementa un service che soddisfa l'interfaccia `PreloadingStrategy`. Ma prima conviene verificare se una delle due built-in basta già (spesso è così), o se fa al caso una soluzione di terze parti come `ngx-quicklink` (precarica le route i cui link entrano nel viewport) o `guess.js` (usa il machine learning per predire la prossima route che l'utente visiterà).
 
 ## Query Strings & Hash Fragments
 > 📖 pp.126-127

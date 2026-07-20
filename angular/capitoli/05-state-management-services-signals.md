@@ -573,7 +573,7 @@ Collegamenti: [[lightweight-store]] · [[08-sustainable-architectures]].
 ## Implementing a Store with Signals
 > 📖 pp.149-151
 
-Lo store incapsula i [[signal]] e le resource. I signal **scrivibili restano privati** (`_from`), si espone la **read-only view** via `asReadonly()`, più [[computed]] derivati e metodi di update:
+Lo store incapsula i [[signal]] e le resource. I signal **scrivibili restano privati** (`_from`); all'esterno se ne espone la **read-only view** con `asReadonly()`, insieme ai [[computed]] derivati e ai metodi di update:
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-search/flight-store.ts

@@ -114,17 +114,17 @@ export class FlightSearch {
 }
 ```
 
-- Tutto ciò che il template usa è esposto come **proprietà** o **metodo**. Lo stato si modella con i [[signal]]: legati al template, avvisano Angular dei cambi di valore così che il framework aggiorni i binding.
-- Un signal si crea con `signal()` (da `@angular/core`) passando un valore iniziale: **ha sempre un valore**. Il tipo si inferisce dal default; esplicitalo quando il default non basta — es. `signal<Flight[]>([])`, perché un array vuoto non porta informazione sul tipo degli elementi.
-- Il `filter` rappresenta i criteri di ricerca; `form(this.filter)` ne costruisce il `filterForm` (Signal Forms) a cui si legano gli input: a ogni modifica dei controlli, sia `filterForm` sia `filter` si aggiornano.
-- Si **legge** un signal chiamandone il getter (il signal usato come funzione, es. `this.filter().from`); si **scrive** con `.set(value)` o con `.update(prev => next)` quando il nuovo valore dipende dal precedente.
+- Tutto ciò che il template usa è esposto come **proprietà** o **metodo** della classe. Lo stato si modella con i [[signal]]: quando sono legati al template, notificano ad Angular ogni cambio di valore, così il framework può aggiornare i binding.
+- Un signal si crea con `signal()` (da `@angular/core`) passando un valore iniziale, e da lì in poi **ha sempre un valore**. Il tipo di norma si inferisce da quel valore iniziale; va dichiarato solo quando l'inferenza non basta, come in `signal<Flight[]>([])`: un array vuoto non porta alcuna informazione sul tipo dei suoi elementi.
+- Il `filter` rappresenta i criteri di ricerca. Da esso `form(this.filter)` costruisce il `filterForm` (Signal Forms), il form a cui si legano gli `<input>`: a ogni modifica dei controlli si aggiornano insieme sia `filterForm` sia `filter`.
+- Un signal si **legge** chiamandone il getter — cioè usandolo come funzione, es. `this.filter().from`. Si **scrive** con `.set(value)`, oppure con `.update(prev => next)` quando il nuovo valore dipende dal precedente.
 
 ```ts
 const counter = signal(0);
 counter.update((current) => current + 1);
 ```
 
-`signal()` ritorna un `WritableSignal<T>` (getter **e** setter); deriva da `Signal<T>`, che ha solo il getter (niente `set`/`update`). Per esporre un signal in sola lettura usa `asReadonly()`:
+`signal()` ritorna un `WritableSignal<T>`, che ha sia il getter sia il setter. Questo tipo deriva da `Signal<T>`, che espone invece il solo getter (niente `set` né `update`): per pubblicare un signal in sola lettura si usa `asReadonly()`.
 
 ```ts
 const counter = signal(0);
@@ -259,9 +259,11 @@ Tipi di binding:
 > ```
 
 ### Exhaustive @switch
-> 📖 pp.43-44 (Listing 2-12/2-14)
+> 📖 pp.43-45 (Listing 2-12/2-14)
 
-Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto al tipo in seguito. Da **Angular 21.2** il ramo `@default` può chiedere al compilatore un **exhaustiveness check** (un controllo che verifica di aver coperto *tutti* i casi possibili: se ne resta scoperto uno, errore). Restringendo `passengerStatus` da `string` a una **literal union** `'A' | 'B' | 'C'` (un tipo che ammette solo questi valori esatti, non una stringa qualsiasi), quando l'espressione dello `@switch` **è la union** basta la forma breve `@default never;`: man mano che gestisci i casi TypeScript "consuma" i valori rimasti, finché non resta nulla — il tipo `never` (nessun valore possibile).
+Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto al tipo in un secondo momento: il template compila lo stesso, ma quel caso resta scoperto a runtime. Da **Angular 21.2** il ramo `@default` può chiedere al compilatore un **exhaustiveness check** — un controllo che verifica di aver coperto *tutti* i casi possibili e fa fallire la build se ne manca uno.
+
+Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito, quindi si restringe `passengerStatus` da `string` a una **literal union** `'A' | 'B' | 'C'` (un tipo che ammette solo questi tre valori esatti, non una stringa qualsiasi). Quando l'espressione dello `@switch` **è** proprio la union, basta la forma breve `@default never;`. Il meccanismo: gestendo i `@case` uno dopo l'altro, TypeScript "consuma" i valori ancora possibili finché non ne resta nessuno, cioè finché il tipo di `passengerStatus` non si riduce a `never` (l'insieme vuoto, nessun valore possibile).
 
 > [!info] Angular 22+
 > ```html
@@ -272,8 +274,17 @@ Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto a
 >   @default never;
 > }
 > ```
-> Se aggiungi `'D'` alla union senza il relativo `@case`, il template **non compila**.
-> Quando invece fai switch su una **proprietà** di una discriminated union (una union di oggetti che si distinguono per il valore di un campo comune — il *discriminatore*, qui `kind`) e non sulla union intera, TypeScript sa restringere la singola proprietà ma non sa dire se l'intera union è coperta: serve la forma `never(<expression>)` (**Angular 22**), che indica esplicitamente al compilatore quale espressione controllare per la copertura completa.
+> Se in seguito si aggiunge `'D'` alla union senza il relativo `@case`, il template **non compila** più.
+
+C'è però un caso più frequente in cui la forma breve non basta: quando lo switch è su una **proprietà** di una *discriminated union* (una union di oggetti distinti dal valore di un campo comune — il *discriminatore*, qui `kind`), e non sull'intera union. TypeScript sa restringere quella singola proprietà, ma non sa dedurre se l'intera union è stata coperta. Serve allora la forma `never(<expression>)` (**Angular 22**), che indica esplicitamente al compilatore quale espressione controllare per la copertura completa.
+
+> [!info] Angular 22+
+> ```ts
+> type Loyalty =
+>   | { kind: 'senator';  loungeAccess: true }
+>   | { kind: 'frequent'; bonusMiles: number }
+>   | { kind: 'regular' };
+> ```
 > ```html
 > @switch (loyalty().kind) {
 >   @case ('senator')  { <p>Senator (Lounge access: {{ loyalty().loungeAccess }})</p> }
@@ -282,7 +293,7 @@ Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto a
 >   @default never(loyalty());
 > }
 > ```
-> Aggiungere una variante come `{ kind: 'staff' }` alla union `Loyalty` senza il corrispondente `@case` rompe la build del template.
+> `loyalty().kind` è solo la stringa discriminatrice: un `@default never;` "secco" non basterebbe, perché TypeScript non può dedurne che l'intera union `Loyalty` è coperta. Aggiungere una variante come `{ kind: 'staff' }` senza il corrispondente `@case` rompe quindi la build del template.
 
 > [!warning]
 > Nel `@for` il `track` è **obbligatorio**: punta a un identificatore univoco (es. `track flight.id`; in mancanza, `track $index` o l'oggetto stesso `track flight`). Permette ad Angular di **spostare** i nodi DOM esistenti quando cambia l'ordine, invece di ri-renderizzare tutta la lista.
@@ -445,7 +456,13 @@ protected readonly flightsResource = httpResource<Flight[]>(
 In alternativa a `error()` puoi guardare il signal `status()`, che vale uno tra: `idle` (niente caricato) · `loading` · `reloading` · `error` · `resolved` (caricamento riuscito) · `local` (valore cambiato localmente via `set`/`update`).
 
 > [!tip]
-> `httpResource` gestisce da sola le [[glossario#race-condition|race condition]] (quando più richieste partite in rapida successione si "sorpassano" e rischi di mostrare la risposta sbagliata, cioè non quella dell'ultima ricerca): se più richieste partono di fila tiene **solo l'ultima** e scarta le risposte precedenti che arrivano dopo (come `switchMap` in RxJS — un operatore che annulla la richiesta in corso quando ne parte una nuova). `reload()` invece, se chiamato mentre una richiesta è già in corso, **viene ignorato** (come `exhaustMap`, l'operatore che ignora le nuove chiamate finché quella attiva non finisce). Queste semantiche sono ideali per il fetch, ma non per update/delete → un altro motivo per cui `HttpClient` resta rilevante.
+> `httpResource` gestisce da sola le [[glossario#race-condition|race condition]], la situazione in cui più richieste partite in rapida successione si "sorpassano", col rischio di mostrare la risposta sbagliata invece di quella dell'ultima ricerca.
+>
+> L'esempio classico: l'utente cerca i voli per Berlino e, prima che la risposta arrivi, cambia destinazione in Londra. Vince l'**ultima** richiesta — solo il risultato per Londra aggiorna `value`, mentre quello per Berlino viene annullato se ancora in corso, o scartato se nel frattempo è già tornato. Chi conosce RxJS lo riconosce come il comportamento di `switchMap` (l'operatore che annulla la richiesta in corso quando ne parte una nuova).
+>
+> `reload()` segue invece la regola opposta: chiamato mentre una richiesta è già in corso, **viene ignorato** — come `exhaustMap`, che scarta le nuove chiamate finché quella attiva non è finita.
+>
+> Sono le semantiche ideali per il fetch, ma non per update/delete: un altro motivo per cui `HttpClient` resta rilevante in quei casi.
 
 Collegamenti: [[resource]] · approfondimento in [[03-reactive-design-with-signals]].
 
@@ -458,7 +475,7 @@ Crescendo l'app conviene spezzare i componenti complessi in pezzi piccoli e riut
 ng g c domains/ticketing/ui/flight-card
 ```
 
-Prima di estrarlo si sostituisce `selectedFlight` con un `basket`: un `Record` (tipo TypeScript per un oggetto-dizionario chiave→valore) che mappa id-volo → booleano (i voli 3 e 5 sono nel carrello fin dall'inizio, a scopo dimostrativo). L'aggiornamento è **immutabile** (nuovo riferimento d'oggetto → Angular rileva il cambio):
+Prima di estrarlo si sostituisce `selectedFlight` con un `basket` (il carrello): un `Record` — il tipo TypeScript per un oggetto-dizionario chiave→valore — che mappa l'id di ogni volo a un booleano. I voli 3 e 5 sono già nel carrello all'avvio, a scopo dimostrativo. L'aggiornamento avviene in modo **immutabile**: si costruisce un oggetto nuovo invece di mutare quello esistente, così il cambio di riferimento fa scattare in modo affidabile la change detection di Angular.
 
 ```ts
 protected readonly basket = signal<Record<number, boolean>>({
@@ -474,7 +491,7 @@ protected updateBasket(flightId: number, selected: boolean): void {
 }
 ```
 
-Lo spread crea un **nuovo** oggetto con tutte le voci correnti più quella aggiornata: il nuovo riferimento aiuta Angular a rilevare la modifica (gli *immutables* sono approfonditi nel [[03-reactive-design-with-signals|cap.3]]).
+Lo spread `{ ...basket, [flightId]: selected }` produce un oggetto nuovo con tutte le voci correnti più quella aggiornata; il tema degli *immutables* è approfondito nel [[03-reactive-design-with-signals|cap.3]].
 
 L'interfaccia pubblica vista dal padre: due **property binding** in ingresso (volo e stato di selezione) e un **event binding** in uscita; il `$event` dell'evento porta il valore emesso.
 
@@ -538,7 +555,7 @@ export class FlightCard {
 
 Dal padre il binding **non cambia**: si lega ancora a `[selected]` e `(selectedChange)`. La differenza è di intento: un `model()` serve quando il figlio deve **riscrivere subito** la modifica al padre; con `input` + `output` il figlio controlla con precisione *quando* notificare.
 
-**Two-way binding** "banana in a box" `[(prop)]` — zucchero sintattico (una scrittura più breve che si espande in qualcosa di più verboso, senza aggiungere funzionalità) per un property + un event binding con naming `prop`/`propChange`. Esempio: uno `SimpleDelayStepper` con `value = model(0)` che incrementa/decrementa di 15 minuti.
+**Two-way binding** "banana in a box" `[(prop)]` — è **zucchero sintattico** (una forma più breve che si espande in qualcosa di più verboso, senza aggiungere funzionalità) per un property binding più un event binding, con la convenzione di nome `prop`/`propChange`. Lo si vede su uno `SimpleDelayStepper`, con `value = model(0)`, che aumenta o riduce un ritardo a passi di 15 minuti.
 
 ```ts
 // src/app/domains/shared/ui-common/simple-delay-stepper/simple-delay-stepper.ts

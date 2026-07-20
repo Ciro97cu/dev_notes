@@ -52,7 +52,7 @@ export const FlightStore = signalStore(
 
 In alternativa alla type assertion si può tipizzare esplicitamente lo stato con `withState<FlightSearchState>({...})`, dichiarando prima l'interfaccia. Il libro preferisce la prima opzione quando non serve un tipo separato altrove, perché è meno verbosa.
 
-**`withProps`** aggiunge proprietà qualunque allo store, anche non-signal: service iniettati, oppure `Subject`/`Observable` per rappresentare eventi. Riceve una funzione che riceve lo store e ritorna le proprietà. Il prefisso `_` rende il membro **privato**: non è solo convenzione, il type system del NgRx esclude i membri `_*` dal tipo esposto ai consumer (vale per tutte le features, non solo `withProps`).
+**`withProps`** aggiunge proprietà qualunque allo store, anche non-signal: service iniettati, oppure `Subject`/`Observable` per rappresentare eventi. Riceve una funzione che, dato lo store, ritorna le proprietà da aggiungere. Il prefisso `_` rende il membro **privato**: non è solo convenzione, il type system del NgRx esclude i membri `_*` dal tipo esposto ai consumer (vale per tutte le features, non solo `withProps`).
 
 ```ts
 withProps(() => ({
@@ -281,7 +281,7 @@ value.set(100); setTimeout(() => value.set(200), 1000);
 // output: Result: 200, poi Result: 400 — il valore iniziale 0 NON passa (glitch-free, cap.3)
 ```
 
-Esempio realistico nel `PassengerStore`: `updateFilter` è un `rxMethod` che fa `patchState` (loading), poi `switchMap` verso il client, con `tap`/`catchError`.
+Esempio realistico nel `PassengerStore`: qui `updateFilter` è un `rxMethod` che prima imposta lo stato di loading con `patchState`, poi con `switchMap` interroga il client, gestendo la risposta con `tap` e `catchError`.
 
 ```ts
 updateFilter: rxMethod<PassengerFilter>(
@@ -384,7 +384,7 @@ const passengerConfig = entityConfig({ entity: type<Passenger>(), collection: 'p
 > [!tip]
 > Spesso è meglio **splittare le collection in store separati** (uno store per tipo di entità per feature, più magari uno per la UI state) anziché ammassarle in un unico store: con gli store leggeri come SignalStore è la prassi, e tiene gli store piccoli e a responsabilità distinta.
 
-**Normalizzazione.** Mettere strutture annidate dal backend direttamente nello store porta a **duplicati** (lo stesso passeggero su più voli) e a stati incoerenti, e rende difficile rimodellare i dati per le varie viste. Come nei DB relazionali si normalizza: ogni tipo di entità nella sua collection, i riferimenti solo via ID. Una sola istanza per entità, ricomponibile (joinabile, come una *join* SQL che riunisce dati collegati) per ogni vista via `computed`.
+**Normalizzazione.** Mettere strutture annidate dal backend direttamente nello store porta a **duplicati** (lo stesso passeggero su più voli) e a stati incoerenti, e rende difficile rimodellare i dati per le varie viste. Come nei DB relazionali, allora, si normalizza: si tiene ogni tipo di entità nella propria collection e si mantengono i riferimenti solo via ID. Così esiste una sola istanza per entità, ricomponibile (joinabile, come una *join* SQL che riunisce dati collegati) per ogni vista via `computed`.
 
 ```ts
 export type FlightState     = Flight    & { passengerIds: number[] };

@@ -41,7 +41,7 @@ Nel passo 2 l'autenticazione può avvenire in più modi: l'app può inviare user
 3. Quella pagina accede alla tua web app: per esempio offre un form che invia i suoi dati al tuo sito, o un link che chiama la tua pagina con certi parametri.
 4. L'utente invia il form o segue il link: poiché il browser **allega il cookie** alle richieste verso il tuo sito, l'azione viene eseguita a suo nome.
 
-I cookie **`SameSite`** già limitano molto questo attacco. Un'ulteriore mitigazione sono gli **XSRF token** (da non confondere con i security token della sezione successiva): stringhe casuali che l'app Angular riceve dal backend e deve includere nelle **richieste state-changing** (cioè quelle che modificano dati lato server: POST/PUT/DELETE) verso la stessa origin, provando così che la richiesta proviene davvero da lei e non da una pagina controllata dall'aggressore.
+I cookie **`SameSite`** già limitano molto questo attacco. Un'ulteriore mitigazione sono gli **XSRF token** (da non confondere con i security token della sezione successiva): sono stringhe casuali che l'app Angular riceve dal backend e deve includere nelle **richieste state-changing** — quelle che modificano dati lato server (POST/PUT/DELETE) — verso la stessa origin. Così l'app dimostra che la richiesta proviene davvero da lei e non da una pagina controllata dall'aggressore.
 
 `HttpClient` implementa questa protezione **out of the box** (già pronta, senza configurarla): al caricamento dell'app si aspetta il token in un cookie `XSRF-TOKEN`, ne memorizza il valore e lo rispedisce al server a ogni richiesta nell'header `X-XSRF-TOKEN`. Sul server devi solo emettere il cookie `XSRF-TOKEN` e verificare l'header `X-XSRF-TOKEN` a ogni richiesta successiva; è importante emettere un **nuovo token, imprevedibile, dopo ogni login** per quell'utente.
 
@@ -182,7 +182,7 @@ Agli albori delle SPA si usava OAuth 2 **direttamente sul client**. Librerie com
 C'è però un problema serio con OAuth 2 client-side:
 
 - L'access token è **solo una stringa** e non esiste un modo **sicuro** per conservarlo nel browser. Codice JavaScript malevolo iniettato nel client può rubarlo — e gli **injection attack** (attacchi in cui l'aggressore inietta codice ostile nella pagina, tipicamente via XSS) figurano da anni in alto nella OWASP Top 10 (la classifica di riferimento dei principali rischi di sicurezza web).
-- Non c'è un buon modo di **rinfrescare** i token nel browser. Per limitare la superficie d'attacco si usano access token **a vita breve** (anche 10 minuti) → serve un modo di ottenere un nuovo access token **senza interazione utente**, cioè il **token refresh**.
+- Non c'è un buon modo di **rinfrescare** i token nel browser. Per limitare la superficie d'attacco si usano access token **a vita breve** (anche 10 minuti), e allora serve un modo di ottenere un nuovo access token **senza interazione utente** (l'utente non vuole certo rifare il login di continuo): è il **token refresh**.
 - OAuth 2 prevede un **refresh token** scambiabile on demand per un nuovo access token (e un nuovo refresh token), ma un refresh token rubato consente di impersonare l'utente **a lungo termine**. Per questo OAuth 2 **non consente l'uso di refresh token nei browser**.
 
 > [!warning]

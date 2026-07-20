@@ -7,14 +7,14 @@ tags: [tipo/capitolo, directives, templates, angular-22]
 # 11 · Directives, Templates, and Containers
 > 📖 cap.11 · pp.312-341 — *Modern Angular* v2.0.0
 
-Le librerie di componenti (Angular Material & co.) non spediscono solo UI pronte: poggiano su una manciata di mattoni che rendono i componenti flessibili e riusabili — [[glossario#attribute-directive|**attribute directive**]] (directive senza template, che aggiungono comportamento a un elemento esistente) che potenziano altri componenti, [[glossario#structural-directive|**structural directive**]] (directive che aggiungono/rimuovono elementi dal DOM, come `*ngIf`), template e componenti dinamici, manipolazioni DOM controllate. Il capitolo attraversa questi meccanismi con un insieme minimo di costrutti riusabili: una **tooltip directive** (in due versioni), una **DataTable** e un **DialogService**.
+Le librerie di componenti (Angular Material & co.) non spediscono solo UI pronte: poggiano su una manciata di mattoni che rendono i componenti flessibili e riusabili. Tra questi ci sono le [[glossario#attribute-directive|**attribute directive**]] (directive senza template, che aggiungono comportamento a un elemento esistente) usate per potenziare altri componenti, le [[glossario#structural-directive|**structural directive**]] (directive che aggiungono/rimuovono elementi dal DOM, come `*ngIf`), i template e i componenti dinamici, e le manipolazioni DOM controllate. Il capitolo attraversa questi meccanismi con un insieme minimo di costrutti riusabili: una **tooltip directive** (in due versioni), una **DataTable** e un **DialogService**.
 
 Idea cardine: un **componente è solo una directive con un template**. La `@Directive` ha quasi tutte le proprietà di `@Component`, mancano solo quelle legate al template (`template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`).
 
 ## Attribute Directives — definire una directive
 > 📖 pp.312-315
 
-Le **attribute directive** aggiungono comportamento a elementi esistenti senza portare una propria view (senza un template proprio: si "agganciano" a un elemento già nel template). Il nome riflette la convenzione: di solito il selector (il pattern CSS che dice a Angular su quali elementi applicarsi) punta a elementi con un certo **attributo**, ma è solo una convenzione, non un obbligo. L'esempio sostituisce il classico `(click)` per azioni critiche con un click che prima mostra un dialog di conferma e scatena l'handler (la funzione che reagisce all'evento) **solo** se l'utente conferma.
+Le **attribute directive** aggiungono comportamento a elementi esistenti senza portare una propria view: non hanno un template, si "agganciano" a un elemento già presente nel template. Il nome riflette una convenzione: di solito il selector (il pattern CSS che dice a Angular su quali elementi applicarsi) punta a elementi con un certo **attributo**, ma resta appunto una convenzione, non un obbligo. L'esempio propone un'alternativa al classico `(click)` per le azioni critiche: prima di scatenare l'handler (la funzione che reagisce all'evento) mostra un dialog di conferma, così l'azione parte **solo** se l'utente conferma.
 
 La directive si importa nei `imports` del componente standalone che la usa:
 
