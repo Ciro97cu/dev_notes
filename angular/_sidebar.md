@@ -47,5 +47,22 @@
   - [@Service](/concetti/service.md)
   - [lightweight store](/concetti/lightweight-store.md)
 
+- **🎓 Cert (Senior) · Angular classico**
+  - [Indice](/cert/00-index.md)
+  - [NgModules](/cert/ngmodules.md)
+  - [Componenti (classico)](/cert/components-classic.md)
+  - [Direttive & pipe (classico)](/cert/directives-pipes-classic.md)
+  - [Dependency Injection (classica)](/cert/di-classic.md)
+  - [Routing (classico)](/cert/routing-classic.md)
+  - [Forms · Template-driven](/cert/forms-template-driven.md)
+  - [Forms · Reactive](/cert/forms-reactive.md)
+  - [RxJS](/cert/rxjs.md)
+  - [HttpClient (classico)](/cert/http-classic.md)
+  - [Change Detection](/cert/change-detection.md)
+  - [NgRx (Redux)](/cert/ngrx-classic.md)
+  - [Testing (classico)](/cert/testing-classic.md)
+  - [Performance](/cert/performance.md)
+  - [Security](/cert/security.md)
+
 - **🛠️ Meta**
   - [📖 Glossario](/_meta/glossario.md)
