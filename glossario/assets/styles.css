@@ -15,6 +15,7 @@
   --bg-soft: #f6f8fa;
   --text: #24292f;
   --text-soft: #57606a;
+  --strong: #14181c;
   --border: #e4e8ec;
   --sidebar-bg: #fafbfc;
   --code-bg: #f3f5f7;
@@ -33,6 +34,7 @@ html.dark {
   --bg-soft: #161b22;
   --text: #c9d1d9;
   --text-soft: #8b949e;
+  --strong: #ffffff;
   --border: #21262d;
   --sidebar-bg: #0b0f14;
   --code-bg: #161b22;
@@ -304,6 +306,12 @@ html.dark {
   margin: 1.1em 0;
   box-shadow: none;
 }
+/* Grassetti: seguono il tema (vue.css li hardcoda scuro → si perdono in dark). */
+.markdown-section strong,
+.markdown-section b { color: var(--strong); }
+.markdown-section .alert strong,
+.markdown-section .alert b { color: inherit; }
+.markdown-section hr { border: 0; border-top: 1px solid var(--border); }
 .markdown-section .alert.callout > p { color: var(--text); }
 .markdown-section .alert.callout .title {
   font-weight: 700; display: flex; align-items: center; gap: .5em; margin: 0 0 .4em;
