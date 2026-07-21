@@ -505,6 +505,38 @@ export const appConfig: ApplicationConfig = {
 > [!warning]
 > `HttpRequest` e `HttpHeaders` sono **[[equality-immutability|immutabili]]** (non si possono cambiare una volta creati): per modificarli devi `req.clone({ ... })`, cioè crearne una copia modificata, non cambiarli sul posto. E l'**ordine** dell'array in `withInterceptors([...])` determina l'ordine della catena: ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa al successivo.
 
+### Ordine della catena: richiesta vs risposta
+➕ *Fuori dal libro Modern Angular — chiarimento sull'ordine.*
+
+La catena è **bidirezionale** (modello a cipolla): la **richiesta** attraversa gli interceptor nell'ordine dell'array, la **risposta** li riattraversa in ordine **inverso**. Due interceptor minimi che si limitano a loggare lo rendono evidente:
+
+```ts
+import { tap } from 'rxjs';
+
+// il codice prima di next() agisce sulla RICHIESTA, la pipe sulla RISPOSTA
+export const first: HttpInterceptorFn = (req, next) => {
+  console.log('first  → richiesta');
+  return next(req).pipe(tap(() => console.log('first  ← risposta')));
+};
+
+export const second: HttpInterceptorFn = (req, next) => {
+  console.log('second → richiesta');
+  return next(req).pipe(tap(() => console.log('second ← risposta')));
+};
+```
+
+Registrati in quest'ordine — `provideHttpClient(withInterceptors([first, second]))` — una singola chiamata HTTP stampa:
+
+```
+first  → richiesta      // uscita: ordine dell'array
+second → richiesta
+   · · · richiesta reale, poi torna la risposta · · ·
+second ← risposta       // rientro: ordine inverso
+first  ← risposta
+```
+
+Siccome `first` chiama `next` (cioè `second`), la `pipe` di `first` **avvolge** quella di `second`: sulla richiesta `first` parla per primo, sulla risposta per ultimo. Conseguenza pratica: un interceptor di logging o di error handling globale conviene metterlo **per primo**, così è il più esterno, vede la risposta per ultimo e copre l'intero round-trip.
+
 Collegamenti: [[inject]] · [[providers]] · [[16-authentication-authorization]] (Bearer token / gestione 401-403).
 
 ## 🔁 Ripasso lampo
