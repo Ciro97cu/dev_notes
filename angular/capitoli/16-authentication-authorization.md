@@ -21,7 +21,7 @@ I cookie sembrano antiquati a prima vista, ma grazie ai **security attribute** i
 
 - **`HttpOnly`** — il cookie **non è leggibile da JavaScript**: codice malevolo non può rubarlo direttamente.
 - **`Secure`** — il cookie viaggia **solo su HTTPS**.
-- **`SameSite`** — limita l'invio del cookie nelle richieste **cross-origin**: se un sito compromesso carica la tua pagina in un iframe o le invia un form, il browser non allega i cookie al server.
+- **`SameSite`** — limita l'invio del cookie nelle richieste **cross-origin** (cioè verso un'origin — schema+host+porta — diversa da quella della pagina; approfondimento nel [glossario](../../glossario/docs/web-browser.md#cross-origin-cors)): se un sito compromesso carica la tua pagina in un iframe o le invia un form, il browser non allega i cookie al server.
 
 Dal punto di vista del client il flusso è semplice:
 
