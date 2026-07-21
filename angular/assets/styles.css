@@ -20,6 +20,7 @@
   --bg-soft: #f6f8fa;
   --text: #1f2328;
   --text-soft: #59636e;
+  --strong: #14181c;   /* grassetti: un filo più forti del testo */
   --border: #e4e8ec;
   --sidebar-bg: #fbfcfd;
   --code-bg: #f4f6f8;
@@ -55,6 +56,7 @@ html.dark {
   --bg-soft: #161b22;
   --text: #d3dae3;
   --text-soft: #9aa5b1;
+  --strong: #ffffff;   /* in dark i grassetti spiccano sul testo */
   --border: #232b35;
   --sidebar-bg: #0b0f14;
   --code-bg: #12181f;
@@ -93,6 +95,13 @@ body {
   text-wrap: pretty;
 }
 .content, .markdown-section { color: var(--text); }
+/* Grassetti: seguono il tema. Il tema vue.css li hardcoda a uno slate scuro,
+   che in dark mode resta scuro sul fondo scuro e "si perde". */
+.markdown-section strong,
+.markdown-section b { color: var(--strong); }
+/* Nei callout il bold resta del colore del callout (solo più marcato). */
+.markdown-section .alert strong,
+.markdown-section .alert b { color: inherit; }
 
 /* ---------- Titoli ---------- */
 .markdown-section h1,
@@ -186,6 +195,7 @@ body {
   margin: 1.1em 0;
   box-shadow: none;
 }
+.markdown-section hr { border: 0; border-top: 1px solid var(--border); }
 .markdown-section .alert.callout > p { color: var(--text); }
 .markdown-section .alert.callout .title {
   font-weight: 700;
