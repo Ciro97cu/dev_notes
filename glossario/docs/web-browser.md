@@ -12,6 +12,24 @@ Il collegamento tra dominio e server avviene tramite il **DNS** (*Domain Name Sy
 
 Un sottodominio è una suddivisione di un dominio principale, usata per separare aree del sito. In `blog.esempio.com`, `blog` è il sottodominio. Usi tipici: sezioni distinte (`shop.`, `support.`) o varianti per lingua (`it.esempio.com`). Come i domini, i sottodomini si gestiscono via DNS, dal pannello del provider di hosting o del registrar.
 
+## Cross-origin (CORS)
+
+Un'**origin** è la combinazione di tre cose: **schema + host + porta** (es. `https://app.example.com:443`). Due URL sono *same-origin* solo se coincidono tutte e tre; se ne cambia anche una sola — protocollo, dominio/sottodominio o porta — una richiesta dall'una all'altra è **cross-origin**.
+
+Per sicurezza il browser applica la **same-origin policy**: uno script può leggere liberamente le risposte solo dalla **propria** origin. Una richiesta cross-origin (es. la SPA su `https://app.example.com` che chiama l'API su `https://api.example.com`) il browser la **invia**, ma **blocca la lettura della risposta** al JavaScript, a meno che il server non lo autorizzi esplicitamente via **CORS** (*Cross-Origin Resource Sharing*).
+
+CORS funziona con header di risposta del **server**: `Access-Control-Allow-Origin` (e affini) dichiarano quali origin possono leggere la risposta. Per le richieste "non semplici" (metodi come `PUT`/`DELETE`, header custom…) il browser manda prima una richiesta **preflight** `OPTIONS` per chiedere il permesso, e invia quella vera solo se il server acconsente.
+
+Cosa conta come cross-origin rispetto a `https://example.com`:
+
+- `http://example.com` — diverso **schema** → cross-origin
+- `https://api.example.com` — diverso **host** (sottodominio) → cross-origin
+- `https://example.com:8080` — diversa **porta** → cross-origin
+- `https://example.com/altra` — stessa origin (il **path** non conta)
+
+> [!tip]
+> Un errore CORS **non** è un errore applicativo del server: la richiesta parte (e spesso arriva), ma è il **browser** a impedire al JS di leggere la risposta. Si risolve **lato server** (header CORS corretti), non nel client. In Angular si manifesta di solito come `HttpErrorResponse` con `status === 0`. La distinzione same-origin/cross-origin è anche alla base dei cookie `SameSite` e della protezione XSRF → [Angular · Authentication](../../angular/capitoli/16-authentication-authorization.md).
+
 ## Cache
 
 La cache è una memoria temporanea in cui si conservano dati usati di frequente, per accedervi più in fretta e ridurre il lavoro ripetuto. Nello sviluppo assume forme diverse a seconda del livello:

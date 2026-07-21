@@ -7,7 +7,7 @@ Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** 
 ## Indice
 
 **[Web, browser e rete](docs/web-browser.md)**
-Dominio · Sottodominio · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
+Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
 
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
 CSV · XML · Bit e Byte
