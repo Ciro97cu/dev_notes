@@ -48,6 +48,11 @@ Vault di studio in italiano sul libro **_Modern Angular_ (2ª edizione, v2.0.0 �
 - [[16-authentication-authorization|16 · Authentication & Authorization]] — pp.412-421
 - [[17-defer-ssr-hydration|17 · Defer, SSR & Hydration]] — pp.422-434
 
+## 🎓 Prep certificazione (Angular classico)
+
+Sezione separata per la **cert Angular** ([certificates.dev](https://certificates.dev/angular), target Senior): copre solo l'**Angular classico** che l'esame richiede e che non è in questo vault (NgModules, forms classiche, RxJS, DI/routing classici, NgRx Redux, ecc.). I temi già trattati qui non si riscrivono, si rimandano.
+→ [[cert/00-index|🎓 Cert — indice e checklist]]
+
 ## 🧩 Concetti cardine
 
 **Reattività**

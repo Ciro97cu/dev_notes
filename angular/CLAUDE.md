@@ -12,6 +12,7 @@ Fonte: `modern-angular_v2_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagin
 00-index.md          home/MOC: mappa dei 19 capitoli + concetti cardine
 capitoli/            1 nota-hub per capitolo (filename inglesi numerati a 2 cifre)
 concetti/            note atomiche sui concetti cardine ricorrenti
+cert/                prep certificazione: Angular *classico* non coperto dal libro (vedi sotto)
 assets/              immagini
 _meta/               book-outline.txt + glossario.md (meta, non sono appunti)
 ```
@@ -107,6 +108,13 @@ aliases: [<sinonimi/varianti>]
 
 **Usato in:** [[NN-capitolo]], [[NN-capitolo]]
 ```
+
+## Sezione `cert/` — prep certificazione (Angular classico)
+Appunti per la **cert Angular** di certificates.dev (target Senior). Coprono **solo** l'Angular *classico/legacy* che l'esame richiede e che **non** è nel libro *Modern Angular* (NgModules, template-driven & reactive forms, RxJS, DI e routing class-based, change detection con Zone.js, NgRx Redux, testing Jasmine/Karma, perf, security).
+- **Anti-duplicazione (regola dura)**: se un tema è già spiegato nei capitoli moderni, **non si riscrive** → si rimanda con `> [!info] vs Modern`. Fonte: [certificates.dev](https://certificates.dev/angular) + angular.dev / rxjs.dev / ngrx.io.
+- **Naming**: `cert/<topic-kebab>.md` (inglese), più `cert/00-index.md` (MOC + checklist spuntabile + link ai capitoli per i temi 🔁). NON usano il template capitolo (niente `📖 pp.`).
+- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> 🎓 Cert Angular · ...`; concept 2-4 righe; sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info] vs Modern` (link al capitolo moderno); `> [!info] Stato attuale` (deprecazione/default odierno + link); chiusura con **🔁 Ripasso lampo** e **In sintesi:**.
+- **Manutenzione**: aggiungendo una nota `cert/`, aggiornare `cert/00-index.md` e la sezione `🎓 Cert` di `_sidebar.md`.
 
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) vanno **senza titolo custom** — niente "Gotcha"/"Take-away": Obsidian mostra l'etichetta di default.
