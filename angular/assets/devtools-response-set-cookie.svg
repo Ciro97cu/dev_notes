@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 450" role="img" aria-label="DevTools Network, sotto-tab Headers: nei Response Headers sono evidenziati Access-Control-Allow-Origin e i Set-Cookie XSRF-TOKEN e sid">
+  <style>
+    .panel{fill:#ffffff;stroke:#d0d7de;stroke-width:1;}
+    .strip{fill:#f6f8fa;}
+    .div{stroke:#eaecef;stroke-width:1;}
+    .tab{font:600 13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#59636e;}
+    .tabA{fill:#1f6feb;}
+    .sec{font:700 12px system-ui,sans-serif;fill:#6e7781;letter-spacing:.03em;}
+    .k{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#1f2328;}
+    .v{font:13px ui-monospace,Menlo,Consolas,monospace;fill:#57606a;}
+    .hl{fill:#fff3cd;}
+    .badge{fill:#0a7d55;}
+    .bt{font:700 12px system-ui,sans-serif;fill:#ffffff;}
+    .lg{font:13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#1f2328;}
+    .lgk{font:700 13px ui-monospace,Menlo,monospace;fill:#0a7d55;}
+  </style>
+
+  <rect class="panel" x="8" y="8" width="824" height="292" rx="8"/>
+  <path class="strip" d="M8 16a8 8 0 0 1 8-8h808a8 8 0 0 1 8 8v24H8z"/>
+  <line class="div" x1="8" y1="40" x2="832" y2="40"/>
+  <text class="tab tabA" x="24" y="28">Headers</text>
+  <text class="tab" x="96" y="28">Payload</text>
+  <text class="tab" x="170" y="28">Preview</text>
+  <text class="tab" x="244" y="28">Response</text>
+  <text class="tab" x="330" y="28">Timing</text>
+  <rect x="22" y="37" width="58" height="2" fill="#1f6feb"/>
+
+  <!-- General -->
+  <text class="sec" x="24" y="62">▾ General</text>
+  <text class="k" x="24" y="84">Request Method:</text><text class="v" x="180" y="84">POST</text>
+  <text class="k" x="24" y="106">Status Code:</text><text class="v" x="180" y="106">200 OK</text>
+  <line class="div" x1="16" y1="122" x2="824" y2="122"/>
+
+  <!-- Response Headers -->
+  <text class="sec" x="24" y="144">▾ Response Headers</text>
+
+  <rect class="hl" x="14" y="155" width="812" height="22"/>
+  <text class="k" x="24" y="170">access-control-allow-origin:</text><text class="v" x="300" y="170">https://app.example.com</text>
+  <circle class="badge" cx="812" cy="166" r="9"/><text class="bt" x="812" y="170" text-anchor="middle">1</text>
+
+  <text class="k" x="24" y="196">access-control-allow-credentials:</text><text class="v" x="340" y="196">true</text>
+  <text class="k" x="24" y="222">content-type:</text><text class="v" x="180" y="222">application/json</text>
+
+  <rect class="hl" x="14" y="233" width="812" height="22"/>
+  <text class="k" x="24" y="248">set-cookie:</text><text class="v" x="180" y="248">XSRF-TOKEN=9f2a1c7b…; Path=/; Secure; SameSite=Lax</text>
+  <circle class="badge" cx="812" cy="244" r="9"/><text class="bt" x="812" y="248" text-anchor="middle">2</text>
+
+  <rect class="hl" x="14" y="259" width="812" height="22"/>
+  <text class="k" x="24" y="274">set-cookie:</text><text class="v" x="180" y="274">sid=8b3e…; Path=/; HttpOnly; Secure; SameSite=Lax</text>
+  <circle class="badge" cx="812" cy="270" r="9"/><text class="bt" x="812" y="274" text-anchor="middle">3</text>
+
+  <!-- legend -->
+  <circle class="badge" cx="24" cy="330" r="9"/><text class="bt" x="24" y="334" text-anchor="middle">1</text>
+  <text class="lg" x="40" y="334"><tspan class="lgk">access-control-allow-origin</tspan> — header CORS: il server autorizza la tua origin a leggere la risposta.</text>
+
+  <circle class="badge" cx="24" cy="360" r="9"/><text class="bt" x="24" y="364" text-anchor="middle">2</text>
+  <text class="lg" x="40" y="364"><tspan class="lgk">set-cookie: XSRF-TOKEN</tspan> — qui il server EMETTE il token anti-XSRF. Niente HttpOnly: il client deve poterlo leggere.</text>
+
+  <circle class="badge" cx="24" cy="390" r="9"/><text class="bt" x="24" y="394" text-anchor="middle">3</text>
+  <text class="lg" x="40" y="394"><tspan class="lgk">set-cookie: sid</tspan> — il cookie di sessione: con HttpOnly, così JavaScript non può rubarlo.</text>
+</svg>

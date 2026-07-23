@@ -73,6 +73,26 @@ Una seconda linea di difesa è validare gli header `Origin`/`Referer` inviati da
 > [!warning]
 > `Origin`/`Referer` possono **mancare per motivi legittimi**: privacy tool, estensioni del browser e proxy aziendali li possono rimuovere, e alcuni client vecchi o bloccati non li inviano affatto. Il server deve trattare l'assenza come **inconcludente**, non rifiutare la richiesta, altrimenti taglia fuori utenti validi.
 
+## Dove trovarli nei DevTools
+➕ *Fuori dal libro Modern Angular — riferimento visivo per lo studio (immagini ricostruite, non screenshot reali).*
+
+Questi header non sono astratti: si vedono nei **DevTools** del browser (`F12`). Si apre il tab **Network**, si fa partire una richiesta (es. un submit), poi si clicca la richiesta e si apre il sotto-tab **Headers**. Quasi tutto vive lì, insieme.
+
+**Request Headers** — nella richiesta viaggiano insieme `Authorization: Bearer …`, `Origin`, `Referer` e `X-XSRF-TOKEN`:
+
+![Request Headers nei DevTools: Authorization Bearer, Origin, Referer e X-XSRF-TOKEN evidenziati](../assets/devtools-request-headers.svg)
+
+**Response Headers** — nella *risposta* il server **emette** il token anti-XSRF con `Set-Cookie: XSRF-TOKEN=…` (insieme agli header CORS):
+
+![Response Headers nei DevTools: Set-Cookie XSRF-TOKEN e Access-Control-Allow-Origin evidenziati](../assets/devtools-response-set-cookie.svg)
+
+**Application → Cookies** — la tabella dei cookie con gli attributi `HttpOnly`/`Secure`/`SameSite`. Si nota che `XSRF-TOKEN` **non** è `HttpOnly` (il client deve poterlo leggere per rispedirlo come header), mentre il cookie di sessione lo è:
+
+![Application → Cookies nei DevTools: XSRF-TOKEN senza HttpOnly, cookie di sessione con HttpOnly](../assets/devtools-application-cookies.svg)
+
+> [!tip]
+> Il ciclo XSRF si legge nelle immagini: il server lo **emette** nella risposta (`Set-Cookie: XSRF-TOKEN`, immagine 2), il browser lo salva tra i **cookie** (immagine 3), e `HttpClient` lo rilegge e lo **rimanda** come header `X-XSRF-TOKEN` nella richiesta successiva (immagine 1).
+
 ## Token-based Security
 
 > 📖 pp.414-417
