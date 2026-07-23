@@ -52,3 +52,19 @@ Con 256 combinazioni un byte rappresenta tutti i caratteri di uno standard come 
 
 > [!tip]
 > **Dai byte ai caratteri.** ASCII usa 1 byte per carattere (128 caratteri base, 256 con le estensioni): sufficiente per l'alfabeto latino. Per alfabeti non latini ed emoji serve **Unicode**, tipicamente con codifica **UTF-8**, che usa da 1 a 4 byte per carattere restando compatibile con ASCII sui primi 128 codici.
+
+## Base64 (`btoa` / `atob`)
+
+Base64 è una codifica che rappresenta dati **binari come testo ASCII**, con un alfabeto di 64 caratteri (`A–Z`, `a–z`, `0–9`, `+`, `/`, più `=` di padding). Serve a trasportare byte dove è ammesso solo testo: data URL, parti di un **JWT**, header `Authorization: Basic`, allegati email. **Non è cifratura**: è reversibile da chiunque, non nasconde nulla.
+
+Nel browser due funzioni globali fanno la conversione:
+
+```js
+btoa('Ciao');       // "Q2lhbw==" — string → Base64  ("binary to ASCII")
+atob('Q2lhbw==');   // "Ciao"     — Base64 → string  ("ASCII to binary")
+```
+
+I nomi sono controintuitivi: `btoa` **codifica**, `atob` **decodifica**.
+
+> [!warning]
+> `btoa` lavora byte per byte e lancia `InvalidCharacterError` sui caratteri fuori da Latin1 (emoji, molte lettere accentate): per una stringa Unicode va prima convertita in UTF-8 (es. con `TextEncoder`). In **Node.js** l'idioma è invece `Buffer.from(str).toString('base64')` / `Buffer.from(b64, 'base64').toString()`.
