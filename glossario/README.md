@@ -10,7 +10,7 @@ Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** 
 Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
 
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
-CSV · XML · Bit e Byte
+CSV · XML · Bit e Byte · Base64 (btoa/atob)
 
 **[Tooling (ecosistema JavaScript)](docs/tooling-javascript.md)**
 Babel · SWC · NPM · NPX · Yarn · NVM · module.exports
@@ -19,7 +19,7 @@ Babel · SWC · NPM · NPX · Yarn · NVM · module.exports
 Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
 
 **[Concetti di programmazione](docs/concetti-programmazione.md)**
-Interoperabilità · Funzione pura · Immutabilità
+Interoperabilità · Funzione pura · Immutabilità · SOLID · DRY
 
 **[Approcci classici e alternativi](docs/approcci-classici.md)**
 Micro frontend con single-spa (Import Map · SystemJS) · NgRx classico (Store, Effects, `dispatch: false`, shallow comparison)
