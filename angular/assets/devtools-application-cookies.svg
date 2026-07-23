@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 400" role="img" aria-label="DevTools Application, Cookies: la tabella dei cookie mostra XSRF-TOKEN senza HttpOnly e il cookie di sessione sid con HttpOnly">
+  <style>
+    .panel{fill:#ffffff;stroke:#d0d7de;stroke-width:1;}
+    .strip{fill:#f6f8fa;}
+    .div{stroke:#eaecef;stroke-width:1;}
+    .tab{font:600 13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#59636e;}
+    .tabA{fill:#1f6feb;}
+    .crumb{font:12px system-ui,sans-serif;fill:#6e7781;}
+    .thbg{fill:#f6f8fa;}
+    .th{font:700 12px system-ui,sans-serif;fill:#42484f;}
+    .td{font:13px ui-monospace,Menlo,Consolas,monospace;fill:#1f2328;}
+    .chk{font:700 14px system-ui,sans-serif;fill:#0a7d55;}
+    .hl{fill:#fff3cd;}
+    .badge{fill:#d9480f;}
+    .bt{font:700 12px system-ui,sans-serif;fill:#ffffff;}
+    .lg{font:13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#1f2328;}
+    .lgk{font:700 13px ui-monospace,Menlo,monospace;fill:#c2410c;}
+  </style>
+
+  <rect class="panel" x="8" y="8" width="824" height="196" rx="8"/>
+  <path class="strip" d="M8 16a8 8 0 0 1 8-8h808a8 8 0 0 1 8 8v24H8z"/>
+  <line class="div" x1="8" y1="40" x2="832" y2="40"/>
+  <text class="tab tabA" x="24" y="28">Application</text>
+  <text class="crumb" x="120" y="28">Storage › Cookies › https://api.example.com</text>
+  <rect x="22" y="37" width="78" height="2" fill="#1f6feb"/>
+
+  <!-- header row -->
+  <rect class="thbg" x="8" y="50" width="824" height="26"/>
+  <line class="div" x1="8" y1="76" x2="832" y2="76"/>
+  <text class="th" x="24" y="68">Name</text>
+  <text class="th" x="150" y="68">Value</text>
+  <text class="th" x="300" y="68">Domain</text>
+  <text class="th" x="424" y="68">Path</text>
+  <text class="th" x="470" y="68">HttpOnly</text>
+  <text class="th" x="580" y="68">Secure</text>
+  <text class="th" x="660" y="68">SameSite</text>
+
+  <!-- row 1: XSRF-TOKEN (HttpOnly blank) -->
+  <rect class="hl" x="464" y="82" width="104" height="28"/>
+  <text class="td" x="24" y="101">XSRF-TOKEN</text>
+  <text class="td" x="150" y="101">9f2a1c7b…</text>
+  <text class="td" x="300" y="101">api.example.com</text>
+  <text class="td" x="424" y="101">/</text>
+  <!-- HttpOnly: vuoto (non impostato) -->
+  <text class="chk" x="590" y="102">✓</text>
+  <text class="td" x="660" y="101">Lax</text>
+  <circle class="badge" cx="812" cy="97" r="9"/><text class="bt" x="812" y="101" text-anchor="middle">1</text>
+  <line class="div" x1="8" y1="110" x2="832" y2="110"/>
+
+  <!-- row 2: sid (HttpOnly ✓) -->
+  <rect class="hl" x="464" y="110" width="104" height="28"/>
+  <text class="td" x="24" y="129">sid</text>
+  <text class="td" x="150" y="129">8b3e…</text>
+  <text class="td" x="300" y="129">api.example.com</text>
+  <text class="td" x="424" y="129">/</text>
+  <text class="chk" x="500" y="130">✓</text>
+  <text class="chk" x="590" y="130">✓</text>
+  <text class="td" x="660" y="129">Lax</text>
+  <circle class="badge" cx="812" cy="125" r="9"/><text class="bt" x="812" y="129" text-anchor="middle">2</text>
+  <line class="div" x1="8" y1="138" x2="832" y2="138"/>
+
+  <!-- legend -->
+  <circle class="badge" cx="24" cy="250" r="9"/><text class="bt" x="24" y="254" text-anchor="middle">1</text>
+  <text class="lg" x="40" y="254"><tspan class="lgk">XSRF-TOKEN</tspan> — HttpOnly vuoto: apposta, così HttpClient lo legge e lo rimanda nell'header X-XSRF-TOKEN.</text>
+
+  <circle class="badge" cx="24" cy="280" r="9"/><text class="bt" x="24" y="284" text-anchor="middle">2</text>
+  <text class="lg" x="40" y="284"><tspan class="lgk">sid</tspan> — HttpOnly spuntato: il cookie di sessione è invisibile a JavaScript, quindi non rubabile via XSS.</text>
+
+  <text class="lg" x="24" y="326">Secure = inviato solo su HTTPS · SameSite=Lax = non allegato alle richieste cross-origin (mitiga XSRF).</text>
+</svg>

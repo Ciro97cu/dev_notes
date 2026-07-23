@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 540" role="img" aria-label="DevTools Network, sotto-tab Headers: nei Request Headers sono evidenziati Authorization (Bearer), Origin, Referer e X-XSRF-TOKEN">
+  <style>
+    .panel{fill:#ffffff;stroke:#d0d7de;stroke-width:1;}
+    .strip{fill:#f6f8fa;}
+    .div{stroke:#eaecef;stroke-width:1;}
+    .tab{font:600 13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#59636e;}
+    .tabA{fill:#1f6feb;}
+    .sec{font:700 12px system-ui,sans-serif;fill:#6e7781;letter-spacing:.03em;}
+    .k{font:600 13px ui-monospace,Menlo,Consolas,monospace;fill:#1f2328;}
+    .v{font:13px ui-monospace,Menlo,Consolas,monospace;fill:#57606a;}
+    .hl{fill:#fff3cd;}
+    .badge{fill:#d9480f;}
+    .bt{font:700 12px system-ui,sans-serif;fill:#ffffff;}
+    .lg{font:13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#1f2328;}
+    .lgk{font:700 13px ui-monospace,Menlo,monospace;fill:#c2410c;}
+  </style>
+
+  <!-- panel + tab strip -->
+  <rect class="panel" x="8" y="8" width="824" height="372" rx="8"/>
+  <path class="strip" d="M8 16a8 8 0 0 1 8-8h808a8 8 0 0 1 8 8v24H8z"/>
+  <line class="div" x1="8" y1="40" x2="832" y2="40"/>
+  <text class="tab tabA" x="24" y="28">Headers</text>
+  <text class="tab" x="96" y="28">Payload</text>
+  <text class="tab" x="170" y="28">Preview</text>
+  <text class="tab" x="244" y="28">Response</text>
+  <text class="tab" x="330" y="28">Timing</text>
+  <rect x="22" y="37" width="58" height="2" fill="#1f6feb"/>
+
+  <!-- General -->
+  <text class="sec" x="24" y="62">▾ General</text>
+  <text class="k" x="24" y="84">Request URL:</text><text class="v" x="180" y="84">https://api.example.com/booking</text>
+  <text class="k" x="24" y="106">Request Method:</text><text class="v" x="180" y="106">POST</text>
+  <text class="k" x="24" y="128">Status Code:</text><text class="v" x="180" y="128">200 OK</text>
+  <line class="div" x1="16" y1="144" x2="824" y2="144"/>
+
+  <!-- Request Headers -->
+  <text class="sec" x="24" y="166">▾ Request Headers</text>
+
+  <text class="k" x="24" y="188">accept:</text><text class="v" x="180" y="188">application/json</text>
+
+  <rect class="hl" x="14" y="199" width="812" height="22"/>
+  <text class="k" x="24" y="214">authorization:</text><text class="v" x="180" y="214">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI…</text>
+  <circle class="badge" cx="812" cy="210" r="9"/><text class="bt" x="812" y="214" text-anchor="middle">1</text>
+
+  <text class="k" x="24" y="240">content-type:</text><text class="v" x="180" y="240">application/json</text>
+
+  <text class="k" x="24" y="266">cookie:</text><text class="v" x="180" y="266">XSRF-TOKEN=9f2a1c7b…; sid=…</text>
+
+  <rect class="hl" x="14" y="277" width="812" height="22"/>
+  <text class="k" x="24" y="292">origin:</text><text class="v" x="180" y="292">https://app.example.com</text>
+  <circle class="badge" cx="812" cy="288" r="9"/><text class="bt" x="812" y="292" text-anchor="middle">2</text>
+
+  <rect class="hl" x="14" y="303" width="812" height="22"/>
+  <text class="k" x="24" y="318">referer:</text><text class="v" x="180" y="318">https://app.example.com/checkout</text>
+  <circle class="badge" cx="812" cy="314" r="9"/><text class="bt" x="812" y="318" text-anchor="middle">3</text>
+
+  <rect class="hl" x="14" y="329" width="812" height="22"/>
+  <text class="k" x="24" y="344">x-xsrf-token:</text><text class="v" x="180" y="344">9f2a1c7b…</text>
+  <circle class="badge" cx="812" cy="340" r="9"/><text class="bt" x="812" y="344" text-anchor="middle">4</text>
+
+  <!-- legend -->
+  <circle class="badge" cx="24" cy="410" r="9"/><text class="bt" x="24" y="414" text-anchor="middle">1</text>
+  <text class="lg" x="40" y="414"><tspan class="lgk">authorization</tspan> — l'access token (Bearer): dimostra chi sei e cosa puoi fare (sezione Token-based).</text>
+
+  <circle class="badge" cx="24" cy="440" r="9"/><text class="bt" x="24" y="444" text-anchor="middle">2</text>
+  <text class="lg" x="40" y="444"><tspan class="lgk">origin</tspan> — da dove parte la richiesta: solo schema + host + porta, senza path.</text>
+
+  <circle class="badge" cx="24" cy="470" r="9"/><text class="bt" x="24" y="474" text-anchor="middle">3</text>
+  <text class="lg" x="40" y="474"><tspan class="lgk">referer</tspan> — l'URL completo della pagina di provenienza (con path).</text>
+
+  <circle class="badge" cx="24" cy="500" r="9"/><text class="bt" x="24" y="504" text-anchor="middle">4</text>
+  <text class="lg" x="40" y="504"><tspan class="lgk">x-xsrf-token</tspan> — il token riletto dal cookie XSRF-TOKEN e rimandato come header (lo aggiunge HttpClient).</text>
+</svg>
