@@ -1,11 +1,11 @@
 ---
 capitolo: 6
 titolo: "Signal Forms"
-pagine: "157-203"
+pagine: "145-191"
 tags: [tipo/capitolo, forms, signals, angular-22]
 ---
 # 06 · Signal Forms
-> 📖 cap.6 · pp.157-203 — *Modern Angular* v2.0.0
+> 📖 cap.6 · pp.145-191 — *Modern Angular* v2.0.0
 
 I **Signal Forms** colmano il divario fra la reattività basata su [[signal]] e l'interazione utente: stato della form, validazione e logica di submit diventano tutti signal, quindi reattivi e componibili. Il capitolo estende il componente `FlightEdit`, partendo da una form semplice fino a custom validator, subform e custom control.
 
@@ -13,7 +13,7 @@ I **Signal Forms** colmano il divario fra la reattività basata su [[signal]] e 
 > Signal Forms è l'**API moderna ma ancora sperimentale** di Angular (package `@angular/forms/signals`). È raccomandata per i nuovi progetti, ma l'API può ancora cambiare. La `form()` era già comparsa di sfuggita nel [[02-signal-based-components|cap.2]] (`filterForm`).
 
 ## A First Signal Form
-> 📖 pp.157-162
+> 📖 pp.145-150
 
 Lo [[glossario#store|store]] (`FlightDetailStore`, sullo stile del [[05-state-management-services-signals|cap.5]]) è responsabile della consistenza dei dati, quindi pubblica solo dati **read-only**. La form deve invece modificarli con un two-way binding (legame a doppio senso: ciò che l'utente digita aggiorna il dato e viceversa), quindi serve una **copia di lavoro locale**, rappresentata da un [[linked-signal|linkedSignal]].
 
@@ -54,7 +54,7 @@ function normalizeFlight(flight: Flight): Flight {
 ```
 
 ### Understanding the FieldTree
-> 📖 pp.159-160
+> 📖 pp.147-148
 
 Un **FieldTree** è come un signal profondamente annidato: ogni proprietà del dato è un signal, e lo stato della form di quel campo (`value`, `dirty`, `invalid`, `errors`) è a sua volta esposto da signal. Poiché tutto è signal-based, lo si può legare ai controlli.
 
@@ -82,7 +82,7 @@ const firstPriceAmt = this.flightForm.prices[0].amount().value();
 ```
 
 ### Binding to the Template
-> 📖 pp.160-162
+> 📖 pp.148-150
 
 Si importa la direttiva **`FormField`** (e `JsonPipe` per mostrare gli errori nei primi passi). `[formField]` lega un campo del FieldTree a un controllo `input` / `select` / `textarea`.
 
@@ -106,15 +106,15 @@ Si importa la direttiva **`FormField`** (e `JsonPipe` per mostrare gli errori ne
 ```
 
 > [!warning]
-> Legando un valore numerico usa `<input type="number">`: Signal Forms rispetta la semantica HTML per garantire la type safety. Inoltre `minLength` **non scatta sui campi vuoti** (è il supporto ai campi opzionali): per imporre un valore serve `required`.
+> Per legare un valore numerico si usa `<input type="number">`: Signal Forms rispetta la semantica HTML per garantire la type safety. Inoltre `minLength` **non scatta sui campi vuoti** (è il supporto ai campi opzionali): per imporre un valore serve `required`.
 
 ## Working with Schemas
-> 📖 pp.163-170
+> 📖 pp.151-158
 
 Lo schema non definisce solo le regole di validazione, ma anche altri aspetti del comportamento della form: [[glossario#debounce-debouncing|debouncing]], campi disabilitati/read-only/hidden in certe condizioni, validazione contro schemi esterni.
 
 ### Using Separate Schemas
-> 📖 pp.163-164
+> 📖 pp.151-152
 
 Per form grandi, definire lo schema inline diventa scomodo: conviene estrarlo in una costante con `schema<T>(...)` in un file separato (cartella `data/`).
 
@@ -148,7 +148,7 @@ export const flightFormSchema = schema<Flight>((path) => {
 ```
 
 ### Controlling Behavior
-> 📖 pp.164-166
+> 📖 pp.152-154
 
 Lo schema può anche dichiarare quando un campo è `disabled`, `readonly` o `hidden`. La condizione si passa nell'oggetto opzioni tramite la proprietà **`when`**, che riceve il `ctx` di validazione (il *context*: un oggetto che dà accesso al valore e allo stato corrente degli altri campi, es. `ctx.valueOf(path.delayed)`).
 
@@ -183,7 +183,7 @@ hidden(path.delay,   { when: (ctx) => !ctx.valueOf(path.delayed) });
 ```
 
 > [!warning]
-> `readonly` blocca **automaticamente** la scrittura sul controllo legato. `hidden` invece è **solo un suggerimento**: Signal Forms non nasconde nulla, perché di solito vanno nascosti anche label e altri elementi UI. Sei tu a usarlo nel template.
+> `readonly` blocca **automaticamente** la scrittura sul controllo legato. `hidden` invece è **solo un suggerimento**: Signal Forms non nasconde nulla, perché di solito vanno nascosti anche label e altri elementi UI. Lo si usa nel template.
 
 ```html
 @if (!flightForm.delay().hidden()) {
@@ -195,9 +195,9 @@ hidden(path.delay,   { when: (ctx) => !ctx.valueOf(path.delayed) });
 ```
 
 ### Debouncing
-> 📖 pp.166-167
+> 📖 pp.154-155
 
-Il debouncing si definisce nello schema con `debounce` (utile soprattutto nelle search form, per non sparare una richiesta a ogni tasto).
+Il [[glossario#debounce-debouncing|debouncing]] si definisce nello schema con `debounce` (utile soprattutto nelle search form, per non sparare una richiesta a ogni tasto): il caso della `filterForm` era già stato anticipato nel [[05-state-management-services-signals|cap.5]].
 
 ```ts
 protected readonly filterForm = form(this.filter, (path) => {
@@ -219,7 +219,7 @@ debounce(path, (ctx, _abortSignal) => {
 ```
 
 ### Validating Against Zod / Standard Schema
-> 📖 pp.167-169
+> 📖 pp.155-157
 
 `validateStandardSchema` valida la form contro uno schema **Zod** (o Valibot, o qualsiasi libreria conforme allo **Standard Schema** — uno standard comune che diverse librerie di validazione adottano, così Angular può lavorare con tutte allo stesso modo). Spesso queste regole esistono già lato server o sono generate da un JSON Schema/OpenAPI.
 
@@ -250,35 +250,41 @@ export const flightSchema = schema<Flight>((path) => {
 > ```
 
 ### Visualizing Validation State with CSS Classes
-> 📖 pp.169-170
+> 📖 pp.157-158
 
-> [!info] Angular 22+
-> Reactive e Template-driven Forms aggiungono da sole classi come `ng-valid`/`ng-invalid`/`ng-pending`. Signal Forms è più **esplicito**: mappi i nomi delle classi a predicati sullo stato del campo con **`provideSignalFormsConfig`**. La costante `NG_STATUS_CLASSES` (namespace `@angular/forms/signals/compat`) replica le classi delle form classiche, così i CSS che già hai continuano a funzionare.
-> ```ts
-> // app.config.ts
-> import { provideSignalFormsConfig } from '@angular/forms/signals';
-> import { NG_STATUS_CLASSES } from '@angular/forms/signals/compat';
->
-> providers: [
->   provideSignalFormsConfig({ classes: NG_STATUS_CLASSES }),
->   // ng-valid, ng-invalid, ng-dirty, ng-pristine, ng-pending
-> ]
-> ```
-> In alternativa puoi scrivere la mappa a mano, ogni classe è un predicato su `field.state()`:
-> ```ts
-> provideSignalFormsConfig({
->   classes: {
->     'ng-invalid':  (field) => field.state().invalid(),
->     'ng-valid':    (field) => field.state().valid(),
->     'ng-dirty':    (field) => field.state().dirty(),
->     'ng-pristine': (field) => !field.state().dirty(),
->     'ng-pending':  (field) => field.state().pending(),
->   },
-> });
-> ```
+Le classiche Reactive e Template-driven Forms aggiungono da sole classi CSS come `ng-valid`, `ng-invalid` o `ng-pending` ai controlli legati. Signal Forms sceglie una strada più **esplicita**: si mappano i nomi delle classi a predicati sullo stato del campo tramite **`provideSignalFormsConfig`**. La configurazione vive di solito in `app.config.ts`.
+
+```ts
+// src/app/app.config.ts
+import { provideSignalFormsConfig } from '@angular/forms/signals';
+import { NG_STATUS_CLASSES } from '@angular/forms/signals/compat';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideSignalFormsConfig({ classes: NG_STATUS_CLASSES }),
+  ],
+};
+```
+
+La costante `NG_STATUS_CLASSES` (dal namespace `@angular/forms/signals/compat`) porta lo stesso set di classi delle form classiche — `ng-valid`, `ng-invalid`, `ng-dirty`, `ng-pristine`, `ng-pending` — così i fogli di stile esistenti continuano a funzionare. In alternativa la mappa si scrive a mano: ogni classe è un predicato su `field.state()`.
+
+```ts
+provideSignalFormsConfig({
+  classes: {
+    'ng-invalid':  (field) => field.state().invalid(),
+    'ng-valid':    (field) => field.state().valid(),
+    'ng-dirty':    (field) => field.state().dirty(),
+    'ng-pristine': (field) => !field.state().dirty(),
+    'ng-pending':  (field) => field.state().pending(),
+  },
+});
+```
+
+Angular applica la classe a ciascun controllo legato non appena il predicato diventa `true`; un tipico foglio di stile la sfrutta per i bordi colorati del feedback di validazione, senza aggiungere alcun binding nel template.
 
 ## Submitting Forms
-> 📖 pp.170-174
+> 📖 pp.158-162
 
 Il submit è forse il miglioramento più grande: la logica si definisce nel nodo `submission` delle opzioni di `form()`, e al template basta un normale bottone di submit.
 
@@ -357,9 +363,9 @@ protected async requestApproval(): Promise<void> {
 > L'interazione fra errori di validazione **client-side** e quelli ricevuti **durante il submit** dal backend (l'`action` ritorna un `ValidationError`) è una novità chiave: con le form precedenti era difficile da realizzare.
 
 ## Custom Validators
-> 📖 pp.174-185
+> 📖 pp.162-173
 
-I custom validator servono per la logica di validazione che va oltre i built-in (`required`, `minLength`, ...): possono verificare regole di business e confrontare valori tra loro. Si scrivono con `validate(path, lambda)`: la lambda riceve un `ctx` e ritorna `null` (nessun errore), un `ValidationError`, oppure un array di `ValidationError`. Ogni errore è identificato dalla stringa `kind` (il "tipo" dell'errore) e può avere proprietà libere (campi extra che decidi tu, per portarti dietro dati utili, es. il valore rifiutato).
+I custom validator servono per la logica di validazione che va oltre i built-in (`required`, `minLength`, ...): possono verificare regole di business e confrontare valori tra loro. Si scrivono con `validate(path, lambda)`: la lambda riceve un `ctx` e ritorna `null` (nessun errore), un `ValidationError`, oppure un array di `ValidationError` (se rileva più violazioni). Ogni errore è identificato dalla stringa `kind` (il "tipo" dell'errore) e può portare proprietà aggiuntive a piacere, utili per allegare dati come il valore rifiutato.
 
 ```ts
 // validatore inline nello schema
@@ -388,7 +394,13 @@ export function validateCity(path: SchemaPathTree<string>, allowed: string[]) {
 // uso nello schema: validateCity(path.from, ['Graz', 'Hamburg', 'Zürich']);
 ```
 
-**Showing Validation Errors** — i validatori built-in accettano `{ message: '...' }`, che finisce nella proprietà `ValidationError.message`. Un componente riusabile `ValidationErrorsPane` mappa gli errori a stringhe, con fallback `toMessage` per i `kind` noti:
+**Showing Validation Errors** — i validatori built-in accettano un oggetto opzioni con `{ message: '...' }`, che finisce nella proprietà `message` del rispettivo `ValidationError`:
+
+```ts
+required(path.from, { message: 'Please enter a value!' });
+```
+
+All'applicazione basta quindi mostrare tutte le `message` presenti nell'array `errors`. Un componente riusabile `ValidationErrorsPane` fa proprio questo: mappa gli errori a stringhe e, quando un errore non ha `message`, ripiega su un messaggio standard deciso dalla helper `toMessage` in base al `kind`.
 
 ```ts
 // .../shared/ui-forms/validation-errors/validation-errors-pane.ts
@@ -414,11 +426,9 @@ function toMessage(error: ValidationError): string {
 }
 ```
 
-```html
-<!-- required con messaggio personalizzato -->
-required(path.from, { message: 'Please enter a value!' });
+Nel template si invoca il pane per ogni campo, passandogli l'array `errors`:
 
-<!-- uso per ogni campo -->
+```html
 <app-validation-errors-pane [errors]="flightForm.from().errors()" />
 ```
 
@@ -454,7 +464,7 @@ export function validateRoundTrip(path: SchemaPathTree<Flight>) {
 > [!warning]
 > Gli errori restano associati al **livello validato** del FieldTree: qui è il flight intero, non `from`/`to`. Per mostrarli servono `flightForm().errors()` (livello corrente) oppure `flightForm().errorSummary()` (include i livelli inferiori — qui conviene `[showFieldNames]="true"`). Gli errori dei livelli più bassi **non** compaiono in `errors`.
 
-**Accessing Sibling Fields** — in alternativa, validi solo `from` accedendo al sibling `to` (il campo "fratello", cioè un altro campo allo stesso livello) con `ctx.valueOf(path.to)`; così l'errore appare nel campo `from`.
+**Accessing Sibling Fields** — in alternativa, si valida solo `from` accedendo al sibling `to` (il campo "fratello", cioè un altro campo allo stesso livello) con `ctx.valueOf(path.to)`; così l'errore appare nel campo `from`.
 
 ```ts
 export function validateRoundTrip2(path: SchemaPathTree<Flight>) {
@@ -480,6 +490,8 @@ export function validateRoundTripTree(path: SchemaPathTree<Flight>) {
 }
 ```
 
+Poiché ogni validatore può restituire un array, un tree validator può anche produrre errori su **campi diversi** in un colpo solo: è quindi la scelta ideale per le regole complesse. Le regole semplici, invece, si risolvono bene con i validatori convenzionali che accedono ai campi vicini, come mostrato sopra.
+
 **Asynchronous Validators** — validatori che fanno una chiamata asincrona (tipicamente al server) prima di dare il verdetto. `validateAsync` si configura con quattro funzioni: `params` (dallo stato del campo ricava i parametri della chiamata), `factory` (crea la resource, cioè l'oggetto che esegue la chiamata e ne segue il risultato), `onSuccess` (dal risultato → `ValidationError | null`), `onError` (dall'errore → `ValidationError | null`):
 
 ```ts
@@ -498,7 +510,7 @@ export function validateCityAsync(path: SchemaPathTree<string>) {
 ```
 
 > [!warning]
-> Finché **almeno un validatore sincrono fallisce**, Angular non esegue quelli asincroni (evita chiamate server inutili). Mentre attende, `field().pending()` è `true` — usalo nel template per mostrare uno stato di caricamento.
+> Finché **almeno un validatore sincrono fallisce**, Angular non esegue quelli asincroni (evita chiamate server inutili). Mentre attende il risultato, `field().pending()` è `true`: lo si sfrutta nel template per mostrare uno stato di caricamento.
 
 ```html
 @if (flightForm.from().pending()) {
@@ -525,7 +537,7 @@ export function validateCityHttp(path: SchemaPathTree<string>) {
 Collegamenti: [[resource|rxResource]] (la factory degli async validator).
 
 ## Large and Nested Forms
-> 📖 pp.186-193
+> 📖 pp.174-181
 
 Signal Forms supporta modelli annidati: oggetti (**form groups**), array ripetuti (**form arrays**) e scomposizione in **subform**.
 
@@ -628,7 +640,7 @@ export class PricesForm {
 ```
 
 ## Working with Form Metadata
-> 📖 pp.193-198
+> 📖 pp.181-186
 
 I metadata informano l'utente **prima** su cosa ci si aspetta (es. campo richiesto, lunghezza). Molti validatori definiscono metadata sui campi che validano.
 
@@ -677,7 +689,7 @@ export function validateCityHttp(path: SchemaPathTree<string>) {
 ```
 
 ## Null and Undefined Values
-> 📖 pp.198-201
+> 📖 pp.186-189
 
 > [!warning]
 > Signal Forms **non ammette valori `undefined`**: semanticamente `undefined` significa "il campo non esiste", quindi `form()` non saprebbe che dovrebbe esistere e non troverebbe i suoi metadata. `null` è invece accettato (semantica di "valore vuoto"), ma è ancora meglio un **default sensato** (es. `delay: 0`).
@@ -711,9 +723,9 @@ protected save(): void {
 Per convertire subito dopo la digitazione si può usare un *delegated signal* (vedi [[05-state-management-services-signals|cap.5]]). La stessa strategia vale per i campi condizionali: dal punto di vista della form esistono sempre, anche se nascosti nell'UI.
 
 ## Custom Fields
-> 📖 pp.201-203
+> 📖 pp.189-191
 
-Per usare `[formField]` con widget propri (i tuoi componenti-controllo, es. uno stepper al posto del classico `<input>`), il componente implementa l'interfaccia **`FormValueControl<T>`**, che richiede solo un [[model-signal|ModelSignal]] chiamato `value` (più proprietà opzionali come `disabled`, `errors`). Sostituisce il vecchio, scomodo *Control Value Accessor* (l'interfaccia che nelle form classiche faceva da ponte fra il valore della form e il controllo personalizzato).
+Per usare `[formField]` con widget propri (componenti-controllo su misura, es. uno stepper al posto del classico `<input>`), il componente implementa l'interfaccia **`FormValueControl<T>`**, che richiede solo un [[model-signal|ModelSignal]] chiamato `value` (più proprietà opzionali come `disabled`, `errors`). Sostituisce il vecchio, scomodo *Control Value Accessor* (l'interfaccia che nelle form classiche faceva da ponte fra il valore della form e il controllo personalizzato).
 
 ```ts
 // delay-stepper.ts — widget che incrementa il delay di 15 min
@@ -760,7 +772,7 @@ Collegamenti: [[model-signal]] · [[two-way-binding]] · [[signal-input|input()]
 
 **5.** Come scrivi un multi-field validator (es. `from` ≠ `to`) e dove finisce l'errore? Cosa cambia con `validateTree`?
 > [!success]- Risposta
-> Lo metti su un **livello genitore comune** con `validate(path, ctx => ...)` e confronti i campi via `ctx.fieldTree.from().value()` (o `ctx.valueOf(path.from)`). L'errore resta associato al **livello validato** (il flight intero), quindi va letto da `flightForm().errors()`/`errorSummary()`, non da `from`/`to`. Con `validateTree` puoi invece definire errori per **tutti i livelli**, indicando il campo affetto nella proprietà `field` del `ValidationError`.
+> Lo si mette su un **livello genitore comune** con `validate(path, ctx => ...)` e si confrontano i campi via `ctx.fieldTree.from().value()` (o `ctx.valueOf(path.from)`). L'errore resta associato al **livello validato** (il flight intero), quindi va letto da `flightForm().errors()`/`errorSummary()`, non da `from`/`to`. Con `validateTree` si possono invece definire errori per **tutti i livelli**, indicando il campo affetto nella proprietà `field` del `ValidationError`; potendo restituire un array, un tree validator emette anche più errori su campi diversi, il che lo rende adatto alle regole complesse.
 
 **6.** Perché Signal Forms rifiuta `undefined`? Come si gestiscono i campi opzionali?
 > [!success]- Risposta

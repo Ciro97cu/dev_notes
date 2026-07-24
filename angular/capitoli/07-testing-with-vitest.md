@@ -1,16 +1,16 @@
 ---
 capitolo: 7
 titolo: "Modern Testing with Vitest"
-pagine: "204-230"
+pagine: "192-218"
 tags: [tipo/capitolo, testing, http, angular-22]
 ---
 # 07 · Modern Testing with Vitest
-> 📖 cap.7 · pp.204-230 — *Modern Angular* v2.0.0
+> 📖 cap.7 · pp.192-218 — *Modern Angular* v2.0.0
 
 Con sempre più logica spostata nel frontend, il test manuale non basta a mantenere stabile un'app nel tempo. La Angular CLI integra **Vitest** come test runner di default: esecuzione veloce, ottima developer experience e supporto a vari runtime (Node.js e diversi browser). Sopra a Vitest, Angular mette a disposizione costrutti propri (`TestBed`, `HttpTestingController`) per montare i componenti e sostituire le dipendenze con dei mock. Il capitolo costruisce i test sulla feature `flight-search` già vista nel [[02-signal-based-components|cap.2]].
 
 ## Structure of a Vitest Test
-> 📖 pp.204-206
+> 📖 pp.192-194
 
 Vitest fornisce due funzioni base: `describe` definisce una test **suite** (raggruppa casi correlati) e `it` definisce un test **case** (verifica una porzione di funzionalità). `describe`, `it`, `beforeEach`, `expect` e le altre sono **globali**: Vitest le rende disponibili durante l'esecuzione, quindi non vanno importate. I file di test hanno estensione **`.spec.ts`** — che li qualifica anche come *specifiche* del comportamento desiderato — e si tengono accanto al codice testato, così restano sempre aggiornati.
 
@@ -42,7 +42,7 @@ describe('Add', () => {
 
 - Pattern **AAA**: *Arrange* (prepara l'esecuzione) → *Act* (esegue l'azione da testare) → *Assert* (verifica che il risultato atteso sia stato ottenuto).
 - Hook del ciclo di vita: `beforeEach` / `afterEach` girano prima/dopo **ogni** caso; `beforeAll` / `afterAll` girano **una volta** per suite (prima del primo caso / dopo l'ultimo).
-- Nella fase di Assert si usa `expect(...)`, concatenabile con i cosiddetti **matcher** (scoprili con l'autocompletamento dell'IDE):
+- Nella fase di Assert si usa `expect(...)`, concatenabile con numerosi metodi che verificano il risultato — i cosiddetti **matcher** (conviene esplorarli con l'autocompletamento dell'IDE):
 
 ```ts
 expect(c).not.toBe(4);
@@ -57,9 +57,9 @@ expect(str).toMatch(/Result/);
 > In ottica **BDD** (Behavior-Driven Development), il nome della suite e quello del caso, letti insieme, devono descrivere il comportamento atteso: `Add` + `correctly adds 1 and 2` → *"Add correctly adds 1 and 2"*. Le `describe` si annidano liberamente chiamando un'altra `describe` dentro un blocco `describe`.
 
 ## Skipping Tests
-> 📖 p.206
+> 📖 p.194
 
-Per saltare un caso o un'intera suite — tipico un `app.spec.ts` generato e mai mantenuto, che ora fallisce — sostituisci `describe` con **`describe.skip`** (e `it` con **`it.skip`** per i singoli casi).
+A volte si vuole saltare un singolo caso o un'intera suite — tipico un `app.spec.ts` generato e mai mantenuto, che nel frattempo ha smesso di passare. Si sostituisce `describe` con **`describe.skip`** (e `it` con **`it.skip`** per i singoli casi).
 
 ```ts
 // src/app/app.spec.ts
@@ -69,7 +69,7 @@ describe.skip('App', () => {
 ```
 
 ## Turning on Browser Mode
-> 📖 pp.206-207
+> 📖 pp.194-195
 
 Di default Vitest gira in ambiente **Node.js**, ma per i test Angular si raccomanda la **browser mode**: rispecchia più fedelmente il comportamento reale dell'app e rende più realistici i component test (imitano l'interazione dell'utente). Per accedere al browser, Vitest ha bisogno di un **provider**: gli autori consigliano **Playwright** (più moderno di webdriver.io, più semplice da configurare e molto performante). Vitest lo usa "sotto il cofano": i test **non** diventano test Playwright.
 
@@ -99,7 +99,7 @@ Si attiva il browser nel nodo `projects/<project-name>/architect/test` di `angul
 - Di default la CLI parte in **watch mode** (ri-esegue i test a ogni modifica): feedback rapido in sviluppo. In CI conviene eseguirli una sola volta → `watch: false` nella configurazione `ci`.
 
 ## Running Tests
-> 📖 p.207
+> 📖 p.195
 
 ```bash
 ng test                      # esegue i test (watch mode di default)
@@ -109,7 +109,7 @@ ng test --configuration=ci   # usa la configurazione "ci"
 La UI di Vitest si divide in tre aree. A sinistra c'è l'elenco dei test eseguiti (spunta verde = passato); a destra le informazioni su ogni run, con lo stack trace in caso di errore; al centro Vitest **monta** i componenti — di solito lo si vede solo per un lampo, ma in debug l'area riflette lo stato corrente. Vari IDE supportano il debug dei test; come ultima spiaggia si possono sempre debuggare nei dev tools del browser.
 
 ## Angular and Vitest: Preparing the TestBed
-> 📖 pp.208-210
+> 📖 pp.196-198
 
 Il **`TestBed`** è il costrutto centrale che Angular offre per i test: come un banco di prova, ci si "attacca" l'oggetto sotto test e gli si forniscono gli input. Permette di definire l'oggetto sotto test e le sue dipendenze, e può **istanziare** i componenti: inietta i servizi dipendenti e dà vita al template, abilitando l'interazione a livello DOM.
 
@@ -153,7 +153,7 @@ describe('flight-search', () => {
 Collegamenti: [[inject]] · [[providers]] · [[04-router-navigation-lazy-loading]] (il `provideRouter`).
 
 ## A First Component Test & Locators
-> 📖 pp.210-212
+> 📖 pp.198-200
 
 Il primo test tratta il componente — più o meno — come una **black box** (scatola nera: non si guarda dentro al codice, si interagisce solo da fuori): interagisce via DOM, come farebbe l'utente. In browser mode Vitest fornisce l'oggetto **`page`**; usando **`expect.element`** (invece del semplice `expect`) si ottengono assert "browser-aware" (es. `toBeDisabled`).
 
@@ -182,7 +182,7 @@ I **locator** (`getByLabelText`, `getByRole`, …) trovano gli elementi DOM tram
 <button (click)="search()" [disabled]="!from() || !to()">Search</button>
 ```
 
-- Di default i locator sono **case-insensitive** e fanno match su **sottostringa** (un bottone `Search Flights` verrebbe comunque trovato da `'Search'`). Con `{ exact: true }` accetti solo il match esatto, oppure usi una **regex**.
+- Di default i locator sono **case-insensitive** e fanno match su **sottostringa** (un bottone `Search Flights` verrebbe comunque trovato da `'Search'`). Con `{ exact: true }` si accetta solo il match esatto, oppure si passa una **regex**.
 - Un locator può restituire **più elementi** (`toHaveLength(n)`).
 
 ```ts
@@ -199,15 +199,15 @@ I locator **descrivono solo come trovare** gli elementi: il recupero effettivo a
 await expect.element(button, { interval: 50, timeout: 100 }).toBeDisabled();
 ```
 
-Per accedere subito al nodo DOM dietro un locator: `.element()` (o `.elements()` se rappresenta più nodi).
+Per accedere subito al nodo DOM dietro un locator: `.element()` (o `.elements()` se rappresenta più nodi). Oltre a quelli visti, Vitest offre altri locator: il riferimento completo è nella [documentazione ufficiale](https://vitest.dev/api/browser/locators.html).
 
 > [!warning]
-> I locator non offrono accesso per `id` o `name`: è **intenzionale**, per spingere verso i ruoli/attributi ARIA. Come ultima spiaggia `page.getByTestId(...)` legge un attributo `data-testid`, ma mina l'accessibilità → usalo con parsimonia.
+> I locator non offrono accesso per `id` o `name`: è **intenzionale**, per spingere verso i ruoli/attributi ARIA. Come ultima spiaggia `page.getByTestId(...)` legge un attributo `data-testid`, ma mina l'accessibilità → va usato con parsimonia.
 
 ## Locating Elements via DebugElement
-> 📖 p.213
+> 📖 p.201
 
-Anche il `debugElement` della fixture permette query sul DOM, ma tramite **selettori CSS** (non ARIA). È più di **basso livello** (lavori più vicino al DOM, scrivendo a mano cose che `page` farebbe per te) e quindi più verboso: niente retry integrato, e devi **dispatchare a mano** l'evento `input` (cioè scatenarlo tu via codice) per notificare ad Angular il cambio di valore.
+Anche il `debugElement` della fixture permette query sul DOM, ma tramite **selettori CSS** (non ARIA). È più di **basso livello** (si lavora più vicino al DOM, scrivendo a mano ciò che `page` farebbe da solo) e quindi più verboso: niente retry integrato, e bisogna **dispatchare a mano** l'evento `input` (cioè scatenarlo via codice) per notificare ad Angular il cambio di valore.
 
 ```ts
 import { By } from '@angular/platform-browser';
@@ -218,12 +218,12 @@ to.dispatchEvent(new Event('input'));   // necessario per notificare Angular
 ```
 
 > [!tip]
-> Preferisci l'oggetto **`page`** di Vitest (browser mode) al `debugElement`: meno verboso, orientato ad ARIA e con retry integrato.
+> Conviene preferire l'oggetto **`page`** di Vitest (browser mode) al `debugElement`: meno verboso, orientato ad ARIA e con retry integrato.
 
 ## Defining Default Timeouts
-> 📖 pp.213-214
+> 📖 pp.201-202
 
-Oltre al timeout per-chiamata, puoi definirne uno di default per-suite o per-caso passando un oggetto opzioni (`TestOptions`) a `describe` / `it`:
+Oltre al timeout per-chiamata, se ne può definire uno di default per-suite o per-caso passando un oggetto opzioni (`TestOptions`) a `describe` / `it`:
 
 ```ts
 const suiteOptions: TestOptions = { timeout: 200 };
@@ -236,7 +236,7 @@ describe('FlightEdit (router)', suiteOptions, () => {
 });
 ```
 
-Per sovrascrivere il timeout di default di **tutte** le suite e i casi, crea un file di setup e imposta `testTimeout`:
+Per sovrascrivere il timeout di default di **tutte** le suite e i casi, si crea un file di setup e vi si imposta `testTimeout`:
 
 ```ts
 // src/vitest-setup.ts
@@ -246,7 +246,7 @@ vi.setConfig({
 });
 ```
 
-Poi registra il file per il builder `unit-test` in `angular.json`:
+Poi si registra il file per il builder `unit-test` in `angular.json`:
 
 ```json
 "test": {
@@ -259,7 +259,7 @@ Poi registra il file per il builder `unit-test` in `angular.json`:
 ```
 
 ## Mocking Services
-> 📖 pp.214-216
+> 📖 pp.202-204
 
 I test isolano l'oggetto sotto test dalle sue dipendenze: così gli errori sono attribuibili con chiarezza e i test restano veloci e affidabili, senza dipendere da sistemi esterni. Si sostituiscono con **mock** (implementazioni semplificate); le **spy**, invece, monitorano le chiamate (con quali parametri e quante volte). Grazie alla [[glossario#dependency-injection-di|DI]] di Angular (il meccanismo con cui Angular fornisce le dipendenze a un componente) basta dire al `TestBed` di fornire un mock al posto del servizio reale — qui il `ConfigService`, che espone dati di configurazione come la base URL del backend.
 
@@ -307,9 +307,9 @@ providers: [
 Collegamenti: [[providers]] · [[05-state-management-services-signals]] (servizi e DI).
 
 ## Mocking Services on the Component Level
-> 📖 p.216
+> 📖 p.204
 
-Fornire mock via `TestBed` funziona per i servizi registrati al **root level**. Se invece un servizio è fornito **a livello componente** (array `providers` del `@Component`), la configurazione del `TestBed` non basta: si **sovrascrivono i metadati** del componente con `overrideComponent`.
+Fornire mock via `TestBed` funziona per i servizi registrati al **root level**. Se invece un servizio è fornito **a livello componente** (array `providers` del `@Component`), la configurazione del `TestBed` non basta: si **sovrascrivono i metadati** del componente con `overrideComponent`. Nell'esempio si assume che `FlightSearch` fornisca un proprio `LanguageService`, da rimpiazzare con un mock (`DefaultLanguageService`):
 
 ```ts
 TestBed.overrideComponent(FlightSearch, {
@@ -325,7 +325,7 @@ TestBed.overrideComponent(FlightSearch, {
 Questo ha effetto sul componente, sui suoi figli e sugli altri servizi allo stesso livello.
 
 ## Mocking Child Components & Shallow Testing
-> 📖 pp.216-217
+> 📖 pp.204-205
 
 Finora `FlightSearch` è stato testato insieme al figlio `FlightCard`. Per evitare questi test cross-componente e concentrarsi su un solo componente si ricorre allo **shallow testing**: si mocka il figlio con uno **stub** che ha **stesso selector, stessi input e stessi output** dell'originale. Poi si scambiano gli `imports` nei metadati del componente sotto test:
 
@@ -337,7 +337,7 @@ TestBed.overrideComponent(FlightSearch, {
 ```
 
 ## Mocking HTTP Calls
-> 📖 pp.217-221
+> 📖 pp.205-209
 
 Per essere indipendenti dal backend si mockano le chiamate HTTP. Si potrebbe mockare il `FlightClient`, ma c'è una via più semplice: Angular fornisce implementazioni mock per i servizi interni dell'`HttpClient` tramite **`provideHttpClientTesting()`**, che intercettano le richieste e restituiscono risposte fake senza vere richieste di rete. Vale anche per **`httpResource`**, costruito sopra l'`HttpClient`.
 
@@ -432,12 +432,12 @@ export function createTestFlight(id: number, from = 'Paris', to = 'London') {
 ```
 
 > [!tip]
-> Aggiungi un `afterEach(() => ctrl.verify())`: `verify()` lancia un'eccezione se restano richieste **senza risposta**. Mockando il risultato non verifichi che il backend funzioni, ma che il componente faccia le **richieste attese** e gestisca correttamente le risposte.
+> Conviene aggiungere un `afterEach(() => ctrl.verify())`: `verify()` lancia un'eccezione se restano richieste **senza risposta**. Mockando il risultato non si verifica che il backend funzioni, ma che il componente faccia le **richieste attese** e gestisca correttamente le risposte.
 
 Collegamenti: [[resource|httpResource]] · [[02-signal-based-components]] (la feature `flight-search`).
 
 ## Gray-Box Testing with Spies
-> 📖 pp.221-222
+> 📖 pp.209-210
 
 Idealmente il test si concentra sul **comportamento** dell'oggetto sotto test, senza assunzioni sul suo funzionamento interno. A volte però conviene verificare che certi metodi **interni** vengano chiamati correttamente → test **gray-box** (scatola grigia: una via di mezzo, dove si conoscono alcuni dettagli interni e non solo l'esterno come nella black box). Le **spy** di Vitest (`vi.spyOn`) avvolgono una funzione/metodo (gli stanno "intorno" senza cambiarne il comportamento) e ricordano con quali parametri è stata chiamata e quante volte.
 
@@ -484,12 +484,12 @@ vi.spyOn(flightStore, 'updateFilter').mockImplementation((_from, _to) => {
 ```
 
 > [!warning]
-> `TestBed.inject(FlightStore)` cerca il servizio al **root level**. Se è fornito a livello componente, recuperalo dall'injector del componente: `fixture.debugElement.injector.get(FlightStore)`.
+> `TestBed.inject(FlightStore)` cerca il servizio al **root level**. Se è fornito a livello componente, va recuperato dall'injector del componente: `fixture.debugElement.injector.get(FlightStore)`.
 
 Collegamenti: [[05-state-management-services-signals]] (lo store).
 
 ## Testing Routed Components
-> 📖 p.223
+> 📖 p.211
 
 Per i componenti che dipendono dalla rotta corrente si usa il **`RouterTestingHarness`** (incluso nell'Angular Router), che simula la navigazione. Lo si istanzia con il metodo statico `create`, poi si chiama `navigateByUrl` per simulare l'utente che passa alla rotta da testare.
 
@@ -521,7 +521,7 @@ describe('FlightEdit (router)', () => {
 Collegamenti: [[04-router-navigation-lazy-loading]].
 
 ## Testing Timers & Debouncing — Mocking Delays
-> 📖 pp.223-224
+> 📖 pp.211-212
 
 Componenti e servizi usano timer per ritardare certe azioni: il caso tipico è il [[glossario#debounce-debouncing|debounce]] dell'input (aspetta che l'utente smetta di digitare prima di reagire, invece di reagire a ogni tasto), per evitare elaborazioni eccessive. Quando possibile, gli autori raccomandano di **mockare** i ritardi per tenere i test veloci e affidabili. Perché ciò sia possibile, i tempi di debounce non vanno scritti fissi nel codice (*hardcodati*): si espongono via un oggetto di configurazione (*settings object*) così da poterli sovrascrivere.
 
@@ -561,7 +561,7 @@ component = fixture.componentInstance;
 > Il mock va impostato **prima** di `createComponent`: il valore serve quando il componente inizializza lo schema della Signal Form.
 
 ## Fake Timers
-> 📖 pp.225-227
+> 📖 pp.213-215
 
 Quando il mocking non è praticabile, i **fake timer** di Vitest controllano e simulano lo scorrere del tempo senza attendere davvero. Metodi principali su `vi`:
 - `vi.useFakeTimers()` — attiva la modalità fake timer: rimpiazza `setTimeout`/`setInterval` con mock.
@@ -634,7 +634,7 @@ describe('reactive-flight-search with fake timers', () => {
 > Con `httpResource` + fake timer serve `runAllTimersAsync()` **due volte**: *prima* di `expectOne` (il timer di debounce deve scadere e poi l'effect che lancia l'HTTP gira in un microtask successivo) e *dopo* il `flush` (alla risposta, l'`httpResource` risolve internamente una Promise → altro microtask). La complessità stessa di questo caso mostra perché spesso **il mocking è la scelta migliore**.
 
 ## Testing Services
-> 📖 pp.227-228
+> 📖 pp.215-216
 
 La community concorda che la maggioranza dei test frontend dovrebbero essere **component test**; testare i servizi in isolamento ha senso soprattutto per servizi molto riusabili e con logica complessa. Tutto ciò che vale per `TestBed`, mock e spy si applica anche qui: l'unica differenza è che, invece di creare una fixture, si recupera il servizio direttamente con `TestBed.inject`.
 
@@ -678,7 +678,7 @@ describe('flight-store', () => {
 Collegamenti: [[05-state-management-services-signals]].
 
 ## Determining Test Coverage
-> 📖 pp.228-229
+> 📖 pp.216-217
 
 La CLI aiuta a individuare candidati per nuovi test misurando quali porzioni di codice sono coperte dai test esistenti e quanto bene (**test coverage**):
 
@@ -686,7 +686,7 @@ La CLI aiuta a individuare candidati per nuovi test misurando quali porzioni di 
 ng test --coverage
 ```
 
-Esegue i test e genera un sito statico in `coverage/<project-name>` (es. `coverage/flights`). Selezionando un file vedi quali righe sono attraversate dai test e quante volte.
+Esegue i test e genera un sito statico in `coverage/<project-name>` (es. `coverage/flights`). Selezionando un file si vede quali righe sono attraversate dai test e quante volte.
 
 ## 🔁 Ripasso lampo
 
@@ -696,7 +696,7 @@ Esegue i test e genera un sito statico in `coverage/<project-name>` (es. `covera
 
 **2.** Perché in browser mode si preferisce l'oggetto `page` (+ `expect.element`) al `debugElement`? Perché i locator usano ARIA e non `id`/`name`?
 > [!success]- Risposta
-> `page` è meno verboso, orientato ad ARIA e ha **retry** integrato fino a un timeout; il `debugElement` è di basso livello (selettori CSS, niente retry, devi dispatchare a mano l'evento `input`). I locator indirizzano ruoli e attributi **ARIA** di proposito, per spingere a costruire app accessibili; non offrono accesso per `id`/`name`. Come ultima spiaggia c'è `getByTestId` (`data-testid`), da usare con parsimonia perché mina l'accessibilità.
+> `page` è meno verboso, orientato ad ARIA e ha **retry** integrato fino a un timeout; il `debugElement` è di basso livello (selettori CSS, niente retry, l'evento `input` va dispatchato a mano). I locator indirizzano ruoli e attributi **ARIA** di proposito, per spingere a costruire app accessibili; non offrono accesso per `id`/`name`. Come ultima spiaggia c'è `getByTestId` (`data-testid`), da usare con parsimonia perché mina l'accessibilità.
 
 **3.** Cosa fa `provideHttpClientTesting()`, e a cosa servono `request.flush(...)` e `ctrl.verify()`?
 > [!success]- Risposta

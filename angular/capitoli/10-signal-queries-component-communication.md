@@ -1,11 +1,11 @@
 ---
 capitolo: 10
 titolo: "Signal Queries & Component Communication"
-pagine: "298-311"
+pagine: "286-299"
 tags: [tipo/capitolo, components, signals, angular-22]
 ---
 # 10 · Signal Queries & Component Communication
-> 📖 cap.10 · pp.298-311 — *Modern Angular* v2.0.0
+> 📖 cap.10 · pp.286-299 — *Modern Angular* v2.0.0
 
 Applicazioni e librerie sono fatte di tanti componenti che devono collaborare. Il capitolo introduce le **signal queries** e la **composizione di componenti**: come scrivere componenti riutilizzabili che il chiamante estende passando dei figli, e quali strade esistono per farli comunicare tra loro.
 
@@ -23,7 +23,7 @@ ng g c shared/ui-common/tab
 ```
 
 ## Content Projection (richiamo)
-> 📖 pp.298-299
+> 📖 pp.286-287
 
 La [[content-projection]] permette a un componente di **ricevere markup** (es. HTML) dal chiamante e di mostrarlo nel proprio template. Il `Tab` ne ha bisogno per presentare gli elementi che gli vengono passati:
 
@@ -88,7 +88,7 @@ Uso dal chiamante (la pagina About):
 Collegamenti: [[content-projection]] · richiamo da [[02-signal-based-components]].
 
 ## Referencing Parent Components (DI del padre)
-> 📖 pp.300-302
+> 📖 pp.288-290
 
 **Variante injection.** Il `TabbedPane` riceve i `Tab` via content projection e li tiene in un signal `tabs`. Ogni tab **si registra da solo** chiamando `registerTab` nel proprio costruttore, dopo aver **iniettato il padre** con [[inject]].
 
@@ -151,7 +151,7 @@ constructor() {
 Collegamenti: [[inject]] · [[glossario#dependency-injection-di|DI]] approfondita in [[05-state-management-services-signals]].
 
 ## View and Content
-> 📖 pp.302-303
+> 📖 pp.290-291
 
 Ogni componente non ha solo una **View**, ma anche un **Content**:
 
@@ -168,7 +168,7 @@ graph TD
 Le query seguono la stessa distinzione: `contentChild`/`contentChildren` interrogano il **Content**, `viewChild`/`viewChildren` interrogano la **View**.
 
 ### Interacting with Content
-> 📖 pp.303-305
+> 📖 pp.291-293
 
 **Variante query.** Invece di farsi registrare i tab, il `TabbedPane` li **interroga** con `contentChildren(Tab)`: passa il tipo `Tab` come filtro e ottiene un signal il cui valore è l'array delle istanze proiettate.
 
@@ -267,7 +267,7 @@ readonly firstTab2 = contentChild('tab');       // template reference, singolo
 Collegamenti: [[signal-queries]] · [[effect]].
 
 ### Interacting with the View
-> 📖 pp.305-307
+> 📖 pp.293-295
 
 Come il Content si interroga con `contentChild`/`contentChildren`, così la **View** si interroga con `viewChild` (un elemento) e `viewChildren` (più elementi). Restituiscono signal che si aggiornano quando gli elementi diventano disponibili.
 
@@ -315,7 +315,7 @@ export class ReportingPage {
 Si usa `afterRenderEffect` per essere certi che la view sia pronta e il canvas già renderizzato prima di disegnarci sopra.
 
 ### Mettere in discussione l'uso di viewChild
-> 📖 p.307
+> 📖 p.295
 
 > [!warning]
 > Interagire direttamente con la View **rimpiazza il data binding dichiarativo** (la via normale di Angular: dichiari nel template cosa mostrare e ci pensa lui ad aggiornarlo) con codice imperativo tuo (l'aggiorni a mano, passo passo): più difficile da seguire e mantenere, e gli update diretti delle proprietà possono innescare cicli di [[glossario#change-detection|change detection]] (il giro che Angular fa per rilevare i cambiamenti e riaggiornare la UI). Gli autori mettono in discussione **ogni** `viewChild`/`viewChildren` in code review.
@@ -326,7 +326,7 @@ L'uso si considera giustificato **solo** quando:
 - un padre deve **chiamare un metodo** di un componente figlio.
 
 ### Static Child Components
-> 📖 p.307
+> 📖 p.295
 
 Le quattro query signal-based (`viewChild`, `viewChildren`, `contentChild`, `contentChildren`) accettano un oggetto di **opzioni** come secondo argomento:
 
@@ -343,7 +343,7 @@ readonly chart = viewChild<ElementRef<HTMLCanvasElement>>('chart', { static: tru
 Collegamenti: [[signal-queries]].
 
 ## Comunicazione via template variables
-> 📖 pp.308
+> 📖 pp.296
 
 Una [[glossario#template-variable|template variable]] (una variabile dichiarata nel template con `#nome`) assegnata a un componente fornisce un **riferimento all'istanza** di quel componente: il template padre può chiamarne i metodi o leggerne le proprietà direttamente.
 
@@ -361,7 +361,7 @@ Una [[glossario#template-variable|template variable]] (una variabile dichiarata 
 Con `#pane` il padre può invocare `pane.activate(1)`, ad esempio in un click handler, per passare programmaticamente al secondo tab. È la forma di comunicazione **più esplicita**: si vede a colpo d'occhio chi parla con chi.
 
 ## Comunicazione via services
-> 📖 pp.308-311
+> 📖 pp.296-299
 
 **Variante service.** Un service messo nell'array `providers` di un componente è **condiviso** da quel componente e da tutti i suoi discendenti: tutti accedono alla **stessa istanza** e possono comunicare attraverso di essa.
 
