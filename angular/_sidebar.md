@@ -27,6 +27,7 @@
   - [computed](/concetti/computed.md)
   - [effect](/concetti/effect.md)
   - [linkedSignal](/concetti/linked-signal.md)
+  - [debounced](/concetti/debounced.md)
   - [resource / httpResource](/concetti/resource.md)
   - [untracked](/concetti/untracked.md)
   - [reactive context](/concetti/reactive-context.md)
@@ -46,6 +47,7 @@
   - [providers](/concetti/providers.md)
   - [@Service](/concetti/service.md)
   - [lightweight store](/concetti/lightweight-store.md)
+  - [delegated signal](/concetti/delegated-signal.md)
 
 - **🎓 Cert (Senior) · Angular classico**
   - [Indice](/cert/00-index.md)

@@ -1,11 +1,11 @@
 ---
 capitolo: 4
 titolo: "Navigation & Lazy Loading with the Router"
-pagine: "99-131"
+pagine: "87-119"
 tags: [tipo/capitolo, routing, di, performance, angular-22]
 ---
 # 04 · Navigation & Lazy Loading with the Router
-> 📖 cap.4 · pp.99-131 — *Modern Angular* v2.0.0
+> 📖 cap.4 · pp.87-119 — *Modern Angular* v2.0.0
 
 In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non basta: perché back button, bookmark e history del browser funzionino, ogni cambio di stato deve riflettersi nell'**URL**. Il **Router** di Angular automatizza tutto questo: mappa **path** → **componenti** e li attiva in un **placeholder** (`<router-outlet>`), tenendo l'URL sincronizzato con la vista corrente. Il capitolo copre: configurazione del routing, navigazione (link e programmatica), route parametrizzate, child routes, [[glossario#lazy-loading|lazy loading]] e preloading, query string e hash fragment, e le due strategie di location (path vs hash).
 
@@ -13,7 +13,7 @@ In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non ba
 > In un'app Angular convivono più configurazioni di routing: `app.routes.ts` contiene le route necessarie fin dall'avvio; altre config vengono caricate **on demand** per singola feature o dominio (vedi lazy loading).
 
 ## Setting up Routing Configuration
-> 📖 pp.101-103
+> 📖 pp.89-91
 
 Le route sono un array di tipo `Routes`. Ogni voce mappa un `path` a un `component` (oppure a una redirect o a un lazy import).
 
@@ -66,7 +66,7 @@ export const appConfig: ApplicationConfig = {
 Collegamenti: [[providers]] · [[12-initialization-route-changes]] (guards/resolver lungo i route change).
 
 ## RouterOutlet: il placeholder
-> 📖 pp.103-104
+> 📖 pp.91-92
 
 Invece di referenziare un componente concreto, `App` espone un **placeholder** `<router-outlet>` dove il Router monta il componente attivato. Va importato `RouterOutlet` (e si può rimuovere l'import di `FlightSearch`, ora attivato dal Router).
 
@@ -94,7 +94,7 @@ export class App {}
 ```
 
 ## routerLink & routerLinkActive
-> 📖 pp.104-107
+> 📖 pp.92-95
 
 I link dichiarativi usano la directive `routerLink`, riferita al `path` della route. `routerLinkActive` assegna una classe CSS quando quel link (o un suo figlio) è attivo, per evidenziare la voce di menu corrente. Entrambe vanno importate nel componente.
 
@@ -123,7 +123,7 @@ export class Sidebar {}
 ```
 
 > [!info] Angular 22+
-> Per il solo **highlighting dichiarativo** `routerLinkActive` resta la scelta naturale (ed è quella che il libro usa ovunque). A volte però ti serve lo stato di attivazione **come valore**, per alimentare un `computed`, un `effect` o altra logica reattiva oltre il semplice toggle di una classe. Da **Angular 21.1** la funzione `isActive(path, router)` restituisce un `Signal<boolean>`, ri-valutato a ogni cambio di route.
+> Per il solo **highlighting dichiarativo** `routerLinkActive` resta la scelta naturale (ed è quella che il libro usa ovunque). A volte però serve lo stato di attivazione **come valore**, per alimentare un `computed`, un `effect` o altra logica reattiva oltre il semplice toggle di una classe. Da **Angular 21.1** la funzione `isActive(path, router)` restituisce un `Signal<boolean>`, ri-valutato a ogni cambio di route.
 > ```ts
 > // src/app/shell/sidebar/sidebar.ts
 > import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
@@ -146,7 +146,7 @@ export class Sidebar {}
 Collegamenti: [[02-signal-based-components]] (struttura componenti e `imports`).
 
 ## Navigazione programmatica con Router
-> 📖 p.107
+> 📖 pp.95-96
 
 Per cambiare route via codice si fa [[inject]] del `Router` e si chiama il metodo `navigate`.
 
@@ -172,7 +172,7 @@ this.router.navigate(['/a', 'b', id]); // con id=17 → attiva /a/b/17
 Collegamenti: [[inject]].
 
 ## Parameterized Routes
-> 📖 pp.109-113
+> 📖 pp.96-102
 
 Quando si cambia route spesso serve passare informazioni alla route di destinazione (es. l'ID del volo da editare): a questo servono i **routing parameters**. Angular supporta tre notazioni:
 
@@ -196,14 +196,22 @@ Approccio classico: [[inject]] di `ActivatedRoute` e subscribe a `paramMap` (un 
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-edit/flight-edit.ts
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+@Component({
+  selector: 'app-flight-edit',
+  imports: [],
+  templateUrl: './flight-edit.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class FlightEdit {
   private readonly route = inject(ActivatedRoute);
   protected readonly id = signal(0);
   protected readonly showDetails = signal(false);
 
   constructor() {
+    // paramMap è un Observable: emette a ogni cambio di parametri
     this.route.paramMap.subscribe((paramsMap) => {
       const flightId = parseInt(paramsMap.get('id') ?? '0');
       this.id.set(flightId);
@@ -260,7 +268,7 @@ export class FlightEdit {
 ```
 
 > [!tip]
-> `withComponentInputBinding` elimina il subscribe manuale: gli [[signal-input|input()]] diventano la fonte reattiva dei parametri. Usa i transformer (piccole funzioni che convertono il valore in ingresso prima che arrivi all'input) `numberAttribute` / `booleanAttribute` per la conversione di tipo, dato che i routing parameter sono sempre stringhe.
+> `withComponentInputBinding` elimina il subscribe manuale: gli [[signal-input|input()]] diventano la fonte reattiva dei parametri. I transformer (piccole funzioni che convertono il valore in ingresso prima che arrivi all'input) `numberAttribute` / `booleanAttribute` gestiscono la conversione di tipo, dato che i routing parameter sono sempre stringhe.
 
 ### Configuring & Linking parameterized routes
 
@@ -291,7 +299,7 @@ Nella config vanno dichiarati **solo** i parametri di **segmento**, prefissati c
 Collegamenti: [[signal-input]] · [[content-projection]] · [[02-signal-based-components]].
 
 ## Hierarchical Routing with Child Routes
-> 📖 pp.114-120
+> 📖 pp.102-108
 
 Un componente attivato dal Router può a sua volta contenere un `<router-outlet>` → **child routes** (viste annidate/gerarchiche). Esempio: un `BookingNavigation` con un menu in alto e, sotto, un placeholder interno in cui attivare `flight-search` / `passenger-search`.
 
@@ -351,7 +359,7 @@ Le child route vanno nell'array `children` del nodo padre, con una default route
 > Path relativi in `routerLink`: `./x` appende alla route corrente (è il default, quindi omettibile). `../x` punta a un **sibling** — es. da `./booking/flight-search` a `./booking/passenger-search` con `../passenger-search`.
 
 ## Lazy Loading of Routes
-> 📖 pp.120-124
+> 📖 pp.108-112
 
 Di default all'avvio Angular carica **tutte** le feature → startup lento nelle app grandi. Il lazy loading risolve caricando parti dell'app su richiesta. Se la parte ha più route, le si dà una propria config (qui per dominio: `ticketing.routes.ts`).
 
@@ -398,7 +406,7 @@ export default ticketingRoutes;
 ```
 
 > [!warning]
-> Il segmento del path (`ticketing`) viene **prefissato a tutte** le child route del file lazy. Con `path: 'ticketing'` + `booking/flight-search` interno → l'URL completo è `ticketing/booking/flight-search`. Aggiorna i `routerLink` di conseguenza (es. nel `Sidebar`).
+> Il segmento del path (`ticketing`) viene **prefissato a tutte** le child route del file lazy. Con `path: 'ticketing'` + `booking/flight-search` interno → l'URL completo è `ticketing/booking/flight-search`. Vanno aggiornati i `routerLink` di conseguenza (es. nel `Sidebar`).
 
 ### Lazy loading di un singolo componente
 
@@ -410,13 +418,13 @@ Oltre alle intere config di route, si può caricare lazy un **singolo componente
 { path: 'about', loadComponent: () => import('./shell/about/about') },
 ```
 
-Verifica nel browser: nell'output di `ng serve` compare un **bundle separato**; nel tab **Network** di Chrome DevTools si vede che viene scaricato solo al bisogno. In dev mode Angular carica diversi file extra (il dev server compila on demand per velocizzare lo startup); in produzione vengono caricati solo i lazy bundle effettivamente richiesti.
+Lo si verifica nel browser: nell'output di `ng serve` compare un **bundle separato**; nel tab **Network** di Chrome DevTools si vede che viene scaricato solo al bisogno. In dev mode Angular carica diversi file extra (il dev server compila on demand per velocizzare lo startup); in produzione vengono caricati solo i lazy bundle effettivamente richiesti.
 
 > [!tip]
-> `loadChildren` → config di route lazy; `loadComponent` → singolo componente lazy. Entrambi passano per un dynamic `import()`; con un `default export` puoi omettere il `.then`.
+> `loadChildren` → config di route lazy; `loadComponent` → singolo componente lazy. Entrambi passano per un dynamic `import()`; con un `default export` si può omettere il `.then`.
 
 ## Preloading
-> 📖 p.125
+> 📖 pp.113-114
 
 Il preloading si costruisce sul lazy loading: usa le risorse idle (i tempi morti in cui browser e rete non hanno nulla da fare) **dopo l'avvio** per caricare in background i bundle lazy prima che servano, così quando il Router ne ha bisogno sono già disponibili. Si attiva con la feature `withPreloading` più una strategia.
 
@@ -437,7 +445,7 @@ provideRouter(
 > Strategie out-of-the-box (già pronte, incluse in Angular senza installare nulla): `NoPreloading` (default) e `PreloadAllModules`. Per logiche custom si implementa un service che soddisfa l'interfaccia `PreloadingStrategy`. Ma prima conviene verificare se una delle due built-in basta già (spesso è così), o se fa al caso una soluzione di terze parti come `ngx-quicklink` (precarica le route i cui link entrano nel viewport) o `guess.js` (usa il machine learning per predire la prossima route che l'utente visiterà).
 
 ## Query Strings & Hash Fragments
-> 📖 pp.126-127
+> 📖 pp.114-115
 
 Oltre a segmenti e matrix, il Router supporta la classica **query string** (`url?param1=value1&param2=value2`) e l'**hash fragment** (`url#info-in-hash-fragment`) — poco usati in Angular, ma utili per impostazioni applicative globali.
 
@@ -478,7 +486,7 @@ this.activatedRoute.fragment.subscribe((fragment) => {
 > Con `withComponentInputBinding` anche i **query parameter** vengono legati a input omonimi, ma **non l'hash fragment**: Angular lo tratta come stringa singola, non come coppie chiave-valore.
 
 ## Path Routing vs. Hash Routing
-> 📖 pp.128-130
+> 📖 pp.116-118
 
 Per restare flessibile, il Router delega la gestione dell'URL a una **strategia** intercambiabile.
 
@@ -525,17 +533,17 @@ Collegamenti: [[providers]] · [[17-defer-ssr-hydration]].
 > [!success]- Risposta
 > Di default Angular fa **prefix matching** e in JavaScript la stringa vuota è prefisso di qualunque stringa: senza `pathMatch: 'full'` la default route `path: ''` matcherebbe **sempre**. `pathMatch: 'full'` la fa scattare solo quando l'intero path è vuoto. Il `**` va ultimo perché le route si valutano dall'alto e vince la prima che matcha: essendo un catch-all, se messo prima "ingoierebbe" tutte le route successive.
 
-**2.** `ActivatedRoute.paramMap` vs `withComponentInputBinding()`: come leggi un parametro nei due modi e che vantaggio dà il secondo?
+**2.** `ActivatedRoute.paramMap` vs `withComponentInputBinding()`: come si legge un parametro nei due modi e che vantaggio dà il secondo?
 > [!success]- Risposta
-> Con `ActivatedRoute` fai `inject(ActivatedRoute)` e ti **subscribi** a `paramMap` (Observable), leggendo i valori con `paramMap.get('id')` (sempre stringhe, da convertire a mano). Con `withComponentInputBinding()` (feature di `provideRouter`) il Router lega automaticamente i parametri a [[signal-input|input()]] omonimi: niente subscribe manuale, gli input diventano la fonte reattiva, e usi i transformer `numberAttribute` / `booleanAttribute` per la conversione di tipo.
+> Con `ActivatedRoute` si fa `inject(ActivatedRoute)` e ci si **subscribe** a `paramMap` (Observable), leggendo i valori con `paramMap.get('id')` (sempre stringhe, da convertire a mano). Con `withComponentInputBinding()` (feature di `provideRouter`) il Router lega automaticamente i parametri a [[signal-input|input()]] omonimi: niente subscribe manuale, gli input diventano la fonte reattiva, e i transformer `numberAttribute` / `booleanAttribute` si occupano della conversione di tipo.
 
-**3.** Come configuri un parametro di segmento nelle route, e cosa diventa un oggetto passato nell'array di `routerLink`?
+**3.** Come si configura un parametro di segmento nelle route, e cosa diventa un oggetto passato nell'array di `routerLink`?
 > [!success]- Risposta
-> Nella config dichiari solo i parametri di **segmento**, prefissati con i due punti: `{ path: 'flight-edit/:id', component: FlightEdit }`. Matrix e query non si dichiarano (riconosciuti a runtime). In `routerLink` un **oggetto** dentro l'array diventa un insieme di **matrix parameter**: `['../flight-edit', 3, { showDetails: true }]` → `../flight-edit/3;showDetails=true`.
+> Nella config si dichiarano solo i parametri di **segmento**, prefissati con i due punti: `{ path: 'flight-edit/:id', component: FlightEdit }`. Matrix e query non si dichiarano (riconosciuti a runtime). In `routerLink` un **oggetto** dentro l'array diventa un insieme di **matrix parameter**: `['../flight-edit', 3, { showDetails: true }]` → `../flight-edit/3;showDetails=true`.
 
-**4.** Differenza tra `loadChildren` e `loadComponent`? Quando puoi omettere il `.then`?
+**4.** Differenza tra `loadChildren` e `loadComponent`? Quando si può omettere il `.then`?
 > [!success]- Risposta
-> `loadChildren` carica lazy un'intera **config di route** (un array `Routes`); `loadComponent` carica lazy un **singolo componente**. Entrambi usano una lambda con un dynamic `import()`. Puoi omettere il `.then` quando il file importato espone un **default export** (`export default ...`): il Router lo prende automaticamente.
+> `loadChildren` carica lazy un'intera **config di route** (un array `Routes`); `loadComponent` carica lazy un **singolo componente**. Entrambi usano una lambda con un dynamic `import()`. Si può omettere il `.then` quando il file importato espone un **default export** (`export default ...`): il Router lo prende automaticamente.
 
 **5.** Cosa fa `PreloadAllModules` e in cosa differisce dal lazy loading puro?
 > [!success]- Risposta
@@ -546,7 +554,7 @@ Collegamenti: [[providers]] · [[17-defer-ssr-hydration]].
 > `PathLocationStrategy` (default) mette la route nel path (`/booking/flight-search`): richiede che il server **rediriga a `index.html`** ogni richiesta dell'app e un elemento `<base href>` in `index.html`. `HashLocationStrategy` (attivata con `withHashLocation`) mette la route nell'hash (`#/booking/flight-search`): non serve né redirect server-side né `<base>`, perché la separazione client/server è data dall'hash. Proprio per questo rompe l'**SSR** delle singole route: l'hash fragment **non viene inviato al server**, quindi il server non sa quale route renderizzare.
 
 **In sintesi:**
-- Il Router mappa **path → componenti**, attivati in un `<router-outlet>`; `provideRouter(routes)` lo registra. Navighi con `routerLink`/`routerLinkActive` o programmaticamente con `Router.navigate([...])`; da Angular 21.1 `isActive(path, router)` dà lo stato attivo come `Signal<boolean>`.
-- I **parametri** passano via segmenti (`:id`), matrix (`;k=v`) o query (`?k=v`); leggili con `ActivatedRoute` o, meglio, legandoli a [[signal-input|input()]] con `withComponentInputBinding()` (più i transformer `numberAttribute`/`booleanAttribute`).
+- Il Router mappa **path → componenti**, attivati in un `<router-outlet>`; `provideRouter(routes)` lo registra. Si naviga con `routerLink`/`routerLinkActive` o programmaticamente con `Router.navigate([...])`; da Angular 21.1 `isActive(path, router)` dà lo stato attivo come `Signal<boolean>`.
+- I **parametri** passano via segmenti (`:id`), matrix (`;k=v`) o query (`?k=v`); si leggono con `ActivatedRoute` o, meglio, legandoli a [[signal-input|input()]] con `withComponentInputBinding()` (più i transformer `numberAttribute`/`booleanAttribute`).
 - Le **child routes** (`children` + outlet annidato) creano gerarchie; il **lazy loading** (`loadChildren`/`loadComponent` + dynamic `import()`) e il **preloading** (`withPreloading`) migliorano lo startup.
 - Due **location strategy**: path (default, serve redirect server-side + `<base>`) vs hash (`withHashLocation`, niente config server ma niente SSR).

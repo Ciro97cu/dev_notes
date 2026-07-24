@@ -1,4 +1,5 @@
-# Outline di modern-angular_v2_0_0.pdf (2a ed., Angular 22) — pagine = numero pagina PDF
+# Outline di modern-angular_v2_0_0.pdf (2a ed., Angular 22) — pagine = numero READER del PDF (1-467).
+# NB: i riferimenti 📖 nelle note usano il numero STAMPATO sul libro = reader - 12 (front matter di 12 pagine).
 
 - [p.13] Preface
   - [p.13] Changes in this 2nd Edition

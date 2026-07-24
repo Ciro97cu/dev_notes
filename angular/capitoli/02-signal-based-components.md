@@ -1,18 +1,18 @@
 ---
 capitolo: 2
 titolo: "Signal-Based Components"
-pagine: "32-72"
+pagine: "20-60"
 tags: [tipo/capitolo, components, signals, templates, http, angular-22]
 ---
 # 02 · Signal-Based Components
-> 📖 cap.2 · pp.32-72 — *Modern Angular* v2.0.0
+> 📖 cap.2 · pp.20-60 — *Modern Angular* v2.0.0
 
 Si estende l'app del [[01-getting-started|cap.1]] con una feature di **ricerca voli** (`flight-search`): l'utente cerca collegamenti e seleziona un volo. Lungo il percorso si incontrano i mattoni di un componente signal-based: data model, logica con [[signal]], template syntax e control flow, accesso ai dati (`HttpClient` vs [[resource|httpResource]]) e sotto-componenti con `input`/`output`/`model`.
 
 La struttura cartelle è a **subdomain** (approfondita nel [[08-sustainable-architectures|cap.8]]): l'app si suddivide in sottodomini che mappano aree del mondo reale. Qui si parte dal dominio `ticketing` con la feature `feature-booking`, sotto `src/app/domains/ticketing/feature-booking/flight-search`.
 
 ## Scaffolding & Style Guide
-> 📖 pp.32-34
+> 📖 pp.20-22
 
 ```bash
 ng generate component domains/ticketing/feature-booking/flight-search
@@ -23,10 +23,10 @@ ng g c domains/ticketing/feature-booking/flight-search
 Per via della config del [[01-getting-started|cap.1]] (in `angular.json`) la CLI genera solo `flight-search.ts` (la classe del componente) + `flight-search.html` (il template): niente stylesheet né file di test, così l'esempio resta pulito.
 
 > [!tip]
-> Lo Style Guide aggiornato **non usa più i suffissi** `Component`/`.component.ts`: la classe è `FlightSearch`, il file `flight-search.ts` (non più `FlightSearchComponent` / `flight-search.component.ts`). Puoi comunque usare suffissi semantici tuoi più informativi di "Component", es. `search` o `edit`.
+> Lo Style Guide aggiornato **non usa più i suffissi** `Component`/`.component.ts`: la classe è `FlightSearch`, il file `flight-search.ts` (non più `FlightSearchComponent` / `flight-search.component.ts`). Restano ammessi suffissi semantici propri, più informativi di "Component" — es. `search` o `edit` — per comunicare lo scopo del componente.
 
 ## Data model
-> 📖 pp.34-35
+> 📖 pp.22-23
 
 Le interfacce del modello (`Flight`, `Aircraft`, `Price`) stanno in `domains/ticketing/data/`. Le date sono **stringhe ISO** (es. `2030-12-24T17:00+01:00`). Le costanti `initial*` danno un valore di partenza comodo per evitare `null`/`undefined` quando si creano nuovi oggetti.
 
@@ -80,7 +80,7 @@ export interface Price {
 ```
 
 ## Component logic con i signal
-> 📖 pp.35-38
+> 📖 pp.23-26
 
 Lo scaffold di partenza è una classe vuota; la si espande per gestire la ricerca con i [[signal]] e si usa subito **Signal Forms** (cap.6) per il form dei criteri.
 
@@ -117,6 +117,7 @@ export class FlightSearch {
 - Tutto ciò che il template usa è esposto come **proprietà** o **metodo** della classe. Lo stato si modella con i [[signal]]: quando sono legati al template, notificano ad Angular ogni cambio di valore, così il framework può aggiornare i binding.
 - Un signal si crea con `signal()` (da `@angular/core`) passando un valore iniziale, e da lì in poi **ha sempre un valore**. Il tipo di norma si inferisce da quel valore iniziale; va dichiarato solo quando l'inferenza non basta, come in `signal<Flight[]>([])`: un array vuoto non porta alcuna informazione sul tipo dei suoi elementi.
 - Il `filter` rappresenta i criteri di ricerca. Da esso `form(this.filter)` costruisce il `filterForm` (Signal Forms), il form a cui si legano gli `<input>`: a ogni modifica dei controlli si aggiornano insieme sia `filterForm` sia `filter`.
+- `flights` contiene i voli trovati; `selectedFlight` il volo selezionato. All'inizio nessun volo è selezionato, quindi il tipo è `Flight | null` inizializzato a `null`. Il metodo `search()` recupera i voli, `select(f)` aggiorna `selectedFlight` con il volo scelto dall'utente.
 - Un signal si **legge** chiamandone il getter — cioè usandolo come funzione, es. `this.filter().from`. Si **scrive** con `.set(value)`, oppure con `.update(prev => next)` quando il nuovo valore dipende dal precedente.
 
 ```ts
@@ -155,7 +156,7 @@ protected search(): void {
 Collegamenti: [[signal]] · [[06-signal-forms]] (la `form()`).
 
 ## Template & data binding
-> 📖 pp.40-46
+> 📖 pp.27-34
 
 Prima del template vanno dichiarate le dipendenze nell'array `imports` del decoratore `@Component`: la direttiva `FormField` (parte di Signal Forms, lega `filterForm` ai singoli `<input>`) e le pipe `JsonPipe` e `DatePipe` (per formattare l'output).
 
@@ -173,6 +174,7 @@ import { FormField, form } from '@angular/forms/signals';
 
 ```html
 <!-- .../flight-search/flight-search.html -->
+<h1>Flight Search</h1>
 <form>
   <div>
     <label for="from">From:</label>
@@ -259,7 +261,7 @@ Tipi di binding:
 > ```
 
 ### Exhaustive @switch
-> 📖 pp.43-45 (Listing 2-12/2-14)
+> 📖 pp.31-33 (Listing 2-12/2-14)
 
 Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto al tipo in un secondo momento: il template compila lo stesso, ma quel caso resta scoperto a runtime. Da **Angular 21.2** il ramo `@default` può chiedere al compilatore un **exhaustiveness check** — un controllo che verifica di aver coperto *tutti* i casi possibili e fa fallire la build se ne manca uno.
 
@@ -284,6 +286,16 @@ C'è però un caso più frequente in cui la forma breve non basta: quando lo swi
 >   | { kind: 'senator';  loungeAccess: true }
 >   | { kind: 'frequent'; bonusMiles: number }
 >   | { kind: 'regular' };
+>
+> // computed che deriva loyalty() dallo status del passeggero
+> protected readonly loyalty = computed<Loyalty>(() => {
+>   const p = this.passenger();
+>   switch (p.passengerStatus) {
+>     case 'A': return { kind: 'senator', loungeAccess: true };
+>     case 'B': return { kind: 'frequent', bonusMiles: p.bonusMiles };
+>     case 'C': return { kind: 'regular' };
+>   }
+> });
 > ```
 > ```html
 > @switch (loyalty().kind) {
@@ -302,7 +314,7 @@ C'è però un caso più frequente in cui la forma breve non basta: quando lo swi
 > Usa `<button type="button">`: il default è `submit`, che farebbe il submit del form e un reload completo della pagina. La direttiva `formRoot` del [[06-signal-forms|cap.6]] disabilita questo comportamento di default del browser.
 
 ## Chiamare il componente
-> 📖 pp.46-47
+> 📖 pp.34-35
 
 Si importa `FlightSearch` nell'array `imports` di `App` (`app.ts`) e lo si usa in `app.html`:
 
@@ -330,15 +342,19 @@ export class App {
 
 Il prefisso del selector (`app-`, inserito dalla CLI per evitare collisioni con librerie e tag HTML nativi) si cambia in `angular.json` (chiave `prefix`); con il linting attivo va allineato anche in `eslint.config.js`.
 
-## Debugging
-> 📖 pp.47-50
+## Running & debugging
+> 📖 pp.35-37
+
+L'app si avvia dalla root del progetto con `ng serve -o` (l'`-o` apre subito il browser); il dev server la pubblica su `http://localhost:4200`.
 
 - **Console del browser**: gli errori a runtime compaiono nei dev tools; Angular stampa **link cliccabili** alle righe dei file HTML/TS coinvolti.
-- **Source Maps**: `ng serve` le genera di default → puoi usare il debugger JavaScript del browser (in Chrome: tab **Sources**; `Ctrl+Shift+P` / `Cmd+Shift+P` per aprire un file e mettere un breakpoint sul numero di riga).
+- **Source Maps**: `ng serve` le genera di default, così è possibile usare il debugger JavaScript del browser (in Chrome: tab **Sources**; `Ctrl+Shift+P` / `Cmd+Shift+P` per aprire un file e mettere un breakpoint sul numero di riga).
 - **VS Code**: breakpoint direttamente nel `.ts` e avvio con `Run | Start Debugging` (F5); funziona senza config aggiuntiva perché la CLI genera già `.vscode/launch.json` allo scaffolding del progetto.
 
 ## Data access: HttpClient
-> 📖 pp.50-54
+> 📖 pp.38-42
+
+Con il componente funzionante a dati statici, si passa a caricare voli reali dal backend. Angular offre due strade: l'`HttpClient`, per richieste HTTP di ogni tipo, e la moderna API signal-based `httpResource`, per il fetch reattivo (sezione successiva).
 
 Per la comunicazione HTTP diretta si inietta il service `HttpClient` con [[inject]] e si chiamano i suoi metodi dentro `search()`.
 
@@ -370,7 +386,35 @@ export class FlightSearch {
 
 - `get<T>` emette una GET e ritorna un **Observable** (il recupero è asincrono): ci si iscrive con `subscribe({ next, error })`. `T` è il tipo della risposta (qui `Flight[]`): l'`HttpClient` converte il JSON ricevuto in oggetto.
 - Altri metodi con firma analoga, uno per verbo HTTP: `get<T>(url, options)`, `post<T>(url, body, options)` (aggiunge una risorsa o avvia un'elaborazione), `put<T>` (aggiunge/aggiorna), `patch<T>` (aggiorna solo le proprietà cambiate), `delete<T>(url, options)`, `request<T>(method, url, options)` (generico, il verbo è un parametro). I metodi che inviano dati hanno un parametro `body`; l'`options` configura `params`, `headers`, ecc.
-- Attenzione: non ogni Web API supporta tutti i verbi e la semantica implementata può discostarsi da quella HTTP (es. una POST che in realtà aggiorna) → fai riferimento alla doc dell'API.
+- Attenzione: non ogni Web API supporta tutti i verbi e la semantica implementata può discostarsi da quella HTTP (es. una POST che in realtà aggiorna) → consultare la documentazione della Web API.
+
+A titolo d'esempio, una POST che crea un nuovo volo: il `body` è l'oggetto da inviare (l'`HttpClient` lo serializza in JSON), e si assume che il server risponda col volo creato, ID incluso.
+
+```ts
+protected createDemoFlight(): void {
+  const url = 'https://demo.angulararchitects.io/api/flight';
+  const newFlight: Flight = {
+    id: 0,
+    from: 'Gleisdorf',
+    to: 'Graz',
+    date: new Date().toISOString(),
+    delayed: false,
+    delay: 0,
+    aircraft: { ...initialAircraft },
+    prices: [],
+  };
+  this.http.post<Flight>(url, newFlight).subscribe({
+    next: (flight) => {
+      console.debug('New Id: ', flight.id);
+    },
+    error: (err) => {
+      console.error('Error', err);
+    },
+  });
+}
+```
+
+Se ne può provare l'invocazione dal constructor o legandola a un button nel template.
 
 > [!warning]
 > Il termine *resource* qui è quello di HTTP (l'oggetto da recuperare o inviare) e **non** va confuso con il concetto Angular di `resource`/`httpResource` della sezione successiva.
@@ -378,7 +422,7 @@ export class FlightSearch {
 Collegamenti: [[inject]].
 
 ## Data access: httpResource (signal-based)
-> 📖 pp.54-59
+> 📖 pp.42-47
 
 `httpResource` è il modo **signal-based** di caricare dati via HTTP: prende signal come input, e ne espone stato e risultato come signal.
 
@@ -412,7 +456,7 @@ export class FlightSearch {
 - La lambda ritorna l'oggetto che descrive la richiesta ed è **reattiva**: quando cambia un qualsiasi signal letto al suo interno, la resource si ri-triggera e ricarica. Parte **subito** alla creazione, per il primo fetch.
 - `Flight[]` è il tipo atteso della risposta: la resource fa il parse del JSON assumendo questo tipo.
 - `reload()` ri-triggera manualmente la richiesta senza cambiare i parametri.
-- Per **impedire** il fetch iniziale o disattivarla a runtime, ritorna `undefined` dalla lambda (conviene passare a una lambda con `return` esplicito):
+- Per **impedire** il fetch iniziale o disattivare la resource a runtime, si restituisce `undefined` dalla lambda (conviene allora passare a una lambda con `return` esplicito):
 
 ```ts
 protected readonly flightsResource = httpResource<Flight[]>(
@@ -430,12 +474,12 @@ protected readonly flightsResource = httpResource<Flight[]>(
 );
 ```
 
-- Di default fa una **GET**; puoi specificare un altro metodo e un `body`, ma è pensata per il **fetch (read)**: per save/delete usa `HttpClient`.
+- Di default esegue una **GET**; è possibile specificare un altro metodo e persino un `body`, ma è pensata per il **fetch (read)**: per save/delete si usa `HttpClient`.
 - `{ defaultValue: [] }` (secondo argomento) dà un valore iniziale prima che la richiesta completi → niente `undefined` nel template.
 - Stato esposto via signal: `value` (i dati), `error` (info sull'errore), `isLoading` (richiesta in corso).
 
 > [!info] Angular 22+
-> Il `value` di una resource è **scrivibile**: puoi modificare i dati caricati localmente (utile per editarli con un form in two-way binding sul `value`). Resta però una **copia di lavoro locale** — per persistere sul server serve comunque `HttpClient`.
+> Il `value` di una resource è **scrivibile**: si possono modificare i dati caricati localmente (utile per editarli con un form in two-way binding sul `value`). Resta però una **copia di lavoro locale** — per persistere sul server serve comunque `HttpClient`.
 
 ```html
 <!-- .../flight-search/flight-search.html -->
@@ -453,7 +497,7 @@ protected readonly flightsResource = httpResource<Flight[]>(
 > [!warning]
 > In stato di errore **non leggere `value()`**: lancia un'eccezione. Controlla prima `error()` e leggi `value` solo se è `undefined` — nel template `@if (!error() && flights().length > 0)`.
 
-In alternativa a `error()` puoi guardare il signal `status()`, che vale uno tra: `idle` (niente caricato) · `loading` · `reloading` · `error` · `resolved` (caricamento riuscito) · `local` (valore cambiato localmente via `set`/`update`).
+In alternativa a `error()` si può guardare il signal `status()`, che vale uno tra: `idle` (niente caricato) · `loading` · `reloading` · `error` · `resolved` (caricamento riuscito) · `local` (valore cambiato localmente via `set`/`update`).
 
 > [!tip]
 > `httpResource` gestisce da sola le [[glossario#race-condition|race condition]], la situazione in cui più richieste partite in rapida successione si "sorpassano", col rischio di mostrare la risposta sbagliata invece di quella dell'ultima ricerca.
@@ -467,7 +511,7 @@ In alternativa a `error()` puoi guardare il signal `status()`, che vale uno tra:
 Collegamenti: [[resource]] · approfondimento in [[03-reactive-design-with-signals]].
 
 ## Sotto-componenti: input, output, model
-> 📖 pp.59-71
+> 📖 pp.47-59
 
 Crescendo l'app conviene spezzare i componenti complessi in pezzi piccoli e riutilizzabili. Si estrae un `FlightCard` che mostra il singolo volo e può essere selezionato, sostituendo le righe della tabella. Essendo un componente general-purpose non legato a una specifica feature, sta nella cartella `ui` del dominio:
 
@@ -532,8 +576,32 @@ export class FlightCard {
 ```
 
 - Gli input sono **signal di sola lettura**: `InputSignal<T>` (o `InputSignal<T | undefined>` se opzionale). `input.required<Flight>()` non ha default e, se il padre lo dimentica, Angular lancia un **errore a compile-time**; gli input obbligatori non possono avere default.
-- Essendo read-only, per notificare il padre si emette un evento: `output<boolean>()` crea un `OutputEmitterRef<boolean>`, su cui si chiama `.emit(value)`. Nel template li si legge come signal: `item()` (o `@let v = item()` per una variabile locale più leggibile).
+- Essendo read-only, per notificare il padre si emette un evento: `output<boolean>()` crea un `OutputEmitterRef<boolean>`, su cui si chiama `.emit(value)`.
 - Nell'event binding il valore emesso arriva nella variabile speciale **`$event`** del template padre.
+
+Nel template gli input si leggono come signal, chiamandone il getter; `@let itemValue = item();` cattura il valore in una variabile locale più leggibile, e i due bottoni scatenano `select()`/`deselect()`:
+
+```html
+<!-- src/app/domains/ticketing/ui/flight-card/flight-card.html -->
+@let itemValue = item();
+<div [class.selected]="selected()" class="card">
+  <div class="card-header">
+    <h2 class="title">{{ itemValue.from }} - {{ itemValue.to }}</h2>
+  </div>
+  <div class="card-body">
+    <p>Flight-No.: #{{ itemValue.id }}</p>
+    <p>Date: {{ itemValue.date | date }}</p>
+    <p>Delayed: {{ itemValue.delayed }}</p>
+    <p>
+      @if (!selected()) {
+        <button (click)="select()">Select</button>
+      } @else {
+        <button (click)="deselect()">Remove</button>
+      }
+    </p>
+  </div>
+</div>
+```
 
 **ModelSignal** — input **scrivibile** (two-way). `model()` crea automaticamente la proprietà **e** l'evento `<nome>Change`:
 
@@ -601,7 +669,33 @@ export class SimpleDelayStepper {
 }
 ```
 
-**Content projection** con `<ng-content>` — il padre inietta markup (HTML o componenti) nel figlio senza toccarne l'implementazione. Un `<ng-content>` può avere un **contenuto di default** (mostrato se il padre non proietta nulla) e si possono avere più slot, ciascuno con `select="<selettore-CSS>"`:
+**Content projection** con `<ng-content>` — il padre inietta contenuto arbitrario (markup HTML o componenti) nel figlio senza toccarne l'implementazione, utile per personalizzare parti di un componente. Nella forma base il figlio espone un solo `<ng-content />` come segnaposto: al render Angular lo sostituisce col contenuto proiettato dal padre.
+
+```html
+<!-- il padre proietta markup extra dentro FlightCard -->
+<app-flight-card [item]="f" [selected]="basket()[f.id]"
+                 (selectedChange)="updateBasket(f.id, $event)">
+  <div>The flight #{{ f.id }} might be delayed. Please check the monitors.</div>
+</app-flight-card>
+```
+
+```html
+<!-- flight-card.html: il segnaposto dove finisce il contenuto proiettato -->
+<div class="card-body">
+  <!-- ...dettagli e bottoni Select/Remove... -->
+  <ng-content />
+</div>
+```
+
+Un `<ng-content>` può avere un **contenuto di default**, mostrato quando il padre non proietta nulla:
+
+```html
+<ng-content>
+  <p>No additional information provided.</p>
+</ng-content>
+```
+
+Si possono anche avere **più slot**, ciascuno con un attributo `select="<selettore-CSS>"` che indica quale contenuto proiettato accogliere (tipicamente per nome di classe):
 
 ```html
 <!-- luggage-card.html (tre slot, simile a flight-card) -->
@@ -635,7 +729,7 @@ Collegamenti: [[signal-input]] · [[signal-output]] · [[model-signal]] · [[two
 
 **2.** Quando usare `HttpClient` e quando `httpResource`? Cosa garantisce `httpResource` sulle race condition?
 > [!success]- Risposta
-> `HttpClient` per la comunicazione diretta e per **tutti** i verbi (save/delete inclusi): ritorna Observable a cui ti iscrivi. `httpResource` per il **fetch (GET) reattivo** signal-based: la lambda reattiva ricarica al cambio dei signal letti, ed espone `value`/`error`/`isLoading`/`status`. Sulle race condition tiene **solo l'ultima** richiesta scartando le risposte precedenti (come `switchMap`); `reload()` invece ignora le chiamate sovrapposte (come `exhaustMap`).
+> `HttpClient` per la comunicazione diretta e per **tutti** i verbi (save/delete inclusi): ritorna Observable a cui ci si iscrive. `httpResource` per il **fetch (GET) reattivo** signal-based: la lambda reattiva ricarica al cambio dei signal letti, ed espone `value`/`error`/`isLoading`/`status`. Sulle race condition tiene **solo l'ultima** richiesta scartando le risposte precedenti (come `switchMap`); `reload()` invece ignora le chiamate sovrapposte (come `exhaustMap`).
 
 **3.** Perché il `track` nel `@for` è obbligatorio e cosa puoi passargli?
 > [!success]- Risposta
@@ -652,6 +746,10 @@ Collegamenti: [[signal-input]] · [[signal-output]] · [[model-signal]] · [[two
 **6.** Perché aggiorni il basket con lo spread invece di mutarlo?
 > [!success]- Risposta
 > `this.basket.update((b) => ({ ...b, [id]: selected }))` crea un **nuovo** oggetto (nuovo riferimento). Mutare l'oggetto esistente non cambierebbe il riferimento e Angular potrebbe non rilevare la modifica; un nuovo riferimento (immutabilità) fa scattare in modo affidabile la change detection.
+
+**7.** Cosa permette la **content projection** e cosa cambia con `select` e il contenuto di default?
+> [!success]- Risposta
+> `<ng-content>` fa sì che il padre inietti contenuto arbitrario (HTML o componenti) nel figlio senza toccarne l'implementazione: al render Angular sostituisce il segnaposto col contenuto proiettato. Un `<ng-content>` può avere un **contenuto di default** (mostrato se il padre non proietta nulla) e si possono definire **più slot**, ciascuno con `select="<selettore-CSS>"` per accogliere un contenuto specifico (es. per nome di classe).
 
 **In sintesi:**
 - Lo stato dei componenti si modella con i **signal** (`signal`/`computed`/`set`/`update`); il template usa interpolation, property/event/two-way binding, il control flow `@if`/`@for`/`@switch` (con `@empty`, multi-value e `@default never`) e le pipe.

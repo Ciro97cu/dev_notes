@@ -1,21 +1,21 @@
 ---
 capitolo: 1
 titolo: "Getting Started with Angular"
-pagine: "18-31"
+pagine: "6-19"
 tags: [tipo/capitolo, tooling, signals, angular-22]
 ---
 # 01 · Getting Started with Angular
-> 📖 cap.1 · pp.18-31 — *Modern Angular* v2.0.0
+> 📖 cap.1 · pp.6-19 — *Modern Angular* v2.0.0
 
 Setup dell'ambiente, generazione del progetto con la **Angular CLI** e prima lettura del codice generato. Un'app Angular è un **albero di componenti** con un root component in cima; questo capitolo arriva fino al punto in cui quel componente gira nel browser. Il progetto di esempio del libro è **flights42** (`angular-architects/flights42` su GitHub).
 
 ## Tooling
-> 📖 pp.18-20
+> 📖 pp.6-8
 
-- **IDE**: in teoria basta un editor di testo, ma un IDE specializzato dà syntax highlighting, code completion e debugging integrato. Gli autori consigliano **VS Code** (gratuito, multipiattaforma) o **WebStorm/IntelliJ** (commerciali, JetBrains).
-  - Su VS Code installa l'extension pack *Angular Essentials* di John Papa (View → Extensions): include l'**Angular Language Service** (code completion nei template HTML) ed **ESLint**.
-  - Su IntelliJ verifica che i plugin **Angular** e **TypeScript** siano attivi.
-- **Node.js**: tutto il tooling di sviluppo/build/test poggia su Node. Usa le versioni **LTS** (Long-Term Support, quelle con supporto a lungo termine, le più stabili); se ti servono versioni diverse tra progetti, gestiscile con un version manager (un programma che tiene installate più versioni di Node e ti fa passare dall'una all'altra) come **NVM**.
+- **IDE**: in teoria basta un editor di testo, ma un IDE specializzato offre syntax highlighting, code completion e debugging integrato. Gli autori consigliano **VS Code** (gratuito, leggero, multipiattaforma) o **WebStorm/IntelliJ** (prodotti commerciali JetBrains, con refactoring avanzato e test runner integrati); entrambi supportano TypeScript e Angular di serie.
+  - Su VS Code conviene installare l'extension pack *Angular Essentials* di John Papa (View → Extensions): include l'**Angular Language Service** (code completion nei template HTML) ed **ESLint** (controlli di qualità del codice).
+  - Su IntelliJ vanno verificati i plugin **Angular** e **TypeScript**, che devono essere attivi.
+- **Node.js**: tutto il tooling di sviluppo, build e test poggia su Node. Si consiglia di attenersi alle versioni **LTS** (Long-Term Support, con supporto a lungo termine, le più stabili); quando servono versioni diverse tra progetti, le si gestisce con un version manager (un programma che tiene installate più versioni di Node e permette di passare dall'una all'altra) come **NVM**.
 - **Angular CLI**: tool ufficiale del team Angular per generare, buildare e testare; viene aggiornato a ogni nuova versione di Angular. Installazione globale (`-g` la rende disponibile ovunque sulla macchina; senza `-g` npm installerebbe solo nel progetto locale):
 
 ```bash
@@ -35,7 +35,7 @@ ng serve -o   # -o apre il browser
 > Il repo di esempio ha **branch per capitolo** (vedi `readme.md`): utili per seguire il libro passo-passo.
 
 ## Generare e avviare un progetto
-> 📖 pp.20-22
+> 📖 pp.8-10
 
 `ng new` scarica e configura automaticamente l'intera toolchain (la catena di strumenti che servono per lavorare al progetto): compilatore TypeScript, strumenti di test e i build tool che, in fase di compilazione, impacchettano i sorgenti in **bundle** (pochi file ottimizzati pronti per la produzione).
 
@@ -46,19 +46,19 @@ ng serve -o          # dev server, default http://localhost:4200
 ng serve -o --port 4242   # porta custom con --port
 ```
 
-`ng serve` non solo serve l'app, ma **monitora i sorgenti** e li ricompila a ogni modifica, aggiornando poi la finestra del browser (live reload). Se la porta `4200` è occupata, la CLI ne propone un'altra. Provalo cambiando il `title` in `app.ts`:
+`ng serve` non solo serve l'app, ma **monitora i sorgenti** e li ricompila a ogni modifica, aggiornando poi la finestra del browser (live reload). Se la porta `4200` è occupata, la CLI ne propone un'altra. Per provare il meccanismo si apre `src/app/app.ts` e si cambia il valore del `title` in `World!`:
 
 ```ts
 protected readonly title = signal('World!');
 ```
 
-salva, e il browser si aggiorna da solo (riporta poi il valore a `flights42` per restare allineato col capitolo).
+Al salvataggio il browser si aggiorna da solo; conviene poi riportare il valore a `flights42` per restare allineati con le spiegazioni del capitolo.
 
 > [!warning]
-> Apri in IDE la **cartella root del progetto** (quella con `angular.json`), altrimenti autocompletamento ed errori vanno in tilt. La ricompilazione automatica funziona bene ma occasionalmente la CLI "perde" una modifica — capita con salvataggi rapidi in sequenza o rinomine di file. Rimedio: risalva i file interessati o, in ultima istanza, riavvia `ng serve`.
+> Va aperta nell'IDE la **cartella root del progetto** (quella che contiene `angular.json`), altrimenti l'autocompletamento fallisce e compaiono numerosi errori. La ricompilazione automatica funziona bene, ma occasionalmente la CLI "perde" una modifica o si desincronizza — capita con salvataggi rapidi in sequenza o con la rinomina di file. Il rimedio è risalvare i file interessati o, in ultima istanza, riavviare `ng serve`.
 
 ## Struttura del progetto
-> 📖 pp.22-23
+> 📖 pp.10-11
 
 La CLI genera il root component `App` più i file di configurazione per build e test. I principali:
 
@@ -74,7 +74,7 @@ La CLI genera il root component `App` più i file di configurazione per build e 
 | `tsconfig.json` | Configurazione del compilatore TypeScript |
 
 ## Il root component & i signal
-> 📖 pp.23-25
+> 📖 pp.11-13
 
 Il root component generato si chiama `App` e vive in `app.ts`. Definisce essenzialmente una proprietà `title`:
 
@@ -100,13 +100,13 @@ export class App {
 }
 ```
 
-- `title` è un [[signal]]: un oggetto che **contiene un valore** e notifica le parti interessate quando cambia; Angular usa questa notifica per aggiornare la UI. Lo **leggi chiamandolo come funzione** — `this.title()` — e lo aggiorni con `.set()`. Il tipo è `WritableSignal<string>`, inferito dal valore di default (non serve dichiararlo).
+- `title` è un [[signal]]: un oggetto che **contiene un valore** e notifica le parti interessate del sistema quando quel valore cambia; Angular sfrutta la notifica per aggiornare la UI e riflettere lo stato più recente. Lo si **legge chiamandolo come funzione** — `this.title()` — e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, inferito dal valore di default (non serve dichiararlo esplicitamente).
 - Secondo la Angular style guide: le proprietà usate **solo nel template** si dichiarano `protected` (evita modifiche accidentali dall'esterno della classe). I signal vanno marcati `readonly`: non si **rimpiazzano**, si aggiornano.
-- `@Component` è un **decorator** che marca la classe come componente (i decorator definiscono metadati per i building block di Angular e sono preceduti da `@`). Il `selector` è il nome dell'elemento HTML custom che rappresenta il componente: lo richiami con `<app-root></app-root>`. Il decorator referenzia anche template (`templateUrl`) e CSS locale (`styleUrl`, vuoto di default).
+- `@Component` è un **decorator** che marca la classe come componente (i decorator definiscono metadati per i building block di Angular e sono preceduti da `@`). Il `selector` è di norma il nome dell'elemento HTML custom che rappresenta il componente: lo si richiama con `<app-root></app-root>`. Il decorator referenzia anche il template (`templateUrl`) e il CSS locale (`styleUrl`, vuoto di default).
 - `export` rende la classe usabile in altri file; gli `import` in cima portano dentro i costrutti di Angular (la funzione `signal`, il decorator `Component`, ecc.).
 - `imports` elenca i costrutti che il **template** usa: qui `RouterOutlet`, il placeholder con cui il router mostra componenti diversi (→ [[04-router-navigation-lazy-loading]]).
 
-Sostituisci il template generato con questo frammento, che mostra due binding:
+Il template generato contiene il markup della start page vista sopra: gradevole, ma verboso. Per iniziare se ne sostituisce l'intero contenuto con questo breve frammento, che mostra due binding:
 
 ```html
 <!-- src/app/app.html -->
@@ -114,13 +114,13 @@ Sostituisci il template generato con questo frammento, che mostra due binding:
 <button (click)="updateTitle()">Update Title</button>
 ```
 
-- `{{ title() }}` è una **interpolation**: nota la chiamata al getter del signal (`title()`) per leggerne il valore corrente.
+- `{{ title() }}` è una **interpolation**: si noti la chiamata al getter del signal (`title()`) per leggerne il valore corrente.
 - `(click)="updateTitle()"` è un **event binding**: parentesi tonde attorno al nome dell'evento.
 
 Collegamenti: [[signal]] · approfondimenti su componenti e binding in [[02-signal-based-components]].
 
 ## Bootstrap dell'applicazione
-> 📖 pp.25-27
+> 📖 pp.13-15
 
 All'avvio Angular esegue `main.ts`, che fa il **bootstrap** del root component (lo avvia e lo "monta" nella pagina, mettendolo in moto): da lì in poi mostra l'intero albero di componenti.
 
@@ -163,11 +163,11 @@ I servizi globali si registrano in `providers` tramite [[providers|provider func
 `index.html` contiene `<app-root></app-root>` come **punto di innesto**: in fase di build la CLI compila e bundla i sorgenti e aggiunge qui i riferimenti ai bundle, uno dei quali contiene il codice di `main.ts` che avvia l'applicazione.
 
 ## CLI: pacchetti, componenti e setup di studio
-> 📖 pp.27-30
+> 📖 pp.15-19
 
 - **Aggiungere pacchetti**:
   - `npm i <pkg>` (alias di `npm install <pkg>`) installa la libreria — es. `npm install @ngrx/signals`, usata più avanti per la gestione dello stato.
-  - `ng add <pkg>` installa **e configura**: es. `ng add @angular/material` imposta theming e tipografia di Material (il libro ne usa parti selezionate per dialog e toast). Rispondi Enter alle domande per i default.
+  - `ng add <pkg>` installa **e configura**: es. `ng add @angular/material` (la component library del team Angular) imposta theming e tipografia di Material — il libro ne usa parti selezionate per dialog e toast. Alle domande del setup si risponde Enter per accettare i default.
 - **Componenti e stili pronti**: il libro fa copiare nel progetto i file del repo `angular-architects/flights42-assets` (uno `styles.css` globale e i componenti `navbar`/`sidebar` con i rispettivi template, più un `app.html` modificato che li referenzia) per non perdere tempo su styling e menu.
 - **Configurare gli schematics** (le "ricette" che la CLI usa quando genera file con `ng generate`: dicono cosa creare e con quali opzioni di default) in `angular.json` (nodo `projects/<project-name>/schematics`) per ridurre il rumore in fase di studio e usare **OnPush**:
 
@@ -192,7 +192,7 @@ I servizi globali si registrano in `providers` tramite [[providers|provider func
 
 `skipTests: true` evita di generare i file di test per componenti, direttive, pipe e service — non perché lo scaffolding sia sbagliato (lo *scaffolding* è la generazione automatica dei file di partenza da parte della CLI), ma perché in [[07-testing-with-vitest]] questi file si scrivono a mano per mostrarne i concetti.
 
-- **Linter**: `ng lint` esegue ESLint. Un *linter* è uno strumento che analizza il codice e segnala errori comuni e violazioni dello stile di scrittura. La CLI lo **configura alla prima esecuzione** (Enter per i default → set di regole Angular + TS); personalizzi in `eslint.config.js`. In VS Code gli errori compaiono mentre scrivi se hai l'estensione ESLint (inclusa nell'Angular Essentials pack).
+- **Linter**: `ng lint` esegue ESLint. Un *linter* è uno strumento che analizza il codice e segnala errori comuni e violazioni degli standard di scrittura. La CLI lo **configura alla prima esecuzione** (Enter per i default → set di regole Angular + TypeScript); le regole si personalizzano in `eslint.config.js`. In VS Code gli errori compaiono man mano che si scrive, se è installata l'estensione ESLint (inclusa nell'Angular Essentials pack).
 - **Build di produzione**: `ng build` compila TS → JS, bundla (raggruppa tutto in pochi file) e ottimizza i bundle per la performance con due tecniche: la **minify** (comprime il codice togliendo spazi e accorciando i nomi) e il [[glossario#tree-shaking|tree-shaking]] (rimuove il codice inutilizzato). L'output finisce in `dist/<app>/browser`, es. `dist/flights42/browser`: per il deploy basta copiarlo su un web server.
 
 > [!info] Angular 22+
@@ -209,11 +209,11 @@ Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal
 > [!success]- Risposta
 > `npm i <pkg>` (alias di `npm install`) si limita a **installare** la libreria. `ng add <pkg>` la installa **e esegue passi di setup aggiuntivi** — es. `ng add @angular/material` configura theming e tipografia di Material nel progetto.
 
-**2.** Come leggi e come aggiorni il valore di un `signal`? Perché si dichiara `readonly`?
+**2.** Come si legge e come si aggiorna il valore di un `signal`? Perché si dichiara `readonly`?
 > [!success]- Risposta
-> Lo **leggi chiamandolo come funzione**: `this.title()`. Lo **aggiorni** con `.set()` (es. `this.title.set('...')`). Si dichiara `readonly` perché i signal **non si rimpiazzano, si aggiornano**: il riferimento all'oggetto signal resta lo stesso, cambia il valore che contiene.
+> Lo si **legge chiamandolo come funzione**: `this.title()`. Lo si **aggiorna** con `.set()` (es. `this.title.set('...')`). Si dichiara `readonly` perché i signal **non si rimpiazzano, si aggiornano**: il riferimento all'oggetto signal resta lo stesso, cambia il valore che contiene.
 
-**3.** Cosa fa `bootstrapApplication` e dove registri i servizi globali?
+**3.** Cosa fa `bootstrapApplication` e dove si registrano i servizi globali?
 > [!success]- Risposta
 > In `main.ts`, `bootstrapApplication(App, appConfig)` fa il **bootstrap** del root component, da cui Angular mostra l'intero albero di componenti. I servizi globali si registrano nell'array `providers` di `appConfig` (in `app.config.ts`) tramite **provider functions** come `provideRouter()` e `provideBrowserGlobalErrorListeners()`.
 
@@ -221,7 +221,7 @@ Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal
 > [!success]- Risposta
 > `OnPush` aggiorna un componente **solo quando i suoi dati cambiano**, invece di ricontrollare l'intera app a ogni ciclo → change detection più efficiente. I signal notificano esplicitamente i cambi di valore, quindi calzano perfettamente con OnPush. Da **Angular 22** è la strategia di default.
 
-**5.** Quali file guardi per capire root component, bootstrap e start page?
+**5.** Quali file si guardano per capire root component, bootstrap e start page?
 > [!success]- Risposta
 > Root component: `src/app/app.ts` (logica) e `src/app/app.html` (template). Bootstrap: `src/main.ts` (chiama `bootstrapApplication`) e `src/app/app.config.ts` (i servizi globali). Start page: `src/index.html`, che contiene `<app-root></app-root>` come punto di innesto.
 
@@ -230,7 +230,7 @@ Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal
 > Per due ragioni: rende la scelta **visibile a colpo d'occhio** in ogni componente (codice auto-documentante) e resta **retrocompatibile** con versioni di Angular precedenti alla 22, dove il default non era OnPush — così chi copia gli snippet in un progetto più vecchio ottiene lo stesso comportamento.
 
 **In sintesi:**
-- La CLI genera una struttura professionale con un solo `ng new` (compiler, test, build, ottimizzazioni) e con `ng serve -o` avvii il dev server con live reload.
+- La CLI genera una struttura professionale con un solo `ng new` (compiler, test, build, ottimizzazioni); `ng serve -o` avvia il dev server con live reload.
 - L'app è un **albero di componenti** con root `App`, bootstrappato da `main.ts` tramite `bootstrapApplication(App, appConfig)`; i servizi globali stanno nei `providers` di `appConfig`.
 - I **signal** sono onnipresenti fin dal componente generato: si leggono chiamandoli (`title()`), si aggiornano con `.set()`, si dichiarano `readonly`.
-- Per lo studio: configura gli schematics in `angular.json` (`skipTests`, `style: none`, `OnPush`), abilita il linter con `ng lint` e produci il bundle con `ng build`. **OnPush è il default da Angular 22.**
+- Per lo studio si configurano gli schematics in `angular.json` (`skipTests`, `style: none`, `OnPush`), si abilita il linter con `ng lint` e si produce il bundle con `ng build`. **OnPush è il default da Angular 22.**
