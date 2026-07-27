@@ -2,7 +2,7 @@
 
 Hub unico degli appunti di sviluppo. Sito statico, **zero dipendenze**, pubblicato con GitHub Pages.
 
-L'hub (`index.html`) raggiunge cinque raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
+L'hub (`index.html`) raggiunge sei raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
 
 | Sezione | Cartella | Contenuto |
 |---|---|---|
@@ -10,6 +10,7 @@ L'hub (`index.html`) raggiunge cinque raccolte, ognuna un sito [docsify](https:/
 | JavaScript | [`javascript/`](javascript/) | Guida completa (basata su *You Don't Know JS*) |
 | TypeScript | [`typescript/`](typescript/) | Guida completa (TypeScript 6.0) |
 | Angular | [`angular/`](angular/) | Modern Angular 2ª ed. — signals e oltre |
+| CSS | [`css/`](css/) | CSS moderno, dai fondamenti a Grid e animazioni |
 | Glossario | [`glossario/`](glossario/) | Termini trasversali: web, tooling, React, concetti |
 
 ## Come funziona
