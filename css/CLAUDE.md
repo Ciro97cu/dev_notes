@@ -1,0 +1,95 @@
+# css/ — regole specifiche
+
+**Vault Obsidian/docsify**. Appunti di studio su **CSS**, dai fondamenti al layout moderno. Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
+
+Fonte: corso *CSS - The Complete Guide* di **Maximilian Schwarzmüller** (Udemy) + appunti personali (Google Doc). Ogni claim non ovvio va verificato su **[MDN](https://developer.mozilla.org/en-US/docs/Web/CSS)**; per il supporto browser si cita **[Can I Use](https://caniuse.com/)** / [Baseline](https://web.dev/baseline).
+
+## Policy sui contenuti — *modern-first* (regola cardine)
+Il CSS del corso è del 2020 circa: va **modernizzato**.
+1. **Sintassi moderna in primo piano**: se una tecnica recente **sostituisce** quella vecchia, si spiega la moderna come default (es. `gap` nei flex/grid invece dei margini; `inset` invece di top/right/bottom/left; nesting nativo; range syntax nelle media query).
+2. **Novità additive integrate dove pertinenti**: `oklch()`/`color-mix()`/relative colors (→ Colori), container queries (→ Responsive), `:has()`/`:is()`/`:where()`/nesting (→ Selettori), `@layer` (→ Cascade), subgrid (→ Grid), `clamp()`/`min()`/`max()`/`dvh` (→ Unità), logical properties (→ Box model), `text-wrap: balance/pretty` (→ Testo), scroll-driven animations & view transitions (→ Animazioni).
+3. **Legacy in secondo piano**: si cita solo se ha ancora valore (contesto storico, codice esistente, fallback). Va in un callout `> [!info] Legacy` o in una frase marcata, **mai** come tecnica principale. Tecniche superate (es. clearfix per il float, hack `-prefix-`) → menzione breve, non tutorial.
+4. **Stato & supporto**: per feature recenti indicare se sono **Baseline** (ampiamente supportate) o ancora da controllare su Can I Use; niente allarmismi da browser morti (IE è fuori scope, citabile solo come nota storica).
+
+## Struttura
+```
+README.md        home/MOC: mappa dei 16 moduli
+_coverpage.md    copertina docsify
+_sidebar.md      navigazione (un solo file, alias per docs/)
+docs/            16 moduli tematici (NN-kebab-italiano.md)
+assets/          immagini/diagrammi
+index.html       app docsify (plugin: wikilink, mermaid, callout collassabili, tema)
+```
+Un modulo = un file-hub che raggruppa più topic affini. I 16 moduli e i loro filename sono elencati in [README.md](README.md).
+
+## Naming file
+`NN-kebab-italiano.md` con NN = numero modulo a 2 cifre (i termini CSS restano inglesi: `05-box-model.md`, `12-flexbox.md`). Wikilink tra moduli: `[[05-box-model]]` → risolto dal plugin a `/docs/05-box-model.md`.
+
+## Template nota-modulo
+```markdown
+---
+modulo: N
+titolo: "<Titolo>"
+tags: [tipo/modulo, <tematici>]
+---
+# NN · <Titolo>
+> 🎨 modulo N — *CSS* · fonte: corso M. Schwarzmüller + MDN
+
+<Intro breve: cosa copre il modulo e perché conta.>
+
+## <Sezione>
+
+<Prosa breve in italiano. Proprietà/valori in backtick.>
+
+```css
+/* esempio commentato, re-indentato */
+.selector { property: value; }
+```
+
+> [!tip]
+> <cosa ricordare>
+
+> [!warning]
+> <insidia tipica>
+
+> [!info] Legacy
+> <vecchia sintassi, solo se vale la pena>
+
+Collegamenti: [[NN-altro-modulo]]
+
+## 🔁 Ripasso lampo
+
+**1.** <domanda>
+> [!success]- Risposta
+> <risposta concisa>
+
+(3-6 domande, ognuna con risposta in callout pieghevole)
+
+**In sintesi:** <2-4 bullet con i punti chiave.>
+```
+
+## Callout
+- `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) **senza** titolo custom.
+- `> [!info]` mantiene il titolo quando è informativo: usare `> [!info] Legacy` per la sintassi vecchia, `> [!info] Baseline` per lo stato di supporto di una feature moderna.
+- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **🔁 Ripasso lampo**.
+
+## Aggiunte oltre il corso
+Contenuto non presente nel corso di Max ma aggiunto perché utile/moderno **non** va marcato ogni volta (il modern-first è la linea editoriale): si integra e basta. Riservare la nota in corsivo ➕ (es. `➕ *Oltre il corso — …*`) solo per **tangenti/approfondimenti** che escono dal filo del modulo.
+
+## Tag controllati
+- tipo: `tipo/modulo`
+- tematici: `fondamenti`, `selettori`, `cascade`, `box-model`, `unita`, `colori`, `testo`, `layout`, `posizionamento`, `sfondi`, `responsive`, `flexbox`, `grid`, `transforms`, `animazioni`, `future-proof`, `moderno`
+
+## Diagrammi
+Mermaid solo dove rende (es. box model, stacking context, flusso della cascade). **Nessun colore custom** (`fill` fissi): rompe il dark mode → distinguere con le forme. Per gli schemi visivi di layout, preferire SVG in `assets/` o esempi di codice renderizzabili.
+
+## Verifica (checklist prima di scrivere)
+- [ ] Sintassi e valori verificati su MDN; niente proprietà/valori inventati.
+- [ ] Modern-first applicato: la tecnica principale è quella attuale, il legacy è in secondo piano.
+- [ ] Feature recenti: stato di supporto indicato (Baseline / Can I Use) con fonte.
+- [ ] Esempi `css` re-indentati e funzionanti.
+
+## Checklist manutenzione (quando aggiungi/rinomini un modulo)
+- [ ] `_sidebar.md` — voce nel gruppo giusto.
+- [ ] `README.md` — riga nell'indice dei moduli.
+- [ ] Link incrociati `[[NN-...]]` dai/ai moduli correlati.
