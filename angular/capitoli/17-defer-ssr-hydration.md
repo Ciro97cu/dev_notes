@@ -19,6 +19,8 @@ Il capitolo presenta tre meccanismi complementari:
 
 Non tutte le aree di una pagina contano allo stesso modo. Sulla pagina di ricerca voli, form e lista risultati sono primari; i pannelli opzionali (noleggio auto, hotel, tenda) sono secondari. Caricarne il codice subito appesantisce inutilmente il bundle iniziale (il pacchetto JavaScript scaricato all'avvio). Con `@defer` si avvolge la regione: Angular ne **splitta il codice in un bundle separato** (lo isola in un pacchetto a parte) e lo carica solo allo scattare di un trigger (un evento che fa partire il caricamento). Nel frattempo `@placeholder` fornisce contenuto alternativo, così il layout non "salta" (non si riassesta bruscamente quando arriva il contenuto vero).
 
+### Using Defer Blocks
+
 ```html
 <!-- .../ticketing/feature-booking/flight-search/flight-search.html -->
 @defer (on hover) {
@@ -177,7 +179,9 @@ Si abilita passando `withEventReplay()` a `provideClientHydration`, come nel lis
 
 SSR e hydration fanno girare lo **stesso codice Angular in due ambienti molto diversi**: sul server al render iniziale e nel browser dopo il boot (l'avvio dell'app lato client). Alcune API (`window`, `document`, `navigator`) esistono solo nel browser; il codice server spesso ha bisogno di dati specifici della richiesta.
 
-**Via [[glossario#dependency-injection-di|DI]]** (dependency injection: Angular fornisce le dipendenze al posto tuo) — quando un servizio ha responsabilità diverse su server e client, si forniscono **implementazioni diverse**. Es. un `LanguageDetector` che rileva la lingua dell'utente: sul server legge l'header `Accept-Language` dalla richiesta HTTP, sul client legge `navigator.language`.
+#### Different Implementations via DI
+
+Quando un servizio ha responsabilità diverse su server e client, si forniscono **implementazioni diverse** via [[glossario#dependency-injection-di|DI]] (dependency injection: Angular fornisce le dipendenze al posto tuo). Es. un `LanguageDetector` che rileva la lingua dell'utente: sul server legge l'header `Accept-Language` dalla richiesta HTTP, sul client legge `navigator.language`.
 
 ```ts
 // src/app/domains/shared/util-common/language.ts
@@ -238,7 +242,10 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-**Controllo della piattaforma a runtime** — se solo una piccola parte è platform-specific, conviene ramificare a runtime (decidere con un `if`, mentre l'app gira, se sei su server o browser) con gli helper `isPlatformBrowser` / `isPlatformServer` sul token `PLATFORM_ID`.
+#### Checking the Platform at Runtime
+> 📖 p.417
+
+Se solo una piccola parte è platform-specific, conviene ramificare a runtime (decidere con un `if`, mentre l'app gira, se si è su server o browser) con gli helper `isPlatformBrowser` / `isPlatformServer` sul token `PLATFORM_ID`.
 
 ```ts
 // src/app/app.ts

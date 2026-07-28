@@ -114,10 +114,7 @@ Collegamenti: [[inject]] · [[providers]] · [[injection-context]] · [[service]
 ## Guards
 > 📖 pp.333-338
 
-I guard informano l'app sui cambi di rotta: sono **funzioni** che il router chiama in certi momenti, e il cui **valore di ritorno** decide se la navigazione può procedere.
-
-- Decisione **immediata** → `boolean` (oppure `UrlTree` per i redirect).
-- Decisione **differita** (serve consultare una web API o chiedere all'utente) → `Observable<boolean>` o `Promise<boolean>`.
+I guard informano l'app sui cambi di rotta: sono **funzioni** che il router chiama in certi momenti, e il cui **valore di ritorno** decide se la navigazione può procedere. La decisione può essere **immediata** — un `boolean`, oppure un `UrlTree` per i redirect — o **differita** quando serve consultare una web API o chiedere all'utente, nel qual caso il guard ritorna un `Observable<boolean>` o una `Promise<boolean>`.
 
 Funzioni guard tipizzate (nomi funzionali moderni):
 

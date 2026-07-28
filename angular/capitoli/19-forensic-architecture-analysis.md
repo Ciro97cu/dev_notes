@@ -45,10 +45,7 @@ util      → funzioni ausiliarie (authentication, logging, ...)
 
 Questi layer si allineano alle idee del team **Nx** e si sono dimostrati validi nei progetti degli autori, soprattutto perché bilanciano bene beneficio e overhead (il costo aggiuntivo in complessità e lavoro che la struttura ti impone). Sono anche adattabili al singolo progetto: alcuni clienti splittano il layer `data` in due (un layer fa data access — cioè legge/scrive i dati dal backend —, l'altro fornisce i tipi associati), così i dumb component vedono solo i tipi, dato che non devono parlare autonomamente col backend.
 
-La funzionalità che `feature-my-tickets` vuole condividere con `feature-next-flights` può essere gestita in vari modi:
-- spostare dumb component e servizi nei layer `ui` e `data`;
-- **ammorbidire un po' il layering**, lasciando che i feature component dei domini accedano ai feature component in `shared`: dato che la comunicazione va in una sola direzione, non si creano cicli;
-- introdurre un ulteriore layer, es. `sub-feature`, fra `feature` e `ui`.
+La funzionalità che `feature-my-tickets` vuole condividere con `feature-next-flights` può essere gestita in vari modi: spostando dumb component e servizi nei layer `ui` e `data`; oppure **ammorbidendo un po' il layering**, lasciando che i feature component dei domini accedano ai feature component in `shared` — dato che la comunicazione va in una sola direzione, non si creano cicli; o ancora introducendo un ulteriore layer, es. `sub-feature`, fra `feature` e `ui`.
 
 > [!tip]
 > Le scoperte dell'analisi della struttura non danno una risposta automatica: portano a **discussioni** e quindi a **decisioni deliberate** sull'evoluzione del progetto. I metodi forensi delle sezioni seguenti aggiungono informazioni e basi di discussione che vanno ben oltre il semplice grafo delle dipendenze.
@@ -60,9 +57,7 @@ Collegamenti: [[08-sustainable-architectures]] (architecture matrix, layer, Sher
 
 Le idee della forensic code analysis (dal libro *Your Code as a Crime Scene* di Adam Tornhill) applicano concetti della criminalistica all'esame del codice sorgente. Usando i **dati storici** del source code management si identificano gli **hotspot**: aree complesse cambiate di frequente, che possono segnalare debolezze architetturali capaci di rendere il sistema instabile e difficile da mantenere nel lungo periodo.
 
-Tenendo conto della **dimensione temporale** emergono altre informazioni nascoste sull'evoluzione dell'architettura:
-- **change coupling**: file cambiati spesso insieme, e quindi con dipendenze non ovvie → aiuta a valutare la modularizzazione attuale;
-- **team alignment**: allineamento fra la struttura dei team e quella dei moduli → permette ai team di concentrarsi su parti specifiche e lavorare in modo più autonomo, migliorando la qualità del codice e riducendo il rischio di errori.
+Tenendo conto della **dimensione temporale** emergono altre informazioni nascoste sull'evoluzione dell'architettura. Un esempio è il **change coupling**: file cambiati spesso insieme, e quindi con dipendenze non ovvie, informazione che aiuta a valutare la modularizzazione attuale. Un altro è il **team alignment**: l'allineamento fra la struttura dei team e quella dei moduli, che permette ai team di concentrarsi su parti specifiche e lavorare in modo più autonomo, migliorando la qualità del codice e riducendo il rischio di errori.
 
 ## Using Detective
 > 📖 p.447
@@ -107,10 +102,7 @@ Se lo **stesso file** viene modificato molto spesso può esserci un problema di 
 
 Ovviamente conta se il file è semplice o complesso: un file con la lista delle voci di menu, che cresce di poche righe a ogni nuova feature, ha churn alto ma **non è critico**, perché la sua struttura non è complessa. Per questo Tornhill raccomanda di pesare il **churn** contro la **complessità**.
 
-Sulla scelta della metrica di complessità Tornhill nota che, in fondo, conta poco quale si sceglie. Cita uno studio sull'attività cerebrale degli sviluppatori mentre leggono codice:
-- la conclusione è che le metriche di complessità **non predicono granché bene** la difficoltà di comprensione del codice;
-- ciò che incide di più è la **dimensione del vocabolario** usato (numero di variabili, funzioni, classi, ...) e, parzialmente correlata, la **lunghezza del codice** esaminato;
-- per questo nel libro Tornhill usa le **Lines of Code** come misura di complessità; nel suo prodotto **Code Scene** usa invece la **cyclomatic complexity di McCabe** (conta il numero di percorsi nel codice). **Detective supporta entrambe le metriche.**
+Sulla scelta della metrica di complessità Tornhill nota che, in fondo, conta poco quale si sceglie. Cita uno studio sull'attività cerebrale degli sviluppatori mentre leggono codice, la cui conclusione è che le metriche di complessità **non predicono granché bene** la difficoltà di comprensione del codice. Ciò che incide di più è la **dimensione del vocabolario** usato (numero di variabili, funzioni, classi, ...) e, parzialmente correlata, la **lunghezza del codice** esaminato. Per questo nel libro Tornhill usa le **Lines of Code** come misura di complessità, mentre nel suo prodotto **Code Scene** usa la **cyclomatic complexity di McCabe** (conta il numero di percorsi nel codice). **Detective supporta entrambe le metriche.**
 
 Moltiplicando il tasso di churn per una misura di complessità, l'analisi degli hotspot dà contesto in più per individuare le sezioni problematiche. La metrica risultante è l'**Hotspot Score**: più alto = area potenzialmente più rischiosa.
 
@@ -142,10 +134,7 @@ Assegnando gli **ex membri** a un team artificiale a parte si può anche scoprir
 ## From Detective to Code Scene
 > 📖 p.452
 
-La forensic analysis descritta può essere migliorata ulteriormente:
-- **raggruppare i commit** dello stesso feature branch (il ramo Git dedicato a una singola funzionalità) o che referenziano lo stesso ticket ID (il codice della task/issue), per non perdere il change coupling quando un dominio viene cambiato in commit separati;
-- negli hotspot, considerare anche **come è distribuita la conoscenza**: se una sola persona conosce il codice dell'hotspot, la sua criticità aumenta;
-- vedere come il sistema **è evoluto nel tempo** (coupling, team alignment e hotspot sono migliorati o peggiorati nelle ultime iterazioni?).
+La forensic analysis descritta può essere migliorata ulteriormente. Si potrebbero **raggruppare i commit** dello stesso feature branch (il ramo Git dedicato a una singola funzionalità) o che referenziano lo stesso ticket ID (il codice della task/issue), per non perdere il change coupling quando un dominio viene cambiato in commit separati. Negli hotspot si potrebbe considerare anche **come è distribuita la conoscenza**: se una sola persona conosce il codice dell'hotspot, la sua criticità aumenta. È inoltre auspicabile vedere come il sistema **è evoluto nel tempo** (coupling, team alignment e hotspot sono migliorati o peggiorati nelle ultime iterazioni?).
 
 Il prodotto commerciale **Code Scene** (di Adam Tornhill) implementa queste opzioni e offre molte altre analisi.
 

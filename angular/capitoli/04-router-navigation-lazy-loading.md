@@ -65,7 +65,7 @@ export const appConfig: ApplicationConfig = {
 
 Collegamenti: [[providers]] · [[12-initialization-route-changes]] (guards/resolver lungo i route change).
 
-## RouterOutlet: il placeholder
+## Adding a Placeholder in the App
 > 📖 pp.91-92
 
 Invece di referenziare un componente concreto, `App` espone un **placeholder** `<router-outlet>` dove il Router monta il componente attivato. Va importato `RouterOutlet` (e si può rimuovere l'import di `FlightSearch`, ora attivato dal Router).
@@ -93,7 +93,7 @@ export class App {}
 </div>
 ```
 
-## routerLink & routerLinkActive
+## Setting up Hyperlinks to Activate Routes
 > 📖 pp.92-95
 
 I link dichiarativi usano la directive `routerLink`, riferita al `path` della route. `routerLinkActive` assegna una classe CSS quando quel link (o un suo figlio) è attivo, per evidenziare la voce di menu corrente. Entrambe vanno importate nel componente.
@@ -145,7 +145,7 @@ export class Sidebar {}
 
 Collegamenti: [[02-signal-based-components]] (struttura componenti e `imports`).
 
-## Navigazione programmatica con Router
+## Programmatically Changing Routes
 > 📖 pp.95-96
 
 Per cambiare route via codice si fa [[inject]] del `Router` e si chiama il metodo `navigate`.
@@ -174,7 +174,11 @@ Collegamenti: [[inject]].
 ## Parameterized Routes
 > 📖 pp.96-102
 
-Quando si cambia route spesso serve passare informazioni alla route di destinazione (es. l'ID del volo da editare): a questo servono i **routing parameters**. Angular supporta tre notazioni:
+Quando si cambia route spesso serve passare informazioni alla route di destinazione (es. l'ID del volo da editare): a questo servono i **routing parameters**.
+
+### Types of Routing Parameters
+
+Angular supporta tre notazioni:
 
 | Posizione | Esempio |
 |---|---|
@@ -222,7 +226,7 @@ export class FlightEdit {
 }
 ```
 
-### withComponentInputBinding() (alternativa)
+### Using withComponentInputBinding() for Reading Parameters
 
 Feature di `provideRouter`: lega automaticamente parametri di segmento e matrix a **input del componente** con lo stesso nome.
 
@@ -270,13 +274,15 @@ export class FlightEdit {
 > [!tip]
 > `withComponentInputBinding` elimina il subscribe manuale: gli [[signal-input|input()]] diventano la fonte reattiva dei parametri. I transformer (piccole funzioni che convertono il valore in ingresso prima che arrivi all'input) `numberAttribute` / `booleanAttribute` gestiscono la conversione di tipo, dato che i routing parameter sono sempre stringhe.
 
-### Configuring & Linking parameterized routes
+### Configuring Parameterized Routes
 
 Nella config vanno dichiarati **solo** i parametri di **segmento**, prefissati con i due punti (`:`). Matrix e query non si dichiarano: Angular li riconosce a runtime.
 
 ```ts
 { path: 'flight-edit/:id', component: FlightEdit },
 ```
+
+### Linking to Parameterized Routes
 
 `routerLink` accetta un **array** di segmenti più un oggetto per i matrix parameter. Il bottone viene passato a `FlightCard` via [[content-projection]] (così la card non sa nulla del routing e resta riutilizzabile):
 
@@ -314,6 +320,8 @@ graph TD
   Booking --> PS["passenger-search → PassengerSearch"]
 ```
 
+### Implementing Child Components
+
 Il componente padre importa `RouterOutlet` (per il placeholder interno) e `RouterLink` (per i link alle child route):
 
 ```ts
@@ -338,6 +346,8 @@ export class BookingNavigation {}
 <router-outlet />
 ```
 
+### Configuring Child Routes
+
 Le child route vanno nell'array `children` del nodo padre, con una default route a path vuoto:
 
 ```ts
@@ -361,7 +371,11 @@ Le child route vanno nell'array `children` del nodo padre, con una default route
 ## Lazy Loading of Routes
 > 📖 pp.108-112
 
-Di default all'avvio Angular carica **tutte** le feature → startup lento nelle app grandi. Il lazy loading risolve caricando parti dell'app su richiesta. Se la parte ha più route, le si dà una propria config (qui per dominio: `ticketing.routes.ts`).
+Di default all'avvio Angular carica **tutte** le feature → startup lento nelle app grandi. Il lazy loading risolve caricando parti dell'app su richiesta.
+
+### Setting up Routes for Lazy Loading
+
+Se la parte ha più route, le si dà una propria config (qui per dominio: `ticketing.routes.ts`).
 
 ```ts
 // src/app/domains/ticketing/ticketing.routes.ts
@@ -408,7 +422,7 @@ export default ticketingRoutes;
 > [!warning]
 > Il segmento del path (`ticketing`) viene **prefissato a tutte** le child route del file lazy. Con `path: 'ticketing'` + `booking/flight-search` interno → l'URL completo è `ticketing/booking/flight-search`. Vanno aggiornati i `routerLink` di conseguenza (es. nel `Sidebar`).
 
-### Lazy loading di un singolo componente
+### Lazy Loading Individual Components with the Router
 
 Oltre alle intere config di route, si può caricare lazy un **singolo componente** (utile per componenti grandi usati in casi eccezionali) con `loadComponent`:
 
@@ -418,12 +432,14 @@ Oltre alle intere config di route, si può caricare lazy un **singolo componente
 { path: 'about', loadComponent: () => import('./shell/about/about') },
 ```
 
+### Verify Lazy Loading in the Browser
+
 Lo si verifica nel browser: nell'output di `ng serve` compare un **bundle separato**; nel tab **Network** di Chrome DevTools si vede che viene scaricato solo al bisogno. In dev mode Angular carica diversi file extra (il dev server compila on demand per velocizzare lo startup); in produzione vengono caricati solo i lazy bundle effettivamente richiesti.
 
 > [!tip]
 > `loadChildren` → config di route lazy; `loadComponent` → singolo componente lazy. Entrambi passano per un dynamic `import()`; con un `default export` si può omettere il `.then`.
 
-## Preloading
+### Preloading
 > 📖 pp.113-114
 
 Il preloading si costruisce sul lazy loading: usa le risorse idle (i tempi morti in cui browser e rete non hanno nulla da fare) **dopo l'avvio** per caricare in background i bundle lazy prima che servano, così quando il Router ne ha bisogno sono già disponibili. Si attiva con la feature `withPreloading` più una strategia.
@@ -444,7 +460,7 @@ provideRouter(
 > [!tip]
 > Strategie out-of-the-box (già pronte, incluse in Angular senza installare nulla): `NoPreloading` (default) e `PreloadAllModules`. Per logiche custom si implementa un service che soddisfa l'interfaccia `PreloadingStrategy`. Ma prima conviene verificare se una delle due built-in basta già (spesso è così), o se fa al caso una soluzione di terze parti come `ngx-quicklink` (precarica le route i cui link entrano nel viewport) o `guess.js` (usa il machine learning per predire la prossima route che l'utente visiterà).
 
-## Query Strings & Hash Fragments
+## Working with Query Strings and Hash Fragments
 > 📖 pp.114-115
 
 Oltre a segmenti e matrix, il Router supporta la classica **query string** (`url?param1=value1&param2=value2`) e l'**hash fragment** (`url#info-in-hash-fragment`) — poco usati in Angular, ma utili per impostazioni applicative globali.
@@ -490,7 +506,9 @@ this.activatedRoute.fragment.subscribe((fragment) => {
 
 Per restare flessibile, il Router delega la gestione dell'URL a una **strategia** intercambiabile.
 
-**PathLocationStrategy** (default) → path routing: `http://localhost:4200/booking/flight-search`. La sfida è far capire al web server quale parte dell'URL gestire server-side e quale lasciare alla SPA come route: il server va configurato per **reindirizzare a `index.html`** ogni richiesta sotto l'URL dell'app (`ng serve` lo fa già). Un elemento `<base>` in `index.html` dice quale parte dell'URL il Router deve interpretare (la parte dopo l'`href`); aiuta anche il browser a risolvere correttamente i path verso gli asset statici (immagini, font):
+### PathLocationStrategy
+
+È la strategia di **default** → path routing: `http://localhost:4200/booking/flight-search`. La sfida è far capire al web server quale parte dell'URL gestire server-side e quale lasciare alla SPA come route: il server va configurato per **reindirizzare a `index.html`** ogni richiesta sotto l'URL dell'app (`ng serve` lo fa già). Un elemento `<base>` in `index.html` dice quale parte dell'URL il Router deve interpretare (la parte dopo l'`href`); aiuta anche il browser a risolvere correttamente i path verso gli asset statici (immagini, font):
 
 ```html
 <base href="/">
@@ -507,7 +525,9 @@ import { APP_BASE_HREF } from '@angular/common';
 > [!warning]
 > Con `APP_BASE_HREF` Angular sa quale parte dell'URL usare per il routing, ma il browser **non** sa più risolvere i path verso asset statici (immagini, font): vanno gestiti a mano, es. usando solo path **assoluti**.
 
-**HashLocationStrategy** → hash routing: `http://localhost:4200#/booking/flight-search`. La route sta nell'hash fragment. Si attiva con la feature `withHashLocation`:
+### HashLocationStrategy
+
+Hash routing: `http://localhost:4200#/booking/flight-search`. La route sta nell'hash fragment. Si attiva con la feature `withHashLocation`:
 
 ```ts
 import { provideRouter, withComponentInputBinding, withHashLocation } from '@angular/router';

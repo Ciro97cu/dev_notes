@@ -22,7 +22,7 @@ ng g c shared/ui-common/tabbed-pane
 ng g c shared/ui-common/tab
 ```
 
-## Content Projection (richiamo)
+## Content Projection
 > 📖 pp.286-287
 
 La [[content-projection]] permette a un componente di **ricevere markup** (es. HTML) dal chiamante e di mostrarlo nel proprio template. Il `Tab` ne ha bisogno per presentare gli elementi che gli vengono passati:
@@ -63,9 +63,7 @@ export class Tab {
 }
 ```
 
-- `title` è un [[signal-input|input()]] obbligatorio.
-- `visible` è un [[computed]] che vale `true` solo quando il tab corrente del padre **è proprio questa istanza**. Il confronto `this.pane.currentTab() === this` è un controllo di **identità** (verifica che sia lo stesso identico oggetto in memoria, non solo due oggetti con gli stessi valori): `this` qui è la keyword JavaScript, cioè l'istanza di `Tab` su cui sta girando il `computed`. Quando il padre cambia `currentTab()`, il `computed` si ricalcola e solo il tab giusto risulta `visible`.
-- Il template usa `@if (visible())` + `<ng-content>` per proiettare il contenuto solo nel tab attivo.
+L'input `title` è un [[signal-input|input()]] obbligatorio, mentre `visible` è un [[computed]] che vale `true` solo quando il tab corrente del padre **è proprio questa istanza**. Il confronto `this.pane.currentTab() === this` è un controllo di **identità** (verifica che sia lo stesso identico oggetto in memoria, non solo due oggetti con gli stessi valori): `this` qui è la keyword JavaScript, cioè l'istanza di `Tab` su cui sta girando il `computed`. Quando il padre cambia `currentTab()`, il `computed` si ricalcola e solo il tab giusto risulta `visible`; il template usa `@if (visible())` + `<ng-content>` per proiettare il contenuto solo nel tab attivo.
 
 Uso dal chiamante (la pagina About):
 
@@ -87,7 +85,7 @@ Uso dal chiamante (la pagina About):
 
 Collegamenti: [[content-projection]] · richiamo da [[02-signal-based-components]].
 
-## Referencing Parent Components (DI del padre)
+## Referencing Parent Components
 > 📖 pp.288-290
 
 **Variante injection.** Il `TabbedPane` riceve i `Tab` via content projection e li tiene in un signal `tabs`. Ogni tab **si registra da solo** chiamando `registerTab` nel proprio costruttore, dopo aver **iniettato il padre** con [[inject]].
@@ -134,9 +132,7 @@ export class TabbedPane {
 }
 ```
 
-- `current` è un [[model-signal|model()]] con l'indice del tab attivo; `currentTab` un [[computed]] che restituisce l'**istanza** del tab corrente, leggendo `tabs()[current()]`.
-- `@for` disegna un bottone per ogni tab (`track tab` traccia l'**istanza**), `<ng-content>` proietta i contenuti. A renderizzare il proprio contenuto è solo il tab il cui `visible()` vale `true`.
-- Ogni `Tab` si aggancia passando `this` (la propria istanza) a `registerTab` dal costruttore.
+`current` è un [[model-signal|model()]] con l'indice del tab attivo, mentre `currentTab` è un [[computed]] che restituisce l'**istanza** del tab corrente, leggendo `tabs()[current()]`. Nel template il `@for` disegna un bottone per ogni tab (`track tab` traccia l'**istanza**) e `<ng-content>` proietta i contenuti, ma a renderizzare il proprio contenuto è solo il tab il cui `visible()` vale `true`. Ogni `Tab` si aggancia passando `this` (la propria istanza) a `registerTab` dal costruttore.
 
 > [!warning]
 > Per far funzionare il `Tab` **anche senza** un `TabbedPane` padre, inietta con `{ optional: true }`: se Angular non trova un'implementazione per il token (la chiave con cui si chiede una dipendenza, qui la classe `TabbedPane`) restituisce `undefined` invece di lanciare un errore. Poi proteggi la chiamata con l'optional chaining (`?.`, l'operatore che evita l'errore se prima del punto c'è `null`/`undefined`).
@@ -314,7 +310,7 @@ export class ReportingPage {
 
 Si usa `afterRenderEffect` per essere certi che la view sia pronta e il canvas già renderizzato prima di disegnarci sopra.
 
-### Mettere in discussione l'uso di viewChild
+### Questioning the Use of viewChild and viewChildren
 > 📖 p.295
 
 > [!warning]
@@ -342,7 +338,7 @@ readonly chart = viewChild<ElementRef<HTMLCanvasElement>>('chart', { static: tru
 
 Collegamenti: [[signal-queries]].
 
-## Comunicazione via template variables
+## Communication via Template Variables
 > 📖 pp.296
 
 Una [[glossario#template-variable|template variable]] (una variabile dichiarata nel template con `#nome`) assegnata a un componente fornisce un **riferimento all'istanza** di quel componente: il template padre può chiamarne i metodi o leggerne le proprietà direttamente.
@@ -360,7 +356,7 @@ Una [[glossario#template-variable|template variable]] (una variabile dichiarata 
 
 Con `#pane` il padre può invocare `pane.activate(1)`, ad esempio in un click handler, per passare programmaticamente al secondo tab. È la forma di comunicazione **più esplicita**: si vede a colpo d'occhio chi parla con chi.
 
-## Comunicazione via services
+## Communication via Services
 > 📖 pp.296-299
 
 **Variante service.** Un service messo nell'array `providers` di un componente è **condiviso** da quel componente e da tutti i suoi discendenti: tutti accedono alla **stessa istanza** e possono comunicare attraverso di essa.
