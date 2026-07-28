@@ -50,9 +50,11 @@ export const FlightStore = signalStore(
 );
 ```
 
+### Defining State
+
 In alternativa alla type assertion si può tipizzare esplicitamente lo stato con `withState<FlightSearchState>({...})`, dichiarando prima l'interfaccia. Il libro preferisce la prima opzione quando non serve un tipo separato altrove, perché è meno verbosa.
 
-**`withProps`** aggiunge proprietà qualunque allo store, anche non-signal: service iniettati, oppure `Subject`/`Observable` per rappresentare eventi. Riceve una funzione che, dato lo store, ritorna le proprietà da aggiungere. Il prefisso `_` rende il membro **privato**: non è solo convenzione, il type system del NgRx esclude i membri `_*` dal tipo esposto ai consumer (vale per tutte le features, non solo `withProps`).
+`withProps` aggiunge proprietà qualunque allo store, anche non-signal: service iniettati, oppure `Subject`/`Observable` per rappresentare eventi. Riceve una funzione che, dato lo store, ritorna le proprietà da aggiungere. Il prefisso `_` rende il membro **privato**: non è solo convenzione, il type system del NgRx esclude i membri `_*` dal tipo esposto ai consumer (vale per tutte le features, non solo `withProps`).
 
 ```ts
 withProps(() => ({
@@ -63,7 +65,9 @@ withProps(() => ({
 > [!tip]
 > La **stessa feature può comparire più volte** nella pila — utile per definire proprietà che dipendono da altre già definite (es. un `withProps` crea `_filterChanged: new Subject<FlightFilter>(...)`, un secondo `withProps` espone `filterChanged: store._filterChanged.asObservable()`). In alternativa, una sola funzione con `return` esplicito che dichiara più proprietà insieme.
 
-**`withResource`** (community) integra la [[resource|Resource API]]: la funzione proietta lo store in un oggetto di resource. Non importa quale implementazione (`httpResource`, `rxResource`): qui la crea `FlightClient.findResource(from, to)` ricevendo i signal `from` e `to` — quando cambiano, la resource si ri-triggera.
+### Providing Resources
+
+`withResource` (community) integra la [[resource|Resource API]]: la funzione proietta lo store in un oggetto di resource. Non importa quale implementazione (`httpResource`, `rxResource`): qui la crea `FlightClient.findResource(from, to)` ricevendo i signal `from` e `to` — quando cambiano, la resource si ri-triggera.
 
 ```ts
 withResource(
@@ -76,7 +80,9 @@ withResource(
 
 `errorHandling` cambia il comportamento di default (leggere `value` in stato di errore lancia un'eccezione): `'previous value'` mantiene l'ultimo valore senza lanciare, `'undefined value'` mette `undefined` (e lo aggiunge al tipo della resource), `'native'` ripristina il comportamento nativo di Angular. Il nome della resource fa da **prefisso** ai membri generati: `flightsValue`, `flightsIsLoading`, `flightsError`, `flightsStatus`, il metodo `flightsHasValue()` e il metodo privato `_flightsReload()`.
 
-**`withComputed`** aggiunge [[computed|computed signals]] derivati dagli altri signal (la controparte dei *selector* dello store NgRx classico; spesso sono **View Model** nella forma utile al componente).
+### Providing Computed Signals
+
+`withComputed` aggiunge [[computed|computed signals]] derivati dagli altri signal (la controparte dei *selector* dello store NgRx classico; spesso sono **View Model** nella forma utile al componente).
 
 ```ts
 withComputed((store) => ({
@@ -88,7 +94,9 @@ withComputed((store) => ({
 
 `toFlightsWithDelays` è una funzione **pura** che ricalcola gli orari sommando il ritardo, senza mutare l'array originale (ritorna `[newFlight, ...flights.slice(1)]`).
 
-**`withMethods`** definisce metodi che aggiornano lo stato in modo controllato. Le modifiche passano per `patchState(store, ...)`, chiamabile **solo dentro lo store**, con un **partial state** (aggiorna solo le proprietà fornite) o una **updater function** `(state) => partial` (quando il nuovo stato dipende dal vecchio). Lo stato va trattato come **immutabile**: si crea un nuovo oggetto, mai una mutazione in place.
+### Providing Methods
+
+`withMethods` definisce metodi che aggiornano lo stato in modo controllato. Le modifiche passano per `patchState(store, ...)`, chiamabile **solo dentro lo store**, con un **partial state** (aggiorna solo le proprietà fornite) o una **updater function** `(state) => partial` (quando il nuovo stato dipende dal vecchio). Lo stato va trattato come **immutabile**: si crea un nuovo oggetto, mai una mutazione in place.
 
 ```ts
 withMethods((store) => ({
@@ -111,7 +119,9 @@ withMethods((store) => ({
 
 Si nota l'interazione tra metodi e features: `updateFilter` cambia `from`/`to` → la resource ricarica; `delay` aggiorna `delayInMin` → il `computed` `flightsWithDelays` si ricalcola.
 
-**`withHooks`** registra funzioni del ciclo di vita: `onInit` (inizializzazione dello store, es. caricamento iniziale) e `onDestroy` (cleanup).
+### Setting up Hooks
+
+`withHooks` registra funzioni del ciclo di vita: `onInit` (inizializzazione dello store, es. caricamento iniziale) e `onDestroy` (cleanup).
 
 ```ts
 withHooks((store) => ({
@@ -120,7 +130,9 @@ withHooks((store) => ({
 })),
 ```
 
-**Consumare lo store**: si inietta con [[inject]], si leggono i signal, si delega ai metodi per gli aggiornamenti.
+### Consuming the Store
+
+Si inietta con [[inject]], si leggono i signal, si delega ai metodi per gli aggiornamenti.
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-search/flight-search.ts
@@ -162,7 +174,9 @@ export const FlightStore = signalStore(
 );
 ```
 
-**Disabilitarli in produzione.** Un primo approccio usa `isDevMode()`: a runtime sceglie tra `withDevtools` reale e lo stub `withDevToolsStub` (stessa API, no-op).
+### Disabling DevTools in Production
+
+Un primo approccio usa `isDevMode()`: a runtime sceglie tra `withDevtools` reale e lo stub `withDevToolsStub` (stessa API, no-op).
 
 ```ts
 import { isDevMode } from '@angular/core';
@@ -190,6 +204,8 @@ export function withDevToolsForDebugMode(name: string) {
 > 📖 pp.254-259
 
 Le resource caricano dati, ma Angular non offre una controparte per **modificarli**. Farlo a mano (HttpClient nei metodi) genera boilerplate per stati loading/error e per le chiamate sovrapposte. Il NgRx Toolkit fornisce la **Mutation API** (ispirata a React Query e a un proof-of-concept di Marko Stanimirović, lead di SignalStore), che ricalca la Resource API. Esistono `httpMutation` (cambi rappresentabili come richiesta HTTP) e `rxMutation` (cambi arbitrari che ritornano un Observable). Si aggiungono con `withMutations`.
+
+### Creating Mutations
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-edit/flight-detail-store.ts
@@ -221,7 +237,9 @@ I due type parameter sono il tipo dell'argomento e il tipo del valore di ritorno
 > [!tip]
 > Come per la resource, conviene spostare i dettagli di protocollo nel `FlightClient`: un metodo `createSaveMutation(options)` che fa lo spread di `options` (con `onSuccess`/`onError` definiti dallo store) dentro `httpMutation`, fissando lì `request` e `operator`. Lo store delega: `saveFlight: store._flightClient.createSaveMutation({ onSuccess, onError })`. Nota: il `FlightClient` è un `@Service()` (Angular 22 — al posto di `@Injectable()`).
 
-**Consumare la mutation.** Il metodo `saveFlight` accetta un `Flight` e ritorna una `Promise` con il risultato in uno di tre stati: `success` (contiene il valore salvato in `result.value`), `error` (oggetto errore in `result.error`), `cancelled` (possibile con `switchOp`/`exhaustOp`).
+### Consuming Mutations
+
+Il metodo `saveFlight` accetta un `Flight` e ritorna una `Promise` con il risultato in uno di tre stati: `success` (contiene il valore salvato in `result.value`), `error` (oggetto errore in `result.error`), `cancelled` (possibile con `switchOp`/`exhaustOp`).
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-edit/flight-edit.ts
@@ -247,7 +265,9 @@ export class FlightEdit {
 
 Anche qui un [[linked-signal|linkedSignal]] fornisce un signal scrivibile per il Signal Form; `normalizeFlight` adatta il formato della data perché sia usabile con `<input type="datetime-local">`.
 
-**`rxMutation`.** Dal punto di vista di store e componente è **identica** (stessi metodo e signal di stato), ma invece di `request` riceve una `operation` che ritorna un `Observable`:
+### Using rxMutation
+
+Dal punto di vista di store e componente è **identica** (stessi metodo e signal di stato), ma invece di `request` riceve una `operation` che ritorna un `Observable`:
 
 ```ts
 createSaveRxMutation(options: Partial<RxMutationOptions<Flight, Flight>>) {
@@ -265,7 +285,9 @@ createSaveRxMutation(options: Partial<RxMutationOptions<Flight, Flight>>) {
 
 Lo SignalStore offre due **reactive methods**, ri-eseguiti automaticamente quando i valori passati cambiano. Sono come un [[effect]] esplicito che reagisce **solo** ai valori in ingresso, non agli altri signal usati al loro interno.
 
-**`rxMethod<T>`** (dall'entry point `@ngrx/signals/rxjs-interop`) sfrutta la potenza di RxJS: riceve un Observable, lo fa passare per gli operator forniti e lo ritorna. Si sottoscrive da solo (fa lui la `subscribe`, non devi farla tu), quindi per lavorare col risultato serve un `tap` dentro la pipe. Il chiamante può passare un valore *plain*, un `Signal<T>` o un `Observable<T>`: per signal/observable, ogni nuovo valore attraversa la pipe.
+### rxMethod
+
+`rxMethod<T>` (dall'entry point `@ngrx/signals/rxjs-interop`) sfrutta la potenza di RxJS: riceve un Observable, lo fa passare per gli operator forniti e lo ritorna. Si sottoscrive da solo (fa lui la `subscribe`, non devi farla tu), quindi per lavorare col risultato serve un `tap` dentro la pipe. Il chiamante può passare un valore *plain*, un `Signal<T>` o un `Observable<T>`: per signal/observable, ogni nuovo valore attraversa la pipe.
 
 ```ts
 protected readonly fn = rxMethod<number>((number$) =>
@@ -316,7 +338,9 @@ tapResponse({
 > [!warning]
 > `rxMethod` usa internamente un `effect` → va chiamato in un **injection context**. Il cleanup è automatico via il `DestroyRef` del chiamante (niente unsubscribe manuale); si può passare un injector diverso come secondo parametro, o chiamare `.destroy()` sull'oggetto ritornato. Nota la differenza d'uso: nel `constructor` passa il **signal** (`updateFilter(this.filter)` → tracciato, la pipe rigira a ogni cambio), in `search` passa il **valore corrente** (`updateFilter(this.filter())` → una sola esecuzione).
 
-**`signalMethod<T>`** (da `@ngrx/signals`) accetta anch'esso valore o `Signal<T>`, ma **non** usa Observable: è una funzione ordinaria ri-eseguita per ogni nuovo valore.
+### signalMethod
+
+`signalMethod<T>` (da `@ngrx/signals`) accetta anch'esso valore o `Signal<T>`, ma **non** usa Observable: è una funzione ordinaria ri-eseguita per ogni nuovo valore.
 
 ```ts
 connectFlightId: signalMethod<number>((id) => {
@@ -334,6 +358,8 @@ connectFlightId: signalMethod<number>((id) => {
 > 📖 pp.266-274
 
 Lo stato è spesso fatto di **[[glossario#entity-normalization|entità]]** (voli, passeggeri — gli oggetti-dominio identificati da un ID). La feature `withEntities` (da `@ngrx/signals/entities`) riduce il boilerplate e incoraggia best practice come la normalizzazione.
+
+### Entities
 
 ```ts
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
@@ -359,9 +385,13 @@ export const NextFlightsStore = signalStore(
 
 Gli **updater** pronti all'uso si passano a `patchState`: `addEntity`/`addEntities` (in coda), `prependEntity`/`prependEntities` (in testa), `setEntity`/`setEntities`/`setAllEntities`, `updateEntity`/`updateEntities`/`updateAllEntities`, `upsertEntity`/`upsertEntities` (update se l'ID esiste, altrimenti insert), `removeEntity`/`removeEntities`/`removeAllEntities`. Il consumer legge il signal `entities` (array delle entità).
 
-**Entity Maps.** Internamente `withEntities` non tiene un array ma un **dizionario** `entityMap` (ID → entità) più un signal `ids` (lista ordinata di ID). `entities` è un `computed` derivato dai due (per riordinare basta cambiare l'ordine in `ids`). La forma keyed permette agli updater di accedere alle entità per ID e abilita la normalizzazione.
+### Entity Maps
 
-**ID.** Di default gli updater assumono una proprietà `id`. Se l'identificatore ha altro nome, si specifica `selectId` direttamente nell'updater, oppure — meglio — in una `entityConfig` riusabile:
+Internamente `withEntities` non tiene un array ma un **dizionario** `entityMap` (ID → entità) più un signal `ids` (lista ordinata di ID). `entities` è un `computed` derivato dai due (per riordinare basta cambiare l'ordine in `ids`). La forma keyed permette agli updater di accedere alle entità per ID e abilita la normalizzazione.
+
+### Identifying Entities with IDs
+
+Di default gli updater assumono una proprietà `id`. Se l'identificatore ha altro nome, si specifica `selectId` direttamente nell'updater, oppure — meglio — in una `entityConfig` riusabile:
 
 ```ts
 import { entityConfig, setAllEntities, withEntities } from '@ngrx/signals/entities';
@@ -373,7 +403,9 @@ const flightConfig = entityConfig({
 // withEntities(flightConfig) + patchState(store, setAllEntities(flights, flightConfig))
 ```
 
-**Più entità nello stesso store.** Si dà un `collection` nella config: i signal generati vengono **prefissati** col nome della collection (es. `flightEntities`, `flightEntityMap`, `flightIds`) — proprietà statiche, tipizzate dal type system, non dinamiche.
+### Managing Several Entities in a Store
+
+Si dà un `collection` nella config: i signal generati vengono **prefissati** col nome della collection (es. `flightEntities`, `flightEntityMap`, `flightIds`) — proprietà statiche, tipizzate dal type system, non dinamiche.
 
 ```ts
 const flightConfig    = entityConfig({ entity: type<Flight>(),    collection: 'flight' });
@@ -384,7 +416,9 @@ const passengerConfig = entityConfig({ entity: type<Passenger>(), collection: 'p
 > [!tip]
 > Spesso è meglio **splittare le collection in store separati** (uno store per tipo di entità per feature, più magari uno per la UI state) anziché ammassarle in un unico store: con gli store leggeri come SignalStore è la prassi, e tiene gli store piccoli e a responsabilità distinta.
 
-**Normalizzazione.** Mettere strutture annidate dal backend direttamente nello store porta a **duplicati** (lo stesso passeggero su più voli) e a stati incoerenti, e rende difficile rimodellare i dati per le varie viste. Come nei DB relazionali, allora, si normalizza: si tiene ogni tipo di entità nella propria collection e si mantengono i riferimenti solo via ID. Così esiste una sola istanza per entità, ricomponibile (joinabile, come una *join* SQL che riunisce dati collegati) per ogni vista via `computed`.
+### Normalization
+
+Mettere strutture annidate dal backend direttamente nello store porta a **duplicati** (lo stesso passeggero su più voli) e a stati incoerenti, e rende difficile rimodellare i dati per le varie viste. Come nei DB relazionali, allora, si normalizza: si tiene ogni tipo di entità nella propria collection e si mantengono i riferimenti solo via ID. Così esiste una sola istanza per entità, ricomponibile (joinabile, come una *join* SQL che riunisce dati collegati) per ogni vista via `computed`.
 
 ```ts
 export type FlightState     = Flight    & { passengerIds: number[] };
@@ -413,8 +447,9 @@ I dati si normalizzano dal backend (se controllabile, o con un BFF — *Backend 
 
 L'**Event API** porta il pattern **Flux** / Redux (il modello a flusso unidirezionale in cui lo stato cambia solo in risposta a eventi, mai con scritture dirette; è quello dello store NgRx "Global") nel mondo dei Signal Store, per **disaccoppiare** gli store dai loro consumer tramite eventi.
 
-> [!info] Mental model
-> Quando una feature usa più store, o uno store serve più feature, crescono complessità, rischio di incoerenze e cicli difficili da debuggare (se gli store si notificano a vicenda i cambiamenti). Invece di chiamare i metodi degli store, i componenti **[[glossario#dispatch|dispatchano]] eventi** (cioè "lanciano" un evento nel sistema, senza sapere chi lo riceverà). Gli store registrano dei **[[glossario#reducer|reducer]]** (funzioni che, dato lo stato attuale e un evento, calcolano il nuovo stato) che dicono come aggiornare lo stato in reazione a eventi specifici: se l'evento li riguarda reagiscono, altrimenti lo ignorano. I componenti non conoscono la struttura interna degli store. I **reducer sono sempre sincroni**; per i side effect e l'async ci sono gli **event handler** (erano gli "effects" dell'NgRx Global, rinominati per non confonderli con l'`effect` di Angular): Observable che ricevono eventi e ne pubblicano altri col risultato — un ponte tra eventi. Poiché con SignalStore ci sono **più store** (non uno globale come in Redux), il pattern prevede un **dispatcher** che inoltra gli eventi a tutti gli store.
+### Mental Model
+
+Quando una feature usa più store, o uno store serve più feature, crescono complessità, rischio di incoerenze e cicli difficili da debuggare (se gli store si notificano a vicenda i cambiamenti). Invece di chiamare i metodi degli store, i componenti **[[glossario#dispatch|dispatchano]] eventi** (cioè "lanciano" un evento nel sistema, senza sapere chi lo riceverà). Gli store registrano dei **[[glossario#reducer|reducer]]** (funzioni che, dato lo stato attuale e un evento, calcolano il nuovo stato) che dicono come aggiornare lo stato in reazione a eventi specifici: se l'evento li riguarda reagiscono, altrimenti lo ignorano. I componenti non conoscono la struttura interna degli store. I **reducer sono sempre sincroni**; per i side effect e l'async ci sono gli **event handler** (erano gli "effects" dell'NgRx Global, rinominati per non confonderli con l'`effect` di Angular): Observable che ricevono eventi e ne pubblicano altri col risultato — un ponte tra eventi. Poiché con SignalStore ci sono **più store** (non uno globale come in Redux), il pattern prevede un **dispatcher** che inoltra gli eventi a tutti gli store.
 
 ```mermaid
 flowchart LR
@@ -427,7 +462,9 @@ flowchart LR
   S -->|"signal read"| C
 ```
 
-**Events.** Si definiscono in **event group** (`eventGroup`); ogni evento ha nome e tipo del payload. `source` indica l'origine (utile per il debug).
+### Events
+
+Si definiscono in **event group** (`eventGroup`); ogni evento ha nome e tipo del payload. `source` indica l'origine (utile per il debug).
 
 ```ts
 import { eventGroup } from '@ngrx/signals/events';
@@ -445,7 +482,9 @@ export const luggageEvents = eventGroup({
 
 Pattern tipico per le operazioni async: tre eventi (trigger / success / error). Il team NgRx consiglia un `source` **fine-grained** (granulare, specifico anziché generico) che punti al consumer concreto (componente/service/store): es. `loadLuggageTriggered` in un gruppo `luggageOverviewEvents` con source `LuggageOverview` (usato dal componente per il trigger), e gli esiti in `luggageApiEvents` con source `LuggageApi` (usati dai reducer/handler dello store). Così si vede subito chi scatena cosa.
 
-**Reducer** — feature `withReducer`; `on(event, fn)` collega un evento al reducer, che riceve il payload (tipizzato) e ritorna lo stato (partial, patchato sopra lo stato dello store).
+### Reducer
+
+La feature è `withReducer`: `on(event, fn)` collega un evento al reducer, che riceve il payload (tipizzato) e ritorna lo stato (partial, patchato sopra lo stato dello store).
 
 ```ts
 import { withReducer, on } from '@ngrx/signals/events';
@@ -459,7 +498,9 @@ withReducer(
 
 Si può associare un **array di eventi** allo stesso reducer: `on([eventA, eventB], () => ({ ... }))`.
 
-**Event Handlers** — feature `withEventHandlers`; tramite il service `Events` ascoltano eventi (`_events.on(...)`) ed eseguono side effect, **emettendo nuovi eventi** col risultato (qui `mapResponse` da `@ngrx/operators`, scorciatoia di `map` + `catchError`).
+### Event Handlers
+
+La feature è `withEventHandlers`: tramite il service `Events` ascoltano eventi (`_events.on(...)`) ed eseguono side effect, **emettendo nuovi eventi** col risultato (qui `mapResponse` da `@ngrx/operators`, scorciatoia di `map` + `catchError`).
 
 ```ts
 import { Events, withEventHandlers } from '@ngrx/signals/events';
@@ -481,7 +522,9 @@ withEventHandlers((store) => ({
 })),
 ```
 
-**Dispatching Events.** I componenti non chiamano più i metodi dello store: dispatchano eventi col service `Dispatcher`. Per leggere lo stato accedono ancora direttamente allo store.
+### Dispatching Events
+
+I componenti non chiamano più i metodi dello store: dispatchano eventi col service `Dispatcher`. Per leggere lo stato accedono ancora direttamente allo store.
 
 ```ts
 import { Dispatcher } from '@ngrx/signals/events';
@@ -509,7 +552,11 @@ constructor() { this.dispatch.loadLuggageTriggered({ passengerId: 4711 }); }
 ## Custom Features
 > 📖 pp.281-284
 
-Le **custom features** sono i blocchi riusabili condivisibili tra store. Anche `withResource`, `withDevtools`, `withEntities` e l'Event API sono custom features. Si definiscono con una **factory** che delega a `signalStoreFeature` — null'altro che una combinazione di altre features.
+Le **custom features** sono i blocchi riusabili condivisibili tra store. Anche `withResource`, `withDevtools`, `withEntities` e l'Event API sono custom features.
+
+### Defining Custom Features
+
+Si definiscono con una **factory** che delega a `signalStoreFeature` — null'altro che una combinazione di altre features.
 
 ```ts
 // src/app/domains/shared/util-common/call-state.feature.ts
@@ -542,7 +589,9 @@ export function setLoaded():  { callState: CallState } { return { callState: 'lo
 export function setError(error: string): { callState: CallState } { return { callState: { error } }; }
 ```
 
-**Usare** una custom feature = chiamare la factory nel `signalStore`. I suoi membri (proprietà, computed, updater) sono poi disponibili nello store e ai consumer.
+### Using Custom Features
+
+Usare una custom feature significa chiamare la factory nel `signalStore`. I suoi membri (proprietà, computed, updater) sono poi disponibili nello store e ai consumer.
 
 ```ts
 export const PassengerStore = signalStore(

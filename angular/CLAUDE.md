@@ -88,6 +88,13 @@ Collegamenti: [[concetto]], [[NN-altro-capitolo]]
 **In sintesi:** <2-4 bullet con i punti chiave.>
 ```
 
+## Fedeltà alla struttura del PDF (heading & prosa)
+Gli appunti **ricalcano l'outline del PDF**, capitolo per capitolo (il **cap.16** è il riferimento):
+- **Heading = titoli di sezione del PDF, in inglese**: `##` per le sezioni principali, `###` per le sottosezioni concettuali. Non appiattire più sottosezioni sotto un unico `##`.
+- **`**bold**` è solo enfasi** di un termine nella prosa, **mai** un surrogato di titolo: se nel PDF quel blocco ha un titolo, va promosso a `###`.
+- **Prosa, non elenchi puntati**: i bullet (o una tabella) si usano **solo** per enumerazioni vere (verbi HTTP, valori ammessi, stati). Mai per spiegare un singolo concetto o una catena di ragionamento, che nel PDF è prosa.
+- **Granularità concettuale**: un heading per ogni sottosezione del PDF che porta un concetto; i passi di pura procedura/scaffolding di progetto si fondono nella prosa (o si omettono se superflui), senza titolo dedicato.
+
 ## Template nota atomica (`concetti/`)
 ```markdown
 ---

@@ -9,7 +9,10 @@ tags: [tipo/capitolo, services, state-management, di, signals, angular-22]
 
 Finora tutta la logica è vissuta nei componenti. Crescendo, all'app conviene separare le responsabilità spostando la funzionalità riusabile in service: classi riusabili che si possono **scambiare** con altre implementazioni dello stesso contratto (cioè che espongono gli stessi metodi). Lo scambio serve a due cose — supportare configurazioni diverse (es. clienti diversi) e migliorare la **testabilità** (sostituire l'accesso al backend con un mock, una finta implementazione che restituisce dati statici). Il capitolo costruisce un `FlightClient` per l'accesso ai dati, percorre i dettagli della **[[glossario#dependency-injection-di|Dependency Injection]]** (il meccanismo con cui Angular fornisce ai componenti le istanze dei service di cui hanno bisogno: [[inject]], injection context, dipendenze tra service, providers e scope) e infine implementa uno **[[glossario#store|store]]** signal-based per gestire lo stato della feature `flight-search`.
 
-## Generating a Service
+## Services
+> 📖 pp.120-136
+
+### Generating a Service
 > 📖 pp.120-121
 
 Come per i componenti, si genera con la CLI:
@@ -37,7 +40,7 @@ export class FlightClient {}
 > Il decoratore **`@Service()`** è stato introdotto con Angular 22 ed è la forma usata in tutto il libro dalla 2ª edizione. Equivale a `@Injectable({ providedIn: 'root' })`: **stessa semantica**, solo più conciso (cambia lo stile di scrittura, non il comportamento). Più avanti compare `@Service({ autoProvided: false })` per i servizi scambiabili (= il vecchio `@Injectable()` *senza* `providedIn`). Dettagli in [[service]].
 > Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, va letto come `@Service()`.
 
-## Implementing a Service
+### Implementing a Service
 > 📖 pp.121-122
 
 Il service espone un metodo che restituisce l'`httpResource` di cui ha bisogno il componente. Riceve i criteri di ricerca come **signal** e li legge dentro la lambda reattiva:
@@ -72,7 +75,7 @@ export class FlightClient {
 
 `findResource` accetta i due signal `from`/`to` e restituisce un `httpResource` che carica i voli corrispondenti. Se `from` o `to` sono vuoti la lambda ritorna `undefined` → la [[resource|httpResource]] non parte.
 
-## Injecting a Service
+### Injecting a Service
 > 📖 pp.122-123
 
 Il componente richiede l'istanza con [[inject]] (niente `new`: è Angular a fornirla in base alla configurazione). Da notare che la Signal Form rappresenta `from`/`to` come signal **annidati**, con un `value` signal per il valore correntemente bindato (dettagli nel [[06-signal-forms|cap.6]]):
@@ -103,7 +106,7 @@ export class FlightSearch {
 
 Collegamenti: [[inject]].
 
-## Injection Context
+### Injection Context
 > 📖 pp.123-124
 
 `inject` va chiamato in un **injection context** valido: i field initializer (l'inizializzazione di un campo direttamente nella sua dichiarazione, come sopra `private flightClient = inject(...)`) e i constructor. Angular e le librerie definiscono altre aree eseguite in injection context, e se ne può creare una con `runInInjectionContext`, che richiede un'istanza dell'`Injector` di Angular (a sua volta iniettabile):
@@ -139,7 +142,7 @@ export class FlightSearch {
 
 Collegamenti: [[injection-context]] · [[inject]].
 
-## Services with Dependencies
+### Services with Dependencies
 > 📖 pp.125-126
 
 Un service può dipendere da altri service. Il `FlightClient` può iniettare un `ConfigService` che fornisce la base URL della Web API:
@@ -181,7 +184,7 @@ export class FlightClient {
 }
 ```
 
-## Exchanging Services with Providers
+### Exchanging Services with Providers
 > 📖 pp.126-128
 
 La DI permette di **scambiare** un'implementazione via configurazione — utile per i test (sostituire il data access con un mock) e per adattarsi a clienti o configurazioni diverse. Esempio del secondo tipo: un `LanguageService` con due strategie per determinare la lingua dell'utente. Si usa una **classe astratta** come contratto:
@@ -261,7 +264,7 @@ export class FlightSearch {
 
 Collegamenti: [[providers]] · [[inject]].
 
-## Short-Hand Syntax for Providers
+### Short-Hand Syntax for Providers
 > 📖 p.129
 
 Per fornire un service **senza tipo base**, la classe fa sia da token sia da implementazione:
@@ -282,7 +285,7 @@ providers: [
 
 Un provider così in `app.config.ts` equivale a mettere `@Service()` — o, pre-Angular 22, `@Injectable({ providedIn: 'root' })` — sulla classe stessa.
 
-## Provider Functions
+### Provider Functions
 > 📖 pp.129-130
 
 Configurare il provider a mano costringe il consumer a **conoscere l'implementazione** corrente — un dettaglio che di solito non interessa. Le librerie (Angular incluso) offrono perciò **provider function** col prefisso `provide`: incapsulano questi dettagli, accettano parametri di configurazione e ritornano un provider o un array di provider:
@@ -314,7 +317,7 @@ export const appConfig: ApplicationConfig = {
 > [!tip]
 > Una provider function può restituire un **array** di provider; Angular **appiattisce** automaticamente gli array annidati nella property `providers`, quindi il nesting non è un problema.
 
-## InjectionToken — token per valori non-classe
+### InjectionToken — token per valori non-classe
 
 ➕ *(Fuori dal libro Modern Angular — DI standard di Angular, aggiunta qui perché completa il caso `useValue`/`API_URL` visto sopra.)*
 
@@ -353,7 +356,7 @@ export const API_URL = new InjectionToken<string>('API_URL', {
 
 Collegamenti: [[providers]] · [[inject]].
 
-## Component-local Services
+### Component-local Services
 > 📖 pp.130-133
 
 I service sono singleton **per scope**. Finora lo scope era solo quello root (`app.config.ts` o `@Service()` sulla classe). Ma ogni **componente ha il proprio injector**: fornendo un service nello scope di un componente, **ogni istanza** del componente ottiene la propria istanza del service. Si configura nella property `providers` del decorator `@Component`:
@@ -417,7 +420,7 @@ Il motivo: `<ng-content>` appartiene concettualmente al **chiamante** (chi ha sc
 
 Collegamenti: [[providers]] · [[injection-context]].
 
-## Route-local Services & Auto Cleanup
+### Route-local Services & Auto Cleanup
 > 📖 pp.133-134
 
 Gli **Environment Provider** (provider validi per un intero "ambiente", cioè una porzione dell'app, non per un singolo componente) definiscono un altro scope DI per intere parti dell'app; il router li usa per fornire service a tutti i componenti associati a una rotta. Si aggiunge la property `providers` alla config della route:
@@ -467,14 +470,11 @@ export const appConfig: ApplicationConfig = {
 
 Collegamenti: [[04-router-navigation-lazy-loading]] · [[providers]].
 
-## Gerarchia degli injector e risoluzione
+### Gerarchia degli injector e risoluzione
 
 ➕ *(Fuori dal libro Modern Angular — DI standard di Angular: mostra come Angular sceglie l'injector che risolve una dipendenza.)*
 
-Gli injector non sono piatti: formano una **gerarchia** su due alberi paralleli.
-
-- **Element injector tree** (o *node injector*): ogni componente/direttiva ha il proprio injector e l'albero ricalca quello dei componenti. Lo popolano le property `providers`/`viewProviders` di `@Component`/`@Directive` ([[#Component-local Services]]).
-- **Environment injector tree**: gli injector d'ambiente — `platform` (condiviso tra le app nella stessa pagina), `root` (dove stanno quasi tutti i service), più quelli di **rotta** e dei **lazy chunk**. Li popolano `app.config.ts`, i `providers` delle rotte ([[#Route-local Services & Auto Cleanup]]) e le provider function.
+Gli injector non sono piatti: formano una **gerarchia** su due alberi paralleli. L'**element injector tree** (o *node injector*) dà a ogni componente/direttiva il proprio injector e ricalca l'albero dei componenti; lo popolano le property `providers`/`viewProviders` di `@Component`/`@Directive` ([[#Component-local Services]]). L'**environment injector tree** raccoglie invece gli injector d'ambiente — `platform` (condiviso tra le app nella stessa pagina), `root` (dove stanno quasi tutti i service), più quelli di **rotta** e dei **lazy chunk** — popolati da `app.config.ts`, dai `providers` delle rotte ([[#Route-local Services & Auto Cleanup]]) e dalle provider function.
 
 Chiamando `inject(X)`, la **risoluzione** parte dall'injector del componente corrente e risale, in quest'ordine:
 
@@ -489,7 +489,7 @@ graph TD
 
 Vince il **primo** injector che conosce il token: per questo un provider a livello di componente **oscura** (shadowing) quello di livello app. Se la risalita arriva fino al **null injector** senza trovare nulla, Angular lancia un `NullInjectorError` — a meno che la richiesta non sia `optional`.
 
-### Resolution modifiers
+#### Resolution modifiers
 
 Modificano *dove* Angular cerca, come opzioni di `inject()`:
 
@@ -515,7 +515,7 @@ private d = inject(MyService, { self: true, optional: true }); // combinabili
 
 Collegamenti: [[injection-context]] · [[providers]].
 
-## Lazy Service Injection con `injectAsync`
+### Lazy Service Injection with `injectAsync`
 > 📖 pp.134-136
 
 > [!info] Angular 22+ · `injectAsync`
@@ -564,7 +564,7 @@ export class UpgradeService {
 
 Collegamenti: [[inject]] · [[service]].
 
-## State Management — perché serve uno store
+## State Management
 > 📖 pp.136-137
 
 Le web app classiche erano **stateless**: ogni richiesta al server era indipendente dalle precedenti. Le SPA moderne no — mantengono stato lato client (voli selezionati, criteri di filtro, dati già caricati dal backend) per offrire una UX migliore. Ma navigando via da una rotta Angular **distrugge il componente** corrispondente (idem quando un `@if` diventa `false`): lo stato tenuto nel componente **va perso** e al ritorno se ne crea uno nuovo.
@@ -573,7 +573,7 @@ Per farlo **sopravvivere** lo si mette in un service nello scope **root**, che n
 
 Collegamenti: [[lightweight-store]] · [[08-sustainable-architectures]].
 
-## Implementing a Store with Signals
+### Implementing a Store with Signals
 > 📖 pp.137-139
 
 Lo store incapsula i [[signal]] e le resource. I signal **scrivibili restano privati** (`_from`); all'esterno se ne espone la **read-only view** con `asReadonly()`, insieme ai [[computed]] derivati e ai metodi di update:
@@ -657,7 +657,7 @@ flowchart LR
 
 Collegamenti: [[signal]] · [[computed]] · [[lightweight-store]].
 
-## Consuming the Store
+### Consuming the Store
 > 📖 pp.139-141
 
 Il componente inietta `FlightStore` e delega a signal/metodi: si semplifica nettamente, non gestisce più signal e resource al proprio interno. C'è però una piccola sfida: i filter signal dello store sono **read-only** e non si possono bindare direttamente agli input del template. Soluzione: un [[linked-signal|linkedSignal]] con copia di lavoro **locale**, su cui si crea la Signal Form. Un `linkedSignal` è come un `computed`, ma la sua copia locale è aggiornabile — e l'update **non** tocca il signal originale dello store.
@@ -746,7 +746,7 @@ export class FlightSearch {
 
 Collegamenti: [[linked-signal]] · [[effect]] · [[06-signal-forms|Signal Forms (cap.6)]].
 
-## Delegated Signals
+### Delegated Signals
 > 📖 pp.141-143
 
 Per una UX reattiva serve chiamare `updateFilter` **a ogni** modifica di `from`/`to`. Un **delegated signal** delega (affida ad altri) sia la lettura sia la scrittura: invece di tenere il valore al proprio interno, legge e scrive su un'altra parte del sistema — qui sullo store, per l'intero oggetto `filter`. Non fa (ancora) parte di Angular — ci sono discussioni in corso per aggiungerlo — quindi nell'example project sta in `delegated-signal.ts` (cartella `src/app/domains/shared/util-common`), implementato come `linkedSignal` che fa override di `set` e `update`.
@@ -795,18 +795,14 @@ protected readonly filterForm = form(this.filter, (path) => {
 
 Collegamenti: [[linked-signal]] · [[delegated-signal]] · [[06-signal-forms]].
 
-## Lifetime & Scopes
+### Lifetime & Scopes
 > 📖 pp.143-144
 
-Il **lifetime** dello store dipende dallo scope in cui lo registri:
-
-- **root** (`@Service()` / `providedIn: 'root'`): lo stato vive quanto l'app → tornando su una rotta si riprende da dove si era; rischio di stato **obsoleto** che resta più del dovuto → serve cleanup manuale (es. un metodo `reset`).
-- **component-level**: ogni istanza del componente ha il suo store → utile per componenti riusabili complessi (es. un calendario con viste daily/weekly/monthly che condividono le date); distrutto il componente, lo stato si pulisce **automaticamente**.
-- **route-local** (Environment Provider): condiviso da componente di rotta e child route → stato di una feature multi-route; con **Auto Cleanup** viene distrutto navigando via, senza stato residuo.
+Il **lifetime** dello store dipende dallo scope in cui lo si registra. Nello scope **root** (`@Service()` / `providedIn: 'root'`) lo stato vive quanto l'app: tornando su una rotta si riprende da dove si era, ma c'è il rischio di stato **obsoleto** che resta più del dovuto, quindi serve un cleanup manuale (es. un metodo `reset`). A livello **component-level** ogni istanza del componente ha il suo store — utile per componenti riusabili complessi, come un calendario con viste daily/weekly/monthly che condividono le date — e, distrutto il componente, lo stato si pulisce **automaticamente**. Con lo scope **route-local** (Environment Provider) lo store è condiviso da componente di rotta e child route, cioè copre lo stato di una feature multi-route, e con l'**Auto Cleanup** viene distrutto navigando via, senza stato residuo.
 
 Collegamenti: [[lightweight-store]] · [[providers]].
 
-## Outlook: NgRx Signal Store
+### Outlook: NgRx Signal Store
 > 📖 p.144
 
 Implementare store con service + signal è abbastanza semplice (incapsulare signal e resource, fornire routine di update controllato, delegare al data access). Ma dopo averne implementati alcuni si nota che comportano molto **lavoro ripetitivo e boilerplate** (codice standard riscritto quasi identico ogni volta). La libreria signal-based più popolare per ridurlo è il **NgRx Signal Store**: snellisce l'implementazione e offre diversi helper utili — dettagli nel [[09-ngrx-signal-store|cap.9]].

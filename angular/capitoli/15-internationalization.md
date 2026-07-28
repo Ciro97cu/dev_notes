@@ -38,9 +38,7 @@ Per far sapere al compiler quali testi estrarre, si marcano nei template con l'a
 <h1 i18n="meaning|description@@flightSearch-title">Flight Search</h1>
 ```
 
-Il valore di `i18n` ha **tre parti opzionali**, con `|` e `@@` come separatori:
-- **meaning** e **description** → contesto per lo studio di traduzione (utili quando una parola ha più traduzioni possibili).
-- **ID** (dopo `@@`) → il compiler lo usa per ricordare dove ricollocare ogni testo. Se non lo specifichi viene generato, ma l'ID auto-generato **può cambiare quando il template cambia** → assegnalo sempre a mano.
+Il valore di `i18n` ha **tre parti opzionali**, con `|` e `@@` come separatori. **meaning** e **description** danno contesto allo studio di traduzione, utili quando una parola ha più traduzioni possibili. L'**ID** (dopo `@@`) serve al compiler per ricordare dove ricollocare ogni testo: se non lo si specifica viene generato, ma l'ID auto-generato **può cambiare quando il template cambia** — conviene quindi assegnarlo sempre a mano.
 
 Essendo tutte e tre opzionali, sono lecite varie combinazioni:
 
@@ -164,8 +162,7 @@ I file di traduzione si registrano in `angular.json`, con un nodo `i18n` sotto `
 }
 ```
 
-- `locales` → mappa ogni locale supportato al suo file di traduzione.
-- `sourceLocale` → la lingua in cui sono i template quando **non sono tradotti** (qui `en-US`).
+Il nodo `locales` mappa ogni locale supportato al suo file di traduzione, mentre `sourceLocale` indica la lingua in cui sono i template quando **non sono tradotti** (qui `en-US`).
 
 Poi si buildano le versioni per ogni lingua:
 
@@ -257,7 +254,7 @@ ng extract-i18n --format json   # genera messages.json con le espressioni
 
 Scambiare i testi è solo uno dei compiti dell'internazionalizzazione: vanno gestite anche le **forme grammaticali** come il genere e la distinzione singolare/plurale (lingue diverse hanno numeri diversi di generi e di forme plurali). Il compiler I18N offre una grammatica dedicata nel template: la sintassi ICU (*International Components for Unicode*, lo standard per esprimere plurali e generi nei messaggi tradotti).
 
-**Plural** — "1 flight" vs "3 flights":
+Il costrutto `plural` copre la distinzione singolare/plurale — "1 flight" vs "3 flights":
 
 ```html
 <!-- src/app/flight-search/flight-search.html -->
@@ -268,7 +265,7 @@ Scambiare i testi è solo uno dei compiti dell'internazionalizzazione: vanno ges
 
 Si definisce un testo per il valore `=1` e uno per tutti gli altri (`other`); il `#` riporta il valore. La CLI e il compiler estraggono l'**intera espressione** nei file di lingua, così, traducendo verso una lingua con più forme plurali, si possono specificare testi anche per ulteriori valori (es. da 2 a 5). Oltre ai valori concreti (`=1`), Angular supporta le categorie: `zero`, `one`, `two`, `few`, `many`, `other`.
 
-**Select** — genere grammaticale. Si estende il `PassengerSearchComponent` con una proprietà `passenger`:
+Il costrutto `select` sceglie il testo in base al **genere grammaticale**; si estende il `PassengerSearchComponent` con una proprietà `passenger`:
 
 ```ts
 // src/app/flight-booking/passenger-search/passenger-search.ts

@@ -40,9 +40,7 @@ export class FlightEdit {
 }
 ```
 
-- `form(signal, schema)` riceve il `linkedSignal` e uno **schema** con le regole. I validatori built-in disponibili sono `required`, `minLength`, `maxLength`, `min`, `max` e `pattern` (che valida contro una regex).
-- Il parametro `path` (tipo `SchemaPathTree`) referenzia le singole proprietà da validare (`path.from`, `path.to`, ...).
-- `form()` ritorna un **FieldTree**, da legare ai controlli del template.
+`form(signal, schema)` riceve il `linkedSignal` e uno **schema** con le regole di validazione; i validatori built-in disponibili sono `required`, `minLength`, `maxLength`, `min`, `max` e `pattern` (che valida contro una regex). Il parametro `path` (tipo `SchemaPathTree`) referenzia le singole proprietà da validare (`path.from`, `path.to`, ...), mentre `form()` ritorna un **FieldTree**, da legare ai controlli del template.
 
 `normalizeFlight` converte la data nel formato richiesto da `<input type="datetime-local">`: una stringa ISO **senza** designatore di timezone (cioè senza il suffisso che indica il fuso orario, come la `Z` finale o `+02:00`) — es. `2030-12-24T17:30:00.000`.
 
@@ -53,7 +51,7 @@ function normalizeFlight(flight: Flight): Flight {
 }
 ```
 
-### Understanding the FieldTree
+### Understanding the FieldTree Type
 > 📖 pp.147-148
 
 Un **FieldTree** è come un signal profondamente annidato: ogni proprietà del dato è un signal, e lo stato della form di quel campo (`value`, `dirty`, `invalid`, `errors`) è a sua volta esposto da signal. Poiché tutto è signal-based, lo si può legare ai controlli.
@@ -218,7 +216,7 @@ debounce(path, (ctx, _abortSignal) => {
 });
 ```
 
-### Validating Against Zod / Standard Schema
+### Validating Against Zod and Standard Schema
 > 📖 pp.155-157
 
 `validateStandardSchema` valida la form contro uno schema **Zod** (o Valibot, o qualsiasi libreria conforme allo **Standard Schema** — uno standard comune che diverse librerie di validazione adottano, così Angular può lavorare con tutte allo stesso modo). Spesso queste regole esistono già lato server o sono generate da un JSON Schema/OpenAPI.
@@ -249,7 +247,7 @@ export const flightSchema = schema<Flight>((path) => {
 > // al cambio di strict(), Signal Forms ri-valida contro lo schema aggiornato
 > ```
 
-### Visualizing Validation State with CSS Classes
+## Visualizing Validation State with CSS Classes
 > 📖 pp.157-158
 
 Le classiche Reactive e Template-driven Forms aggiungono da sole classi CSS come `ng-valid`, `ng-invalid` o `ng-pending` ai controlli legati. Signal Forms sceglie una strada più **esplicita**: si mappano i nomi delle classi a predicati sullo stato del campo tramite **`provideSignalFormsConfig`**. La configurazione vive di solito in `app.config.ts`.
@@ -308,10 +306,7 @@ protected async save(form: FieldTree<Flight>) {
 }
 ```
 
-- `action`: funzione eseguita al submit; di default **non parte** se un validatore fallisce o è *pending* (validatore async che non ha ancora un risultato).
-- `ignoreValidators`: `none` (default, blocca su failing/pending), `pending` (ignora solo i pending), `all` (ignora tutto).
-- `onInvalid`: eseguito quando un validatore fallito blocca il submit.
-- `action` può **ritornare un `ValidationError`**: viene piazzato nel grafo della form (la struttura ad albero che rappresenta la form e tutti i suoi campi) e appare in `errorSummary()` (l'elenco di tutti gli errori del campo e dei suoi sotto-campi).
+`action` è la funzione eseguita al submit; di default **non parte** se un validatore fallisce o è *pending* (validatore async che non ha ancora un risultato). Quando può partire lo decide `ignoreValidators`: `none` (default, blocca su failing/pending), `pending` (ignora solo i pending) o `all` (ignora tutto). `onInvalid` viene eseguito quando un validatore fallito blocca il submit. Infine `action` può **ritornare un `ValidationError`**: viene piazzato nel grafo della form (la struttura ad albero che rappresenta la form e tutti i suoi campi) e appare in `errorSummary()` (l'elenco di tutti gli errori del campo e dei suoi sotto-campi).
 
 ```ts
 private reportValidationError(form: FieldTree<Flight>): void {
@@ -332,7 +327,9 @@ Gli errori restituiti dal backend appaiono nel grafo della form; per mostrarli s
 <p>{{ flightForm().errorSummary() | json }}</p>
 ```
 
-**Template** — basta la direttiva **`formRoot`**:
+### Template for Submitting
+
+Nel template basta la direttiva **`formRoot`**:
 
 ```html
 <!-- flight-edit.html -->
@@ -347,7 +344,9 @@ Gli errori restituiti dal backend appaiono nel grafo della form; per mostrarli s
 
 `formRoot` fa tre cose: disabilita il submit nativo (niente postback al server, cioè niente ricaricamento della pagina con invio dei dati al server come nelle pagine HTML tradizionali), disabilita la validazione HTML del browser (ci pensa Angular), collega l'`action` all'evento submit. Funziona anche premendo Invio.
 
-**Further Submit Actions** — per azioni aggiuntive (es. richiesta di approvazione) si usa un `<button type="button">` con la funzione `submit()`, che esegue la logica solo se la form è valida:
+### Further Submit Actions
+
+Per azioni aggiuntive (es. richiesta di approvazione) si usa un `<button type="button">` con la funzione `submit()`, che esegue la logica solo se la form è valida:
 
 ```ts
 protected async requestApproval(): Promise<void> {
@@ -379,7 +378,9 @@ validate(path.from, (ctx) => {
 });
 ```
 
-**Refactoring in funzioni** — riusabili, ricevono almeno il `path` da validare (tipo `SchemaPathTree<T>`):
+### Refactoring Validators into Functions
+
+I validator si estraggono in funzioni riusabili, che ricevono almeno il `path` da validare (tipo `SchemaPathTree<T>`):
 
 ```ts
 // data/flight-validators.ts
@@ -394,7 +395,9 @@ export function validateCity(path: SchemaPathTree<string>, allowed: string[]) {
 // uso nello schema: validateCity(path.from, ['Graz', 'Hamburg', 'Zürich']);
 ```
 
-**Showing Validation Errors** — i validatori built-in accettano un oggetto opzioni con `{ message: '...' }`, che finisce nella proprietà `message` del rispettivo `ValidationError`:
+### Showing Validation Errors
+
+I validatori built-in accettano un oggetto opzioni con `{ message: '...' }`, che finisce nella proprietà `message` del rispettivo `ValidationError`:
 
 ```ts
 required(path.from, { message: 'Please enter a value!' });
@@ -432,7 +435,9 @@ Nel template si invoca il pane per ogni campo, passandogli l'array `errors`:
 <app-validation-errors-pane [errors]="flightForm.from().errors()" />
 ```
 
-**Conditional Validation** — alcune regole valgono solo in certe condizioni: nell'esempio `delay` va validato solo quando `delayed` è `true`. `applyWhenValue(path, predicate, schema)` applica uno schema solo se il predicato (di solito una lambda) ritorna `true`:
+### Conditional Validation
+
+Alcune regole valgono solo in certe condizioni: nell'esempio `delay` va validato solo quando `delayed` è `true`. `applyWhenValue(path, predicate, schema)` applica uno schema solo se il predicato (di solito una lambda) ritorna `true`:
 
 ```ts
 applyWhenValue(path, (flight) => flight.delayed, delayedFlight);
@@ -449,7 +454,9 @@ required(path.delay, { when: (ctx) => ctx.valueOf(path.delayed) });  // opzione 
 
 `applyWhen` riceve il `ctx` invece del solo valore: oltre a `ctx.valueOf(path)` espone `ctx.stateOf(path)`, che dà l'intero field state (utile se il predicato deve controllare proprietà come `dirty`).
 
-**Multi-Field Validators** — un validatore sul **genitore comune** può confrontare più campi (es. `from` ≠ `to`):
+### Multi-Field Validators
+
+Un validatore sul **genitore comune** può confrontare più campi (es. `from` ≠ `to`):
 
 ```ts
 export function validateRoundTrip(path: SchemaPathTree<Flight>) {
@@ -464,7 +471,9 @@ export function validateRoundTrip(path: SchemaPathTree<Flight>) {
 > [!warning]
 > Gli errori restano associati al **livello validato** del FieldTree: qui è il flight intero, non `from`/`to`. Per mostrarli servono `flightForm().errors()` (livello corrente) oppure `flightForm().errorSummary()` (include i livelli inferiori — qui conviene `[showFieldNames]="true"`). Gli errori dei livelli più bassi **non** compaiono in `errors`.
 
-**Accessing Sibling Fields** — in alternativa, si valida solo `from` accedendo al sibling `to` (il campo "fratello", cioè un altro campo allo stesso livello) con `ctx.valueOf(path.to)`; così l'errore appare nel campo `from`.
+### Accessing Sibling Fields
+
+In alternativa, si valida solo `from` accedendo al sibling `to` (il campo "fratello", cioè un altro campo allo stesso livello) con `ctx.valueOf(path.to)`; così l'errore appare nel campo `from`.
 
 ```ts
 export function validateRoundTrip2(path: SchemaPathTree<Flight>) {
@@ -476,7 +485,9 @@ export function validateRoundTrip2(path: SchemaPathTree<Flight>) {
 }
 ```
 
-**Tree Validators** — `validateTree` è un multi-field validator speciale che può definire errori per **tutti i livelli**, memorizzando il campo affetto in `field`:
+### Tree Validators
+
+`validateTree` è un multi-field validator speciale che può definire errori per **tutti i livelli**, memorizzando il campo affetto in `field`:
 
 ```ts
 export function validateRoundTripTree(path: SchemaPathTree<Flight>) {
@@ -492,7 +503,9 @@ export function validateRoundTripTree(path: SchemaPathTree<Flight>) {
 
 Poiché ogni validatore può restituire un array, un tree validator può anche produrre errori su **campi diversi** in un colpo solo: è quindi la scelta ideale per le regole complesse. Le regole semplici, invece, si risolvono bene con i validatori convenzionali che accedono ai campi vicini, come mostrato sopra.
 
-**Asynchronous Validators** — validatori che fanno una chiamata asincrona (tipicamente al server) prima di dare il verdetto. `validateAsync` si configura con quattro funzioni: `params` (dallo stato del campo ricava i parametri della chiamata), `factory` (crea la resource, cioè l'oggetto che esegue la chiamata e ne segue il risultato), `onSuccess` (dal risultato → `ValidationError | null`), `onError` (dall'errore → `ValidationError | null`):
+### Asynchronous Validators
+
+I validatori asincroni fanno una chiamata asincrona (tipicamente al server) prima di dare il verdetto. `validateAsync` si configura con quattro funzioni: `params` (dallo stato del campo ricava i parametri della chiamata), `factory` (crea la resource, cioè l'oggetto che esegue la chiamata e ne segue il risultato), `onSuccess` (dal risultato → `ValidationError | null`), `onError` (dall'errore → `ValidationError | null`):
 
 ```ts
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -518,7 +531,9 @@ export function validateCityAsync(path: SchemaPathTree<string>) {
 }
 ```
 
-**HTTP Validators** — `validateHttp` è una versione semplificata che ritorna direttamente una request per un `HttpResource` (niente `params`/`factory`, solo `request`/`onSuccess`/`onError`):
+### HTTP Validators
+
+`validateHttp` è una versione semplificata che ritorna direttamente una request per un `HttpResource` (niente `params`/`factory`, solo `request`/`onSuccess`/`onError`):
 
 ```ts
 export function validateCityHttp(path: SchemaPathTree<string>) {
@@ -541,7 +556,9 @@ Collegamenti: [[resource|rxResource]] (la factory degli async validator).
 
 Signal Forms supporta modelli annidati: oggetti (**form groups**), array ripetuti (**form arrays**) e scomposizione in **subform**.
 
-**Form Groups** — schema separato per l'oggetto annidato, incluso con `apply(path.aircraft, ...)`:
+### Form Groups
+
+Per un oggetto annidato si definisce uno schema separato, incluso con `apply(path.aircraft, ...)`:
 
 ```ts
 // data/aircraft-schema.ts
@@ -560,7 +577,9 @@ apply(path.aircraft, aircraftSchema);
 <app-validation-errors-pane [errors]="aircraftForm.type().errors()" />
 ```
 
-**Form Arrays** — gruppo ripetuto (i `prices`). Schema per il singolo elemento, applicato a ciascuno con **`applyEach`** (non `apply`):
+### Form Arrays
+
+Un form array è un gruppo ripetuto (i `prices`): si scrive lo schema per il singolo elemento e lo si applica a ciascuno con **`applyEach`** (non `apply`):
 
 ```ts
 // data/price-schema.ts
@@ -592,7 +611,9 @@ addPrice(): void {
 }
 ```
 
-**Validating Form Arrays** — anche gli array sono nodi del grafo; un validatore può iterare gli elementi (es. duplicati). Nota il tipo `SchemaPath<Price[]>`:
+### Validating Form Arrays
+
+Anche gli array sono nodi del grafo; un validatore può iterare gli elementi (es. duplicati). Nota il tipo `SchemaPath<Price[]>`:
 
 ```ts
 import { SchemaPath, validate } from '@angular/forms/signals';
@@ -616,7 +637,9 @@ export function validateDuplicatePrices(path: SchemaPath<Price[]>) {
 // nello schema: validateDuplicatePrices(path.prices);
 ```
 
-**Subforms** — si spezza la form in componenti (`FlightForm`, `PricesForm`, `AircraftForm`), ognuno riceve una porzione del FieldTree via input tipizzato `FieldTree<T>`:
+### Subforms
+
+Si spezza la form in componenti (`FlightForm`, `PricesForm`, `AircraftForm`), ognuno riceve una porzione del FieldTree via input tipizzato `FieldTree<T>`:
 
 ```html
 <!-- flight-edit.html: passa porzioni del FieldTree ai sottocomponenti -->
@@ -644,7 +667,9 @@ export class PricesForm {
 
 I metadata informano l'utente **prima** su cosa ci si aspetta (es. campo richiesto, lunghezza). Molti validatori definiscono metadata sui campi che validano.
 
-**Reading Metadata** — `fieldState.metadata(KEY)` con chiavi built-in `REQUIRED`, `MIN_LENGTH`, `MAX_LENGTH`:
+### Reading Metadata
+
+I metadata si leggono con `fieldState.metadata(KEY)`, usando le chiavi built-in `REQUIRED`, `MIN_LENGTH`, `MAX_LENGTH`:
 
 ```ts
 // .../shared/ui-forms/field-meta-data-pane/field-meta-data-pane.ts
@@ -665,7 +690,9 @@ export class FieldMetaDataPane {
 </label>
 ```
 
-**Custom Metadata** — `createMetadataKey<T>()` crea una chiave; un **reducer** decide come combinare valori multipli (default: vince l'ultimo definito):
+### Defining Custom Metadata
+
+`createMetadataKey<T>()` crea una chiave; un **reducer** decide come combinare valori multipli (default: vince l'ultimo definito):
 
 ```ts
 import { createMetadataKey, MetadataReducer } from '@angular/forms/signals';

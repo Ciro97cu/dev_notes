@@ -14,7 +14,10 @@ Il capitolo estende un'app esistente di flight-booking con tre scenari crescenti
 2. **Generative UI**: l'LLM sceglie e renderizza componenti dentro la chat, non più solo testo.
 3. **Natural language queries con code generation**: l'LLM genera JavaScript che gira in sandbox per trasformare i dati e produrre un chart.
 
-## Setting up Hashbrown
+## Implementing an Assistant with Tool Calling
+> 📖 pp.345-353
+
+### Setting up Hashbrown
 > 📖 pp.345-348
 
 Servono pochi pacchetti npm: il core framework-agnostic, il binding Angular e l'adapter del provider.
@@ -23,8 +26,7 @@ Servono pochi pacchetti npm: il core framework-agnostic, il binding Angular e l'
 npm install @hashbrownai/{core,angular,google}
 ```
 
-- `@hashbrownai/angular` → API Angular costruita sul core framework-agnostic (il nucleo non è legato a un framework specifico, quindi è riusabile altrove; esiste anche un binding per React).
-- `@hashbrownai/google` → accesso ai modelli Gemini di Google. Per altre famiglie di modelli ci sono pacchetti dedicati (es. `@hashbrownai/openai`).
+`@hashbrownai/angular` fornisce l'API Angular costruita sul core framework-agnostic (il nucleo non è legato a un framework specifico, quindi è riusabile altrove; esiste anche un binding per React), mentre `@hashbrownai/google` dà accesso ai modelli Gemini di Google — per altre famiglie di modelli ci sono pacchetti dedicati (es. `@hashbrownai/openai`).
 
 L'accesso programmatico agli LLM richiede una **API key**, di solito legata a una licenza a pagamento; Gemini offre però un piano free generoso per i test, con key generabile in pochi clic da Google AI Studio. La key **non va mai usata direttamente nel frontend Angular**, altrimenti finirebbe pubblicata sul web: si interpone un backend snello tra frontend e LLM.
 
@@ -111,7 +113,7 @@ Il `middleware` opzionale qui logga ogni richiesta al server nella console del b
 > [!tip]
 > La API key sta **solo nel backend**. Il frontend parla con un proxy che fa da intermediario verso l'LLM e che applica guardrail server-side (paletti di sicurezza imposti dal server — scelta del modello, system instruction — che il client non può aggirare): è lì che si controllano costi e ambito.
 
-## Using the chatResource
+### Using the chatResource
 > 📖 pp.349-350
 
 Hashbrown offre varie implementazioni della **Resource API** di Angular (vedi [[resource]]) per chattare con gli LLM. Per la chat testuale si usa `chatResource`.
@@ -141,9 +143,7 @@ export class AssistantChatComponent {
 }
 ```
 
-- Gli LLM sono **stateless** (senza memoria: non ricordano nulla tra una richiesta e l'altra): `chatResource` rimanda l'intera chat history a ogni richiesta, così il modello può riferirsi ai messaggi precedenti (es. capire cosa significa "questo volo" se la conversazione ruota attorno al volo #4711).
-- Supporta il **tool calling**: i tool passati in `tools` sono le funzionalità che il frontend espone (es. `findFlights` per le ricerche); il modello può richiederne l'invocazione.
-- `chat.value()` contiene la chat history da mostrare; `sendMessage()` invia un messaggio utente.
+Gli LLM sono **stateless** (senza memoria: non ricordano nulla tra una richiesta e l'altra), perciò `chatResource` rimanda l'intera chat history a ogni richiesta, così il modello può riferirsi ai messaggi precedenti (es. capire cosa significa "questo volo" se la conversazione ruota attorno al volo #4711). Supporta il **tool calling**: i tool passati in `tools` sono le funzionalità che il frontend espone (es. `findFlights` per le ricerche) e il modello può richiederne l'invocazione. `chat.value()` contiene la chat history da mostrare, mentre `sendMessage()` invia un messaggio utente.
 
 ```html
 <!-- Listing 13-4 — render della chat history -->
@@ -171,7 +171,7 @@ export class AssistantChatComponent {
 > [!tip]
 > Mostrare "Tool Call: findFlights" va bene per gli sviluppatori, ma confonde l'utente finale. Conviene **tradurre la traccia tecnica** in qualcosa di leggibile come "Loading flights from Graz to Hamburg".
 
-## Providing Tools
+### Providing Tools
 > 📖 p.351
 
 I tool sono oggetti creati con `createTool`. Definiscono `name`, `description`, lo `schema` degli argomenti e un `handler`.
@@ -203,10 +203,7 @@ export const findFlightsTool = createTool({
 });
 ```
 
-- `name` deve essere univoco e conforme alle specifiche del modello (regola pratica: ciò che è valido come nome di variabile in TypeScript va bene anche qui).
-- `description` è ciò che l'LLM usa per **decidere se il tool è rilevante** per il task corrente. Idem per le descrizioni testuali dentro lo schema.
-- Lo `schema` è scritto in **Skillet**, il linguaggio di schema di Hashbrown (accessibile via `s`). Ricorda librerie come Zod ma è ridotto ai costrutti che gli LLM supportano in modo affidabile. È previsto in futuro anche il supporto a JSON Schema e un ponte verso Zod.
-- Lo `handler` riceve l'oggetto definito dallo schema e delega alla logica di sistema (store, router). Può anche **restituire valori al modello**:
+Il `name` deve essere univoco e conforme alle specifiche del modello (regola pratica: ciò che è valido come nome di variabile in TypeScript va bene anche qui). La `description` è ciò che l'LLM usa per **decidere se il tool è rilevante** per il task corrente, e lo stesso vale per le descrizioni testuali dentro lo schema. Lo `schema` è scritto in **Skillet**, il linguaggio di schema di Hashbrown (accessibile via `s`): ricorda librerie come Zod ma è ridotto ai costrutti che gli LLM supportano in modo affidabile, ed è previsto in futuro anche il supporto a JSON Schema e un ponte verso Zod. Lo `handler`, infine, riceve l'oggetto definito dallo schema e delega alla logica di sistema (store, router); può anche **restituire valori al modello**:
 
 ```ts
 // Listing 13-6 — handler che ritorna dati al modello
@@ -223,7 +220,7 @@ export const getLoadedFlights = createTool({
 > [!warning]
 > Skillet **non** descrive formalmente il valore di ritorno dei tool: il modello accetta qualsiasi forma di risposta. Se vuoi informarlo sulla struttura del risultato, descrivila **come testo libero** nella `description`.
 
-## Under the Hood (tool calling)
+### Under the Hood (tool calling)
 > 📖 pp.352-353
 
 Guardando i messaggi inviati all'LLM si capisce il meccanismo: la conversazione passa attraverso i ruoli (`user`, `assistant`, `tool`), e l'elenco dei tool con i relativi metadata (le informazioni che descrivono ogni tool: nome, descrizione, schema degli argomenti) viene appeso in fondo alla richiesta.
@@ -281,7 +278,10 @@ sequenceDiagram
     FE-->>U: messaggio in chat
 ```
 
-## UI chat con uiChatResource
+## Generative UI and Component Control
+> 📖 pp.354-363
+
+### UI chat with uiChatResource
 > 📖 pp.354-357
 
 `uiChatResource` va oltre: oltre al tool calling, l'LLM può **rispondere con componenti** renderizzati direttamente nella chat, non più solo testo. È un rimpiazzo drop-in di `chatResource` (lo sostituisci così com'è, senza cambiare il resto del codice).
@@ -346,7 +346,7 @@ messageModels = computed(() =>
 );
 ```
 
-## Dumb components con smart wrapper
+### Components for chat: Dumb Components with Smart Wrappers
 > 📖 pp.358-359
 
 I componenti offerti all'LLM sono **dumb component** oppure, come `flightWidget`, uno **smart wrapper** intorno a un dumb component (cfr. componenti e input/output in [[02-signal-based-components]]).
@@ -394,7 +394,7 @@ export class FlightWidgetComponent {
 
 Il wrapper inoltra i suoi [[signal-input|input]] al dumb component wrappato e ne gestisce gli eventi, scatenando azioni negli store delle feature o cambi rotta. Il punto chiave è l'input `status` (`'booked' | 'other'`): l'LLM deve **derivarne il valore dalla storia della conversazione**, e in base a quel valore il widget sceglie il pulsante da mostrare sul flight card — "Check in" per i voli prenotati, "Select"/"Remove" per i voli trovati in ricerca (aggiungi/rimuovi dal carrello). Come si vedrà a fine sezione, i modelli più piccoli ed economici (es. Gemini Flash) hanno bisogno di un aiuto per questo compito.
 
-## Describing Components
+### Describing Components
 > 📖 pp.359-360
 
 I componenti si descrivono con `exposeComponent`: `name`, `description` (quando usarlo) e schema Skillet di ogni `input`.
@@ -435,7 +435,7 @@ export const FlightSchema = s.object('Flight to be displayed', {
 });
 ```
 
-## Under the Hood: Structured Output
+### Under the Hood: Structured Output
 > 📖 p.360
 
 Per decidere quali componenti mostrare, Hashbrown istruisce l'LLM a rispondere **solo con documenti JSON** (structured output). Il JSON arriva come stringa in `content` e contiene i componenti da mostrare con i valori dei rispettivi input.
@@ -451,7 +451,7 @@ Per decidere quali componenti mostrare, Hashbrown istruisce l'LLM a rispondere *
 
 I componenti possibili (con i loro input e descrizioni) vengono passati in una sezione separata di ogni richiesta come **JSON Schema derivato da Skillet**.
 
-## Supporting Different Models
+### Supporting Different Models
 > 📖 p.361
 
 Alcuni modelli (es. Google Gemini) **non supportano (ancora) la combinazione di structured output e tool calling**. Si risolve al bootstrap con la proprietà `emulateStructuredOutput`:
@@ -470,7 +470,7 @@ bootstrapApplication(AppComponent, {
 
 Con `true`, Hashbrown definisce uno **pseudo-tool** che permette all'LLM di selezionare uno o più componenti dal set offerto, e istruisce il modello a rispondere chiamando quel tool.
 
-## Applying Few-Shot Prompting
+### Applying Few-Shot Prompting
 > 📖 pp.361-363
 
 Per far rispondere sempre con testo (e, opzionalmente, uno o più componenti), e per aiutare i modelli più deboli ed economici (es. Gemini Flash), si arricchisce con esempi il system prompt della resource.
@@ -542,7 +542,10 @@ uiChatResource({
 > [!warning]
 > Il tag `prompt` (con validazione XML vs componenti registrati) funziona **solo per il system prompt nella resource**. Siccome in questo esempio il system prompt viene sovrascritto lato server per sicurezza, e servono comunque esempi dentro le descrizioni dei componenti, si resta vincolati agli **esempi in prosa** non validati.
 
-## Natural Language Queries — Approach
+## Natural Language Queries with Code Generation
+> 📖 pp.364-371
+
+### Approach
 > 📖 pp.364-365
 
 Si va ancora oltre la selezione da un catalogo di componenti: l'app **genera codice** per fornire parti completamente dinamiche. Scenario: l'utente descrive a parole un report ("% di voli in ritardo vs. totale per giorno, ignorando l'orario, ordinati per data"), l'app trasforma i dati e mostra un chart. Per non compromettere la sicurezza, il codice generato gira in **sandbox** (un ambiente isolato e recintato, dove il codice può fare solo le poche cose permesse e non tocca il resto dell'app).
@@ -591,7 +594,7 @@ generateChart({ data });   // sink fornito dall'app
 
 Il codice delega a due funzioni fornite dall'app: `loadFlights` (recupera i dati) all'inizio e `generateChart` (sink che mostra il chart) alla fine. L'LLM **non genera solo codice**: decide anche quali funzioni dell'app il codice deve invocare. Le funzioni potrebbero anche restituire valori pre-aggregati, per rendere i report più efficienti.
 
-## Implementation with Hashbrown
+### Implementation with Hashbrown
 > 📖 pp.366-367
 
 Due building block: `structuredCompletionResource` + una **runtime JavaScript** (il "motore" che esegue il codice JavaScript generato dall'LLM, in modo isolato).
@@ -648,11 +651,9 @@ export class ReportingComponent {
 }
 ```
 
-- Il [[signal]] `message` è legato a una textbox; `submit()` lo copia in `input`, che è il signal di input della resource → la fa partire.
-- `createRuntime` riceve le funzioni che il codice generato può chiamare e crea la runtime JS; viene registrata come tool della resource via `createToolJavaScript`.
-- Lo `schema` impone la struttura della risposta: esito (`success`/`error`), `message` per l'utente e `code` generato.
+Il [[signal]] `message` è legato a una textbox e `submit()` lo copia in `input`, il signal di input della resource, facendola partire. `createRuntime` riceve le funzioni che il codice generato può chiamare e crea la runtime JS, che viene registrata come tool della resource via `createToolJavaScript`. Lo `schema`, infine, impone la struttura della risposta: esito (`success`/`error`), `message` per l'utente e `code` generato.
 
-## Runtime Functions
+### Runtime Functions
 > 📖 pp.368-369
 
 `createRuntimeFunction` crea una funzione che il codice generato può chiamare nella runtime. Definisce `name`, `description`, `args` (schema input), `result` (schema output) e `handler`.
@@ -707,7 +708,7 @@ Dettaglio importante: a differenza di `loadFlights` (data source), `generateChar
 > [!warning]
 > Nelle runtime function il `result` **è** descritto via Skillet (es. `s.array(..., FlightSchema)`), così il modello sa cosa aspettarsi come ritorno — a differenza dei tool del `chatResource`, dove il valore di ritorno non era schematizzato.
 
-## System Prompt con One-Shot Prompting
+### System Prompt with One-Shot Prompting
 > 📖 pp.370-371
 
 Il system prompt di `structuredCompletionResource` definisce i guardrail per la generazione del codice: i passi chiave, un esempio e regole generali.
