@@ -1,11 +1,11 @@
 # angular/ — regole specifiche
 
-**Vault Obsidian**. Appunti di studio sul libro *Modern Angular* (**2ª edizione**, v2.0.0 — aggiornata ad **Angular 22**). Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
+**Vault Obsidian**. Appunti di studio sul libro *Modern Angular* (**3ª edizione**, v3.0.0 — aggiornata ad **Angular 22**). Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
 
-Fonte: `modern-angular_v2_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagina dei riferimenti 📖 sono i **numeri stampati sul libro** (il page-label che il viewer mostra aprendo il PDF), **non** l'indice sequenziale del reader. Il PDF ha 12 pagine di front matter, quindi: **stampato = reader − 12**. L'outline in [`_meta/book-outline.txt`](_meta/book-outline.txt) è invece in numeri **reader** (1–467): per leggere col Read tool / `r.pages[N-1]` una pagina stampata `P`, usare `reader = P + 12`.
+Fonte: `modern-angular_v3_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagina dei riferimenti 📖 sono i **numeri stampati sul libro** (il page-label che il viewer mostra aprendo il PDF), **non** l'indice sequenziale del reader. Il PDF ha 12 pagine di front matter, quindi: **stampato = reader − 12**. L'outline in [`_meta/book-outline.txt`](_meta/book-outline.txt) è invece in numeri **reader** (1–467): per leggere col Read tool / `r.pages[N-1]` una pagina stampata `P`, usare `reader = P + 12`.
 
 > [!info] Versioning del vault
-> Gli appunti seguono la **v2.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info] Angular 22+` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
+> Gli appunti seguono la **v3.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info] Angular 22+` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
 
 ## Struttura
 ```
@@ -52,7 +52,7 @@ pagine: "<start>-<end>"
 tags: [tipo/capitolo, <tematici>]
 ---
 # NN · <Titolo inglese>
-> 📖 cap.N · pp.<start>-<end> — *Modern Angular* v2.0.0
+> 📖 cap.N · pp.<start>-<end> — *Modern Angular* v3.0.0
 
 <Intro/contesto breve: cosa copre il capitolo e perché conta.>
 

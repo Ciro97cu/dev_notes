@@ -1,8 +1,8 @@
-# Outline di modern-angular_v2_0_0.pdf (2a ed., Angular 22) — pagine = numero READER del PDF (1-467).
+# Outline di modern-angular_v3_0_0.pdf (3a ed., Angular 22) — pagine = numero READER del PDF (1-467).
 # NB: i riferimenti 📖 nelle note usano il numero STAMPATO sul libro = reader - 12 (front matter di 12 pagine).
 
 - [p.13] Preface
-  - [p.13] Changes in this 2nd Edition
+  - [p.13] Changes in this 3rd Edition
   - [p.13] Who This Book Is For
   - [p.14] How to Read This Book
   - [p.14] Structure of This Book
@@ -131,7 +131,7 @@
   - [p.148] State Management
     - [p.149] Implementing a Store with Signals
     - [p.151] Consuming the Store
-    - [p.153] Delegated Signals
+    - [p.153] Linked Signals with a Setter
     - [p.155] Lifetime and Scopes
     - [p.156] Outlook: NgRx Signal Store
   - [p.156] Summary

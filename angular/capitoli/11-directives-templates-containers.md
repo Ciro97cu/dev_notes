@@ -5,7 +5,7 @@ pagine: "300-329"
 tags: [tipo/capitolo, directives, templates, angular-22]
 ---
 # 11 · Directives, Templates, and Containers
-> 📖 cap.11 · pp.300-329 — *Modern Angular* v2.0.0
+> 📖 cap.11 · pp.300-329 — *Modern Angular* v3.0.0
 
 Le librerie di componenti (Angular Material & co.) non spediscono solo UI pronte: poggiano su una manciata di mattoni che rendono i componenti flessibili e riusabili. Tra questi ci sono le [[glossario#attribute-directive|**attribute directive**]] (directive senza template, che aggiungono comportamento a un elemento esistente) usate per potenziare altri componenti, le [[glossario#structural-directive|**structural directive**]] (directive che aggiungono/rimuovono elementi dal DOM, come `*ngIf`), i template e i componenti dinamici, e le manipolazioni DOM controllate. Il capitolo attraversa questi meccanismi con un insieme minimo di costrutti riusabili: una **tooltip directive** (in due versioni), una **DataTable** e un **DialogService**.
 

@@ -5,7 +5,7 @@ pagine: "444-453"
 tags: [tipo/capitolo, architecture]
 ---
 # 19 · Analyzing Your Architecture with Forensic Techniques
-> 📖 cap.19 · pp.444-453 — *Modern Angular* v2.0.0
+> 📖 cap.19 · pp.444-453 — *Modern Angular* v3.0.0
 
 Dei buoni **domain boundary** (i confini fra i domini, cioè dove finisce un'area funzionale e ne inizia un'altra) rendono un sistema manutenibile nel lungo periodo (vedi [[08-sustainable-architectures]]). Ma come capire se la struttura definita all'inizio è ancora valida, e dove conviene migliorarla? L'approccio ovvio è analizzare le **dipendenze** fra le parti dell'app. La **forensic analysis** (analisi "forense", cioè in stile scena del crimine: si parte dalle tracce lasciate nella storia del codice per ricostruire com'è fatto davvero) va oltre: tenendo conto anche dei **dati storici** del version control (la storia dei commit registrata da Git), scopre pattern nascosti che le sole dipendenze non rivelano.
 

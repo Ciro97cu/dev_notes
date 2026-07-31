@@ -5,7 +5,7 @@ pagine: "87-119"
 tags: [tipo/capitolo, routing, di, performance, angular-22]
 ---
 # 04 · Navigation & Lazy Loading with the Router
-> 📖 cap.4 · pp.87-119 — *Modern Angular* v2.0.0
+> 📖 cap.4 · pp.87-119 — *Modern Angular* v3.0.0
 
 In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non basta: perché back button, bookmark e history del browser funzionino, ogni cambio di stato deve riflettersi nell'**URL**. Il **Router** di Angular automatizza tutto questo: mappa **path** → **componenti** e li attiva in un **placeholder** (`<router-outlet>`), tenendo l'URL sincronizzato con la vista corrente. Il capitolo copre: configurazione del routing, navigazione (link e programmatica), route parametrizzate, child routes, [[glossario#lazy-loading|lazy loading]] e preloading, query string e hash fragment, e le due strategie di location (path vs hash).
 

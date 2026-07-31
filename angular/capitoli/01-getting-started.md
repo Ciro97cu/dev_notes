@@ -5,7 +5,7 @@ pagine: "6-19"
 tags: [tipo/capitolo, tooling, signals, angular-22]
 ---
 # 01 · Getting Started with Angular
-> 📖 cap.1 · pp.6-19 — *Modern Angular* v2.0.0
+> 📖 cap.1 · pp.6-19 — *Modern Angular* v3.0.0
 
 Setup dell'ambiente, generazione del progetto con la **Angular CLI** e prima lettura del codice generato. Un'app Angular è un **albero di componenti** con un root component in cima; questo capitolo arriva fino al punto in cui quel componente gira nel browser. Il progetto di esempio del libro è **flights42** (`angular-architects/flights42` su GitHub).
 

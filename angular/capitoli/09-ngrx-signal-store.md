@@ -5,7 +5,7 @@ pagine: "242-285"
 tags: [tipo/capitolo, ngrx, state-management, signals, angular-22]
 ---
 # 09 · State Management with NgRx Signal Store
-> 📖 cap.9 · pp.242-285 — *Modern Angular* v2.0.0
+> 📖 cap.9 · pp.242-285 — *Modern Angular* v3.0.0
 
 Una SPA mantiene lo stato mentre l'utente cambia rotta: dati caricati via HTTP, ma anche interazioni UI (filtri impostati, elementi selezionati). Implementare lo [[glossario#store|store]] (il contenitore centralizzato dello stato) a mano (vedi [[05-state-management-services-signals|cap.5]]) funziona, ma produce **molto codice ripetitivo**: esporre signal read-only per i consumer ma scrivibili dall'interno, integrare le resource per il caricamento, gestire stati di errore e di loading. Il **NgRx SignalStore** (`@ngrx/signals`) elimina gran parte di questo boilerplate ed è oggi la soluzione di state management più diffusa per Angular moderno, integrandosi nativamente con i [[signal]].
 
