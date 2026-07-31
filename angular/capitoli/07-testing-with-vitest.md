@@ -5,7 +5,7 @@ pagine: "192-218"
 tags: [tipo/capitolo, testing, http, angular-22]
 ---
 # 07 · Modern Testing with Vitest
-> 📖 cap.7 · pp.192-218 — *Modern Angular* v2.0.0
+> 📖 cap.7 · pp.192-218 — *Modern Angular* v3.0.0
 
 Con sempre più logica spostata nel frontend, il test manuale non basta a mantenere stabile un'app nel tempo. La Angular CLI integra **Vitest** come test runner di default: esecuzione veloce, ottima developer experience e supporto a vari runtime (Node.js e diversi browser). Sopra a Vitest, Angular mette a disposizione costrutti propri (`TestBed`, `HttpTestingController`) per montare i componenti e sostituire le dipendenze con dei mock. Il capitolo costruisce i test sulla feature `flight-search` già vista nel [[02-signal-based-components|cap.2]].
 

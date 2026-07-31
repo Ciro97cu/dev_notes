@@ -7,7 +7,7 @@ tags: [tipo/capitolo, security]
 
 # 16 · Modern Patterns for Authentication & Authorization
 
-> 📖 cap.16 · pp.400-409 — _Modern Angular_ v2.0.0
+> 📖 cap.16 · pp.400-409 — _Modern Angular_ v3.0.0
 
 Poche applicazioni gestionali fanno a meno dell'autenticazione. Il capitolo presenta due varianti: prima la classica **cookie-based authentication** (l'utente è riconosciuto da un cookie che il browser allega da solo), poi la **token-based security** con [[glossario#oauth-2-oidc|OAuth 2 e OpenID Connect (OIDC)]] (il client porta con sé un _token_, una stringa che dimostra chi è e cosa può fare). La buona notizia: l'autenticazione moderna si implementa **soprattutto sul server**. Sul frontend non scrivi quasi codice, ma devi capire e saper inquadrare i concetti, anche solo per discuterli con i colleghi backend. Per questo il capitolo è più **concettuale** degli altri.
 

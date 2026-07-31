@@ -5,7 +5,7 @@ pagine: "120-144"
 tags: [tipo/capitolo, services, state-management, di, signals, angular-22]
 ---
 # 05 · State Management with Services & Signals
-> 📖 cap.5 · pp.120-144 — *Modern Angular* v2.0.0
+> 📖 cap.5 · pp.120-144 — *Modern Angular* v3.0.0
 
 Finora tutta la logica è vissuta nei componenti. Crescendo, all'app conviene separare le responsabilità spostando la funzionalità riusabile in service: classi riusabili che si possono **scambiare** con altre implementazioni dello stesso contratto (cioè che espongono gli stessi metodi). Lo scambio serve a due cose — supportare configurazioni diverse (es. clienti diversi) e migliorare la **testabilità** (sostituire l'accesso al backend con un mock, una finta implementazione che restituisce dati statici). Il capitolo costruisce un `FlightClient` per l'accesso ai dati, percorre i dettagli della **[[glossario#dependency-injection-di|Dependency Injection]]** (il meccanismo con cui Angular fornisce ai componenti le istanze dei service di cui hanno bisogno: [[inject]], injection context, dipendenze tra service, providers e scope) e infine implementa uno **[[glossario#store|store]]** signal-based per gestire lo stato della feature `flight-search`.
 
@@ -37,7 +37,7 @@ export class FlightClient {}
 > `@Service()` registra la classe nel root injector: Angular crea **una sola istanza** (singleton) per tutta l'app, accessibile da chiunque conosca il tipo `FlightClient`. È il default adatto alla maggior parte dei casi.
 
 > [!info] Angular 22+ · `@Service` vs `@Injectable`
-> Il decoratore **`@Service()`** è stato introdotto con Angular 22 ed è la forma usata in tutto il libro dalla 2ª edizione. Equivale a `@Injectable({ providedIn: 'root' })`: **stessa semantica**, solo più conciso (cambia lo stile di scrittura, non il comportamento). Più avanti compare `@Service({ autoProvided: false })` per i servizi scambiabili (= il vecchio `@Injectable()` *senza* `providedIn`). Dettagli in [[service]].
+> Il decoratore **`@Service()`** è stato introdotto con Angular 22 ed è la forma usata in tutto il libro dalla 3ª edizione. Equivale a `@Injectable({ providedIn: 'root' })`: **stessa semantica**, solo più conciso (cambia lo stile di scrittura, non il comportamento). Più avanti compare `@Service({ autoProvided: false })` per i servizi scambiabili (= il vecchio `@Injectable()` *senza* `providedIn`). Dettagli in [[service]].
 > Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, va letto come `@Service()`.
 
 ### Implementing a Service
@@ -746,42 +746,40 @@ export class FlightSearch {
 
 Collegamenti: [[linked-signal]] · [[effect]] · [[06-signal-forms|Signal Forms (cap.6)]].
 
-### Delegated Signals
+### Linked Signals with a Setter
 > 📖 pp.141-143
 
-Per una UX reattiva serve chiamare `updateFilter` **a ogni** modifica di `from`/`to`. Un **delegated signal** delega (affida ad altri) sia la lettura sia la scrittura: invece di tenere il valore al proprio interno, legge e scrive su un'altra parte del sistema — qui sullo store, per l'intero oggetto `filter`. Non fa (ancora) parte di Angular — ci sono discussioni in corso per aggiungerlo — quindi nell'example project sta in `delegated-signal.ts` (cartella `src/app/domains/shared/util-common`), implementato come `linkedSignal` che fa override di `set` e `update`.
-
-`delegatedSignal(read, write)` accetta due parametri: il primo è la funzione di lettura (come per `linkedSignal`); il secondo è una funzione chiamata a ogni update, usata per riscrivere il nuovo valore nello store.
+Per una UX reattiva serve chiamare `updateFilter` **a ogni** modifica di `from`/`to`, senza passare dal bottone *Search*. Da **Angular 22.1** lo risolve il [[linked-signal|linkedSignal]]: oltre alla funzione di computazione (la **lettura**), accetta un **oggetto opzioni con un `set`** che delega la **scrittura** allo store. Il `set` è invocato a ogni `.set`/`.update`, riceve il nuovo valore e lo riscrive nello store; lo store aggiorna i suoi signal, il linked signal ricalcola, e i due restano **in sync**.
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-search/flight-search.ts
 import { form } from '@angular/forms/signals';
-import { delegatedSignal } from '../../../shared/util-common/delegated-signal';
 
 @Component({ /* ... */ })
 export class FlightSearch {
   private readonly store = inject(FlightStore);
 
-  protected readonly filter = delegatedSignal(
+  protected readonly filter = linkedSignal(
     () => ({
       from: this.store.from(),
       to: this.store.to(),
     }),
-    (value) => this.store.updateFilter(value.from, value.to),
+    {
+      set: (value) => this.store.updateFilter(value.from, value.to),
+    },
   );
   protected readonly filterForm = form(this.filter);
 }
 ```
 
-Per evitare che il `delegatedSignal` triggeri la resource a **ogni** tasto, si fa **[[glossario#debounce-debouncing|debounce]]** dell'input (si aspetta una breve pausa di digitazione prima di reagire, così non parte una richiesta a ogni carattere) assegnando uno schema alla `filterForm`:
+Per evitare che il linked signal triggeri la resource a **ogni** tasto, si fa **[[glossario#debounce-debouncing|debounce]]** dell'input (si aspetta una breve pausa di digitazione prima di reagire, così non parte una richiesta a ogni carattere) assegnando uno schema alla `filterForm`:
 
 ```ts
 import { debounce, form } from '@angular/forms/signals';
-import { delegatedSignal } from '../../../shared/util-common/delegated-signal';
 
-protected readonly filter = delegatedSignal(
+protected readonly filter = linkedSignal(
   () => ({ from: this.store.from(), to: this.store.to() }),
-  (value) => this.store.updateFilter(value.from, value.to),
+  { set: (value) => this.store.updateFilter(value.from, value.to) },
 );
 
 protected readonly filterForm = form(this.filter, (path) => {
@@ -791,9 +789,12 @@ protected readonly filterForm = form(this.filter, (path) => {
 ```
 
 > [!tip]
-> Alternative al delegated signal: rilassare l'incapsulamento esponendo signal scrivibili dallo store, oppure un handler sull'evento `input` che chiama il metodo di update dello store a ogni modifica. Gli schema della Signal Form sono approfonditi nel [[06-signal-forms|cap.6]].
+> Alternative al setter: rilassare l'incapsulamento esponendo signal scrivibili dallo store, oppure un handler sull'evento `input` che chiama il metodo di update dello store a ogni modifica. Gli schema della Signal Form sono approfonditi nel [[06-signal-forms|cap.6]].
 
-Collegamenti: [[linked-signal]] · [[delegated-signal]] · [[06-signal-forms]].
+> [!info] Storico
+> Prima di Angular 22.1 lo stesso pattern richiedeva un **helper custom** (`delegatedSignal`), incluso nell'example project del libro. Oggi non serve più: vedi [[delegated-signal]] per la memoria storica.
+
+Collegamenti: [[linked-signal]] · [[06-signal-forms]].
 
 ### Lifetime & Scopes
 > 📖 pp.143-144
@@ -829,9 +830,9 @@ Implementare store con service + signal è abbastanza semplice (incapsulare sign
 > [!success]- Risposta
 > Per impedire manipolazioni dirette dall'esterno: i consumer vedono solo signal read-only e metodi di update **controllato**, mentre i writable (`_from`, ...), la resource e il `FlightClient` restano incapsulati. Per bindare un read-only a un input si usa un [[linked-signal|linkedSignal]] (copia di lavoro locale aggiornabile, che non tocca l'originale).
 
-**6.** Quale problema risolve il `delegatedSignal` rispetto al `linkedSignal`, e perché serve il `debounce`?
+**6.** Come si ottiene una UX reattiva bindando la form allo store senza il bottone *Search*, e perché serve il `debounce`?
 > [!success]- Risposta
-> Con il `linkedSignal` si **perde la reattività**: l'update tocca solo la copia locale, quindi serve un'azione esplicita (bottone *Search*) per scrivere nello store. Il `delegatedSignal` accetta anche una funzione di **scrittura** che richiama `updateFilter` a ogni modifica → riscrive subito nello store. Il `debounce` (via schema della `filterForm`) evita di ritriggerare la resource a ogni tasto.
+> Da **Angular 22.1** con un [[linked-signal|linkedSignal]] che, oltre alla lettura, riceve un'opzione **`set`**: a ogni modifica il `set` richiama `updateFilter` e riscrive subito nello store (lo store aggiorna i signal, il linked signal ricalcola, restano in sync). Il `debounce` (via schema della `filterForm`) evita di ritriggerare la resource a ogni tasto. *(Prima di 22.1 serviva l'helper custom `delegatedSignal`, vedi [[delegated-signal]].)*
 
 **7.** Come cambia il lifetime dello stato tra scope **root**, **component-local** e **route-local**? Cosa aggiunge l'Auto Cleanup?
 > [!success]- Risposta
@@ -841,4 +842,4 @@ Implementare store con service + signal è abbastanza semplice (incapsulare sign
 - I **service** sono classi iniettabili e **scambiabili** via providers (`useClass`/`useValue`/`useFactory`/`useExisting`); il token dice *cosa chiedi*, la strategia *cosa ottieni*. Per i tipi base usa classi astratte (sopravvivono alla compilazione, a differenza delle interfacce).
 - La DI ha **scope** gerarchici: root (`@Service()`, singleton globale), component-local (un'istanza per componente + figli, con shadowing), route-local (Environment Provider, con Auto Cleanup sperimentale). `injectAsync` (Angular 22) consente la **lazy injection** di service in bundle separati.
 - Uno **store** è un service che incapsula lo stato in [[signal]]/[[computed]], espone solo read-only + metodi di update controllati, e fa **sopravvivere** lo stato alla distruzione dei componenti.
-- Per bindare uno stato read-only al template: [[linked-signal]] (copia locale, perde reattività) o `delegatedSignal` (delega read/write allo store, con `debounce`). Per ridurre il boilerplate → [[09-ngrx-signal-store]].
+- Per bindare uno stato read-only al template si usa un [[linked-signal|linkedSignal]]: senza `set` è una copia locale (perde reattività verso lo store); con l'opzione **`set`** (Angular 22.1) delega la scrittura allo store, e con `debounce` non ritriggera la resource a ogni tasto. Per ridurre il boilerplate → [[09-ngrx-signal-store]].

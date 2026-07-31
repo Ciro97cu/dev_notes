@@ -1,6 +1,6 @@
 # 🅰️ Appunti Angular — Modern Angular (2ª ed.)
 
-Appunti di studio in italiano sul libro **_Modern Angular_ (2ª edizione, v2.0.0 — aggiornata ad Angular 22)**.
+Appunti di studio in italiano sul libro **_Modern Angular_ (3ª edizione, v3.0.0 — aggiornata ad Angular 22)**.
 Prosa in italiano, termini/API/codice in inglese. Ogni capitolo è un **hub** con riferimenti alle pagine del PDF e un **🔁 Ripasso lampo** finale; i concetti cardine ricorrenti sono note atomiche cross-linkate.
 
 ## Come navigare

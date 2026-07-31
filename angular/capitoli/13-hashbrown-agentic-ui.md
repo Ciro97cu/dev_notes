@@ -5,7 +5,7 @@ pagine: "345-371"
 tags: [tipo/capitolo, ai]
 ---
 # 13 · Agentic UI & AI Assistants with Hashbrown
-> 📖 cap.13 · pp.345-371 — *Modern Angular* v2.0.0
+> 📖 cap.13 · pp.345-371 — *Modern Angular* v3.0.0
 
 Gli assistenti AI migliorano la UX e abbattono i costi di supporto, ma implementarli porta con sé tanto lavoro tecnico ripetitivo: connessione ai vari LLM, tool calling (il modello chiede all'app di eseguire una funzione e gli rispedisce indietro il risultato), gestione dello streaming (la risposta arriva a pezzi, un pezzo per volta, man mano che il modello la produce). **Hashbrown** (`@hashbrownai/*`, progetto open-source sostenuto da due esperti noti della community Angular) toglie di mezzo questa fatica e supporta i principali provider — Gemini (Google), GPT (OpenAI), Azure (Microsoft), Llama (Meta).
 

@@ -5,7 +5,7 @@ pagine: "410-422"
 tags: [tipo/capitolo, ssr, performance, angular-22]
 ---
 # 17 · Defer, SSR & Hydration
-> 📖 cap.17 · pp.410-422 — *Modern Angular* v2.0.0
+> 📖 cap.17 · pp.410-422 — *Modern Angular* v3.0.0
 
 Le SPA hanno ottime performance a runtime, ma il **primo caricamento** è spesso più lento di qualche secondo rispetto a un sito classico server-rendered: il browser non riceve solo l'HTML, ma deve anche scaricare ed eseguire una quantità significativa di JavaScript prima di poter renderizzare l'applicazione. Il *First Meaningful Paint* (FMP) arriva quindi tardi. Per app aziendali interne il ritardo può essere accettabile; per soluzioni pubbliche come web shop e landing page diventa un problema (più secondi di attesa = più bounce).
 

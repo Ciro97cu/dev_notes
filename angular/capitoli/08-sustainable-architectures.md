@@ -5,7 +5,7 @@ pagine: "219-241"
 tags: [tipo/capitolo, architecture, state-management, angular-22]
 ---
 # 08 · Sustainable Architectures for Modern Angular
-> 📖 cap.8 · pp.219-241 — *Modern Angular* v2.0.0
+> 📖 cap.8 · pp.219-241 — *Modern Angular* v3.0.0
 
 Le soluzioni enterprise devono restare **manutenibili nel lungo periodo**. Il capitolo raccoglie approcci architetturali collaudati: aspetti statici e dinamici, pattern e tecniche, e soprattutto come **far rispettare** l'architettura definita (enforcing via linting, cioè impedire automaticamente con un analizzatore di codice gli import che violano le regole). Si articola in tre blocchi: come tagliare il sistema in **verticali**, come strutturarli (Architecture Matrix + [[glossario#modulith|modulith]] con Sheriff/Detective) e come collocare i **lightweight [[glossario#store|store]]** (piccoli contenitori di stato, semplici service Angular) dentro un flusso dati unidirezionale.
 

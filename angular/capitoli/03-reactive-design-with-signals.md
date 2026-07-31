@@ -5,7 +5,7 @@ pagine: "61-86"
 tags: [tipo/capitolo, signals, reactivity, http, angular-22]
 ---
 # 03 · Reactive Design with Signals
-> 📖 cap.3 · pp.61-86 — *Modern Angular* v2.0.0
+> 📖 cap.3 · pp.61-86 — *Modern Angular* v3.0.0
 
 Finora i [[signal]] servivano solo a dire ad Angular *quando* aggiornare i binding del template. Qui si fa il salto: si usano i signal per un design **reattivo e dichiarativo**. Invece di descrivere *come* aggiornare i valori dipendenti, si descrive *da cosa* sono derivati; il framework tiene tutto in sync. Ne risulta un codice più mantenibile e meno soggetto a errori. L'analogia è il foglio di calcolo: si definiscono formule che derivano valori da altre celle, e quando cambia la sorgente le celle dipendenti si aggiornano da sole.
 
@@ -342,7 +342,7 @@ Leggere un input direttamente nel costruttore darebbe errore: il costruttore gir
 > const debouncedFilter = debounced(filter, 300); // 300ms
 > effect(() => console.log(debouncedFilter.value()));
 > ```
-> Mentre `filter` si aggiorna a ogni cambiamento, `debouncedFilter.value()` lo raggiunge solo dopo che l'input è rimasto stabile per 300 ms. Per il caso più comune — debounce dell'input di un form prima di una search/validazione — Signal Forms offre l'helper dedicato `debounce()` (da `@angular/forms/signals`, per-campo, sullo schema): lo si incontra in [[05-state-management-services-signals|cap.5]] (Delegated Signals) e in dettaglio in [[06-signal-forms|cap.6]].
+> Mentre `filter` si aggiorna a ogni cambiamento, `debouncedFilter.value()` lo raggiunge solo dopo che l'input è rimasto stabile per 300 ms. Per il caso più comune — debounce dell'input di un form prima di una search/validazione — Signal Forms offre l'helper dedicato `debounce()` (da `@angular/forms/signals`, per-campo, sullo schema): lo si incontra in [[05-state-management-services-signals|cap.5]] (Linked Signals with a Setter) e in dettaglio in [[06-signal-forms|cap.6]].
 
 Collegamenti: [[debounced]].
 

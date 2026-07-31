@@ -5,7 +5,7 @@ pagine: "20-60"
 tags: [tipo/capitolo, components, signals, templates, http, angular-22]
 ---
 # 02 · Signal-Based Components
-> 📖 cap.2 · pp.20-60 — *Modern Angular* v2.0.0
+> 📖 cap.2 · pp.20-60 — *Modern Angular* v3.0.0
 
 Si estende l'app del [[01-getting-started|cap.1]] con una feature di **ricerca voli** (`flight-search`): l'utente cerca collegamenti e seleziona un volo. Lungo il percorso si incontrano i mattoni di un componente signal-based: data model, logica con [[signal]], template syntax e control flow, accesso ai dati (`HttpClient` vs [[resource|httpResource]]) e sotto-componenti con `input`/`output`/`model`.
 

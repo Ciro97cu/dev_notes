@@ -5,7 +5,7 @@ aliases: [Service, autoProvided, Injectable vs Service]
 ---
 # @Service()
 
-Decoratore (**Angular 22**) per marcare una classe come servizio iniettabile. Di default **registra la classe nel root injector** → singleton applicativo, senza dover scrivere `providedIn: 'root'`. È la forma usata in tutto il libro dalla 2ª edizione.
+Decoratore (**Angular 22**) per marcare una classe come servizio iniettabile. Di default **registra la classe nel root injector** → singleton applicativo, senza dover scrivere `providedIn: 'root'`. È la forma usata in tutto il libro dalla 3ª edizione.
 
 ```ts
 import { Service } from '@angular/core';

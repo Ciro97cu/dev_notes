@@ -5,7 +5,7 @@ pagine: "145-191"
 tags: [tipo/capitolo, forms, signals, angular-22]
 ---
 # 06 · Signal Forms
-> 📖 cap.6 · pp.145-191 — *Modern Angular* v2.0.0
+> 📖 cap.6 · pp.145-191 — *Modern Angular* v3.0.0
 
 I **Signal Forms** colmano il divario fra la reattività basata su [[signal]] e l'interazione utente: stato della form, validazione e logica di submit diventano tutti signal, quindi reattivi e componibili. Il capitolo estende il componente `FlightEdit`, partendo da una form semplice fino a custom validator, subform e custom control.
 
@@ -747,7 +747,7 @@ protected save(): void {
 }
 ```
 
-Per convertire subito dopo la digitazione si può usare un *delegated signal* (vedi [[05-state-management-services-signals|cap.5]]). La stessa strategia vale per i campi condizionali: dal punto di vista della form esistono sempre, anche se nascosti nell'UI.
+Per convertire subito dopo la digitazione si può usare un [[linked-signal|linkedSignal]] con `set` (vedi [[05-state-management-services-signals|cap.5]]). La stessa strategia vale per i campi condizionali: dal punto di vista della form esistono sempre, anche se nascosti nell'UI.
 
 ## Custom Fields
 > 📖 pp.189-191

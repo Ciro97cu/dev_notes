@@ -47,7 +47,7 @@
   - [providers](/concetti/providers.md)
   - [@Service](/concetti/service.md)
   - [lightweight store](/concetti/lightweight-store.md)
-  - [delegated signal](/concetti/delegated-signal.md)
+  - [delegated signal (storico)](/concetti/delegated-signal.md)
 
 - **🎓 Cert (Senior) · Angular classico**
   - [Indice](/cert/00-index.md)

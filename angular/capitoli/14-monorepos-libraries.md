@@ -5,7 +5,7 @@ pagine: "372-387"
 tags: [tipo/capitolo, monorepo, architecture, angular-22]
 ---
 # 14 · Monorepos & Reusable Libraries
-> 📖 cap.14 · pp.372-387 — *Modern Angular* v2.0.0
+> 📖 cap.14 · pp.372-387 — *Modern Angular* v3.0.0
 
 Un singolo progetto Angular basta finché il codice è piccolo: appena cresce, i team raggiungono i propri limiti. La risposta sono i [[glossario#monorepo|monorepo]], un'unica repo che raggruppa più applicazioni e **librerie riutilizzabili**. Le librerie servono a sotto-strutturare un sistema grande (vedi i moduliths del [[08-sustainable-architectures|cap.8]]) e, quando servono in altri progetti, si **pubblicano via npm**.
 

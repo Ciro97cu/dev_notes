@@ -5,7 +5,7 @@ pagine: "388-399"
 tags: [tipo/capitolo, i18n]
 ---
 # 15 · Internationalization
-> 📖 cap.15 · pp.388-399 — *Modern Angular* v2.0.0
+> 📖 cap.15 · pp.388-399 — *Modern Angular* v3.0.0
 
 Adattare un'app a regioni e lingue diverse va previsto **in fase di implementazione**, per esempio rendendo intercambiabili i testi — e lo stesso vale per i formati di data e numero. Questo è l'obiettivo dell'**internationalization** (abbreviata **I18N**). L'adattamento alle singole lingue/regioni che ne consegue si chiama **localization** (**L10N**). La combinazione di regione + lingua è il **locale**: `de-DE` (tedesco standard, Germania), `de-AT` (tedesco austriaco); i **locale generici** ignorano la regione (es. `de`).
 

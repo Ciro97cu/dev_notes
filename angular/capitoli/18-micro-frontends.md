@@ -5,7 +5,7 @@ pagine: "423-443"
 tags: [tipo/capitolo, micro-frontends, architecture, angular-22]
 ---
 # 18 · Micro Frontends: Scaling Across Multiple Teams
-> 📖 cap.18 · pp.423-443 — *Modern Angular* v2.0.0
+> 📖 cap.18 · pp.423-443 — *Modern Angular* v3.0.0
 
 I sistemi enterprise sono spesso sviluppati da più team cross-funzionali. Per farli procedere in autonomia, riducendo al minimo il bisogno di coordinarsi, conviene **modularizzare verticalmente** il sistema (tagliarlo per [[glossario#vertical-slicing|aree funzionali]] — es. "prenotazioni", "fatturazione" — invece che per livelli tecnici) in aree a basso accoppiamento che ogni team può gestire da sé. Finora nel libro i verticali erano semplici cartelle (vedi [[08-sustainable-architectures]]); i [[glossario#micro-frontend|**Micro Frontends**]] fanno un passo in più: a ogni verticale dedicano una **applicazione separata**, deployabile in modo indipendente (rilasciabile da sola, senza ridistribuire il resto del sistema).
 

@@ -5,7 +5,7 @@ pagine: "286-299"
 tags: [tipo/capitolo, components, signals, angular-22]
 ---
 # 10 · Signal Queries & Component Communication
-> 📖 cap.10 · pp.286-299 — *Modern Angular* v2.0.0
+> 📖 cap.10 · pp.286-299 — *Modern Angular* v3.0.0
 
 Applicazioni e librerie sono fatte di tanti componenti che devono collaborare. Il capitolo introduce le **signal queries** e la **composizione di componenti**: come scrivere componenti riutilizzabili che il chiamante estende passando dei figli, e quali strade esistono per farli comunicare tra loro.
 

@@ -5,7 +5,7 @@ pagine: "330-344"
 tags: [tipo/capitolo, routing, lifecycle, di, http, angular-22]
 ---
 # 12 · Initialization & Route Changes
-> 📖 cap.12 · pp.330-344 — *Modern Angular* v2.0.0
+> 📖 cap.12 · pp.330-344 — *Modern Angular* v3.0.0
 
 Prima di poter usare una feature spesso serve **inizializzarla**: caricare dati, registrare error handler, avviare servizi. Sul frontend questo significa che l'app deve caricare dati prima di proseguire, e tipicamente accade allo **startup** (l'avvio dell'app) e al **cambio rotta**. Il capitolo raccoglie i meccanismi tecnici per agganciarsi a questi momenti: **initializers** (application/environment/platform), [[glossario#guard|guards]] (consentire/negare activation e deactivation, cioè l'entrata e l'uscita da una rotta), **router events**, [[glossario#resolver|resolver]] (caricare dati *prima* dell'attivazione della rotta) e [[glossario#interceptor-httpinterceptor|HttpInterceptors]] (ispezionare/modificare richieste e risposte HTTP).
 
