@@ -254,6 +254,9 @@ La differenza: nella versione TCO-friendly il risultato parziale viene accumulat
 
 ES6 richiede TCO nei motori (non lo lascia opzionale) precisamente perché senza di essa certi algoritmi ricorsivi non sono praticamente implementabili — non è solo un'ottimizzazione di velocità, ma un'abilitazione di pattern altrimenti impossibili.
 
+> [!info] Oggi
+> Il libro presenta la TCO come una garanzia della specifica: la si può quindi dare per acquisita. Nella specifica lo è tuttora — le *proper tail calls* sono normate da ES2015 — ma **in pratica quasi nessun motore la implementa**. A oggi solo **JavaScriptCore** (il motore di Safari) offre le proper tail calls; **V8** (Chrome e Node.js) le ha avute solo dietro un flag sperimentale poi abbandonato, e **SpiderMonkey** (Firefox) non le ha mai spedite. La conseguenza pratica: non si può contare sulla TCO per la ricorsione profonda su Node.js o Chrome — lo stack esplode ugualmente. Per garantire spazio di stack costante conviene riscrivere l'algoritmo in forma iterativa (un loop con accumulatore esplicito) invece di affidarsi al riuso automatico del frame.
+
 ---
 
 ## ⚡ Ripasso veloce

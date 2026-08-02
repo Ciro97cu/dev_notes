@@ -86,7 +86,7 @@ ajax("http://url.2", bar);
 /* Se bar prima: a = (20*2)+1 = 41 */
 ```
 
-Questa nondeterminismo a livello di funzione si chiama **race condition**.
+Questo nondeterminismo a livello di funzione si chiama **race condition**.
 
 ### Run-to-completion
 
