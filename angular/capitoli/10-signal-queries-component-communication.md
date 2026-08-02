@@ -318,7 +318,7 @@ Si usa `afterRenderEffect` per essere certi che la view sia pronta e il canvas g
 
 L'uso si considera giustificato **solo** quando:
 - un controllo di terze parti non permette il data binding per certe proprietà;
-- ti serve il DOM (es. Chart.js);
+- serve accedere al DOM (es. Chart.js);
 - un padre deve **chiamare un metodo** di un componente figlio.
 
 ### Static Child Components
@@ -490,9 +490,9 @@ Collegamenti: [[providers]] · [[inject]] · pattern di store condiviso in [[lig
 > [!success]- Risposta
 > Perché sostituisce il **data binding dichiarativo** (feature centrale di Angular) con codice imperativo: più difficile da leggere/mantenere, e gli update diretti delle proprietà possono innescare cicli di change detection. Giustificato solo quando: (1) un controllo di terze parti non espone data binding per certe proprietà; (2) ti serve il **DOM** (es. Chart.js); (3) un padre deve **chiamare un metodo** di un figlio.
 
-**5.** A cosa serve `static: true` in una query e quando *non* puoi usarlo? Cosa usi per reagire quando gli elementi sono pronti?
+**5.** A cosa serve `static: true` in una query e quando *non* si può usare? Cosa si usa per reagire quando gli elementi sono pronti?
 > [!success]- Risposta
-> `static: true` dichiara che l'elemento esiste **prima** della change detection, così il signal della query ha un valore prima. **Non** puoi usarlo se l'elemento è dentro `@if`/`@for` (compare solo dopo). In quei casi reagisci con `afterRenderEffect` o `afterNextRender`: i content children sono pronti dopo il check del content, i view children dopo l'init della view.
+> `static: true` dichiara che l'elemento esiste **prima** della change detection, così il signal della query ha un valore prima. **Non** si può usare se l'elemento è dentro `@if`/`@for` (compare solo dopo). In quei casi si reagisce con `afterRenderEffect` o `afterNextRender`: i content children sono pronti dopo il check del content, i view children dopo l'init della view.
 
 **6.** Confronta comunicazione via **template variable** e via **service**: pro e contro di ciascuna in termini di esplicitezza e accoppiamento.
 > [!success]- Risposta
