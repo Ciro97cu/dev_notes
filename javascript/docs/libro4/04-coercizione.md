@@ -159,11 +159,11 @@ Math.floor(-3.14); // -4 — diverso! floor arrotonda verso -∞
 parseInt("42px");  // 42 — tollerante
 Number("42px");    // NaN — stretto
 
-parseInt("08");    /* in pre-ES5 poteva interpretare come ottale → 0! */
-parseInt("08", 10); // 42 sempre specificare la base
+parseInt("08");     // 8 in ES5+ (base-10); prima di ES5 lo "0" iniziale poteva far assumere l'ottale → 0
+parseInt("08", 10); // 8 — conviene comunque indicare sempre la base (radix)
 ```
 
-`parseInt()` opera su stringhe: se il primo argomento non è una stringa, viene convertito a stringa prima. Questo produce curiosità come `parseInt(0.000008)` → `parseInt("8e-7")` → `8`.
+`parseInt()` opera su stringhe: se il primo argomento non è una stringa, viene prima convertito a stringa — quindi passargli un numero è un errore concettuale. Ne nascono curiosità: `parseInt(0.000008)` diventa `parseInt("0.000008")` → `0` (parsa lo `0` iniziale e si ferma al punto), mentre `parseInt(0.0000008)` — un solo zero in più — diventa `parseInt("8e-7")` → `8`, perché sotto `1e-6` JavaScript passa alla notazione esponenziale e `parseInt` parsa la cifra `8`.
 
 ### Da valore a booleano
 
