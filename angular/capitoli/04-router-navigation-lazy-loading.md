@@ -307,7 +307,7 @@ Collegamenti: [[signal-input]] · [[content-projection]] · [[02-signal-based-co
 ## Hierarchical Routing with Child Routes
 > 📖 pp.102-108
 
-Un componente attivato dal Router può a sua volta contenere un `<router-outlet>` → **child routes** (viste annidate/gerarchiche). Esempio: un `BookingNavigation` con un menu in alto e, sotto, un placeholder interno in cui attivare `flight-search` / `passenger-search`.
+Un componente attivato dal Router può a sua volta contenere un `<router-outlet>`, dando luogo alle **child routes** (viste annidate/gerarchiche). Esempio: un `BookingNavigation` con un menu in alto e, sotto, un placeholder interno in cui attivare `flight-search` / `passenger-search`.
 
 ```mermaid
 graph TD
@@ -371,7 +371,7 @@ Le child route vanno nell'array `children` del nodo padre, con una default route
 ## Lazy Loading of Routes
 > 📖 pp.108-112
 
-Di default all'avvio Angular carica **tutte** le feature → startup lento nelle app grandi. Il lazy loading risolve caricando parti dell'app su richiesta.
+Di default all'avvio Angular carica **tutte** le feature, il che rende lo startup lento nelle app grandi. Il lazy loading risolve il problema caricando parti dell'app solo su richiesta.
 
 ### Setting up Routes for Lazy Loading
 
@@ -508,7 +508,7 @@ Per restare flessibile, il Router delega la gestione dell'URL a una **strategia*
 
 ### PathLocationStrategy
 
-È la strategia di **default** → path routing: `http://localhost:4200/booking/flight-search`. La sfida è far capire al web server quale parte dell'URL gestire server-side e quale lasciare alla SPA come route: il server va configurato per **reindirizzare a `index.html`** ogni richiesta sotto l'URL dell'app (`ng serve` lo fa già). Un elemento `<base>` in `index.html` dice quale parte dell'URL il Router deve interpretare (la parte dopo l'`href`); aiuta anche il browser a risolvere correttamente i path verso gli asset statici (immagini, font):
+È la strategia di **default**, quella del path routing: `http://localhost:4200/booking/flight-search`. La sfida è far capire al web server quale parte dell'URL gestire server-side e quale lasciare alla SPA come route: il server va configurato per **reindirizzare a `index.html`** ogni richiesta sotto l'URL dell'app (`ng serve` lo fa già). Un elemento `<base>` in `index.html` dice quale parte dell'URL il Router deve interpretare (la parte dopo l'`href`); aiuta anche il browser a risolvere correttamente i path verso gli asset statici (immagini, font):
 
 ```html
 <base href="/">

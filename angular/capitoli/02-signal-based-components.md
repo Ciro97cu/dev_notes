@@ -743,7 +743,7 @@ Collegamenti: [[signal-input]] · [[signal-output]] · [[model-signal]] · [[two
 > [!success]- Risposta
 > `HttpClient` per la comunicazione diretta e per **tutti** i verbi (save/delete inclusi): ritorna Observable a cui ci si iscrive. `httpResource` per il **fetch (GET) reattivo** signal-based: la lambda reattiva ricarica al cambio dei signal letti, ed espone `value`/`error`/`isLoading`/`status`. Sulle race condition tiene **solo l'ultima** richiesta scartando le risposte precedenti (come `switchMap`); `reload()` invece ignora le chiamate sovrapposte (come `exhaustMap`).
 
-**3.** Perché il `track` nel `@for` è obbligatorio e cosa puoi passargli?
+**3.** Perché il `track` nel `@for` è obbligatorio e cosa gli si può passare?
 > [!success]- Risposta
 > Identifica univocamente ogni elemento così Angular, al cambio d'ordine, **sposta** i nodi DOM esistenti invece di ri-renderizzare tutta la lista. Idealmente una proprietà univoca come `track flight.id`; in mancanza, `track $index` o l'oggetto stesso `track flight`.
 

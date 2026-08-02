@@ -247,7 +247,7 @@ ng extract-i18n --format json   # genera messages.json con le espressioni
 ```
 
 > [!warning]
-> Puoi caricare i testi di `loadTranslations` anche via HTTP (es. `HttpClient`), ma **devono essere disponibili prima del primo uso**. Essendo le richieste HTTP asincrone, non è facile garantirlo: usa un [[glossario#resolver|resolver]] che ritarda il routing (cfr. cap. 8).
+> Si possono caricare i testi di `loadTranslations` anche via HTTP (es. `HttpClient`), ma **devono essere disponibili prima del primo uso**. Essendo le richieste HTTP asincrone, non è facile garantirlo: conviene un [[glossario#resolver|resolver]] che ritarda il routing (cfr. cap. 8).
 
 ## Taking Grammatical Forms into Account (ICU: plural / select)
 > 📖 pp.396-398

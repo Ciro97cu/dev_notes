@@ -117,7 +117,7 @@ withMethods((store) => ({
 })),
 ```
 
-Si nota l'interazione tra metodi e features: `updateFilter` cambia `from`/`to` → la resource ricarica; `delay` aggiorna `delayInMin` → il `computed` `flightsWithDelays` si ricalcola.
+Si nota l'interazione tra metodi e features: `updateFilter` cambia `from`/`to` e la resource ricarica; `delay` aggiorna `delayInMin` e il `computed` `flightsWithDelays` si ricalcola.
 
 ### Setting up Hooks
 

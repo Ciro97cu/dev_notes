@@ -191,7 +191,7 @@ ng build util-logger --prod
 npm publish dist/util-logger
 ```
 
-In alternativa puoi usare un **registry npm privato** (in-house). Se non ne hai uno, **Verdaccio** è un server npm gratuito e leggerissimo, eseguibile in locale per i test oppure come servizio Windows / daemon Linux su un server:
+In alternativa si può usare un **registry npm privato** (in-house). Se non se ne ha uno, **Verdaccio** è un server npm gratuito e leggerissimo, eseguibile in locale per i test oppure come servizio Windows / daemon Linux su un server:
 
 ```bash
 npm i -g verdaccio
@@ -205,7 +205,7 @@ npm adduser --registry http://localhost:4873
 npm publish dist/util-logger --registry http://localhost:4873
 ```
 
-Aprendo Verdaccio nel browser dovresti vedere il pacchetto pubblicato (Figure 14-1).
+Aprendo Verdaccio nel browser si dovrebbe vedere il pacchetto pubblicato (Figure 14-1).
 
 > [!tip]
 > Per non ripetere `--registry` a ogni `npm publish`, crea un `.npmrc` (formato .ini) nella root del progetto. Lo puoi mettere **sotto version control**, così vale per tutto il team:
@@ -399,7 +399,7 @@ Gli script specificano il numero di worker node e di processi paralleli per work
 
 **3.** Perché far puntare i path mapping al **sorgente** anziché a `dist/`? E perché non usare il proprio path mapping **dentro** la libreria?
 > [!success]- Risposta
-> Puntando a `dist/` dovresti **ricompilare la lib dopo ogni modifica** (tedioso ed error-prone); puntando al `public-api` sorgente i cambiamenti sono visibili subito. Dentro la libreria stessa non si usa il proprio path mapping né si importa dal proprio `public-api` perché crea **riferimenti circolari**.
+> Puntando a `dist/` si dovrebbe **ricompilare la lib dopo ogni modifica** (tedioso ed error-prone); puntando al `public-api` sorgente i cambiamenti sono visibili subito. Dentro la libreria stessa non si usa il proprio path mapping né si importa dal proprio `public-api` perché crea **riferimenti circolari**.
 
 **4.** Differenza tra `peerDependencies` e `dependencies` in una lib, e a cosa serve `allowedNonPeerDependencies`?
 > [!success]- Risposta

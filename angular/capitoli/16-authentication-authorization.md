@@ -194,9 +194,9 @@ sequenceDiagram
     RS-->>C: risorsa protetta
 ```
 
-Cosa ti serve sapere:
+In pratica:
 
-- **Nuove app** → usa librerie/API che supportano **Authorization Code Flow + PKCE**.
+- **Nuove app**: si scelgono librerie/API che supportano **Authorization Code Flow + PKCE**.
 - **App esistenti** sviluppate con l'Implicit Flow restano sicure finché si seguono le best practice correnti.
 
 ### Client-side OAuth 2

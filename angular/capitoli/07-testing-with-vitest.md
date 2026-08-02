@@ -444,7 +444,7 @@ Collegamenti: [[resource|httpResource]] · [[02-signal-based-components]] (la fe
 ### Gray-Box Testing with Spies
 > 📖 pp.209-210
 
-Idealmente il test si concentra sul **comportamento** dell'oggetto sotto test, senza assunzioni sul suo funzionamento interno. A volte però conviene verificare che certi metodi **interni** vengano chiamati correttamente → test **gray-box** (scatola grigia: una via di mezzo, dove si conoscono alcuni dettagli interni e non solo l'esterno come nella black box). Le **spy** di Vitest (`vi.spyOn`) avvolgono una funzione/metodo (gli stanno "intorno" senza cambiarne il comportamento) e ricordano con quali parametri è stata chiamata e quante volte.
+Idealmente il test si concentra sul **comportamento** dell'oggetto sotto test, senza assunzioni sul suo funzionamento interno. A volte però conviene verificare che certi metodi **interni** vengano chiamati correttamente, ed è qui che entra il test **gray-box** (scatola grigia: una via di mezzo, dove si conoscono alcuni dettagli interni e non solo l'esterno come nella black box). Le **spy** di Vitest (`vi.spyOn`) avvolgono una funzione/metodo (gli stanno "intorno" senza cambiarne il comportamento) e ricordano con quali parametri è stata chiamata e quante volte.
 
 ```ts
 // .../feature-booking/flight-search/flight-search.spec.ts

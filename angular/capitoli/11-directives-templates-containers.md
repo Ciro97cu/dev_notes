@@ -382,7 +382,7 @@ Nel template le variabili si introducono con attributi prefissati `let-`:
 </ng-template>
 ```
 
-Leggilo come una funzione che riceve valori: `let-title` prende `$implicit`, `let-body` prende `text`. Siccome `$implicit` è il default, si può abbreviare `let-title="$implicit"` in **`let-title`**:
+Lo si legge come una funzione che riceve valori: `let-title` prende `$implicit`, `let-body` prende `text`. Siccome `$implicit` è il default, si può abbreviare `let-title="$implicit"` in **`let-title`**:
 
 ```html
 <ng-template #tmpl let-title let-body="text">

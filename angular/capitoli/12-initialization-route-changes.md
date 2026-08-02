@@ -562,9 +562,9 @@ Collegamenti: [[inject]] · [[providers]] · [[16-authentication-authorization]]
 > [!success]- Risposta
 > Perché un `ResolveFn<T>` gira **prima** dell'attivazione della rotta e il router **attende** la sua Promise/Observable: `NavigationEnd` arriva solo dopo il completamento, quindi lo spinner basato sugli eventi resta coerente e il componente trova i dati già pronti (niente `null` transitorio). Consumo: (1) via `route.data` (Observable con i dati sotto le stesse chiavi, es. `data['passenger']`); (2) facendo pilotare al resolver uno **store** che il componente legge via `inject()`.
 
-**7.** Perché in un interceptor devi clonare la richiesta? Cosa stabilisce l'ordine in `withInterceptors([...])`?
+**7.** Perché in un interceptor va clonata la richiesta? Cosa stabilisce l'ordine in `withInterceptors([...])`?
 > [!success]- Risposta
-> Perché `HttpRequest` e `HttpHeaders` sono **immutabili**: non puoi mutarli in place, devi `req.clone({ ... })` per produrre una richiesta modificata. L'**ordine dell'array** in `withInterceptors([...])` determina l'ordine della catena (Chain of Responsibility): ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa a `next`.
+> Perché `HttpRequest` e `HttpHeaders` sono **immutabili**: non si possono mutare in place, e serve `req.clone({ ... })` per produrre una richiesta modificata. L'**ordine dell'array** in `withInterceptors([...])` determina l'ordine della catena (Chain of Responsibility): ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa a `next`.
 
 **In sintesi:**
 - **Initializers**: `provideAppInitializer` blocca il bootstrap finché il lavoro async (Promise/Observable) finisce; gli environment initializer scopano il setup a rotta/feature; i platform initializer sono per infrastruttura di basso livello.
