@@ -183,7 +183,7 @@ Car.ignition === Vehicle.ignition; // true — stesso oggetto, non una copia
 <details>
 <summary>Perché JavaScript non ha classi "vere" nonostante la keyword `class` di ES6?</summary>
 
-Perché `class` in ES6 è zucchero sintattico — una sintassi più comoda che nasconde il meccanismo sottostante, che rimane quello dei prototipi e dei link tra oggetti. In linguaggi come Java, l'istanziazione produce una **copia** del comportamento dalla classe all'istanza. In JavaScript, `new Foo()` crea un oggetto che viene **collegato** tramite `[[Prototype]]` a `Foo.prototype` — non ne copia le proprietà. Il comportamento sembra simile in superficie, ma il meccanismo è fundamentalmente diverso, e questa differenza emerge in tutti i casi non banali.
+Perché `class` in ES6 è zucchero sintattico — una sintassi più comoda che nasconde il meccanismo sottostante, che rimane quello dei prototipi e dei link tra oggetti. In linguaggi come Java, l'istanziazione produce una **copia** del comportamento dalla classe all'istanza. In JavaScript, `new Foo()` crea un oggetto che viene **collegato** tramite `[[Prototype]]` a `Foo.prototype` — non ne copia le proprietà. Il comportamento sembra simile in superficie, ma il meccanismo è fondamentalmente diverso, e questa differenza emerge in tutti i casi non banali.
 
 </details>
 

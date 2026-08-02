@@ -146,7 +146,7 @@ class Button extends Widget {
         this.$elem = $("<button>").text(this.label);
     }
     render($where) {
-        super($where);
+        super.render($where);
         this.$elem.click(this.onClick.bind(this));
     }
     onClick(evt) {
@@ -156,6 +156,9 @@ class Button extends Widget {
 ```
 
 La sintassi è più pulita, ma il meccanismo sottostante è lo stesso `[[Prototype]]`. I problemi concettuali descritti nei capitoli 4 e 5 rimangono.
+
+> [!info] Oggi
+> Il libro (scritto sulle **prime bozze di ES6**) chiamava il metodo del padre con `super($where)` dentro `render()`. Nella specifica ES6 **definitiva**, e in tutti i motori odierni, `super(...)` in forma di **chiamata** è ammesso **solo nel `constructor`** (per invocare il costruttore della classe base). Per chiamare un **metodo** del padre da un altro metodo si usa invece `super.metodo(...)` — qui `super.render($where)`. Scrivere `super($where)` in un metodo produce oggi un `SyntaxError`. Il `super(width, height)` dentro il `constructor`, invece, è corretto.
 
 ### Widget/Button con OLOO
 
