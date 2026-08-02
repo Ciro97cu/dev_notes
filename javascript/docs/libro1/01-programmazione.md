@@ -133,6 +133,9 @@ console.log(amount.toFixed(2)); // "107.99"
 
 `toFixed(2)` è un metodo disponibile sui valori numerici che restituisce una stringa con il numero arrotondato a due decimali.
 
+> [!info] Oggi
+> YDKJS (2015) descrive la riassegnazione di un `const` come *"rifiutata, e in strict mode con errore"*. Oggi il comportamento è più netto: **riassegnare un `const` lancia sempre un `TypeError`** (`Assignment to constant variable`), sia in strict sia in non-strict mode. Attenzione però: `const` vincola il **binding** (il legame nome→valore), non il valore in sé — le proprietà di un oggetto dichiarato `const` restano modificabili.
+
 ## Blocchi
 
 Un blocco raggruppa più statement tra parentesi graffe `{ }`. I blocchi non richiedono `;` alla fine e compaiono quasi sempre associati a un'altra struttura di controllo:
@@ -303,7 +306,7 @@ La coercizione implicita è la conversione automatica di un valore da un tipo a 
 <details>
 <summary>Qual è la differenza tra `var`, `let` e `const`?</summary>
 
-`var` dichiara una variabile con scope di funzione e può essere riassegnata. `let` (introdotto con ES6) dichiara una variabile con scope di blocco e può essere riassegnata. `const` (introdotto con ES6) dichiara un binding con scope di blocco che non può essere riassegnato dopo la dichiarazione — se si tenta la riassegnazione in strict mode viene generato un errore. `const` non rende il valore immutabile: se il valore è un oggetto, le sue proprietà possono comunque essere modificate.
+`var` dichiara una variabile con scope di funzione e può essere riassegnata. `let` (introdotto con ES6) dichiara una variabile con scope di blocco e può essere riassegnata. `const` (introdotto con ES6) dichiara un binding con scope di blocco che non può essere riassegnato dopo la dichiarazione: la riassegnazione lancia **sempre** un `TypeError` (in strict e non-strict mode). `const` non rende il valore immutabile: se il valore è un oggetto, le sue proprietà possono comunque essere modificate.
 
 </details>
 
