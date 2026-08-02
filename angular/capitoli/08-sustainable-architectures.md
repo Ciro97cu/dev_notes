@@ -27,7 +27,7 @@ Benefici:
 ### Finding Boundaries
 > 📖 pp.220-222
 
-L'idea di verticalizzazione compare in **DDD** (Domain-Driven Design, la progettazione guidata dal dominio di business) e nei **Self-Contained Systems (SCS)**, e oggi si usa per strutturare monoliti, micro servizi e [[18-micro-frontends|micro frontend]]. Lo **Strategic Design** di DDD offre un approccio sistematico: suddivide il sistema in **bounded context** (contesti delimitati: zone del dominio con un linguaggio e un modello propri), ciascuno col proprio domain model e responsabile di una parte specifica del dominio. La comunicazione tra contesti avviene con mezzi ben definiti: idealmente **eventing** (i contesti si scambiano *eventi* invece di chiamarsi direttamente → restano poco accoppiati, *loose coupling*), ma anche API per comunicazione diretta. Le euristiche che seguono si prendono in prestito dal domain modeling, ma l'approccio del capitolo funziona anche **senza adottare** in blocco una metodologia specifica.
+L'idea di verticalizzazione compare in **DDD** (Domain-Driven Design, la progettazione guidata dal dominio di business) e nei **Self-Contained Systems (SCS)**, e oggi si usa per strutturare monoliti, micro servizi e [[18-micro-frontends|micro frontend]]. Lo **Strategic Design** di DDD offre un approccio sistematico: suddivide il sistema in **bounded context** (contesti delimitati: zone del dominio con un linguaggio e un modello propri), ciascuno col proprio domain model e responsabile di una parte specifica del dominio. La comunicazione tra contesti avviene con mezzi ben definiti: idealmente **eventing** (i contesti si scambiano *eventi* invece di chiamarsi direttamente, e così restano poco accoppiati, *loose coupling*), ma anche API per comunicazione diretta. Le euristiche che seguono si prendono in prestito dal domain modeling, ma l'approccio del capitolo funziona anche **senza adottare** in blocco una metodologia specifica.
 
 Per identificare i confini si guardano i **processi di business** e il **linguaggio** dei domain expert. Indicatori:
 - **Language** — gli stessi termini con lo stesso significato in step diversi → stesso bounded context; stessi termini con **significati diversi** → contesti diversi.
@@ -42,7 +42,7 @@ Per identificare i confini si guardano i **processi di business** e il **linguag
 
 Workshop interattivo nato nella community DDD che mette insieme domain expert, sviluppatori e UX designer per combinarne le conoscenze. Con **sticky note colorati** si visualizza il dominio passo passo, in ordine cronologico. Il focus sono i **domain event** (note arancioni): ognuno descrive il completamento di una sottoparte che influenza il processo successivo (es. *flight booked*, *passenger checked in*). Discutendo insieme gli eventi nasce in fretta un **modello visuale** comprensibile a tutti.
 
-Il **Big Picture Event Storming** sviluppa la vista d'insieme → ideale per discutere i confini dei contesti. Legenda tipica:
+Il **Big Picture Event Storming** sviluppa la vista d'insieme, ed è quindi ideale per discutere i confini dei contesti. Legenda tipica:
 
 | Elemento | Sticky | Significato |
 |---|---|---|
@@ -61,7 +61,7 @@ Oltre ai pivotal event, anche le **swimlane** (le "corsie" orizzontali che raggr
 
 Altra lezione chiave di DDD: **modelli diversi per contesti diversi**. La parola "flight" lo mostra — nel contesto *booking* è un'offerta vendibile (fare class cioè classe tariffaria, prezzo, disponibilità posti); nel contesto *boarding* è un processo operativo (gate, posto, stato di sicurezza). Forzare entrambi i significati in **un solo modello** produce campi irrilevanti e validazioni fragili. Tenerli separati è uno degli scopi principali dello strategic design e porta a **verticali disaccoppiati** che evolvono in modo indipendente. La riconciliazione tra contesti avviene spesso via **domain event** nel backend (es. Booking pubblica `TicketCancelled`, Boarding lo riceve e rimuove il passeggero dalla lista).
 
-**Slicing nel frontend.** Nella maggior parte dei progetti lo slicing del frontend **rispecchia quello del backend** → low coupling, high cohesion, allineamento dei team, autonomia, carico cognitivo ridotto. Ma a volte si sceglie deliberatamente uno slicing diverso (es. backend con molti calcoli complessi e frontend semplice; oppure frontend che gestisce workflow fatti di azioni implementate in contesti backend diversi). In quei casi serve **tradurre** il linguaggio del backend in quello del frontend (o del singolo slice frontend): pattern elegante è il **Backend for Frontend (BFF)** — fisicamente nel backend ma **logicamente parte del frontend** e (idealmente) sotto responsabilità del team frontend. Oltre alla traduzione tra bounded context offre anche caching, security e monitoring.
+**Slicing nel frontend.** Nella maggior parte dei progetti lo slicing del frontend **rispecchia quello del backend**, con gli stessi vantaggi: low coupling, high cohesion, allineamento dei team, autonomia e carico cognitivo ridotto. Ma a volte si sceglie deliberatamente uno slicing diverso (es. backend con molti calcoli complessi e frontend semplice; oppure frontend che gestisce workflow fatti di azioni implementate in contesti backend diversi). In quei casi serve **tradurre** il linguaggio del backend in quello del frontend (o del singolo slice frontend): pattern elegante è il **Backend for Frontend (BFF)** — fisicamente nel backend ma **logicamente parte del frontend** e (idealmente) sotto responsabilità del team frontend. Oltre alla traduzione tra bounded context offre anche caching, security e monitoring.
 
 ## Structuring Verticals
 > 📖 pp.226-230
@@ -103,7 +103,7 @@ graph TD
 ### Feature-Local Source Code (VSA)
 > 📖 pp.227-229
 
-Combinare verticali e layer può **spargere** il codice di un singolo use case su più moduli/cartelle → più carico cognitivo, meno coesione. La **Vertical Slice Architecture (VSA)** di Jimmy Bogard usa il **feature slicing**: tutto il codice di una feature sta in **un solo posto**. Tradotto al frontend, un feature module include anche i dumb component, gli store e i service di accesso al backend → alta coesione, basso carico cognitivo (ciò che cambia insieme sta insieme).
+Combinare verticali e layer può **spargere** il codice di un singolo use case su più moduli/cartelle, con più carico cognitivo e meno coesione. La **Vertical Slice Architecture (VSA)** di Jimmy Bogard usa il **feature slicing**: tutto il codice di una feature sta in **un solo posto**. Tradotto al frontend, un feature module include anche i dumb component, gli store e i service di accesso al backend, ottenendo alta coesione e basso carico cognitivo (ciò che cambia insieme sta insieme).
 
 Il feature slicing funziona al meglio quando **tutti i building block** (i pezzi che la compongono: model e data access compresi) sono locali alla feature e non riusati altrove. In pratica però feature affini condividono linguaggio, modello, stato e data access; inoltre i verticali aiutano l'allineamento con la struttura dei team. Per questo il feature slicing si **combina** con il vertical slicing per dominio: si parte con building block feature-local (dumb component, service, store) e, **quando** servono in altre feature, li si **promuove** al layer `ui` o `data` del dominio.
 
@@ -125,7 +125,7 @@ Il resto del capitolo implementa un **modulith** con Angular.
 ### Project Structure for a Modulith
 > 📖 pp.230-231
 
-Modo diretto: tradurre la matrice in **cartelle**. Ogni dominio una cartella, con una sottocartella per modulo; il nome del modulo è **prefissato con la categoria** → a colpo d'occhio si vede dove sta nella matrice.
+Modo diretto: tradurre la matrice in **cartelle**. Ogni dominio una cartella, con una sottocartella per modulo; il nome del modulo è **prefissato con la categoria**, così a colpo d'occhio si vede dove sta nella matrice.
 
 ```text
 src/app/domains
@@ -257,7 +257,7 @@ npm i @softarc/detective
 npx detective
 ```
 
-Si selezionano le cartelle che rappresentano i moduli e Detective mostra un **dependency graph** (il grafo delle dipendenze: i moduli sono nodi, le frecce indicano chi dipende da chi). Tecnicamente le dipendenze sono **import tra file di moduli diversi**: cliccando un arco si vede il numero di import, e lo **spessore** dell'arco ne indica la quantità. Detective implementa anche **metodi di analisi forense** per scoprire pattern nascosti sulla salute della modularizzazione → [[19-forensic-architecture-analysis|cap.19]].
+Si selezionano le cartelle che rappresentano i moduli e Detective mostra un **dependency graph** (il grafo delle dipendenze: i moduli sono nodi, le frecce indicano chi dipende da chi). Tecnicamente le dipendenze sono **import tra file di moduli diversi**: cliccando un arco si vede il numero di import, e lo **spessore** dell'arco ne indica la quantità. Detective implementa anche **metodi di analisi forense** per scoprire pattern nascosti sulla salute della modularizzazione, approfonditi nel [[19-forensic-architecture-analysis|cap.19]].
 
 ### Lightweight Path Mappings
 > 📖 p.236
@@ -348,7 +348,7 @@ Questo lo rende disponibile anche ai figli e garantisce **un'istanza per istanza
 ### Granularity of a Store
 > 📖 p.239
 
-Un lightweight store in Angular è **solo un service** → vale il **single-responsibility principle** (ogni store fa una cosa sola). Spesso conviene spezzare uno slice in store più fine-grained: tipicamente **uno store per entità** usata nella feature, più uno o due per lo **stato UI**. Esempio dall'app: la feature *booking* ha `FlightsStore`, `FlightDetailStore`, `PassengerStore`, `PassengerDetailStore`.
+Un lightweight store in Angular è **solo un service**, quindi vale il **single-responsibility principle** (ogni store fa una cosa sola). Spesso conviene spezzare uno slice in store più fine-grained: tipicamente **uno store per entità** usata nella feature, più uno o due per lo **stato UI**. Esempio dall'app: la feature *booking* ha `FlightsStore`, `FlightDetailStore`, `PassengerStore`, `PassengerDetailStore`.
 
 ### Communication Between Stores
 > 📖 pp.240-241
