@@ -6,7 +6,7 @@ Il materiale è organizzato seguendo la struttura originale della serie, con un 
 
 ## Come è organizzata
 
-La barra laterale presenta i 33 capitoli distribuiti in sei libri:
+La barra laterale presenta i 33 capitoli distribuiti in sei libri, più una sezione moderna aggiuntiva:
 
 - **Libro I — Up & Going**: fondamenti della programmazione e prima panoramica di JavaScript.
 - **Libro II — Scope & Closures**: come JavaScript gestisce scope, lexical scope, hoisting e closure.
@@ -14,6 +14,7 @@ La barra laterale presenta i 33 capitoli distribuiti in sei libri:
 - **Libro IV — Types & Grammar**: tipi di dati, valori, natives, coercizione e grammatica del linguaggio.
 - **Libro V — Async & Performance**: asincronia, callbacks, promises, generators e ottimizzazione.
 - **Libro VI — ES6 & Beyond**: le funzionalità introdotte con ES6 e le evoluzioni successive.
+- **[JavaScript moderno — oltre YDKJS](docs/moderno/README.md)**: sezione distaccata dal libro, una pagina per edizione annuale (ES2017 → ES2025), che copre ciò che il linguaggio ha aggiunto dopo YDKJS. Verificata su MDN.
 
 ## Convenzioni
 
