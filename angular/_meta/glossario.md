@@ -12,7 +12,7 @@ Termini tecnici ricorrenti del libro, spiegati in parole semplici. I capitoli li
 Il meccanismo con cui Angular **controlla se qualcosa è cambiato** nei dati e, se sì, **aggiorna il DOM** di conseguenza. In pratica: ricalcola cosa mostrare quando lo stato cambia. Con i signal questo controllo diventa mirato (solo ciò che dipende dal valore cambiato).
 
 ### reactive context
-La "zona" di codice in cui Angular **tiene traccia di quali signal leggi**, così sa cosa ricalcolare quando cambiano. Dentro un `computed`/`effect`/template sei in reactive context (le letture vengono tracciate); in una funzione normale no.
+La "zona" di codice in cui Angular **tiene traccia di quali signal vengono letti**, così sa cosa ricalcolare quando cambiano. Dentro un `computed`/`effect`/template si è in reactive context (le letture vengono tracciate); in una funzione normale no.
 
 ### signal graph
 Il **grafo delle dipendenze** tra signal: chi legge chi. Un `computed` che legge due signal ne "dipende"; quando uno cambia, Angular sa esattamente quali nodi del grafo ricalcolare. Pensare in termini di grafo = progettare il flusso dei dati come catene di dipendenze.
@@ -47,10 +47,10 @@ Una direttiva che **aggiunge o rimuove elementi dal DOM** (cambia la "struttura"
 L'**elemento del DOM su cui è applicata** una direttiva o che "ospita" un componente. L'opzione `host` del decorator lega classi/stili/eventi proprio a quell'elemento.
 
 ### exportAs
-Un **nome pubblico** che una direttiva si dà per poter essere "afferrata" da una template variable. Siccome su un elemento possono esserci più direttive, `#x="nomeExportAs"` dice ad Angular *quale* istanza vuoi.
+Un **nome pubblico** che una direttiva si dà per poter essere "afferrata" da una template variable. Siccome su un elemento possono esserci più direttive, `#x="nomeExportAs"` specifica ad Angular *quale* istanza afferrare.
 
 ### template variable
-Una variabile dichiarata nel template con `#nome`, che ti dà un **riferimento** a un elemento, componente o direttiva, così puoi leggerne proprietà o chiamarne metodi da un altro punto del template.
+Una variabile dichiarata nel template con `#nome`, che dà un **riferimento** a un elemento, componente o direttiva, così se ne possono leggere le proprietà o chiamarne i metodi da un altro punto del template.
 
 ## Dependency Injection e servizi
 
