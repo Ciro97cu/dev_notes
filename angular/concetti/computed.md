@@ -5,7 +5,7 @@ aliases: [computed signal, segnale derivato]
 ---
 # computed()
 
-Signal **di sola lettura derivato** da altri signal. La funzione passata viene rieseguita solo quando una delle dipendenze lette cambia; il risultato è **memoizzato** e il calcolo è **lazy** (avviene alla prima lettura, non alla creazione).
+Un **`computed`** è un signal di **sola lettura** il cui valore è **derivato** da altri signal: invece di custodire un valore proprio, lo calcola a partire da quelli. La funzione che gli si passa viene rieseguita solo quando cambia uno dei signal che ha letto, e il risultato viene **memoizzato** (conservato e riutilizzato finché le dipendenze non cambiano). Il calcolo è inoltre **lazy**: avviene alla prima lettura, non al momento della creazione.
 
 ```ts
 const price = signal(100);
@@ -14,9 +14,9 @@ const total = computed(() => price() * qty()); // 200, ricalcolato on-demand
 ```
 
 > [!tip]
-> Le dipendenze sono **auto-tracciate** ([[reactive-context]]): vengono raccolte solo i signal effettivamente letti durante l'esecuzione. Un ramo non eseguito (dentro un `if`) non crea dipendenza.
+> Le dipendenze sono **auto-tracciate** ([[reactive-context]]): Angular registra solo i signal effettivamente letti durante l'esecuzione. Un ramo non percorso — per esempio dentro un `if` che risulta falso — non crea alcuna dipendenza.
 
 > [!warning]
-> Deve essere **puro**: niente side-effect, niente `.set()` su altri signal. Per gli effetti collaterali usa [[effect]].
+> La funzione di un `computed` deve essere **pura**: nessun side-effect e nessun `.set()` su altri signal. Quando serve produrre un effetto collaterale si usa invece un [[effect]].
 
 **Usato in:** [[03-reactive-design-with-signals]], [[02-signal-based-components]]

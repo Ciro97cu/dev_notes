@@ -5,7 +5,7 @@ aliases: [input, InputSignal, signal input]
 ---
 # input() — InputSignal
 
-Dichiara un **input di componente come signal di sola lettura**. Sostituisce il decoratore `@Input()`. Si legge come signal (`this.flight()`), è reattivo e usabile in [[computed]]/[[effect]]/template.
+Con **`input()`** si dichiara un **input di componente** — cioè un dato che arriva dal componente padre — sotto forma di **signal di sola lettura**. Prende il posto del vecchio decoratore `@Input()`: il valore si legge come un signal (`this.flight()`), è reattivo e si può quindi usare dentro [[computed]], [[effect]] e nel template.
 
 ```ts
 flight = input<Flight>();                 // InputSignal<Flight | undefined>
@@ -15,6 +15,6 @@ count = input(0, { transform: numberAttribute }); // transform
 ```
 
 > [!tip]
-> `input.required` non ha default e fallisce a compile-time se non passato. Per un input **scrivibile** (two-way) usa invece [[model-signal]].
+> `input.required` non ha un valore di default e fa **fallire la compilazione** se il padre non lo passa. Per un input **scrivibile** (bidirezionale) si usa invece [[model-signal]].
 
 **Usato in:** [[02-signal-based-components]]

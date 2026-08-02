@@ -5,11 +5,11 @@ aliases: [resource, httpResource, rxResource]
 ---
 # resource()
 
-Famiglia di primitive per **dati asincroni reattivi**. Una resource lega una richiesta a dei signal sorgente: quando questi cambiano, **rilancia** automaticamente e espone `value()`, `status()`, `error()` e `isLoading()` come signal.
+Le **resource** sono una famiglia di primitive per gestire i **dati asincroni in modo reattivo**. Una resource lega una richiesta ad alcuni signal sorgente: quando questi cambiano, la richiesta si **rilancia** da sola, e lo stato del caricamento è esposto come signal — `value()`, `status()`, `error()` e `isLoading()`. Ne esistono tre varianti, con la stessa interfaccia ma un "motore" diverso:
 
-- **`httpResource`** — dichiarativa, basata su `HttpClient`; passi una URL/request reattiva.
-- **`rxResource`** — basata su un `loader` che ritorna un `Observable`.
-- **`resource`** — generica, `loader` Promise-based (con `abortSignal`).
+- **`httpResource`** — la più dichiarativa, basata su `HttpClient`: si passa una URL o una request reattiva.
+- **`rxResource`** — basata su un `loader` che restituisce un `Observable`.
+- **`resource`** — la più generica, con un `loader` basato su `Promise` (e un `abortSignal`).
 
 ```ts
 const id = signal(1);
@@ -18,12 +18,12 @@ const flight = httpResource<Flight>(() => `/api/flight/${id()}`);
 ```
 
 > [!warning]
-> La richiesta riparte ad ogni cambio delle dipendenze lette nella funzione sorgente. `httpResource` è pensata per **GET/read**; per le mutazioni usa `HttpClient` o le mutations dello store.
+> La richiesta riparte a ogni cambio delle dipendenze lette nella funzione sorgente. `httpResource` è pensata per le **GET/read**; per le mutazioni (create/update/delete) si usa `HttpClient` o le mutations dello store.
 
 > [!info] Angular 21.2+ · Snapshots
-> Ogni resource espone un signal **`snapshot()`** che impacchetta `status` + `value` in un unico oggetto. Lo si può trasformare con un [[linked-signal]] e ri-convertire in resource con **`resourceFromSnapshots`** → resource derivate da altre resource (prima era possibile solo per singola proprietà).
+> Ogni resource espone un signal **`snapshot()`** che impacchetta `status` e `value` in un unico oggetto. Lo si può trasformare con un [[linked-signal]] e ri-convertire in resource con **`resourceFromSnapshots`**, ottenendo resource **derivate** da altre resource (prima era possibile solo per una singola proprietà).
 > ```ts
-> // mantieni l'ultimo valore valido durante un reload
+> // mantiene l'ultimo valore valido durante un reload
 > const derived = linkedSignal<ResourceSnapshot<T>, ResourceSnapshot<T>>({
 >   source: input.snapshot,
 >   computation: (snap, previous) =>
@@ -35,7 +35,7 @@ const flight = httpResource<Flight>(() => `/api/flight/${id()}`);
 > ```
 
 > [!info] Angular 22+ · debounced
-> I signal non hanno nozione di tempo. **`debounced(sig, ms)`** prende un signal e ritorna una *resource* che insegue il signal con ritardo configurabile (`status() === 'loading'` mentre il valore si assesta). Per i form esiste l'helper dedicato `debounce()` di `@angular/forms/signals` (vedi [[06-signal-forms]]).
+> I signal non hanno una nozione di tempo. **`debounced(sig, ms)`** prende un signal e restituisce una *resource* che insegue il signal con un ritardo configurabile (`status()` vale `'loading'` mentre il valore si assesta). Per i form c'è l'helper dedicato `debounce()` di `@angular/forms/signals` (vedi [[06-signal-forms]]).
 > ```ts
 > const debouncedFilter = debounced(filter, 300); // 300ms
 > ```

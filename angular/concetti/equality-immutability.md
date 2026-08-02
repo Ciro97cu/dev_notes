@@ -5,7 +5,7 @@ aliases: [equality, immutability, glitch-free]
 ---
 # Equality & immutability
 
-Un [[signal]] notifica i dipendenti **solo se il nuovo valore è diverso** dal precedente. Il confronto default è `Object.is`, personalizzabile con l'opzione `equal`. Per questo lo stato va trattato in modo **immutabile**: sostituire il riferimento, non mutarlo in place.
+Un [[signal]] avvisa chi dipende da lui **solo se il nuovo valore è diverso** dal precedente. Il confronto avviene di default con `Object.is`, ma si può personalizzare con l'opzione `equal`. È proprio per questo che lo stato va trattato in modo **immutabile**: invece di modificare un valore sul posto, se ne crea uno nuovo e si sostituisce il riferimento.
 
 ```ts
 // ❌ non notifica: stesso riferimento
@@ -15,6 +15,6 @@ list.update(l => [...l, x]);
 ```
 
 > [!warning]
-> Mutazioni in place (`obj.prop = ...`, `arr.push(...)`) lasciano i computed/effect/UI **non aggiornati**. È anche alla base della proprietà **glitch-free**: i consumatori vedono solo valori coerenti e stabilizzati.
+> Le mutazioni "sul posto" (`obj.prop = ...`, `arr.push(...)`) lasciano computed, effect e UI **non aggiornati**, perché il riferimento non cambia e il signal non se ne accorge. Questo è anche alla base della proprietà **glitch-free**: i consumatori vedono soltanto valori coerenti e già stabilizzati.
 
 **Usato in:** [[03-reactive-design-with-signals]]
