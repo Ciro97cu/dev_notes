@@ -9,6 +9,8 @@ Struttura: contenuti in `docs/libroN/` (`libro1`…`libro6`), **un capitolo per 
 - **`this` mai tradotto**: è una keyword del linguaggio, tradurla ne altera il significato.
 - Fedeltà alla struttura originale della serie (i sei libri e l'ordine dei capitoli).
 - **Correttezza prima di tutto**: sono temi profondi e insidiosi (coercizione, `this`, closure, async). Ogni claim, output di codice e sfumatura va **verificato sul PDF** (`Kyle_Simpson-All-6.pdf`); non semplificare al punto da alterare ciò che il libro afferma.
+- **Quando il libro è superato**: se un'affermazione di YDKJS (2015, fino a ES6) **oggi non è più vera** perché il linguaggio è cambiato, e se ne è **certi al 100%**, si corregge e si **segnala** con un callout `> [!info] Oggi` che contrappone *"il libro dice X; oggi vale Y"*. Se invece è solo una semplificazione ancora valida, si resta **fedeli** al libro (non si "corregge" il libro).
+- **Novità post-libro**: le feature JS non coperte da YDKJS (da ES2016 in poi) **non** si infilano nei capitoli fedeli al libro, ma vanno nella sezione dedicata e distaccata `docs/moderno/` ("JavaScript moderno — oltre YDKJS"), organizzata **per versione ES** e verificata su [MDN](https://developer.mozilla.org/).
 
 ## Tono e chiarezza (registro professore)
 Come nel vault Angular: si spiega come farebbe **un professore appassionato e chiaro**, con prosa **fluida e distesa**.
