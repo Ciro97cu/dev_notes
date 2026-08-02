@@ -5,10 +5,7 @@ aliases: [viewChild, viewChildren, contentChild, contentChildren]
 ---
 # Signal queries
 
-Recuperano riferimenti a elementi/componenti come **signal**, sostituendo i decoratori `@ViewChild`/`@ContentChild`.
-
-- **`viewChild` / `viewChildren`** → elementi del **proprio template** (la *view*).
-- **`contentChild` / `contentChildren`** → contenuto proiettato via [[content-projection]] (il *content*).
+Le **signal query** recuperano riferimenti a elementi o componenti della pagina sotto forma di **signal**, al posto dei decoratori `@ViewChild`/`@ContentChild`. Si dividono in due famiglie a seconda di *dove* cercano: `viewChild`/`viewChildren` guardano dentro il **proprio template** (la *view* del componente), mentre `contentChild`/`contentChildren` guardano il contenuto **proiettato** dal padre via [[content-projection]] (il *content*).
 
 ```ts
 title = viewChild<ElementRef>('title');     // Signal<ElementRef | undefined>
@@ -17,6 +14,6 @@ first = viewChild.required(ChildCmp);        // versione required
 ```
 
 > [!warning]
-> Disponibili dopo il rendering della rispettiva fase; leggili in [[effect]] o nei hook appropriati, non nel costruttore. Il libro invita a **mettere in discussione** l'abuso di `viewChild` (preferire input/output e servizi).
+> Il riferimento è disponibile solo dopo che la rispettiva fase di rendering è avvenuta: conviene leggerlo dentro un [[effect]] o negli hook appropriati, non nel costruttore. Il libro invita inoltre a **mettere in discussione** l'abuso di `viewChild`, preferendo dove possibile input/output e servizi.
 
 **Usato in:** [[10-signal-queries-component-communication]], [[11-directives-templates-containers]]

@@ -5,7 +5,7 @@ aliases: [injection context, runInInjectionContext]
 ---
 # Injection context
 
-È l'ambito in cui [[inject]] (ed `effect`, `toSignal`, ecc.) sono utilizzabili perché esiste un `Injector` attivo: durante la **costruzione** di componenti/servizi/direttive, nelle **factory** dei provider, e dentro `runInInjectionContext(injector, fn)`.
+L'**injection context** è l'ambito in cui [[inject]] (ed `effect`, `toSignal`, ecc.) si possono usare, perché in quel momento esiste un `Injector` attivo. Sono injection context la **costruzione** di componenti, servizi e direttive, le **factory** dei provider, e il blocco eseguito dentro `runInInjectionContext(injector, fn)`.
 
 ```ts
 constructor() {
@@ -18,6 +18,6 @@ ngOnInit() {
 ```
 
 > [!warning]
-> Chiamare `inject()` fuori contesto (es. in un callback async o in un metodo di lifecycle) lancia un errore. Cattura l'`Injector` con `inject(Injector)` se ti serve più tardi.
+> Chiamare `inject()` fuori contesto — per esempio in un callback asincrono o in un metodo di lifecycle — lancia un errore. Se l'`Injector` serve più tardi, lo si cattura prima con `inject(Injector)` e lo si riusa quando occorre.
 
 **Usato in:** [[05-state-management-services-signals]]

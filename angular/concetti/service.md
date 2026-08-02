@@ -5,7 +5,7 @@ aliases: [Service, autoProvided, Injectable vs Service]
 ---
 # @Service()
 
-Decoratore (**Angular 22**) per marcare una classe come servizio iniettabile. Di default **registra la classe nel root injector** → singleton applicativo, senza dover scrivere `providedIn: 'root'`. È la forma usata in tutto il libro dalla 3ª edizione.
+Il decoratore **`@Service()`** (introdotto con **Angular 22**) marca una classe come **servizio iniettabile**. Di default la registra nel root injector, cioè ne crea un'unica istanza (**singleton**) condivisa da tutta l'app, senza bisogno di scrivere `providedIn: 'root'`. È la forma usata in tutto il libro dalla 3ª edizione.
 
 ```ts
 import { Service } from '@angular/core';
@@ -18,13 +18,13 @@ export class BrowserLanguageService implements LanguageService {}
 ```
 
 > [!info] Angular 22+
-> `@Service()` sostituisce `@Injectable({ providedIn: 'root' })`. **Semantica identica**, solo più conciso. Mappa pre-22:
+> `@Service()` sostituisce `@Injectable({ providedIn: 'root' })`. La **semantica è identica**, solo più concisa. Mappa rispetto a prima della 22:
 > - `@Service()` ≡ `@Injectable({ providedIn: 'root' })`
 > - `@Service({ autoProvided: false })` ≡ `@Injectable()` (senza `providedIn`, da fornire a mano)
 >
-> Usi `autoProvided: false` per i servizi scambiabili tramite [[providers]] (es. dietro una classe astratta usata come token).
+> Si usa `autoProvided: false` per i servizi **scambiabili** tramite [[providers]] (per esempio dietro una classe astratta usata come token).
 
 > [!tip]
-> `@Service()` di default = root singleton. Per la lazy injection con `injectAsync` il servizio **deve** essere auto-provided (`@Service()` semplice). Vedi [[inject]] e [[providers]].
+> Un `@Service()` semplice è un singleton di root. Attenzione però alla lazy injection con `injectAsync`: lì il servizio **deve** essere auto-provided, cioè un `@Service()` senza `autoProvided: false`. Vedi [[inject]] e [[providers]].
 
 **Usato in:** [[05-state-management-services-signals]], [[09-ngrx-signal-store]], [[12-initialization-route-changes]], [[08-sustainable-architectures]]

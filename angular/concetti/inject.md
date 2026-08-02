@@ -5,7 +5,7 @@ aliases: [inject, dependency injection]
 ---
 # inject()
 
-Funzione per ottenere una dipendenza dal DI **senza injection via costruttore**. Va chiamata in un [[injection-context]] (campi di classe, costruttore, factory di provider, `runInInjectionContext`).
+La funzione **`inject()`** consente di ottenere una dipendenza dal sistema di Dependency Injection **senza passarla nel costruttore**: la si chiama direttamente dove serve. Va usata dentro un [[injection-context]] (i campi di una classe, il costruttore, le factory dei provider, o `runInInjectionContext`).
 
 ```ts
 export class FlightService {
@@ -15,10 +15,10 @@ export class FlightService {
 ```
 
 > [!tip]
-> Più componibile dei parametri del costruttore: abilita funzioni helper riusabili (es. guardie, resolver, "injectable functions"). Cosa è disponibile dipende dalla gerarchia dei [[providers]]. I servizi si dichiarano con [[service|@Service()]].
+> È più componibile dei parametri del costruttore, perché abilita funzioni helper riusabili (guardie, resolver, le cosiddette "injectable functions"). Cosa sia effettivamente disponibile dipende dalla gerarchia dei [[providers]]; i servizi si dichiarano con [[service|@Service()]].
 
 > [!info] Angular 22+ · injectAsync
-> **`injectAsync(() => import(...).then(m => m.Svc))`** inietta un servizio in modo **lazy**: il bundle viene caricato solo alla prima chiamata della funzione ritornata (che dà una `Promise`). Opzione `prefetch` (es. `onIdle()`) per pre-caricare a browser idle. Il servizio target deve essere auto-provided ([[service|@Service()]]).
+> **`injectAsync(() => import(...).then(m => m.Svc))`** inietta un servizio in modo **lazy**: il bundle viene caricato solo alla prima chiamata della funzione restituita (che dà una `Promise`). L'opzione `prefetch` (es. `onIdle()`) permette di pre-caricarlo quando il browser è a riposo. Il servizio di destinazione dev'essere auto-provided ([[service|@Service()]]).
 > ```ts
 > private readonly upgradeService = injectAsync(
 >   () => import('./upgrade-service').then((m) => m.UpgradeService),

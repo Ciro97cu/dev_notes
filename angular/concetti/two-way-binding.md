@@ -5,7 +5,7 @@ aliases: [two-way, banana in a box]
 ---
 # Two-way binding [(x)]
 
-La sintassi **"banana in a box"** `[(prop)]="expr"` è zucchero per un property binding `[prop]` + un event binding `(propChange)`. Funziona su una proprietà esposta come [[model-signal]] (o sul classico `prop`/`propChange`).
+La sintassi **"banana in a box"** `[(prop)]="expr"` è **zucchero sintattico** per due binding messi insieme: un property binding `[prop]` (il valore che scende dal padre) e un event binding `(propChange)` (l'aggiornamento che risale dal figlio). Funziona su una proprietà esposta come [[model-signal]], oppure sul classico abbinamento `prop`/`propChange`.
 
 ```html
 <my-input [(value)]="text" />
@@ -14,6 +14,6 @@ La sintassi **"banana in a box"** `[(prop)]="expr"` è zucchero per un property 
 ```
 
 > [!warning]
-> Richiede la convenzione di naming `prop` + `propChange`. Con i signal, `model()` la fornisce out-of-the-box.
+> Serve la convenzione di naming `prop` + `propChange`: senza quell'evento il doppio senso non funziona. Con i signal, `model()` fornisce già la coppia pronta all'uso.
 
 **Usato in:** [[02-signal-based-components]]

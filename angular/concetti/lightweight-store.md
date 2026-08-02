@@ -5,7 +5,7 @@ aliases: [store, signal store pattern, lightweight store]
 ---
 # Lightweight store (signal-based)
 
-Pattern di **state management** senza librerie: un service [[service|@Service]] che incapsula lo stato in [[signal]] privati ed espone signal/[[computed]] di sola lettura + metodi per le modifiche. Garantisce **unidirectional data flow** (la UI legge i derivati, scrive solo via metodi).
+Il **lightweight store** è un modo di gestire lo stato **senza librerie esterne**: un service [[service|@Service]] che tiene lo stato in [[signal]] privati ed espone verso l'esterno solo signal e [[computed]] di **sola lettura**, più dei metodi per modificarlo. Così si ottiene un **unidirectional data flow**, un flusso a senso unico: la UI legge i valori derivati e può cambiarli soltanto passando dai metodi, mai toccando lo stato direttamente.
 
 ```ts
 @Service()   // Angular 22; pre-22: @Injectable({ providedIn: 'root' }). A livello feature: @Service({ autoProvided: false }) + providers
@@ -18,6 +18,6 @@ export class FlightStore {
 ```
 
 > [!tip]
-> Granularità e posizione contano: store per-feature forniti a livello [[providers|route/componente]] per scope e auto-cleanup; evita cicli/ridondanze tra store. Per esigenze più ricche → [[09-ngrx-signal-store|NgRx Signal Store]].
+> La granularità e la collocazione contano: uno store per-feature conviene fornirlo a livello [[providers|route o componente]], così ha lo scope giusto e viene ripulito da solo; conviene inoltre evitare cicli e ridondanze tra store diversi. Per esigenze più ricche c'è [[09-ngrx-signal-store|NgRx Signal Store]].
 
 **Usato in:** [[05-state-management-services-signals]], [[08-sustainable-architectures]]
