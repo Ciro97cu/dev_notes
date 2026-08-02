@@ -41,7 +41,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-L'initializer gira in un [[injection-context]] → può usare [[inject]] direttamente invece della constructor injection. La logica asincrona vera vive nel servizio, che espone i valori caricati:
+L'initializer gira in un [[injection-context]], quindi può usare [[inject]] direttamente invece della constructor injection. La logica asincrona vera vive nel servizio, che espone i valori caricati:
 
 > [!info] Angular 22+
 > Da Angular 22 un service si annota con `@Service()` (in Listing 12-2 importato da `@angular/core`), che corrisponde al vecchio `@Injectable({ providedIn: 'root' })`. Dettagli in [[service]].
@@ -572,4 +572,4 @@ Collegamenti: [[inject]] · [[providers]] · [[16-authentication-authorization]]
 - **Router events** (`NavigationStart/End/Cancel/Error`) permettono di reagire alla navigazione (loading overlay).
 - **Resolver** (`ResolveFn<T>`) caricano i dati *prima* dell'attivazione della rotta: il router attende, niente valori `null` transitori.
 - **HttpInterceptors** (`HttpInterceptorFn`) formano una catena (Chain of Responsibility): clonano/modificano richieste e risposte; registrati con `provideHttpClient(withInterceptors([...]))`.
-- Tutti gli hook girano in [[injection-context]] → usano [[inject]] direttamente.
+- Tutti gli hook girano in un [[injection-context]], quindi usano [[inject]] direttamente.

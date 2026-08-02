@@ -116,11 +116,11 @@ export class App {
 }
 ```
 
-`title` è un [[signal]]: un oggetto che **contiene un valore** e notifica le parti interessate del sistema quando quel valore cambia, notifica che Angular sfrutta per aggiornare la UI e riflettere lo stato più recente. Lo si **legge chiamandolo come funzione** — `this.title()` — e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, inferito dal valore di default, quindi non serve dichiararlo esplicitamente.
+`title` è un [[signal]]: un contenitore per un valore che, ogni volta che cambia, **avvisa** le parti del sistema interessate — ed è proprio questa notifica che Angular sfrutta per aggiornare la UI e mostrare sempre lo stato più recente. Lo si **legge chiamandolo come una funzione** — `this.title()` — e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, che Angular deduce dal valore di default, quindi non serve dichiararlo a mano.
 
 Secondo la Angular style guide le proprietà usate **solo nel template** si dichiarano `protected`, per evitare modifiche accidentali dall'esterno della classe, e i signal si marcano `readonly`: non si **rimpiazzano**, si aggiornano.
 
-`@Component` è un **decorator** che marca la classe come componente — i decorator definiscono metadati per i building block di Angular e sono preceduti da `@`. Il `selector` è di norma il nome dell'elemento HTML custom che rappresenta il componente, richiamabile con `<app-root></app-root>`, e il decorator referenzia anche il template (`templateUrl`) e il CSS locale (`styleUrl`, vuoto di default).
+`@Component` è un **decorator**, cioè un'annotazione che marca la classe come componente: i decorator aggiungono informazioni (i *metadati*) ai mattoni di Angular e si riconoscono dal `@` che li precede. Il `selector` è di norma il nome dell'elemento HTML personalizzato che rappresenta il componente, richiamabile con `<app-root></app-root>`; il decorator indica anche dove trovare il template (`templateUrl`) e il CSS locale (`styleUrl`, vuoto di default).
 
 La keyword `export` rende la classe usabile in altri file, mentre gli `import` in cima portano dentro i costrutti di Angular (la funzione `signal`, il decorator `Component`, ecc.). L'array `imports` del decoratore elenca invece i costrutti che il **template** usa: qui `RouterOutlet`, il placeholder con cui il router mostra componenti diversi (→ [[04-router-navigation-lazy-loading]]).
 
