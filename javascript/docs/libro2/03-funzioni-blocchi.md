@@ -322,7 +322,7 @@ console.log(i); // ReferenceError
 ```
 
 **`var`** → function scope (o global).  
-**`let` / `const`** → block scope, no hoist prima della dichiarazione, `const` è immutabile.  
+**`let` / `const`** → block scope, non accessibili prima della dichiarazione (TDZ); `const` non è riassegnabile — è il **binding** a essere fisso, non il valore (un oggetto `const` resta mutabile).  
 **`try/catch`** → la variabile `err` in `catch` è block-scoped fin da ES3.
 
 ---
