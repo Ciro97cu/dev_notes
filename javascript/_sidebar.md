@@ -44,3 +44,15 @@
   - [31. Aggiunte alle API](docs/libro6/06-api-additions.md)
   - [32. Metaprogrammazione](docs/libro6/07-metaprogramming.md)
   - [33. Oltre ES6](docs/libro6/08-oltre-es6.md)
+
+- **JavaScript moderno — oltre YDKJS**
+  - [Panoramica](docs/moderno/README.md)
+  - [ES2017 (ES8)](docs/moderno/es2017.md)
+  - [ES2018 (ES9)](docs/moderno/es2018.md)
+  - [ES2019 (ES10)](docs/moderno/es2019.md)
+  - [ES2020 (ES11)](docs/moderno/es2020.md)
+  - [ES2021 (ES12)](docs/moderno/es2021.md)
+  - [ES2022 (ES13)](docs/moderno/es2022.md)
+  - [ES2023 (ES14)](docs/moderno/es2023.md)
+  - [ES2024 (ES15)](docs/moderno/es2024.md)
+  - [ES2025 (ES16)](docs/moderno/es2025.md)
