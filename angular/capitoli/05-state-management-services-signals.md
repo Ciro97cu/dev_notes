@@ -438,7 +438,7 @@ export const bookingRoutes: Routes = [
 ];
 ```
 
-Il service è disponibile al componente della rotta **e a tutti i figli raggiungibili via child route** → stato/funzionalità condivisi in una feature che si estende su più rotte.
+Il service è disponibile al componente della rotta **e a tutti i figli raggiungibili via child route**, così stato e funzionalità restano condivisi in una feature che si estende su più rotte.
 
 Di default Angular **non distrugge** gli Environment Provider: vivono finché l'app è aperta. Da **Angular 21.1** l'**Auto Cleanup** li distrugge (con le istanze che hanno creato) quando l'utente naviga via dalla rotta. Si attiva aggiungendo la feature al router:
 

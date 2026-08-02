@@ -334,7 +334,7 @@ readonly chart = viewChild<ElementRef<HTMLCanvasElement>>('chart', { static: tru
 ```
 
 > [!tip]
-> Se gli elementi esistono fin dall'inizio (cioè **non** dentro `@if`/`@for`) puoi mettere `static: true` e il signal avrà un valore prima. Altrimenti: i **content children** sono disponibili dopo il controllo del content, i **view children** dopo l'init della view → reagisci con `afterRenderEffect` o `afterNextRender`.
+> Se gli elementi esistono fin dall'inizio (cioè **non** dentro `@if`/`@for`) si può impostare `static: true` e il signal avrà un valore già prima. Altrimenti i **content children** sono disponibili dopo il controllo del content e i **view children** dopo l'inizializzazione della view, quindi conviene reagire con `afterRenderEffect` o `afterNextRender`.
 
 Collegamenti: [[signal-queries]].
 
