@@ -116,6 +116,30 @@
         document.body.appendChild(btn);
       });
     }
+    // «▶ Prova»: sotto a ogni blocco di codice CSS aggiunge un bottone che apre il
+    // playground precompilato con quello snippet (l'editor è in assets/playground.js).
+    function playgroundTryPlugin(hook) {
+      hook.doneEach(function () {
+        var blocks = document.querySelectorAll('.markdown-section pre[data-lang]');
+        Array.prototype.forEach.call(blocks, function (pre) {
+          var next = pre.nextElementSibling;
+          if (next && next.classList.contains('pg-try')) return;
+          if ((pre.getAttribute('data-lang') || '').toLowerCase() !== 'css') return;
+          var code = pre.querySelector('code');
+          if (!code) return;
+          var css = code.textContent.replace(/\n+$/, '');
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pg-try';
+          btn.textContent = '▶ Prova nel playground';
+          btn.addEventListener('click', function () {
+            if (window.__pgOpen) window.__pgOpen(css);
+          });
+          pre.insertAdjacentElement('afterend', btn);
+        });
+      });
+    }
+
     // Imposta il tema il prima possibile per evitare il flash (prima ancora di docsify).
     (function () {
       try {
@@ -169,7 +193,7 @@
       },
       search: { placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
       copyCode: { buttonText: 'Copia', successText: 'Copiato' },
-      plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin]
+      plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, playgroundTryPlugin]
     };
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
@@ -183,5 +207,8 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+  <!-- Playground CSS — editor Monaco + anteprima live (vedi assets/playground.js) -->
+  <script src="assets/playground.js"></script>
 </body>
 </html>
