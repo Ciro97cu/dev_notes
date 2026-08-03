@@ -27,7 +27,7 @@ Sezioni principali:
 Si modifica a mano o, meglio, con `git config`.
 
 ## objects/ — il database interno
-Git non salva i file come li vediamo, ma come "oggetti" compressi. Quattro tipi:
+Git non salva i file come appaiono, ma come "oggetti" compressi. Quattro tipi:
 - **Blob** → il contenuto di un file (solo dati, niente nome né permessi).
 - **Tree** → una directory: elenco di puntatori a blob (file) e ad altri tree
   (sottocartelle), con nomi e permessi.
