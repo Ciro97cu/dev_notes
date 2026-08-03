@@ -12,10 +12,10 @@ Una raccolta di riferimenti per approfondire e restare aggiornati su TypeScript.
 
 ## Versioni
 
-Questa guida è validata su **TypeScript 6.0**, la release stabile più recente. È utile conoscere anche la direzione futura del linguaggio:
+Questa guida è validata su **TypeScript 7.0**, la release stabile più recente. Per collocarla nella storia recente del linguaggio conviene ricordare due tappe:
 
-- **TypeScript 6.0** — versione di transizione: introduce nuovi valori predefiniti (`strict`, `module: esnext`, `target` allineato all'anno corrente) e segna come deprecate diverse opzioni storiche, in preparazione alla versione successiva.
-- **TypeScript 7.0** — nuova implementazione del compilatore portata in Go (nota informalmente come *tsgo*), che preserva le stesse semantiche di type checking ma punta a prestazioni anche dieci volte superiori. Al momento è disponibile in beta.
+- **TypeScript 6.0** — versione di transizione, ultima costruita sull'implementazione in JavaScript: ha introdotto i valori predefiniti moderni (`strict`, `module: esnext`, `target` allineato all'anno corrente) e ha marcato come deprecate diverse opzioni storiche, in preparazione alla versione successiva.
+- **TypeScript 7.0** — riscrittura nativa del compilatore e del tooling in Go (durante l'anteprima nota come *tsgo*): preserva le stesse semantiche di type checking della 6.0, ne rende definitivamente errori le opzioni deprecate, e offre prestazioni fino a circa dieci volte superiori con un consumo di memoria dimezzato.
 
 ## Type definitions
 

@@ -81,7 +81,7 @@ console.log(ottale === 0o17);
 
 Il tipo `number` rappresenta in modo affidabile soltanto gli interi compresi fino a `Number.MAX_SAFE_INTEGER`, pari a `9007199254740991`. Oltre questa soglia i calcoli con interi perdono precisione. Per gestire interi arbitrariamente grandi in modo esatto esiste il tipo `bigint`.
 
-Un letterale `bigint` si ottiene aggiungendo il suffisso `n` a un numero intero. Per emettere questi letterali è sufficiente un `target` pari a `"es2020"` o superiore; con le impostazioni predefinite di TypeScript 6.0 il `target` è già allineato a un valore moderno, quindi i `bigint` funzionano senza alcuna configurazione aggiuntiva.
+Un letterale `bigint` si ottiene aggiungendo il suffisso `n` a un numero intero. Per emettere questi letterali è sufficiente un `target` pari a `"es2020"` o superiore; con le impostazioni predefinite di TypeScript 7.0 il `target` è già allineato a un valore moderno, quindi i `bigint` funzionano senza alcuna configurazione aggiuntiva.
 
 ```ts
 const grande: bigint = 9_007_199_254_740_993n;
@@ -171,7 +171,7 @@ No. Tutti e tre sono letterali numerici scritti in basi differenti (esadecimale,
 <details>
 <summary>Di quale `target` minimo si ha bisogno per usare i letterali `bigint` come `10n`?</summary>
 
-È sufficiente un `target` pari a `"es2020"` o superiore. Non occorre impostare `"esnext"`. Con le impostazioni predefinite di TypeScript 6.0, in cui il `target` è già allineato a un valore moderno, i letterali `bigint` funzionano senza alcuna configurazione aggiuntiva.
+È sufficiente un `target` pari a `"es2020"` o superiore. Non occorre impostare `"esnext"`. Con le impostazioni predefinite di TypeScript 7.0, in cui il `target` è già allineato a un valore moderno, i letterali `bigint` funzionano senza alcuna configurazione aggiuntiva.
 </details>
 
 <details>

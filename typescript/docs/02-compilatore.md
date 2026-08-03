@@ -10,6 +10,12 @@ npm install --save-dev typescript
 
 A questo punto il compilatore è disponibile attraverso `npx tsc` (oppure tramite uno script di npm), senza bisogno di un'installazione globale.
 
+## Il compilatore nativo
+
+A partire da TypeScript 7.0 il compilatore è stato riscritto in Go: `tsc` non è più un programma JavaScript eseguito da Node, ma un binario nativo. La riscrittura non tocca il linguaggio né le regole di type checking, quindi il codice che compilava sulla versione precedente continua a compilare esattamente allo stesso modo; ciò che cambia sono le prestazioni, con una compilazione e un caricamento nell'editor circa dieci volte più rapidi e un consumo di memoria dimezzato. Il comando resta invariato: si installa il pacchetto `typescript` e si invoca `npx tsc` come sempre. Durante la fase di anteprima il binario nativo veniva distribuito separatamente con il nome `tsgo`, mentre nella versione stabile è di nuovo semplicemente `tsc`.
+
+Vale la pena tenere presente una sola avvertenza pratica: la 7.0 non espone ancora un'API programmatica del compilatore, prevista per la 7.1. Gli strumenti che invocano `tsc` come libreria, ad esempio alcuni transformer personalizzati, possono quindi richiedere temporaneamente la versione precedente, che resta installabile affiancata.
+
 ## Compilare un singolo file
 
 La forma più diretta consiste nel passare a `tsc` il percorso del file da compilare. Il compilatore produce un file JavaScript con lo stesso nome ed estensione `.js` nella stessa cartella del sorgente:
@@ -28,7 +34,13 @@ function saluta(nome: string): string {
 console.log(saluta("Ada"));
 ```
 
-l'esecuzione di `npx tsc indice.ts` genera un `indice.js` accanto al sorgente. È importante notare che, quando si indica esplicitamente un file sulla riga di comando, l'eventuale `tsconfig.json` presente nel progetto viene ignorato: `tsc` compila solo ciò che gli viene passato, applicando le opzioni predefinite del compilatore.
+l'esecuzione di `npx tsc indice.ts` genera un `indice.js` accanto al sorgente. Va però tenuto presente un aspetto del comportamento moderno di `tsc`: quando nel progetto è presente un `tsconfig.json`, passare esplicitamente un file sulla riga di comando produce un errore, perché indicare al tempo stesso una configurazione di progetto e un singolo file viene considerato ambiguo. Per compilare deliberatamente un solo file ignorando la configurazione si usa il flag `--ignoreConfig`:
+
+```bash
+npx tsc indice.ts --ignoreConfig
+```
+
+In questo caso `tsc` compila soltanto ciò che gli viene passato, applicando le opzioni predefinite del compilatore.
 
 Se il sorgente contiene un errore di tipo, il compilatore lo riporta sul terminale indicando file, posizione e messaggio:
 
@@ -55,7 +67,7 @@ Il modo più rapido per generare un `tsconfig.json` di partenza è il comando di
 npx tsc --init
 ```
 
-Un `tsconfig.json` minimale e adatto a TypeScript 6.0 può apparire così:
+Un `tsconfig.json` minimale e adatto a TypeScript 7.0 può apparire così:
 
 ```json
 {
@@ -71,9 +83,9 @@ Un `tsconfig.json` minimale e adatto a TypeScript 6.0 può apparire così:
 }
 ```
 
-In questo esempio non compare `strict`, perché in TypeScript 6.0 il controllo rigoroso è attivo per impostazione predefinita: l'intera famiglia di controlli `strict` viene applicata anche senza dichiararla. Analogamente, il `target` predefinito è allineato a una versione moderna di ECMAScript (attualmente `es2025`) e il sistema di moduli predefinito è basato sugli ES module. Le opzioni mostrate qui servono quindi a rendere esplicite alcune scelte e a definire la struttura delle cartelle, non a forzare un comportamento che il compilatore non avrebbe già.
+In questo esempio non compare `strict`, perché in TypeScript 7.0 il controllo rigoroso è attivo per impostazione predefinita: l'intera famiglia di controlli `strict` viene applicata anche senza dichiararla. Analogamente, il `target` predefinito è allineato a una versione moderna di ECMAScript (attualmente `es2025`) e il sistema di moduli predefinito è basato sugli ES module. Le opzioni mostrate qui servono quindi a rendere esplicite alcune scelte e a definire la struttura delle cartelle, non a forzare un comportamento che il compilatore non avrebbe già.
 
-Vale la pena soffermarsi su `types`: in TypeScript 6.0 questa opzione vale `[]` per impostazione predefinita, ovvero non vengono più inclusi automaticamente tutti i pacchetti presenti in `node_modules/@types`. Per disporre dei tipi globali di Node (come `process` o `Buffer`) occorre quindi indicarli esplicitamente con `"types": ["node"]`, dopo aver installato il relativo pacchetto:
+Vale la pena soffermarsi su `types`: in TypeScript 7.0 questa opzione vale `[]` per impostazione predefinita, ovvero non vengono più inclusi automaticamente tutti i pacchetti presenti in `node_modules/@types`. Per disporre dei tipi globali di Node (come `process` o `Buffer`) occorre quindi indicarli esplicitamente con `"types": ["node"]`, dopo aver installato il relativo pacchetto:
 
 ```bash
 npm install --save-dev @types/node
@@ -116,14 +128,14 @@ Resta comunque `tsc` lo strumento di riferimento per la verifica dei tipi e per 
 <details>
 <summary>Qual è la differenza tra eseguire `tsc indice.ts` e `tsc` senza argomenti?</summary>
 
-Passando esplicitamente un file (`tsc indice.ts`) il compilatore compila solo quel file e ignora l'eventuale `tsconfig.json`, applicando le opzioni predefinite. Lanciando `tsc` senza argomenti, invece, il compilatore cerca il `tsconfig.json`, individua tutti i file inclusi nel progetto e li compila rispettando le opzioni configurate.
+In presenza di un `tsconfig.json`, passare esplicitamente un file (`tsc indice.ts`) produce un errore, perché combinare la configurazione di progetto e un singolo file è considerato ambiguo: per farlo di proposito si aggiunge il flag `--ignoreConfig`, e in tal caso `tsc` compila solo quel file applicando le opzioni predefinite. Lanciando invece `tsc` senza argomenti, il compilatore individua il `tsconfig.json`, raccoglie tutti i file inclusi nel progetto e li compila rispettando le opzioni configurate.
 
 </details>
 
 <details>
-<summary>Perché in un `tsconfig.json` per TypeScript 6.0 non è necessario impostare `strict: true`?</summary>
+<summary>Perché in un `tsconfig.json` per TypeScript 7.0 non è necessario impostare `strict: true`?</summary>
 
-Perché in TypeScript 6.0 `strict` è attivo per impostazione predefinita. L'intera famiglia di controlli rigorosi (tra cui `noImplicitAny`, `strictNullChecks` e `strictPropertyInitialization`) viene quindi applicata anche senza dichiarare l'opzione. La si indica solo se la si vuole disattivare esplicitamente.
+Perché in TypeScript 7.0 `strict` è attivo per impostazione predefinita. L'intera famiglia di controlli rigorosi (tra cui `noImplicitAny`, `strictNullChecks` e `strictPropertyInitialization`) viene quindi applicata anche senza dichiarare l'opzione. La si indica solo se la si vuole disattivare esplicitamente.
 
 </details>
 
@@ -142,8 +154,8 @@ Con il comando `npx tsc --init`, che crea un `tsconfig.json` ampiamente commenta
 </details>
 
 <details>
-<summary>Perché in TypeScript 6.0 può essere necessario aggiungere `"types": ["node"]` al `tsconfig.json`?</summary>
+<summary>Perché in TypeScript 7.0 può essere necessario aggiungere `"types": ["node"]` al `tsconfig.json`?</summary>
 
-Perché in TypeScript 6.0 l'opzione `types` vale `[]` per impostazione predefinita: i pacchetti presenti in `node_modules/@types` non vengono più inclusi automaticamente. Per rendere disponibili i tipi globali di Node, dopo aver installato `@types/node`, occorre indicarli esplicitamente con `"types": ["node"]`.
+Perché in TypeScript 7.0 l'opzione `types` vale `[]` per impostazione predefinita: i pacchetti presenti in `node_modules/@types` non vengono più inclusi automaticamente. Per rendere disponibili i tipi globali di Node, dopo aver installato `@types/node`, occorre indicarli esplicitamente con `"types": ["node"]`.
 
 </details>

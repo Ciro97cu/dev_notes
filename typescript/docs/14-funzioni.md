@@ -4,7 +4,7 @@ Una funzione è un blocco di codice riutilizzabile che incapsula una determinata
 
 ## Tipizzazione di parametri e valore di ritorno
 
-Ogni parametro di una funzione può essere annotato con un tipo, scrivendolo dopo il nome del parametro e separato da due punti. Il tipo del valore di ritorno si indica invece dopo la parentesi chiusa della lista dei parametri. Annotare esplicitamente i parametri è particolarmente importante: in assenza di annotazione e di un contesto da cui dedurla, il compilatore non è in grado di inferire un tipo significativo e segnalerebbe un errore, dal momento che con le impostazioni predefinite di TypeScript 6.0 il controllo `noImplicitAny` è attivo.
+Ogni parametro di una funzione può essere annotato con un tipo, scrivendolo dopo il nome del parametro e separato da due punti. Il tipo del valore di ritorno si indica invece dopo la parentesi chiusa della lista dei parametri. Annotare esplicitamente i parametri è particolarmente importante: in assenza di annotazione e di un contesto da cui dedurla, il compilatore non è in grado di inferire un tipo significativo e segnalerebbe un errore, dal momento che con le impostazioni predefinite di TypeScript 7.0 il controllo `noImplicitAny` è attivo.
 
 ```ts
 function somma(a: number, b: number): number {
@@ -193,9 +193,9 @@ Va tenuto presente che, quando le firme alternative differiscono unicamente per 
 ## Domande
 
 <details>
-<summary>Perché con le impostazioni predefinite di TypeScript 6.0 una funzione con un parametro privo di annotazione genera un errore?</summary>
+<summary>Perché con le impostazioni predefinite di TypeScript 7.0 una funzione con un parametro privo di annotazione genera un errore?</summary>
 
-Perché in TypeScript 6.0 l'opzione `strict` è attiva per impostazione predefinita e include `noImplicitAny`. In assenza di un'annotazione esplicita o di un contesto da cui dedurre il tipo, il compilatore non può inferire un tipo significativo per il parametro e, anziché assegnargli implicitamente `any`, segnala un errore come `Parameter 'x' implicitly has an 'any' type`.
+Perché in TypeScript 7.0 l'opzione `strict` è attiva per impostazione predefinita e include `noImplicitAny`. In assenza di un'annotazione esplicita o di un contesto da cui dedurre il tipo, il compilatore non può inferire un tipo significativo per il parametro e, anziché assegnargli implicitamente `any`, segnala un errore come `Parameter 'x' implicitly has an 'any' type`.
 </details>
 
 <details>

@@ -183,6 +183,40 @@ const trovato = repo.trovaPerId(1); // trovato: { id: number; titolo: string } |
 
 In questo caso il constraint assicura che ogni tipo gestito dal `Repository` disponga di una proprietà `id`, indispensabile al metodo `trovaPerId` per effettuare la ricerca.
 
+## const type parameters
+
+Per impostazione predefinita l'inferenza dei generics allarga i literal ai loro tipi di base: passando la stringa `"auto"` a una funzione generica, il parametro di tipo viene dedotto come `string`, non come il literal `"auto"`. Talvolta però si desidera che l'inferenza conservi i literal, come accadrebbe se il chiamante scrivesse `as const`. Il modificatore `const`, anteposto a un parametro di tipo, ottiene esattamente questo, spostando la decisione dall'utente all'autore della funzione.
+
+```ts
+function configura<const T>(opzioni: T): T {
+  return opzioni;
+}
+
+const conf = configura({ modo: "auto", tentativi: 3 });
+// Con `const T` il tipo inferito è { readonly modo: "auto"; readonly tentativi: 3 }
+// Senza il modificatore sarebbe stato { modo: string; tentativi: number }
+```
+
+Il modificatore `const` è particolarmente utile quando una funzione deve restituire o vincolare i valori esatti ricevuti, ad esempio nella costruzione di tuple o di configurazioni immutabili, evitando che il chiamante debba ricordarsi di aggiungere `as const` a ogni invocazione.
+
+## Controllare l'inferenza con NoInfer
+
+Quando lo stesso parametro di tipo compare in più posizioni, TypeScript lo inferisce combinando tutte le occorrenze. In certi casi questo non è desiderabile, perché una delle posizioni dovrebbe soltanto essere *verificata* contro il tipo dedotto altrove, non contribuire a determinarlo. L'utility type `NoInfer<T>` marca una posizione come esclusa dall'inferenza: il parametro viene dedotto unicamente dalle altre occorrenze, e in quella marcata viene solo controllato.
+
+```ts
+function seleziona<T>(valori: T[], predefinito: NoInfer<T>): T {
+  return predefinito;
+}
+
+seleziona(["rosso", "verde", "blu"], "rosso"); // OK: T è "rosso" | "verde" | "blu"
+
+seleziona(["rosso", "verde", "blu"], "giallo");
+// Errore: Argument of type '"giallo"' is not assignable to parameter of type
+// '"rosso" | "verde" | "blu"'.
+```
+
+Senza `NoInfer`, il valore `"giallo"` passato come secondo argomento allargherebbe `T` includendolo, e il controllo perderebbe di significato. Avvolgendo la posizione con `NoInfer<T>`, il tipo `T` viene fissato esclusivamente dal primo argomento e il valore predefinito deve necessariamente appartenere all'insieme già stabilito.
+
 ## Domande
 
 <details>

@@ -4,7 +4,7 @@ Quando un progetto cresce, mantenere tutto il codice in un unico file diventa ra
 
 ## Moduli ES
 
-Un modulo è semplicemente un file che dichiara almeno un `import` o un `export`. Ogni modulo ha il proprio scope: le dichiarazioni di un file non inquinano lo scope globale e non sono visibili altrove finché non vengono esportate esplicitamente. Questo isolamento elimina i conflitti di nomi senza bisogno di alcuna struttura di raggruppamento aggiuntiva. Con i default di TypeScript 6.0 il sistema di moduli è già configurato su `"esnext"`, quindi i moduli ES funzionano senza alcuna impostazione particolare.
+Un modulo è semplicemente un file che dichiara almeno un `import` o un `export`. Ogni modulo ha il proprio scope: le dichiarazioni di un file non inquinano lo scope globale e non sono visibili altrove finché non vengono esportate esplicitamente. Questo isolamento elimina i conflitti di nomi senza bisogno di alcuna struttura di raggruppamento aggiuntiva. Con i default di TypeScript 7.0 il sistema di moduli è già configurato su `"esnext"`, quindi i moduli ES funzionano senza alcuna impostazione particolare.
 
 ### Named export e named import
 
@@ -139,9 +139,28 @@ console.log(PI_GRECO);
 const c = new Contatore();
 ```
 
+### Import attributes
+
+Quando un import non carica un modulo JavaScript ma un altro tipo di risorsa, tipicamente un file JSON, occorre dichiarare esplicitamente il tipo atteso con la clausola `with`. Questa sintassi, nota come import attributes, comunica sia al compilatore sia al runtime come interpretare la risorsa importata, ed è obbligatoria per i moduli JSON.
+
+```ts
+// file: config.ts
+import configurazione from "./config.json" with { type: "json" };
+
+console.log(configurazione.versione);
+```
+
+La forma dinamica passa gli attributi come secondo argomento di `import()`.
+
+```ts
+const dati = await import("./dati.json", { with: { type: "json" } });
+```
+
+La clausola `with` sostituisce la precedente sintassi basata su `assert`, che non fa più parte del linguaggio: nel codice attuale si utilizza esclusivamente `with`.
+
 ## Namespaces
 
-Prima che i moduli ES diventassero parte dello standard, i namespaces erano il meccanismo principale per raggruppare codice correlato — classi, interfacce, funzioni e variabili — all'interno di un unico blocco logico, così da prevenire i conflitti di nomi nello scope globale. Un namespace si dichiara con la keyword `namespace` e i suoi membri restano privati a meno che non vengano esposti con `export`. L'accesso dall'esterno avviene tramite la notazione `Nome.Elemento`.
+Prima che i moduli ES diventassero parte dello standard, i namespaces erano il meccanismo principale per raggruppare codice correlato — classi, interfacce, funzioni e variabili — all'interno di un unico blocco logico, così da prevenire i conflitti di nomi nello scope globale. Un namespace si dichiara con la keyword `namespace` e i suoi membri restano privati a meno che non vengano esposti con `export`. L'accesso dall'esterno avviene tramite la notazione `Nome.Elemento`. La vecchia sintassi equivalente basata sulla keyword `module` (nella forma `module Nome { ... }`) non è più ammessa e produce un errore: l'unica forma valida è oggi `namespace`, mentre `declare module "nome"` resta riservato alla dichiarazione di moduli esterni.
 
 ```ts
 namespace Validazione {
@@ -220,7 +239,7 @@ const gruppi = chunk([1, 2, 3, 4, 5], 2);
 console.log(gruppi); // [[1, 2], [3, 4], [5]]
 ```
 
-Va tenuto presente che con i default di TypeScript 6.0 l'opzione `types` parte da un array vuoto: i pacchetti sotto `node_modules/@types` non vengono più enumerati implicitamente. Per i tipi globali di ambienti come Node serve dichiararli espressamente nel `tsconfig.json`.
+Va tenuto presente che con i default di TypeScript 7.0 l'opzione `types` parte da un array vuoto: i pacchetti sotto `node_modules/@types` non vengono più enumerati implicitamente. Per i tipi globali di ambienti come Node serve dichiararli espressamente nel `tsconfig.json`.
 
 ```json
 {
@@ -285,7 +304,7 @@ Perché i moduli ES forniscono nativamente l'isolamento dello scope che i namesp
 <details>
 <summary>Dopo aver installato un pacchetto `@types`, è necessario importarlo per usarne i tipi?</summary>
 
-No. Il compilatore individua e applica automaticamente le dichiarazioni dei pacchetti presenti come `@types`, quindi è sufficiente importare la libreria vera e propria per ottenere il type checking. Va però ricordato che con i default di TypeScript 6.0 l'opzione `types` parte vuota, perciò i tipi globali di ambienti come Node vanno abilitati esplicitamente indicando `"types": ["node"]` nel `tsconfig.json`.
+No. Il compilatore individua e applica automaticamente le dichiarazioni dei pacchetti presenti come `@types`, quindi è sufficiente importare la libreria vera e propria per ottenere il type checking. Va però ricordato che con i default di TypeScript 7.0 l'opzione `types` parte vuota, perciò i tipi globali di ambienti come Node vanno abilitati esplicitamente indicando `"types": ["node"]` nel `tsconfig.json`.
 
 </details>
 

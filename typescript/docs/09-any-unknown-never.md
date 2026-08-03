@@ -29,10 +29,10 @@ const eta: number = caricaDati().eta; // accettato, ma a runtime eta è una stri
 const doppio = eta * 2; // NaN, nessun errore di compilazione
 ```
 
-In TypeScript 6.0 l'opzione `strict` è abilitata in modo predefinito, e con essa `noImplicitAny`: un parametro o una variabile privi di annotazione il cui tipo non possa essere dedotto generano un errore di compilazione, invece di assumere silenziosamente il tipo `any`. Questo aiuta a evitare che `any` si insinui nel codice senza che lo sviluppatore se ne accorga.
+In TypeScript 7.0 l'opzione `strict` è abilitata in modo predefinito, e con essa `noImplicitAny`: un parametro o una variabile privi di annotazione il cui tipo non possa essere dedotto generano un errore di compilazione, invece di assumere silenziosamente il tipo `any`. Questo aiuta a evitare che `any` si insinui nel codice senza che lo sviluppatore se ne accorga.
 
 ```ts
-// Con noImplicitAny attivo (default in 6.0)
+// Con noImplicitAny attivo (default in 7.0)
 function saluta(nome) {
   // Errore: Parameter 'nome' implicitly has an 'any' type.
   return "Ciao " + nome;
@@ -244,8 +244,8 @@ default:
 </details>
 
 <details>
-<summary>Cosa accade in TypeScript 6.0 a un parametro di funzione privo di annotazione di tipo?</summary>
+<summary>Cosa accade in TypeScript 7.0 a un parametro di funzione privo di annotazione di tipo?</summary>
 
-Con i valori predefiniti di TypeScript 6.0, `strict` è attivo e include `noImplicitAny`. Un parametro privo di annotazione, il cui tipo non possa essere dedotto dal contesto, genera l'errore "Parameter implicitly has an 'any' type" invece di assumere silenziosamente il tipo `any`. Per risolverlo occorre annotare esplicitamente il parametro con il tipo corretto.
+Con i valori predefiniti di TypeScript 7.0, `strict` è attivo e include `noImplicitAny`. Un parametro privo di annotazione, il cui tipo non possa essere dedotto dal contesto, genera l'errore "Parameter implicitly has an 'any' type" invece di assumere silenziosamente il tipo `any`. Per risolverlo occorre annotare esplicitamente il parametro con il tipo corretto.
 
 </details>

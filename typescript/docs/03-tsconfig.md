@@ -2,7 +2,7 @@
 
 Il file `tsconfig.json` è il file di configurazione che guida il compilatore su come compilare un progetto. La sua presenza nella radice di una cartella segnala a TypeScript che quella cartella è la root di un progetto: a quel punto è sufficiente eseguire `tsc` senza argomenti perché il compilatore individui automaticamente i file da elaborare e applichi le opzioni indicate. Il file viene normalmente generato con `npx tsc --init`, che produce uno scheletro commentato pronto da personalizzare.
 
-Le opzioni si suddividono in due grandi famiglie: quelle che determinano *quali* file fanno parte del progetto (`include`, `exclude`, `files`) e quelle, raccolte sotto `compilerOptions`, che determinano *come* quei file vengono compilati. Un esempio minimale e moderno, valido su TypeScript 6.0, ha questo aspetto.
+Le opzioni si suddividono in due grandi famiglie: quelle che determinano *quali* file fanno parte del progetto (`include`, `exclude`, `files`) e quelle, raccolte sotto `compilerOptions`, che determinano *come* quei file vengono compilati. Un esempio minimale e moderno, valido su TypeScript 7.0, ha questo aspetto.
 
 ```json
 {
@@ -18,7 +18,7 @@ Le opzioni si suddividono in due grandi famiglie: quelle che determinano *quali*
 }
 ```
 
-Va tenuto presente che molte impostazioni hanno valori predefiniti già orientati allo sviluppo moderno: in TypeScript 6.0 la modalità rigorosa è attiva di default, il sistema di moduli predefinito è `esnext` e il `target` è allineato all'anno corrente. Le opzioni descritte di seguito servono quindi soprattutto a deviare consapevolmente da questi default o a renderli espliciti.
+Va tenuto presente che molte impostazioni hanno valori predefiniti già orientati allo sviluppo moderno: in TypeScript 7.0 la modalità rigorosa è attiva di default, il sistema di moduli predefinito è `esnext` e il `target` è allineato all'anno corrente. Le opzioni descritte di seguito servono quindi soprattutto a deviare consapevolmente da questi default o a renderli espliciti.
 
 ## include & exclude
 
@@ -51,7 +51,7 @@ Va tenuto presente che molte impostazioni hanno valori predefiniti già orientat
 
 `target` specifica la versione di ECMAScript del JavaScript generato. Il compilatore traduce le sintassi più recenti negli equivalenti supportati dalla versione richiesta: scegliendo un target più basso, costrutti moderni vengono trasformati in forme più verbose ma compatibili con ambienti datati. La scelta va fatta in base agli ambienti di esecuzione di destinazione.
 
-Su TypeScript 6.0 il valore predefinito è allineato all'anno corrente, attualmente `es2025`. Per i progetti nuovi si utilizzano valori moderni come `es2022`, `es2025` o `esnext`. Il valore `es5` è considerato legacy e va evitato.
+Su TypeScript 7.0 il valore predefinito è allineato all'anno corrente, attualmente `es2025`. Per i progetti nuovi si utilizzano valori moderni come `es2022`, `es2024`, `es2025` o `esnext`. I target obsoleti come `es5` ed `es3` non sono più supportati: il target minimo accettato è `es2015`.
 
 ```json
 {
@@ -198,7 +198,7 @@ export default Saluto;
 
 ## rootDir & outDir
 
-`rootDir` indica la directory radice dei sorgenti e determina come la struttura delle cartelle viene riprodotta nell'output. In TypeScript 6.0 il valore predefinito è la cartella che contiene il `tsconfig.json`. `outDir` indica invece la directory in cui viene scritto il JavaScript compilato; in sua assenza l'output viene generato accanto ai sorgenti. La combinazione tipica fa partire i file da `src` e li scrive in `dist`, mantenendo la gerarchia interna.
+`rootDir` indica la directory radice dei sorgenti e determina come la struttura delle cartelle viene riprodotta nell'output. In TypeScript 7.0 il valore predefinito è la cartella che contiene il `tsconfig.json`. `outDir` indica invece la directory in cui viene scritto il JavaScript compilato; in sua assenza l'output viene generato accanto ai sorgenti. La combinazione tipica fa partire i file da `src` e li scrive in `dist`, mantenendo la gerarchia interna.
 
 ```json
 {
@@ -231,7 +231,7 @@ Con questa configurazione, un file `src/servizi/auth.ts` viene compilato in `dis
 
 ## downlevelIteration
 
-`downlevelIteration` fa emettere al compilatore del codice aggiuntivo per far funzionare correttamente le iterazioni — come `for...of` su `Map`, `Set` o generatori — quando si compila verso target ECMAScript molto vecchi privi di iteratori nativi. Si tratta di un'opzione legacy, legata a `target` ormai datati: con i target moderni gli iteratori sono supportati nativamente e l'opzione non serve. Su TypeScript 6.0 è considerata deprecata e non va utilizzata nei progetti nuovi.
+`downlevelIteration` faceva emettere al compilatore del codice aggiuntivo per far funzionare correttamente le iterazioni — come `for...of` su `Map`, `Set` o generatori — quando si compilava verso target ECMAScript molto vecchi privi di iteratori nativi. Era un'opzione legata a `target` ormai datati: con i target moderni gli iteratori sono supportati nativamente e l'opzione non serve. Poiché su TypeScript 7.0 il target minimo è `es2015`, l'opzione ha perso ogni scopo ed è stata rimossa: non è più un valore valido nel `tsconfig.json`.
 
 ## noEmitOnError
 
@@ -250,7 +250,7 @@ Con questa configurazione, un file `src/servizi/auth.ts` viene compilato in `dis
 
 ## strict
 
-`strict` è un'opzione ombrello che abilita in blocco l'intera famiglia dei controlli rigorosi: `noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitThis`, `useUnknownInCatchVariables` e `alwaysStrict`. In TypeScript 6.0 questa modalità è attiva di default, perché rappresenta la base per scrivere codice solido e privo di insidie legate ai valori nulli o ai tipi impliciti. Ciascun controllo può comunque essere riattivato o disattivato singolarmente, ponendo l'opzione specifica dopo `strict`.
+`strict` è un'opzione ombrello che abilita in blocco l'intera famiglia dei controlli rigorosi: `noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitThis`, `useUnknownInCatchVariables` e `alwaysStrict`. In TypeScript 7.0 questa modalità è attiva di default, perché rappresenta la base per scrivere codice solido e privo di insidie legate ai valori nulli o ai tipi impliciti. Ciascun controllo può comunque essere riattivato o disattivato singolarmente, ponendo l'opzione specifica dopo `strict`.
 
 ```json
 {
@@ -304,7 +304,7 @@ function segno(n: number): string {
 
 ## module
 
-`module` determina il sistema di moduli usato per il codice generato, ovvero la forma in cui vengono emessi gli `import` e gli `export`. In TypeScript 6.0 il valore predefinito è `esnext`. Per i progetti nuovi i valori consigliati sono `esnext` quando l'output viene gestito da un bundler, `nodenext` per applicazioni Node che combinano moduli ES e CommonJS seguendo le regole di risoluzione di Node, `commonjs` quando serve esplicitamente l'output CommonJS, e `preserve` quando si desidera che il compilatore lasci la sintassi dei moduli il più possibile inalterata. I valori storici `amd`, `umd`, `system` e `none` sono deprecati e non vanno scelti per codice nuovo.
+`module` determina il sistema di moduli usato per il codice generato, ovvero la forma in cui vengono emessi gli `import` e gli `export`. In TypeScript 7.0 il valore predefinito è `esnext`. Per i progetti nuovi i valori consigliati sono `esnext` quando l'output viene gestito da un bundler, `nodenext` per applicazioni Node che combinano moduli ES e CommonJS seguendo le regole di risoluzione di Node, `commonjs` quando serve esplicitamente l'output CommonJS, e `preserve` quando si desidera che il compilatore lasci la sintassi dei moduli il più possibile inalterata. I valori storici `amd`, `umd`, `system` e `none` sono stati rimossi e non sono più selezionabili.
 
 ```json
 {
@@ -357,16 +357,16 @@ console.log(quadrato(4)); // 16
 ## Domande
 
 <details>
-<summary>Quale impostazione di moduleResolution corrisponde al vecchio comportamento "classic" in TypeScript 6.0?</summary>
+<summary>Quale impostazione di moduleResolution corrisponde al vecchio comportamento "classic" in TypeScript 7.0?</summary>
 
 Nessuna. La strategia `classic` è stata rimossa e non è più un valore valido per `moduleResolution`. Anche l'alias `node` (cioè `node10`) è ormai deprecato. Le strategie da utilizzare sono `nodenext` (o `node16`) per le applicazioni Node e `bundler` per i progetti gestiti da un bundler come Vite, esbuild o webpack.
 
 </details>
 
 <details>
-<summary>Perché in molti progetti su TypeScript 6.0 il tsconfig.json non riporta esplicitamente "strict": true?</summary>
+<summary>Perché in molti progetti su TypeScript 7.0 il tsconfig.json non riporta esplicitamente "strict": true?</summary>
 
-Perché in TypeScript 6.0 la modalità rigorosa è attiva di default. L'opzione `strict` abilita in blocco controlli come `strictNullChecks`, `noImplicitAny`, `strictFunctionTypes` e `strictPropertyInitialization`. Indicarla esplicitamente serve solo a renderne evidente l'attivazione, oppure a riattivarla quando si desidera disattivare uno dei controlli individuali ponendolo dopo `strict`.
+Perché in TypeScript 7.0 la modalità rigorosa è attiva di default. L'opzione `strict` abilita in blocco controlli come `strictNullChecks`, `noImplicitAny`, `strictFunctionTypes` e `strictPropertyInitialization`. Indicarla esplicitamente serve solo a renderne evidente l'attivazione, oppure a riattivarla quando si desidera disattivare uno dei controlli individuali ponendolo dopo `strict`.
 
 </details>
 
@@ -385,8 +385,8 @@ Per impostazione predefinita TypeScript emette comunque i file JavaScript anche 
 </details>
 
 <details>
-<summary>Perché l'opzione `downlevelIteration` non è più necessaria nei progetti nuovi?</summary>
+<summary>Che fine ha fatto l'opzione `downlevelIteration`?</summary>
 
-Perché serviva a far funzionare le iterazioni come `for...of` su `Map`, `Set` o generatori quando si compilava verso target ECMAScript molto vecchi, privi di iteratori nativi. Con i target moderni gli iteratori sono supportati direttamente, quindi l'opzione non aggiunge nulla. Su TypeScript 6.0 è considerata legacy e deprecata, così come i target più datati a cui era legata.
+Serviva a far funzionare le iterazioni come `for...of` su `Map`, `Set` o generatori quando si compilava verso target ECMAScript molto vecchi, privi di iteratori nativi. Con i target moderni gli iteratori sono supportati direttamente, quindi l'opzione non aggiunge nulla. Poiché su TypeScript 7.0 il target minimo è `es2015`, sono stati rimossi sia i target obsoleti a cui era legata sia l'opzione stessa: `downlevelIteration` non è più un valore valido nel `tsconfig.json`.
 
 </details>

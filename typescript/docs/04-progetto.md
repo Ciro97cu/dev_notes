@@ -30,7 +30,7 @@ La configurazione del compilatore risiede nel file `tsconfig.json`. Lo si genera
 npx tsc --init
 ```
 
-Il file prodotto adotta impostazioni moderne già sicure per default. In TypeScript 6.0 la modalità `strict` è attiva senza interventi manuali, il `module` predefinito è `"esnext"` e il `target` è allineato all'anno corrente. Una configurazione tipica per un progetto destinato a un bundler come Vite si presenta nella forma seguente.
+Il file prodotto adotta impostazioni moderne già sicure per default. In TypeScript 7.0 la modalità `strict` è attiva senza interventi manuali, il `module` predefinito è `"esnext"` e il `target` è allineato all'anno corrente. Una configurazione tipica per un progetto destinato a un bundler come Vite si presenta nella forma seguente.
 
 ```json
 {
@@ -49,7 +49,7 @@ Il file prodotto adotta impostazioni moderne già sicure per default. In TypeScr
 }
 ```
 
-Per un progetto eseguito direttamente su Node.js, invece, conviene allineare risoluzione dei moduli e tipi all'ambiente di esecuzione, indicando esplicitamente i tipi di Node tramite `"types": ["node"]`, dato che in 6.0 i pacchetti in `node_modules/@types` non vengono più inclusi automaticamente.
+Per un progetto eseguito direttamente su Node.js, invece, conviene allineare risoluzione dei moduli e tipi all'ambiente di esecuzione, indicando esplicitamente i tipi di Node tramite `"types": ["node"]`, dato che in 7.0 i pacchetti in `node_modules/@types` non vengono più inclusi automaticamente.
 
 ```json
 {
@@ -120,7 +120,7 @@ tsx supporta anche una modalità di esecuzione continua, che riavvia il processo
 npx tsx watch src/index.ts
 ```
 
-Un possibile file di partenza, type-correct su TypeScript 6.0, mostra come i tipi vengano applicati anche al codice eseguito tramite tsx.
+Un possibile file di partenza, type-correct su TypeScript 7.0, mostra come i tipi vengano applicati anche al codice eseguito tramite tsx.
 
 ```ts
 // src/index.ts
@@ -152,7 +152,7 @@ Perché il compilatore serve soltanto in fase di scrittura e di build, non quand
 <details>
 <summary>Quale valore di moduleResolution conviene scegliere per un progetto basato su Vite e quale per uno eseguito su Node.js?</summary>
 
-Per un progetto servito da un bundler come Vite si usa `"bundler"`, che riflette il modo in cui questi strumenti risolvono gli import. Per un'applicazione eseguita direttamente su Node.js si usa `"nodenext"`, allineata alle regole di risoluzione dei moduli di Node. L'opzione `classic` non esiste più in TypeScript 6.0 e non va presa in considerazione.
+Per un progetto servito da un bundler come Vite si usa `"bundler"`, che riflette il modo in cui questi strumenti risolvono gli import. Per un'applicazione eseguita direttamente su Node.js si usa `"nodenext"`, allineata alle regole di risoluzione dei moduli di Node. L'opzione `classic` non esiste più in TypeScript 7.0 e non va presa in considerazione.
 
 </details>
 
@@ -166,7 +166,7 @@ Per un progetto servito da un bundler come Vite si usa `"bundler"`, che riflette
 <details>
 <summary>Perché in un progetto Node.js può essere necessario aggiungere "types": ["node"] al tsconfig.json?</summary>
 
-Perché in TypeScript 6.0 l'opzione `types` ha come default un array vuoto, e i pacchetti presenti in `node_modules/@types` non vengono più inclusi automaticamente. Per disporre delle dichiarazioni globali di Node, come `process` o i moduli del core, occorre quindi elencarli esplicitamente con `"types": ["node"]`.
+Perché in TypeScript 7.0 l'opzione `types` ha come default un array vuoto, e i pacchetti presenti in `node_modules/@types` non vengono più inclusi automaticamente. Per disporre delle dichiarazioni globali di Node, come `process` o i moduli del core, occorre quindi elencarli esplicitamente con `"types": ["node"]`.
 
 </details>
 
