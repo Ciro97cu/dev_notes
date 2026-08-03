@@ -42,7 +42,7 @@
           : window.matchMedia('(prefers-color-scheme: dark)').matches;
         function apply() {
           document.documentElement.classList.toggle('dark', dark);
-          btn.textContent = dark ? '☀️' : '🌙';
+          btn.textContent = dark ? '☀' : '☾';
           btn.title = dark ? 'Passa al tema chiaro' : 'Passa al tema scuro';
         }
         apply();
