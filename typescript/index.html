@@ -89,6 +89,29 @@
             });
             document.body.appendChild(btn);
           });
+        },
+        // «▶ Prova»: aggiunge sotto a ogni blocco di codice TS un bottone che apre il
+        // playground precompilato con quello snippet (l'editor è in assets/playground.js).
+        function (hook) {
+          hook.doneEach(function () {
+            var LANGS = { ts: 1, typescript: 1 };
+            var blocks = document.querySelectorAll('.markdown-section pre[data-lang]');
+            Array.prototype.forEach.call(blocks, function (pre) {
+              var next = pre.nextElementSibling;
+              if (next && next.classList.contains('pg-try')) return;
+              if (!LANGS[(pre.getAttribute('data-lang') || '').toLowerCase()]) return;
+              var code = pre.querySelector('code');
+              if (!code) return;
+              var btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'pg-try';
+              btn.textContent = '▶ Prova nel playground';
+              btn.addEventListener('click', function () {
+                if (window.__pgOpen) window.__pgOpen(code.textContent.replace(/\n+$/, ''));
+              });
+              pre.insertAdjacentElement('afterend', btn);
+            });
+          });
         }
       ]
     };
@@ -111,5 +134,8 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-tsx.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+
+  <!-- Playground TypeScript — editor Monaco + transpile TS→JS ed esecuzione (vedi assets/playground.js) -->
+  <script src="assets/playground.js"></script>
 </body>
 </html>
