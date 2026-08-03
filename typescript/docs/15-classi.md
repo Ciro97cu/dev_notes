@@ -15,7 +15,7 @@ console.log(p instanceof Persona); // true
 
 Lo stato di un'istanza è descritto dalle sue proprietà, ovvero variabili associate all'oggetto e dichiarate all'interno del corpo della classe con il proprio tipo. Il comportamento è invece definito dai metodi, funzioni che operano su quello stato. Esiste poi un metodo speciale, il `constructor`, che viene invocato automaticamente al momento della creazione dell'istanza con `new` e che serve a inizializzare le proprietà a partire dagli argomenti ricevuti.
 
-Va tenuto presente che, con le impostazioni predefinite di TypeScript 6.0 (dove `strict` vale `true`), è attivo anche `strictPropertyInitialization`: ogni proprietà dichiarata deve essere inizializzata, nel constructor oppure tramite un valore di default, altrimenti il compilatore segnala un errore.
+Va tenuto presente che, con le impostazioni predefinite di TypeScript 7.0 (dove `strict` vale `true`), è attivo anche `strictPropertyInitialization`: ogni proprietà dichiarata deve essere inizializzata, nel constructor oppure tramite un valore di default, altrimenti il compilatore segnala un errore.
 
 ```ts
 class Persona {
@@ -47,7 +47,7 @@ class Conto {
 
 ## this e il problema dei callback
 
-All'interno di un metodo, la keyword `this` fa riferimento all'istanza su cui il metodo è stato invocato. Il punto delicato è che, in JavaScript, il valore di `this` non è legato al punto in cui il metodo viene definito, bensì al modo in cui viene chiamato. Quando un metodo viene estratto dall'oggetto e passato altrove come callback, ad esempio a `setTimeout` o a un gestore di eventi, perde il proprio collegamento con l'istanza: in modalità strict, che con TypeScript 6.0 è quella predefinita, `this` diventa `undefined`, con il conseguente errore a runtime.
+All'interno di un metodo, la keyword `this` fa riferimento all'istanza su cui il metodo è stato invocato. Il punto delicato è che, in JavaScript, il valore di `this` non è legato al punto in cui il metodo viene definito, bensì al modo in cui viene chiamato. Quando un metodo viene estratto dall'oggetto e passato altrove come callback, ad esempio a `setTimeout` o a un gestore di eventi, perde il proprio collegamento con l'istanza: in modalità strict, che con TypeScript 7.0 è quella predefinita, `this` diventa `undefined`, con il conseguente errore a runtime.
 
 ```ts
 class Contatore {
@@ -257,15 +257,15 @@ console.log(`${origine.x}, ${origine.y}`); // 0, 0
 ## Domande
 
 <details>
-<summary>Con le impostazioni predefinite di TypeScript 6.0, perché dichiarare una proprietà senza inizializzarla produce un errore?</summary>
+<summary>Con le impostazioni predefinite di TypeScript 7.0, perché dichiarare una proprietà senza inizializzarla produce un errore?</summary>
 
-Perché in TypeScript 6.0 l'opzione `strict` è attiva per default e con essa `strictPropertyInitialization`. Questo controllo richiede che ogni proprietà non opzionale sia inizializzata, nel constructor o con un valore di default; in caso contrario il compilatore segnala `Property '...' has no initializer and is not definitely assigned in the constructor`. Si può aggirare il controllo, quando appropriato, con la definite assignment assertion `!` o rendendo la proprietà opzionale.
+Perché in TypeScript 7.0 l'opzione `strict` è attiva per default e con essa `strictPropertyInitialization`. Questo controllo richiede che ogni proprietà non opzionale sia inizializzata, nel constructor o con un valore di default; in caso contrario il compilatore segnala `Property '...' has no initializer and is not definitely assigned in the constructor`. Si può aggirare il controllo, quando appropriato, con la definite assignment assertion `!` o rendendo la proprietà opzionale.
 </details>
 
 <details>
 <summary>Perché passare un metodo come callback (ad esempio a setTimeout) può far perdere il riferimento a this, e quali soluzioni esistono?</summary>
 
-Perché in JavaScript il valore di `this` dipende da come la funzione viene chiamata, non da dove viene definita. Estraendo il metodo dall'oggetto e passandolo come callback, il legame con l'istanza si perde e, in modalità strict (default in TypeScript 6.0), `this` diventa `undefined`. Le due soluzioni consolidate sono legare esplicitamente il contesto con `metodo.bind(istanza)`, oppure definire il metodo come arrow function assegnata a un campo, poiché le arrow function ereditano `this` dal contesto di creazione, ovvero l'istanza.
+Perché in JavaScript il valore di `this` dipende da come la funzione viene chiamata, non da dove viene definita. Estraendo il metodo dall'oggetto e passandolo come callback, il legame con l'istanza si perde e, in modalità strict (default in TypeScript 7.0), `this` diventa `undefined`. Le due soluzioni consolidate sono legare esplicitamente il contesto con `metodo.bind(istanza)`, oppure definire il metodo come arrow function assegnata a un campo, poiché le arrow function ereditano `this` dal contesto di creazione, ovvero l'istanza.
 </details>
 
 <details>

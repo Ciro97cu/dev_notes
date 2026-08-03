@@ -70,7 +70,7 @@ descrizione = "in lavorazione"; // assegnazione valida
 
 I parametri di una funzione rappresentano il caso più frequente in cui la type inference non dispone di informazioni sufficienti: al momento della dichiarazione non esiste alcun valore da cui dedurre il tipo, poiché il valore arriverà soltanto al momento della chiamata. Un parametro privo di annotazione assumerebbe quindi il tipo `any` in modo implicito, perdendo ogni garanzia offerta dal type system.
 
-Con `strict` attivo per impostazione predefinita in TypeScript 6.0, l'opzione `noImplicitAny` è anch'essa abilitata di default: di conseguenza, un parametro senza tipo esplicito non viene tollerato silenziosamente, ma genera un errore di compilazione.
+Con `strict` attivo per impostazione predefinita in TypeScript 7.0, l'opzione `noImplicitAny` è anch'essa abilitata di default: di conseguenza, un parametro senza tipo esplicito non viene tollerato silenziosamente, ma genera un errore di compilazione.
 
 ```ts
 // Errore: Parameter 'a' implicitly has an 'any' type.
@@ -122,9 +122,9 @@ Con il type assignment il tipo viene indicato esplicitamente tramite una type an
 </details>
 
 <details>
-<summary>Perché un parametro di funzione senza tipo provoca un errore in TypeScript 6.0?</summary>
+<summary>Perché un parametro di funzione senza tipo provoca un errore in TypeScript 7.0?</summary>
 
-Un parametro privo di annotazione assumerebbe il tipo `any` in modo implicito, perché al momento della dichiarazione non esiste alcun valore da cui dedurre il tipo. In TypeScript 6.0 l'opzione `strict` è attiva per impostazione predefinita e include `noImplicitAny`, che trasforma l'any implicito in un errore di compilazione: viene segnalato un messaggio del tipo `Parameter 'a' implicitly has an 'any' type.`. La soluzione è annotare esplicitamente il parametro, ad esempio `function somma(a: number, b: number)`.
+Un parametro privo di annotazione assumerebbe il tipo `any` in modo implicito, perché al momento della dichiarazione non esiste alcun valore da cui dedurre il tipo. In TypeScript 7.0 l'opzione `strict` è attiva per impostazione predefinita e include `noImplicitAny`, che trasforma l'any implicito in un errore di compilazione: viene segnalato un messaggio del tipo `Parameter 'a' implicitly has an 'any' type.`. La soluzione è annotare esplicitamente il parametro, ad esempio `function somma(a: number, b: number)`.
 
 </details>
 

@@ -186,6 +186,31 @@ const soloPesci: Pesce[] = animali.filter(isPesce);
 
 È bene sottolineare che il type predicate è un'asserzione di cui il compilatore si fida: spetta a chi scrive la funzione garantire che il controllo a runtime corrisponda effettivamente al tipo dichiarato. Un predicate scritto in modo scorretto non produce errori di compilazione, ma sposta il problema all'esecuzione, vanificando la sicurezza che il type system intende offrire.
 
+### Type predicate inferiti
+
+Non sempre è necessario scrivere il type predicate a mano. Quando una funzione priva di annotazione esplicita del tipo di ritorno si limita a restituire un'espressione booleana che restringe uno dei suoi parametri, il compilatore è in grado di dedurre da solo il type predicate, comportandosi come se fosse stato dichiarato. L'effetto è particolarmente evidente con `filter`, dove un semplice controllo di esistenza produce ora un array già ristretto.
+
+```ts
+function isDefinito<T>(valore: T | null | undefined) {
+  // Nessuna annotazione `valore is T`: il predicate viene inferito
+  return valore !== null && valore !== undefined;
+}
+
+const valori = [1, 2, undefined, 4, null];
+
+const definiti = valori.filter(isDefinito);
+// definiti è number[]; senza il predicate inferito sarebbe (number | undefined | null)[]
+```
+
+La stessa inferenza si applica agli arrow function passati direttamente a `filter`, purché il corpo consista in un'unica espressione che restringe il parametro.
+
+```ts
+const numeri = [1, 2, undefined, 4].filter((n) => n !== undefined);
+// numeri è number[]
+```
+
+L'inferenza avviene solo quando la relazione tra il valore restituito e il narrowing del parametro è abbastanza diretta da poter essere riconosciuta; nei casi più elaborati resta necessario dichiarare il type predicate in modo esplicito.
+
 ## Domande
 
 <details>

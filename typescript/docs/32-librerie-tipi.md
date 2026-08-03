@@ -40,7 +40,7 @@ const gruppi: number[][] = chunk([1, 2, 3, 4, 5], 2);
 // gruppi -> [[1, 2], [3, 4], [5]]
 ```
 
-Va osservato che, con i valori predefiniti di TypeScript 6.0, l'opzione `types` è impostata su `[]` solo per quanto riguarda i tipi globali da includere d'ufficio (come quelli di Node). I tipi degli `@types` associati a un modulo che viene effettivamente importato continuano invece a essere risolti automaticamente in base agli import presenti nel codice. Per i tipi globali di Node, ad esempio, occorre richiederli esplicitamente:
+Va osservato che, con i valori predefiniti di TypeScript 7.0, l'opzione `types` è impostata su `[]` solo per quanto riguarda i tipi globali da includere d'ufficio (come quelli di Node). I tipi degli `@types` associati a un modulo che viene effettivamente importato continuano invece a essere risolti automaticamente in base agli import presenti nel codice. Per i tipi globali di Node, ad esempio, occorre richiederli esplicitamente:
 
 ```json
 {
