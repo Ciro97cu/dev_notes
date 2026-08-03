@@ -2,6 +2,21 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <!-- Content Security Policy: limita le origini esterne. Host SENZA schema
+       (cdn.jsdelivr.net, fonts.*) così combacia sia in http (locale) sia in https
+       (GitHub Pages). 'unsafe-inline'/'unsafe-eval' servono a docsify (e a Monaco dove
+       c'è il playground); worker-src abilita i web worker di Monaco (data:/blob:/CDN). -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com;
+    font-src 'self' fonts.gstatic.com cdn.jsdelivr.net;
+    img-src 'self' data: https:;
+    worker-src 'self' blob: data: cdn.jsdelivr.net;
+    child-src 'self' blob: data: cdn.jsdelivr.net;
+    frame-src 'self';
+    connect-src 'self' cdn.jsdelivr.net;
+  " />
   <title>Appunti Git</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Appunti di studio su Git, da zero ad avanzato">
