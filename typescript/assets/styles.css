@@ -10,6 +10,7 @@
   --ts-blue-light: #4a90d9;
 
   --theme-color: var(--ts-blue);
+  --on-accent: #fff;
 
   --bg: #ffffff;
   --bg-soft: #f6f8fa;
@@ -47,6 +48,7 @@ html.dark {
   --details-border: #21262d;
   --table-head-bg: #161b22;
   --theme-color: #58a6ff;
+  --on-accent: #111;
 }
 
 /* ---------- Base ---------- */
@@ -428,3 +430,62 @@ body { font-family: var(--font-sans); }
     font-size: 16px;
   }
 }
+
+
+/* ---------- Bottoni flottanti: menu (sidebar-toggle) + hover uniforme ---------- */
+/* Il button menu ha la stessa forma del button home (cerchio bianco, bordo, ombra),
+   in basso a destra sopra il button home. La geometria usa !important per battere le
+   regole di stato di docsify (es. body.close .sidebar-toggle { width: auto }). */
+.sidebar-toggle {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: 16px !important;
+  bottom: 70px !important;      /* sopra il button home (bottom: 16px) */
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  z-index: 2147483000;          /* come il button home: sopra sidebar e overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* le tre barre dell'hamburger, centrate e scure come l'icona home */
+.sidebar-toggle .sidebar-toggle-button { position: static; padding: 0; }
+.sidebar-toggle span {
+  position: static;
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 2px 0;
+  border-radius: 1px;
+  background-color: #24292e;
+  transition: background-color 0.2s ease;
+}
+/* docsify sbiadisce le barre in hover: lo annullo, il contrasto lo dà --on-accent */
+.sidebar-toggle:hover .sidebar-toggle-button { opacity: 1; }
+
+/* transizione per l'hover del button home (lo stile base resta inline nell'HTML) */
+a[aria-label="Torna a Dev Notes"] {
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* ---------- Hover uniforme e identitario per tutti e 3 i bottoni ---------- */
+/* Riempimento col colore del doc (--theme-color, già adattato a chiaro/scuro) e
+   icona/testo con contrasto garantito in entrambi i temi (--on-accent). */
+a[aria-label="Torna a Dev Notes"]:hover,
+.sidebar-toggle:hover,
+#theme-toggle:hover {
+  transform: scale(1.08);
+  background: var(--theme-color) !important;
+  border-color: var(--theme-color) !important;
+  color: var(--on-accent) !important;
+}
+.sidebar-toggle:hover span { background-color: var(--on-accent) !important; }
