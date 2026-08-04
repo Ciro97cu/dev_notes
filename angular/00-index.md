@@ -4,16 +4,7 @@ tags: [tipo/indice, moc]
 ---
 # 🅰️ Modern Angular — Appunti
 
-Vault di studio in italiano sul libro **_Modern Angular_ (3ª edizione, v3.0.0 — aggiornata ad Angular 22)**. Appunti per capire e ripassare: prosa in italiano, termini/API/codice in inglese. Ogni nota-capitolo è un **hub** con riferimenti alle pagine del PDF e una sezione **🔁 Ripasso lampo** in fondo; i concetti cardine ricorrenti sono note atomiche cross-linkate.
-
-> [!info] Aggiornato alla 3ª edizione (Angular 22)
-> Le novità della v3.0.0 (Angular 21.1/21.2/22) sono marcate con callout `[!info] Angular 22+` e tag `angular-22` (cercalo per ripassarle tutte): [[concetti/service|@Service]], `injectAsync`, Resource Snapshots, `debounced`, exhaustive `@switch`, `isActive`, CSS validation per Signal Forms, FetchBackend e incremental hydration di default.
-
-> [!tip] Come usare questo vault
-> - Apri la cartella `ma/` come **vault in Obsidian** per navigare i link `[[...]]` e il *graph view*.
-> - Parti dai **Fondamenti** in ordine; gli altri blocchi sono abbastanza autonomi.
-> - Per ripassare: leggi i **Take-away** e rispondi al **🔁 Ripasso lampo** di ogni capitolo.
-> - I `> 📖 pp.x-y` rimandano alle pagine del PDF per approfondire.
+Mappa completa del vault: tutti i capitoli, la prep certificazione e i concetti cardine.
 
 ## 📚 Capitoli
 
@@ -63,9 +54,6 @@ Sezione separata per la **cert Angular** ([certificates.dev](https://certificate
 
 **Dependency Injection & stato**
 [[inject]] · [[injection-context]] · [[providers]] · [[service]] · [[lightweight-store]]
-
-## 🏷️ Tag utili
-`tipo/capitolo` · `tipo/concetto` · `signals` · `reactivity` · `components` · `routing` · `di` · `services` · `state-management` · `ngrx` · `forms` · `testing` · `architecture` · `directives` · `templates` · `ssr` · `security` · `micro-frontends` · `i18n` · `ai` · `monorepo`
 
 ---
 *Fonte: `modern-angular_v3_0_0.pdf`.*
