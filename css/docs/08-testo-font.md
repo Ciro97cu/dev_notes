@@ -4,7 +4,7 @@ titolo: "Testo & font"
 tags: [tipo/modulo, testo]
 ---
 # 08 · Testo & font
-> 🎨 modulo 8 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 8 — *CSS* · rif. MDN
 
 La tipografia è gran parte di ciò che rende leggibile una pagina. Questo modulo raccoglie le proprietà che scelgono il **carattere** (`font-*`), caricano i **web font** (`@font-face`) e governano la resa del **testo** (spaziatura, allineamento, decorazioni, a capo). La linea è *modern-first*: dove il CSS recente offre un controllo migliore — `font-display` per il caricamento, variable font, `text-wrap: balance`/`pretty` per gli a capo — quello è il default; il resto resta come nota di contesto.
 

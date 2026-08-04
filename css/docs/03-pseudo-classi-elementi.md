@@ -4,7 +4,7 @@ titolo: "Pseudo-classi & pseudo-elementi"
 tags: [tipo/modulo, selettori]
 ---
 # 03 · Pseudo-classi & pseudo-elementi
-> 🎨 modulo 3 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 3 — *CSS* · rif. MDN
 
 I selettori visti finora individuano elementi **così come stanno nel markup** (modulo [[02-selettori-combinatori]]). Due famiglie li estendono oltre il DOM statico:
 

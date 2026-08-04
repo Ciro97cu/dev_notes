@@ -4,7 +4,7 @@ Appunti di studio su **CSS**, dai fondamenti al layout moderno. Prosa in italian
 
 **Sintassi moderna in primo piano** (2026): dove una tecnica recente sostituisce la vecchia, si spiega quella; il legacy resta come nota di contesto. Le novità additive (`oklch()`, container queries, `:has()`, nesting nativo, subgrid, `@layer`…) sono integrate nei moduli pertinenti.
 
-> Fonte: corso *CSS - The Complete Guide* (Maximilian Schwarzmüller) + appunti personali, con verifica su [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS) e [Can I Use](https://caniuse.com/).
+> Appunti personali di studio, verificati su [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS) e [Can I Use](https://caniuse.com/).
 
 ## Indice dei moduli
 

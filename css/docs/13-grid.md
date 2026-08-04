@@ -5,7 +5,7 @@ tags: [tipo/modulo, grid, layout]
 ---
 # 13 · Grid
 
-> 🎨 modulo 13 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 13 — *CSS* · rif. MDN
 
 **CSS Grid** è il sistema di layout **bidimensionale** del CSS: dispone gli elementi su **righe e colonne insieme**, come una tabella ma senza markup di tabella. Si definisce una griglia sul contenitore e vi si posizionano i figli, per coordinate o per aree con nome. È lo strumento giusto per l'impianto complessivo di una pagina (header, sidebar, contenuto, footer); per una singola fila o colonna di elementi resta più comodo il [[12-flexbox]].
 

@@ -4,7 +4,7 @@ titolo: "Fondamenti"
 tags: [tipo/modulo, fondamenti]
 ---
 # 01 · Fondamenti
-> 🎨 modulo 1 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 1 — *CSS* · rif. MDN
 
 **CSS** (*Cascading Style Sheets*) è il linguaggio che descrive l'**aspetto** di un documento HTML: colori, tipografia, spaziature, layout. Separa la **presentazione** dal **contenuto** (l'HTML), così la stessa struttura può cambiare veste senza toccare il markup, e più pagine possono condividere un unico foglio di stile.
 

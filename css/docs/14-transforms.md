@@ -4,7 +4,7 @@ titolo: "Transforms"
 tags: [tipo/modulo, transforms]
 ---
 # 14 · Transforms
-> 🎨 modulo 14 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 14 — *CSS* · rif. MDN
 
 Le **transform** spostano, ruotano, scalano e inclinano un elemento agendo sul suo **sistema di coordinate visivo**. Il punto chiave: **non toccano il flusso del layout** — l'elemento continua a occupare lo spazio originale, cambia solo come viene *disegnato*. Questo le rende ideali per le animazioni performanti (vedi [[15-transizioni-animazioni]]).
 

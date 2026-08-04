@@ -5,7 +5,7 @@ tags: [tipo/modulo, responsive]
 ---
 # 11 · Responsive design
 
-> 🎨 modulo 11 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 11 — *CSS* · rif. MDN
 
 Il **responsive design** è la pratica di far adattare un'unica pagina a schermi di ogni dimensione — dal telefono al desktop — senza versioni separate. Gli strumenti sono tre, in ordine di potenza crescente: le **media query** (`@media`), che reagiscono al **viewport**; le **container query** (`@container`), che reagiscono al **contenitore** di un componente; e le funzioni **fluide** (`clamp()`, unità relative) che scalano di continuo senza soglie. La regola guida di tutto: i **breakpoint** nascono dal *contenuto*, non dal catalogo dei dispositivi.
 
@@ -221,7 +221,7 @@ Dentro un `@container` (e non solo) si possono usare unità **relative al conten
 > [!info] Baseline
 > Le **container query** (dimensione + unità `cq*`) sono **Baseline: Widely available** (Chrome 105/106, Safari 16, Firefox 110; ampiamente disponibili da agosto 2025). [MDN — Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)
 
-*➕ Oltre il corso — esistono anche le **style query** (`@container style(--tema: scuro)`), che reagiscono al valore di una custom property del contenitore invece che alla sua dimensione: supporto più recente, da verificare su Can I Use.*
+*➕ Approfondimento — esistono anche le **style query** (`@container style(--tema: scuro)`), che reagiscono al valore di una custom property del contenitore invece che alla sua dimensione: supporto più recente, da verificare su Can I Use.*
 
 ## Rapporto d'aspetto con `aspect-ratio`
 

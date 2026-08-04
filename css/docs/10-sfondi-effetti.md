@@ -4,7 +4,7 @@ titolo: "Sfondi & effetti visivi"
 tags: [tipo/modulo, sfondi]
 ---
 # 10 · Sfondi & effetti visivi
-> 🎨 modulo 10 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 10 — *CSS* · rif. MDN
 
 Questo modulo raccoglie tutto ciò che dà "consistenza visiva" a un elemento oltre a colore e testo: **sfondi** (tinte, immagini, gradienti, layer multipli), **ombre** (`box-shadow`), **effetti sui pixel** (`filter` e `backdrop-filter`), l'adattamento di immagini e video (`object-fit`), il ritaglio della forma (`clip-path`, `mask`) e le peculiarità di **SVG**. Per i formati di colore (hex, `rgb()`, `hsl()`, `oklch()`) vedi [[07-colori]]; per unità e funzioni come `deg`, `turn`, percentuali e `calc()` vedi [[06-unita-valori-funzioni]].
 
