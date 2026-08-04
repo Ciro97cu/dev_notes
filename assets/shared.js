@@ -99,28 +99,60 @@ function collapsibleAnswersPlugin(hook) {
   });
 }
 
-// "Riprendi": memorizza l'ultima pagina-contenuto visitata e popola la card #nav-resume
-// sulla cover (nascosta finché non c'è cronologia). Chiave per-vault via window.__VAULT.
+// "Riprendi": memorizza l'ultima posizione di lettura (pagina + sotto-sezione) e popola
+// la card #nav-resume sulla cover (nascosta finché non c'è cronologia). La sotto-sezione
+// è l'ultima heading superata durante lo scroll → si riapre esattamente lì (?id=…).
+// Chiave per-vault via window.__VAULT.
 function resumePlugin(hook, vm) {
   var KEY = (window.__VAULT || 'dev-notes') + '-last-page';
   var SKIP = { '/': 1, '/00-index': 1, '/README': 1, '/_coverpage': 1 };
+  var current = null, timer = null;
+
+  // id dell'ultima heading (h1/h2/h3) il cui bordo superiore è sopra la soglia = sezione corrente
+  function currentId() {
+    var hs = document.querySelectorAll('.markdown-section h1[id], .markdown-section h2[id], .markdown-section h3[id]');
+    var id = '';
+    for (var i = 0; i < hs.length; i++) {
+      if (hs[i].getBoundingClientRect().top <= 120) id = hs[i].id; else break;
+    }
+    return id;
+  }
+  function persist() {
+    if (!current) return;
+    try { localStorage.setItem(KEY, JSON.stringify({ p: current, id: currentId() })); } catch (e) {}
+  }
+  function read() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return null;
+      if (raw.charAt(0) === '{') return JSON.parse(raw);
+      return { p: raw, id: '' };   // retro-compatibilità con la vecchia chiave (solo path)
+    } catch (e) { return null; }
+  }
+
   hook.doneEach(function () {
     var path = (vm.route && vm.route.path) || '';
-    if (path && !SKIP[path]) { try { localStorage.setItem(KEY, path); } catch (e) {} }
+    current = (path && !SKIP[path]) ? path : null;
+    if (current) persist();   // salva almeno la pagina appena arrivati
+
     var card = document.getElementById('nav-resume');
     if (!card) return;
-    var last = '';
-    try { last = localStorage.getItem(KEY) || ''; } catch (e) {}
-    if (last && !SKIP[last]) {
-      card.setAttribute('href', '#' + last);
-      var seg = decodeURIComponent(last.split('/').pop() || '').replace(/^\d+-/, '').replace(/-/g, ' ');
-      var d = card.querySelector('.nav-desc');
-      if (d && seg) d.textContent = seg.charAt(0).toUpperCase() + seg.slice(1);
+    var rec = read();
+    if (rec && rec.p && !SKIP[rec.p]) {
+      card.setAttribute('href', '#' + rec.p + (rec.id ? '?id=' + rec.id : ''));
       card.style.display = '';
     } else {
       card.style.display = 'none';
     }
   });
+
+  // mentre si scorre, aggiorna la sotto-sezione salvata (debounced); capture per intercettare
+  // lo scroll su qualsiasi contenitore.
+  document.addEventListener('scroll', function () {
+    if (!current) return;
+    clearTimeout(timer);
+    timer = setTimeout(persist, 200);
+  }, true);
 }
 
 // Puntini interattivi sulla cover: griglia su <canvas>, respinta dal cursore.
