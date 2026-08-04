@@ -175,17 +175,15 @@
     }
     .card:hover::before, .card:focus-visible::before { opacity: 1; }
 
+    /* Logo del vault senza box: solo il monogramma/icona nel colore del brand */
     .tile {
       flex: 0 0 auto;
       width: 52px; height: 52px;
-      border-radius: 14px;
       display: flex; align-items: center; justify-content: center;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 6px 16px color-mix(in srgb, var(--accent) 40%, transparent);
+      color: var(--accent);
+      font-weight: 800; font-size: 1.55rem; letter-spacing: -.02em;
     }
-    .tile svg { width: 26px; height: 26px; }
+    .tile svg { width: 34px; height: 34px; }
 
     .body { flex: 1 1 auto; min-width: 0; }
     .title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; }
@@ -236,7 +234,7 @@
     <main class="grid">
       <a class="card" href="git/" style="--accent:#f05133">
         <span class="tile" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="6" y1="3" x2="6" y2="15"/>
             <circle cx="18" cy="6" r="3"/>
             <circle cx="6" cy="18" r="3"/>
@@ -251,7 +249,7 @@
       </a>
 
       <a class="card" href="javascript/" style="--accent:#e6c200">
-        <span class="tile" aria-hidden="true" style="color:#1a1a1a">JS</span>
+        <span class="tile" aria-hidden="true">JS</span>
         <span class="body">
           <span class="title">JavaScript</span>
           <span class="desc">Guida completa, basata su <em>You Don't Know JS</em>.</span>
@@ -263,27 +261,27 @@
         <span class="tile" aria-hidden="true">TS</span>
         <span class="body">
           <span class="title">TypeScript</span>
-          <span class="desc">Guida completa, validata su TypeScript 6.0.</span>
+          <span class="desc">Guida completa, validata su TypeScript 7.0.</span>
         </span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
 
       <a class="card" href="angular/" style="--accent:#dd0031">
         <span class="tile" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="#fff" stroke="none">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
             <path d="M12 2 3 5.3l1.4 11.9L12 22l7.6-4.8L21 5.3 12 2Zm0 2.4 6.7 2.4-1 8.6L12 19.4 6.3 15.4l-1-8.6L12 4.4Z"/>
             <path d="M12 6.2 8 15.4h1.7l.8-2h3l.8 2H16L12 6.2Zm-1 5.7L12 9l1 2.9h-2Z"/>
           </svg>
         </span>
         <span class="body">
           <span class="title">Angular</span>
-          <span class="desc">Modern Angular (2ª ed.) — signals e oltre.</span>
+          <span class="desc">Modern Angular (3ª ed.) — signals e oltre.</span>
         </span>
         <span class="arrow" aria-hidden="true">→</span>
       </a>
 
       <a class="card" href="css/" style="--accent:#1572b6">
-        <span class="tile" aria-hidden="true" style="font-size:1rem">CSS</span>
+        <span class="tile" aria-hidden="true" style="font-size:1.25rem">CSS</span>
         <span class="body">
           <span class="title">CSS</span>
           <span class="desc">CSS moderno, dai fondamenti a Grid e animazioni.</span>
@@ -293,7 +291,7 @@
 
       <a class="card" href="glossario/" style="--accent:#6366f1">
         <span class="tile" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2z"/>
             <path d="M19 3v18"/>
             <path d="M8 7h7"/>
