@@ -5,7 +5,7 @@ tags: [tipo/modulo, animazioni]
 ---
 # 15 · Transizioni & animazioni
 
-> 🎨 modulo 15 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 15 — *CSS* · rif. MDN
 
 Il movimento in CSS ha due strumenti complementari. Una **transizione** interpola un valore tra due stati — quello di partenza e quello nuovo — quando qualcosa scatena il cambiamento (un `:hover`, l'aggiunta di una classe, un focus). Un'**animazione** con `@keyframes` è invece autonoma: definisce una sequenza di tappe, parte da sola e può ripetersi all'infinito, senza bisogno di un trigger. Questo modulo copre entrambe, il modo giusto di sceglierle per non appesantire il rendering (privilegiando `transform` e `opacity`, vedi [[14-transforms]]), l'accessibilità con `prefers-reduced-motion` e le novità che permettono di animare anche l'entrata di un elemento e le transizioni tra viste.
 

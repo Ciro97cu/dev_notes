@@ -2,10 +2,10 @@
 
 **Vault Obsidian/docsify**. Appunti di studio su **CSS**, dai fondamenti al layout moderno. Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
 
-Fonte: corso *CSS - The Complete Guide* di **Maximilian Schwarzmüller** (Udemy) + appunti personali (Google Doc). Ogni claim non ovvio va verificato su **[MDN](https://developer.mozilla.org/en-US/docs/Web/CSS)**; per il supporto browser si cita **[Can I Use](https://caniuse.com/)** / [Baseline](https://web.dev/baseline).
+Fonte: appunti personali (Google Doc), modernizzati e riscritti. Ogni claim non ovvio va verificato su **[MDN](https://developer.mozilla.org/en-US/docs/Web/CSS)**; per il supporto browser si cita **[Can I Use](https://caniuse.com/)** / [Baseline](https://web.dev/baseline).
 
 ## Policy sui contenuti — *modern-first* (regola cardine)
-Il CSS del corso è del 2020 circa: va **modernizzato**.
+Gli appunti di partenza sono datati (~2020): vanno **modernizzati**.
 1. **Sintassi moderna in primo piano**: se una tecnica recente **sostituisce** quella vecchia, si spiega la moderna come default (es. `gap` nei flex/grid invece dei margini; `inset` invece di top/right/bottom/left; nesting nativo; range syntax nelle media query).
 2. **Novità additive integrate dove pertinenti**: `oklch()`/`color-mix()`/relative colors (→ Colori), container queries (→ Responsive), `:has()`/`:is()`/`:where()`/nesting (→ Selettori), `@layer` (→ Cascade), subgrid (→ Grid), `clamp()`/`min()`/`max()`/`dvh` (→ Unità), logical properties (→ Box model), `text-wrap: balance/pretty` (→ Testo), scroll-driven animations & view transitions (→ Animazioni).
 3. **Legacy in secondo piano**: si cita solo se ha ancora valore (contesto storico, codice esistente, fallback). Va in un callout `> [!info] Legacy` o in una frase marcata, **mai** come tecnica principale. Tecniche superate (es. clearfix per il float, hack `-prefix-`) → menzione breve, non tutorial.
@@ -33,7 +33,7 @@ titolo: "<Titolo>"
 tags: [tipo/modulo, <tematici>]
 ---
 # NN · <Titolo>
-> 🎨 modulo N — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo N — *CSS* · rif. MDN
 
 <Intro breve: cosa copre il modulo e perché conta.>
 
@@ -73,8 +73,8 @@ Collegamenti: [[NN-altro-modulo]]
 - `> [!info]` mantiene il titolo quando è informativo: usare `> [!info] Legacy` per la sintassi vecchia, `> [!info] Baseline` per lo stato di supporto di una feature moderna.
 - `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **🔁 Ripasso lampo**.
 
-## Aggiunte oltre il corso
-Contenuto non presente nel corso di Max ma aggiunto perché utile/moderno **non** va marcato ogni volta (il modern-first è la linea editoriale): si integra e basta. Riservare la nota in corsivo ➕ (es. `➕ *Oltre il corso — …*`) solo per **tangenti/approfondimenti** che escono dal filo del modulo.
+## Aggiunte e modernizzazioni
+Contenuto aggiunto perché utile/moderno **non** va marcato ogni volta (il modern-first è la linea editoriale): si integra e basta. Riservare la nota in corsivo ➕ (es. `➕ *Approfondimento — …*`) solo per **tangenti/approfondimenti** che escono dal filo del modulo.
 
 ## Tag controllati
 - tipo: `tipo/modulo`

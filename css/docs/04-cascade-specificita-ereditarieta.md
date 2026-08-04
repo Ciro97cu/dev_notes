@@ -4,7 +4,7 @@ titolo: "Cascade, specificità, ereditarietà"
 tags: [tipo/modulo, cascade]
 ---
 # 04 · Cascade, specificità, ereditarietà
-> 🎨 modulo 4 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 4 — *CSS* · rif. MDN
 
 Più regole possono toccare lo stesso elemento e chiedere valori diversi per la stessa proprietà. Chi vince? A deciderlo sono tre meccanismi in cascata: la **cascade** (l'algoritmo che ordina le dichiarazioni), la **specificità** (quanto "pesa" un selettore) e l'**ereditarietà** (i valori che scendono da genitore a figlio). Capirli evita la sindrome del `!important` a tappeto e rende gli stili prevedibili.
 

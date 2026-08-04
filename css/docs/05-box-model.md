@@ -4,7 +4,7 @@ titolo: "Box model"
 tags: [tipo/modulo, box-model]
 ---
 # 05 · Box model
-> 🎨 modulo 5 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 5 — *CSS* · rif. MDN
 
 Ogni elemento HTML è, per il layout, una **scatola rettangolare**. Il *box model* descrive come questa scatola è costruita — da un nucleo di contenuto verso l'esterno — e come le sue misure si combinano per occupare lo spazio in pagina. Capirlo bene è il prerequisito di ogni tecnica di layout: senza, i valori di `width`, `padding` e `margin` sembrano "non tornare mai".
 

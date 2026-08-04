@@ -4,7 +4,7 @@ titolo: "Future-proof CSS"
 tags: [tipo/modulo, future-proof]
 ---
 # 16 · Future-proof CSS
-> 🎨 modulo 16 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 16 — *CSS* · rif. MDN
 
 Scrivere CSS **a prova di futuro** significa usare feature nuove senza rompere i browser che non le hanno ancora, e appoggiarsi a strumenti e convenzioni che invecchiano bene. Il tema non è tanto *quali* proprietà esistono, ma *come* decidere quando usarle, come degradare con eleganza e quali pratiche del passato (prefissi a mano, hack di specificità, framework monolitici) oggi non servono più. Questo modulo mette in fila gli strumenti attuali — `@supports`, **Baseline**, Autoprefixer — e inquadra il legacy per quello che è: contesto storico, non ricetta.
 

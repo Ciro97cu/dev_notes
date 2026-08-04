@@ -5,7 +5,7 @@ tags: [tipo/modulo, unita]
 ---
 # 06 · Unità, valori & funzioni
 
-> 🎨 modulo 6 — *CSS* · fonte: corso M. Schwarzmüller + MDN
+> 🎨 modulo 6 — *CSS* · rif. MDN
 
 Ogni dichiarazione CSS ha la forma `property: value`, e il **valore** ha un tipo: una keyword predefinita, un colore, una lunghezza, un numero, una percentuale, il risultato di una funzione. Questo modulo mette a fuoco le **unità di misura** (assolute e relative), le **funzioni matematiche** (`calc()`, `clamp()`, `min()`, `max()`) e le **custom properties** — lo strumento con cui il CSS moderno rende i valori dinamici e riutilizzabili.
 

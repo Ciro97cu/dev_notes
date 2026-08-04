@@ -13,5 +13,5 @@
     <a class="cover-btn" href="#/docs/15-transizioni-animazioni">🎬<span>Transizioni &amp; animazioni</span></a>
     <a class="cover-btn" href="#/docs/16-future-proof">✨<span>Future-proof</span></a>
   </div>
-  <p class="cover-disclaimer">Appunti personali di studio, non affiliati all'autore del corso. Rielaborazioni originali dei concetti, verificate su MDN e Can I Use.</p>
+  <p class="cover-disclaimer">Appunti personali di studio: rielaborazioni originali, verificate su MDN e Can I Use.</p>
 </div>
