@@ -354,6 +354,33 @@ export class App {
 
 Il prefisso del selector (`app-`, inserito dalla CLI per evitare collisioni con librerie e tag HTML nativi) si cambia in `angular.json` (chiave `prefix`); con il linting attivo va allineato anche in `eslint.config.js`.
 
+## View Encapsulation
+
+*➕ Fuori dal libro — come Angular isola gli stili di un componente.*
+
+Gli stili dichiarati in `styleUrl`/`styles` di un componente sono, per impostazione predefinita, **scoped**: valgono solo per quel componente e non "sporcano" il resto dell'app. Angular lo ottiene **senza** Shadow DOM, con la *view encapsulation* emulata: aggiunge agli elementi del componente un attributo univoco (es. `_ngcontent-abc`) e riscrive di conseguenza i selettori CSS, così una regola come `h2 { … }` colpisce solo gli `h2` di quel componente.
+
+Il comportamento si governa col metadato `encapsulation` del decoratore, che accetta i tre valori dell'enum `ViewEncapsulation`:
+
+```ts
+import { Component, ViewEncapsulation } from '@angular/core';
+
+@Component({
+  selector: 'app-badge',
+  templateUrl: './badge.html',
+  styleUrl: './badge.css',
+  encapsulation: ViewEncapsulation.Emulated, // default
+})
+export class Badge {}
+```
+
+- **`Emulated`** (default) — scoping emulato via attributi: gli stili del componente **non escono**, ma quelli globali **entrano** ancora. È il compromesso adatto alla quasi totalità dei componenti.
+- **`None`** — nessuno scoping: gli stili del componente diventano **globali** e si applicano a tutta l'app. Ha senso solo per stili di tema/reset dichiarati di proposito a livello globale; da evitare nei componenti normali, perché i selettori generici finiscono per collidere.
+- **`ShadowDom`** — isolamento **reale** tramite lo Shadow DOM del browser: gli stili sono completamente incapsulati e quelli globali **non entrano**. Adatto a componenti davvero autonomi (o esposti come web component), al prezzo di rinunciare all'ereditarietà degli stili globali.
+
+> [!tip]
+> Con l'incapsulamento emulato, il pseudo-selettore **`:host`** stila l'elemento-host del componente stesso: è il modo corretto per dare stili al "contenitore" senza sconfinare fuori dal componente.
+
 ## Running & Debugging the Application
 > 📖 pp.35-37
 
