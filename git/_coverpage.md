@@ -1,10 +1,17 @@
-# Appunti Git <small>da zero ad avanzato</small>
-
-> Controllo di versione spiegato in italiano semplice — percorso ordinato e reference rapida.
-
-- Dai fondamenti (`init`, `commit`, `branch`) fino a rebase, interni di Git e SemVer
-- Comandi in inglese, spiegazioni in italiano; comandi pericolosi marcati ⚠️
-- Playbook di ricette pronte + glossario + errori comuni con fix
-
-[Inizia a leggere](README.md)
-[Vai al Playbook](playbook.md)
+<div class="cover-wrap">
+  <img class="cover-logo" src="assets/git-logo.svg" alt="Git" />
+  <h1>Appunti Git</h1>
+  <p class="cover-sub">Controllo di versione, da zero ad avanzato</p>
+  <p class="cover-desc">Git spiegato in italiano semplice: dai fondamenti (init, commit, branch) fino a merge, rebase, interni di Git e SemVer. Comandi in inglese, quelli pericolosi marcati ⚠️. In più playbook di ricette pronte, glossario ed errori comuni con fix.</p>
+  <div class="cover-actions">
+    <a class="cover-btn is-resume" id="nav-resume" href="#/" style="display:none">▶️<span>Riprendi</span></a>
+    <a class="cover-btn is-primary" href="#/01-introduzione">🚀<span>Inizia a leggere</span></a>
+    <a class="cover-btn" href="#/06-branch">🌿<span>Branch</span></a>
+    <a class="cover-btn" href="#/07-merge">🔀<span>Merge &amp; rebase</span></a>
+    <a class="cover-btn" href="#/08-annullare">↩️<span>Annullare</span></a>
+    <a class="cover-btn" href="#/14-github">🐙<span>GitHub</span></a>
+    <a class="cover-btn" href="#/playbook">📖<span>Playbook</span></a>
+    <a class="cover-btn" href="#/glossario">📇<span>Glossario</span></a>
+  </div>
+  <p class="cover-disclaimer">Appunti personali di studio, verificati sulla documentazione ufficiale di Git.</p>
+</div>
