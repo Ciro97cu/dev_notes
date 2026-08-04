@@ -184,6 +184,35 @@ export class FlightClient {
 }
 ```
 
+### Circular Dependencies
+
+*➕ Fuori dal libro — gotcha classico della DI, sempre valido.*
+
+Due service che si iniettano a vicenda creano una **dipendenza circolare**: per costruire `A` l'injector scopre che serve `B`, ma per costruire `B` serve di nuovo `A`, e non ha un punto da cui partire. A runtime Angular si ferma con l'errore **`NG0200: Circular dependency in DI detected`**, stampando la catena coinvolta.
+
+Nella maggior parte dei casi è un **segnale di design**: la responsabilità condivisa che lega i due service va estratta in un terzo service, da cui entrambi dipendono, spezzando il ciclo.
+
+```ts
+// invece di A <-> B, entrambi dipendono da un service comune
+@Service()
+export class SharedState { /* stato/logica condivisa */ }
+
+@Service()
+export class A { private shared = inject(SharedState); }
+
+@Service()
+export class B { private shared = inject(SharedState); }
+```
+
+Quando il ciclo non è eliminabile — o quando il riferimento alla classe **non è ancora definito** nel punto in cui lo si usa (ordine di dichiarazione, self-reference nei `providers`) — si rompe l'anello con **`forwardRef()`**, che rimanda la risoluzione del riferimento a inizializzazione avvenuta:
+
+```ts
+private other = inject(forwardRef(() => Other));
+```
+
+> [!warning]
+> `forwardRef` risolve il *sintomo* (il riferimento pigro), non la *causa* (l'accoppiamento circolare): va tenuto come ultima risorsa, non come modo per normalizzare cicli evitabili.
+
 ### Exchanging Services with Providers
 > 📖 pp.126-128
 
