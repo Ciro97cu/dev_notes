@@ -1,4 +1,4 @@
-# 🅰️ Appunti Angular — Modern Angular (2ª ed.)
+# 🅰️ Appunti Angular — Modern Angular (3ª ed.)
 
 Appunti di studio in italiano sul libro **_Modern Angular_ (3ª edizione, v3.0.0 — aggiornata ad Angular 22)**.
 Prosa in italiano, termini/API/codice in inglese. Ogni capitolo è un **hub** con riferimenti alle pagine del PDF e un **🔁 Ripasso lampo** finale; i concetti cardine ricorrenti sono note atomiche cross-linkate.
@@ -14,4 +14,4 @@ Prosa in italiano, termini/API/codice in inglese. Ogni capitolo è un **hub** co
 - [02 · Signal-Based Components](/capitoli/02-signal-based-components.md)
 - [03 · Reactive Design with Signals](/capitoli/03-reactive-design-with-signals.md)
 
-> Fonte: libro *Modern Angular* di Manfred Steyer. Questi sono appunti personali di studio.
+> **Disclaimer.** Questi sono **appunti personali di studio**, non affiliati né approvati dall'autore o dall'editore. La fonte è il libro *Modern Angular* di **Manfred Steyer**, di cui si possiede una copia acquistata regolarmente. Qui **non** si riproduce né ridistribuisce alcun contenuto del libro (testo, figure, PDF): le note sono **rielaborazioni originali** dei concetti, e i riferimenti `📖 pp.x-y` servono solo da indice per chi possiede il libro. Per il testo completo, acquistare il libro.
