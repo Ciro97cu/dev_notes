@@ -296,40 +296,95 @@ html.dark .sidebar-nav li.active > a {
   color: #000 !important;
 }
 
-/* ---------- Coverpage ---------- */
+/* ---------- Coverpage (hero centrato · fondo scuro con glow giallo + puntini) ---------- */
+/* Il giallo brand non regge il testo bianco come sfondo: cover a fondo SCURO con
+   accenti gialli. I puntini sono su <canvas> (coverDotsPlugin, ../assets/shared.js). */
 section.cover {
-  background: linear-gradient(135deg, #1a1a00 0%, #3d3400 50%, #1a1a00 100%) !important;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 100% at 12% 6%, rgba(247, 223, 30, .14), transparent 45%) center / cover no-repeat,
+    linear-gradient(135deg, #17181c 0%, #23262d 55%, #141519 100%) center / cover no-repeat,
+    #1e2127 !important;
+}
+section.cover #cover-dots { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+section.cover .cover-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 clamp(1.4rem, 5vw, 4rem);
+  text-align: center;
+}
+.cover-wrap { display: flex; flex-direction: column; align-items: center; }
+.cover-logo {
+  width: 92px;
+  height: 92px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, .45));
+}
+section.cover .cover-wrap h1 {
+  margin: .2rem 0 .1rem;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .35);
+}
+.cover-wrap .cover-sub { margin: 0 0 1rem; font-size: clamp(1.05rem, 1.8vw, 1.3rem); font-weight: 600; color: #fff; opacity: .95; }
+.cover-wrap .cover-desc { max-width: 60ch; margin: 0 auto; font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.6; color: #fff; opacity: .9; }
+
+/* azioni: pill icona+testo, a capo su mobile */
+.cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .8rem;
+  margin: 1.9rem 0 1.5rem;
+}
+.cover-actions .cover-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .72rem 1.35rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff !important;
+  text-decoration: none !important;
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .28);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.cover-actions .cover-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, .18);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .4);
+}
+/* CTA primaria: giallo brand con testo scuro */
+.cover-actions .cover-btn.is-primary {
+  background: #f7df1e;
+  border-color: #f7df1e;
+  color: #1a1a1a !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .4);
+}
+.cover-actions .cover-btn.is-resume { border-color: rgba(247, 223, 30, .7); }
+
+.cover-wrap .cover-disclaimer {
+  max-width: 60ch;
+  margin: .4rem auto 0;
+  font-size: .74rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .68);
 }
 
-section.cover .cover-main > p,
-section.cover .cover-main > h1,
-section.cover .cover-main blockquote p {
-  color: #f0f0e0;
-}
-
-section.cover .cover-main h1 em {
-  color: var(--js-yellow);
-  font-style: normal;
-}
-
-section.cover .cover-main > p a {
-  border: 2px solid var(--js-yellow);
-  color: var(--js-yellow);
-  border-radius: 4px;
-  padding: 0.3em 0.8em;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-section.cover .cover-main > p a:hover {
-  background: var(--js-yellow);
-  color: #000;
+@media (max-width: 720px) {
+  .cover-actions .cover-btn { font-size: .92rem; padding: .62rem 1.1rem; }
 }
 
 section.cover.show ~ .sidebar,
-section.cover.show ~ .content {
-  display: none;
-}
+section.cover.show ~ .content { display: none; }
 
 /* ---------- Callout (flexible-alerts) — box tintati, uniformi tra le sezioni ---------- */
 :root {
