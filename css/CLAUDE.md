@@ -5,7 +5,7 @@
 Fonte: appunti personali (Google Doc), modernizzati e riscritti. Ogni claim non ovvio va verificato su **[MDN](https://developer.mozilla.org/en-US/docs/Web/CSS)**; per il supporto browser si cita **[Can I Use](https://caniuse.com/)** / [Baseline](https://web.dev/baseline).
 
 ## Policy sui contenuti — *modern-first* (regola cardine)
-Gli appunti di partenza sono datati (~2020): vanno **modernizzati**.
+Linea editoriale: la sintassi CSS **attuale (2026)** è il default; il legacy resta solo dove ha ancora valore (contesto storico, fallback). I moduli sono già scritti così — questa policy vale per ogni aggiunta o revisione.
 1. **Sintassi moderna in primo piano**: se una tecnica recente **sostituisce** quella vecchia, si spiega la moderna come default (es. `gap` nei flex/grid invece dei margini; `inset` invece di top/right/bottom/left; nesting nativo; range syntax nelle media query).
 2. **Novità additive integrate dove pertinenti**: `oklch()`/`color-mix()`/relative colors (→ Colori), container queries (→ Responsive), `:has()`/`:is()`/`:where()`/nesting (→ Selettori), `@layer` (→ Cascade), subgrid (→ Grid), `clamp()`/`min()`/`max()`/`dvh` (→ Unità), logical properties (→ Box model), `text-wrap: balance/pretty` (→ Testo), scroll-driven animations & view transitions (→ Animazioni).
 3. **Legacy in secondo piano**: si cita solo se ha ancora valore (contesto storico, codice esistente, fallback). Va in un callout `> [!info] Legacy` o in una frase marcata, **mai** come tecnica principale. Tecniche superate (es. clearfix per il float, hack `-prefix-`) → menzione breve, non tutorial.
