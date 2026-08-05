@@ -1,4 +1,4 @@
-- [Indice completo](README.md)
+- [Indice completo](/README)
 
 - **Parte 1 — Le basi**
   - [1. Introduzione](docs/01-introduzione.md)

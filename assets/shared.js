@@ -292,18 +292,23 @@ function dnSearchReadIndex() {
   // l'indice per path: possono esistere più chiavi `docsify.search.index*`, una
   // per vault. Si sceglie quella del vault CORRENTE = l'indice che contiene la
   // pagina attuale (fallback: l'ultima trovata).
+  var vault = window.__VAULT || '';
   var curPath = (location.hash || '').replace(/^#/, '').split('?')[0] || '/';
   var candidates = [];
   for (var i = 0; i < localStorage.length; i++) {
     var k = localStorage.key(i);
     if (!k || k.indexOf('docsify.search.index') !== 0) continue;
     var obj; try { obj = JSON.parse(localStorage.getItem(k)); } catch (e) { continue; }
-    if (obj && typeof obj === 'object') candidates.push(obj);
+    if (obj && typeof obj === 'object') candidates.push({ k: k, o: obj });
   }
   if (!candidates.length) return [];
   var chosen = null;
-  candidates.forEach(function (o) { if (o[curPath]) chosen = o; });
-  if (!chosen) chosen = candidates[candidates.length - 1];
+  // 1) chiave namespacizzata col vault corrente (deterministico)
+  if (vault) candidates.forEach(function (c) { if (c.k.indexOf('dev-notes-' + vault) >= 0) chosen = c.o; });
+  // 2) altrimenti l'indice che contiene la pagina attuale
+  if (!chosen) candidates.forEach(function (c) { if (c.o[curPath]) chosen = c.o; });
+  // 3) fallback
+  if (!chosen) chosen = candidates[candidates.length - 1].o;
   var out = [];
   Object.keys(chosen).forEach(function (path) {
     var secs = chosen[path]; if (!secs || typeof secs !== 'object') return;
@@ -352,7 +357,8 @@ function dnSearchRun() {
   hits.slice(0, 60).forEach(function (h, ix) {
     var snip = dnSearchSnippet(h.s.body || h.s.title, new RegExp(re.source, re.flags));
     var page = h.s.path.split('/').filter(Boolean).pop() || h.s.path;
-    html += '<a class="dn-s-item' + (ix === 0 ? ' sel' : '') + '" href="' + dnEscHtml(h.s.slug) + '">' +
+    var slug = h.s.slug.charAt(0) === '#' ? h.s.slug : '#' + h.s.slug;   // assicura la rotta hash
+    html += '<a class="dn-s-item' + (ix === 0 ? ' sel' : '') + '" href="' + dnEscHtml(slug) + '">' +
       '<span class="dn-s-title">' + dnEscHtml(h.s.title || '(senza titolo)') + '<span class="dn-s-path">' + dnEscHtml(page) + '</span></span>' +
       (snip ? '<div class="dn-s-snip">' + snip + '</div>' : '') + '</a>';
   });

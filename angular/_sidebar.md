@@ -1,4 +1,4 @@
-- [Indice completo](README.md)
+- [Indice completo](/README)
 
 - **Capitoli**
   - [01 · Getting Started](/capitoli/01-getting-started.md)
