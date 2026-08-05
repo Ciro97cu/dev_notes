@@ -717,6 +717,20 @@ function studyProgressPlugin(hook, vm) {
     }
     return out;
   }
+  // Roll-up: il capitolo aperto è "letto" se tutte le sue sottosezioni lo sono
+  // (e viceversa). Serve a rendere significativa la % a livello di capitolo
+  // sull'hub anche quando si spuntano solo le sottosezioni. Ritorna true se cambia.
+  function rollup(read) {
+    var cur = (vm.route && vm.route.path) || '';
+    if (!cur || DN_SKIP[cur]) return false;
+    var subs = descendantIdents(cur);
+    if (!subs.length) return false;                 // capitolo senza sottosezioni: nessun roll-up
+    var allDone = subs.every(function (id) { return read.indexOf(id) >= 0; });
+    var ci = read.indexOf(cur);
+    if (allDone && ci < 0) { read.push(cur); return true; }
+    if (!allDone && ci >= 0) { read.splice(ci, 1); return true; }
+    return false;
+  }
   // Spunta/despunta `ident` e cascata sui suoi discendenti (stesso stato).
   function applyCascade(ident) {
     var read = getRead(), on = read.indexOf(ident) < 0;
@@ -725,6 +739,7 @@ function studyProgressPlugin(hook, vm) {
       if (on && i < 0) read.push(id);
       else if (!on && i >= 0) read.splice(i, 1);
     });
+    rollup(read);
     window.NotesStore.write('read', read);
   }
   // Inserisce/aggiorna la casella accanto a ogni voce presente nella sidebar
@@ -734,13 +749,14 @@ function studyProgressPlugin(hook, vm) {
   function decorate() {
     var read = getRead();
     var links = [].slice.call(document.querySelectorAll('.sidebar-nav a'));
-    var total = 0, done = 0;
+    var total = 0, done = 0, chT = 0, chD = 0;
     links.forEach(function (a) {
       var ident = (a.getAttribute('href') || '').replace(/^#/, '');   // /docs/x  o  /docs/x?id=sez
       var base = ident.split('?')[0];
       if (!base || DN_SKIP[base]) return;
       var r = read.indexOf(ident) >= 0;
       total++; if (r) done++;
+      if (ident.indexOf('?id=') < 0) { chT++; if (r) chD++; }         // conteggio a livello di CAPITOLO (stabile) per l'hub
       var chk = a.querySelector('.dn-check');
       if (!chk) {
         chk = document.createElement('span');
@@ -759,6 +775,8 @@ function studyProgressPlugin(hook, vm) {
       chk.setAttribute('aria-checked', r ? 'true' : 'false');
     });
     updateMeter(done, total);
+    // progressione a livello di capitolo, per la % sulle card dell'hub (scrittura raw: niente evento)
+    if (chT) { try { localStorage.setItem(window.NotesStore.keyFor('progress'), JSON.stringify({ d: chD, t: chT })); } catch (e) {} }
   }
   function updateMeter(done, total) {
     var nav = document.querySelector('.sidebar-nav') || document.querySelector('.sidebar');
@@ -777,7 +795,11 @@ function studyProgressPlugin(hook, vm) {
     m.querySelector('.dn-progress-bar span').style.width = pct + '%';
     m.style.display = total ? '' : 'none';
   }
-  hook.doneEach(function () { decorate(); });
+  hook.doneEach(function () {
+    var read = getRead();
+    if (rollup(read)) window.NotesStore.write('read', read);   // auto-completa se le sezioni erano già tutte spuntate (decorate via evento)
+    else decorate();
+  });
   document.addEventListener('notesstore:change', function (e) {
     if (e.detail && (e.detail.name === 'read' || e.detail.name === '*')) decorate();
   });
