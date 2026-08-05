@@ -4,7 +4,7 @@ tags: [tipo/cert, routing, legacy]
 livello: [mid]
 ---
 # Routing classico
-> 🎓 Cert Angular · il Router in forma *module-based* — `RouterModule.forRoot`, guard/resolver class-based, `snapshot`; il setup moderno è nel vault ([[04-router-navigation-lazy-loading]])
+> Cert Angular · il Router in forma *module-based* — `RouterModule.forRoot`, guard/resolver class-based, `snapshot`; il setup moderno è nel vault ([[04-router-navigation-lazy-loading]])
 
 Nel Router classico la configurazione si registra con `RouterModule.forRoot`/`forChild` dentro gli `@NgModule`, guard e resolver sono **classi** `@Injectable` che implementano un'interfaccia, e i parametri si leggono spesso via `ActivatedRoute.snapshot`. La cert lo richiede perché è così che è cablata la maggior parte delle app esistenti, e perché il ciclo di navigazione (guard → resolve → activate) è materia d'esame.
 
@@ -230,7 +230,7 @@ Tra gli eventi principali, nell'ordine: `NavigationStart`, `RoutesRecognized`, `
 > [!info] Stato attuale
 > Le **interfacce** dei guard/resolver class-based (`CanActivate`, `CanActivateChild`, `CanDeactivate`, `CanMatch`, `Resolve`) sono **deprecate dalla v15.2** in favore dei guard/resolver **funzionali**; `CanLoad` è deprecato ancora prima in favore di `CanMatch`. Una classe `@Injectable` resta comunque riusabile da un guard funzionale in migrazione — `canActivate: [() => inject(AuthGuard).canActivate(route, state)]` — o con gli helper `mapToCanActivate` & co. `RouterModule.forRoot`/`forChild` **non** sono deprecati e valgono per le app module-based. Fonte: [angular.dev/guide/routing](https://angular.dev/guide/routing) e l'issue di deprecazione [angular#50234](https://github.com/angular/angular/issues/50234).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Differenza tra `RouterModule.forRoot` e `forChild`?
 > [!success]- Risposta

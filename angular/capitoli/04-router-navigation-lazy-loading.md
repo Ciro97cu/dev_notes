@@ -5,7 +5,7 @@ pagine: "87-119"
 tags: [tipo/capitolo, routing, di, performance, angular-22]
 ---
 # 04 · Navigation & Lazy Loading with the Router
-> 📖 cap.4 · pp.87-119 — *Modern Angular* v3.0.0
+> cap.4 · pp.87-119 — *Modern Angular* v3.0.0
 
 In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non basta: perché back button, bookmark e history del browser funzionino, ogni cambio di stato deve riflettersi nell'**URL**. Il **Router** di Angular automatizza tutto questo: mappa **path** → **componenti** e li attiva in un **placeholder** (`<router-outlet>`), tenendo l'URL sincronizzato con la vista corrente. Il capitolo copre: configurazione del routing, navigazione (link e programmatica), route parametrizzate, child routes, [[glossario#lazy-loading|lazy loading]] e preloading, query string e hash fragment, e le due strategie di location (path vs hash).
 
@@ -13,7 +13,7 @@ In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non ba
 > In un'app Angular convivono più configurazioni di routing: `app.routes.ts` contiene le route necessarie fin dall'avvio; altre config vengono caricate **on demand** per singola feature o dominio (vedi lazy loading).
 
 ## Setting up Routing Configuration
-> 📖 pp.89-91
+> pp.89-91
 
 Le route sono un array di tipo `Routes`. Ogni voce mappa un `path` a un `component` (oppure a una redirect o a un lazy import).
 
@@ -66,7 +66,7 @@ export const appConfig: ApplicationConfig = {
 Collegamenti: [[providers]] · [[12-initialization-route-changes]] (guards/resolver lungo i route change).
 
 ## Adding a Placeholder in the App
-> 📖 pp.91-92
+> pp.91-92
 
 Invece di referenziare un componente concreto, `App` espone un **placeholder** `<router-outlet>` dove il Router monta il componente attivato. Va importato `RouterOutlet` (e si può rimuovere l'import di `FlightSearch`, ora attivato dal Router).
 
@@ -94,7 +94,7 @@ export class App {}
 ```
 
 ## Setting up Hyperlinks to Activate Routes
-> 📖 pp.92-95
+> pp.92-95
 
 I link dichiarativi usano la directive `routerLink`, riferita al `path` della route. `routerLinkActive` assegna una classe CSS quando quel link (o un suo figlio) è attivo, per evidenziare la voce di menu corrente. Entrambe vanno importate nel componente.
 
@@ -146,7 +146,7 @@ export class Sidebar {}
 Collegamenti: [[02-signal-based-components]] (struttura componenti e `imports`).
 
 ## Programmatically Changing Routes
-> 📖 pp.95-96
+> pp.95-96
 
 Per cambiare route via codice si fa [[inject]] del `Router` e si chiama il metodo `navigate`.
 
@@ -172,7 +172,7 @@ this.router.navigate(['/a', 'b', id]); // con id=17 → attiva /a/b/17
 Collegamenti: [[inject]].
 
 ## Parameterized Routes
-> 📖 pp.96-102
+> pp.96-102
 
 Quando si cambia route spesso serve passare informazioni alla route di destinazione (es. l'ID del volo da editare): a questo servono i **routing parameters**.
 
@@ -305,7 +305,7 @@ Nella config vanno dichiarati **solo** i parametri di **segmento**, prefissati c
 Collegamenti: [[signal-input]] · [[content-projection]] · [[02-signal-based-components]].
 
 ## Hierarchical Routing with Child Routes
-> 📖 pp.102-108
+> pp.102-108
 
 Un componente attivato dal Router può a sua volta contenere un `<router-outlet>`, dando luogo alle **child routes** (viste annidate/gerarchiche). Esempio: un `BookingNavigation` con un menu in alto e, sotto, un placeholder interno in cui attivare `flight-search` / `passenger-search`.
 
@@ -369,7 +369,7 @@ Le child route vanno nell'array `children` del nodo padre, con una default route
 > Path relativi in `routerLink`: `./x` appende alla route corrente (è il default, quindi omettibile). `../x` punta a un **sibling** — es. da `./booking/flight-search` a `./booking/passenger-search` con `../passenger-search`.
 
 ## Lazy Loading of Routes
-> 📖 pp.108-112
+> pp.108-112
 
 Di default all'avvio Angular carica **tutte** le feature, il che rende lo startup lento nelle app grandi. Il lazy loading risolve il problema caricando parti dell'app solo su richiesta.
 
@@ -440,7 +440,7 @@ Lo si verifica nel browser: nell'output di `ng serve` compare un **bundle separa
 > `loadChildren` → config di route lazy; `loadComponent` → singolo componente lazy. Entrambi passano per un dynamic `import()`; con un `default export` si può omettere il `.then`.
 
 ### Preloading
-> 📖 pp.113-114
+> pp.113-114
 
 Il preloading si costruisce sul lazy loading: usa le risorse idle (i tempi morti in cui browser e rete non hanno nulla da fare) **dopo l'avvio** per caricare in background i bundle lazy prima che servano, così quando il Router ne ha bisogno sono già disponibili. Si attiva con la feature `withPreloading` più una strategia.
 
@@ -461,7 +461,7 @@ provideRouter(
 > Strategie out-of-the-box (già pronte, incluse in Angular senza installare nulla): `NoPreloading` (default) e `PreloadAllModules`. Per logiche custom si implementa un service che soddisfa l'interfaccia `PreloadingStrategy`. Ma prima conviene verificare se una delle due built-in basta già (spesso è così), o se fa al caso una soluzione di terze parti come `ngx-quicklink` (precarica le route i cui link entrano nel viewport) o `guess.js` (usa il machine learning per predire la prossima route che l'utente visiterà).
 
 ## Working with Query Strings and Hash Fragments
-> 📖 pp.114-115
+> pp.114-115
 
 Oltre a segmenti e matrix, il Router supporta la classica **query string** (`url?param1=value1&param2=value2`) e l'**hash fragment** (`url#info-in-hash-fragment`) — poco usati in Angular, ma utili per impostazioni applicative globali.
 
@@ -502,7 +502,7 @@ this.activatedRoute.fragment.subscribe((fragment) => {
 > Con `withComponentInputBinding` anche i **query parameter** vengono legati a input omonimi, ma **non l'hash fragment**: Angular lo tratta come stringa singola, non come coppie chiave-valore.
 
 ## Path Routing vs. Hash Routing
-> 📖 pp.116-118
+> pp.116-118
 
 Per restare flessibile, il Router delega la gestione dell'URL a una **strategia** intercambiabile.
 
@@ -547,7 +547,7 @@ Vantaggio: niente redirect server-side né `<base>` da configurare — la separa
 
 Collegamenti: [[providers]] · [[17-defer-ssr-hydration]].
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché la default route `path: ''` richiede `pathMatch: 'full'` e perché il catch-all `**` va per ultimo?
 > [!success]- Risposta

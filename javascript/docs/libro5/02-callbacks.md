@@ -244,7 +244,7 @@ Ogni soluzione è possibile, ma richiede boilerplate costoso e specifico. I call
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Due problemi fondamentali dei callback:**
 

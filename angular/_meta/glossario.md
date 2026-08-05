@@ -2,7 +2,7 @@
 titolo: "Glossario"
 tags: [tipo/glossario]
 ---
-# 📖 Glossario
+# Glossario
 
 Termini tecnici ricorrenti del libro, spiegati in parole semplici. I capitoli linkano qui alla prima occorrenza di un termine; i nomi di API e keyword restano in inglese (non si traducono), ma qui trovi cosa significano davvero.
 

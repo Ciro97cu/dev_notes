@@ -244,7 +244,7 @@ x = null; // { id: 1 } diventa GC-eligible
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 ```js
 /* === TYPEDARRAY === */

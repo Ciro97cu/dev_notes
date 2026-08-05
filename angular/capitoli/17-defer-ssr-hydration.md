@@ -5,7 +5,7 @@ pagine: "410-422"
 tags: [tipo/capitolo, ssr, performance, angular-22]
 ---
 # 17 · Defer, SSR & Hydration
-> 📖 cap.17 · pp.410-422 — *Modern Angular* v3.0.0
+> cap.17 · pp.410-422 — *Modern Angular* v3.0.0
 
 Le SPA hanno ottime performance a runtime, ma il **primo caricamento** è spesso più lento di qualche secondo rispetto a un sito classico server-rendered: il browser non riceve solo l'HTML, ma deve anche scaricare ed eseguire una quantità significativa di JavaScript prima di poter renderizzare l'applicazione. Il *First Meaningful Paint* (FMP) arriva quindi tardi. Per app aziendali interne il ritardo può essere accettabile; per soluzioni pubbliche come web shop e landing page diventa un problema (più secondi di attesa = più bounce).
 
@@ -15,7 +15,7 @@ Il capitolo presenta tre meccanismi complementari:
 - **[[glossario#hydration|Hydration]]**: rende interattivo quell'HTML sul client (gli "aggancia" il JavaScript così bottoni, form ecc. rispondono), eventualmente a step incrementali.
 
 ## Deferrable Views — `@defer`
-> 📖 pp.410-411
+> pp.410-411
 
 Non tutte le aree di una pagina contano allo stesso modo. Sulla pagina di ricerca voli, form e lista risultati sono primari; i pannelli opzionali (noleggio auto, hotel, tenda) sono secondari. Caricarne il codice subito appesantisce inutilmente il bundle iniziale (il pacchetto JavaScript scaricato all'avvio). Con `@defer` si avvolge la regione: Angular ne **splitta il codice in un bundle separato** (lo isola in un pacchetto a parte) e lo carica solo allo scattare di un trigger (un evento che fa partire il caricamento). Nel frattempo `@placeholder` fornisce contenuto alternativo, così il layout non "salta" (non si riassesta bruscamente quando arriva il contenuto vero).
 
@@ -52,7 +52,7 @@ Oltre a `@placeholder`, `@defer` supporta `@loading` (mostrato mentre si scarica
 > Usa `@defer` per UI che chiaramente **non** serve alla prima interazione utile. Differire (rimandare) la navigazione core o le azioni primarie costringe l'utente a uno stato di loading proprio quando ha bisogno di quella funzionalità: danneggia la *perceived performance* (la velocità che l'utente percepisce, a prescindere dai tempi reali).
 
 ### Triggers
-> 📖 pp.411-412
+> pp.411-412
 
 Insieme fisso di trigger su `@defer`:
 
@@ -81,12 +81,12 @@ Di default `on viewport`, `on interaction` e `on hover` **richiedono un `@placeh
 Collegamenti: il code-splitting/[[glossario#lazy-loading|lazy loading]] (caricare il codice solo quando serve, non tutto all'avvio) è lo stesso tema del [[04-router-navigation-lazy-loading|cap.4]] applicato a livello di template.
 
 ## SSR & Hydration
-> 📖 pp.412-413
+> pp.412-413
 
 Per migliorare il primo paint delle soluzioni pubbliche si rende la SPA **sul server**, che consegna una pagina HTML completa: il chiamante vede il contenuto prima. Una volta caricati i bundle JS, la pagina diventa interattiva — questo processo si chiama **hydration**.
 
 ### Adding Server-Side Rendering
-> 📖 p.412
+> p.412
 
 Per aggiungere il supporto SSR basta aggiungere il pacchetto `@angular/ssr`, oppure usare lo switch `--ssr` alla creazione del progetto:
 
@@ -129,7 +129,7 @@ export const appConfig: ApplicationConfig = {
 Collegamenti: [[providers]] · le provider function (`provide*`/`with*`).
 
 ### Incremental Hydration
-> 📖 pp.413-414
+> pp.413-414
 
 L'[[glossario#incremental-hydration|hydration incrementale]] vuol dire che l'hydration **non deve avvenire tutta in una volta**. I bundle si richiedono solo quando servono — il più tardi possibile, idealmente mai per le regioni che l'utente non tocca. Le parti più importanti diventano interattive prima; le meno importanti dopo. Si abbina naturalmente a `@defer`: le regioni da idratare on-demand (su richiesta, solo al bisogno) si marcano con `@defer` e la clausola **`hydrate`** dice *quando* idratare.
 
@@ -165,7 +165,7 @@ Trigger di hydration disponibili:
 > Per l'hydration *non distruttiva* (che riusa il markup del server senza buttarlo via e ricostruirlo) il markup server-rendered deve **combaciare** con quello che Angular renderizzerebbe sul client. Componenti o librerie di terze parti che manipolano il DOM direttamente possono violare questo vincolo. Per escluderli usa l'attributo `ngSkipHydration` sull'[[glossario#host-elemento-host|host element]] (l'elemento DOM su cui vive il componente): Angular **non** ammette data binding su questo attributo (deve essere assente o impostato a `'true'`). Per escludere un componente per default, mettilo nei `host` metadata: `host: { 'ngSkipHydration': 'true' }`. Se più app Angular convivono sulla stessa pagina, vanno distinte via token `APP_ID` perché l'hydration colpisca l'app giusta.
 
 ### Event Replay
-> 📖 p.416
+> p.416
 
 Il periodo tra FMP e *Time to Interactive* (il momento in cui la pagina risponde davvero alle interazioni) è la **Uncanny Valley**: l'utente già vede la pagina, ma il JavaScript che gestisce le interazioni non è ancora caricato, quindi i click e gli altri eventi andrebbero persi. L'**[[glossario#event-replay|Event Replay]]** lo evita: un piccolo script incluso nell'HTML server-rendered si carica con la risposta iniziale e **registra** le interazioni (click, input nei form, ecc.) avvenute prima del termine dell'hydration. Quando l'app è interattiva, Angular **rigioca** gli eventi registrati, così nulla va perso.
 
@@ -175,7 +175,7 @@ Si abilita passando `withEventReplay()` a `provideClientHydration`, come nel lis
 > Con il setup SSR integrato di Angular l'**Event Replay è attivo di default**: usando la config standard non serve aggiungerlo esplicitamente. La tecnica è usata da tempo in **Wiz**, il framework interno di Google noto per le sue capacità di SSR e hydration: Angular ha adottato l'Event Replay da Wiz, mentre Wiz ha adottato i signal di Angular.
 
 ### Different Implementations for Server and Client
-> 📖 pp.416-418
+> pp.416-418
 
 SSR e hydration fanno girare lo **stesso codice Angular in due ambienti molto diversi**: sul server al render iniziale e nel browser dopo il boot (l'avvio dell'app lato client). Alcune API (`window`, `document`, `navigator`) esistono solo nel browser; il codice server spesso ha bisogno di dati specifici della richiesta.
 
@@ -243,7 +243,7 @@ export const appConfig: ApplicationConfig = {
 ```
 
 #### Checking the Platform at Runtime
-> 📖 p.417
+> p.417
 
 Se solo una piccola parte è platform-specific, conviene ramificare a runtime (decidere con un `if`, mentre l'app gira, se si è su server o browser) con gli helper `isPlatformBrowser` / `isPlatformServer` sul token `PLATFORM_ID`.
 
@@ -272,7 +272,7 @@ export class App {
 Collegamenti: [[inject]] · [[providers]] · l'[[injection-context]] e i provider con `useClass`.
 
 ## Hybrid Routing
-> 📖 pp.418-420
+> pp.418-420
 
 Non tutte le route traggono lo stesso beneficio dall'SSR: una landing o lista prodotti pubblica sì, una route di back-office (le pagine gestionali interne) dietro login forse non giustifica il costo, una pagina "About" quasi statica è ottima per il **prerendering** a build time (l'HTML viene generato una volta sola in fase di compilazione, non a ogni richiesta). L'**hybrid routing** lo permette: una config di route **lato server** sceglie il *render mode* (la modalità con cui ogni route viene resa: sul client, prerenderizzata o sul server) per ogni route. Oltre alla normale routing config, l'app definisce le `serverRoutes` e le passa alla config server.
 
@@ -318,7 +318,7 @@ I tre render mode:
 Server e prerender valgono solo per il render **iniziale**; dopo, Angular gira sul client.
 
 ### Prerendering Routes With Parameters
-> 📖 p.420
+> p.420
 
 Il prerendering produce HTML statico a build time, quindi i valori possibili dei parametri di route devono essere **noti allora**. Invece di mantenere una lista separata di route, si definisce una funzione async **`getPrerenderParams`** sulla route config: ritorna un array di record, uno per ogni combinazione di parametri per cui la CLI genera una pagina statica.
 
@@ -348,7 +348,7 @@ export const serverRoutes: ServerRoute[] = [
 Collegamenti: route parametrizzate e configurazione in [[04-router-navigation-lazy-loading|cap.4]].
 
 ### Working with the HTTP request and response
-> 📖 pp.420-421
+> pp.420-421
 
 Per le route server-rendered l'app può **leggere la richiesta HTTP in entrata** e **influenzare la risposta**. Angular fornisce i token:
 - **`REQUEST`** — l'oggetto request standard di Node/fetch.
@@ -388,7 +388,7 @@ Per la **response** si possono impostare header e status **dichiarativamente** n
 
 Collegamenti: [[inject]] · [[12-initialization-route-changes|cap.12]] ([[glossario#resolver|resolver]]/[[glossario#interceptor-httpinterceptor|interceptor]] lato HTTP).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Cosa fanno `@placeholder`, `@loading` e `@error` in un blocco `@defer`? A cosa servono `minimum` e `after`?
 > [!success]- Risposta

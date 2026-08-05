@@ -5,7 +5,7 @@ tags: [tipo/modulo, unita]
 ---
 # 06 · Unità, valori & funzioni
 
-> 🎨 modulo 6 — *CSS* · rif. MDN
+> modulo 6 — *CSS* · rif. MDN
 
 Ogni dichiarazione CSS ha la forma `property: value`, e il **valore** ha un tipo: una keyword predefinita, un colore, una lunghezza, un numero, una percentuale, il risultato di una funzione. Questo modulo mette a fuoco le **unità di misura** (assolute e relative), le **funzioni matematiche** (`calc()`, `clamp()`, `min()`, `max()`) e le **custom properties** — lo strumento con cui il CSS moderno rende i valori dinamici e riutilizzabili.
 
@@ -279,7 +279,7 @@ Molte funzioni CSS producono valori specifici di un dominio e sono trattate nei 
 
 Collegamenti: [[05-box-model]] · [[07-colori]] · [[10-sfondi-effetti]] · [[11-responsive]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza tra `em` e `rem`, e quando si preferisce l'una all'altra?
 > [!success]- Risposta

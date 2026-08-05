@@ -2,7 +2,7 @@
 titolo: "Cert Angular (Senior) — Angular classico"
 tags: [tipo/indice, moc, cert]
 ---
-# 🎓 Cert Angular — Angular classico
+# Cert Angular — Angular classico
 
 Appunti di preparazione alla **certificazione Angular** di [certificates.dev](https://certificates.dev/angular) (target **Senior**), limitati a ciò che l'esame richiede e che **non** è coperto dal vault *Modern Angular*: NgModules, forms classiche, RxJS, DI e routing classici, change detection con Zone.js, NgRx Redux, testing Jasmine/Karma, ecc.
 

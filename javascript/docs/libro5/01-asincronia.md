@@ -243,7 +243,7 @@ Questo concetto — operazioni atomicamente sicure che però possono essere rior
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Now vs Later**: ogni programma è diviso in chunk "adesso" e chunk "dopo". Il callback è il meccanismo base per eseguire codice "dopo".
 

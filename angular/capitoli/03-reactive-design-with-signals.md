@@ -5,17 +5,17 @@ pagine: "61-86"
 tags: [tipo/capitolo, signals, reactivity, http, angular-22]
 ---
 # 03 · Reactive Design with Signals
-> 📖 cap.3 · pp.61-86 — *Modern Angular* v3.0.0
+> cap.3 · pp.61-86 — *Modern Angular* v3.0.0
 
 Finora i [[signal]] servivano solo a dire ad Angular *quando* aggiornare i binding del template. Qui si fa il salto: si usano i signal per un design **reattivo e dichiarativo**. Invece di descrivere *come* aggiornare i valori dipendenti, si descrive *da cosa* sono derivati; il framework tiene tutto in sync. Ne risulta un codice più mantenibile e meno soggetto a errori. L'analogia è il foglio di calcolo: si definiscono formule che derivano valori da altre celle, e quando cambia la sorgente le celle dipendenti si aggiornano da sole.
 
 I mattoni sono tre — **computed signals**, **resources**, **effects** — più la semantica sottostante (auto-tracking, untracking, [[glossario#glitch-free|glitch-free]]). Si chiude assemblando il tutto in un **reactive flow** (flusso reattivo: i valori si propagano da soli lungo le dipendenze) sulla `flight-search` del [[02-signal-based-components|cap.2]].
 
 ## Building Blocks of Reactive Design
-> 📖 pp.61-74
+> pp.61-74
 
 ### Computed Signals
-> 📖 pp.61-63
+> pp.61-63
 
 Un [[computed]] definisce un signal di sola lettura che **deriva** il proprio valore da altri signal; quando le dipendenze cambiano, ricalcola. Esempio: la rotta di volo derivata da `from` e `to` del signal `filter`.
 
@@ -65,7 +65,7 @@ Qui `flightRoute` si aggiorna solo quando cambia `from`, non `to`: controllo fin
 Collegamenti: [[computed]] · [[untracked]] · [[signal]]
 
 ### Resources
-> 📖 pp.63-72
+> pp.63-72
 
 I computed derivano valori **sincroni** (disponibili subito); per i dati **asincroni** (che arrivano più tardi, es. fetch dal backend) servono le [[resource]]. Tutte usano signal sia per la richiesta sia per il risultato: in pratica prendono signal in ingresso (i criteri di ricerca) e, in modo asincrono, ne producono altri in uscita (i dati caricati). Angular ne offre tre implementazioni: `httpResource`, `rxResource` e `resource` (Promise-based).
 
@@ -252,7 +252,7 @@ export function withPreviousValue<T>(input: Resource<T>): Resource<T> {
 Collegamenti: [[resource]] · [[linked-signal]] · [[02-signal-based-components]] (intro a `httpResource`)
 
 ### Effects
-> 📖 pp.72-74
+> pp.72-74
 
 Come un computed, un [[effect]] ri-esegue quando cambia un signal che legge; ma **non ritorna un valore**: esegue un side effect (logging, DOM, canvas, librerie terze).
 
@@ -310,7 +310,7 @@ afterEveryRender(()  => { /* dopo OGNI ciclo, indipendente dai signal */ });
 Collegamenti: [[effect]] · [[injection-context]]
 
 ## Signal Semantics in Angular
-> 📖 pp.75-82
+> pp.75-82
 
 ### Signals in the Component Lifecycle
 Un effect creato nel costruttore non parte subito: Angular **ne rinvia l'esecuzione** finché il componente non è inizializzato. Quindi quando gira può leggere in sicurezza gli input.
@@ -469,7 +469,7 @@ Si può passare una **equality function** custom (secondo parametro di `signal`)
 Collegamenti: [[reactive-context]] · [[untracked]] · [[equality-immutability]] · [[linked-signal]] (per stato che dipende da una sorgente ma resta scrivibile)
 
 ## Establishing a Reactive Flow
-> 📖 pp.82-86
+> pp.82-86
 
 ### Thinking in Terms of the Signal Graph
 Angular mantiene in background un [[glossario#signal-graph|signal graph]]: la struttura che dice come signal, computed e consumer (effect, template) dipendono tra loro — cioè come i dati fluiscono nell'app. Ragionare per grafo rende naturale costruire il flusso. Esempio: oltre ai `flights` c'è un `delayInMin` (valore client-side, cioè calcolato nel browser, che simula un ritardo sul primo volo); il flow parte da `filter`, è proiettato asincronamente in `flights` via `flightsResource`, poi `flights` si combina con `delayInMin` in un computed `flightsWithDelays`, che è ciò che il template mostra.
@@ -575,7 +575,7 @@ Il punto chiave del design: `delay()` aggiorna **solo** `delayInMin`, non l'arra
 
 Collegamenti: [[computed]] · [[resource]] · [[equality-immutability]] · [[02-signal-based-components]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché preferire `computed` a `effect` per derivare un valore? Cosa significa che i computed sono *lazy*?
 > [!success]- Risposta

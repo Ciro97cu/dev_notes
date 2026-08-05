@@ -498,7 +498,7 @@ Ogni `yield` diventa un cambio di stato. Le variabili del generator diventano va
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Sintassi base:**
 

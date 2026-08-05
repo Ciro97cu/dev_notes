@@ -252,7 +252,7 @@ Il pattern pre-ES6 equivalente era `var self = this` — entrambi risolvono il p
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 Quattro domande da fare al call-site, in ordine di priorità:
 

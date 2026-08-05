@@ -276,7 +276,7 @@ Il contenuto di ogni file modulo è trattato come se fosse racchiuso in un closu
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Closure** = una funzione che ricorda il proprio lexical scope anche quando eseguita fuori da esso.
 

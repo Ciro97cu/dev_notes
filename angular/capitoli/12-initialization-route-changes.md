@@ -5,19 +5,19 @@ pagine: "330-344"
 tags: [tipo/capitolo, routing, lifecycle, di, http, angular-22]
 ---
 # 12 · Initialization & Route Changes
-> 📖 cap.12 · pp.330-344 — *Modern Angular* v3.0.0
+> cap.12 · pp.330-344 — *Modern Angular* v3.0.0
 
 Prima di poter usare una feature spesso serve **inizializzarla**: caricare dati, registrare error handler, avviare servizi. Sul frontend questo significa che l'app deve caricare dati prima di proseguire, e tipicamente accade allo **startup** (l'avvio dell'app) e al **cambio rotta**. Il capitolo raccoglie i meccanismi tecnici per agganciarsi a questi momenti: **initializers** (application/environment/platform), [[glossario#guard|guards]] (consentire/negare activation e deactivation, cioè l'entrata e l'uscita da una rotta), **router events**, [[glossario#resolver|resolver]] (caricare dati *prima* dell'attivazione della rotta) e [[glossario#interceptor-httpinterceptor|HttpInterceptors]] (ispezionare/modificare richieste e risposte HTTP).
 
 Tutti questi hook girano in un [[injection-context]], quindi usano [[inject]]`(...)` direttamente invece della constructor injection.
 
 ## Initializers
-> 📖 pp.330-333
+> pp.330-333
 
 Gli initializer servono per i compiti tecnici da eseguire *prima* che la UI parta davvero: caricare la configurazione a runtime (i valori letti all'avvio, non scritti nel codice), registrare error handler globali, avviare servizi di background. Angular offre tre livelli di hook (punti di aggancio); il più comune è l'**application initializer** (spesso detto `appInitializer`), che può **bloccare il bootstrap** (mettere in pausa l'avvio dell'app) finché il lavoro asincrono non è completo.
 
 ### Application Initializers
-> 📖 pp.330-332
+> pp.330-332
 
 Un application initializer gira durante `bootstrapApplication`. Se la funzione passata ritorna una **Promise** o un **Observable**, Angular **attende** che si completi prima di renderizzare i componenti: è il punto giusto per caricare config a runtime o altri dati da cui dipende il resto dell'app.
 
@@ -82,7 +82,7 @@ export class ConfigService {
 > Un application initializer **ritarda il primo render** e può far sembrare lo startup lento. Se ti servono dati solo per una feature specifica, caricali in modo [[glossario#lazy-loading|lazy]] (solo quando servono davvero, es. all'attivazione della rotta, via [[#Resolver]]) invece di bloccare l'intera app.
 
 ### Environment Initializers
-> 📖 p.332
+> p.332
 
 Mentre `provideAppInitializer` è **globale** (gira col root injector, l'injector radice condiviso da tutta l'app), un **environment initializer** gira quando viene creato un **environment injector** (un injector locale, ad es. quello di una rotta) — utile per setup *feature-* o *route-scoped*, cioè limitati a una singola feature o rotta, quando usi provider a livello di rotta (vedi [[04-router-navigation-lazy-loading]]). Nel demo, la feature route `bookingRoutes` lo registra nel proprio array `providers`.
 
@@ -105,14 +105,14 @@ export const bookingRoutes: Routes = [
 L'initializer è agganciato all'injector della rotta. Usi tipici: avviare servizi specifici della feature, configurare logging/telemetria di un'area, registrare listener che devono esistere solo finché vive quell'injector.
 
 ### Platform Initializers
-> 📖 p.333
+> p.333
 
 Registrato con `providePlatformInitializer`, gira quando viene creata la **platform** Angular, *prima* del bootstrap dell'applicazione. In pratica è usato soprattutto da Angular stesso e da librerie infrastrutturali di basso livello: per il codice applicativo quotidiano sono preferibili `provideAppInitializer` e gli environment initializer route/feature-scoped.
 
 Collegamenti: [[inject]] · [[providers]] · [[injection-context]] · [[service]] · [[04-router-navigation-lazy-loading]].
 
 ## Guards
-> 📖 pp.333-338
+> pp.333-338
 
 I guard informano l'app sui cambi di rotta: sono **funzioni** che il router chiama in certi momenti, e il cui **valore di ritorno** decide se la navigazione può procedere. La decisione può essere **immediata** — un `boolean`, oppure un `UrlTree` per i redirect — o **differita** quando serve consultare una web API o chiedere all'utente, nel qual caso il guard ritorna un `Observable<boolean>` o una `Promise<boolean>`.
 
@@ -126,7 +126,7 @@ Funzioni guard tipizzate (nomi funzionali moderni):
 | `CanDeactivateFn` | la rotta può essere **disattivata** (si può lasciare) |
 
 ### Preventing Route Activation (CanActivateFn)
-> 📖 pp.333-335
+> pp.333-335
 
 Esempio: un auth guard che redirige al login gli utenti non autenticati. Non è una questione di sicurezza — nelle SPA browser-based (le single-page application, dove il codice gira nel browser dell'utente) la **sicurezza va sempre imposta sul backend** — ma di *usability* (comodità d'uso): l'app può reindirizzare l'utente alla pagina di login quando serve (vedi [[16-authentication-authorization]]).
 
@@ -180,7 +180,7 @@ export const bookingRoutes: Routes = [
 > `canActivate` è un **array**: la navigazione procede solo se **ogni** guard ritorna `true` (o un `UrlTree` per redirect). Basta un `false` per bloccarla.
 
 ### Preventing Route Deactivation (CanDeactivateFn)
-> 📖 pp.335-338
+> pp.335-338
 
 Un `CanDeactivateFn` può chiedere all'utente se vuole davvero lasciare la rotta, evitando di perdere dati modificati ma non salvati. Riceve come **primo parametro l'istanza del componente** corrente. Qui i componenti proteggibili implementano una piccola interfaccia `FormComponent` con `isDirty()`; il guard usa il CDK `Dialog` per chiedere conferma.
 
@@ -280,7 +280,7 @@ Si registra con la property `canDeactivate` della rotta (qui insieme a `canActiv
 Collegamenti: [[inject]] · [[injection-context]] · [[16-authentication-authorization]] (auth guard) · [[04-router-navigation-lazy-loading]].
 
 ## Router Events
-> 📖 pp.338-340
+> pp.338-340
 
 Per reagire all'attività di routing, il router pubblica **eventi** su `router.events` (un Observable). Una selezione:
 
@@ -388,7 +388,7 @@ In console appare ogni evento nell'ordine reale di emissione, con il relativo `u
 > ```
 
 ## Resolver
-> 📖 pp.340-342
+> pp.340-342
 
 Problema: se il componente legge l'id dalla rotta e *poi* inizia a caricare, il caricamento parte **dopo** che la navigazione è completata. Il router emette `NavigationEnd` appena il routing finisce, ma in quel momento il load asincrono può essere ancora in corso: lo spinner basato sugli eventi si spegne troppo presto, l'utente aspetta più del dovuto e il template deve gestire un valore `null`/`undefined`.
 
@@ -445,7 +445,7 @@ L'oggetto `resolve` mappa chiavi a funzioni resolver. Il router esegue ogni reso
 > Resolver = carica **prima** di attivare la rotta. Così il componente trova i dati già disponibili (niente `null` transitorio) e lo spinner basato sui router events resta coerente, perché `NavigationEnd` arriva solo dopo che il resolver ha completato.
 
 ## HttpInterceptors
-> 📖 pp.342-344
+> pp.342-344
 
 Gli interceptor sono **funzioni** che ispezionano e modificano le richieste HTTP in uscita e le risposte in entrata. Casi tipici: aggiungere header di autenticazione, error handling globale, supportare formati oltre il JSON.
 
@@ -536,7 +536,7 @@ Siccome `first` chiama `next` (cioè `second`), la `pipe` di `first` **avvolge**
 
 Collegamenti: [[inject]] · [[providers]] · [[16-authentication-authorization]] (Bearer token / gestione 401-403).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Quando un application initializer **blocca** il bootstrap? Cosa deve ritornare la funzione per far attendere Angular?
 > [!success]- Risposta

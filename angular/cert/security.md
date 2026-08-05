@@ -4,7 +4,7 @@ tags: [tipo/cert, security, legacy]
 livello: [senior]
 ---
 # Security
-> 🎓 Cert Angular · le difese *built-in* del framework (sanitizzazione, XSRF, CSP) — invariate tra Angular classico e moderno
+> Cert Angular · le difese *built-in* del framework (sanitizzazione, XSRF, CSP) — invariate tra Angular classico e moderno
 
 Angular tratta **ogni valore come non fidato** finché non lo dimostra sicuro per il contesto del DOM in cui finisce. La cert Senior chiede di conoscere queste difese — **sanitizzazione contestuale**, escaping dell'interpolation, `DomSanitizer`, protezione **XSRF** di `HttpClient`, **CSP** e Trusted Types — perché sono il modello di sicurezza che regge sia l'app module-based che quella standalone. La minaccia principale è l'**XSS** (*Cross-Site Scripting*: iniezione di codice eseguibile nella pagina attraverso dati non fidati).
 
@@ -120,7 +120,7 @@ Il modello di sicurezza vale per i **dati**, non per i **template**: costruire u
 > [!info] Stato attuale
 > Sanitizzazione, `DomSanitizer`, XSRF, `CSP_NONCE`/`ngCspNonce` e il supporto Trusted Types sono **validi e non deprecati** su Angular 22. Nelle app standalone `HttpClientModule`/`HttpClientXsrfModule` sono sostituiti da `provideHttpClient(...)` con le funzioni `with…`, ma nome cookie/header di default e comportamento dell'interceptor restano invariati. L'AOT è il default di build da molte versioni: il rischio *template injection* riguarda quasi solo chi usa ancora la compilazione JIT.
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Cosa significa che la sanitizzazione di Angular è "contestuale" e quali sono i contesti?
 > [!success]- Risposta

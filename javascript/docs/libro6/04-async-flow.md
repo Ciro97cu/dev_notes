@@ -189,7 +189,7 @@ main().then(/* ... */);
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 ```js
 /* === PROMISE === */

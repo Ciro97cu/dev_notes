@@ -133,7 +133,7 @@ Nessun approccio è universalmente corretto — si sceglie in base al contesto.
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **7 tipi built-in**: `null`, `undefined`, `boolean`, `number`, `string`, `object`, `symbol`. Tutti tranne `object` sono primitivi.
 

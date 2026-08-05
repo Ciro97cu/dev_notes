@@ -5,7 +5,7 @@ tags: [tipo/modulo, responsive]
 ---
 # 11 · Responsive design
 
-> 🎨 modulo 11 — *CSS* · rif. MDN
+> modulo 11 — *CSS* · rif. MDN
 
 Il **responsive design** è la pratica di far adattare un'unica pagina a schermi di ogni dimensione — dal telefono al desktop — senza versioni separate. Gli strumenti sono tre, in ordine di potenza crescente: le **media query** (`@media`), che reagiscono al **viewport**; le **container query** (`@container`), che reagiscono al **contenitore** di un componente; e le funzioni **fluide** (`clamp()`, unità relative) che scalano di continuo senza soglie. La regola guida di tutto: i **breakpoint** nascono dal *contenuto*, non dal catalogo dei dispositivi.
 
@@ -269,7 +269,7 @@ Alcune conseguenze pratiche:
 
 Collegamenti: [[06-unita-valori-funzioni]] · [[07-colori]] · [[12-flexbox]] · [[13-grid]] · [[15-transizioni-animazioni]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** A cosa serve `<meta name="viewport" content="width=device-width, initial-scale=1">` e cosa succede senza?
 > [!success]- Risposta

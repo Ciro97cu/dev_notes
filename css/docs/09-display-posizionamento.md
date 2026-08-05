@@ -4,7 +4,7 @@ titolo: "Display & posizionamento"
 tags: [tipo/modulo, layout, posizionamento]
 ---
 # 09 · Display & posizionamento
-> 🎨 modulo 9 — *CSS* · rif. MDN
+> modulo 9 — *CSS* · rif. MDN
 
 Prima di impilare gli elementi con Flexbox o Grid serve capire due leve fondamentali del layout: `display` — **che tipo di scatola** genera un elemento — e `position` — **come e rispetto a cosa** quella scatola viene collocata. Da qui discendono lo *stacking* (`z-index`), la gestione del contenuto che trabocca (`overflow`) e la tecnica storica del `float`. Il *box model* di ogni scatola è il prerequisito: vedi [[05-box-model]].
 
@@ -216,7 +216,7 @@ Ancorare un elemento a un altro — un *tooltip* sotto un bottone, un menu accan
 
 Collegamenti: [[05-box-model]] · [[10-sfondi-effetti]] · [[12-flexbox]] · [[13-grid]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Che differenza c'è tra `display: none`, `visibility: hidden` e `opacity: 0`?
 > [!success]- Risposta

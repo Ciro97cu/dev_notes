@@ -4,7 +4,7 @@ tags: [tipo/cert, components, lifecycle, legacy]
 livello: [mid]
 ---
 # Componenti classici (decoratori)
-> 🎓 Cert Angular · l'API a decoratori che il *Modern Angular* rimpiazza con `input()`/`output()` e le signal query
+> Cert Angular · l'API a decoratori che il *Modern Angular* rimpiazza con `input()`/`output()` e le signal query
 
 Prima delle funzioni signal-based, la comunicazione fra componenti e l'accesso agli elementi del template si basavano su **decoratori** di proprietà: `@Input()`/`@Output()` per il flusso di dati padre↔figlio e le query `@ViewChild`/`@ContentChild` per ottenere riferimenti. La cert lo chiede perché è ciò che si trova in quasi tutte le codebase esistenti, e perché i **lifecycle hook** (che restano invariati) si ragionano insieme a queste API.
 
@@ -153,7 +153,7 @@ Ordine al primo render (poi i `…Checked` si ripetono a ogni ciclo di CD):
 > [!info] Stato attuale
 > `@Input()` / `@Output()` e i decoratori query **non sono deprecati** e restano pienamente supportati; convivono con le API signal-based nello stesso componente. Per il codice nuovo la documentazione raccomanda `input()` / `output()` / `viewChild()`. I lifecycle hook sono validi in entrambi i mondi. → [angular.dev/guide/components/lifecycle](https://angular.dev/guide/components/lifecycle)
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** In quale hook sono garantiti risolti i `@ViewChild` con `{ static: false }`? E i `@ContentChild`?
 > [!success]- Risposta

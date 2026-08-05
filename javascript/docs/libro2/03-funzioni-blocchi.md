@@ -300,7 +300,7 @@ console.log(b); // ReferenceError — fuori dal blocco
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Function scope** = ogni funzione crea una bolla di scope. Qualunque variabile o funzione dichiarata al suo interno è invisibile dall'esterno — utile per nascondere dettagli implementativi (Principle of Least Privilege).
 

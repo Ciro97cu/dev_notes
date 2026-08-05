@@ -5,7 +5,7 @@ tags: [tipo/modulo, grid, layout]
 ---
 # 13 · Grid
 
-> 🎨 modulo 13 — *CSS* · rif. MDN
+> modulo 13 — *CSS* · rif. MDN
 
 **CSS Grid** è il sistema di layout **bidimensionale** del CSS: dispone gli elementi su **righe e colonne insieme**, come una tabella ma senza markup di tabella. Si definisce una griglia sul contenitore e vi si posizionano i figli, per coordinate o per aree con nome. È lo strumento giusto per l'impianto complessivo di una pagina (header, sidebar, contenuto, footer); per una singola fila o colonna di elementi resta più comodo il [[12-flexbox]].
 
@@ -284,7 +284,7 @@ Il layout **masonry** (a "mattoni", stile Pinterest) tiene un asse a griglia reg
 
 Collegamenti: [[12-flexbox]] · [[11-responsive]] · [[05-box-model]] · [[09-display-posizionamento]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza di fondo tra Grid e Flexbox?
 > [!success]- Risposta

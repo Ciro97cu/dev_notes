@@ -20,11 +20,11 @@ Come nel vault Angular: si spiega come farebbe **un professore appassionato e ch
 
 ## Struttura di ogni capitolo
 1. **Spiegazione** del contenuto — sintetica ma completa, con esempi di codice.
-2. **⚡ Ripasso veloce** — i punti chiave in poche righe con uno snippet minimo.
+2. **Ripasso veloce** — i punti chiave in poche righe con uno snippet minimo.
 3. **Domande** — quiz a risposta nascosta per l'auto-valutazione.
 
 ## Checklist manutenzione (quando aggiungi/rinomini una nota)
 - [ ] `_sidebar.md` — voce nel libro e nell'ordine giusto.
 - [ ] `README.md` — se cambia la mappa dei sei libri.
-- [ ] Sezioni **⚡ Ripasso veloce** e **Domande** presenti a fine capitolo.
+- [ ] Sezioni **Ripasso veloce** e **Domande** presenti a fine capitolo.
 - [ ] Eventuali diagrammi SVG in `assets/images/`.

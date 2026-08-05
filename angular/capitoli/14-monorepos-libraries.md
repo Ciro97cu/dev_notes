@@ -5,7 +5,7 @@ pagine: "372-387"
 tags: [tipo/capitolo, monorepo, architecture, angular-22]
 ---
 # 14 · Monorepos & Reusable Libraries
-> 📖 cap.14 · pp.372-387 — *Modern Angular* v3.0.0
+> cap.14 · pp.372-387 — *Modern Angular* v3.0.0
 
 Un singolo progetto Angular basta finché il codice è piccolo: appena cresce, i team raggiungono i propri limiti. La risposta sono i [[glossario#monorepo|monorepo]], un'unica repo che raggruppa più applicazioni e **librerie riutilizzabili**. Le librerie servono a sotto-strutturare un sistema grande (vedi i moduliths del [[08-sustainable-architectures|cap.8]]) e, quando servono in altri progetti, si **pubblicano via npm**.
 
@@ -15,10 +15,10 @@ Il capitolo parte dalla **Angular CLI** (monorepo manuale, build e publish) e po
 > I monorepo non servono solo a creare librerie da pubblicare. Nei progetti molto grandi suddividono la soluzione complessiva in app e librerie più piccole, più facili da governare e mantenere. In questo scenario le librerie **non vanno pubblicate su npm**: sono consumate localmente dalle app del monorepo stesso. Termine alternativo a monorepo: **workspace**.
 
 ## Angular CLI-based Repos
-> 📖 pp.372-380
+> pp.372-380
 
 ### Creating a Monorepo
-> 📖 pp.372-373
+> pp.372-373
 
 Dal punto di vista della CLI un monorepo è un normale progetto Angular. La differenza è che **non vogliamo la cartella `src` centrale**: di norma `ng new` la genera per ospitare tutto il codice dell'app, ma qui vogliamo dividere il progetto in app e librerie separate, quindi la disattiviamo con `--create-application false`. App e librerie si aggiungono poi dentro `projects/`.
 
@@ -54,7 +54,7 @@ graph TD
 > ```
 
 ### Structure of Libraries
-> 📖 pp.374-376
+> pp.374-376
 
 Come le app, le librerie sono file TypeScript (componenti, servizi, ...) e vivono sotto `src/lib`. Una lib contiene anche `ng-package.json`, `package.json` e i `tsconfig.lib*.json` (Listing 14-3). Generiamo un servizio `Logger` (da non confondere con l'`UtilLoggerService` che la CLI crea quando genera la libreria omonima):
 
@@ -128,7 +128,7 @@ Prima di pubblicare si cura il `package.json` della libreria (Listing 14-7):
 > ```
 
 ### Trying Out the Library in the Monorepo
-> 📖 pp.377-378
+> pp.377-378
 
 I building block delle librerie si testano come tutti gli altri (vedi [[07-testing-with-vitest|cap.7]]), indicando il nome della lib:
 
@@ -179,7 +179,7 @@ export class AppComponent {
 Lanciando `ng serve playground-app -o`, il messaggio di test compare nella console JavaScript.
 
 ### Building and Publishing the npm Package
-> 📖 pp.378-380
+> pp.378-380
 
 Prima di pubblicare, assicurati che il `package.json` della lib (es. `projects/util-logger/package.json`) abbia un **numero di versione univoco**, altrimenti la pubblicazione fallisce. Poi build e publish:
 
@@ -216,7 +216,7 @@ Aprendo Verdaccio nel browser si dovrebbe vedere il pacchetto pubblicato (Figure
 > ```
 
 ### Consuming the npm Package
-> 📖 p.380
+> p.380
 
 Il consumer installa il pacchetto con `npm install` nella propria app Angular e lo usa come visto sopra con `playground-app`:
 
@@ -229,14 +229,14 @@ npm install @my/util-logger --registry http://localhost:4873
 > Se si richiede un pacchetto che Verdaccio non conosce, di default delega al **registry npm pubblico** e lo recupera da lì.
 
 ## Faster Builds and More Convenience with Nx
-> 📖 pp.381-387
+> pp.381-387
 
 Il limite della soluzione CLI: gli sviluppatori devono **sapere quali app sono cambiate** e lanciare a mano la build giusta; e il build server, per sicurezza, finisce comunque per ricostruire e testare tutto. Meglio lasciare che sia il **tooling** (gli strumenti di build) a capire cosa è cambiato — per esempio calcolando un **hash** dei file sorgente che confluiscono in ogni app. L'hash è una specie di "impronta digitale": un codice breve calcolato dai file, che cambia appena cambia anche un solo file. Se l'hash cambia, quell'app va ricostruita o ritestata.
 
 **Nx** implementa questa idea e aggiunge molto altro. Oltre ad Angular supporta React e backend Node.js, e integra senza setup manuale i tool comuni dello sviluppo web: i testing tool Jest, Cypress e Playwright, il server npm Verdaccio e Storybook per la documentazione interattiva dei componenti. Per gli sviluppatori Angular è naturale: la **Nx CLI** si usa come la Angular CLI, basta sostituire `ng` con `nx` e gli argomenti restano in gran parte gli stessi (`nx build`, `nx serve`, `nx g app`, `nx g lib`, ...).
 
 ### Creating an Nx Workspace
-> 📖 pp.381-382
+> pp.381-382
 
 ```bash
 npm i -g nx
@@ -275,7 +275,7 @@ graph TD
 Il comando `nx graph` mostra il **grafo delle dipendenze** tra app e librerie (Figure 14-2).
 
 ### Module Boundaries
-> 📖 pp.383-384
+> pp.383-384
 
 Come Sheriff (vedi [[08-sustainable-architectures]]), anche Nx permette di definire regole su **chi può dipendere da cosa** — i cosiddetti **module boundaries** — ma in Nx sono sempre definiti **a livello di libreria e applicazione** (non per cartella). Si configura la regola ESLint `@nx/enforce-module-boundaries` in `eslint.config.js`, dichiarando i `depConstraints` per `sourceTag` (Listing 14-13):
 
@@ -339,14 +339,14 @@ nx run-many -t lint --all
 ```
 
 ### Nx with Sheriff and Detective
-> 📖 p.385
+> p.385
 
 I module boundaries di Nx lavorano **per libreria e applicazione**. Se servono regole **più granulari, per-cartella**, si combina **Sheriff** con Nx; **Detective**, sempre con Nx, aiuta a **visualizzare** i setup folder-based. Entrambi i tool sono trattati nel [[08-sustainable-architectures|cap.8]] e nel [[19-forensic-architecture-analysis|cap.19]].
 
 Collegamenti: [[08-sustainable-architectures]] (Sheriff, Detective, moduliths) · [[19-forensic-architecture-analysis]].
 
 ### Incremental Builds with Nx
-> 📖 p.385
+> p.385
 
 Gli stessi dati del grafo delle dipendenze alimentano le **build incrementali** che Nx offre out of the box (già pronte, senza configurazione). Build "incrementale" significa che Nx ricostruisce solo ciò che è davvero cambiato, non tutto da capo. Con `nx build`, se i sorgenti che confluiscono nell'app non sono cambiati, il risultato arriva **subito dalla cache locale** (cartella `.nx`, ignorata dal `.gitignore` del progetto):
 
@@ -364,7 +364,7 @@ Anche unit test, E2E e linting sono incrementali allo stesso modo; Nx va oltre e
 > Lo stesso sarebbe possibile per `nx build` rendendo le singole lib **buildable** (compilabili come pacchetto a sé, non solo insieme all'app: `nx g lib myLib --buildable`), ma in pratica **raramente porta vantaggi**: i rebuild incrementali a livello di applicazione sono preferibili.
 
 ### Distributed Cache with Nx Cloud
-> 📖 p.385
+> p.385
 
 Di default la cache è **locale**. Per andare oltre, una **cache distribuita** condivisa da tutto il team e dal build server permette di beneficiare anche delle build già fatte da altri. La offre **Nx Cloud**, add-on commerciale del Nx gratuito (self-hostabile se non si possono usare provider cloud). Per connettere il workspace basta un comando:
 
@@ -373,7 +373,7 @@ npx nx connect-to-nx-cloud
 ```
 
 ### Even Faster: Parallelization with Nx Cloud
-> 📖 pp.386-387
+> pp.386-387
 
 Per accelerare ulteriormente, Nx Cloud **parallelizza** i singoli task di build. Anche qui il grafo delle dipendenze è il vantaggio: stabilisce l'ordine in cui i task devono essere eseguiti e quali si possono parallelizzare. Si usano nodi distinti nel cloud: un **main node** coordina, più **worker node** eseguono i singoli task in parallelo. Nx può perfino generare gli **script CI** che avviano i nodi e gli assegnano i task:
 
@@ -387,7 +387,7 @@ Gli script specificano il numero di worker node e di processi paralleli per work
 > [!tip]
 > Lo stesso **dependency graph** che disegna `nx graph` è il motore di tutto Nx: module boundaries, build/test/lint **incrementali** con cache, cache **distribuita** e **parallelizzazione**. Più spezzi in librerie ben confinate, più ne guadagni.
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché si crea il monorepo con `ng new logger --create-application false`? Come si generano poi app e librerie?
 > [!success]- Risposta

@@ -139,7 +139,7 @@ Il capitolo successivo mostrerà le quattro regole che determinano quale valore 
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 `this` **non** è:
 - un riferimento alla funzione stessa

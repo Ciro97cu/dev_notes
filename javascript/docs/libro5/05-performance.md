@@ -189,7 +189,7 @@ asm.js è adatto a task intensivi e circoscritti (calcoli matematici pesanti, el
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Tre tecniche per performance oltre l'asincronia:**
 

@@ -4,7 +4,7 @@ titolo: "Colori"
 tags: [tipo/modulo, colori]
 ---
 # 07 · Colori
-> 🎨 modulo 7 — *CSS* · rif. MDN
+> modulo 7 — *CSS* · rif. MDN
 
 Un colore in CSS è un **valore** come un altro: si assegna a proprietà quali `color` (il testo), `background-color`, `border-color`, `box-shadow` e decine di altre. Esistono però tanti **modi di scriverlo** — parole chiave, esadecimale, `rgb()`, `hsl()`, e le notazioni moderne `oklch()`/`oklab()` — e ognuno appartiene a uno **spazio colore** diverso. Questo modulo copre come esprimere un colore oggi, quando conviene ciascuna notazione, e le funzioni che permettono di **derivare** e **mescolare** colori senza preprocessori.
 
@@ -218,7 +218,7 @@ Per applicare colori diversi in base al tema scelto dall'utente si usa la media 
 
 Collegamenti: [[06-unita-valori-funzioni]] · [[10-sfondi-effetti]] · [[11-responsive]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Come si scrive un rosso semitrasparente con la sintassi moderna di `rgb()`, e qual è la forma legacy equivalente?
 > [!success]- Risposta

@@ -4,7 +4,7 @@ tags: [tipo/cert, rxjs, reactivity, legacy]
 livello: [mid, senior]
 ---
 # RxJS
-> 🎓 Cert Angular · trattato solo di sfuggita nel *Modern Angular* (il vault ragiona in signals)
+> Cert Angular · trattato solo di sfuggita nel *Modern Angular* (il vault ragiona in signals)
 
 **RxJS** (Reactive Extensions for JavaScript) è la libreria di programmazione reattiva su cui Angular ha storicamente fondato l'asincronia: `HttpClient`, `Router`, `EventEmitter`, `valueChanges` delle reactive forms ([[forms-reactive]]) espongono tutti `Observable`. L'esame la considera core knowledge Senior: l'`Observable` come stream, i `Subject` per il multicasting, gli operator pipeable e — soprattutto — i pattern corretti di **unsubscribe**.
 
@@ -204,7 +204,7 @@ export class Legacy implements OnInit, OnDestroy {
 > [!info] Stato attuale
 > RxJS **non è deprecato** né rimosso: `HttpClient`, `Router` ed `EventEmitter` restano Observable-based e i Signal Forms convivono con gli stream. Angular 22 gira su RxJS 7.x; l'interop `toSignal`/`toObservable` è stabile e `takeUntilDestroyed` è stabile dalla v19. Per il codice nuovo si preferiscono i signal per lo **stato**, riservando RxJS agli **eventi/stream** ([rxjs.dev/guide/observable](https://rxjs.dev/guide/observable) · [rxjs.dev/guide/subject](https://rxjs.dev/guide/subject) · [takeUntilDestroyed](https://angular.dev/api/core/rxjs-interop/takeUntilDestroyed)).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Cosa significa che un `Observable` è "cold" e come si vede la differenza con un `Subject`?
 > [!success]- Risposta

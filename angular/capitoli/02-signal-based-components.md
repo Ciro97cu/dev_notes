@@ -5,14 +5,14 @@ pagine: "20-60"
 tags: [tipo/capitolo, components, signals, templates, http, angular-22]
 ---
 # 02 · Signal-Based Components
-> 📖 cap.2 · pp.20-60 — *Modern Angular* v3.0.0
+> cap.2 · pp.20-60 — *Modern Angular* v3.0.0
 
 Si estende l'app del [[01-getting-started|cap.1]] con una feature di **ricerca voli** (`flight-search`): l'utente cerca collegamenti e seleziona un volo. Lungo il percorso si incontrano i mattoni di un componente signal-based: data model, logica con [[signal]], template syntax e control flow, accesso ai dati (`HttpClient` vs [[resource|httpResource]]) e sotto-componenti con `input`/`output`/`model`.
 
 La struttura cartelle è a **subdomain** (approfondita nel [[08-sustainable-architectures|cap.8]]): l'app si suddivide in sottodomini che mappano aree del mondo reale. Qui si parte dal dominio `ticketing` con la feature `feature-booking`, sotto `src/app/domains/ticketing/feature-booking/flight-search`.
 
 ## Scaffolding & the Angular Style Guide
-> 📖 pp.20-22
+> pp.20-22
 
 ```bash
 ng generate component domains/ticketing/feature-booking/flight-search
@@ -26,7 +26,7 @@ Per via della config del [[01-getting-started|cap.1]] (in `angular.json`) la CLI
 > Lo Style Guide aggiornato **non usa più i suffissi** `Component`/`.component.ts`: la classe è `FlightSearch`, il file `flight-search.ts` (non più `FlightSearchComponent` / `flight-search.component.ts`). Restano ammessi suffissi semantici propri, più informativi di "Component" — es. `search` o `edit` — per comunicare lo scopo del componente.
 
 ## Data Model
-> 📖 pp.22-23
+> pp.22-23
 
 Le interfacce del modello (`Flight`, `Aircraft`, `Price`) stanno in `domains/ticketing/data/`. Le date sono **stringhe ISO** (es. `2030-12-24T17:00+01:00`). Le costanti `initial*` danno un valore di partenza comodo per evitare `null`/`undefined` quando si creano nuovi oggetti.
 
@@ -80,7 +80,7 @@ export interface Price {
 ```
 
 ## Component Logic
-> 📖 pp.23-26
+> pp.23-26
 
 Lo scaffold di partenza è una classe vuota; la si espande per gestire la ricerca con i [[signal]] e si usa subito **Signal Forms** (cap.6) per il form dei criteri.
 
@@ -156,7 +156,7 @@ protected search(): void {
 Collegamenti: [[signal]] · [[06-signal-forms]] (la `form()`).
 
 ## Template & Data Binding
-> 📖 pp.27-34
+> pp.27-34
 
 Prima del template vanno dichiarate le dipendenze nell'array `imports` del decoratore `@Component`: la direttiva `FormField` (parte di Signal Forms, lega `filterForm` ai singoli `<input>`) e le pipe `JsonPipe` e `DatePipe` (per formattare l'output).
 
@@ -279,7 +279,7 @@ Il control flow è **built-in** nel template (`@if`, `@for`, `@switch`, prefisso
 > Usa `<button type="button">`: il default è `submit`, che farebbe il submit del form e un reload completo della pagina. La direttiva `formRoot` del [[06-signal-forms|cap.6]] disabilita questo comportamento di default del browser.
 
 ### Exhaustive @switch with @default never
-> 📖 pp.31-33 (Listing 2-12/2-14)
+> pp.31-33 (Listing 2-12/2-14)
 
 Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto al tipo in un secondo momento: il template compila lo stesso, ma quel caso resta scoperto a runtime. Da **Angular 21.2** il ramo `@default` può chiedere al compilatore un **exhaustiveness check** — un controllo che verifica di aver coperto *tutti* i casi possibili e fa fallire la build se ne manca uno.
 
@@ -326,7 +326,7 @@ C'è però un caso più frequente in cui la forma breve non basta: quando lo swi
 > `loyalty().kind` è solo la stringa discriminatrice: un `@default never;` "secco" non basterebbe, perché TypeScript non può dedurne che l'intera union `Loyalty` è coperta. Aggiungere una variante come `{ kind: 'staff' }` senza il corrispondente `@case` rompe quindi la build del template.
 
 ## Calling the Component
-> 📖 pp.34-35
+> pp.34-35
 
 Si importa `FlightSearch` nell'array `imports` di `App` (`app.ts`) e lo si usa in `app.html`:
 
@@ -382,19 +382,19 @@ export class Badge {}
 > Con l'incapsulamento emulato, il pseudo-selettore **`:host`** stila l'elemento-host del componente stesso: è il modo corretto per dare stili al "contenitore" senza sconfinare fuori dal componente.
 
 ## Running & Debugging the Application
-> 📖 pp.35-37
+> pp.35-37
 
 L'app si avvia dalla root del progetto con `ng serve -o` (l'`-o` apre subito il browser); il dev server la pubblica su `http://localhost:4200`.
 
 Gli errori a runtime compaiono nella **console** dei dev tools, dove Angular stampa **link cliccabili** alle righe dei file HTML/TS coinvolti. `ng serve` genera di default le **source map**, così si può usare il debugger JavaScript del browser (in Chrome: tab **Sources**; `Ctrl+Shift+P` / `Cmd+Shift+P` per aprire un file e mettere un breakpoint sul numero di riga). In **VS Code** si mettono i breakpoint direttamente nel `.ts` e si avvia con `Run | Start Debugging` (F5): funziona senza config aggiuntiva, perché la CLI genera già `.vscode/launch.json` allo scaffolding del progetto.
 
 ## Data Access
-> 📖 pp.38-47
+> pp.38-47
 
 Con il componente funzionante a dati statici, si passa a caricare voli reali dal backend. Angular offre due strade: l'**`HttpClient`**, per richieste HTTP di ogni tipo, e la moderna API signal-based **`httpResource`**, per il fetch reattivo.
 
 ### Data Access with HttpClient
-> 📖 pp.38-42
+> pp.38-42
 
 Per la comunicazione HTTP diretta si inietta il service `HttpClient` con [[inject]] e si chiamano i suoi metodi dentro `search()`.
 
@@ -456,7 +456,7 @@ protected createDemoFlight(): void {
 Collegamenti: [[inject]].
 
 ### Data Access with httpResource
-> 📖 pp.42-47
+> pp.42-47
 
 `httpResource` è il modo **signal-based** di caricare dati via HTTP: prende signal come input, e ne espone stato e risultato come signal.
 
@@ -540,7 +540,7 @@ In alternativa a `error()` si può guardare il signal `status()`, che vale uno t
 Collegamenti: [[resource]] · approfondimento in [[03-reactive-design-with-signals]].
 
 ## Sub Components with Properties and Events
-> 📖 pp.47-59
+> pp.47-59
 
 Crescendo l'app conviene spezzare i componenti complessi in pezzi piccoli e riutilizzabili. Si estrae un `FlightCard` che mostra il singolo volo e può essere selezionato, sostituendo le righe della tabella. Essendo un componente general-purpose non legato a una specifica feature, sta nella cartella `ui` del dominio:
 
@@ -577,7 +577,7 @@ L'interfaccia pubblica vista dal padre sono due **property binding** in ingresso
 ```
 
 ### Components with InputSignals and OutputEmitterRefs
-> 📖 pp.49-51
+> pp.49-51
 
 Dentro `FlightCard` ogni proprietà è un [[signal-input|input()]] e ogni evento un [[signal-output|output()]]:
 
@@ -634,7 +634,7 @@ Nel template del figlio gli input si leggono come signal chiamandone il getter; 
 ```
 
 ### Content Projection
-> 📖 p.53
+> p.53
 
 Con la **content projection** il padre inietta contenuto arbitrario (markup HTML o componenti) nel figlio senza toccarne l'implementazione, utile per personalizzare parti di un componente. Nella forma base il figlio espone un solo `<ng-content />` come segnaposto: al render Angular lo sostituisce col contenuto proiettato dal padre.
 
@@ -687,7 +687,7 @@ Si possono anche avere **più slot**, ciascuno con un attributo `select="<selett
 ```
 
 ### Writable Inputs with ModelSignals
-> 📖 p.55
+> p.55
 
 Un **ModelSignal** è un input **scrivibile** (two-way). `model()` crea automaticamente la proprietà **e** l'evento `<nome>Change`:
 
@@ -710,7 +710,7 @@ export class FlightCard {
 Dal padre il binding **non cambia**: si lega ancora a `[selected]` e `(selectedChange)`. La differenza è di intento: un `model()` serve quando il figlio deve **riscrivere subito** la modifica al padre; con `input` + `output` il figlio controlla con precisione *quando* notificare.
 
 ### Two-way Bindings
-> 📖 p.57
+> p.57
 
 Il **two-way binding** "banana in a box" `[(prop)]` è **zucchero sintattico** (una forma più breve che si espande in qualcosa di più verboso, senza aggiungere funzionalità) per un property binding più un event binding, con la convenzione di nome `prop`/`propChange`. Lo si vede su uno `SimpleDelayStepper`, con `value = model(0)`, che aumenta o riduce un ritardo a passi di 15 minuti.
 
@@ -760,7 +760,7 @@ export class SimpleDelayStepper {
 
 Collegamenti: [[signal-input]] · [[signal-output]] · [[model-signal]] · [[two-way-binding]] · [[content-projection]] · approfondimento comunicazione padre-figlio in [[10-signal-queries-component-communication]].
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché `signal<Flight[]>([])` ha il tipo esplicito mentre `signal({ from, to })` no?
 > [!success]- Risposta

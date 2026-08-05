@@ -65,7 +65,7 @@ La prospettiva del libro è che conoscere le funzionalità ES6 non basta: è nec
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Scope & Closures**: JS non è interpretato — il codice viene compilato JIT. Il lexical scope è il prerequisito per capire la closure. La closure è il concetto più importante del linguaggio. Il module pattern è la sua applicazione più diffusa.
 

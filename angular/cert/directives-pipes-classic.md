@@ -4,7 +4,7 @@ tags: [tipo/cert, directives, templates, legacy]
 livello: [junior, mid]
 ---
 # Direttive e pipe classiche
-> 🎓 Cert Angular · il control flow `*ngIf`/`*ngFor` pre-`@if`/`@for`, più directive attributo e pipe (invariati)
+> Cert Angular · il control flow `*ngIf`/`*ngFor` pre-`@if`/`@for`, più directive attributo e pipe (invariati)
 
 Prima del **control flow a blocchi** (`@if`/`@for`/`@switch`), la logica di template si esprimeva con le **structural directive** `*ngIf`/`*ngFor`/`*ngSwitch` di `CommonModule`. Le **directive attributo** custom e le **pipe** (built-in e custom, pure/impure, `async`) sono invece rimaste sostanzialmente invariate. La cert copre tutto questo perché è pervasivo nelle codebase esistenti.
 
@@ -195,7 +195,7 @@ Sottoscrive un `Observable` (o `Promise`), restituisce l'ultimo valore emesso e 
 > [!info] Stato attuale
 > Da Angular v17 il control flow a blocchi (`@if`/`@for`/`@switch`) è la forma raccomandata; `NgIf`/`NgFor`/`NgSwitch` restano supportati ma sconsigliati per il codice nuovo, con migration automatica (`ng generate @angular/core:control-flow`). `NgClass`/`NgStyle`, le directive attributo custom e le pipe **non sono deprecate**. → [angular.dev/guide/templates/control-flow](https://angular.dev/guide/templates/control-flow)
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** A cosa serve `trackBy` in `*ngFor`?
 > [!success]- Risposta

@@ -262,7 +262,7 @@ L'effetto netto è che WASM allontana dalla specifica JS la pressione a introdur
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **`async function` / `await`:** sugar sintattico per generators + promises + run(). Sostituisce `function*` e `yield`. Restituisce una Promise. Limite: nessuna cancellazione nativa.
 

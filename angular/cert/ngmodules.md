@@ -4,7 +4,7 @@ tags: [tipo/cert, ngmodules, legacy, di, routing]
 livello: [mid, senior]
 ---
 # NgModules
-> 🎓 Cert Angular · non coperto dal *Modern Angular* (il vault è standalone-only)
+> Cert Angular · non coperto dal *Modern Angular* (il vault è standalone-only)
 
 Un **NgModule** è un contenitore che raggruppa componenti, direttive, pipe e provider correlati e dichiara come si compongono con il resto dell'app. Prima dei **standalone component** era l'unità organizzativa obbligatoria: ogni componente doveva appartenere a esattamente un NgModule. La cert lo chiede perché la stragrande maggioranza delle codebase esistenti è ancora module-based, e perché lazy loading, DI e librerie storiche si ragionano in termini di moduli.
 
@@ -110,7 +110,7 @@ const routes: Routes = [
 > [!info] Stato attuale
 > Da Angular v17 il CLI genera app **standalone** e da v19 `standalone: true` è implicito. Gli NgModule **non sono deprecati**: restano pienamente supportati e interoperano con lo standalone (un modulo può importare componenti standalone, e un componente standalone può importare un NgModule). Per il codice nuovo si preferisce lo standalone.
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza fra `imports` ed `exports` di un `@NgModule`?
 > [!success]- Risposta

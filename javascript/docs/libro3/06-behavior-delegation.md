@@ -306,7 +306,7 @@ Non serve più `instanceof`, che presuppone una relazione class-like. Si usa dir
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **OLOO** (Objects Linked to Other Objects): stile di codice in cui gli oggetti sono collegati direttamente tramite `Object.create()` senza costruttori, `.prototype` o `new`.
 

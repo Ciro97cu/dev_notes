@@ -4,7 +4,7 @@ tags: [tipo/cert, ngrx, state-management, legacy]
 livello: [senior]
 ---
 # NgRx Store (Redux)
-> 🎓 Cert Angular · non coperto dal *Modern Angular* (il vault usa il NgRx **Signal** Store)
+> Cert Angular · non coperto dal *Modern Angular* (il vault usa il NgRx **Signal** Store)
 
 **NgRx Store** (`@ngrx/store`) è l'implementazione del pattern **Redux** per Angular: un unico **store** globale contiene tutto lo stato dell'app, che cambia **solo** in risposta ad **action** (oggetti che descrivono "cosa è successo"), applicate da **reducer** puri. La cert lo chiede perché è stato per anni lo standard di state management delle grandi codebase Angular, e perché il suo modello mentale (flusso unidirezionale, immutabilità, selector memoizzati, side effect isolati) è concettualmente distinto dal Signal Store del vault moderno.
 
@@ -271,7 +271,7 @@ export const { selectAll, selectEntities, selectIds, selectTotal } =
 > [!info] Stato attuale
 > NgRx Store (Redux) **non è deprecato**: è mantenuto e resta la scelta per chi vuole il pattern Redux "puro" con time-travel debugging. La versione attuale offre API **funzionali/standalone** che affiancano i moduli classici: `provideStore(reducers)`, `provideState(feature)`, `provideEffects([...])` al posto di `StoreModule`/`EffectsModule`; `createActionGroup` per dichiarare gruppi di action con meno codice; `createFeature` che accorpa reducer + selector auto-generati; **effect funzionali** (`createEffect` con `inject` invece della classe); e `store.selectSignal(selector)` (da NgRx v16) che ritorna un `Signal` invece di un `Observable`, per integrarsi con la reactivity a signal ([ngrx.io](https://ngrx.io/guide/store)).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Quali sono i tre principi Redux e da cosa deriva il "flusso unidirezionale"?
 > [!success]- Risposta

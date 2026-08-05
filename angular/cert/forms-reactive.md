@@ -4,7 +4,7 @@ tags: [tipo/cert, forms, legacy]
 livello: [mid]
 ---
 # Reactive Forms
-> 🎓 Cert Angular · non coperto dal *Modern Angular* (il vault usa i Signal Forms)
+> Cert Angular · non coperto dal *Modern Angular* (il vault usa i Signal Forms)
 
 Nelle **reactive forms** (dette anche *model-driven*) la struttura della form è dichiarata **esplicitamente nella classe** come albero di oggetti `FormControl`/`FormGroup`/`FormArray`; il template si limita a legarsi a quel modello con delle direttive. Il modello è **immutabile e sincrono**: leggerlo dà sempre il valore corrente, e lo stato/valore sono esposti anche come `Observable`. È l'approccio scelto per form complesse, dinamiche o fortemente validate — ed è ciò che l'esame verifica per la parte forms "avanzata".
 
@@ -188,7 +188,7 @@ Il modello dichiarato nella classe si collega al DOM con:
 > [!info] Stato attuale
 > `ReactiveFormsModule` e le reactive forms **non sono deprecate**: restano pienamente supportate e convivono con `@angular/forms/signals`. I **Signal Forms** sono l'approccio moderno raccomandato per il codice nuovo, ma in Angular 22 sono **ancora sperimentali** (package `@angular/forms/signals`, l'API può cambiare); l'API classica resta lo standard **stabile** delle codebase esistenti ([angular.dev/guide/forms/reactive-forms](https://angular.dev/guide/forms/reactive-forms) · [Validators](https://angular.dev/api/forms/Validators)).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza di fondo fra reactive e template-driven forms?
 > [!success]- Risposta
