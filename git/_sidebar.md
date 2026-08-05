@@ -1,6 +1,6 @@
 <!-- Menu di navigazione del sito. Aggiungere qui ogni nuovo file topic. -->
 
-- [Home](/)
+- [Indice completo](/)
 
 - **Appunti**
   - [01 · Introduzione](01-introduzione.md)
