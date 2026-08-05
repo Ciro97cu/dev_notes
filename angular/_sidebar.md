@@ -1,7 +1,6 @@
-- [🏠 Home](/)
-- [🗺️ Indice completo](/00-index.md)
+- [Indice completo](/)
 
-- **📘 Capitoli**
+- **Capitoli**
   - [01 · Getting Started](/capitoli/01-getting-started.md)
   - [02 · Signal-Based Components](/capitoli/02-signal-based-components.md)
   - [03 · Reactive Design with Signals](/capitoli/03-reactive-design-with-signals.md)
@@ -22,7 +21,7 @@
   - [18 · Micro Frontends](/capitoli/18-micro-frontends.md)
   - [19 · Forensic Architecture Analysis](/capitoli/19-forensic-architecture-analysis.md)
 
-- **🧩 Concetti · Reattività**
+- **Concetti · Reattività**
   - [signal](/concetti/signal.md)
   - [computed](/concetti/computed.md)
   - [effect](/concetti/effect.md)
@@ -33,7 +32,7 @@
   - [reactive context](/concetti/reactive-context.md)
   - [equality & immutability](/concetti/equality-immutability.md)
 
-- **🧩 Concetti · Componenti & comunicazione**
+- **Concetti · Componenti & comunicazione**
   - [signal input](/concetti/signal-input.md)
   - [signal output](/concetti/signal-output.md)
   - [model signal](/concetti/model-signal.md)
@@ -41,7 +40,7 @@
   - [content projection](/concetti/content-projection.md)
   - [signal queries](/concetti/signal-queries.md)
 
-- **🧩 Concetti · DI & stato**
+- **Concetti · DI & stato**
   - [inject()](/concetti/inject.md)
   - [injection context](/concetti/injection-context.md)
   - [providers](/concetti/providers.md)
@@ -49,7 +48,7 @@
   - [lightweight store](/concetti/lightweight-store.md)
   - [delegated signal (storico)](/concetti/delegated-signal.md)
 
-- **🎓 Cert (Senior) · Angular classico**
+- **Cert (Senior) · Angular classico**
   - [Indice](/cert/00-index.md)
   - [NgModules](/cert/ngmodules.md)
   - [Componenti (classico)](/cert/components-classic.md)
@@ -66,5 +65,5 @@
   - [Performance](/cert/performance.md)
   - [Security](/cert/security.md)
 
-- **🛠️ Meta**
-  - [📖 Glossario](/_meta/glossario.md)
+- **Meta**
+  - [Glossario](/_meta/glossario.md)
