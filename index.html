@@ -215,8 +215,8 @@
     /* Barra di progresso lettura: striscia sul bordo inferiore della card, con il
        riempimento animato "a brace/fiamma" nel colore del vault. + % in alto a destra. */
     .card-prog {
-      position: absolute; left: 0; right: 0; bottom: 0; height: 6px;
-      background: color-mix(in srgb, var(--fg) 9%, transparent);
+      position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
+      background: color-mix(in srgb, var(--fg) 16%, transparent);
     }
     .card-prog .fill {
       height: 100%; width: 0;
@@ -419,7 +419,7 @@
         var pct = Math.round((rec.d || 0) / rec.t * 100);
         var bar = document.createElement('span');
         bar.className = 'card-prog';
-        bar.title = (rec.d || 0) + '/' + rec.t + ' capitoli letti';
+        bar.title = pct + '% letto';
         var fill = document.createElement('span');
         fill.className = 'fill';
         fill.style.width = pct + '%';
