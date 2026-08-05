@@ -17,6 +17,7 @@ window.$docsify = {
   relativePath: true,
   auto2top: true,
   search: {
+    namespace: 'dev-notes-git',
     placeholder: 'Cerca…',
     noData: 'Nessun risultato',
     depth: 4

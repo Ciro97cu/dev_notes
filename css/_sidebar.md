@@ -1,6 +1,6 @@
 <!-- docsify sidebar -->
 
-- [Indice completo](README.md)
+- [Indice completo](/README)
 
 - **Fondamenti & selettori**
   - [01 · Fondamenti](/docs/01-fondamenti.md)

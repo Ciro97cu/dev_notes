@@ -18,6 +18,7 @@ window.$docsify = {
   homepage: 'README.md',
   notFoundPage: true,
   search: {
+    namespace: 'dev-notes-glossario',
     placeholder: 'Cerca un termine…',
     noData: 'Nessun risultato.',
     depth: 4

@@ -42,6 +42,7 @@ window.$docsify = {
   homepage: 'README.md',
   notFoundPage: true,
   search: {
+    namespace: 'dev-notes-typescript',
     placeholder: 'Cerca nella guida…',
     noData: 'Nessun risultato.',
     depth: 4

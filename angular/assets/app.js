@@ -73,7 +73,8 @@ window.$docsify = {
     crossChapter: true,
     crossChapterText: true
   },
-  search: { placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
+  search: {
+    namespace: 'dev-notes-angular', placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
   copyCode: { buttonText: 'Copia', successText: 'Copiato' },
   // plugin condivisi (../assets/shared.js) + wikilink locale
   plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, highlighterPlugin, coverDotsPlugin]
