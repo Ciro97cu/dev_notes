@@ -25,6 +25,7 @@
     '.dn-pop button:hover{background:rgba(127,127,127,.14)}',
     '.dn-pop button svg{flex:0 0 auto;opacity:.8}',
     '.dn-pop .dn-note{font-size:.74rem;line-height:1.45;opacity:.7;padding:.4rem .6rem .3rem;border-top:1px solid var(--border);margin-top:.3rem}',
+    '.dn-pop .dn-sep{border:none;border-top:1px solid var(--border);margin:.3rem .3rem}',
     // il toggle tema usa un\'icona SVG come gli altri: centrala
     '#theme-toggle{display:flex;align-items:center;justify-content:center}',
     '#theme-toggle svg{display:block}',
@@ -41,9 +42,11 @@
   el.textContent = css;
   (document.head || document.documentElement).appendChild(el);
 
-  var ICON_DB = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
-  var ICON_DL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
-  var ICON_UP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
+  var ICON_DB  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
+  var ICON_DL  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
+  var ICON_UP  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
+  var ICON_QR  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
+  var ICON_CAM = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
 
   function build() {
     if (document.getElementById('dn-data')) return;
@@ -55,7 +58,10 @@
         '<div class="dn-title">Dati e progressi</div>' +
         '<button type="button" data-act="export" role="menuitem">' + ICON_DL + 'Esporta su file…</button>' +
         '<button type="button" data-act="import" role="menuitem">' + ICON_UP + 'Importa da file…</button>' +
-        '<div class="dn-note">Progresso, preferiti ed evidenziazioni restano in questo browser. <strong>Esporta</strong> per salvarli in un file (da conservare o spostare su un altro dispositivo); <strong>Importa</strong> per ripristinarli.</div>' +
+        '<hr class="dn-sep">' +
+        '<button type="button" data-act="qr-show" role="menuitem">' + ICON_QR + 'Condividi via QR / Link…</button>' +
+        '<button type="button" data-act="qr-scan" role="menuitem">' + ICON_CAM + 'Scannerizza QR…</button>' +
+        '<div class="dn-note"><strong>File</strong>: backup completo (incluse evidenziazioni). <strong>QR / Link</strong>: sincronizzazione rapida di progresso e segnalibri tra dispositivi.</div>' +
       '</div>' +
       '<input type="file" accept="application/json,.json" hidden>';
     document.body.appendChild(wrap);
@@ -76,8 +82,11 @@
     pop.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('button[data-act]');
       if (!b) return;
-      if (b.getAttribute('data-act') === 'export') { window.NotesStore.download(); close(); }
-      else { file.value = ''; file.click(); close(); }
+      var act = b.getAttribute('data-act');
+      if (act === 'export')   { window.NotesStore.download(); close(); }
+      else if (act === 'import')  { file.value = ''; file.click(); close(); }
+      else if (act === 'qr-show') { close(); window.dnQrOpen && window.dnQrOpen(); }
+      else if (act === 'qr-scan') { close(); window.dnScanOpen && window.dnScanOpen(); }
     });
     file.addEventListener('change', function () {
       var f = file.files && file.files[0];
