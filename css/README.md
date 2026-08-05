@@ -1,12 +1,10 @@
-# Appunti CSS
+# Indice completo
 
-Appunti di studio su **CSS**, dai fondamenti al layout moderno. Prosa in italiano, proprietà e sintassi in inglese. Ogni modulo chiude con un **🔁 Ripasso lampo** e una sintesi.
-
-**Sintassi moderna in primo piano** (2026): dove una tecnica recente sostituisce la vecchia, si spiega quella; il legacy resta come nota di contesto. Le novità additive (`oklch()`, container queries, `:has()`, nesting nativo, subgrid, `@layer`…) sono integrate nei moduli pertinenti.
+I 16 moduli di CSS moderno, dai fondamenti al layout. Ogni modulo chiude con un Ripasso lampo e una sintesi.
 
 > Appunti personali di studio, verificati su [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS) e [Can I Use](https://caniuse.com/).
 
-## Indice dei moduli
+## Moduli
 
 | # | Modulo | Contenuto |
 |---|--------|-----------|
