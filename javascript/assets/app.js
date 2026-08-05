@@ -1,7 +1,7 @@
 /*
  * Parti SPECIFICHE del vault JavaScript: bottone «▶ Prova» sui blocchi JS e la
  * configurazione window.$docsify. Anti-flash e plugin condivisi (tema, resume,
- * coverDots) vivono in ../assets/shared.js, caricato prima di questo file.
+ * coverDots) vivono in ../assets/shared/ (01-core … 06-highlighter), caricato prima di questo file.
  */
 window.__VAULT = 'javascript';   // chiave per "Riprendi" (javascript-last-page)
 
@@ -65,6 +65,6 @@ window.$docsify = {
     warning: { label: 'Attenzione' },
     info:    { label: 'Info', className: 'note', icon: 'icon-note' }
   },
-  // plugin condivisi (../assets/shared.js) + «Prova» locale
+  // plugin condivisi (../assets/shared/ (01-core … 06-highlighter)) + «Prova» locale
   plugins: [playgroundTryPlugin, themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, highlighterPlugin, coverDotsPlugin]
 };

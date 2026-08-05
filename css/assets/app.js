@@ -1,7 +1,7 @@
 /*
  * Parti SPECIFICHE del vault CSS: wikilink (moduli in /docs/), bottone «▶ Prova» sui
  * blocchi CSS e la configurazione window.$docsify. Anti-flash e plugin condivisi
- * (tema, mermaid, callout, resume, coverDots) vivono in ../assets/shared.js, caricato prima.
+ * (tema, mermaid, callout, resume, coverDots) vivono in ../assets/shared/ (01-core … 06-highlighter), caricato prima.
  */
 window.__VAULT = 'css';   // chiave per "Riprendi" (css-last-page)
 
@@ -89,6 +89,6 @@ window.$docsify = {
   search: {
     namespace: 'dev-notes-css', placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
   copyCode: { buttonText: 'Copia', successText: 'Copiato' },
-  // plugin condivisi (../assets/shared.js) + specifici del vault
+  // plugin condivisi (../assets/shared/ (01-core … 06-highlighter)) + specifici del vault
   plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, playgroundTryPlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, highlighterPlugin, coverDotsPlugin]
 };
