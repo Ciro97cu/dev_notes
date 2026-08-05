@@ -139,7 +139,10 @@ function dnCloseAllPops(keep) {
     // i pulsanti fissi in basso a destra (home/menu/playground) erano bianchi fissi:
     // li rendo theme-aware come quelli in alto, così cambiano col tema
     'a[aria-label="Torna a Dev Notes"],.sidebar-toggle,#pg-toggle,#ng-play{background:var(--bg-soft) !important;color:var(--text) !important;border-color:var(--border) !important}',
-    '.sidebar-toggle span{background-color:var(--text) !important}'
+    '.sidebar-toggle span{background-color:var(--text) !important}',
+    // hover: icona/bordo in accento (!important perché la base qui sopra è !important e vincerebbe)
+    'a[aria-label="Torna a Dev Notes"]:hover,.sidebar-toggle:hover,#pg-toggle:hover,#ng-play:hover{color:var(--link) !important;border-color:var(--link) !important}',
+    '.sidebar-toggle:hover span{background-color:var(--link) !important}'
   ].join('');
   var el = document.createElement('style');
   el.id = 'dn-data-styles';
@@ -221,6 +224,60 @@ function dnCloseAllPops(keep) {
   }
   if (document.body) build();
   else document.addEventListener('DOMContentLoaded', build);
+})();
+
+// ── Navigazione da tastiera ───────────────────────────────────────────────────
+// ←/→ capitolo precedente/successivo · «/» ricerca · «t» tema · «?» aiuto · Esc chiude.
+// Gli shortcut a lettera/freccia sono ignorati mentre si scrive in un campo.
+(function () {
+  var css = [
+    '#dn-keyhelp{position:fixed;inset:0;z-index:2147483600;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45)}',
+    '#dn-keyhelp.open{display:flex}',
+    '#dn-keyhelp .box{background:var(--bg-soft);color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.4);padding:1rem 1.2rem;min-width:260px;max-width:90vw}',
+    '#dn-keyhelp h3{margin:0 0 .7rem;font-size:1rem}',
+    '#dn-keyhelp dl{display:grid;grid-template-columns:auto 1fr;gap:.45rem .9rem;margin:0;font-size:.9rem;align-items:center}',
+    '#dn-keyhelp dt{white-space:nowrap}',
+    '#dn-keyhelp dd{margin:0;opacity:.85}',
+    '#dn-keyhelp kbd{font-family:var(--font-mono,ui-monospace,monospace);background:rgba(127,127,127,.16);border:1px solid var(--border);border-radius:6px;padding:.08em .5em;font-size:.85em}'
+  ].join('');
+  var st = document.createElement('style'); st.id = 'dn-keyhelp-styles'; st.textContent = css;
+  (document.head || document.documentElement).appendChild(st);
+
+  function help() {
+    var h = document.getElementById('dn-keyhelp');
+    if (h) return h;
+    h = document.createElement('div');
+    h.id = 'dn-keyhelp';
+    h.innerHTML = '<div class="box"><h3>Scorciatoie da tastiera</h3><dl>' +
+      '<dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Capitolo precedente / successivo</dd>' +
+      '<dt><kbd>/</kbd></dt><dd>Cerca</dd>' +
+      '<dt><kbd>t</kbd></dt><dd>Tema chiaro / scuro</dd>' +
+      '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>' +
+      '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>' +
+      '</dl></div>';
+    h.addEventListener('click', function (e) { if (e.target === h) h.classList.remove('open'); });
+    (document.body || document.documentElement).appendChild(h);
+    return h;
+  }
+  function typing() {
+    var a = document.activeElement; if (!a) return false;
+    var t = a.tagName; return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || a.isContentEditable;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (e.key === '?') { e.preventDefault(); help().classList.toggle('open'); return; }
+    if (e.key === 'Escape') { var h = document.getElementById('dn-keyhelp'); if (h && h.classList.contains('open')) { h.classList.remove('open'); return; } }
+    if (e.key === '/') {
+      if (typing()) return;
+      var s = document.querySelector('.search input, input[type=search]');
+      if (s) { e.preventDefault(); s.focus(); if (s.select) s.select(); }
+      return;
+    }
+    if (typing()) return;
+    if (e.key === 'ArrowLeft') { var p = document.querySelector('.pagination-item--previous a'); if (p) { e.preventDefault(); p.click(); } }
+    else if (e.key === 'ArrowRight') { var n = document.querySelector('.pagination-item--next a'); if (n) { e.preventDefault(); n.click(); } }
+    else if (e.key === 't' || e.key === 'T') { var tt = document.getElementById('theme-toggle'); if (tt) { e.preventDefault(); tt.click(); } }
+  });
 })();
 
 // Stile (condiviso) delle 3 sezioni "Come funziona" sulla cover: layout a colonne e
@@ -359,7 +416,7 @@ function resumePlugin(hook, vm) {
   }
   function persist() {
     if (!current) return;
-    try { localStorage.setItem(KEY, JSON.stringify({ p: current, id: currentId() })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ p: current, id: currentId(), t: Date.now() })); } catch (e) {}  // t: per il «Continua» globale sull'hub
   }
   function read() {
     try {
