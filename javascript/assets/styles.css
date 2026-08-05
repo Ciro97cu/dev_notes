@@ -373,14 +373,67 @@ section.cover .cover-wrap h1 {
 
 .cover-wrap .cover-disclaimer {
   max-width: 60ch;
-  margin: .4rem auto 0;
+  margin: 1rem auto 0;
   font-size: .74rem;
   line-height: 1.5;
   color: rgba(255, 255, 255, .68);
 }
 
+/* "Come funziona": 3 sezioni esplicative collassabili (colonne su web, stack su mobile) */
+.cover-about {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .8rem;
+  width: 100%;
+  max-width: 860px;
+  margin: 1.6rem auto .2rem;
+  text-align: left;
+}
+.cover-about .about-col {
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 12px;
+  padding: 0 .95rem;
+}
+.cover-about .about-head {
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .7rem 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  font-size: .92rem;
+  color: #fff;
+  text-align: left;
+}
+.cover-about .about-head::after { content: "+"; font-weight: 400; opacity: .65; }
+.cover-about .about-col.open .about-head::after { content: "\2212"; }
+/* apertura fluida: la riga grid passa da 0fr a 1fr (niente scatto) */
+.cover-about .about-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .3s ease;
+}
+.cover-about .about-col.open .about-body { grid-template-rows: 1fr; }
+.cover-about .about-inner {
+  overflow: hidden;
+  min-height: 0;
+  font-size: .8rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .85);
+}
+.cover-about .about-inner ul { margin: .35rem 0 .85rem; padding-left: 1.1rem; }
+.cover-about .about-inner li { margin: .28rem 0; }
+.cover-about .about-inner code { background: rgba(255, 255, 255, .14); padding: 0 .3em; border-radius: 4px; }
+
 @media (max-width: 720px) {
   .cover-actions .cover-btn { font-size: .92rem; padding: .62rem 1.1rem; }
+  .cover-about { grid-template-columns: 1fr; max-width: 460px; }
 }
 
 section.cover.show ~ .sidebar,

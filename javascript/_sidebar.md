@@ -1,4 +1,4 @@
-- [Home](README.md)
+- [Indice completo](README.md)
 
 - **Libro I — Up & Going**
   - [1. Introduzione alla programmazione](docs/libro1/01-programmazione.md)

@@ -18,6 +18,16 @@
   } catch (e) {}
 })();
 
+// Espansione fluida delle sezioni "Come funziona" sulla cover: il click sull'header
+// commuta la classe .open sul contenitore (l'animazione è CSS, grid-template-rows).
+document.addEventListener('click', function (e) {
+  var h = e.target && e.target.closest && e.target.closest('.about-head');
+  if (!h) return;
+  var col = h.parentNode;
+  var open = col.classList.toggle('open');
+  h.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+
 // Toggle tema chiaro/scuro, persistito in localStorage (key: dev-notes-theme).
 // Il ramo mermaid è no-op nei vault che non caricano mermaid.
 function themeTogglePlugin(hook) {

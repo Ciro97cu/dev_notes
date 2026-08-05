@@ -1,34 +1,60 @@
-# Guida a JavaScript
+# Indice completo
 
-Questa guida è una sintesi ragionata e traduzione in italiano della serie **You Don't Know JS** di Kyle Simpson — sei libri che esplorano JavaScript in profondità, dai fondamenti ai meccanismi interni più sottili.
+Sintesi ragionata e traduzione in italiano della serie **You Don't Know JS** di Kyle Simpson: 33 capitoli in sei libri, più una sezione sul JavaScript moderno. Ogni capitolo chiude con **Ripasso veloce** e **Domande**.
 
-Il materiale è organizzato seguendo la struttura originale della serie, con un capitolo per pagina. Ogni pagina affianca la spiegazione completa a una sezione di **ripasso veloce** e a una serie di **domande** con risposta nascosta, per permettere l'auto-valutazione.
+## Libro I — Up & Going
+- [1. Introduzione alla programmazione](docs/libro1/01-programmazione.md)
+- [2. Introduzione a JavaScript](docs/libro1/02-javascript.md)
+- [3. Introduzione a YDKJS](docs/libro1/03-ydkjs.md)
 
-## Come è organizzata
+## Libro II — Scope & Closures
+- [4. Che cos'è lo Scope](docs/libro2/01-scope.md)
+- [5. Lexical Scope](docs/libro2/02-scope-lessicale.md)
+- [6. Function Scope e Block Scope](docs/libro2/03-funzioni-blocchi.md)
+- [7. Hoisting](docs/libro2/04-hoisting.md)
+- [8. Closure](docs/libro2/05-closure.md)
 
-La barra laterale presenta i 33 capitoli distribuiti in sei libri, più una sezione moderna aggiuntiva:
+## Libro III — this & Object Prototypes
+- [9. this: introduzione](docs/libro3/01-this-introduzione.md)
+- [10. this in pratica](docs/libro3/02-this-in-pratica.md)
+- [11. Oggetti](docs/libro3/03-oggetti.md)
+- [12. Classi e mixin](docs/libro3/04-classi.md)
+- [13. Prototype](docs/libro3/05-prototipi.md)
+- [14. Behavior Delegation](docs/libro3/06-behavior-delegation.md)
 
-- **Libro I — Up & Going**: fondamenti della programmazione e prima panoramica di JavaScript.
-- **Libro II — Scope & Closures**: come JavaScript gestisce scope, lexical scope, hoisting e closure.
-- **Libro III — this & Object Prototypes**: il meccanismo di `this`, gli oggetti, il prototype e la delegation.
-- **Libro IV — Types & Grammar**: tipi di dati, valori, natives, coercizione e grammatica del linguaggio.
-- **Libro V — Async & Performance**: asincronia, callbacks, promises, generators e ottimizzazione.
-- **Libro VI — ES6 & Beyond**: le funzionalità introdotte con ES6 e le evoluzioni successive.
-- **[JavaScript moderno — oltre YDKJS](docs/moderno/README.md)**: sezione distaccata dal libro, una pagina per edizione annuale (ES2017 → ES2025), che copre ciò che il linguaggio ha aggiunto dopo YDKJS. Verificata su MDN.
+## Libro IV — Types & Grammar
+- [15. Tipi](docs/libro4/01-tipi.md)
+- [16. Valori](docs/libro4/02-valori.md)
+- [17. Natives](docs/libro4/03-natives.md)
+- [18. Coercizione](docs/libro4/04-coercizione.md)
+- [19. Grammatica](docs/libro4/05-grammatica.md)
 
-## Convenzioni
+## Libro V — Async & Performance
+- [20. Asincronia](docs/libro5/01-asincronia.md)
+- [21. Callbacks](docs/libro5/02-callbacks.md)
+- [22. Promises](docs/libro5/03-promises.md)
+- [23. Generators](docs/libro5/04-generators.md)
+- [24. Performance](docs/libro5/05-performance.md)
+- [25. Benchmarking](docs/libro5/06-benchmarking.md)
 
-- I termini tecnici inglesi (scope, closure, hoisting, prototype, callback, promise, ecc.) restano in inglese, perché sono lo standard consolidato nell'ecosistema JavaScript.
-- `this` non viene mai tradotto: è una keyword del linguaggio e tradurla ne altera il significato.
-- Quando un termine tecnico compare per la prima volta senza contesto, viene aperta una parentesi con una spiegazione breve.
-- La scrittura è impersonale: si usa "si può", "è possibile", "si consideri" al posto di "puoi" o "noi".
+## Libro VI — ES6 & Beyond
+- [26. ES6: ora e futuro](docs/libro6/01-es6-ora-e-futuro.md)
+- [27. Sintassi ES6](docs/libro6/02-sintassi.md)
+- [28. Organizzazione del codice](docs/libro6/03-organizzazione.md)
+- [29. Async Flow Control](docs/libro6/04-async-flow.md)
+- [30. Collezioni](docs/libro6/05-collezioni.md)
+- [31. Aggiunte alle API](docs/libro6/06-api-additions.md)
+- [32. Metaprogrammazione](docs/libro6/07-metaprogramming.md)
+- [33. Oltre ES6](docs/libro6/08-oltre-es6.md)
 
-## Struttura di ogni capitolo
-
-Ogni capitolo segue questo schema:
-
-1. Spiegazione del contenuto — sintetica ma completa, con esempi di codice.
-2. **⚡ Ripasso veloce** — i punti chiave in poche righe con un snippet minimo.
-3. **Domande** — quiz a risposta nascosta per verificare la comprensione.
-
-Si può iniziare dalla prima sezione: [Introduzione alla programmazione](docs/libro1/01-programmazione.md).
+## JavaScript moderno — oltre YDKJS
+- [Panoramica](docs/moderno/README.md)
+- [ES2017 (ES8)](docs/moderno/es2017.md)
+- [ES2018 (ES9)](docs/moderno/es2018.md)
+- [ES2019 (ES10)](docs/moderno/es2019.md)
+- [ES2020 (ES11)](docs/moderno/es2020.md)
+- [ES2021 (ES12)](docs/moderno/es2021.md)
+- [ES2022 (ES13)](docs/moderno/es2022.md)
+- [ES2023 (ES14)](docs/moderno/es2023.md)
+- [ES2024 (ES15)](docs/moderno/es2024.md)
+- [ES2025 (ES16)](docs/moderno/es2025.md)
