@@ -4,7 +4,7 @@ tags: [tipo/cert, testing, legacy]
 livello: [mid, senior]
 ---
 # Testing classico (Jasmine + Karma)
-> 🎓 Cert Angular · non coperto dal *Modern Angular* (il vault testa con **Vitest**)
+> Cert Angular · non coperto dal *Modern Angular* (il vault testa con **Vitest**)
 
 Per anni lo stack di test unitari di Angular è stato **Jasmine** (framework di asserzioni: `describe`/`it`/`expect`) eseguito da **Karma** (test runner che lancia un browser reale). Sopra ci sta il **`TestBed`**, il costrutto Angular che monta componenti e servizi sostituendo le dipendenze con dei mock. La cert lo chiede perché la stragrande maggioranza delle codebase esistenti usa ancora Jasmine, e perché i concetti (fixture, change detection manuale, test async con `fakeAsync`, mock HTTP) valgono a prescindere dal runner.
 
@@ -252,7 +252,7 @@ await TestBed.configureTestingModule({
 > [!info] Stato attuale
 > **Karma è deprecato** (pubblicato su npm come *deprecated* dall'aprile 2023: non riceve più feature né bugfix generali) e Angular ha **rimosso il builder Karma** in v20; da **Angular 21 Vitest è il test runner di default** dei nuovi progetti ([angular.dev](https://angular.dev/guide/testing/migrating-to-vitest)). **Jasmine** come framework di asserzioni non è deprecato ma non è più il default. Nelle codebase esistenti Karma+Jasmine restano finché non si migra a Vitest (big-bang o progressiva).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Differenza tra `toBe` e `toEqual`, e a cosa servono `spyOn` e `jasmine.createSpyObj`?
 > [!success]- Risposta

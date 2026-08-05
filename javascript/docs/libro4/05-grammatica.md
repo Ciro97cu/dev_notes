@@ -426,7 +426,7 @@ switch (true) {
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Statement vs expression**: le expression si valutano in un valore; gli statement sono istruzioni. Ogni statement ha un completion value.
 

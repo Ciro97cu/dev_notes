@@ -259,7 +259,7 @@ ES6 richiede TCO nei motori (non lo lascia opzionale) precisamente perché senza
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Benchmarking:**
 - `Date.now()` diff = metodo sbagliato — imprecisione del timer, campione singolo, ottimizzazioni artificiose

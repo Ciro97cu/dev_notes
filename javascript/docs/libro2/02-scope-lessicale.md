@@ -135,7 +135,7 @@ Il JavaScript engine ottimizza il lookup delle variabili durante la fase di comp
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Lexical scope** = scope definito al momento della scrittura, da dove le funzioni sono dichiarate — non da dove vengono chiamate.
 

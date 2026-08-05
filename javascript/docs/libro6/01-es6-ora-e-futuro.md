@@ -74,7 +74,7 @@ La strategia corretta è usare entrambi: un transpiler nel workflow di build per
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 - **ES6 / ES2015** — salto radicale, non incrementale; introduce sintassi nuova, non solo API
 - **Versioning evergreen** — il ritmo di evoluzione è per-feature, non per-versione; ragionare funzionalità per funzionalità

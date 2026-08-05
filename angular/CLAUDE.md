@@ -2,7 +2,7 @@
 
 **Vault Obsidian**. Appunti di studio sul libro *Modern Angular* (**3ª edizione**, v3.0.0 — aggiornata ad **Angular 22**). Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
 
-Fonte: `modern-angular_v3_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagina dei riferimenti 📖 sono i **numeri stampati sul libro** (il page-label che il viewer mostra aprendo il PDF), **non** l'indice sequenziale del reader. Il PDF ha 12 pagine di front matter, quindi: **stampato = reader − 12**. L'outline in [`_meta/book-outline.txt`](_meta/book-outline.txt) è invece in numeri **reader** (1–467): per leggere col Read tool / `r.pages[N-1]` una pagina stampata `P`, usare `reader = P + 12`.
+Fonte: `modern-angular_v3_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagina dei riferimenti sono i **numeri stampati sul libro** (il page-label che il viewer mostra aprendo il PDF), **non** l'indice sequenziale del reader. Il PDF ha 12 pagine di front matter, quindi: **stampato = reader − 12**. L'outline in [`_meta/book-outline.txt`](_meta/book-outline.txt) è invece in numeri **reader** (1–467): per leggere col Read tool / `r.pages[N-1]` una pagina stampata `P`, usare `reader = P + 12`.
 
 > [!info] Versioning del vault
 > Gli appunti seguono la **v3.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info] Angular 22+` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
@@ -59,12 +59,12 @@ pagine: "<start>-<end>"
 tags: [tipo/capitolo, <tematici>]
 ---
 # NN · <Titolo inglese>
-> 📖 cap.N · pp.<start>-<end> — *Modern Angular* v3.0.0
+> cap.N · pp.<start>-<end> — *Modern Angular* v3.0.0
 
 <Intro/contesto breve: cosa copre il capitolo e perché conta.>
 
 ## <Sezione>
-> 📖 pp.<x>-<y>
+> pp.<x>-<y>
 
 <Prosa breve in italiano.>
 
@@ -80,7 +80,7 @@ tags: [tipo/capitolo, <tematici>]
 
 Collegamenti: [[concetto]], [[NN-altro-capitolo]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** <domanda>
 > [!success]- Risposta
@@ -126,14 +126,14 @@ aliases: [<sinonimi/varianti>]
 ## Sezione `cert/` — prep certificazione (Angular classico)
 Appunti per la **cert Angular** di certificates.dev (target Senior). Coprono **solo** l'Angular *classico/legacy* che l'esame richiede e che **non** è nel libro *Modern Angular* (NgModules, template-driven & reactive forms, RxJS, DI e routing class-based, change detection con Zone.js, NgRx Redux, testing Jasmine/Karma, perf, security).
 - **Anti-duplicazione (regola dura)**: se un tema è già spiegato nei capitoli moderni, **non si riscrive** → si rimanda con `> [!info] vs Modern`. Fonte: [certificates.dev](https://certificates.dev/angular) + angular.dev / rxjs.dev / ngrx.io.
-- **Naming**: `cert/<topic-kebab>.md` (inglese), più `cert/00-index.md` (MOC + checklist spuntabile + link ai capitoli per i temi 🔁). NON usano il template capitolo (niente `📖 pp.`).
-- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> 🎓 Cert Angular · ...`; concept 2-4 righe; sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info] vs Modern` (link al capitolo moderno); `> [!info] Stato attuale` (deprecazione/default odierno + link); chiusura con **🔁 Ripasso lampo** e **In sintesi:**.
-- **Manutenzione**: aggiungendo una nota `cert/`, aggiornare `cert/00-index.md` e la sezione `🎓 Cert` di `_sidebar.md`.
+- **Naming**: `cert/<topic-kebab>.md` (inglese), più `cert/00-index.md` (MOC + checklist spuntabile + link ai capitoli per i temi). NON usano il template capitolo (niente `pp.`).
+- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> Cert Angular · ...`; concept 2-4 righe; sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info] vs Modern` (link al capitolo moderno); `> [!info] Stato attuale` (deprecazione/default odierno + link); chiusura con **Ripasso lampo** e **In sintesi:**.
+- **Manutenzione**: aggiungendo una nota `cert/`, aggiornare `cert/00-index.md` e la sezione `Cert` di `_sidebar.md`.
 
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) vanno **senza titolo custom** — niente "Gotcha"/"Take-away": Obsidian mostra l'etichetta di default.
 - `> [!info]` mantiene il titolo quando è informativo (es. `[!info] Angular 22+`, `[!info] Versioning del vault`).
-- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **🔁 Ripasso lampo**.
+- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **Ripasso lampo**.
 - La sezione di chiusura del capitolo si chiama **In sintesi:** (non "Take-away").
 
 ## Tag controllati
@@ -148,11 +148,11 @@ Mermaid dove rende davvero: reactive flow / signal graph, gerarchia DI, child ro
 - Testo via `pypdf` (`python3` con `from pypdf import PdfReader`). Pagina i-esima = `r.pages[i-1].extract_text()` (0-based).
 - Il codice estratto **perde indentazione** → ricostruirla.
 - Ogni pagina ha un watermark `ciro.cu97@gmail.com <data>` → **ignorarlo**.
-- **Numerazione pagine**: `r.pages[N-1]` e l'outline usano il numero **reader** (1–467); i riferimenti 📖 nelle note usano il numero **stampato** (`stampato = reader − 12`, per le 12 pagine di front matter). Quindi per estrarre il testo della pagina stampata `P` si legge `r.pages[P + 12 - 1]`. Fonte dei numeri: l'outline in `_meta/book-outline.txt` (reader), da convertire `−12`.
+- **Numerazione pagine**: `r.pages[N-1]` e l'outline usano il numero **reader** (1–467); i riferimenti nelle note usano il numero **stampato** (`stampato = reader − 12`, per le 12 pagine di front matter). Quindi per estrarre il testo della pagina stampata `P` si legge `r.pages[P + 12 - 1]`. Fonte dei numeri: l'outline in `_meta/book-outline.txt` (reader), da convertire `−12`.
 
 ## Checklist manutenzione (quando aggiungi/rinomini una nota)
 - [ ] `_sidebar.md` — voce nell'ordine giusto.
 - [ ] `README.md` (home = indice) — link al capitolo/concetto.
 - [ ] Frontmatter completo (`capitolo`/`titolo`/`pagine`/`tags`), col tag `angular-22` se la nota tratta feature gated.
 - [ ] `concetti/` — se introduci un concetto cardine ricorrente, valuta una nota atomica + backlink `[[nome]]`.
-- [ ] Sezioni **🔁 Ripasso lampo** e **In sintesi:** a fine capitolo.
+- [ ] Sezioni **Ripasso lampo** e **In sintesi:** a fine capitolo.

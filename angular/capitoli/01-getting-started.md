@@ -5,12 +5,12 @@ pagine: "6-19"
 tags: [tipo/capitolo, tooling, signals, angular-22]
 ---
 # 01 · Getting Started with Angular
-> 📖 cap.1 · pp.6-19 — *Modern Angular* v3.0.0
+> cap.1 · pp.6-19 — *Modern Angular* v3.0.0
 
 Setup dell'ambiente, generazione del progetto con la **Angular CLI** e prima lettura del codice generato. Un'app Angular è un **albero di componenti** con un root component in cima; questo capitolo arriva fino al punto in cui quel componente gira nel browser. Il progetto di esempio del libro è **flights42** (`angular-architects/flights42` su GitHub).
 
 ## Tooling
-> 📖 pp.6-8
+> pp.6-8
 
 ### Development Environment
 
@@ -43,10 +43,10 @@ ng serve -o   # -o apre il browser
 > Il repo di esempio ha **branch per capitolo** (vedi `readme.md`): utili per seguire il libro passo-passo.
 
 ## Getting Started with the Angular CLI
-> 📖 pp.8-19
+> pp.8-19
 
 ### Generating & Starting a Project
-> 📖 pp.8-10
+> pp.8-10
 
 `ng new` scarica e configura automaticamente l'intera toolchain (la catena di strumenti che servono per lavorare al progetto): compilatore TypeScript, strumenti di test e i build tool che, in fase di compilazione, impacchettano i sorgenti in **bundle** (pochi file ottimizzati pronti per la produzione).
 
@@ -69,7 +69,7 @@ Al salvataggio il browser si aggiorna da solo; conviene poi riportare il valore 
 > Va aperta nell'IDE la **cartella root del progetto** (quella che contiene `angular.json`), altrimenti l'autocompletamento fallisce e compaiono numerosi errori. La ricompilazione automatica funziona bene, ma occasionalmente la CLI "perde" una modifica o si desincronizza — capita con salvataggi rapidi in sequenza o con la rinomina di file. Il rimedio è risalvare i file interessati o, in ultima istanza, riavviare `ng serve`.
 
 ### Project Structure of CLI Projects
-> 📖 pp.10-11
+> pp.10-11
 
 La CLI genera il root component `App` più i file di configurazione per build e test. I principali:
 
@@ -85,12 +85,12 @@ La CLI genera il root component `App` più i file di configurazione per build e 
 | `tsconfig.json` | Configurazione del compilatore TypeScript |
 
 ### Inspecting the Generated Source Code
-> 📖 pp.11-15
+> pp.11-15
 
 Con la struttura sotto mano, si legge il codice generato: mostra fin da subito i **signal**, il **bootstrap** dell'applicazione e il collegamento alla **start page**.
 
 #### App Component with Signals and Data Bindings
-> 📖 pp.11-13
+> pp.11-13
 
 Il root component generato si chiama `App` e vive in `app.ts`. Definisce essenzialmente una proprietà `title`:
 
@@ -137,7 +137,7 @@ Il template generato contiene il markup della start page vista sopra: gradevole,
 Collegamenti: [[signal]] · approfondimenti su componenti e binding in [[02-signal-based-components]].
 
 #### Bootstrapping the App Component
-> 📖 pp.13-15
+> pp.13-15
 
 All'avvio Angular esegue `main.ts`, che fa il **bootstrap** del root component (lo avvia e lo "monta" nella pagina, mettendolo in moto): da lì in poi mostra l'intero albero di componenti.
 
@@ -190,7 +190,7 @@ Ci sono due modi per aggiungere una libreria. `npm i <pkg>` (alias di `npm insta
 Per non perdere tempo su styling e menu, il libro fa copiare nel progetto i file del repo `angular-architects/flights42-assets`: uno `styles.css` globale e i componenti `navbar`/`sidebar` con i rispettivi template, più un `app.html` modificato che li referenzia.
 
 ### Configuring the Angular CLI
-> 📖 pp.15-19
+> pp.15-19
 
 Gli **schematics** (le "ricette" che la CLI usa quando genera file con `ng generate`: dicono cosa creare e con quali opzioni di default) si configurano in `angular.json` (nodo `projects/<project-name>/schematics`) per ridurre il rumore in fase di studio e usare **OnPush**:
 
@@ -231,7 +231,7 @@ Gli **schematics** (le "ricette" che la CLI usa quando genera file con `ng gener
 
 Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal-store]] · testing in [[07-testing-with-vitest]].
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Che differenza c'è tra `npm i <pkg>` e `ng add <pkg>`?
 > [!success]- Risposta

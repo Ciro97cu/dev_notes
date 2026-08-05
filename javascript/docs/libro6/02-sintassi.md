@@ -561,7 +561,7 @@ ES6 include Symbol predefiniti che controllano comportamenti dell'engine:
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 ```js
 /* let/const block scope */

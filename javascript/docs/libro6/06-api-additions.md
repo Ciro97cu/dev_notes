@@ -279,7 +279,7 @@ s.includes("on", 6);        // false — inizia la ricerca dall'indice 6
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 ```js
 /* ARRAY */

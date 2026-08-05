@@ -4,7 +4,7 @@ tags: [tipo/cert, performance, legacy]
 livello: [senior]
 ---
 # Performance
-> 🎓 Cert Angular · tecniche di ottimizzazione dell'Angular *classico* (module-based, CD con Zone.js) — il vault moderno le tratta con signals e `@defer`
+> Cert Angular · tecniche di ottimizzazione dell'Angular *classico* (module-based, CD con Zone.js) — il vault moderno le tratta con signals e `@defer`
 
 Le performance di un'app Angular si giocano su due assi: **quanto codice si scarica** (bundle, lazy loading) e **quanto lavoro fa la change detection** (CD) a ogni ciclo. La cert Senior chiede le leve *classiche* — `trackBy`, `OnPush` con dati immutabili, pure pipe, `PreloadingStrategy`, bundle budget — perché sono ciò che si trova (e si deve saper ottimizzare) in una codebase Zone.js pre-signal.
 
@@ -185,7 +185,7 @@ export class TickerComponent implements OnInit, OnDestroy {
 > [!info] Stato attuale
 > `trackBy`, `OnPush`, pure pipe, `PreloadingStrategy`, bundle budget e `detach` **non sono deprecati** e restano validi su Angular 22. Con lo standalone la preloading strategy si configura via `provideRouter(routes, withPreloading(PreloadAllModules))` invece di `RouterModule.forRoot`; i budget in `angular.json` sono invariati. `OnPush` resta utile finché convivono componenti Zone.js: nelle app *zoneless* + signals la sua rilevanza cala.
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché aggiungere `trackBy` a un `*ngFor` migliora le performance?
 > [!success]- Risposta

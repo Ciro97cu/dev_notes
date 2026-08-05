@@ -299,7 +299,7 @@ foo(a.slice()); /* foo riceve un nuovo array — a è al sicuro */
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Array**: contenitori generici, indici numerici. Le chiavi stringa non contano per `length`. Gli slot vuoti (sparse array) sono leciti ma ambigui.
 

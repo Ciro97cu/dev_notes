@@ -7,7 +7,7 @@ tags: [tipo/capitolo, security]
 
 # 16 · Modern Patterns for Authentication & Authorization
 
-> 📖 cap.16 · pp.400-409 — _Modern Angular_ v3.0.0
+> cap.16 · pp.400-409 — _Modern Angular_ v3.0.0
 
 Poche applicazioni gestionali fanno a meno dell'autenticazione. Il capitolo presenta due varianti: prima la classica **cookie-based authentication** (l'utente è riconosciuto da un cookie che il browser allega da solo), poi la **token-based security** con [[glossario#oauth-2-oidc|OAuth 2 e OpenID Connect (OIDC)]] (il client porta con sé un _token_, una stringa che dimostra chi è e cosa può fare). La buona notizia: l'autenticazione moderna si implementa **soprattutto sul server**. Sul frontend non scrivi quasi codice, ma devi capire e saper inquadrare i concetti, anche solo per discuterli con i colleghi backend. Per questo il capitolo è più **concettuale** degli altri.
 
@@ -16,7 +16,7 @@ Poche applicazioni gestionali fanno a meno dell'autenticazione. Il capitolo pres
 
 ## Cookie-based Authentication
 
-> 📖 pp.400-401
+> pp.400-401
 
 I cookie sembrano antiquati a prima vista, ma grazie ai **security attribute** introdotti negli ultimi anni sono oggi l'approccio preferito per l'autenticazione in molti scenari. Il client non può influenzare questi attributi: li imposta il **server** quando emette il cookie.
 
@@ -36,7 +36,7 @@ Nel passo 2 l'autenticazione può avvenire in più modi: l'app può inviare user
 
 ### Cookies and XSRF
 
-> 📖 p.401
+> p.401
 
 **[[glossario#xsrf-csrf|Cross-Site Request Forgery (CSRF/XSRF)]]** è un attacco in cui un aggressore fa eseguire a un utente già loggato un'azione a sua insaputa, sfruttando il fatto che il browser allega da solo i cookie di quell'utente:
 
@@ -95,7 +95,7 @@ Questi header non sono astratti: si vedono nei **DevTools** del browser (`F12`).
 
 ## Token-based Security
 
-> 📖 pp.402-405
+> pp.402-405
 
 Spesso bisogna integrare identity solution esistenti (sistemi di gestione delle identità degli utenti, come Active Directory o LDAP) per abilitare il **single sign-on** (un unico login che dà accesso a più applicazioni); inoltre nelle web app moderne il client deve ottenere il diritto di accedere ai servizi **per conto** dell'utente loggato. I **security token** risolvono tutti questi requisiti con eleganza.
 
@@ -104,7 +104,7 @@ Spesso bisogna integrare identity solution esistenti (sistemi di gestione delle 
 
 ### OAuth 2
 
-> 📖 pp.403-404
+> pp.403-404
 
 La prima versione di OAuth nasce nel 2006 (Twitter e Ma.gnolia) con l'obiettivo di permettere a un utente di **delegare parte dei propri diritti a un client senza condividere la password**: così, per esempio, un'app può ottenere il diritto di chiamare servizi per conto dell'utente. OAuth e il suo successore **OAuth 2** sono oggi usati da Google, Facebook, Flickr, Microsoft, Salesforce.com e Yahoo!, sempre più non solo per la delega di diritti (**authorization**) ma anche per il single sign-on (**authentication**) — per esempio loggarsi su altri servizi con il proprio account Google.
 
@@ -122,7 +122,7 @@ Il **formato** dell'access token e le misure di validazione sono dettagli implem
 
 ### Authenticating Users with OpenID Connect
 
-> 📖 pp.404-405
+> pp.404-405
 
 **OpenID Connect (OIDC)** estende OAuth 2 definendo, fra l'altro, come i client ottengono informazioni sugli utenti — aspetto che OAuth 2 non copre (l'access token può persino non essere leggibile dal client). OIDC introduce un **ID token** che il client riceve **in aggiunta** all'access token:
 
@@ -133,7 +133,7 @@ A differenza degli access token, la struttura degli **ID token è prescritta** (
 
 ### JSON Web Token
 
-> 📖 pp.404-406
+> pp.404-406
 
 Un **JWT** contiene, fra l'altro, un oggetto JSON di **claim**: coppie nome/valore che descrivono un soggetto (es. un utente). Ci sono anche claim che descrivono il **token stesso** (periodo di validità, audience, …). L'issuer può firmare e/o cifrare l'insieme di claim. Un JWT firmato è composto da **tre sezioni codificate in BASE64, separate da un punto**:
 
@@ -173,7 +173,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9 . eyJuYmYiOjEz[...]BlbmlkIn0 . Nt5pBRqGvDFn
 
 ### OAuth 2 and OIDC Flows
 
-> 📖 pp.406-407
+> pp.406-407
 
 I **flow** sono le sequenze di messaggi da scambiare perché il client ottenga l'access o l'ID token. Per le SPA era stato originariamente definito l'**Implicit Flow** — corrisponde alla vista d'insieme descritta sopra — ma oggi si raccomanda l'**Authorization Code Flow** combinato con **[[glossario#pkce|PKCE]]** (_Proof Key for Code Exchange_); l'Implicit Flow è addirittura **deprecato** (sconsigliato e destinato a sparire) con OAuth 2.1.
 
@@ -201,7 +201,7 @@ In pratica:
 
 ### Client-side OAuth 2
 
-> 📖 p.407
+> p.407
 
 Agli albori delle SPA si usava OAuth 2 **direttamente sul client**. Librerie come `angular-oauth2-oidc` gestiscono i dettagli del protocollo e restituiscono un access token, che il client può poi inoltrare all'API — per esempio via un **[[glossario#interceptor-httpinterceptor|HttpInterceptor]]** (un filtro che intercetta le richieste HTTP in uscita) che aggiunge l'header `Authorization: Bearer ...` (vedi [[12-initialization-route-changes]]).
 
@@ -216,7 +216,7 @@ C'è però un problema serio con OAuth 2 client-side:
 
 ### Current Recommendation: Server-side OAuth 2 (BFF)
 
-> 📖 pp.407-408
+> pp.407-408
 
 Per i rischi visti, l'OAuth 2 Working Group raccomanda (nel best practice _OAuth 2.0 for Browser-Based Applications_) alle app browser-based di **limitare OAuth 2 al lato server**: il flow OAuth 2 gira **sul server** e access/refresh token sono conservati in una **session server-side**. La SPA **non vede mai l'access token**, quindi codice malevolo non può rubarlo.
 
@@ -242,7 +242,7 @@ Il gateway può essere un componente riusabile in più progetti, oppure parte de
 
 Collegamenti: [[12-initialization-route-changes]] (auth guard come usability; `authInterceptor` che allega il `Bearer` token e gestisce 401/403) · [[17-defer-ssr-hydration]] (il BFF/gateway si combina con il rendering lato server).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Cosa fanno i tre attributi `HttpOnly`, `Secure`, `SameSite` e chi li imposta?
 

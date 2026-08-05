@@ -5,14 +5,14 @@ pagine: "444-453"
 tags: [tipo/capitolo, architecture]
 ---
 # 19 · Analyzing Your Architecture with Forensic Techniques
-> 📖 cap.19 · pp.444-453 — *Modern Angular* v3.0.0
+> cap.19 · pp.444-453 — *Modern Angular* v3.0.0
 
 Dei buoni **domain boundary** (i confini fra i domini, cioè dove finisce un'area funzionale e ne inizia un'altra) rendono un sistema manutenibile nel lungo periodo (vedi [[08-sustainable-architectures]]). Ma come capire se la struttura definita all'inizio è ancora valida, e dove conviene migliorarla? L'approccio ovvio è analizzare le **dipendenze** fra le parti dell'app. La **forensic analysis** (analisi "forense", cioè in stile scena del crimine: si parte dalle tracce lasciate nella storia del codice per ricostruire com'è fatto davvero) va oltre: tenendo conto anche dei **dati storici** del version control (la storia dei commit registrata da Git), scopre pattern nascosti che le sole dipendenze non rivelano.
 
 Il capitolo mostra cosa può rivelare, dal punto di vista architetturale, la forensic analysis di un'app Angular. Lo strumento usato è **Detective** (open-source, di Angular Architects), ispirato al libro *Your Code as a Crime Scene* di Adam Tornhill, di cui implementa parzialmente le idee.
 
 ## The Example Application Examined
-> 📖 p.444
+> p.444
 
 L'app demo è divisa in **due domini**, più un'area `shared` che fornisce componenti tecnici riusabili (logging, authentication). Detective deriva il diagramma della struttura direttamente dal codice sorgente.
 
@@ -32,7 +32,7 @@ Aprendo i tre blocchi (drill-down, cioè scendendo nel dettaglio di ciascuno) si
 > **High cohesion** dentro i domini e **low coupling** fra i domini (basso accoppiamento: pochi legami che li tengono attaccati l'uno all'altro) sono due facce della stessa medaglia: entrambi servono a far evolvere i domini in modo il più possibile indipendente. Così lo sviluppatore non deve tenere a mente tutto il sistema, e questo si traduce in meno carico cognitivo, più focus, meno errori e lead time più brevi (passa meno tempo dall'inizio del lavoro alla consegna). Idealmente il taglio dei domini correla anche con la struttura dei team, dando team self-sufficient (autosufficienti: ciascuno lavora sul proprio dominio senza dipendere dagli altri; vedi [[#Team Alignment and Conway's Law]]).
 
 ## Analyzing Layering
-> 📖 pp.445-446
+> pp.445-446
 
 Questa prima analisi strutturale rivela però un potenziale problema: la feature `feature-next-flight` dipende da `feature-my-tickets`. Non è per forza un male, ma può portare a catene di dipendenze e persino a **cicli**. Per prevenirlo, i domini si suddividono in **layer**, dove ogni layer può comunicare solo con i layer inferiori.
 
@@ -53,14 +53,14 @@ La funzionalità che `feature-my-tickets` vuole condividere con `feature-next-fl
 Collegamenti: [[08-sustainable-architectures]] (architecture matrix, layer, Sheriff/Detective).
 
 ## Forensic Analysis for Architects: A Brief Overview
-> 📖 p.447
+> p.447
 
 Le idee della forensic code analysis (dal libro *Your Code as a Crime Scene* di Adam Tornhill) applicano concetti della criminalistica all'esame del codice sorgente. Usando i **dati storici** del source code management si identificano gli **hotspot**: aree complesse cambiate di frequente, che possono segnalare debolezze architetturali capaci di rendere il sistema instabile e difficile da mantenere nel lungo periodo.
 
 Tenendo conto della **dimensione temporale** emergono altre informazioni nascoste sull'evoluzione dell'architettura. Un esempio è il **change coupling**: file cambiati spesso insieme, e quindi con dipendenze non ovvie, informazione che aiuta a valutare la modularizzazione attuale. Un altro è il **team alignment**: l'allineamento fra la struttura dei team e quella dei moduli, che permette ai team di concentrarsi su parti specifiche e lavorare in modo più autonomo, migliorando la qualità del codice e riducendo il rischio di errori.
 
 ## Using Detective
-> 📖 p.447
+> p.447
 
 Per analizzare un progetto, dalla root si eseguono questi comandi:
 
@@ -75,7 +75,7 @@ npx detective
 Collegamenti: Detective compare già in [[08-sustainable-architectures]] (visualizzazione dipendenze) e in [[14-monorepos-libraries]] (uso con Nx, insieme a Sheriff).
 
 ## Change Coupling
-> 📖 p.448
+> p.448
 
 Il coupling visto finora nasce direttamente dalle dipendenze fra moduli ECMAScript, e si deduce dagli statement `import`/`export` del codice. Il **change coupling** è un coupling meno ovvio: identifica i **file cambiati frequentemente insieme**. Questi file sono logicamente accoppiati e possono evidenziare problemi nei domain boundary — per esempio mina l'obiettivo, visto sopra, per cui la maggior parte dei cambiamenti dovrebbe restare in un solo dominio.
 
@@ -96,7 +96,7 @@ Nella demo emerge che il coupling fra i domini `check-in` e `ticketing` **non è
 > Se la discussione conclude che le alternative hanno svantaggi maggiori, la decisione è **mantenere** l'implementazione attuale. Anche in quel caso l'analisi è servita: ha reso consapevoli dei trade-off necessari.
 
 ## Hotspots as an Indicator of Architectural Problems
-> 📖 pp.449-450
+> pp.449-450
 
 Se lo **stesso file** viene modificato molto spesso può esserci un problema di architettura e di modularizzazione: magari un componente centrale da cui troppi domini dipendono, oppure un file editato di continuo per motivi diversi, segno che ha troppe responsabilità. Inoltre è ormai noto che un alto **code churn** (il "ricambio" del codice: quante volte le stesse righe/file vengono toccate nel tempo) correla con un tasso di errore più elevato.
 
@@ -114,7 +114,7 @@ Per il suo taglio architetturale, Detective **aggrega gli hotspot a livello di m
 Nella demo gli hotspot non preoccupano: due-tre cambiamenti totali e una cyclomatic complexity ≤ 6 a livello di file non giustificano nessun allarme.
 
 ## Team Alignment and Conway's Law
-> 📖 pp.450-451
+> pp.450-451
 
 Già nel 1968 l'informatico americano **Melvin Conway** osservò che la struttura delle applicazioni riflette le strutture di comunicazione degli sviluppatori (**Conway's Law**). La spiegazione classica e vivida: se tre team costruiscono insieme un compilatore, finisci con un compilatore a tre fasi.
 
@@ -132,14 +132,14 @@ Poiché `shared` non è un'unità omogenea ma una collezione eterogenea di modul
 Assegnando gli **ex membri** a un team artificiale a parte si può anche scoprire una **perdita di conoscenza** dovuta alla loro uscita. L'approccio si estende a ragionamenti **what-if** (scenari ipotetici "e se...": si simula un cambiamento per vederne l'effetto), per capire se la conoscenza vada distribuita meglio all'interno dei team.
 
 ## From Detective to Code Scene
-> 📖 p.452
+> p.452
 
 La forensic analysis descritta può essere migliorata ulteriormente. Si potrebbero **raggruppare i commit** dello stesso feature branch (il ramo Git dedicato a una singola funzionalità) o che referenziano lo stesso ticket ID (il codice della task/issue), per non perdere il change coupling quando un dominio viene cambiato in commit separati. Negli hotspot si potrebbe considerare anche **come è distribuita la conoscenza**: se una sola persona conosce il codice dell'hotspot, la sua criticità aumenta. È inoltre auspicabile vedere come il sistema **è evoluto nel tempo** (coupling, team alignment e hotspot sono migliorati o peggiorati nelle ultime iterazioni?).
 
 Il prodotto commerciale **Code Scene** (di Adam Tornhill) implementa queste opzioni e offre molte altre analisi.
 
 ## Critical Review
-> 📖 p.452
+> p.452
 
 È sorprendente quanti pattern nascosti la forensic analysis riesca a rivelare, e quanto bene combacino con i temi tipici dell'architettura software: coupling, cohesion, team alignment.
 
@@ -148,7 +148,7 @@ Il prodotto commerciale **Code Scene** (di Adam Tornhill) implementa queste opzi
 
 Non sostituisce nemmeno le **interviste agli stakeholder** (product manager, sviluppatori): in tutte le architecture review condotte dall'autore, gli sviluppatori avevano una forte intuizione delle aree da migliorare. I valori ottenuti **non vanno usati come target** da raggiungere: indicano aree sottili da esaminare più da vicino.
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza fra il coupling derivato dagli `import`/`export` e il **change coupling**? Cosa rivela quest'ultimo che il primo non vede?
 > [!success]- Risposta

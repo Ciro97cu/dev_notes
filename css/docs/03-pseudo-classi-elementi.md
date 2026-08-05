@@ -4,7 +4,7 @@ titolo: "Pseudo-classi & pseudo-elementi"
 tags: [tipo/modulo, selettori]
 ---
 # 03 · Pseudo-classi & pseudo-elementi
-> 🎨 modulo 3 — *CSS* · rif. MDN
+> modulo 3 — *CSS* · rif. MDN
 
 I selettori visti finora individuano elementi **così come stanno nel markup** (modulo [[02-selettori-combinatori]]). Due famiglie li estendono oltre il DOM statico:
 
@@ -266,7 +266,7 @@ dialog::backdrop {
 
 Collegamenti: [[02-selettori-combinatori]] · [[04-cascade-specificita-ereditarieta]] · [[15-transizioni-animazioni]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza tra `:` e `::`, e perché esiste?
 > [!success]- Risposta

@@ -4,7 +4,7 @@ tags: [tipo/cert, di, services, legacy]
 livello: [mid, senior]
 ---
 # Dependency Injection classica
-> 🎓 Cert Angular · l'API DI *senza* `inject()` — decoratori, provider espliciti e injector gerarchici; nel vault la DI è coperta in forma moderna ([[05-state-management-services-signals]])
+> Cert Angular · l'API DI *senza* `inject()` — decoratori, provider espliciti e injector gerarchici; nel vault la DI è coperta in forma moderna ([[05-state-management-services-signals]])
 
 La **dependency injection** (DI: una classe non costruisce le proprie dipendenze ma le riceve da un *injector*) in Angular classico ruota attorno a `@Injectable`, ai **provider** dichiarati negli array `providers`, e all'**injection via costruttore**. La cert la chiede perché ogni codebase pre-`inject()` (e gran parte di quelle attuali) configura la DI così, e perché injector gerarchici e resolution modifier sono un tema d'esame ricorrente.
 
@@ -156,7 +156,7 @@ export class FlightCard {
 > [!info] Stato attuale
 > `@Injectable` e la constructor injection **non sono deprecati** e restano pienamente supportati (Angular 22+). Per il codice nuovo la guida ufficiale preferisce [[inject]]: è più componibile, tree-shakable e senza i limiti dei decoratori di parametro. `providedIn: 'root'` è tuttora la via consigliata per i singleton (nel vault, da Angular 22, l'annotazione equivalente è [[service|@Service()]]). Fonte: [angular.dev/guide/di](https://angular.dev/guide/di) e [angular.dev/guide/di/hierarchical-dependency-injection](https://angular.dev/guide/di/hierarchical-dependency-injection).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Quando serve un `InjectionToken<T>` invece di usare la classe come token?
 > [!success]- Risposta

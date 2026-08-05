@@ -5,7 +5,7 @@ tags: [tipo/modulo, flexbox, layout]
 ---
 # 12 · Flexbox
 
-> 🎨 modulo 12 — *CSS* · rif. MDN
+> modulo 12 — *CSS* · rif. MDN
 
 **Flexbox** (*Flexible Box Layout*) è un modello di layout **monodimensionale**: dispone gli elementi lungo **un asse** per volta — una riga *oppure* una colonna — e sa distribuire lo spazio libero e allineare gli elementi in modo naturale. È lo strumento giusto per barre di navigazione, gruppi di pulsanti, card affiancate, centrature: ovunque conti come si comportano gli elementi lungo una singola direzione. Per griglie a righe **e** colonne insieme (layout bidimensionale) si usa invece [[13-grid]].
 
@@ -322,7 +322,7 @@ Regola pratica: se si ragiona su **una direzione** per volta (una fila di elemen
 
 Collegamenti: [[13-grid]] · [[05-box-model]] · [[09-display-posizionamento]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Qual è la differenza tra `justify-content` e `align-items`, e da cosa dipende quale dei due agisce in orizzontale?
 > [!success]- Risposta

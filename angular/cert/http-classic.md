@@ -4,7 +4,7 @@ tags: [tipo/cert, http, legacy]
 livello: [mid]
 ---
 # HttpClient classico
-> 🎓 Cert Angular · `HttpClientModule`, interceptor class-based ed error handling RxJS; il fetch reattivo moderno è nel vault ([[02-signal-based-components]])
+> Cert Angular · `HttpClientModule`, interceptor class-based ed error handling RxJS; il fetch reattivo moderno è nel vault ([[02-signal-based-components]])
 
 Nel classico `HttpClient` si abilita importando `HttpClientModule`, i dati arrivano come **Observable** (non come signal), e gli **interceptor** sono classi che implementano `HttpInterceptor` registrate sul token multi `HTTP_INTERCEPTORS`. La cert lo richiede perché è così che quasi tutte le codebase parlano col backend, e perché il pattern *clone-and-forward* degli interceptor è un tema d'esame classico.
 
@@ -159,7 +159,7 @@ find(): Observable<Flight[]> {
 > [!info] Stato attuale
 > `HttpClientModule` (con `HttpClientJsonpModule` e `HttpClientTestingModule`) è **deprecato dalla v18** in favore di `provideHttpClient()` / `provideHttpClientTesting()`: non offre nulla in più ed è meno tree-shakable. `HttpClient`, i suoi verbi, `HttpParams`/`HttpHeaders`, l'interfaccia `HttpInterceptor` e `HttpErrorResponse` **non** sono deprecati; gli interceptor class-based restano usabili col moderno via `withInterceptorsFromDi()`. Fonte: [angular.dev/guide/http](https://angular.dev/guide/http).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** `HttpClientModule` vs `provideHttpClient`: come si abilita `HttpClient` nei due mondi?
 > [!success]- Risposta

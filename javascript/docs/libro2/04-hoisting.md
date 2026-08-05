@@ -156,7 +156,7 @@ Dichiarare funzioni all'interno di blocchi è una pratica da evitare. Per questo
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Hoisting** = le dichiarazioni (variabili e funzioni) vengono processate nella fase di compilazione, prima dell'esecuzione. Solo le dichiarazioni vengono sollevate — gli assegnamenti restano al loro posto.
 

@@ -249,7 +249,7 @@ Questa caratteristica — detta **lexical scope** — è il meccanismo alla base
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Statement ed espressioni**: un statement è un'istruzione completa (`a = b * 2;`); un'espressione è qualsiasi parte che produce un valore (`b * 2`, `a`).
 

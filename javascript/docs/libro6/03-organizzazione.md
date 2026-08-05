@@ -469,7 +469,7 @@ new Bar(); // Foo: Bar — new.target rispetta il call-site originale
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 ```js
 /* === ITERATOR === */

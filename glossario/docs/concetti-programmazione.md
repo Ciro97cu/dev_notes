@@ -111,7 +111,7 @@ Di seguito i pattern più comuni. Per ciascuno: l'idea in breve, un'analogia, il
 
 Garantisce che di una classe esista **una sola istanza** condivisa in tutta l'applicazione, con un punto di accesso unico a essa.
 
-🧩 **Analogia**: il governo di uno Stato — ce n'è uno solo, e tutti sanno come raggiungerlo.
+**Analogia**: il governo di uno Stato — ce n'è uno solo, e tutti sanno come raggiungerlo.
 
 ❗ **Il problema**: serve una singola configurazione condivisa, ma se ogni modulo fa `new Config()` si ottengono **copie scollegate**: una modifica su una non si riflette sulle altre.
 
@@ -143,7 +143,7 @@ Config.get().tema; // "scuro" — è sempre lo stesso identico oggetto
 
 Sposta la **creazione** di un oggetto in un punto dedicato (una funzione o un metodo), così che il resto del codice — il **cliente**, cioè chi usa l'oggetto — lavori con un tipo astratto senza sapere quale classe concreta viene istanziata.
 
-🧩 **Analogia**: si ordina "una pizza"; è la cucina a decidere come prepararla. Chi ordina non maneggia forni e impasti.
+**Analogia**: si ordina "una pizza"; è la cucina a decidere come prepararla. Chi ordina non maneggia forni e impasti.
 
 ❗ **Il problema**: la scelta del tipo concreto è sparsa nel codice, ripetuta con `new` e `if` ovunque serva. Aggiungere un nuovo tipo obbliga a ritrovare e modificare tutti quei punti.
 
@@ -173,7 +173,7 @@ Nella forma GoF piena la scelta è affidata a **sottoclassi** che ridefiniscono 
 
 Costruisce un oggetto complesso **un pezzo alla volta**, con metodi che si concatenano, invece di passare tutto a un unico costruttore.
 
-🧩 **Analogia**: comporre un panino da asporto scegliendo un ingrediente per volta, invece di elencarli tutti in un'unica ordinazione.
+**Analogia**: comporre un panino da asporto scegliendo un ingrediente per volta, invece di elencarli tutti in un'unica ordinazione.
 
 ❗ **Il problema**: un costruttore con molti parametri (spesso facoltativi) diventa illeggibile e fragile — non si capisce cosa sia cosa, e i valori "vuoti" vanno passati comunque, nell'ordine giusto.
 
@@ -198,7 +198,7 @@ const query = new QueryBuilder()
 
 Fa da **traduttore** tra due interfacce incompatibili: avvolge un oggetto ed espone i metodi che il **cliente** si aspetta, convertendo le chiamate verso quelli reali dell'oggetto avvolto.
 
-🧩 **Analogia**: l'adattatore di viaggio tra la spina italiana e la presa inglese.
+**Analogia**: l'adattatore di viaggio tra la spina italiana e la presa inglese.
 
 ❗ **Il problema**: il proprio codice vorrebbe chiamare `paga(euro)`, ma la libreria di pagamento esterna espone `fai_pagamento(centesimi)`. Le firme non combaciano, e legarsi ovunque a quella della libreria significa dover cambiare tutto il codice se un domani si cambia fornitore.
 
@@ -227,7 +227,7 @@ pagamenti.paga(19.9); // per cambiare fornitore basta scrivere un altro adapter
 
 Aggiunge funzionalità a un oggetto **avvolgendolo** in un altro che espone la **stessa interfaccia**: ogni strato aggiunge qualcosa e delega il resto all'oggetto che avvolge.
 
-🧩 **Analogia**: vestirsi a strati — maglietta, poi maglione, poi giacca: ognuno aggiunge qualcosa e si può togliere in modo indipendente.
+**Analogia**: vestirsi a strati — maglietta, poi maglione, poi giacca: ognuno aggiunge qualcosa e si può togliere in modo indipendente.
 
 ❗ **Il problema**: servono combinazioni di funzionalità opzionali — un flusso di dati che può essere compresso, cifrato, entrambi, in qualunque ordine. Con la sola ereditarietà servirebbe una sottoclasse per ogni combinazione: un'esplosione.
 
@@ -256,7 +256,7 @@ flusso.scrivi(dati);               // cifra → comprime → scrive su file
 
 Offre un'**interfaccia unica e semplice** verso un sottosistema complesso, nascondendone le parti interne al **cliente**.
 
-🧩 **Analogia**: il pulsante "avvia" di un'automobile — dietro c'è un sistema complicato, ma si preme un solo bottone.
+**Analogia**: il pulsante "avvia" di un'automobile — dietro c'è un sistema complicato, ma si preme un solo bottone.
 
 ❗ **Il problema**: per convertire un video il cliente dovrebbe conoscere e coordinare a mano decine di classi (codec, tracce audio, bitrate…), nell'ordine esatto. Troppa complessità esposta, e ogni cliente la ripete.
 
@@ -285,7 +285,7 @@ new VideoConverter().converti(file, "mp4"); // il cliente vede soltanto questo
 
 Prima il gergo: il **subject** (il "soggetto osservato") è l'oggetto il cui stato cambia; gli **observer** (osservatori) sono gli oggetti interessati a quei cambiamenti. Il pattern: il subject tiene una lista di observer e, quando cambia, li **notifica** tutti — senza sapere chi siano né cosa faranno.
 
-🧩 **Analogia**: un canale YouTube (il *subject*) e i suoi iscritti (gli *observer*). A ogni nuovo video tutti gli iscritti ricevono la notifica; il canale non conosce i singoli iscritti, si limita a "pubblicare".
+**Analogia**: un canale YouTube (il *subject*) e i suoi iscritti (gli *observer*). A ogni nuovo video tutti gli iscritti ricevono la notifica; il canale non conosce i singoli iscritti, si limita a "pubblicare".
 
 ❗ **Il problema**: quando un dato cambia, più parti dell'app devono aggiornarsi (un grafico, un contatore, un log). Se è il dato stesso a chiamarle una per una, resta **accoppiato** a tutte, e aggiungere un nuovo interessato costringe a modificarlo.
 
@@ -325,7 +325,7 @@ store.set(42); // grafico e contatore si aggiornano da soli, lo store non li con
 
 Raccoglie **algoritmi intercambiabili** dietro una stessa interfaccia, così da poterli scegliere o sostituire a runtime, senza catene di `if/else` sparse.
 
-🧩 **Analogia**: un navigatore che calcola il percorso "in auto", "a piedi" o "in bici": stessa richiesta, strategie diverse selezionabili.
+**Analogia**: un navigatore che calcola il percorso "in auto", "a piedi" o "in bici": stessa richiesta, strategie diverse selezionabili.
 
 ❗ **Il problema**: una funzione decide il comportamento con un `if/else` che cresce a ogni nuovo caso; ogni aggiunta la ingrossa e rischia di romperla.
 

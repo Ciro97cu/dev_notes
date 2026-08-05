@@ -233,7 +233,7 @@ myObject.doCool(); // "cool!"
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **`[[Prototype]]`**: link interno che l'engine segue quando una proprietà non è trovata direttamente sull'oggetto. La chain termina su `Object.prototype`.
 

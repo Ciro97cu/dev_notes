@@ -33,7 +33,7 @@ titolo: "<Titolo>"
 tags: [tipo/modulo, <tematici>]
 ---
 # NN · <Titolo>
-> 🎨 modulo N — *CSS* · rif. MDN
+> modulo N — *CSS* · rif. MDN
 
 <Intro breve: cosa copre il modulo e perché conta.>
 
@@ -57,7 +57,7 @@ tags: [tipo/modulo, <tematici>]
 
 Collegamenti: [[NN-altro-modulo]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** <domanda>
 > [!success]- Risposta
@@ -71,7 +71,7 @@ Collegamenti: [[NN-altro-modulo]]
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) **senza** titolo custom.
 - `> [!info]` mantiene il titolo quando è informativo: usare `> [!info] Legacy` per la sintassi vecchia, `> [!info] Baseline` per lo stato di supporto di una feature moderna.
-- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **🔁 Ripasso lampo**.
+- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **Ripasso lampo**.
 
 ## Aggiunte e modernizzazioni
 Contenuto aggiunto perché utile/moderno **non** va marcato ogni volta (il modern-first è la linea editoriale): si integra e basta. Riservare la nota in corsivo ➕ (es. `➕ *Approfondimento — …*`) solo per **tangenti/approfondimenti** che escono dal filo del modulo.

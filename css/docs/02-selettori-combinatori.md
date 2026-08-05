@@ -5,7 +5,7 @@ tags: [tipo/modulo, selettori]
 ---
 # 02 · Selettori & combinatori
 
-> 🎨 modulo 2 — *CSS* · rif. MDN
+> modulo 2 — *CSS* · rif. MDN
 
 Un **selettore** individua gli elementi HTML a cui applicare un blocco di dichiarazioni (vedi [[01-fondamenti]]). Saperli scegliere bene significa colpire *esattamente* ciò che serve, con la minima **specificità** possibile — così le regole restano facili da sovrascrivere (la specificità è il tema di [[04-cascade-specificita-ereditarieta]]). Questo modulo copre i selettori base, quelli di attributo, i **combinatori** che mettono in relazione più elementi e le funzioni moderne `:is()`/`:where()`, chiudendo con il **nesting nativo**.
 
@@ -235,7 +235,7 @@ La pseudo-classe **`:scope`** rappresenta il *punto di riferimento* rispetto al 
 
 Collegamenti: [[01-fondamenti]] · [[03-pseudo-classi-elementi]] · [[04-cascade-specificita-ereditarieta]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Che differenza c'è tra `.a.b` e `.a .b`?
 > [!success]- Risposta

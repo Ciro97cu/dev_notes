@@ -145,7 +145,7 @@ La distinzione tra `ReferenceError` e `TypeError` è significativa: il primo seg
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **JavaScript è compilato** — il codice viene tokenizzato, parsato in AST e compilato in bytecode prima di essere eseguito. La compilazione avviene JIT, pochi microsecondi prima dell'esecuzione.
 

@@ -399,7 +399,7 @@ request("http://url.1/").then(handler);
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Promise = future value immutabile**: si risolve una sola volta (fulfilled o rejected), il suo stato non cambia più.
 

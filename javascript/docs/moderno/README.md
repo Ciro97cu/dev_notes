@@ -23,4 +23,4 @@ Questa sezione è **distaccata** dalla guida al libro: raccoglie le funzionalit�
 
 ## Convenzioni
 
-Le convenzioni sono quelle del resto del vault: prosa impersonale in italiano, termini tecnici e keyword in inglese, ogni claim non ovvio ancorato a MDN. Ogni pagina segue lo schema **spiegazione → ⚡ Ripasso veloce → Domande**.
+Le convenzioni sono quelle del resto del vault: prosa impersonale in italiano, termini tecnici e keyword in inglese, ogni claim non ovvio ancorato a MDN. Ogni pagina segue lo schema **spiegazione → Ripasso veloce → Domande**.

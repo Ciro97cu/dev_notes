@@ -15,10 +15,10 @@ L'hub (`index.html`) raggiunge sei raccolte, ognuna un sito [docsify](https://do
 
 ## Come funziona
 
-- La root serve una landing HTML statica con cinque card.
+- La root serve una landing HTML statica con sei card.
 - Ogni sottocartella mantiene il **proprio** `index.html` docsify, tema e plugin: nessuna configurazione condivisa da riconciliare.
 - Docsify usa hash-routing, quindi ogni sottocartella è una SPA autonoma servita sotto lo stesso repo/URL.
-- Un link 🏠 in ogni sezione riporta all'hub.
+- Un link in ogni sezione riporta all'hub.
 
 ## Sviluppo locale
 

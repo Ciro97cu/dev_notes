@@ -5,19 +5,19 @@ pagine: "300-329"
 tags: [tipo/capitolo, directives, templates, angular-22]
 ---
 # 11 · Directives, Templates, and Containers
-> 📖 cap.11 · pp.300-329 — *Modern Angular* v3.0.0
+> cap.11 · pp.300-329 — *Modern Angular* v3.0.0
 
 Le librerie di componenti (Angular Material & co.) non spediscono solo UI pronte: poggiano su una manciata di mattoni che rendono i componenti flessibili e riusabili. Tra questi ci sono le [[glossario#attribute-directive|**attribute directive**]] (directive senza template, che aggiungono comportamento a un elemento esistente) usate per potenziare altri componenti, le [[glossario#structural-directive|**structural directive**]] (directive che aggiungono/rimuovono elementi dal DOM, come `*ngIf`), i template e i componenti dinamici, e le manipolazioni DOM controllate. Il capitolo attraversa questi meccanismi con un insieme minimo di costrutti riusabili: una **tooltip directive** (in due versioni), una **DataTable** e un **DialogService**.
 
 Idea cardine: un **componente è solo una directive con un template**. La `@Directive` ha quasi tutte le proprietà di `@Component`, mancano solo quelle legate al template (`template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`).
 
 ## Attribute Directives
-> 📖 pp.300-306
+> pp.300-306
 
 Le **attribute directive** aggiungono comportamento a elementi esistenti senza portare una propria view: non hanno un template, si "agganciano" a un elemento già presente nel template. Il nome riflette una convenzione: di solito il selector (il pattern CSS che dice a Angular su quali elementi applicarsi) punta a elementi con un certo **attributo**, ma resta appunto una convenzione, non un obbligo.
 
 ### Defining Directives
-> 📖 pp.300-303
+> pp.300-303
 
 L'esempio propone un'alternativa al classico `(click)` per le azioni critiche: prima di scatenare l'handler (la funzione che reagisce all'evento) mostra un dialog di conferma, così l'azione parte **solo** se l'utente conferma. La directive si importa nei `imports` del componente standalone che la usa:
 
@@ -85,7 +85,7 @@ I selector seguono le possibilità CSS, quindi si può restringere il match: `bu
 > L'opzione `host` del decorator lega proprietà ed eventi all'[[glossario#host-elemento-host|elemento host]] (l'elemento DOM su cui la directive è applicata): binding di `class:`/`style.`/proprietà e **host listener** (un ascoltatore di eventi attaccato a quell'elemento) tipo `'(click)': '...'`. È il modo signal-era di fare ciò che un tempo si faceva con `@HostBinding`/`@HostListener`.
 
 ### Communicating with the Environment
-> 📖 pp.303-304
+> pp.303-304
 
 Come i componenti, le directive comunicano col chiamante via `input()`/`output()`. Dare allo `output` **lo stesso nome del selector** permette di applicare la directive e impostare il binding in un colpo solo:
 
@@ -126,7 +126,7 @@ Il parametro di tipo (`<HTMLElement>`, `<HTMLCanvasElement>`, ecc.) è solo un'a
 > Manipolare `nativeElement` direttamente rompe in SSR (Node.js non ha DOM). Per modificare stili e attributi in modo cross-platform usa `Renderer2`; riserva `nativeElement` ai casi in cui una libreria esterna (Chart.js, canvas API, ResizeObserver…) richiede l'elemento grezzo.
 
 ### Controlled DOM-Manipulations
-> 📖 pp.304-306
+> pp.304-306
 
 A volte una directive deve creare/gestire elementi DOM **fuori dal template** (overlay, tooltip, popover che devono sfuggire a `overflow`/posizionamento dei genitori). È una manipolazione di basso livello (tocchi il DOM a mano, con codice, invece di lasciar fare ad Angular): usarla solo se non c'è un'astrazione di più alto livello, e **ripulire sempre** gli elementi creati alla distruzione, pena memory leak (memoria occupata e mai liberata) e nodi orfani (elementi rimasti nella pagina senza più nessuno che li gestisce).
 
@@ -224,7 +224,7 @@ Uso:
 Collegamenti: [[inject]] · [[injection-context]] · [[signal-input]].
 
 ## Code-based Content Projection
-> 📖 pp.307-309
+> pp.307-309
 
 Oltre alla [[content-projection]] dichiarativa (`<ng-content>`), si può renderizzare il contenuto di un **template via codice**: più flessibilità, e si può proiettare lo stesso template più volte con parametri diversi.
 
@@ -328,7 +328,7 @@ Uso (il template si passa come `TemplateRef`, ottenuto con la variabile `#tmpl`)
 La directive riceve il `TemplateRef` via l'input `appTooltip`, mentre il container dell'host è l'iniettato `ViewContainerRef`. `viewContainer.createEmbeddedView(template)` aggiunge il template al container e si può chiamare **più volte** per ottenere più istanze; i nodi proiettati sono rappresentati dall'`EmbeddedViewRef`, il cui `rootNodes` dà i loro elementi radice (qui usati per posizionamento e show/hide). Infine `viewRef.destroy()`, invocato dal `DestroyRef`, garantisce che i nodi muoiano con l'host.
 
 ### Passing Parameters to Templates
-> 📖 pp.310-312
+> pp.310-312
 
 Quando si renderizza un template si può passare un **context object** (un oggetto coi "dati di ingresso" del template) con parametri usabili come variabili nel template (anche in data binding).
 
@@ -399,7 +399,7 @@ Lo si legge come una funzione che riceve valori: `let-title` prende `$implicit`,
 Collegamenti: [[content-projection]].
 
 ## Structural Directives
-> 📖 pp.312-314
+> pp.312-314
 
 Le **structural directive** sono solo directive ordinarie con un po' di zucchero sintattico (una scrittura abbreviata e comoda che il compilatore espande in qualcosa di più verboso) che ne rende l'uso più compatto. Assumono che l'host (l'elemento su cui la directive è applicata) sia un **template** renderizzabile su richiesta (una o più volte) e offrono una **microsyntax** (una mini-grammatica che sta tutta dentro le virgolette dell'attributo) per parametri e binding. È il chiamante (chi usa la directive nel template), non la directive stessa, a decidere l'uso strutturale, prefissando l'attributo con `*`.
 
@@ -449,7 +449,7 @@ Internamente una structural directive di solito **prende il container corrente e
 > `let data` cattura `$implicit`; `let link=details` cattura il parametro **nominato** `details`. Sono cose diverse: il primo è il valore implicito, il secondo va richiesto per nome. In Angular moderno il control flow (`@if`/`@for`) sostituisce le vecchie `*ngIf`/`*ngFor` — le structural directive custom restano utili per costrutti riusabili come questa DataTable.
 
 ### Implementing a Simple DataTable
-> 📖 pp.314-318
+> pp.314-318
 
 DataTable generica: riceve un array di oggetti, e per ogni colonna si passa un template via `*appTableField`. Con la microsyntax il chiamante specifica quale proprietà mostra ogni colonna (`provide`) e l'header (`title`):
 
@@ -525,7 +525,7 @@ export class DataTable<T extends object> {
 Collegamenti: [[signal-queries]] (la query `contentChildren`) · [[10-signal-queries-component-communication]].
 
 ### Using ViewContainerRef Directly to Display Templates
-> 📖 pp.318-320
+> pp.318-320
 
 `ngTemplateOutlet` usa internamente un `ViewContainerRef` per rappresentare la sezione in cui inserisce un template (o un intero componente). Per scenari più complessi lo si usa **direttamente**. Ecco una reimplementazione di `ngTemplateOutlet`:
 
@@ -587,7 +587,7 @@ readonly container = viewChild('anchor', { read: ViewContainerRef });
 Collegamenti: [[signal-queries]].
 
 ## Dynamic Components
-> 📖 pp.320-326
+> pp.320-326
 
 Aggiungere dinamicamente un componente via codice serve quando il componente da mostrare è noto solo a runtime e può cambiare — caso tipico: un **modal dialog** con contenuto contestuale. Angular offre `ngComponentOutlet`:
 
@@ -761,7 +761,7 @@ Perché funzioni serve un `<app-dialog-outlet />` in un template attivo (es. que
 Collegamenti: [[inject]] · [[providers]].
 
 ### Instantiating Component via Code
-> 📖 pp.327-329
+> pp.327-329
 
 Le librerie (es. Angular Material) mostrano i dialog **senza** che noi aggiungiamo l'outlet a un template: lo aggiungono **via codice**. Lo fa il `DialogOutletService` con la funzione `createComponent`, attaccando la view all'`ApplicationRef` e inserendone l'elemento nel `<body>`:
 
@@ -843,7 +843,7 @@ flowchart LR
 
 Collegamenti: [[inject]] · [[injection-context]] · [[providers]].
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché si dice che "un componente è solo una directive con un template"? Cosa manca alla `@Directive` rispetto a `@Component`?
 > [!success]- Risposta

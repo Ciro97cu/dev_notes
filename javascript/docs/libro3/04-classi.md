@@ -160,7 +160,7 @@ Another.count;      // 1 — stato separato da Something
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Classi = copie**: istanziazione copia dalla classe all'istanza; ereditarietà copia dal padre al figlio. JavaScript non fa né l'una né l'altra in modo automatico.
 

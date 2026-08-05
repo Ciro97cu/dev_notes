@@ -4,7 +4,7 @@ tags: [tipo/cert, forms, legacy]
 livello: [junior, mid]
 ---
 # Template-Driven Forms
-> 🎓 Cert Angular · non coperto dal *Modern Angular* (il vault usa i Signal Forms)
+> Cert Angular · non coperto dal *Modern Angular* (il vault usa i Signal Forms)
 
 Nelle **template-driven forms** la form è pilotata dal **template**: si annotano i controlli con direttive (`ngModel`, `ngForm`, `ngModelGroup`) e Angular costruisce **implicitamente** il modello dei dati e lo stato di validazione dietro le quinte. Non esiste una struttura dati dichiarata nella classe: il "grafo" della form vive nel markup. È l'approccio più rapido per form semplici; l'esame lo chiede perché è ancora diffusissimo e perché espone i concetti di stato del controllo e validazione via attributi.
 
@@ -144,7 +144,7 @@ input.ng-invalid.ng-touched {
 > [!info] Stato attuale
 > `FormsModule` e le template-driven forms **non sono deprecate**: restano pienamente supportate e convivono con `@angular/forms/signals`. Da **Angular 22** i Signal Forms sono usciti dallo stato sperimentale e sono **stabili**, raccomandati per il codice nuovo, ma l'API classica resta valida per le codebase esistenti ([angular.dev/guide/forms/template-driven-forms](https://angular.dev/guide/forms/template-driven-forms) · [panoramica forms](https://angular.dev/guide/forms)).
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Perché un `ngModel` dentro un `<form>` richiede l'attributo `name`?
 > [!success]- Risposta

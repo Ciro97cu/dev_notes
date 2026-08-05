@@ -195,7 +195,7 @@ I prototype sono già creati una volta sola al boot del runtime — nessuna allo
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Autoboxing**: l'engine converte automaticamente primitivi in wrapper temporanei per accedere a metodi. Non creare wrapper manualmente con `new String()`, `new Number()`, ecc.
 

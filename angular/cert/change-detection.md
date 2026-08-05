@@ -4,7 +4,7 @@ tags: [tipo/cert, performance, change-detection, legacy]
 livello: [mid, senior]
 ---
 # Change detection (Zone.js)
-> 🎓 Cert Angular · il modello Zone.js, che il *Modern Angular* supera con signal + zoneless
+> Cert Angular · il modello Zone.js, che il *Modern Angular* supera con signal + zoneless
 
 La **change detection** (CD) è il processo con cui Angular sincronizza lo stato dei componenti con il DOM. Nel modello classico è **Zone.js** a decidere *quando* farla partire, la strategia (`Default` vs `OnPush`) a decidere *quali* componenti controllare, e `ChangeDetectorRef`/`NgZone` a intervenire manualmente. La cert lo chiede perché è il modello di gran lunga più diffuso nelle app esistenti.
 
@@ -102,7 +102,7 @@ Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forza
 > [!info] Stato attuale
 > Da Angular **v20.2** l'API zoneless è **stabile** (`provideZonelessChangeDetection()`) e da **v21** le nuove app sono **zoneless di default** (Zone.js non più incluso). Senza Zone.js la CD è guidata dalle notifiche dei signal, da `markForCheck()`, dagli eventi del template e dalla `async` pipe — di fatto le stesse condizioni di `OnPush`. Il modello Zone.js resta pienamente supportato per le app esistenti. → [angular.dev/guide/zoneless](https://angular.dev/guide/zoneless)
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Cosa fa Zone.js e come fa scattare la change detection?
 > [!success]- Risposta

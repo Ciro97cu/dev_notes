@@ -4,7 +4,7 @@ titolo: "Box model"
 tags: [tipo/modulo, box-model]
 ---
 # 05 · Box model
-> 🎨 modulo 5 — *CSS* · rif. MDN
+> modulo 5 — *CSS* · rif. MDN
 
 Ogni elemento HTML è, per il layout, una **scatola rettangolare**. Il *box model* descrive come questa scatola è costruita — da un nucleo di contenuto verso l'esterno — e come le sue misure si combinano per occupare lo spazio in pagina. Capirlo bene è il prerequisito di ogni tecnica di layout: senza, i valori di `width`, `padding` e `margin` sembrano "non tornare mai".
 
@@ -168,7 +168,7 @@ Per spaziare gli elementi *tra loro* dentro un layout, i margini oggi cedono il 
 
 Collegamenti: [[06-unita-valori-funzioni]] · [[09-display-posizionamento]]
 
-## 🔁 Ripasso lampo
+## Ripasso lampo
 
 **1.** Con `box-sizing: content-box`, quanto occupa in larghezza `width: 200px; padding: 20px; border: 5px solid`?
 > [!success]- Risposta

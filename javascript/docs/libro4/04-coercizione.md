@@ -404,7 +404,7 @@ Number(a) < Number(b);      // true  — confronto numerico esplicito
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **ToString**: oggetti usano `.toString()`, array uniscono con virgola. `JSON.stringify` esclude `undefined` e funzioni.
 

@@ -460,7 +460,7 @@ Queste API non fanno parte della specifica ECMAScript ma sono presenti in ogni p
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **typeof**: restituisce sempre una stringa. `typeof null === "object"` è un bug storico.
 

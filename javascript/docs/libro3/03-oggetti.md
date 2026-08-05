@@ -268,7 +268,7 @@ for (var v of obj) { console.log(v); } // 2, 3
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 **Tipi**: 6 primitivi in JS, `object` è uno di essi — non "tutto è un oggetto". I primitivi vengono autoboxati quando si accede ai loro metodi.
 

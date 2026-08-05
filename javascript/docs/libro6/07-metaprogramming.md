@@ -390,7 +390,7 @@ Il trampolining è riutilizzabile e non richiede TCO — funziona in qualsiasi e
 
 ---
 
-## ⚡ Ripasso veloce
+## Ripasso veloce
 
 ```js
 /* === FUNCTION NAME === */
