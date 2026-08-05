@@ -18,14 +18,26 @@
   } catch (e) {}
 })();
 
-// Espansione fluida delle sezioni "Come funziona" sulla cover: il click sull'header
-// commuta la classe .open sul contenitore (l'animazione è CSS, grid-template-rows).
+// Espansione fluida delle sezioni "Come funziona" sulla cover (accordion): il click
+// sull'header apre quella sezione e chiude le altre della stessa fascia (mai tutte
+// aperte). L'animazione è CSS (grid-template-rows).
 document.addEventListener('click', function (e) {
   var h = e.target && e.target.closest && e.target.closest('.about-head');
   if (!h) return;
   var col = h.parentNode;
-  var open = col.classList.toggle('open');
-  h.setAttribute('aria-expanded', open ? 'true' : 'false');
+  var willOpen = !col.classList.contains('open');
+  var group = col.parentNode;
+  if (group) {
+    group.querySelectorAll('.about-col.open').forEach(function (c) {
+      if (c !== col) {
+        c.classList.remove('open');
+        var b = c.querySelector('.about-head');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+  col.classList.toggle('open', willOpen);
+  h.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
 });
 
 // Toggle tema chiaro/scuro, persistito in localStorage (key: dev-notes-theme).
