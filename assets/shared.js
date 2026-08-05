@@ -690,6 +690,7 @@ function dnEscHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { retur
 // bottone "Segna come letto" a fine capitolo. Robusto: salva i path, non citazioni.
 function studyProgressPlugin(hook, vm) {
   function getRead() { var v = window.NotesStore.read('read', []); return Array.isArray(v) ? v : []; }
+  function getFrac() { var v = window.NotesStore.read('frac', {}); return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {}; }
   function isRead(p) { return getRead().indexOf(p) >= 0; }
   function toggle(p) {
     var arr = getRead(), i = arr.indexOf(p);
@@ -749,13 +750,10 @@ function studyProgressPlugin(hook, vm) {
   function decorate() {
     var read = getRead();
     var links = [].slice.call(document.querySelectorAll('.sidebar-nav a'));
-    var chT = 0, chD = 0;
     links.forEach(function (a) {
       var ident = (a.getAttribute('href') || '').replace(/^#/, '');   // /docs/x  o  /docs/x?id=sez
       var base = ident.split('?')[0];
       if (!base || DN_SKIP[base]) return;
-      var r = read.indexOf(ident) >= 0;
-      if (ident.indexOf('?id=') < 0) { chT++; if (r) chD++; }         // barra e hub: SOLO capitoli (denominatore stabile)
       var chk = a.querySelector('.dn-check');
       if (!chk) {
         chk = document.createElement('span');
@@ -770,26 +768,50 @@ function studyProgressPlugin(hook, vm) {
         })(ident);
         a.insertBefore(chk, a.firstChild);
       }
+      var r = read.indexOf(ident) >= 0;
       chk.classList.toggle('checked', r);
       chk.setAttribute('aria-checked', r ? 'true' : 'false');
     });
-    updateMeter(chD, chT);   // barra = capitoli completati / totale capitoli (stabile)
+    var p = computeProgress();
+    updateMeter(p.sum, p.total);
     // stessa progressione persistita per la % sulle card dell'hub (scrittura raw: niente evento)
-    if (chT) { try { localStorage.setItem(window.NotesStore.keyFor('progress'), JSON.stringify({ d: chD, t: chT })); } catch (e) {} }
+    if (p.total) { try { localStorage.setItem(window.NotesStore.keyFor('progress'), JSON.stringify({ d: Math.round(p.sum * 100) / 100, t: p.total })); } catch (e) {} }
   }
-  function updateMeter(done, total) {
+  // Progressione FRAZIONARIA: denominatore = n. capitoli (fisso, stabile); ogni
+  // capitolo contribuisce con la frazione delle sue sezioni lette. La frazione del
+  // capitolo aperto si ricava dal DOM e si memorizza (dev-notes-<vault>-frac), così
+  // non "balla" navigando: i capitoli non aperti mantengono l'ultima frazione nota.
+  function computeProgress() {
+    var read = getRead(), frac = getFrac();
+    var cur = (vm.route && vm.route.path) || '';
+    if (cur && !DN_SKIP[cur]) {
+      var subs = descendantIdents(cur), f;
+      if (subs.length) { var d = 0; subs.forEach(function (id) { if (read.indexOf(id) >= 0) d++; }); f = d / subs.length; }
+      else { f = read.indexOf(cur) >= 0 ? 1 : 0; }                 // capitolo senza sottosezioni
+      if (frac[cur] !== f) { frac[cur] = f; try { localStorage.setItem(window.NotesStore.keyFor('frac'), JSON.stringify(frac)); } catch (e) {} }
+    }
+    var seen = {}, total = 0, sum = 0;
+    [].forEach.call(document.querySelectorAll('.sidebar-nav a'), function (a) {
+      var ident = (a.getAttribute('href') || '').replace(/^#/, '');
+      if (ident.indexOf('?id=') >= 0) return;                      // solo capitoli come denominatore
+      var base = ident.split('?')[0];
+      if (!base || DN_SKIP[base] || seen[ident]) return;
+      seen[ident] = 1; total++;
+      sum += (typeof frac[ident] === 'number') ? frac[ident] : (read.indexOf(ident) >= 0 ? 1 : 0);
+    });
+    return { sum: sum, total: total };
+  }
+  function updateMeter(sum, total) {
     var nav = document.querySelector('.sidebar-nav') || document.querySelector('.sidebar');
     if (!nav) return;
     var m = document.getElementById('dn-progress');
     if (!m) {
       m = document.createElement('div');
       m.id = 'dn-progress';
-      m.innerHTML = '<div class="dn-progress-label"><span class="dn-progress-text"></span><span class="dn-progress-pct"></span></div><div class="dn-progress-bar"><span></span></div>';
+      m.innerHTML = '<div class="dn-progress-label"><span class="dn-progress-text">letto</span><span class="dn-progress-pct"></span></div><div class="dn-progress-bar"><span></span></div>';
       nav.insertBefore(m, nav.firstChild);
     }
-    var pct = total ? Math.round(done / total * 100) : 0;
-    var txt = done + '/' + total + ' capitoli';
-    var t = m.querySelector('.dn-progress-text'); if (t.textContent !== txt) t.textContent = txt;
+    var pct = total ? Math.round(sum / total * 100) : 0;
     var pc = m.querySelector('.dn-progress-pct'); var ps = pct + '%'; if (pc.textContent !== ps) pc.textContent = ps;
     m.querySelector('.dn-progress-bar span').style.width = pct + '%';
     m.style.display = total ? '' : 'none';
