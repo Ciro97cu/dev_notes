@@ -21,5 +21,3 @@ Interoperabilità · Funzione pura · Immutabilità · SOLID · DRY · KISS · Y
 
 **[Approcci classici e alternativi](docs/approcci-classici.md)**
 Micro frontend con single-spa (Import Map · SystemJS) · NgRx classico (Store, Effects, `dispatch: false`, shallow comparison)
-
-> Fonte originale: glossario personale (Google Docs), rivisto in registro impersonale e con le definizioni verificate/aggiornate.
