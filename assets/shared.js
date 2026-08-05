@@ -22,7 +22,7 @@
 // animazione. I colori sono fissi (testo bianco sul fondo brand), quindi vale per tutti.
 (function () {
   var css = [
-    '.cover-about{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;width:100%;max-width:860px;margin:1.6rem auto .2rem;text-align:left}',
+    '.cover-about{display:grid;grid-template-columns:repeat(3,1fr);align-items:start;gap:.8rem;width:100%;max-width:860px;margin:1.6rem auto .2rem;text-align:left}',
     '.cover-about .about-col{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:0 .95rem}',
     '.cover-about .about-head{width:100%;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.7rem 0;border:0;background:transparent;font:inherit;font-weight:700;font-size:.92rem;color:#fff;text-align:left}',
     '.cover-about .about-head::after{content:"+";font-weight:400;opacity:.65}',
@@ -41,26 +41,13 @@
   (document.head || document.documentElement).appendChild(el);
 })();
 
-// Espansione fluida delle sezioni "Come funziona" sulla cover (accordion): il click
-// sull'header apre quella sezione e chiude le altre della stessa fascia (mai tutte
-// aperte). L'animazione è CSS (grid-template-rows).
+// Espansione fluida delle sezioni "Come funziona" sulla cover: ogni sezione si apre e
+// chiude in modo indipendente (più di una può restare aperta). L'animazione è CSS.
 document.addEventListener('click', function (e) {
   var h = e.target && e.target.closest && e.target.closest('.about-head');
   if (!h) return;
-  var col = h.parentNode;
-  var willOpen = !col.classList.contains('open');
-  var group = col.parentNode;
-  if (group) {
-    group.querySelectorAll('.about-col.open').forEach(function (c) {
-      if (c !== col) {
-        c.classList.remove('open');
-        var b = c.querySelector('.about-head');
-        if (b) b.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-  col.classList.toggle('open', willOpen);
-  h.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  var open = h.parentNode.classList.toggle('open');
+  h.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 
 // Toggle tema chiaro/scuro, persistito in localStorage (key: dev-notes-theme).
