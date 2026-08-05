@@ -221,6 +221,7 @@
       overflow: hidden;
     }
     .card-prog .fill {
+      display: block;                            /* è uno <span>: senza questo, inline → width/height ignorati */
       position: relative; height: 100%; width: 0;
       border-radius: 5px;
       background: var(--accent);                 /* colore pieno del vault (niente color-mix) */
