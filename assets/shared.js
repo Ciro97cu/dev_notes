@@ -95,6 +95,18 @@ window.NotesStore = (function () {
   return { read: read, write: write, snapshot: snapshot, download: download, importFile: importFile, keyFor: k };
 })();
 
+// Chiude i popover dei pulsanti fissi (dati/preferiti/evidenziatore) tranne `keep`,
+// così aprendone uno gli altri non restano aperti in sovrapposizione.
+function dnCloseAllPops(keep) {
+  [['.dn-pop', '#dn-data-btn'], ['.dn-fav-list', '#dn-fav-btn'], ['.dn-hl-pop', '#dn-hl-btn']].forEach(function (pair) {
+    var pop = document.querySelector(pair[0]);
+    if (pop && pop !== keep && pop.classList.contains('open')) {
+      pop.classList.remove('open');
+      var b = document.querySelector(pair[1]); if (b) b.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
 // ── Dock "Dati": Esporta / Importa il file dei progressi ──────────────────────
 // Pulsante fisso (sotto il toggle tema) che apre un popover. È UI globale, quindi
 // vive in un IIFE su DOMContentLoaded (non serve registrarlo come plugin docsify).
@@ -111,7 +123,11 @@ window.NotesStore = (function () {
     '.dn-pop .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem .2rem}',
     '.dn-pop button{display:flex;gap:.55rem;align-items:center;width:100%;padding:.5rem .6rem;border:0;background:transparent;color:var(--text);font:inherit;font-size:.9rem;cursor:pointer;border-radius:8px;text-align:left}',
     '.dn-pop button:hover{background:rgba(127,127,127,.14)}',
-    '.dn-pop button svg{flex:0 0 auto;opacity:.8}'
+    '.dn-pop button svg{flex:0 0 auto;opacity:.8}',
+    '.dn-pop .dn-note{font-size:.74rem;line-height:1.45;opacity:.7;padding:.4rem .6rem .3rem;border-top:1px solid var(--border);margin-top:.3rem}',
+    // il toggle tema usa un\'icona SVG come gli altri: centrala
+    '#theme-toggle{display:flex;align-items:center;justify-content:center}',
+    '#theme-toggle svg{display:block}'
   ].join('');
   var el = document.createElement('style');
   el.id = 'dn-data-styles';
@@ -132,6 +148,7 @@ window.NotesStore = (function () {
         '<div class="dn-title">Dati e progressi</div>' +
         '<button type="button" data-act="export" role="menuitem">' + ICON_DL + 'Esporta su file…</button>' +
         '<button type="button" data-act="import" role="menuitem">' + ICON_UP + 'Importa da file…</button>' +
+        '<div class="dn-note">Progresso, preferiti ed evidenziazioni restano in questo browser. <strong>Esporta</strong> per salvarli in un file (da conservare o spostare su un altro dispositivo); <strong>Importa</strong> per ripristinarli.</div>' +
       '</div>' +
       '<input type="file" accept="application/json,.json" hidden>';
     document.body.appendChild(wrap);
@@ -142,8 +159,10 @@ window.NotesStore = (function () {
     function close() { pop.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      var open = pop.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var willOpen = !pop.classList.contains('open');
+      dnCloseAllPops(pop);                       // chiudi gli altri popover
+      pop.classList.toggle('open', willOpen);
+      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
     });
     document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
@@ -202,6 +221,9 @@ document.addEventListener('click', function (e) {
 // Toggle tema chiaro/scuro, persistito in localStorage (key: dev-notes-theme).
 // Il ramo mermaid è no-op nei vault che non caricano mermaid.
 function themeTogglePlugin(hook) {
+  // Icone SVG (Lucide) coerenti con gli altri pulsanti: sole quando è scuro (→ passa a chiaro), luna quando è chiaro.
+  var SUN = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+  var MOON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
   hook.mounted(function () {
     var KEY = 'dev-notes-theme';
     var btn = document.createElement('button');
@@ -212,7 +234,7 @@ function themeTogglePlugin(hook) {
     var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
     function apply() {
       document.documentElement.classList.toggle('dark', dark);
-      btn.textContent = dark ? '☀' : '☾';
+      btn.innerHTML = dark ? SUN : MOON;
       btn.title = dark ? 'Passa al tema chiaro' : 'Passa al tema scuro';
       if (window.mermaid && window.__mermaidInit) {
         mermaid.initialize({ startOnLoad: false, theme: dark ? 'dark' : 'neutral' });
@@ -350,9 +372,11 @@ function resumePlugin(hook, vm) {
     '.dn-read-toggle{display:inline-flex;align-items:center;gap:.5rem;margin:2.4rem 0 .5rem;padding:.55rem .9rem;border:1px solid var(--border);border-radius:9px;background:var(--bg-soft);color:var(--text);font:inherit;font-size:.9rem;cursor:pointer}',
     '.dn-read-toggle:hover{border-color:var(--link)}',
     '.dn-read-toggle.is-read{border-color:var(--link);color:var(--link)}',
-    // stella preferiti accanto al titolo
-    '.dn-star{margin-left:.5rem;vertical-align:middle;border:0;background:transparent;color:inherit;cursor:pointer;opacity:.5;padding:.1em;line-height:0}',
-    '.dn-star:hover,.dn-star.is-fav{opacity:1;color:var(--link)}',
+    // stella preferiti sulle sotto-sezioni: discreta, compare all'hover del titolo (o se è preferita)
+    '.dn-star{margin-left:.4rem;vertical-align:baseline;border:0;background:transparent;color:inherit;cursor:pointer;opacity:0;padding:0 .15em;line-height:0;transition:opacity .15s ease,color .15s ease}',
+    '.dn-star svg{width:.82em;height:.82em;vertical-align:-.06em}',
+    '.markdown-section h2:hover .dn-star,.markdown-section h3:hover .dn-star,.markdown-section h4:hover .dn-star,.dn-star:focus-visible,.dn-star.is-fav{opacity:1}',
+    '.dn-star:hover,.dn-star.is-fav{color:var(--link)}',
     // dock preferiti (stessa estetica del dock dati)
     '#dn-fav{position:fixed;top:110px;right:16px;z-index:100}',
     '#dn-fav-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
@@ -461,13 +485,16 @@ function studyProgressPlugin(hook, vm) {
   });
 }
 
-// "Preferiti": stella accanto al titolo del capitolo + dock fisso con l'elenco
-// (click per navigare, ✕ per rimuovere). Persistito via NotesStore (path + titolo).
+// "Preferiti": stella su ogni SOTTO-SEZIONE (h2/h3/h4) del capitolo — segnalibrare
+// il capitolo intero è poco utile — più un dock fisso con l'elenco (click per
+// navigare alla sezione, ✕ per rimuovere). Persistito via NotesStore: {path, id, title}.
 function bookmarksPlugin(hook, vm) {
   function get() { var v = window.NotesStore.read('favorites', []); return Array.isArray(v) ? v.filter(function (x) { return x && typeof x.path === 'string'; }) : []; }
-  function idx(p) { var a = get(), r = -1; a.forEach(function (x, i) { if (x.path === p) r = i; }); return r; }
-  function toggle(p, title) { var a = get(), i = idx(p); if (i >= 0) a.splice(i, 1); else a.push({ path: p, title: title }); window.NotesStore.write('favorites', a); }
-  function remove(p) { var a = get(), i = idx(p); if (i >= 0) { a.splice(i, 1); window.NotesStore.write('favorites', a); } }
+  function eq(x, p, id) { return x.path === p && (x.id || '') === (id || ''); }
+  function idx(p, id) { var a = get(), r = -1; a.forEach(function (x, i) { if (eq(x, p, id)) r = i; }); return r; }
+  function toggle(p, id, title) { var a = get(), i = idx(p, id); if (i >= 0) a.splice(i, 1); else a.push({ path: p, id: id || '', title: title }); window.NotesStore.write('favorites', a); }
+  function remove(p, id) { var a = get(), i = idx(p, id); if (i >= 0) { a.splice(i, 1); window.NotesStore.write('favorites', a); } }
+  function href(f) { return '#' + f.path + (f.id ? '?id=' + f.id : ''); }
 
   function ensureDock() {
     if (document.getElementById('dn-fav')) return;
@@ -478,9 +505,11 @@ function bookmarksPlugin(hook, vm) {
     var btn = w.querySelector('#dn-fav-btn'), list = w.querySelector('.dn-fav-list');
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      var o = list.classList.toggle('open');
-      btn.setAttribute('aria-expanded', o ? 'true' : 'false');
-      if (o) renderList();
+      var willOpen = !list.classList.contains('open');
+      dnCloseAllPops(list);                     // chiudi gli altri popover
+      list.classList.toggle('open', willOpen);
+      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      if (willOpen) renderList();
     });
     document.addEventListener('click', function (e) { if (!w.contains(e.target)) list.classList.remove('open'); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') list.classList.remove('open'); });
@@ -488,40 +517,58 @@ function bookmarksPlugin(hook, vm) {
   function renderList() {
     var list = document.querySelector('#dn-fav .dn-fav-list'); if (!list) return;
     var favs = get(), html = '<div class="dn-title">Preferiti</div>';
-    if (!favs.length) html += '<div class="dn-empty">Nessun preferito. Usa la ☆ accanto al titolo del capitolo.</div>';
+    if (!favs.length) html += '<div class="dn-empty">Nessun preferito. Usa la ☆ che compare accanto ai titoli delle sezioni.</div>';
     else favs.forEach(function (f) {
-      html += '<div class="dn-fav-row"><a href="#' + dnEscHtml(f.path) + '">' + dnEscHtml(f.title || f.path) + '</a>' +
-              '<button class="dn-fav-del" type="button" data-path="' + dnEscHtml(f.path) + '" title="Rimuovi" aria-label="Rimuovi">' + DN_ICON.x + '</button></div>';
+      html += '<div class="dn-fav-row"><a href="' + dnEscHtml(href(f)) + '">' + dnEscHtml(f.title || f.path) + '</a>' +
+              '<button class="dn-fav-del" type="button" data-path="' + dnEscHtml(f.path) + '" data-id="' + dnEscHtml(f.id || '') + '" title="Rimuovi" aria-label="Rimuovi">' + DN_ICON.x + '</button></div>';
     });
     list.innerHTML = html;
     [].forEach.call(list.querySelectorAll('.dn-fav-del'), function (b) {
       b.addEventListener('click', function (e) {
         e.preventDefault(); e.stopPropagation();
-        remove(b.getAttribute('data-path')); renderList(); refreshBtn();
+        remove(b.getAttribute('data-path'), b.getAttribute('data-id')); renderList(); refreshBtn(); syncStars();
       });
     });
   }
   function refreshBtn() { var b = document.getElementById('dn-fav-btn'); if (b) b.classList.toggle('has-fav', get().length > 0); }
-  function addStar(path) {
-    var h1 = document.querySelector('.markdown-section h1'); if (!h1 || h1.querySelector('.dn-star')) return;
-    var title = (h1.textContent || '').trim();
-    var s = document.createElement('button');
-    s.type = 'button'; s.className = 'dn-star';
-    s.title = 'Aggiungi ai preferiti'; s.setAttribute('aria-label', 'Aggiungi ai preferiti');
-    function sync() { var f = idx(path) >= 0; s.classList.toggle('is-fav', f); s.innerHTML = f ? DN_ICON.starFull : DN_ICON.starOut; }
-    sync();
-    s.addEventListener('click', function () { toggle(path, title); sync(); renderList(); refreshBtn(); });
-    h1.appendChild(s);
+  // una stella per ogni sotto-sezione (h2/h3/h4 con id); il capitolo intero (h1) no.
+  function addStars(path) {
+    var hs = document.querySelectorAll('.markdown-section h2[id], .markdown-section h3[id], .markdown-section h4[id]');
+    [].forEach.call(hs, function (h) {
+      if (h.querySelector('.dn-star')) return;
+      var id = h.id || '', title = (h.textContent || '').trim();
+      var s = document.createElement('button');
+      s.type = 'button'; s.className = 'dn-star';
+      s.title = 'Aggiungi ai preferiti'; s.setAttribute('aria-label', 'Aggiungi ai preferiti');
+      s.setAttribute('data-id', id);
+      s.innerHTML = idx(path, id) >= 0 ? DN_ICON.starFull : DN_ICON.starOut;
+      s.classList.toggle('is-fav', idx(path, id) >= 0);
+      s.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        toggle(path, id, title);
+        var f = idx(path, id) >= 0;
+        s.classList.toggle('is-fav', f); s.innerHTML = f ? DN_ICON.starFull : DN_ICON.starOut;
+        renderList(); refreshBtn();
+      });
+      h.appendChild(s);
+    });
+  }
+  function syncStars() {
+    var path = (vm.route && vm.route.path) || '';
+    [].forEach.call(document.querySelectorAll('.markdown-section .dn-star'), function (s) {
+      var f = idx(path, s.getAttribute('data-id') || '') >= 0;
+      s.classList.toggle('is-fav', f); s.innerHTML = f ? DN_ICON.starFull : DN_ICON.starOut;
+    });
   }
   hook.mounted(function () { ensureDock(); refreshBtn(); });
   hook.doneEach(function () {
     ensureDock(); refreshBtn();
     var path = (vm.route && vm.route.path) || '';
-    if (path && !DN_SKIP[path]) addStar(path);
+    if (path && !DN_SKIP[path]) addStars(path);
   });
   document.addEventListener('notesstore:change', function (e) {
     if (e.detail && (e.detail.name === 'favorites' || e.detail.name === '*')) {
-      refreshBtn();
+      refreshBtn(); syncStars();
       if (document.querySelector('#dn-fav .dn-fav-list.open')) renderList();
     }
   });
@@ -722,7 +769,13 @@ function dnBuildToolbar() {
     '</div>';
   document.body.appendChild(w);
   var btn = w.querySelector('#dn-hl-btn'), pop = w.querySelector('.dn-hl-pop');
-  btn.addEventListener('click', function (e) { e.stopPropagation(); var o = pop.classList.toggle('open'); btn.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var willOpen = !pop.classList.contains('open');
+    dnCloseAllPops(pop);                        // chiudi gli altri popover
+    pop.classList.toggle('open', willOpen);
+    btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  });
   document.addEventListener('click', function (e) { if (!w.contains(e.target)) pop.classList.remove('open'); });
   pop.addEventListener('click', function (e) {
     var s = e.target.closest && e.target.closest('.dn-swatch');
