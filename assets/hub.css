@@ -1,0 +1,230 @@
+:root {
+  --grad-a: #7c3aed;   /* violet */
+  --grad-b: #06b6d4;   /* cyan   */
+
+  --bg: #f5f7fb;
+  --fg: #0f172a;
+  --fg-soft: #5b6675;
+  --card: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(15, 23, 42, 0.08);
+  --card-shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 18px 40px rgba(15, 23, 42, .08);
+  --footer: #8a94a3;
+  --blob: .55;
+}
+html.dark {
+  --bg: #080b12;
+  --fg: #e8eef6;
+  --fg-soft: #99a4b4;
+  --card: rgba(255, 255, 255, 0.045);
+  --card-border: rgba(255, 255, 255, 0.09);
+  --card-shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 22px 60px rgba(0, 0, 0, .55);
+  --footer: #5c6675;
+  --blob: .4;
+}
+#theme-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 5;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--card-border); background: var(--card);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  color: var(--fg); font-size: 18px; line-height: 1; cursor: pointer;
+  box-shadow: var(--card-shadow); transition: transform .15s ease;
+}
+#theme-toggle:hover { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); }
+#theme-toggle svg { display: block; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+/* mesh di gradienti soffusi sullo sfondo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 40rem at 12% -8%, color-mix(in srgb, var(--grad-a) 60%, transparent), transparent 60%),
+    radial-gradient(38rem 38rem at 100% 0%, color-mix(in srgb, var(--grad-b) 55%, transparent), transparent 55%),
+    radial-gradient(30rem 30rem at 85% 100%, color-mix(in srgb, #f05133 45%, transparent), transparent 60%);
+  opacity: var(--blob);
+  filter: saturate(1.1);
+}
+/* griglia a punti interattiva (canvas #bg-dots) con dispersione al passaggio del cursore */
+#bg-dots {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 6rem) 1.25rem 2rem;
+  flex: 1;
+}
+
+/* ---------- Hero ---------- */
+.hero { text-align: center; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
+.logo {
+  width: 84px; height: 84px; margin: 0 auto 1.2rem;
+  filter: drop-shadow(0 8px 26px color-mix(in srgb, var(--grad-a) 45%, transparent));
+  animation: floaty 6s ease-in-out infinite;
+}
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .logo { animation: none; } }
+
+.wordmark {
+  margin: 0;
+  font-size: clamp(2.6rem, 7vw, 3.8rem);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1;
+  background: linear-gradient(100deg, var(--grad-a), var(--grad-b) 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.tagline {
+  margin: .9rem 0 0;
+  color: var(--fg-soft);
+  font-size: clamp(1rem, 2.4vw, 1.15rem);
+  font-weight: 500;
+}
+
+/* ---------- Griglia card ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.3rem;
+}
+@media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+/* Banner "Continua a leggere": ultima pagina letta tra tutti i vault (localStorage condiviso). */
+.resume-banner {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: .85rem;
+  padding: .8rem 1.15rem; text-decoration: none; color: inherit;
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--card-border));
+  border-radius: 16px; box-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  transition: transform .18s ease, border-color .18s ease;
+}
+.resume-banner:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 55%, var(--card-border)); }
+.resume-banner .resume-ic { display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); flex:0 0 auto; }
+.resume-banner .resume-txt { display:flex; flex-direction:column; line-height:1.25; min-width:0; }
+.resume-banner .resume-k { font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color: var(--fg-soft); }
+.resume-banner .resume-v { font-weight:650; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.resume-banner .resume-arrow { margin-left:auto; color: var(--accent); font-size:1.2rem; transition: transform .18s ease; }
+.resume-banner:hover .resume-arrow { transform: translateX(4px); }
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.3rem;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+/* alone colorato di brand che appare in hover */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--accent), transparent 55%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity .18s ease;
+}
+.card:hover, .card:focus-visible {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--card-border));
+  box-shadow: var(--card-shadow), 0 10px 34px color-mix(in srgb, var(--accent) 30%, transparent);
+  outline: none;
+}
+.card:hover::before, .card:focus-visible::before { opacity: 1; }
+
+/* Logo del vault senza box: solo il monogramma/icona nel colore del brand */
+.tile {
+  flex: 0 0 auto;
+  width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  font-weight: 800; font-size: 2.2rem; letter-spacing: -.02em; line-height: 1;
+}
+.tile svg { width: 48px; height: 48px; }
+
+.body { flex: 1 1 auto; min-width: 0; }
+.title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; }
+.desc  { display: block; margin-top: .2rem; color: var(--fg-soft); font-size: .92rem; line-height: 1.45; }
+
+.arrow {
+  flex: 0 0 auto;
+  color: var(--fg-soft);
+  transition: transform .18s ease, color .18s ease;
+  font-size: 1.3rem;
+}
+.card:hover .arrow { transform: translateX(4px); color: var(--accent); }
+
+/* Barra di progresso lettura: riempimento nel colore del vault con un riflesso
+   scintillante che scorre. + % inline a destra. */
+.card-prog-wrap { display: flex; align-items: center; gap: .6rem; margin-top: .8rem; }
+.card-prog {
+  flex: 1 1 auto; height: 9px;
+  border-radius: 5px; background: rgba(128, 128, 128, .22);
+  overflow: hidden;
+}
+.card-prog .fill {
+  display: block;                            /* è uno <span>: senza questo, inline → width/height ignorati */
+  position: relative; overflow: hidden;
+  height: 100%; width: 0; border-radius: 5px;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  transition: width .5s ease;
+}
+/* riflesso scintillante che scorre sul riempimento */
+.card-prog .fill::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .75) 50%, transparent 65%);
+  background-size: 45% 100%; background-repeat: no-repeat;
+  animation: dn-shine 1.7s linear infinite;
+}
+@keyframes dn-shine { from { background-position: -60% 0; } to { background-position: 170% 0; } }
+.card-pct { flex: 0 0 auto; font-size: .74rem; font-weight: 700; color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .card-prog .fill::after { animation: none; } }
+
+footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--footer);
+  font-size: .82rem;
+  padding: 2.5rem 1rem 2rem;
+}
+footer code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; opacity: .8; }
