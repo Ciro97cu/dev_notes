@@ -40,5 +40,5 @@ window.$docsify = {
     info:    { label: 'Info', className: 'note', icon: 'icon-note' }
   },
   // plugin condivisi (../assets/shared.js)
-  plugins: [themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, coverDotsPlugin]
+  plugins: [themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, highlighterPlugin, coverDotsPlugin]
 };

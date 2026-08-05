@@ -89,5 +89,5 @@ window.$docsify = {
   search: { placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
   copyCode: { buttonText: 'Copia', successText: 'Copiato' },
   // plugin condivisi (../assets/shared.js) + specifici del vault
-  plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, playgroundTryPlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, coverDotsPlugin]
+  plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, playgroundTryPlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, highlighterPlugin, coverDotsPlugin]
 };
