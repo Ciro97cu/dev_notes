@@ -327,6 +327,197 @@ function resumePlugin(hook, vm) {
   }, true);
 }
 
+// ── Feature di lettura (progresso, preferiti): CSS, icone e helper condivisi ──
+(function () {
+  var css = [
+    // barra progresso in cima alla sidebar
+    '#dn-progress{padding:.55rem .75rem .7rem}',
+    '.dn-progress-label{font-size:.74rem;opacity:.75;margin-bottom:.35rem;display:flex;justify-content:space-between}',
+    '.dn-progress-bar{height:6px;border-radius:4px;background:rgba(127,127,127,.22);overflow:hidden}',
+    '.dn-progress-bar span{display:block;height:100%;width:0;background:var(--link);transition:width .3s ease}',
+    // spunta ✓ sui capitoli letti nella sidebar
+    '.sidebar-nav a.dn-read::before,.sidebar a.dn-read::before{content:"\\2713";color:var(--link);font-weight:700;margin-right:.35em}',
+    // bottone "segna come letto" a fine capitolo
+    '.dn-read-toggle{display:inline-flex;align-items:center;gap:.5rem;margin:2.4rem 0 .5rem;padding:.55rem .9rem;border:1px solid var(--border);border-radius:9px;background:var(--bg-soft);color:var(--text);font:inherit;font-size:.9rem;cursor:pointer}',
+    '.dn-read-toggle:hover{border-color:var(--link)}',
+    '.dn-read-toggle.is-read{border-color:var(--link);color:var(--link)}',
+    // stella preferiti accanto al titolo
+    '.dn-star{margin-left:.5rem;vertical-align:middle;border:0;background:transparent;color:inherit;cursor:pointer;opacity:.5;padding:.1em;line-height:0}',
+    '.dn-star:hover,.dn-star.is-fav{opacity:1;color:var(--link)}',
+    // dock preferiti (stessa estetica del dock dati)
+    '#dn-fav{position:fixed;top:110px;right:16px;z-index:100}',
+    '#dn-fav-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
+    '#dn-fav-btn:hover,#dn-fav-btn.has-fav{border-color:var(--link);color:var(--link)}',
+    '.dn-fav-list{position:absolute;top:48px;right:0;min-width:240px;max-width:320px;max-height:60vh;overflow:auto;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
+    '.dn-fav-list.open{display:block}',
+    '.dn-fav-list .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem}',
+    '.dn-fav-list .dn-empty{padding:.5rem .6rem;opacity:.6;font-size:.86rem}',
+    '.dn-fav-row{display:flex;align-items:center;gap:.4rem;border-radius:8px}',
+    '.dn-fav-row:hover{background:rgba(127,127,127,.14)}',
+    '.dn-fav-row a{flex:1 1 auto;padding:.5rem .6rem;color:var(--text);text-decoration:none;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+    '.dn-fav-del{flex:0 0 auto;border:0;background:transparent;color:inherit;opacity:.5;cursor:pointer;padding:.35rem .5rem;border-radius:8px;line-height:0}',
+    '.dn-fav-del:hover{opacity:1;color:var(--link)}'
+  ].join('');
+  var el = document.createElement('style');
+  el.id = 'dn-reading-styles';
+  el.textContent = css;
+  (document.head || document.documentElement).appendChild(el);
+})();
+
+// Icone (Lucide-style) per le feature di lettura.
+var DN_ICON = {
+  check: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>',
+  circle: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>',
+  starOut: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  starFull: '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>'
+};
+// Pagine non-capitolo (cover/indice) escluse da progresso e preferiti.
+var DN_SKIP = { '/': 1, '/README': 1, '/_coverpage': 1, '': 1 };
+// "#/docs/x?id=y" → "/docs/x"
+function dnPathOf(href) {
+  if (!href) return '';
+  var h = href.indexOf('#'); if (h >= 0) href = href.slice(h + 1);
+  href = href.split('?')[0];
+  if (href.length > 1 && href.charAt(href.length - 1) === '/') href = href.slice(0, -1);
+  return href;
+}
+function dnEscHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+// "Progresso di studio": segna i capitoli come letti (persistito via NotesStore),
+// mostra ✓ nella sidebar e una barra "X/N" in cima alla navigazione, con un
+// bottone "Segna come letto" a fine capitolo. Robusto: salva i path, non citazioni.
+function studyProgressPlugin(hook, vm) {
+  function getRead() { return window.NotesStore.read('read', []); }
+  function isRead(p) { return getRead().indexOf(p) >= 0; }
+  function toggle(p) {
+    var arr = getRead(), i = arr.indexOf(p);
+    if (i >= 0) arr.splice(i, 1); else arr.push(p);
+    window.NotesStore.write('read', arr);
+  }
+  function decorate() {
+    var read = getRead();
+    var links = [].slice.call(document.querySelectorAll('.sidebar-nav a, .sidebar a'));
+    var total = 0, done = 0;
+    links.forEach(function (a) {
+      var p = dnPathOf(a.getAttribute('href'));
+      if (!p || DN_SKIP[p]) return;
+      total++;
+      var r = read.indexOf(p) >= 0;
+      if (r) done++;
+      a.classList.toggle('dn-read', r);
+    });
+    updateMeter(done, total);
+  }
+  function updateMeter(done, total) {
+    var nav = document.querySelector('.sidebar-nav') || document.querySelector('.sidebar');
+    if (!nav) return;
+    var m = document.getElementById('dn-progress');
+    if (!m) {
+      m = document.createElement('div');
+      m.id = 'dn-progress';
+      m.innerHTML = '<div class="dn-progress-label"><span class="dn-progress-text"></span><span class="dn-progress-pct"></span></div><div class="dn-progress-bar"><span></span></div>';
+      nav.insertBefore(m, nav.firstChild);
+    }
+    var pct = total ? Math.round(done / total * 100) : 0;
+    var txt = done + '/' + total + ' letti';
+    var t = m.querySelector('.dn-progress-text'); if (t.textContent !== txt) t.textContent = txt;
+    var pc = m.querySelector('.dn-progress-pct'); var ps = pct + '%'; if (pc.textContent !== ps) pc.textContent = ps;
+    m.querySelector('.dn-progress-bar span').style.width = pct + '%';
+    m.style.display = total ? '' : 'none';
+  }
+  function addToggle(path) {
+    var sec = document.querySelector('.markdown-section');
+    if (!sec) return;
+    var old = sec.querySelector('.dn-read-toggle'); if (old) old.remove();
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'dn-read-toggle';
+    function sync() {
+      var r = isRead(path);
+      b.classList.toggle('is-read', r);
+      b.innerHTML = (r ? DN_ICON.check : DN_ICON.circle) + '<span>' + (r ? 'Letto' : 'Segna come letto') + '</span>';
+    }
+    sync();
+    b.addEventListener('click', function () { toggle(path); sync(); decorate(); });
+    sec.appendChild(b);
+  }
+  hook.doneEach(function () {
+    var path = (vm.route && vm.route.path) || '';
+    decorate();
+    if (path && !DN_SKIP[path]) addToggle(path);
+  });
+  document.addEventListener('notesstore:change', function (e) {
+    if (e.detail && (e.detail.name === 'read' || e.detail.name === '*')) decorate();
+  });
+}
+
+// "Preferiti": stella accanto al titolo del capitolo + dock fisso con l'elenco
+// (click per navigare, ✕ per rimuovere). Persistito via NotesStore (path + titolo).
+function bookmarksPlugin(hook, vm) {
+  function get() { return window.NotesStore.read('favorites', []); }
+  function idx(p) { var a = get(), r = -1; a.forEach(function (x, i) { if (x.path === p) r = i; }); return r; }
+  function toggle(p, title) { var a = get(), i = idx(p); if (i >= 0) a.splice(i, 1); else a.push({ path: p, title: title }); window.NotesStore.write('favorites', a); }
+  function remove(p) { var a = get(), i = idx(p); if (i >= 0) { a.splice(i, 1); window.NotesStore.write('favorites', a); } }
+
+  function ensureDock() {
+    if (document.getElementById('dn-fav')) return;
+    var w = document.createElement('div');
+    w.id = 'dn-fav';
+    w.innerHTML = '<button id="dn-fav-btn" type="button" title="Preferiti" aria-label="Preferiti" aria-expanded="false">' + DN_ICON.starOut + '</button><div class="dn-fav-list" role="menu"></div>';
+    document.body.appendChild(w);
+    var btn = w.querySelector('#dn-fav-btn'), list = w.querySelector('.dn-fav-list');
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var o = list.classList.toggle('open');
+      btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+      if (o) renderList();
+    });
+    document.addEventListener('click', function (e) { if (!w.contains(e.target)) list.classList.remove('open'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') list.classList.remove('open'); });
+  }
+  function renderList() {
+    var list = document.querySelector('#dn-fav .dn-fav-list'); if (!list) return;
+    var favs = get(), html = '<div class="dn-title">Preferiti</div>';
+    if (!favs.length) html += '<div class="dn-empty">Nessun preferito. Usa la ☆ accanto al titolo del capitolo.</div>';
+    else favs.forEach(function (f) {
+      html += '<div class="dn-fav-row"><a href="#' + dnEscHtml(f.path) + '">' + dnEscHtml(f.title || f.path) + '</a>' +
+              '<button class="dn-fav-del" type="button" data-path="' + dnEscHtml(f.path) + '" title="Rimuovi" aria-label="Rimuovi">' + DN_ICON.x + '</button></div>';
+    });
+    list.innerHTML = html;
+    [].forEach.call(list.querySelectorAll('.dn-fav-del'), function (b) {
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        remove(b.getAttribute('data-path')); renderList(); refreshBtn();
+      });
+    });
+  }
+  function refreshBtn() { var b = document.getElementById('dn-fav-btn'); if (b) b.classList.toggle('has-fav', get().length > 0); }
+  function addStar(path) {
+    var h1 = document.querySelector('.markdown-section h1'); if (!h1 || h1.querySelector('.dn-star')) return;
+    var title = (h1.textContent || '').trim();
+    var s = document.createElement('button');
+    s.type = 'button'; s.className = 'dn-star';
+    s.title = 'Aggiungi ai preferiti'; s.setAttribute('aria-label', 'Aggiungi ai preferiti');
+    function sync() { var f = idx(path) >= 0; s.classList.toggle('is-fav', f); s.innerHTML = f ? DN_ICON.starFull : DN_ICON.starOut; }
+    sync();
+    s.addEventListener('click', function () { toggle(path, title); sync(); renderList(); refreshBtn(); });
+    h1.appendChild(s);
+  }
+  hook.mounted(function () { ensureDock(); refreshBtn(); });
+  hook.doneEach(function () {
+    ensureDock(); refreshBtn();
+    var path = (vm.route && vm.route.path) || '';
+    if (path && !DN_SKIP[path]) addStar(path);
+  });
+  document.addEventListener('notesstore:change', function (e) {
+    if (e.detail && (e.detail.name === 'favorites' || e.detail.name === '*')) {
+      refreshBtn();
+      if (document.querySelector('#dn-fav .dn-fav-list.open')) renderList();
+    }
+  });
+}
+
 // Puntini interattivi sulla cover: griglia su <canvas>, respinta dal cursore.
 // A riposo non consuma CPU (rAF solo mentre i puntini si muovono/riassestano).
 // Il colore dei puntini e lo sfondo sono definiti in CSS per ciascun vault.
