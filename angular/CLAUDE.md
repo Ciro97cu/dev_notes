@@ -16,7 +16,7 @@ Gli appunti spiegano come farebbe **un professore appassionato e chiaro** a uno 
 
 ## Struttura
 ```
-00-index.md          home/MOC: mappa dei 19 capitoli + concetti cardine
+README.md            home = indice completo: mappa dei 19 capitoli + concetti + cert
 capitoli/            1 nota-hub per capitolo (filename inglesi numerati a 2 cifre)
 concetti/            note atomiche sui concetti cardine ricorrenti
 cert/                prep certificazione: Angular *classico* non coperto dal libro (vedi sotto)
@@ -152,7 +152,7 @@ Mermaid dove rende davvero: reactive flow / signal graph, gerarchia DI, child ro
 
 ## Checklist manutenzione (quando aggiungi/rinomini una nota)
 - [ ] `_sidebar.md` — voce nell'ordine giusto.
-- [ ] `00-index.md` (MOC) — link al capitolo/concetto.
+- [ ] `README.md` (home = indice) — link al capitolo/concetto.
 - [ ] Frontmatter completo (`capitolo`/`titolo`/`pagine`/`tags`), col tag `angular-22` se la nota tratta feature gated.
 - [ ] `concetti/` — se introduci un concetto cardine ricorrente, valuta una nota atomica + backlink `[[nome]]`.
 - [ ] Sezioni **🔁 Ripasso lampo** e **In sintesi:** a fine capitolo.

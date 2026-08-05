@@ -7,7 +7,7 @@
 window.__VAULT = 'angular';   // chiave per "Riprendi" (angular-last-page)
 
 // Risolve i link Obsidian [[nome]] / [[nome|alias]] in link Docsify (a render-time).
-// [[NN-...]] -> /capitoli/ ; 00-index -> /00-index.md ; glossario -> /_meta/ ; resto -> /concetti/
+// [[NN-...]] -> /capitoli/ ; 00-index -> / (home = indice) ; glossario -> /_meta/ ; resto -> /concetti/
 function wikilinkPlugin(hook) {
   hook.beforeEach(function (content) {
     // rimuove il frontmatter YAML (--- ... ---) così non viene stampato come testo
@@ -22,7 +22,7 @@ function wikilinkPlugin(hook) {
       var path;
       if (target === 'glossario') path = '/_meta/glossario.md' + q;
       else if (/^\d{2}-/.test(target)) path = '/capitoli/' + target + '.md' + q;
-      else if (target === '00-index') path = '/00-index.md';
+      else if (target === '00-index') path = '/';
       else path = '/concetti/' + target + '.md' + q;
       return '[' + text + '](' + path + ')';
     });
