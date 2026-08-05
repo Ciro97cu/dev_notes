@@ -364,10 +364,16 @@ function dnSearchRun() {
   });
   res.innerHTML = html;
 }
-function dnSearchClose() { var b = document.getElementById('dn-search'); if (b) b.classList.remove('open'); }
+function dnSearchClose() {
+  var b = document.getElementById('dn-search'); if (b) b.classList.remove('open');
+  document.body.classList.remove('dn-search-open');   // sblocca lo scroll della pagina
+  document.documentElement.classList.remove('dn-search-open');
+}
 function dnSearchOpen() {
   var box = dnSearchBuild();
   box.classList.add('open');
+  document.body.classList.add('dn-search-open');       // blocca lo scroll della pagina sotto
+  document.documentElement.classList.add('dn-search-open');
   var inp = box.querySelector('.dn-s-input');
   inp.focus(); inp.select();
   dnSearchRun();
@@ -428,7 +434,8 @@ function dnSearchBuild() {
     '#dn-search .dn-s-tog{width:30px;height:28px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--text);cursor:pointer;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;opacity:.7}',
     '#dn-search .dn-s-tog:hover{opacity:1;border-color:var(--link)}',
     '#dn-search .dn-s-tog.active{opacity:1;color:var(--link);border-color:var(--link);background:color-mix(in srgb,var(--link) 12%,transparent)}',
-    '#dn-search .dn-s-results{overflow:auto;padding:.35rem}',
+    '#dn-search .dn-s-results{overflow:auto;overscroll-behavior:contain;padding:.35rem}',
+    'html.dn-search-open,body.dn-search-open{overflow:hidden !important}',
     '#dn-search .dn-s-item{display:block;padding:.5rem .6rem;border-radius:9px;text-decoration:none;color:inherit}',
     '#dn-search .dn-s-item:hover,#dn-search .dn-s-item.sel{background:rgba(127,127,127,.14)}',
     '#dn-search .dn-s-title{font-weight:650;font-size:.92rem}',
