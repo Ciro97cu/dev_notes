@@ -18,6 +18,146 @@
   } catch (e) {}
 })();
 
+// ── Persistenza condivisa: NotesStore ────────────────────────────────────────
+// Cache su localStorage (chiavi `dev-notes-<vault>-<nome>`, namespace via __VAULT)
+// come store di lavoro, + Esporta/Importa di UN file JSON che l'utente possiede:
+// sopravvive alla cancellazione dei dati del browser, portabile fra dispositivi.
+// Nessun backend, nessun account, nessuna dipendenza. È la "fonte di verità" durevole.
+window.NotesStore = (function () {
+  var PREFIX = 'dev-notes-';
+  function k(name) { return PREFIX + (window.__VAULT || 'hub') + '-' + name; }
+  function read(name, fallback) {
+    try { var r = localStorage.getItem(k(name)); return r == null ? fallback : JSON.parse(r); }
+    catch (e) { return fallback; }
+  }
+  function write(name, val) {
+    try { localStorage.setItem(k(name), JSON.stringify(val)); } catch (e) {}
+    try { document.dispatchEvent(new CustomEvent('notesstore:change', { detail: { name: name } })); } catch (e) {}
+  }
+  // Fotografia di TUTTE le chiavi dev-notes-* (tutti i vault) per l'esportazione.
+  function snapshot() {
+    var out = {};
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (key && key.indexOf(PREFIX) === 0) {
+        try { out[key] = JSON.parse(localStorage.getItem(key)); }
+        catch (e) { out[key] = localStorage.getItem(key); }
+      }
+    }
+    return { app: 'dev-notes', version: 1, exportedAt: new Date().toISOString(), data: out };
+  }
+  function download() {
+    var blob = new Blob([JSON.stringify(snapshot(), null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'dev-notes-dati.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+  }
+  function isArr(x) { return Object.prototype.toString.call(x) === '[object Array]'; }
+  function mergeInto(key, incoming) {
+    var cur; try { cur = JSON.parse(localStorage.getItem(key)); } catch (e) { cur = null; }
+    var val = incoming;
+    if (isArr(cur) && isArr(incoming)) {                 // array → unione senza duplicati
+      var seen = {}, out = [];
+      cur.concat(incoming).forEach(function (x) {
+        var s = (x && typeof x === 'object') ? JSON.stringify(x) : String(x);
+        if (!seen[s]) { seen[s] = 1; out.push(x); }
+      });
+      val = out;
+    } else if (cur && incoming && typeof cur === 'object' && typeof incoming === 'object') {
+      val = cur; Object.keys(incoming).forEach(function (kk) { val[kk] = incoming[kk]; });  // oggetto → shallow-merge
+    }
+    localStorage.setItem(key, JSON.stringify(val));
+  }
+  function importObj(obj, mode) {           // mode: 'merge' | 'replace'
+    if (!obj || !obj.data) throw new Error('file non valido');
+    Object.keys(obj.data).forEach(function (key) {
+      if (key.indexOf(PREFIX) !== 0) return;
+      if (mode === 'merge') mergeInto(key, obj.data[key]);
+      else localStorage.setItem(key, JSON.stringify(obj.data[key]));
+    });
+  }
+  function importFile(file, mode, done) {
+    var r = new FileReader();
+    r.onload = function () {
+      try { importObj(JSON.parse(r.result), mode); done && done(null); }
+      catch (e) { done && done(e); }
+    };
+    r.onerror = function () { done && done(new Error('lettura fallita')); };
+    r.readAsText(file);
+  }
+  return { read: read, write: write, snapshot: snapshot, download: download, importFile: importFile, keyFor: k };
+})();
+
+// ── Dock "Dati": Esporta / Importa il file dei progressi ──────────────────────
+// Pulsante fisso (sotto il toggle tema) che apre un popover. È UI globale, quindi
+// vive in un IIFE su DOMContentLoaded (non serve registrarlo come plugin docsify).
+(function () {
+  var css = [
+    '#dn-data{position:fixed;top:62px;right:16px;z-index:100}',
+    '#dn-data-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
+    '#dn-data-btn:hover{border-color:var(--link);color:var(--link)}',
+    '.dn-pop{position:absolute;top:48px;right:0;min-width:210px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
+    '.dn-pop.open{display:block}',
+    '.dn-pop .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem .2rem}',
+    '.dn-pop button{display:flex;gap:.55rem;align-items:center;width:100%;padding:.5rem .6rem;border:0;background:transparent;color:var(--text);font:inherit;font-size:.9rem;cursor:pointer;border-radius:8px;text-align:left}',
+    '.dn-pop button:hover{background:rgba(127,127,127,.14)}',
+    '.dn-pop button svg{flex:0 0 auto;opacity:.8}'
+  ].join('');
+  var el = document.createElement('style');
+  el.id = 'dn-data-styles';
+  el.textContent = css;
+  (document.head || document.documentElement).appendChild(el);
+
+  var ICON_DB = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
+  var ICON_DL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
+  var ICON_UP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
+
+  function build() {
+    if (document.getElementById('dn-data')) return;
+    var wrap = document.createElement('div');
+    wrap.id = 'dn-data';
+    wrap.innerHTML =
+      '<button id="dn-data-btn" type="button" title="Dati e progressi" aria-label="Dati e progressi" aria-expanded="false">' + ICON_DB + '</button>' +
+      '<div class="dn-pop" role="menu">' +
+        '<div class="dn-title">Dati e progressi</div>' +
+        '<button type="button" data-act="export" role="menuitem">' + ICON_DL + 'Esporta su file…</button>' +
+        '<button type="button" data-act="import" role="menuitem">' + ICON_UP + 'Importa da file…</button>' +
+      '</div>' +
+      '<input type="file" accept="application/json,.json" hidden>';
+    document.body.appendChild(wrap);
+
+    var btn = wrap.querySelector('#dn-data-btn');
+    var pop = wrap.querySelector('.dn-pop');
+    var file = wrap.querySelector('input[type=file]');
+    function close() { pop.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = pop.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    pop.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('button[data-act]');
+      if (!b) return;
+      if (b.getAttribute('data-act') === 'export') { window.NotesStore.download(); close(); }
+      else { file.value = ''; file.click(); close(); }
+    });
+    file.addEventListener('change', function () {
+      var f = file.files && file.files[0];
+      if (!f) return;
+      var merge = window.confirm('Importa "' + f.name + '".\n\nOK = unisci ai dati attuali\nAnnulla = sostituisci tutto');
+      window.NotesStore.importFile(f, merge ? 'merge' : 'replace', function (err) {
+        if (err) { window.alert('Import non riuscito: ' + err.message); return; }
+        location.reload();
+      });
+    });
+  }
+  if (document.body) build();
+  else document.addEventListener('DOMContentLoaded', build);
+})();
+
 // Stile (condiviso) delle 3 sezioni "Come funziona" sulla cover: layout a colonne e
 // animazione. I colori sono fissi (testo bianco sul fondo brand), quindi vale per tutti.
 (function () {
