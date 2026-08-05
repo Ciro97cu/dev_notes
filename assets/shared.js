@@ -705,12 +705,13 @@ function studyProgressPlugin(hook, vm) {
     var total = 0, done = 0;
     links.forEach(function (a) {
       var href = a.getAttribute('href') || '';
-      if (href.indexOf('?id=') >= 0) return;           // salta il sotto-TOC (heading interni)
-      var p = dnPathOf(href);
-      if (!p || DN_SKIP[p]) return;
-      total++;
-      var r = read.indexOf(p) >= 0;
-      if (r) done++;
+      var ident = href.replace(/^#/, '');              // /docs/x  oppure  /docs/x?id=sezione
+      var base = ident.split('?')[0];
+      if (!base || DN_SKIP[base]) return;
+      var isChapter = ident.indexOf('?id=') < 0;        // le sottosezioni hanno ?id=
+      var r = read.indexOf(ident) >= 0;
+      // la barra conta solo i capitoli (le sottosezioni sono in DOM solo per il capitolo attivo)
+      if (isChapter) { total++; if (r) done++; }
       var chk = a.querySelector('.dn-check');
       if (!chk) {
         chk = document.createElement('span');
@@ -718,11 +719,11 @@ function studyProgressPlugin(hook, vm) {
         chk.setAttribute('role', 'checkbox');
         chk.setAttribute('tabindex', '0');
         chk.setAttribute('title', 'Segna come letto');
-        (function (path) {
-          function flip(e) { e.preventDefault(); e.stopPropagation(); toggle(path); decorate(); }
+        (function (id) {
+          function flip(e) { e.preventDefault(); e.stopPropagation(); toggle(id); decorate(); }
           chk.addEventListener('click', flip);
           chk.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') flip(e); });
-        })(p);
+        })(ident);
         a.insertBefore(chk, a.firstChild);
       }
       chk.classList.toggle('checked', r);
