@@ -568,8 +568,7 @@ a[aria-label="Torna a Dev Notes"]:hover,
 .sidebar-toggle:hover,
 #theme-toggle:hover {
   transform: scale(1.08);
-  background: var(--theme-color) !important;
-  border-color: var(--theme-color) !important;
-  color: var(--on-accent) !important;
+  border-color: var(--link) !important;
+  color: var(--link) !important;
 }
-.sidebar-toggle:hover span { background-color: var(--on-accent) !important; }
+.sidebar-toggle:hover span { background-color: var(--link) !important; }
