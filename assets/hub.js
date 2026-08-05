@@ -94,6 +94,16 @@
   var ICON_UP   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
   var ICON_CAM  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
   var ICON_LINK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+  var ICON_QR   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
+
+  var VAULT_META = {
+    git:        { n: 'Git',        a: '#f05133' },
+    javascript: { n: 'JavaScript', a: '#e6c200' },
+    typescript: { n: 'TypeScript', a: '#3178c6' },
+    angular:    { n: 'Angular',    a: '#dd0031' },
+    css:        { n: 'CSS',        a: '#1572b6' },
+    glossario:  { n: 'Glossario',  a: '#6366f1' }
+  };
 
   btn.innerHTML = ICON_DB;
 
@@ -110,7 +120,11 @@
     '.dn-qr-btn:hover{opacity:.88}',
     '#dn-qr-video{width:100%;border-radius:8px;max-height:280px;object-fit:cover;background:#000;display:block}',
     '#dn-qr-scan-hint{font-size:.8rem;color:var(--fg);opacity:.6;text-align:center;margin:.6rem 0 0}',
-    '#dn-hub-link-input{width:100%;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--fg);font:inherit;font-size:.85rem;padding:.6rem;resize:none;margin-bottom:.8rem;box-sizing:border-box}'
+    '#dn-hub-link-input{width:100%;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--fg);font:inherit;font-size:.85rem;padding:.6rem;resize:none;margin-bottom:.8rem;box-sizing:border-box}',
+    '#dn-qr-canvas{display:flex;justify-content:center;margin-bottom:1rem;background:#fff;border-radius:8px;padding:.75rem}',
+    '#dn-qr-canvas canvas,#dn-qr-canvas img{display:block!important}',
+    '.hub-vault-btn{padding:.3rem .75rem;border-radius:20px;border:1.5px solid var(--vac);background:transparent;color:var(--vac);font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s,color .15s}',
+    '.hub-vault-btn:hover,.hub-vault-btn.sel{background:var(--vac);color:#fff}'
   ].join('');
   document.head.appendChild(mst);
 
@@ -122,9 +136,10 @@
     '<button type="button" data-act="export">'      + ICON_DL   + 'Esporta tutto su file…</button>' +
     '<button type="button" data-act="import">'      + ICON_UP   + 'Importa da file…</button>' +
     '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
+    '<button type="button" data-act="qr-show">'     + ICON_QR   + 'Condividi via QR / Link…</button>' +
     '<button type="button" data-act="qr-scan">'     + ICON_CAM  + 'Scannerizza QR…</button>' +
     '<button type="button" data-act="link-import">' + ICON_LINK + 'Importa da link…</button>' +
-    '<div class="dn-note"><strong>File</strong>: backup completo di tutti i vault. <strong>QR / Link</strong>: importa da un vault su un altro dispositivo.</div>';
+    '<div class="dn-note"><strong>File</strong>: backup completo tutti i vault. <strong>QR / Link</strong>: sync rapida per vault singolo.</div>';
   document.body.appendChild(pop);
 
   var fileIn = document.createElement('input');
@@ -190,21 +205,27 @@
     r.readAsText(f);
   });
 
-  // ── Lazy libs (lz-string + jsqr, senza 01-core né NotesStore) ────────────
-  var _libsReady = false;
+  // ── Lazy libs (separate per non caricare 257 KB jsqr quando non serve) ────
   function loadLib(src, cb) {
     var s = document.createElement('script'); s.src = src;
     s.onload = cb; s.onerror = function () { console.warn('[hub-qr] cannot load', src); };
     document.head.appendChild(s);
   }
-  function ensureLibs(cb) {
-    if (_libsReady) { cb(); return; }
-    var pending = 0;
-    function done() { if (--pending === 0) { _libsReady = true; cb(); } }
-    function need(cond, src) { if (!cond) { pending++; loadLib(src, done); } }
-    need(window.LZString, LIB + 'lz-string.min.js');
-    need(window.jsQR,     LIB + 'jsqr.min.js');
-    if (!pending) { _libsReady = true; cb(); }
+  function ensureLz(cb) {
+    if (window.LZString) { cb(); return; }
+    loadLib(LIB + 'lz-string.min.js', cb);
+  }
+  function ensureScan(cb) {
+    ensureLz(function () {
+      if (window.jsQR) { cb(); return; }
+      loadLib(LIB + 'jsqr.min.js', cb);
+    });
+  }
+  function ensureQr(cb) {
+    ensureLz(function () {
+      if (window.QRCode) { cb(); return; }
+      loadLib(LIB + 'qrcode.min.js', cb);
+    });
   }
 
   // ── Decode e import da sync URL (scrive direttamente in localStorage) ────
@@ -223,6 +244,21 @@
       try { localStorage.setItem(PREFIX + obj.vault + '-' + k, JSON.stringify(obj.d[k])); count++; } catch (_) {}
     });
     return count > 0;
+  }
+
+  // ── Snapshot e URL sync per vault (hub non ha vault attivo) ─────────────
+  var SYNC_KEYS_ARR = ['read', 'frac', 'progress', 'favorites'];
+  function hubSnapshot(vault) {
+    var PREFIX = 'dev-notes-', d = {};
+    SYNC_KEYS_ARR.forEach(function (k) {
+      var raw = localStorage.getItem(PREFIX + vault + '-' + k);
+      if (raw !== null) { try { d[k] = JSON.parse(raw); } catch (_) { d[k] = raw; } }
+    });
+    return { vault: vault, d: d };
+  }
+  function hubSyncUrl(vault) {
+    var encoded = LZString.compressToEncodedURIComponent(JSON.stringify(hubSnapshot(vault)));
+    return location.origin + '/' + vault + '/?sync=' + encoded;
   }
 
   // ── Modal comune ──────────────────────────────────────────────────────────
@@ -245,7 +281,7 @@
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       alert('Fotocamera non disponibile (richiede HTTPS o localhost).'); return;
     }
-    ensureLibs(function () {
+    ensureScan(function () {
       var modal = makeModal('Scannerizza QR');
       modal.innerHTML =
         '<div class="dn-qr-box">' +
@@ -337,6 +373,64 @@
     });
   }
 
+  // ── Esporta QR / Link con selettore vault ────────────────────────────────
+  function qrExportOpen() {
+    if (document.getElementById('dn-qr-modal')) return;
+    ensureQr(function () {
+      var modal = makeModal('Condividi via QR / Link');
+      var vaultBtns = Object.keys(VAULT_META).map(function (v) {
+        return '<button type="button" class="hub-vault-btn" data-vault="' + v + '" style="--vac:' + VAULT_META[v].a + '">' + VAULT_META[v].n + '</button>';
+      }).join('');
+      modal.innerHTML =
+        '<div class="dn-qr-box" style="max-width:360px">' +
+          '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
+          '<h3>Condividi via QR / Link</h3>' +
+          '<p>Scegli il vault da condividere:</p>' +
+          '<div id="dn-vault-sel" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem">' + vaultBtns + '</div>' +
+          '<div id="dn-qr-canvas" style="display:none"></div>' +
+          '<button class="dn-qr-btn" id="dn-qr-copy" style="display:none" type="button">Copia link</button>' +
+        '</div>';
+      document.body.appendChild(modal);
+      modal.querySelector('.dn-qr-close').addEventListener('click', modal._close);
+
+      var currentUrl = '';
+      var qrCanvas = modal.querySelector('#dn-qr-canvas');
+      var copyBtn  = modal.querySelector('#dn-qr-copy');
+
+      modal.querySelector('#dn-vault-sel').addEventListener('click', function (e) {
+        var b = e.target.closest('.hub-vault-btn'); if (!b) return;
+        var vault = b.getAttribute('data-vault');
+        modal.querySelectorAll('.hub-vault-btn').forEach(function (el) { el.classList.remove('sel'); });
+        b.classList.add('sel');
+        currentUrl = hubSyncUrl(vault);
+        qrCanvas.innerHTML = ''; qrCanvas.style.display = 'flex';
+        new QRCode(qrCanvas, {
+          text: currentUrl, width: 210, height: 210,
+          colorDark: '#111111', colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+        copyBtn.style.display = '';
+        copyBtn.textContent = 'Copia link — ' + VAULT_META[vault].n;
+      });
+
+      copyBtn.addEventListener('click', function () {
+        if (!currentUrl) return;
+        var orig = copyBtn.textContent;
+        (navigator.clipboard ? navigator.clipboard.writeText(currentUrl) : Promise.reject())
+          .catch(function () {
+            var t = document.createElement('textarea');
+            t.value = currentUrl; t.style.cssText = 'position:fixed;opacity:0';
+            document.body.appendChild(t); t.focus(); t.select();
+            document.execCommand('copy'); t.remove();
+          })
+          .finally(function () {
+            copyBtn.textContent = 'Copiato!';
+            setTimeout(function () { copyBtn.textContent = orig; }, 1800);
+          });
+      });
+    });
+  }
+
   // ── Click handler popover ─────────────────────────────────────────────────
   pop.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-act]');
@@ -344,6 +438,7 @@
     var act = b.getAttribute('data-act');
     if      (act === 'export')      { exportAll(); }
     else if (act === 'import')      { fileIn.value = ''; fileIn.click(); close(); }
+    else if (act === 'qr-show')     { close(); qrExportOpen(); }
     else if (act === 'qr-scan')     { close(); scanOpen(); }
     else if (act === 'link-import') { close(); linkImportOpen(); }
   });
