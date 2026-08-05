@@ -112,13 +112,21 @@ function dnCloseAllPops(keep) {
 // vive in un IIFE su DOMContentLoaded (non serve registrarlo come plugin docsify).
 (function () {
   var css = [
-    '#dn-data{position:fixed;top:62px;right:16px;z-index:100}',
+    // speed-dial "Strumenti": raggruppa i tool sotto un unico bottone (il tema resta a parte)
+    '#dn-tools{position:fixed;top:62px;right:16px;z-index:101}',
+    '#dn-tools-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
+    '#dn-data{position:fixed;top:110px;right:16px;z-index:100}',
     '#dn-data-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
     '#dn-data-btn:hover{border-color:var(--link);color:var(--link)}',
+    // i tool restano nascosti finché non si apre lo speed-dial
+    '#dn-data,#dn-fav,#dn-hl{opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease}',
+    'body.dn-tools-open #dn-data,body.dn-tools-open #dn-fav,body.dn-tools-open #dn-hl{opacity:1;pointer-events:auto;transform:none}',
     // hover uniforme di tutti i pulsanti fissi (icona che cambia colore, niente fondo pieno) + micro-zoom
-    '#dn-data-btn,#dn-fav-btn,#dn-hl-btn{transition:transform .15s ease,color .2s ease,border-color .2s ease}',
-    '#dn-data-btn:hover,#dn-fav-btn:hover,#dn-hl-btn:hover{transform:scale(1.08)}',
-    '.dn-pop{position:absolute;top:48px;right:0;min-width:210px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
+    '#dn-data-btn,#dn-fav-btn,#dn-hl-btn,#dn-tools-btn{transition:transform .15s ease,color .2s ease,border-color .2s ease}',
+    '#dn-data-btn:hover,#dn-fav-btn:hover,#dn-hl-btn:hover,#dn-tools-btn:hover{transform:scale(1.08)}',
+    '#dn-tools-btn:hover{border-color:var(--link);color:var(--link)}',
+    // i pannelli si aprono a SINISTRA del bottone, così non finiscono dietro gli altri
+    '.dn-pop{position:absolute;top:0;right:48px;min-width:210px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
     '.dn-pop.open{display:block}',
     '.dn-pop .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem .2rem}',
     '.dn-pop button{display:flex;gap:.55rem;align-items:center;width:100%;padding:.5rem .6rem;border:0;background:transparent;color:var(--text);font:inherit;font-size:.9rem;cursor:pointer;border-radius:8px;text-align:left}',
@@ -184,6 +192,31 @@ function dnCloseAllPops(keep) {
         if (err) { window.alert('Import non riuscito: ' + err.message); return; }
         location.reload();
       });
+    });
+  }
+  if (document.body) build();
+  else document.addEventListener('DOMContentLoaded', build);
+})();
+
+// ── Speed-dial "Strumenti": un unico bottone (sotto il tema) che apre/chiude i
+// tool raggruppati (dati, preferiti, evidenziatore). Il tema resta separato.
+(function () {
+  var TOOLS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
+  var CLOSE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  function build() {
+    if (document.getElementById('dn-tools')) return;
+    var wrap = document.createElement('div');
+    wrap.id = 'dn-tools';
+    wrap.innerHTML = '<button id="dn-tools-btn" type="button" title="Strumenti" aria-label="Strumenti" aria-expanded="false">' + TOOLS + '</button>';
+    document.body.appendChild(wrap);
+    var btn = wrap.querySelector('#dn-tools-btn');
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = document.body.classList.toggle('dn-tools-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.innerHTML = open ? CLOSE : TOOLS;
+      btn.title = open ? 'Chiudi strumenti' : 'Strumenti';
+      if (!open) dnCloseAllPops(null);   // chiudendo il gruppo, chiudi anche i pannelli aperti
     });
   }
   if (document.body) build();
@@ -382,10 +415,10 @@ function resumePlugin(hook, vm) {
     '.markdown-section h2:hover .dn-star,.markdown-section h3:hover .dn-star,.markdown-section h4:hover .dn-star,.dn-star:focus-visible,.dn-star.is-fav{opacity:1}',
     '.dn-star:hover,.dn-star.is-fav{color:var(--link)}',
     // dock preferiti (stessa estetica del dock dati)
-    '#dn-fav{position:fixed;top:110px;right:16px;z-index:100}',
+    '#dn-fav{position:fixed;top:158px;right:16px;z-index:100}',
     '#dn-fav-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
     '#dn-fav-btn:hover,#dn-fav-btn.has-fav{border-color:var(--link);color:var(--link)}',
-    '.dn-fav-list{position:absolute;top:48px;right:0;min-width:240px;max-width:320px;max-height:60vh;overflow:auto;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
+    '.dn-fav-list{position:absolute;top:0;right:48px;min-width:240px;max-width:320px;max-height:60vh;overflow:auto;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
     '.dn-fav-list.open{display:block}',
     '.dn-fav-list .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem}',
     '.dn-fav-list .dn-empty{padding:.5rem .6rem;opacity:.6;font-size:.86rem}',
@@ -725,11 +758,11 @@ function dnInit() {
   if (dnInited || !dnSupported()) return;
   dnInited = true;
   var rules = [
-    '#dn-hl{position:fixed;top:158px;right:16px;z-index:100}',
+    '#dn-hl{position:fixed;top:206px;right:16px;z-index:100}',
     '#dn-hl-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
     '#dn-hl-btn:hover{border-color:var(--link);color:var(--link)}',
     '#dn-hl-btn.is-on{border-color:var(--link)}',
-    '.dn-hl-pop{position:absolute;top:48px;right:0;width:214px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.2);padding:.55rem;display:none}',
+    '.dn-hl-pop{position:absolute;top:0;right:48px;width:214px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.2);padding:.55rem;display:none}',
     '.dn-hl-pop.open{display:block}',
     '.dn-hl-pop .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.1rem .25rem .45rem}',
     '.dn-swatches{display:grid;grid-template-columns:repeat(7,1fr);gap:.28rem}',
