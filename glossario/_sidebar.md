@@ -1,4 +1,4 @@
-- [Indice completo](/)
+- [Indice completo](README.md)
 
 - **Web e browser**
   - [Web, browser e rete](docs/web-browser.md)
