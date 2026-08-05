@@ -1,7 +1,7 @@
 /*
  * Parti SPECIFICHE del vault Angular: risoluzione dei wikilink (percorsi capitoli/
  * concetti/meta) e la configurazione window.$docsify. Anti-flash e plugin condivisi
- * (tema, mermaid, callout, resume, coverDots) vivono in ../assets/shared.js, caricato
+ * (tema, mermaid, callout, resume, coverDots) vivono in ../assets/shared/ (01-core … 06-highlighter), caricato
  * prima di questo file.
  */
 window.__VAULT = 'angular';   // chiave per "Riprendi" (angular-last-page)
@@ -76,6 +76,6 @@ window.$docsify = {
   search: {
     namespace: 'dev-notes-angular', placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
   copyCode: { buttonText: 'Copia', successText: 'Copiato' },
-  // plugin condivisi (../assets/shared.js) + wikilink locale
+  // plugin condivisi (../assets/shared/ (01-core … 06-highlighter)) + wikilink locale
   plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, highlighterPlugin, coverDotsPlugin]
 };
