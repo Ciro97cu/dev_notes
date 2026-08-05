@@ -696,6 +696,37 @@ function studyProgressPlugin(hook, vm) {
     if (i >= 0) arr.splice(i, 1); else arr.push(p);
     window.NotesStore.write('read', arr);
   }
+  // Livello di un heading (h2→2 …) dal suo id nel contenuto.
+  function levelOf(id) { var el = document.getElementById(id); return el && el.tagName.charAt(0) === 'H' ? parseInt(el.tagName.charAt(1), 10) : 99; }
+  // Ident delle sottosezioni "figlie" di `ident` (capitolo → tutte; heading →
+  // gli heading seguenti di livello più profondo, fino al prossimo pari/superiore).
+  // Funziona solo sulla pagina aperta (le sottosezioni sono nel DOM solo lì).
+  function descendantIdents(ident) {
+    var q = ident.indexOf('?id='), path = q < 0 ? ident : ident.slice(0, q);
+    var cur = (vm.route && vm.route.path) || '';
+    if (path !== cur) return [];
+    var hs = [].slice.call(document.querySelectorAll('.markdown-section h2[id], .markdown-section h3[id], .markdown-section h4[id]'));
+    var out = [];
+    if (q < 0) { hs.forEach(function (h) { out.push(path + '?id=' + h.id); }); return out; }  // capitolo: tutte
+    var startId = ident.slice(q + 4), startLevel = levelOf(startId), started = false;
+    for (var i = 0; i < hs.length; i++) {
+      if (hs[i].id === startId) { started = true; continue; }
+      if (!started) continue;
+      if (levelOf(hs[i].id) > startLevel) out.push(path + '?id=' + hs[i].id);
+      else break;                       // fine del blocco discendente
+    }
+    return out;
+  }
+  // Spunta/despunta `ident` e cascata sui suoi discendenti (stesso stato).
+  function applyCascade(ident) {
+    var read = getRead(), on = read.indexOf(ident) < 0;
+    [ident].concat(descendantIdents(ident)).forEach(function (id) {
+      var i = read.indexOf(id);
+      if (on && i < 0) read.push(id);
+      else if (!on && i >= 0) read.splice(i, 1);
+    });
+    window.NotesStore.write('read', read);
+  }
   // Una casella spuntabile accanto a ogni voce-capitolo della sidebar (non sul
   // sotto-TOC degli heading, che hanno ?id= nell'href). Cliccarla segna letto/da
   // leggere senza navigare; aggiorna la barra «X/N».
@@ -720,7 +751,7 @@ function studyProgressPlugin(hook, vm) {
         chk.setAttribute('tabindex', '0');
         chk.setAttribute('title', 'Segna come letto');
         (function (id) {
-          function flip(e) { e.preventDefault(); e.stopPropagation(); toggle(id); decorate(); }
+          function flip(e) { e.preventDefault(); e.stopPropagation(); applyCascade(id); decorate(); }
           chk.addEventListener('click', flip);
           chk.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') flip(e); });
         })(ident);
