@@ -443,7 +443,7 @@ section.cover.show ~ .content { display: none; }
   display: flex; align-items: center; justify-content: center;
   transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease;
 }
-#theme-toggle:hover { transform: scale(1.08); background: var(--ng-red); color: #fff; border-color: var(--ng-red); }
+#theme-toggle:hover { transform: scale(1.08); color: var(--link); border-color: var(--link); }
 #theme-toggle:focus-visible { outline: 2px solid var(--ng-red); outline-offset: 2px; }
 
 /* ---------- Mermaid ---------- */
