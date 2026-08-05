@@ -127,7 +127,11 @@ function dnCloseAllPops(keep) {
     '.dn-pop .dn-note{font-size:.74rem;line-height:1.45;opacity:.7;padding:.4rem .6rem .3rem;border-top:1px solid var(--border);margin-top:.3rem}',
     // il toggle tema usa un\'icona SVG come gli altri: centrala
     '#theme-toggle{display:flex;align-items:center;justify-content:center}',
-    '#theme-toggle svg{display:block}'
+    '#theme-toggle svg{display:block}',
+    // i pulsanti fissi in basso a destra (home/menu/playground) erano bianchi fissi:
+    // li rendo theme-aware come quelli in alto, così cambiano col tema
+    'a[aria-label="Torna a Dev Notes"],.sidebar-toggle,#pg-toggle,#ng-play{background:var(--bg-soft) !important;color:var(--text) !important;border-color:var(--border) !important}',
+    '.sidebar-toggle span{background-color:var(--text) !important}'
   ].join('');
   var el = document.createElement('style');
   el.id = 'dn-data-styles';
