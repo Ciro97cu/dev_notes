@@ -52,7 +52,7 @@ window.$docsify = {
   onlyCover: false,
   homepage: 'README.md',
   notFoundPage: true,
-  subMaxLevel: 2,
+  subMaxLevel: 4,   // sotto-TOC nella sidebar fino agli h4 (####)
   relativePath: true,
   auto2top: true,
   // un solo _sidebar.md (root) anche nella sottocartella docs/

@@ -38,7 +38,7 @@ window.$docsify = {
   onlyCover: false,
   auto2top: true,
   maxLevel: 3,
-  subMaxLevel: 2,
+  subMaxLevel: 4,   // sotto-TOC nella sidebar fino agli h4 (####)
   homepage: 'README.md',
   notFoundPage: true,
   search: {
