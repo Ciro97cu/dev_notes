@@ -212,23 +212,30 @@
     }
     .card:hover .arrow { transform: translateX(4px); color: var(--accent); }
 
-    /* Percentuale di lettura + fiamma animata (colore del vault) in alto a destra della card */
+    /* Barra di progresso lettura: striscia sul bordo inferiore della card, con il
+       riempimento animato "a brace/fiamma" nel colore del vault. + % in alto a destra. */
     .card-prog {
-      position: absolute; top: .6rem; right: .8rem;
-      display: inline-flex; align-items: center; gap: .28rem;
-      font-size: .82rem; font-weight: 700; color: var(--accent);
-      line-height: 1;
+      position: absolute; left: 0; right: 0; bottom: 0; height: 6px;
+      background: color-mix(in srgb, var(--fg) 9%, transparent);
     }
-    .card-prog .flame { width: 15px; height: 18px; transform-origin: 50% 100%; will-change: transform, opacity; }
-    .card-prog .flame svg { width: 100%; height: 100%; display: block; }
-    @keyframes dn-flame {
-      0%   { transform: scale(1, 1)       rotate(-2deg); opacity: .82; }
-      35%  { transform: scale(1.08, 1.16) rotate(1.5deg); opacity: 1;  }
-      70%  { transform: scale(.96, .92)   rotate(-1.5deg); opacity: .9; }
-      100% { transform: scale(1.04, 1.08) rotate(1deg);  opacity: .95; }
+    .card-prog .fill {
+      height: 100%; width: 0;
+      border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+      background: linear-gradient(90deg,
+        color-mix(in srgb, var(--accent), #000 25%) 0%,
+        var(--accent) 35%,
+        color-mix(in srgb, var(--accent), #fff 55%) 55%,
+        var(--accent) 72%,
+        color-mix(in srgb, var(--accent), #000 12%) 100%);
+      background-size: 220% 100%;
+      box-shadow: 0 0 7px color-mix(in srgb, var(--accent) 55%, transparent);
+      animation: dn-ember 1.8s linear infinite, dn-flick 1.15s ease-in-out infinite alternate;
+      transition: width .5s ease;
     }
-    .card-prog .flame { animation: dn-flame 1.05s ease-in-out infinite alternate; }
-    @media (prefers-reduced-motion: reduce) { .card-prog .flame { animation: none; } }
+    @keyframes dn-ember { from { background-position: 0 0; } to { background-position: -220% 0; } }
+    @keyframes dn-flick { 0% { filter: brightness(.92) saturate(1); } 50% { filter: brightness(1.18) saturate(1.15); } 100% { filter: brightness(1.03); } }
+    .card-pct { position: absolute; top: .55rem; right: .85rem; font-size: .74rem; font-weight: 700; color: var(--accent); }
+    @media (prefers-reduced-motion: reduce) { .card-prog .fill { animation: none; } }
 
     footer {
       position: relative;
@@ -404,18 +411,24 @@
     // % di lettura per ogni card (a livello di capitolo), scritta da ogni vault in
     // dev-notes-<vault>-progress = {d,t}. Fiamma animata nel colore del vault.
     (function () {
-      var FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c3 4 5 6.5 5 10a5 5 0 0 1-10 0c0-1.8.8-3.2 2-4.4.2 1 .9 1.8 1.9 1.8-1-2 .1-4.3 1.1-7.4z"/></svg>';
       [].forEach.call(document.querySelectorAll('.card'), function (card) {
         var vault = (card.getAttribute('href') || '').replace(/\/+$/, '').replace(/^.*\//, '');
         if (!vault) return;
         var rec; try { rec = JSON.parse(localStorage.getItem('dev-notes-' + vault + '-progress')); } catch (e) { rec = null; }
         if (!rec || !rec.t) return;
         var pct = Math.round((rec.d || 0) / rec.t * 100);
-        var el = document.createElement('span');
-        el.className = 'card-prog';
-        el.title = (rec.d || 0) + '/' + rec.t + ' capitoli letti';
-        el.innerHTML = '<span class="flame">' + FLAME + '</span><span class="card-pct">' + pct + '%</span>';
-        card.appendChild(el);
+        var bar = document.createElement('span');
+        bar.className = 'card-prog';
+        bar.title = (rec.d || 0) + '/' + rec.t + ' capitoli letti';
+        var fill = document.createElement('span');
+        fill.className = 'fill';
+        fill.style.width = pct + '%';
+        bar.appendChild(fill);
+        var lbl = document.createElement('span');
+        lbl.className = 'card-pct';
+        lbl.textContent = pct + '%';
+        card.appendChild(bar);
+        card.appendChild(lbl);
       });
     })();
   </script>
