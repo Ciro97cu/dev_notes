@@ -1,15 +1,10 @@
-# Appunti Git
+# Indice completo
 
-Appunti di studio su Git, da zero ad avanzato. Pensati come percorso ordinato
-ma usabili anche come reference rapida durante il lavoro.
+Appunti di studio su **Git**, da zero ad avanzato: un percorso ordinato in 16 topic, usabile anche come reference rapida durante il lavoro.
 
-## Come sono organizzati
+> Appunti personali di studio, verificati sulla documentazione ufficiale di [Git](https://git-scm.com/doc).
 
-- File numerati per topic (`01-*.md`, `02-*.md`, ...) da leggere in ordine.
-- Ogni file segue lo stesso scheletro.
-- Termini tecnici e comandi restano in inglese; il testo è in italiano semplice.
-
-## Indice topic
+## Topic
 
 | # | File | Argomento |
 |---|------|-----------|
@@ -32,23 +27,6 @@ ma usabili anche come reference rapida durante il lavoro.
 
 ## File di supporto
 
-- [glossario.md](glossario.md) — termini Git (EN) spiegati in italiano semplice.
-- [playbook.md](playbook.md) — ricette pronte: problema reale → comandi esatti.
-- [errori.md](errori.md) — messaggi di errore di Git → causa e fix.
-
-## Convenzioni
-
-- Commit in stile [Conventional Commits](https://www.conventionalcommits.org/)
-  (`docs:`, `fix:`, ...).
-- Comandi pericolosi marcati con ⚠️.
-
-## Anteprima locale
-
-Il sito è generato con [Docsify](https://docsify.js.org/) (nessuna build).
-Per vederlo in locale serve un server statico (non basta aprire il file):
-
-```bash
-npx serve .          # poi aprire l'indirizzo mostrato
-# oppure
-python3 -m http.server
-```
+- [Glossario](glossario.md) — termini Git (EN) spiegati in italiano semplice; è la fonte terminologica.
+- [Playbook](playbook.md) — ricette pronte: "voglio fare X" → comandi esatti.
+- [Errori comuni](errori.md) — messaggi di errore di Git → causa e fix.
