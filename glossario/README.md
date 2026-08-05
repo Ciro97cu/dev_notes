@@ -1,10 +1,8 @@
-# Glossario
+# Indice completo
 
 Raccolta di termini di sviluppo **trasversali**: concetti che non appartengono a uno dei vault tematici dell'hub ([Git](../git/), [JavaScript](../javascript/), [TypeScript](../typescript/), [Angular](../angular/)) e che quindi trovano casa qui.
 
 Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** invece di duplicarlo (una fonte di verità).
-
-## Indice
 
 **[Web, browser e rete](docs/web-browser.md)**
 Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
