@@ -78,6 +78,101 @@
 })();
 
 
+// Backup dati: esporta/importa TUTTI i vault (stesso formato di NotesStore).
+(function () {
+  var btn = document.getElementById('hub-data-btn');
+  if (!btn) return;
+
+  var ICON_DB = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
+  var ICON_DL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
+  var ICON_UP = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
+
+  btn.innerHTML = ICON_DB;
+
+  var pop = document.createElement('div');
+  pop.id = 'hub-data-pop';
+  pop.innerHTML =
+    '<div class="dn-title">Dati — tutti i vault</div>' +
+    '<button type="button" data-act="export">' + ICON_DL + 'Esporta tutto su file…</button>' +
+    '<button type="button" data-act="import">' + ICON_UP + 'Importa da file…</button>' +
+    '<div class="dn-note">Backup completo di tutti i vault: progresso, segnalibri ed evidenziazioni.</div>';
+  document.body.appendChild(pop);
+
+  var fileIn = document.createElement('input');
+  fileIn.type = 'file'; fileIn.accept = 'application/json,.json';
+  fileIn.style.cssText = 'position:absolute;opacity:0;pointer-events:none';
+  document.body.appendChild(fileIn);
+
+  function close() { pop.classList.remove('open'); }
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    pop.classList.toggle('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!pop.contains(e.target) && e.target !== btn) close();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+  function exportAll() {
+    var PREFIX = 'dev-notes-', data = {};
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (key && key.indexOf(PREFIX) === 0) {
+          try { data[key] = JSON.parse(localStorage.getItem(key)); }
+          catch (_) { data[key] = localStorage.getItem(key); }
+        }
+      }
+    } catch (e) {}
+    var json = JSON.stringify({ app: 'dev-notes', version: 1, exportedAt: new Date().toISOString(), data: data }, null, 2);
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    a.download = 'dev-notes-dati.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(a.href);
+    close();
+  }
+
+  fileIn.addEventListener('change', function () {
+    var f = fileIn.files && fileIn.files[0];
+    if (!f) return;
+    if (f.size > 8 * 1024 * 1024) { alert('File troppo grande (max 8 MB).'); return; }
+    var merge = confirm('Importa "' + f.name + '".\n\nOK = unisci ai dati attuali\nAnnulla = sostituisci tutto');
+    var r = new FileReader();
+    r.onload = function (ev) {
+      try {
+        var obj = JSON.parse(ev.target.result);
+        if (!obj || typeof obj !== 'object' || !obj.data || typeof obj.data !== 'object')
+          throw new Error('formato non valido');
+        var PREFIX = 'dev-notes-';
+        var UNSAFE = { __proto__: 1, constructor: 1, prototype: 1 };
+        if (!merge) {
+          var toRemove = [];
+          for (var i = 0; i < localStorage.length; i++) {
+            var k = localStorage.key(i);
+            if (k && k.indexOf(PREFIX) === 0) toRemove.push(k);
+          }
+          toRemove.forEach(function (k) { try { localStorage.removeItem(k); } catch (_) {} });
+        }
+        Object.keys(obj.data).forEach(function (key) {
+          if (UNSAFE[key] || key.indexOf(PREFIX) !== 0) return;
+          try { localStorage.setItem(key, JSON.stringify(obj.data[key])); } catch (_) {}
+        });
+        location.reload();
+      } catch (e) { alert('Import non riuscito: ' + e.message); }
+    };
+    r.readAsText(f);
+  });
+
+  pop.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-act]');
+    if (!b) return;
+    if (b.getAttribute('data-act') === 'export') exportAll();
+    else if (b.getAttribute('data-act') === 'import') { fileIn.value = ''; fileIn.click(); close(); }
+  });
+})();
+
+
 // Puntini di sfondo con dispersione al cursore (canvas fisso alla viewport).
 // rAF solo mentre il cursore si muove (a riposo zero CPU); reduced-motion → statici.
 (function () {
