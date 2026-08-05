@@ -20,7 +20,7 @@ function playgroundTryPlugin(hook) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'pg-try';
-      btn.textContent = '▶ Prova nel playground';
+      btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right:.45em"><polygon points="6 3 20 12 6 21 6 3"/></svg>Prova nel playground';
       btn.addEventListener('click', function () {
         if (window.__pgOpen) window.__pgOpen(code.textContent.replace(/\n+$/, ''));
       });
