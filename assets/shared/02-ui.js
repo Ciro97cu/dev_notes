@@ -45,8 +45,9 @@
   var ICON_DB  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
   var ICON_DL  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
   var ICON_UP  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
-  var ICON_QR  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
-  var ICON_CAM = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
+  var ICON_QR   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
+  var ICON_CAM  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
+  var ICON_LINK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 
   function build() {
     if (document.getElementById('dn-data')) return;
@@ -61,6 +62,7 @@
         '<hr class="dn-sep">' +
         '<button type="button" data-act="qr-show" role="menuitem">' + ICON_QR + 'Condividi via QR / Link…</button>' +
         '<button type="button" data-act="qr-scan" role="menuitem">' + ICON_CAM + 'Scannerizza QR…</button>' +
+        '<button type="button" data-act="link-import" role="menuitem">' + ICON_LINK + 'Importa da link…</button>' +
         '<div class="dn-note"><strong>File</strong>: backup completo (incluse evidenziazioni). <strong>QR / Link</strong>: sincronizzazione rapida di progresso e segnalibri tra dispositivi.</div>' +
       '</div>' +
       '<input type="file" accept="application/json,.json" hidden>';
@@ -85,8 +87,9 @@
       var act = b.getAttribute('data-act');
       if (act === 'export')   { window.NotesStore.download(); close(); }
       else if (act === 'import')  { file.value = ''; file.click(); close(); }
-      else if (act === 'qr-show') { close(); window.dnQrOpen && window.dnQrOpen(); }
-      else if (act === 'qr-scan') { close(); window.dnScanOpen && window.dnScanOpen(); }
+      else if (act === 'qr-show')    { close(); window.dnQrOpen && window.dnQrOpen(); }
+      else if (act === 'qr-scan')    { close(); window.dnScanOpen && window.dnScanOpen(); }
+      else if (act === 'link-import') { close(); window.dnLinkImportOpen && window.dnLinkImportOpen(); }
     });
     file.addEventListener('change', function () {
       var f = file.files && file.files[0];

@@ -275,9 +275,59 @@
     });
   }
 
+  // ── Modal: incolla link di sync ───────────────────────────────────────────
+  function linkImportOpen() {
+    if (document.getElementById('dn-qr-modal')) return;
+    var modal = document.createElement('div');
+    modal.id = 'dn-qr-modal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Importa da link');
+    modal.innerHTML =
+      '<div class="dn-qr-box">' +
+        '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
+        '<h3>Importa da link</h3>' +
+        '<p>Incolla il link di sincronizzazione ricevuto dall\'altro dispositivo.</p>' +
+        '<textarea id="dn-link-input" placeholder="https://…?sync=…" rows="3" spellcheck="false"></textarea>' +
+        '<button class="dn-qr-btn" id="dn-link-go">Importa</button>' +
+      '</div>';
+    // stile textarea
+    var st = modal.querySelector('#dn-link-input');
+    st.style.cssText = 'width:100%;border-radius:8px;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);font:inherit;font-size:.85rem;padding:.6rem;resize:none;margin-bottom:.8rem;box-sizing:border-box';
+    document.body.appendChild(modal);
+
+    var input = modal.querySelector('#dn-link-input');
+    var goBtn = modal.querySelector('#dn-link-go');
+    input.focus();
+
+    goBtn.addEventListener('click', function () {
+      var url = input.value.trim();
+      if (!url) return;
+      var m = url.match(/[?&]sync=([^&#]+)/);
+      if (!m) { alert('Link non valido: parametro ?sync= non trovato.'); return; }
+      var raw = m[1];
+      function proceed() {
+        var obj = decode(raw);
+        if (!obj) { alert('Dati non leggibili: link corrotto o scaduto.'); return; }
+        modal.remove();
+        if (confirm('Importare i dati dal link?')) {
+          if (syncImport(obj)) location.reload();
+        }
+      }
+      if (window.LZString) { proceed(); return; }
+      loadLib(LIB_BASE + 'lz-string.min.js', proceed);
+    });
+
+    function close() { modal.remove(); }
+    modal.querySelector('.dn-qr-close').addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    modal.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
+
   // ── Esposizione pubblica ───────────────────────────────────────────────────
-  window.dnQrOpen   = qrOpen;
-  window.dnScanOpen = scanOpen;
+  window.dnQrOpen         = qrOpen;
+  window.dnScanOpen       = scanOpen;
+  window.dnLinkImportOpen = linkImportOpen;
 
   // ── Init: controlla ?sync= all'apertura ───────────────────────────────────
   if (document.readyState === 'loading') {
