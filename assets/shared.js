@@ -727,22 +727,20 @@ function studyProgressPlugin(hook, vm) {
     });
     window.NotesStore.write('read', read);
   }
-  // Una casella spuntabile accanto a ogni voce-capitolo della sidebar (non sul
-  // sotto-TOC degli heading, che hanno ?id= nell'href). Cliccarla segna letto/da
-  // leggere senza navigare; aggiorna la barra «X/N».
+  // Inserisce/aggiorna la casella accanto a ogni voce presente nella sidebar
+  // (capitoli + sottosezioni del capitolo aperto) e conta la barra su TUTTE le
+  // voci visibili, così la % si muove a ogni spunta (anche sulle sottosezioni).
+  // N include le sottosezioni del capitolo aperto, quindi si ricalcola navigando.
   function decorate() {
     var read = getRead();
     var links = [].slice.call(document.querySelectorAll('.sidebar-nav a'));
     var total = 0, done = 0;
     links.forEach(function (a) {
-      var href = a.getAttribute('href') || '';
-      var ident = href.replace(/^#/, '');              // /docs/x  oppure  /docs/x?id=sezione
+      var ident = (a.getAttribute('href') || '').replace(/^#/, '');   // /docs/x  o  /docs/x?id=sez
       var base = ident.split('?')[0];
       if (!base || DN_SKIP[base]) return;
-      var isChapter = ident.indexOf('?id=') < 0;        // le sottosezioni hanno ?id=
       var r = read.indexOf(ident) >= 0;
-      // la barra conta solo i capitoli (le sottosezioni sono in DOM solo per il capitolo attivo)
-      if (isChapter) { total++; if (r) done++; }
+      total++; if (r) done++;
       var chk = a.querySelector('.dn-check');
       if (!chk) {
         chk = document.createElement('span');
