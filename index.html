@@ -50,7 +50,8 @@
       color: var(--fg); font-size: 18px; line-height: 1; cursor: pointer;
       box-shadow: var(--card-shadow); transition: transform .15s ease;
     }
-    #theme-toggle:hover { transform: scale(1.08); }
+    #theme-toggle:hover { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); }
+    #theme-toggle svg { display: block; }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -311,7 +312,9 @@
       var KEY = 'dev-notes-theme';
       var btn = document.getElementById('theme-toggle');
       var isDark = function () { return document.documentElement.classList.contains('dark'); };
-      var paint = function () { btn.textContent = isDark() ? '☀️' : '🌙'; btn.title = isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro'; };
+      var SUN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+      var MOON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+      var paint = function () { btn.innerHTML = isDark() ? SUN : MOON; btn.title = isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro'; };
       paint();
       btn.addEventListener('click', function () {
         var d = !isDark();
