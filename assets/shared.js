@@ -269,8 +269,8 @@ function dnCloseAllPops(keep) {
     if (e.key === 'Escape') { var h = document.getElementById('dn-keyhelp'); if (h && h.classList.contains('open')) { h.classList.remove('open'); return; } }
     if (e.key === '/') {
       if (typing()) return;
-      var s = document.querySelector('.search input, input[type=search]');
-      if (s) { e.preventDefault(); s.focus(); if (s.select) s.select(); }
+      e.preventDefault();
+      dnSearchOpen();               // ricerca avanzata (overlay con toggle)
       return;
     }
     if (typing()) return;
@@ -278,6 +278,168 @@ function dnCloseAllPops(keep) {
     else if (e.key === 'ArrowRight') { var n = document.querySelector('.pagination-item--next a'); if (n) { e.preventDefault(); n.click(); } }
     else if (e.key === 't' || e.key === 'T') { var tt = document.getElementById('theme-toggle'); if (tt) { e.preventDefault(); tt.click(); } }
   });
+})();
+
+// ── Ricerca avanzata (stile VS Code: match case · parola intera · regex) ──────
+// Riusa l'indice full-text che docsify costruisce in localStorage
+// (`docsify.search.index` = { [path]: { [headingId]: {slug,title,body} } }) e ci
+// mette sopra un matcher configurabile. Overlay aperto con «/» o cliccando la
+// casella di ricerca della sidebar; il dropdown fuzzy di docsify è nascosto.
+var dnSearchState = { case: false, word: false, regex: false };
+
+function dnSearchReadIndex() {
+  // I vault condividono l'origine → localStorage condiviso e docsify namespacizza
+  // l'indice per path: possono esistere più chiavi `docsify.search.index*`, una
+  // per vault. Si sceglie quella del vault CORRENTE = l'indice che contiene la
+  // pagina attuale (fallback: l'ultima trovata).
+  var curPath = (location.hash || '').replace(/^#/, '').split('?')[0] || '/';
+  var candidates = [];
+  for (var i = 0; i < localStorage.length; i++) {
+    var k = localStorage.key(i);
+    if (!k || k.indexOf('docsify.search.index') !== 0) continue;
+    var obj; try { obj = JSON.parse(localStorage.getItem(k)); } catch (e) { continue; }
+    if (obj && typeof obj === 'object') candidates.push(obj);
+  }
+  if (!candidates.length) return [];
+  var chosen = null;
+  candidates.forEach(function (o) { if (o[curPath]) chosen = o; });
+  if (!chosen) chosen = candidates[candidates.length - 1];
+  var out = [];
+  Object.keys(chosen).forEach(function (path) {
+    var secs = chosen[path]; if (!secs || typeof secs !== 'object') return;
+    Object.keys(secs).forEach(function (hid) {
+      var s = secs[hid];
+      if (s && s.slug) out.push({ slug: s.slug, title: s.title || '', body: s.body || '', path: path });
+    });
+  });
+  return out;
+}
+function dnSearchRe(q) {
+  var pat = dnSearchState.regex ? q : q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  if (dnSearchState.word) { var L = '[A-Za-z0-9_À-ÿ]'; pat = '(?<!' + L + ')(?:' + pat + ')(?!' + L + ')'; }
+  return new RegExp(pat, 'g' + (dnSearchState.case ? '' : 'i'));
+}
+function dnSearchCount(text, re) { re.lastIndex = 0; var n = 0, m; while ((m = re.exec(text))) { n++; if (m.index === re.lastIndex) re.lastIndex++; if (n > 999) break; } return n; }
+function dnSearchSnippet(text, re) {
+  re.lastIndex = 0; var m = re.exec(text); if (!m) return '';
+  var i = m.index, start = Math.max(0, i - 55), end = Math.min(text.length, i + m[0].length + 90);
+  var slice = text.slice(start, end), out = '', last = 0, mm; re.lastIndex = 0;
+  while ((mm = re.exec(slice))) {
+    out += dnEscHtml(slice.slice(last, mm.index)) + '<mark>' + dnEscHtml(mm[0]) + '</mark>';
+    last = mm.index + mm[0].length; if (mm.index === re.lastIndex) re.lastIndex++;
+  }
+  out += dnEscHtml(slice.slice(last));
+  return (start > 0 ? '… ' : '') + out + (end < text.length ? ' …' : '');
+}
+function dnSearchRun() {
+  var box = document.getElementById('dn-search'); if (!box) return;
+  var q = box.querySelector('.dn-s-input').value.trim();
+  var res = box.querySelector('.dn-s-results');
+  if (!q) { res.innerHTML = '<div class="dn-s-empty">Digita per cercare in questo vault.</div>'; return; }
+  var re; try { re = dnSearchRe(q); } catch (e) { res.innerHTML = '<div class="dn-s-empty">Espressione regolare non valida.</div>'; return; }
+  var idx = dnSearchReadIndex();
+  if (!idx.length) { res.innerHTML = '<div class="dn-s-empty">Indice non ancora pronto: apri qualche pagina e riprova.</div>'; return; }
+  var hits = [];
+  idx.forEach(function (s) {
+    var ct = dnSearchCount(s.title, new RegExp(re.source, re.flags));
+    var cb = dnSearchCount(s.body, new RegExp(re.source, re.flags));
+    if (ct + cb === 0) return;
+    hits.push({ s: s, score: ct * 8 + cb });
+  });
+  if (!hits.length) { res.innerHTML = '<div class="dn-s-empty">Nessun risultato per «' + dnEscHtml(q) + '».</div>'; return; }
+  hits.sort(function (a, b) { return b.score - a.score; });
+  var html = '';
+  hits.slice(0, 60).forEach(function (h, ix) {
+    var snip = dnSearchSnippet(h.s.body || h.s.title, new RegExp(re.source, re.flags));
+    var page = h.s.path.split('/').filter(Boolean).pop() || h.s.path;
+    html += '<a class="dn-s-item' + (ix === 0 ? ' sel' : '') + '" href="' + dnEscHtml(h.s.slug) + '">' +
+      '<span class="dn-s-title">' + dnEscHtml(h.s.title || '(senza titolo)') + '<span class="dn-s-path">' + dnEscHtml(page) + '</span></span>' +
+      (snip ? '<div class="dn-s-snip">' + snip + '</div>' : '') + '</a>';
+  });
+  res.innerHTML = html;
+}
+function dnSearchClose() { var b = document.getElementById('dn-search'); if (b) b.classList.remove('open'); }
+function dnSearchOpen() {
+  var box = dnSearchBuild();
+  box.classList.add('open');
+  var inp = box.querySelector('.dn-s-input');
+  inp.focus(); inp.select();
+  dnSearchRun();
+}
+function dnSearchBuild() {
+  var box = document.getElementById('dn-search');
+  if (box) return box;
+  box = document.createElement('div');
+  box.id = 'dn-search';
+  box.innerHTML = '<div class="dn-s-box" role="dialog" aria-label="Ricerca">' +
+    '<div class="dn-s-top">' +
+      '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="opacity:.55;flex:0 0 auto"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>' +
+      '<input class="dn-s-input" type="text" placeholder="Cerca nel vault…" autocomplete="off" spellcheck="false" aria-label="Cerca">' +
+      '<div class="dn-s-toggles">' +
+        '<button class="dn-s-tog" type="button" data-t="case" title="Maiuscole/minuscole" aria-pressed="false">Aa</button>' +
+        '<button class="dn-s-tog" type="button" data-t="word" title="Parola intera" aria-pressed="false">W</button>' +
+        '<button class="dn-s-tog" type="button" data-t="regex" title="Espressione regolare" aria-pressed="false">.*</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="dn-s-results"></div>' +
+    '<div class="dn-s-hint">Invio: apri il primo risultato · ↑↓: scorri · Esc: chiudi</div>' +
+  '</div>';
+  document.body.appendChild(box);
+  var inp = box.querySelector('.dn-s-input'), timer = null;
+  inp.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(dnSearchRun, 110); });
+  inp.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { var sel = box.querySelector('.dn-s-item.sel') || box.querySelector('.dn-s-item'); if (sel) sel.click(); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      var items = [].slice.call(box.querySelectorAll('.dn-s-item')); if (!items.length) return;
+      e.preventDefault();
+      var cur = box.querySelector('.dn-s-item.sel'), ci = items.indexOf(cur);
+      if (cur) cur.classList.remove('sel');
+      var ni = e.key === 'ArrowDown' ? (ci + 1) % items.length : (ci - 1 + items.length) % items.length;
+      items[ni].classList.add('sel'); items[ni].scrollIntoView({ block: 'nearest' });
+    }
+  });
+  box.querySelector('.dn-s-toggles').addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.dn-s-tog'); if (!b) return;
+    var t = b.getAttribute('data-t'); dnSearchState[t] = !dnSearchState[t];
+    b.classList.toggle('active', dnSearchState[t]); b.setAttribute('aria-pressed', dnSearchState[t] ? 'true' : 'false');
+    dnSearchRun(); inp.focus();
+  });
+  box.querySelector('.dn-s-results').addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('.dn-s-item')) setTimeout(dnSearchClose, 0);
+  });
+  box.addEventListener('click', function (e) { if (e.target === box) dnSearchClose(); });
+  return box;
+}
+// init: CSS + intercetta la casella di docsify (apre l'overlay) + nasconde il dropdown fuzzy
+(function () {
+  var css = [
+    '#dn-search{position:fixed;inset:0;z-index:2147483500;display:none;justify-content:center;align-items:flex-start;background:rgba(0,0,0,.45)}',
+    '#dn-search.open{display:flex}',
+    '#dn-search .dn-s-box{margin-top:8vh;width:min(680px,92vw);max-height:80vh;display:flex;flex-direction:column;background:var(--bg-soft);color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.45);overflow:hidden}',
+    '#dn-search .dn-s-top{display:flex;align-items:center;gap:.5rem;padding:.6rem .7rem;border-bottom:1px solid var(--border)}',
+    '#dn-search .dn-s-input{flex:1;min-width:0;border:0;background:transparent;color:var(--text);font:inherit;font-size:1rem;outline:none}',
+    '#dn-search .dn-s-toggles{display:flex;gap:.25rem;flex:0 0 auto}',
+    '#dn-search .dn-s-tog{width:30px;height:28px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--text);cursor:pointer;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;opacity:.7}',
+    '#dn-search .dn-s-tog:hover{opacity:1;border-color:var(--link)}',
+    '#dn-search .dn-s-tog.active{opacity:1;color:var(--link);border-color:var(--link);background:color-mix(in srgb,var(--link) 12%,transparent)}',
+    '#dn-search .dn-s-results{overflow:auto;padding:.35rem}',
+    '#dn-search .dn-s-item{display:block;padding:.5rem .6rem;border-radius:9px;text-decoration:none;color:inherit}',
+    '#dn-search .dn-s-item:hover,#dn-search .dn-s-item.sel{background:rgba(127,127,127,.14)}',
+    '#dn-search .dn-s-title{font-weight:650;font-size:.92rem}',
+    '#dn-search .dn-s-path{font-size:.72rem;opacity:.5;margin-left:.45rem;font-weight:400}',
+    '#dn-search .dn-s-snip{font-size:.82rem;opacity:.8;margin-top:.15rem;line-height:1.4}',
+    '#dn-search .dn-s-snip mark{background:color-mix(in srgb,var(--link) 32%,transparent);color:inherit;border-radius:3px;padding:0 .1em}',
+    '#dn-search .dn-s-empty{padding:1.1rem;opacity:.6;font-size:.9rem;text-align:center}',
+    '#dn-search .dn-s-hint{padding:.4rem .7rem;border-top:1px solid var(--border);font-size:.72rem;opacity:.5}',
+    '.search .results-panel{display:none !important}'   // via il dropdown fuzzy di docsify
+  ].join('');
+  var st = document.createElement('style'); st.id = 'dn-search-styles'; st.textContent = css;
+  (document.head || document.documentElement).appendChild(st);
+  document.addEventListener('focusin', function (e) {
+    var t = e.target;
+    if (t && t.matches && t.matches('.search input')) { t.blur(); dnSearchOpen(); }
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dnSearchClose(); });
 })();
 
 // Stile (condiviso) delle 3 sezioni "Come funziona" sulla cover: layout a colonne e
