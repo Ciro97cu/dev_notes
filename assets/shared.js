@@ -108,9 +108,9 @@ function resumePlugin(hook, vm) {
   var SKIP = { '/': 1, '/00-index': 1, '/README': 1, '/_coverpage': 1 };
   var current = null, timer = null;
 
-  // id dell'ultima heading (h1/h2/h3) il cui bordo superiore è sopra la soglia = sezione corrente
+  // id dell'ultima heading (h1..h4) il cui bordo superiore è sopra la soglia = sezione corrente
   function currentId() {
-    var hs = document.querySelectorAll('.markdown-section h1[id], .markdown-section h2[id], .markdown-section h3[id]');
+    var hs = document.querySelectorAll('.markdown-section h1[id], .markdown-section h2[id], .markdown-section h3[id], .markdown-section h4[id]');
     var id = '';
     for (var i = 0; i < hs.length; i++) {
       if (hs[i].getBoundingClientRect().top <= 120) id = hs[i].id; else break;
