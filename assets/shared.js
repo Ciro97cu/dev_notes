@@ -749,14 +749,13 @@ function studyProgressPlugin(hook, vm) {
   function decorate() {
     var read = getRead();
     var links = [].slice.call(document.querySelectorAll('.sidebar-nav a'));
-    var total = 0, done = 0, chT = 0, chD = 0;
+    var chT = 0, chD = 0;
     links.forEach(function (a) {
       var ident = (a.getAttribute('href') || '').replace(/^#/, '');   // /docs/x  o  /docs/x?id=sez
       var base = ident.split('?')[0];
       if (!base || DN_SKIP[base]) return;
       var r = read.indexOf(ident) >= 0;
-      total++; if (r) done++;
-      if (ident.indexOf('?id=') < 0) { chT++; if (r) chD++; }         // conteggio a livello di CAPITOLO (stabile) per l'hub
+      if (ident.indexOf('?id=') < 0) { chT++; if (r) chD++; }         // barra e hub: SOLO capitoli (denominatore stabile)
       var chk = a.querySelector('.dn-check');
       if (!chk) {
         chk = document.createElement('span');
@@ -774,8 +773,8 @@ function studyProgressPlugin(hook, vm) {
       chk.classList.toggle('checked', r);
       chk.setAttribute('aria-checked', r ? 'true' : 'false');
     });
-    updateMeter(done, total);
-    // progressione a livello di capitolo, per la % sulle card dell'hub (scrittura raw: niente evento)
+    updateMeter(chD, chT);   // barra = capitoli completati / totale capitoli (stabile)
+    // stessa progressione persistita per la % sulle card dell'hub (scrittura raw: niente evento)
     if (chT) { try { localStorage.setItem(window.NotesStore.keyFor('progress'), JSON.stringify({ d: chD, t: chT })); } catch (e) {} }
   }
   function updateMeter(done, total) {
@@ -789,7 +788,7 @@ function studyProgressPlugin(hook, vm) {
       nav.insertBefore(m, nav.firstChild);
     }
     var pct = total ? Math.round(done / total * 100) : 0;
-    var txt = done + '/' + total + ' letti';
+    var txt = done + '/' + total + ' capitoli';
     var t = m.querySelector('.dn-progress-text'); if (t.textContent !== txt) t.textContent = txt;
     var pc = m.querySelector('.dn-progress-pct'); var ps = pct + '%'; if (pc.textContent !== ps) pc.textContent = ps;
     m.querySelector('.dn-progress-bar span').style.width = pct + '%';
