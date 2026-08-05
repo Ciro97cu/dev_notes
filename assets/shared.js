@@ -635,12 +635,11 @@ function resumePlugin(hook, vm) {
     '.dn-progress-label{font-size:.74rem;opacity:.75;margin-bottom:.35rem;display:flex;justify-content:space-between}',
     '.dn-progress-bar{height:6px;border-radius:4px;background:rgba(127,127,127,.22);overflow:hidden}',
     '.dn-progress-bar span{display:block;height:100%;width:0;background:var(--link);transition:width .3s ease}',
-    // spunta ✓ sui capitoli letti nella sidebar
-    '.sidebar-nav a.dn-read::before,.sidebar a.dn-read::before{content:"\\2713";color:var(--link);font-weight:700;margin-right:.35em}',
-    // bottone "segna come letto" a fine capitolo
-    '.dn-read-toggle{display:inline-flex;align-items:center;gap:.5rem;margin:2.4rem 0 .5rem;padding:.55rem .9rem;border:1px solid var(--border);border-radius:9px;background:var(--bg-soft);color:var(--text);font:inherit;font-size:.9rem;cursor:pointer}',
-    '.dn-read-toggle:hover{border-color:var(--link)}',
-    '.dn-read-toggle.is-read{border-color:var(--link);color:var(--link)}',
+    // casella "letto" accanto a ogni voce-capitolo della sidebar
+    '.sidebar-nav a .dn-check{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;flex:0 0 auto;margin-right:.5em;border:1.5px solid var(--border);border-radius:4px;vertical-align:-2px;cursor:pointer;transition:background .15s ease,border-color .15s ease}',
+    '.sidebar-nav a .dn-check:hover{border-color:var(--link)}',
+    '.sidebar-nav a .dn-check.checked{background:var(--link);border-color:var(--link)}',
+    '.sidebar-nav a .dn-check.checked::after{content:"";width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}',
     // stella preferiti sulle sotto-sezioni: discreta, compare all'hover del titolo (o se è preferita)
     '.dn-star{margin-left:.4rem;vertical-align:baseline;border:0;background:transparent;color:inherit;cursor:pointer;opacity:0;padding:0 .15em;line-height:0;transition:opacity .15s ease,color .15s ease}',
     '.dn-star svg{width:.82em;height:.82em;vertical-align:-.06em}',
@@ -697,17 +696,37 @@ function studyProgressPlugin(hook, vm) {
     if (i >= 0) arr.splice(i, 1); else arr.push(p);
     window.NotesStore.write('read', arr);
   }
+  // Una casella spuntabile accanto a ogni voce-capitolo della sidebar (non sul
+  // sotto-TOC degli heading, che hanno ?id= nell'href). Cliccarla segna letto/da
+  // leggere senza navigare; aggiorna la barra «X/N».
   function decorate() {
     var read = getRead();
-    var links = [].slice.call(document.querySelectorAll('.sidebar-nav a, .sidebar a'));
+    var links = [].slice.call(document.querySelectorAll('.sidebar-nav a'));
     var total = 0, done = 0;
     links.forEach(function (a) {
-      var p = dnPathOf(a.getAttribute('href'));
+      var href = a.getAttribute('href') || '';
+      if (href.indexOf('?id=') >= 0) return;           // salta il sotto-TOC (heading interni)
+      var p = dnPathOf(href);
       if (!p || DN_SKIP[p]) return;
       total++;
       var r = read.indexOf(p) >= 0;
       if (r) done++;
-      a.classList.toggle('dn-read', r);
+      var chk = a.querySelector('.dn-check');
+      if (!chk) {
+        chk = document.createElement('span');
+        chk.className = 'dn-check';
+        chk.setAttribute('role', 'checkbox');
+        chk.setAttribute('tabindex', '0');
+        chk.setAttribute('title', 'Segna come letto');
+        (function (path) {
+          function flip(e) { e.preventDefault(); e.stopPropagation(); toggle(path); decorate(); }
+          chk.addEventListener('click', flip);
+          chk.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') flip(e); });
+        })(p);
+        a.insertBefore(chk, a.firstChild);
+      }
+      chk.classList.toggle('checked', r);
+      chk.setAttribute('aria-checked', r ? 'true' : 'false');
     });
     updateMeter(done, total);
   }
@@ -728,27 +747,7 @@ function studyProgressPlugin(hook, vm) {
     m.querySelector('.dn-progress-bar span').style.width = pct + '%';
     m.style.display = total ? '' : 'none';
   }
-  function addToggle(path) {
-    var sec = document.querySelector('.markdown-section');
-    if (!sec) return;
-    var old = sec.querySelector('.dn-read-toggle'); if (old) old.remove();
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'dn-read-toggle';
-    function sync() {
-      var r = isRead(path);
-      b.classList.toggle('is-read', r);
-      b.innerHTML = (r ? DN_ICON.check : DN_ICON.circle) + '<span>' + (r ? 'Letto' : 'Segna come letto') + '</span>';
-    }
-    sync();
-    b.addEventListener('click', function () { toggle(path); sync(); decorate(); });
-    sec.appendChild(b);
-  }
-  hook.doneEach(function () {
-    var path = (vm.route && vm.route.path) || '';
-    decorate();
-    if (path && !DN_SKIP[path]) addToggle(path);
-  });
+  hook.doneEach(function () { decorate(); });
   document.addEventListener('notesstore:change', function (e) {
     if (e.detail && (e.detail.name === 'read' || e.detail.name === '*')) decorate();
   });
