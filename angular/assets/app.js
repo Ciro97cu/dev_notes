@@ -76,5 +76,5 @@ window.$docsify = {
   search: { placeholder: 'Cerca…', noData: 'Nessun risultato', depth: 4 },
   copyCode: { buttonText: 'Copia', successText: 'Copiato' },
   // plugin condivisi (../assets/shared.js) + wikilink locale
-  plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, resumePlugin, coverDotsPlugin]
+  plugins: [wikilinkPlugin, mermaidPlugin, collapsibleAnswersPlugin, themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, coverDotsPlugin]
 };

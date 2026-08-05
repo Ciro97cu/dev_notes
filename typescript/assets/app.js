@@ -65,5 +65,5 @@ window.$docsify = {
     info:    { label: 'Info', className: 'note', icon: 'icon-note' }
   },
   // plugin condivisi (../assets/shared.js) + «Prova» locale
-  plugins: [playgroundTryPlugin, themeTogglePlugin, resumePlugin, coverDotsPlugin]
+  plugins: [playgroundTryPlugin, themeTogglePlugin, resumePlugin, studyProgressPlugin, bookmarksPlugin, coverDotsPlugin]
 };
