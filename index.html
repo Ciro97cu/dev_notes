@@ -214,32 +214,43 @@
 
     /* Barra di progresso lettura: striscia sul bordo inferiore della card, con il
        riempimento animato "a brace/fiamma" nel colore del vault. + % in alto a destra. */
-    .card-prog-wrap { display: flex; align-items: center; gap: .55rem; margin-top: .7rem; }
+    .card-prog-wrap { display: flex; align-items: center; gap: .6rem; margin-top: .8rem; }
     .card-prog {
-      flex: 1 1 auto; height: 8px;
-      border-radius: 5px; background: rgba(128, 128, 128, .2);
-      overflow: hidden;
+      flex: 1 1 auto; height: 10px;
+      border-radius: 6px; background: rgba(128, 128, 128, .22);
+      overflow: visible;                         /* le fiamme possono uscire sopra la barra */
     }
     .card-prog .fill {
       display: block;                            /* è uno <span>: senza questo, inline → width/height ignorati */
       position: relative; height: 100%; width: 0;
-      border-radius: 5px;
-      background: var(--accent);                 /* colore pieno del vault (niente color-mix) */
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 60%), var(--accent);
       box-shadow: 0 0 8px var(--accent);
-      animation: dn-flick 1.15s ease-in-out infinite alternate;
+      animation: dn-flick .9s ease-in-out infinite alternate;
       transition: width .5s ease;
     }
-    /* luccichio bianco che scorre: effetto brace/fiamma sul riempimento */
-    .card-prog .fill::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, .6) 50%, transparent 100%);
-      background-size: 55% 100%; background-repeat: no-repeat;
-      animation: dn-ember 1.5s linear infinite;
+    /* due lingue di fuoco "cartoon" sulla punta del riempimento (goccia rovesciata = fiamma) */
+    .card-prog .fill::before, .card-prog .fill::after {
+      content: ""; position: absolute; bottom: 0;
+      border-radius: 0 50% 50% 50%;              /* goccia; ruotata a 45° punta in alto */
+      transform-origin: center;
     }
-    @keyframes dn-ember { from { background-position: -55% 0; } to { background-position: 160% 0; } }
-    @keyframes dn-flick { 0% { filter: brightness(.9); } 50% { filter: brightness(1.22); } 100% { filter: brightness(1.03); } }
+    .card-prog .fill::before {                   /* fiamma esterna, colore del vault */
+      right: -5px; width: 14px; height: 18px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: dn-flame1 .5s ease-in-out infinite alternate;
+    }
+    .card-prog .fill::after {                    /* fiammella interna più chiara (nucleo caldo) */
+      right: -2px; width: 8px; height: 11px;
+      background: rgba(255, 255, 255, .8);
+      animation: dn-flame2 .36s ease-in-out infinite alternate;
+    }
+    @keyframes dn-flame1 { 0% { transform: translateY(-28%) rotate(43deg) scale(1, 1); } 100% { transform: translateY(-46%) rotate(47deg) scale(1.08, 1.24); } }
+    @keyframes dn-flame2 { 0% { transform: translateY(-22%) rotate(44deg) scale(.9, 1); }  100% { transform: translateY(-42%) rotate(46deg) scale(1.05, 1.28); } }
+    @keyframes dn-flick  { 0% { filter: brightness(.97); } 50% { filter: brightness(1.28) saturate(1.12); } 100% { filter: brightness(1.06); } }
     .card-pct { flex: 0 0 auto; font-size: .74rem; font-weight: 700; color: var(--accent); }
-    @media (prefers-reduced-motion: reduce) { .card-prog .fill, .card-prog .fill::after { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .card-prog .fill, .card-prog .fill::before, .card-prog .fill::after { animation: none; } }
 
     footer {
       position: relative;
