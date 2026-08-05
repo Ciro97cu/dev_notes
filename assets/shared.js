@@ -54,6 +54,8 @@ window.NotesStore = (function () {
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
   function isArr(x) { return Object.prototype.toString.call(x) === '[object Array]'; }
+  // Chiavi vietate: evitano il prototype pollution in fase di merge di dati importati.
+  function unsafeKey(k) { return k === '__proto__' || k === 'constructor' || k === 'prototype'; }
   function mergeInto(key, incoming) {
     var cur; try { cur = JSON.parse(localStorage.getItem(key)); } catch (e) { cur = null; }
     var val = incoming;
@@ -65,19 +67,23 @@ window.NotesStore = (function () {
       });
       val = out;
     } else if (cur && incoming && typeof cur === 'object' && typeof incoming === 'object') {
-      val = cur; Object.keys(incoming).forEach(function (kk) { val[kk] = incoming[kk]; });  // oggetto → shallow-merge
+      val = cur;
+      Object.keys(incoming).forEach(function (kk) { if (!unsafeKey(kk)) val[kk] = incoming[kk]; });  // oggetto → shallow-merge
     }
-    localStorage.setItem(key, JSON.stringify(val));
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
   }
+  // Importa SOLO chiavi `dev-notes-*` (niente scritture arbitrarie), validando i tipi.
   function importObj(obj, mode) {           // mode: 'merge' | 'replace'
-    if (!obj || !obj.data) throw new Error('file non valido');
+    if (!obj || typeof obj !== 'object' || !obj.data || typeof obj.data !== 'object') throw new Error('file non valido');
     Object.keys(obj.data).forEach(function (key) {
-      if (key.indexOf(PREFIX) !== 0) return;
+      if (typeof key !== 'string' || key.indexOf(PREFIX) !== 0 || unsafeKey(key)) return;
       if (mode === 'merge') mergeInto(key, obj.data[key]);
-      else localStorage.setItem(key, JSON.stringify(obj.data[key]));
+      else { try { localStorage.setItem(key, JSON.stringify(obj.data[key])); } catch (e) {} }
     });
   }
   function importFile(file, mode, done) {
+    if (!file) { done && done(new Error('nessun file')); return; }
+    if (file.size > 8 * 1024 * 1024) { done && done(new Error('file troppo grande (max 8 MB)')); return; }
     var r = new FileReader();
     r.onload = function () {
       try { importObj(JSON.parse(r.result), mode); done && done(null); }
@@ -97,6 +103,9 @@ window.NotesStore = (function () {
     '#dn-data{position:fixed;top:62px;right:16px;z-index:100}',
     '#dn-data-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
     '#dn-data-btn:hover{border-color:var(--link);color:var(--link)}',
+    // hover uniforme di tutti i pulsanti fissi (icona che cambia colore, niente fondo pieno) + micro-zoom
+    '#dn-data-btn,#dn-fav-btn,#dn-hl-btn{transition:transform .15s ease,color .2s ease,border-color .2s ease}',
+    '#dn-data-btn:hover,#dn-fav-btn:hover,#dn-hl-btn:hover{transform:scale(1.08)}',
     '.dn-pop{position:absolute;top:48px;right:0;min-width:210px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
     '.dn-pop.open{display:block}',
     '.dn-pop .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem .2rem}',
@@ -388,7 +397,7 @@ function dnEscHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { retur
 // mostra ✓ nella sidebar e una barra "X/N" in cima alla navigazione, con un
 // bottone "Segna come letto" a fine capitolo. Robusto: salva i path, non citazioni.
 function studyProgressPlugin(hook, vm) {
-  function getRead() { return window.NotesStore.read('read', []); }
+  function getRead() { var v = window.NotesStore.read('read', []); return Array.isArray(v) ? v : []; }
   function isRead(p) { return getRead().indexOf(p) >= 0; }
   function toggle(p) {
     var arr = getRead(), i = arr.indexOf(p);
@@ -455,7 +464,7 @@ function studyProgressPlugin(hook, vm) {
 // "Preferiti": stella accanto al titolo del capitolo + dock fisso con l'elenco
 // (click per navigare, ✕ per rimuovere). Persistito via NotesStore (path + titolo).
 function bookmarksPlugin(hook, vm) {
-  function get() { return window.NotesStore.read('favorites', []); }
+  function get() { var v = window.NotesStore.read('favorites', []); return Array.isArray(v) ? v.filter(function (x) { return x && typeof x.path === 'string'; }) : []; }
   function idx(p) { var a = get(), r = -1; a.forEach(function (x, i) { if (x.path === p) r = i; }); return r; }
   function toggle(p, title) { var a = get(), i = idx(p); if (i >= 0) a.splice(i, 1); else a.push({ path: p, title: title }); window.NotesStore.write('favorites', a); }
   function remove(p) { var a = get(), i = idx(p); if (i >= 0) { a.splice(i, 1); window.NotesStore.write('favorites', a); } }
@@ -595,10 +604,13 @@ function dnRender(path) {
   dnRendered = [];
   Object.keys(dnHL).forEach(function (c) { dnHL[c].clear(); });
   var sec = document.querySelector('.markdown-section'); if (!sec) return;
-  var list = (window.NotesStore.read('highlights', {})[path]) || [];
-  if (!list.length) return;
+  var store = window.NotesStore.read('highlights', {});
+  if (!store || typeof store !== 'object') return;
+  var list = store[path];
+  if (!Array.isArray(list) || !list.length) return;
   var index = dnTextIndex(sec);
   list.forEach(function (hl) {
+    if (!hl || typeof hl.q !== 'string' || !hl.q) return;  // voce malformata: ignora
     var range = dnLocate(index, hl); if (!range) return;   // orfana: si conserva, si salta
     var c = dnHL[hl.c] ? hl.c : 'yellow';
     dnHL[c].add(range);
@@ -619,7 +631,9 @@ function dnCapture(color) {
   var item = { c: color, scope: dnScopeFor(range.startContainer), q: quote,
                pre: index.text.slice(Math.max(0, gs - 32), gs), suf: index.text.slice(ge, ge + 32) };
   var all = window.NotesStore.read('highlights', {}), p = dnPath();
-  (all[p] = all[p] || []).push(item);
+  if (!all || typeof all !== 'object') all = {};
+  if (!Array.isArray(all[p])) all[p] = [];
+  all[p].push(item);
   window.NotesStore.write('highlights', all);
   sel.removeAllRanges();
   dnRender(p);
@@ -630,7 +644,9 @@ function dnEraseAt(x, y) {
     for (var j = 0; j < rects.length; j++) {
       var r = rects[j];
       if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
-        var it = dnRendered[i].item, all = window.NotesStore.read('highlights', {}), p = dnPath(), list = all[p] || [];
+        var it = dnRendered[i].item, all = window.NotesStore.read('highlights', {}), p = dnPath();
+        if (!all || typeof all !== 'object') all = {};
+        var list = Array.isArray(all[p]) ? all[p] : [];
         for (var k = 0; k < list.length; k++) {
           if (list[k].q === it.q && list[k].pre === it.pre && list[k].suf === it.suf && list[k].c === it.c) { list.splice(k, 1); break; }
         }

@@ -516,11 +516,7 @@ body { font-family: var(--font-sans); }
   transition: transform 0.15s ease, background 0.2s ease;
 }
 
-#theme-toggle:hover {
-  transform: scale(1.08);
-  background: var(--js-yellow);
-  color: #000;
-}
+#theme-toggle:hover { transform: scale(1.08); color: var(--link); border-color: var(--link); }
 
 @media (max-width: 768px) {
   #theme-toggle {
