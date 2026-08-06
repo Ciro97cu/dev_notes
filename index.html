@@ -2,6 +2,21 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
+  <!-- Content Security Policy: l'hub non ha dipendenze esterne (tutto self), quindi è
+       stretta. 'unsafe-inline' serve solo agli <style> iniettati a runtime da hub.js e
+       agli attributi style= nelle modali; img-src data: per il QR (canvas → data URI);
+       niente eval, niente connect esterni → nessuna esfiltrazione anche in caso di XSS. -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data:;
+    font-src 'self';
+    connect-src 'self';
+    media-src 'self' blob:;
+    object-src 'none';
+    base-uri 'self';
+  ">
   <title>Dev Notes — Appunti di sviluppo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Dev Notes — hub degli appunti di sviluppo: Git, JavaScript, TypeScript, Angular.">

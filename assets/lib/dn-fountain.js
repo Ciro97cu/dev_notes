@@ -17,6 +17,11 @@
 (function (root) {
   'use strict';
 
+  // Limiti anti-DoS: un QR malevolo/corrotto (header con numeri enormi) non deve poter
+  // far allocare array/buffer giganti. Valori larghi rispetto all'uso reale (K~500,
+  // chunk 300, total ~180 KB): un payload legittimo non li avvicina nemmeno.
+  var MAX_K = 20000, MAX_CHUNK = 8192, MAX_TOTAL = 4 * 1024 * 1024;
+
   // ── base64 (Uint8Array ⇄ ASCII) ─────────────────────────────────────────
   var B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   var B64INV = (function () { var m = {}; for (var i = 0; i < B64.length; i++) m[B64.charAt(i)] = i; return m; })();
@@ -173,6 +178,8 @@
           fCs = parseInt(parts[3], 10), fTot = parseInt(parts[4], 10);
       var payload = parts.slice(5).join('|');   // il base64 non contiene '|', ma per sicurezza
       if (!(fK > 0) || !(fCs > 0) || !(fTot >= 0)) return { ok: false, done: false, have: solvedCount, K: K };
+      if (fK > MAX_K || fCs > MAX_CHUNK || fTot > MAX_TOTAL || fTot > fK * fCs)
+        return { ok: false, done: false, have: solvedCount, K: K };   // fuori dai limiti o incoerente: ignora
       if (K === null) { K = fK; chunkSize = fCs; total = fTot; solved = new Array(K); soliton = buildSoliton(K); }
       else if (fK !== K || fCs !== chunkSize || fTot !== total) {
         return { ok: false, done: solvedCount === K, have: solvedCount, K: K };   // stream diverso: ignora

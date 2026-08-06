@@ -111,10 +111,14 @@
     '#dn-qr-video{width:100%;border-radius:8px;max-height:280px;object-fit:cover;background:#000;display:block}',
     '#dn-qr-scan-hint{font-size:.8rem;color:var(--fg);opacity:.7;text-align:center;margin:.6rem 0 0}',
     '#dn-qr-canvas{display:flex;justify-content:center;align-items:center;box-sizing:border-box;width:100%;margin-bottom:.9rem;background:#fff;border-radius:8px;padding:.75rem;min-height:210px}',
-    // il QR non deve mai sforare: min-width:0 sblocca il restringimento del flex item
-    // (default min-width:auto lo terrebbe alla dimensione intrinseca 260px → overflow su box stretti);
-    // max-width:100% lo tiene dentro #dn-qr-canvas senza upscalare (nitido a 260 sui box larghi).
-    '#dn-qr-canvas canvas,#dn-qr-canvas img{display:block!important;max-width:100%!important;height:auto!important;min-width:0}',
+    // Mostra SOLO il canvas: davidshimjs dopo il primo render passerebbe a un <img>
+    // (toDataURL) nascondendo il canvas, ma makeCode() aggiorna il canvas → l'img
+    // resterebbe ferma sul frame 0 e l'animazione sembrerebbe congelata. Forzando il
+    // canvas visibile e l'img nascosta, ogni frame di makeCode() si vede davvero.
+    // min-width:0 sblocca il restringimento del flex item (default min-width:auto lo
+    // terrebbe a 260px → overflow su box stretti); max-width:100% lo contiene senza upscalare.
+    '#dn-qr-canvas canvas{display:block!important;max-width:100%!important;height:auto!important;min-width:0}',
+    '#dn-qr-canvas img{display:none!important}',
     // barra di avanzamento (blocchi catturati) per lo scan animato
     '.dn-prog{height:8px;border-radius:5px;background:rgba(127,127,127,.25);overflow:hidden;margin:.7rem 0 .35rem}',
     '.dn-prog>span{display:block;height:100%;width:0;background:var(--grad-a);transition:width .2s ease}',
@@ -248,8 +252,9 @@
     return obj.data;
   }
 
-  // Parametri del QR animato: blocchi piccoli = QR meno denso e più facile da inquadrare.
-  var CHUNK = 300, FPS = 6, QR_PX = 260;
+  // Parametri del QR animato: blocchi piccoli = QR meno denso e più facile da inquadrare;
+  // FPS basso = ogni frame resta stabile più a lungo (la camera fa in tempo a leggerlo).
+  var CHUNK = 200, FPS = 5, QR_PX = 260;
 
   // ── Modal comune ──────────────────────────────────────────────────────────
   function makeModal(label) {
@@ -283,14 +288,18 @@
           '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
           '<h3>Condividi via QR animato</h3>' +
           '<div id="dn-qr-canvas"></div>' +
-          '<p id="dn-qr-scan-hint">Inquadra con «Scannerizza QR animato» sull\'altro dispositivo. Tieni aperto finché non completa (' + enc.K + ' blocchi).</p>' +
+          '<p id="dn-qr-scan-hint">Inquadra con «Scannerizza QR animato» sull\'altro dispositivo. Tieni aperto finché non completa (' + enc.K + ' blocchi) · <span id="dn-qr-frame">frame 1</span></p>' +
         '</div>';
       document.body.appendChild(modal);
       modal.querySelector('.dn-qr-close').addEventListener('click', modal._close);
 
       var box = modal.querySelector('#dn-qr-canvas');
+      var fc  = modal.querySelector('#dn-qr-frame');
       var qr = new QRCode(box, { text: enc.next(), width: QR_PX, height: QR_PX, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.L });
-      var timer = setInterval(function () { qr.makeCode(enc.next()); }, Math.round(1000 / FPS));
+      var n = 1;
+      var timer = setInterval(function () {
+        try { qr.makeCode(enc.next()); n++; if (fc) fc.textContent = 'frame ' + n; } catch (e) {}
+      }, Math.round(1000 / FPS));
 
       var origClose = modal._close;
       modal._close = function () { clearInterval(timer); origClose(); };
