@@ -1,18 +1,13 @@
 # GitHub
 
 ## Concetto
-GitHub è una piattaforma online che ospita repository Git remoti, con funzioni di
-collaborazione (issue, pull request, review, ecc.). Git è lo strumento; GitHub è
-uno dei posti dove tenere il repo remoto.
+GitHub è una piattaforma online che ospita repository Git remoti e vi costruisce sopra una serie di funzioni di collaborazione, come la gestione delle issue, le pull request e la revisione del codice. Conviene tenere ben distinti i due nomi: Git è lo strumento di versionamento vero e proprio, mentre GitHub è soltanto uno dei posti in cui conservare un repository remoto.
 
 ## Repo pubblico vs privato
-- **Pubblico** → visibile a chiunque: tutti vedono, scaricano, propongono modifiche.
-- **Privato** → visibile solo a proprietari e collaboratori autorizzati.
+Un repository su GitHub può essere pubblico o privato. Un repository **pubblico** è visibile a chiunque: tutti possono vederne il codice, scaricarlo e proporre modifiche. Un repository **privato**, al contrario, è accessibile solo al proprietario e ai collaboratori esplicitamente autorizzati.
 
 ## README
-File di testo (di solito `README.md`) nella cartella principale. Descrive il
-progetto: scopo, installazione, uso, esempi, come contribuire, licenza. GitHub lo
-mostra in automatico aprendo il repo.
+Il README è un file di testo, di solito chiamato `README.md`, collocato nella cartella principale del progetto. Serve a descriverlo — lo scopo, come si installa e si usa, qualche esempio, le indicazioni per contribuire e la licenza — ed è la prima cosa che chi arriva sul repo si trova davanti, perché GitHub lo mostra in automatico appena si apre il repository.
 
 ## Comandi
 | Comando | Cosa fa |
@@ -49,22 +44,16 @@ traccia dello stato di un branch sul remoto. Serve a sapere se il proprio branch
 avanti o indietro rispetto al server. `git branch -r` li elenca.
 
 ## clone vs init
-- Progetto nuovo, da zero → `git init`.
-- Progetto già esistente su un remoto → `git clone`.
+La scelta tra i due comandi dipende dal punto di partenza: per un progetto nuovo, creato da zero, si usa `git init`, mentre per un progetto che esiste già su un remoto si usa `git clone` per portarsene una copia in locale.
 
 ## GitHub Gists
-Frammenti di codice o note condivisibili. Ogni gist è un repo Git (clonabile,
-versionato). Possono essere pubblici (tutti) o segreti (solo con il link).
+I Gist di GitHub sono frammenti di codice o note che si possono condividere al volo. Ogni gist è a tutti gli effetti un piccolo repository Git, quindi è clonabile e versionato come qualsiasi altro, e può essere pubblico, visibile a tutti, oppure segreto, raggiungibile solo da chi ne ha il link.
 
 ## Pull Request (PR)
-Richiesta formale di unire un branch (di solito un feature branch) in un altro (di
-solito `main` / `develop`). Abilita la review del codice prima dell'integrazione →
-mantiene qualità e stabilità.
+Una pull request è la richiesta formale di unire un branch — tipicamente un feature branch — dentro un altro, di solito `main` o `develop`. Il suo valore è aprire uno spazio per la review del codice prima che l'integrazione avvenga davvero, e questo aiuta a mantenere la qualità e la stabilità del progetto.
 
 ## Forking
-Il fork crea una copia indipendente di un repo remoto sul proprio account. Ci si
-lavora liberamente senza toccare l'originale. Usato per contribuire a progetti di
-altri (poi si propone una PR).
+Il fork crea una copia indipendente di un repository remoto sul proprio account, sulla quale si può lavorare liberamente senza toccare in alcun modo l'originale. È il meccanismo con cui si contribuisce ai progetti altrui: si lavora sul proprio fork e poi si propongono le modifiche al progetto di partenza tramite una pull request.
 
 ## Collegamenti
 - [Repository](02-repository.md)

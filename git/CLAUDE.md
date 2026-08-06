@@ -18,13 +18,16 @@ Ogni file di appunti deve rispettarle: sono il filtro usato in validazione e cor
 9. **Linguaggio semplice** — parole comuni; niente vocaboli ricercati se non indispensabili.
 10. **Registro impersonale** — teoria in forma impersonale ("si usa `git commit`…"); i passi delle ricette all'infinito/imperativo ("Eseguire `git revert`…").
 
+## Tono e chiarezza
+Vale la **voce "professore"** del [root](../CLAUDE.md): la **spiegazione** (regola 9) va in prosa narrativa e distesa, non telegrafica. Eccezione del vault: i **comandi** restano in tabella (comando/effetto) e i **passi delle ricette** all'infinito/imperativo (regola 10) — la prosa narrativa è la teoria *attorno* ai comandi, non i comandi stessi.
+
 ## Scheletro di un file topic
 
 ```markdown
 # <Titolo>
 
 ## Concetto
-Cosa è e perché, 2–4 righe.
+Cosa è e perché, in **prosa narrativa e distesa** (non 2-4 righe telegrafiche).
 
 ## Comandi
 | Comando | Cosa fa |

@@ -1,9 +1,7 @@
 # Interni di Git
 
 ## La cartella .git
-È il cuore del repo, creata da `git init` o `git clone`. Contiene tutti i dati e i
-metadati per la cronologia, i branch, ecc. Cancellandola si perde tutta la storia,
-ma i file del progetto (lo stato attuale) restano.
+La cartella `.git` è il cuore del repository: viene creata da `git init` o da `git clone` e contiene tutti i dati e i metadati che compongono la cronologia, i branch, i tag e la configurazione. È qui che vive davvero il repository, non nei file di progetto: cancellando questa cartella si perde l'intera storia, mentre i file del progetto — cioè lo stato attuale così com'è sul disco — restano al loro posto, semplicemente non più tracciati.
 
 | Elemento | Scopo |
 |----------|-------|
@@ -15,57 +13,36 @@ ma i file del progetto (lo stato attuale) restano.
 | `config` | Configurazione locale del repo |
 
 ## config
-Il file `.git/config` ha le impostazioni valide **solo per questo repo**. Hanno la
-precedenza sulla config globale (`~/.gitconfig`) e di sistema. Utile per usare
-nome/email diversi per progetto.
+Il file `.git/config` raccoglie le impostazioni valide **solo per questo repository**, che hanno la precedenza sulla configurazione globale (`~/.gitconfig`) e su quella di sistema. È il posto giusto, per esempio, quando si vogliono usare nome ed email diversi in un progetto specifico.
 
-Sezioni principali:
-- `[core]` → impostazioni di base del repo.
-- `[remote "origin"]` → URL del remoto e regole di fetch.
-- `[branch "main"]` → upstream del branch locale (`remote = origin`, `merge = refs/heads/main`).
+Le sezioni principali sono:
+- `[core]` — le impostazioni di base del repo.
+- `[remote "origin"]` — l'URL del remoto e le regole di fetch.
+- `[branch "main"]` — l'upstream del branch locale (`remote = origin`, `merge = refs/heads/main`).
 
-Si modifica a mano o, meglio, con `git config`.
+Il file si può modificare a mano, ma di solito conviene farlo con `git config`.
 
 ## objects/ — il database interno
-Git non salva i file come appaiono, ma come "oggetti" compressi. Quattro tipi:
-- **Blob** → il contenuto di un file (solo dati, niente nome né permessi).
-- **Tree** → una directory: elenco di puntatori a blob (file) e ad altri tree
-  (sottocartelle), con nomi e permessi.
-- **Commit** → punta a un tree (stato completo del progetto) + metadati: commit
-  genitore, autore, committer, data, messaggio. La sequenza di commit = la storia.
-- **Tag** → nome leggibile che punta a un commit (oggetto annotated tag).
+Git non memorizza i file così come appaiono, ma li scompone in "oggetti" compressi, ciascuno identificato dal proprio hash. Gli oggetti sono di quattro tipi. Un **blob** custodisce il contenuto vero e proprio di un file, e nient'altro: solo i dati, senza il nome né i permessi. Un **tree** rappresenta una directory, cioè un elenco di puntatori ai blob (i file) e ad altri tree (le sottocartelle), stavolta corredati di nomi e permessi. Un **commit** punta a un singolo tree — che fissa lo stato completo del progetto in quel momento — e vi aggiunge i metadati: il commit genitore, l'autore, il committer, la data e il messaggio; è la catena di questi commit, ciascuno che rimanda al precedente, a formare la storia. Un **tag**, nella sua forma annotated, è infine un oggetto che dà un nome leggibile a un commit.
 
 ### Hashing
-Git calcola un hash **SHA-1** (40 caratteri esadecimali, es. `a1e8fb59...`) sul
-contenuto di ogni oggetto → è il suo id univoco.
-- **Integrità** → cambia un bit → cambia l'hash. La storia non si altera senza che
-  si noti.
-- **Efficienza** → file con contenuto identico = un solo blob, spazio risparmiato.
+Su ogni oggetto Git calcola un hash **SHA-1**, una stringa di 40 caratteri esadecimali (per esempio `a1e8fb59...`) derivata dal contenuto dell'oggetto stesso: quell'hash ne diventa l'identificatore univoco. Da questa scelta discendono due proprietà importanti. La prima è l'**integrità**: poiché l'hash dipende dal contenuto, basta che cambi un solo bit perché cambi anche l'hash, così la storia non può essere alterata senza che la modifica salti all'occhio. La seconda è l'**efficienza**: due file con contenuto identico producono lo stesso hash e vengono quindi salvati come un unico blob, risparmiando spazio.
 
 > Nota: SHA-1 è il default; Git supporta anche SHA-256 come opzione.
 
-Gli oggetti stanno in sottocartelle nominate con i **primi 2 caratteri** dell'hash;
-il resto è il nome del file. Es: `a1e8fb...` → `.git/objects/a1/e8fb...`. Evita
-troppi file in una sola directory.
+Gli oggetti sono conservati in sottocartelle il cui nome è dato dai **primi 2 caratteri** dell'hash, mentre il resto dell'hash fa da nome del file: l'oggetto `a1e8fb...`, per esempio, finisce in `.git/objects/a1/e8fb...`. Questa suddivisione evita di accumulare troppi file in un'unica directory.
 
 ## Reflog
-`git reflog` registra tutte le posizioni passate di `HEAD` (e delle punte dei
-branch) nel repo **locale**. A differenza di `git log` (storia pubblica e lineare),
-è un diario privato delle proprie azioni, **non** condiviso con `git push`. Serve a
-recuperare lavoro che sembra perso dopo operazioni distruttive (`reset`, branch
-cancellato).
+Il comando `git reflog` registra tutte le posizioni che `HEAD` (e le punte dei branch) hanno assunto nel tempo, ma solo nel repository **locale**. A differenza di `git log`, che mostra la storia pubblica e lineare del progetto, il reflog è una sorta di diario privato delle proprie azioni, **non** condiviso con `git push`. Il suo scopo è recuperare lavoro che sembra perso dopo operazioni distruttive, come un `reset` o la cancellazione di un branch.
 
 ```bash
 git reflog                 # elenco delle mosse di HEAD
 git reflog show            # alias di: git log -g --abbrev-commit --pretty=oneline
 ```
-Ogni riga: hash, puntatore (`HEAD@{1}`), azione (commit/reset/checkout/merge),
-messaggio.
+Ogni riga riporta l'hash, il puntatore (`HEAD@{1}`), l'azione compiuta (commit, reset, checkout, merge) e un messaggio.
 
 ### Qualificatori
-- **Per indice** → `HEAD@{0}` = ora, `HEAD@{1}` = mossa precedente. Anche `main@{2}`.
-- **Per tempo** → `HEAD@{"5 minutes ago"}`, `main@{"2 hours ago"}`,
-  `HEAD@{yesterday}`, `HEAD@{2025-10-25 09:00:00}`.
+I riferimenti del reflog si possono qualificare in due modi. Il primo è per indice, dove `HEAD@{0}` indica la posizione attuale, `HEAD@{1}` la mossa precedente e così via; la stessa notazione vale anche per un branch, come `main@{2}`. Il secondo è per tempo, indicando un momento tra parentesi graffe, per esempio `HEAD@{"5 minutes ago"}`, `main@{"2 hours ago"}`, `HEAD@{yesterday}` o `HEAD@{2025-10-25 09:00:00}`.
 
 ### Recuperare
 Annullare un `reset --hard`:
@@ -80,9 +57,7 @@ git branch nome-recuperato b2c1d3e  # ricrea il branch su quel commit
 ```
 
 ### Limiti
-- Non permanente: le voci scadono (in genere ~90 giorni, ~30 per i commit non più
-  raggiungibili). Ottimo per errori recenti, inaffidabile per lavoro perso da tempo.
-- Strettamente **locale**: non condiviso con i collaboratori.
+Il reflog ha però due limiti importanti. Non è permanente: le sue voci scadono col tempo (in genere dopo circa 90 giorni, e circa 30 per i commit non più raggiungibili), quindi è ottimo per rimediare a errori recenti ma inaffidabile per recuperare lavoro perso da tempo. Ed è strettamente **locale**: non viene condiviso con i collaboratori né inviato con `git push`.
 
 ## Collegamenti
 - [Annullare](08-annullare.md)

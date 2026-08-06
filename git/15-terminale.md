@@ -1,7 +1,6 @@
 # Terminale (Mac/Linux)
 
-Comandi base di shell per navigare e gestire file/cartelle. Servono a muoversi nel
-filesystem prima e durante l'uso di Git.
+Prima ancora di usare Git conviene sapersi muovere nella shell, perché ogni comando Git si impartisce trovandosi in una certa cartella del progetto. Questa pagina raccoglie i comandi di base per navigare nel filesystem e gestire file e cartelle, quelli che servono a spostarsi e a preparare il terreno prima e durante l'uso di Git.
 
 ## Navigazione
 | Comando | Cosa fa |

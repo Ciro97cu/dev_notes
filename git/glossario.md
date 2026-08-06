@@ -9,34 +9,34 @@ terminologia: se un termine è qui, si usa sempre questa parola negli appunti.
 
 ## Termini
 
-- **repository (repo)** — la cartella di progetto tracciata da Git, con tutta la sua storia.
-- **working directory** — i file così come si vedono e si modificano sul disco.
-- **staging area (index)** — zona intermedia dove si preparano le modifiche prima del commit.
-- **commit** — una fotografia salvata dei file tracciati in un dato momento, con un id (hash).
-- **hash (SHA-1)** — stringa di 40 caratteri esadecimali che identifica in modo univoco un oggetto Git.
-- **HEAD** — puntatore al branch (o commit) su cui si sta lavorando ora.
-- **branch** — una linea di sviluppo separata.
-- **main / master** — il branch principale (`main` è lo standard attuale, `master` il vecchio nome).
-- **detached HEAD** — stato in cui HEAD punta direttamente a un commit invece che a un branch.
-- **merge** — unione delle modifiche di due branch in uno solo.
-- **fast-forward** — merge senza nuovo commit: il puntatore del branch avanza e basta.
-- **merge conflict** — stesse righe cambiate in modo diverso su due branch; vanno risolte a mano.
-- **rebase** — riapplicare i commit di un branch su un'altra base, riscrivendo la storia.
-- **stash** — deposito temporaneo di modifiche non ancora committate.
-- **tag** — nome fisso assegnato a un commit, di solito per le release (es. `v1.0.0`).
-- **SemVer (Semantic Versioning)** — schema di versionamento `MAJOR.MINOR.PATCH` con regole precise su quando incrementare ogni numero.
-- **remote** — una copia del repo su un altro server (es. GitHub).
-- **origin** — nome di default del remoto principale.
-- **upstream** — il branch remoto a cui un branch locale è collegato.
-- **remote tracking branch** — branch locale (es. `origin/main`) che riflette lo stato di un branch remoto.
-- **clone** — copia locale di un repo remoto.
-- **fetch** — scarica gli aggiornamenti dal remoto senza unirli.
-- **pull** — `fetch` + `merge`: scarica e unisce.
+- **repository (repo)** — è la cartella di un progetto tracciata da Git, che ne conserva i file insieme all'intera storia delle modifiche.
+- **working directory** — sono i file del progetto così come si vedono e si modificano sul disco in un dato momento.
+- **staging area (index)** — è la zona intermedia in cui si preparano le modifiche da includere nel prossimo commit.
+- **commit** — è una fotografia salvata dei file tracciati in un dato momento, identificata da un id (hash).
+- **hash (SHA-1)** — è la stringa di 40 caratteri esadecimali che identifica in modo univoco un oggetto Git.
+- **HEAD** — è il puntatore al branch (o al commit) su cui si sta lavorando in quel momento.
+- **branch** — è una linea di sviluppo separata, che procede in parallelo rispetto alle altre.
+- **main / master** — è il branch principale di un repository (`main` è il nome standard di oggi, `master` quello storico).
+- **detached HEAD** — è lo stato in cui HEAD punta direttamente a un commit anziché a un branch.
+- **merge** — è l'unione delle modifiche di due branch in uno solo.
+- **fast-forward** — è un merge senza nuovo commit, in cui il puntatore del branch si limita ad avanzare.
+- **merge conflict** — si verifica quando le stesse righe vengono cambiate in modo diverso su due branch, e vanno riconciliate a mano.
+- **rebase** — consiste nel riapplicare i commit di un branch su un'altra base, riscrivendone la storia.
+- **stash** — è un deposito temporaneo delle modifiche non ancora committate.
+- **tag** — è un nome fisso assegnato a un commit, di solito per marcare una release (es. `v1.0.0`).
+- **SemVer (Semantic Versioning)** — è lo schema di versionamento `MAJOR.MINOR.PATCH`, con regole precise su quando incrementare ciascun numero.
+- **remote** — è una copia del repository ospitata su un altro server (per esempio GitHub).
+- **origin** — è il nome di default del remoto principale.
+- **upstream** — è il branch remoto a cui un branch locale è collegato.
+- **remote tracking branch** — è un branch locale (come `origin/main`) che riflette lo stato di un branch sul remoto.
+- **clone** — è la copia locale di un repository remoto.
+- **fetch** — scarica gli aggiornamenti dal remoto senza però unirli al branch locale.
+- **pull** — è un `fetch` seguito da un `merge`: scarica gli aggiornamenti e li unisce.
 - **push** — invia i commit locali al remoto.
-- **fork** — copia indipendente di un repo remoto sul proprio account.
-- **pull request (PR)** — richiesta di unire un branch in un altro, con review del codice.
-- **blob** — oggetto Git che contiene il contenuto di un file.
-- **tree** — oggetto Git che rappresenta una directory.
-- **reflog** — registro locale delle posizioni passate di HEAD; serve a recuperare lavoro perso.
-- **blame** — comando che mostra, riga per riga, l'ultimo commit che ha toccato un file.
-- **ORIG_HEAD** — riferimento al punto in cui era HEAD prima di un'operazione rischiosa (merge, reset); utile per tornare indietro.
+- **fork** — è una copia indipendente di un repository remoto creata sul proprio account.
+- **pull request (PR)** — è la richiesta di unire un branch in un altro, sottoponendo le modifiche a una review del codice.
+- **blob** — è l'oggetto Git che contiene il contenuto di un file.
+- **tree** — è l'oggetto Git che rappresenta una directory.
+- **reflog** — è il registro locale delle posizioni passate di HEAD, utile a recuperare lavoro che sembra perso.
+- **blame** — è il comando che mostra, riga per riga, l'ultimo commit che ha toccato un file.
+- **ORIG_HEAD** — è il riferimento al punto in cui si trovava HEAD prima di un'operazione rischiosa (merge, reset), utile per tornare indietro.

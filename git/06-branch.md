@@ -1,17 +1,13 @@
 # Branch
 
 ## Concetto
-Un branch (ramo) è una linea di sviluppo parallela. Permette di lavorare su nuove
-funzionalità o fix senza toccare il codice principale. Più persone lavorano in
-parallelo e poi uniscono (merge) il lavoro.
+Un branch (in italiano "ramo") è una linea di sviluppo parallela e indipendente all'interno dello stesso repository. Serve a lavorare su una nuova funzionalità o su una correzione tenendola isolata dal codice principale, che resta intatto finché il lavoro non è pronto. È anche il meccanismo che rende possibile la collaborazione: più persone possono procedere ognuna sul proprio ramo e poi riunire i rispettivi contributi con un'operazione di merge.
 
 ## master e main
-Storicamente il branch principale si chiamava `master`. Lo standard attuale è
-`main`. Stesso concetto: il ramo principale, la versione ufficiale e stabile.
+Storicamente il branch principale di un repository si chiamava `master`, mentre lo standard adottato oggi è `main`. Il nome è cambiato ma il concetto è lo stesso: si tratta del ramo di riferimento, quello che custodisce la versione ufficiale e stabile del progetto.
 
 ## HEAD
-`HEAD` è un puntatore che indica su quale branch (o commit) si sta lavorando ora.
-Un segnalibro: "Git lavora qui". Cambiando branch, `HEAD` si sposta.
+`HEAD` è il puntatore che indica su quale branch (o, più raramente, su quale commit) si sta lavorando in questo momento. Lo si può immaginare come un segnalibro che dice a Git "il lavoro corrente è qui": ogni volta che si cambia branch, `HEAD` si sposta a seguire il nuovo ramo attivo.
 
 ## Comandi
 | Comando | Cosa fa |
@@ -46,14 +42,10 @@ git branch -D feature    # ⚠️ forza, anche con modifiche non unite (si perde
 ```
 
 ## checkout vs switch
-`git checkout` fa due cose (cambia branch **e** ripristina file) → ambiguo. Da Git
-2.23 le funzioni sono separate:
-- cambiare branch → `git switch`
-- ripristinare file → `git restore` (vedi [Annullare](08-annullare.md))
+Il comando `git checkout` è storicamente ambiguo perché fa due cose molto diverse: cambia branch **e** ripristina file. Proprio per questo, a partire da Git 2.23, le due funzioni sono state separate in comandi distinti: per cambiare branch si usa `git switch`, mentre per ripristinare file si usa `git restore` (si veda [Annullare](08-annullare.md)).
 
 ## Errori frequenti
-- `error: Cannot delete branch 'X' checked out at ...` → si è sul branch da
-  cancellare. Spostarsi prima con `git switch <altro>`.
+- `error: Cannot delete branch 'X' checked out at ...` — significa che si sta cercando di cancellare proprio il branch su cui ci si trova. Occorre spostarsi prima su un altro branch con `git switch <altro>` e poi ripetere la cancellazione.
 
 ## Collegamenti
 - [Merge](07-merge.md)

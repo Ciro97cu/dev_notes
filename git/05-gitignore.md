@@ -1,16 +1,12 @@
 # .gitignore
 
 ## Concetto
-`.gitignore` dice a Git quali file o cartelle **non** tracciare: file temporanei,
-config personali, output di build, ecc. Evita di aggiungerli per errore al repo.
+Il file `.gitignore` indica a Git quali file o cartelle **non** deve tracciare, come i file temporanei, le configurazioni personali dell'ambiente o gli output di build: serve a tenere fuori dal repository tutto ciò che non ha senso versionare, evitando così di aggiungerlo per errore.
 
-Ogni riga è una regola (pattern). Funziona **solo sui file non ancora tracciati**:
-se un file è già stato aggiunto, va prima rimosso dal tracking (vedi sotto).
+Ogni riga del file è una regola espressa come pattern. Un aspetto importante da tenere presente è che `.gitignore` agisce **solo sui file non ancora tracciati**: se un file è già stato aggiunto al repository, elencarlo qui non basta a farlo ignorare, e occorre prima rimuoverlo dal tracking come mostrato più avanti.
 
 ## Dove scrivere le regole
-- `.gitignore` nella cartella del progetto → condiviso con tutti, regole comuni.
-- `.git/info/exclude` → regole locali, non condivise.
-- File globale dell'utente → ignora file in tutti i progetti (es. file dell'editor).
+Le regole possono stare in tre posti diversi, a seconda di quanto devono valere. Il file `.gitignore` posto nella cartella del progetto viene versionato e condiviso con tutti i collaboratori, ed è il posto giusto per le esclusioni comuni al progetto. Il file `.git/info/exclude` contiene invece regole locali, valide solo sulla propria copia e non condivise con gli altri. Infine un file di ignore globale dell'utente permette di ignorare gli stessi file in tutti i propri progetti, tipicamente quelli generati dal proprio editor.
 
 ## Sintassi dei pattern
 | Pattern | Significato |
@@ -21,8 +17,8 @@ se un file è già stato aggiunto, va prima rimosso dal tracking (vedi sotto).
 | `file?.txt` | `?` = un singolo carattere, tranne `/` |
 | `[a-zA-Z]` | intervallo di caratteri |
 | `!regola` | annulla un'esclusione precedente (re-include un file) |
-| `cartella/` | barra finale → vale solo per le cartelle, non per i file |
-| `/file` | barra iniziale o in mezzo → regola relativa alla posizione del `.gitignore` |
+| `cartella/` | la barra finale limita la regola alle sole cartelle, non ai file |
+| `/file` | la barra iniziale o intermedia rende la regola relativa alla posizione del `.gitignore` |
 | `**/foo` | `foo` in qualsiasi cartella |
 | `abc/**` | tutto dentro `abc`, a qualsiasi profondità |
 | `a/**/b` | `b` dentro `a`, anche con sottocartelle in mezzo |
@@ -45,8 +41,7 @@ node_modules/
 ```
 
 ## Casi comuni
-File già tracciato che ora va ignorato: aggiungerlo a `.gitignore`, poi toglierlo
-dal tracking (il file resta sul disco):
+Quando un file è già tracciato e lo si vuole ignorare da ora in poi, va prima aggiunto a `.gitignore` e poi rimosso dal tracking; il file rimane comunque sul disco, viene solo tolto dal controllo di versione:
 ```bash
 git rm --cached <file>
 ```

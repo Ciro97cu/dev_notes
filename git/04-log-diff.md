@@ -1,8 +1,7 @@
 # Log e Diff
 
 ## git log
-Mostra la cronologia dei commit, dal più recente al più vecchio: hash, autore,
-data, messaggio.
+Il comando `git log` mostra la cronologia dei commit, elencandoli dal più recente al più vecchio. Per ciascuno riporta l'hash che lo identifica, l'autore, la data e il messaggio, così da poter ripercorrere l'evoluzione del progetto un commit dopo l'altro.
 
 | Comando | Cosa fa |
 |---------|---------|
@@ -16,11 +15,10 @@ data, messaggio.
 git log --oneline
 git log -n 3          # ultimi 3 commit
 ```
-Default: tutti i commit, nessun limite fisso.
+Senza opzioni `git log` elenca tutti i commit, senza un limite prefissato.
 
 ## git diff
-Mostra le differenze tra versioni: working directory, staging, commit, branch.
-Evidenzia le righe aggiunte, modificate o cancellate.
+Il comando `git diff` mostra le differenze tra due versioni dei file: a seconda di come lo si invoca può confrontare il working directory, la staging area, un commit o un intero branch. L'output evidenzia riga per riga cosa è stato aggiunto, modificato o cancellato.
 
 | Comando | Confronta |
 |---------|-----------|
@@ -38,12 +36,10 @@ git diff main develop             # differenze tra due branch
 git diff main develop -- app.js   # solo su un file
 git diff a1b2c3d e4f5g6h          # tra due commit
 ```
-`--staged` e `--cached` sono equivalenti. Al posto degli hash si possono usare
-nomi di branch o tag.
+Le opzioni `--staged` e `--cached` sono equivalenti, e al posto degli hash dei commit si possono indicare anche nomi di branch o di tag.
 
 ## git blame
-Mostra, per ogni riga di un file, l'ultimo commit che l'ha modificata: hash,
-autore, data. Utile per capire chi ha introdotto una riga e quando.
+Il comando `git blame` mostra, per ogni singola riga di un file, l'ultimo commit che l'ha toccata, con il relativo hash, autore e data. È lo strumento con cui si risale a chi ha introdotto una determinata riga e a quando, di solito per capire il perché di una scelta o per rintracciare l'origine di un bug.
 
 | Comando | Cosa fa |
 |---------|---------|
@@ -54,7 +50,7 @@ autore, data. Utile per capire chi ha introdotto una riga e quando.
 git blame app.js
 git blame -L 30,45 app.js   # solo una porzione
 ```
-Sola lettura: non modifica nulla.
+È un comando di sola lettura: non modifica nulla nel repo.
 
 ## Collegamenti
 - [Commit](03-commit.md)

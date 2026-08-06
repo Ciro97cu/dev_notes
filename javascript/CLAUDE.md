@@ -12,11 +12,8 @@ Struttura: contenuti in `docs/libroN/` (`libro1`…`libro6`), **un capitolo per 
 - **Quando il libro è superato**: se un'affermazione di YDKJS (2015, fino a ES6) **oggi non è più vera** perché il linguaggio è cambiato, e se ne è **certi al 100%**, si corregge e si **segnala** con un callout `> [!info] Oggi` che contrappone *"il libro dice X; oggi vale Y"*. Se invece è solo una semplificazione ancora valida, si resta **fedeli** al libro (non si "corregge" il libro).
 - **Novità post-libro**: le feature JS non coperte da YDKJS (da ES2016 in poi) **non** si infilano nei capitoli fedeli al libro, ma vanno nella sezione dedicata e distaccata `docs/moderno/` ("JavaScript moderno — oltre YDKJS"), organizzata **per versione ES** e verificata su [MDN](https://developer.mozilla.org/).
 
-## Tono e chiarezza (registro professore)
-Come nel vault Angular: si spiega come farebbe **un professore appassionato e chiaro**, con prosa **fluida e distesa**.
-- **Registro impersonale** (*"si usa"*, *"si ottiene"*, *"conviene"*); **mai** la seconda persona (*"usi"*, *"puoi"*, *"vedi"*) nella teoria — l'imperativo solo nei passi operativi.
-- Ogni sezione apre con una **frase-definizione in parole semplici**; ogni tecnicismo si introduce spiegandolo, senza però tagliare la profondità tecnica.
-- **Prosa, non elenchi spezzati**; niente `→` come connettivo di prosa (si usano le congiunzioni).
+## Tono e chiarezza
+Vale la **voce "professore"** del [root](../CLAUDE.md): prosa narrativa e distesa, impersonale, ogni tecnicismo spiegato. Qui conta soprattutto **non tagliare la profondità tecnica** su temi insidiosi (coercizione, `this`, closure, async): accessibile è *come* si spiega, non *quanto* si semplifica.
 
 ## Struttura di ogni capitolo
 1. **Spiegazione** del contenuto — sintetica ma completa, con esempi di codice.

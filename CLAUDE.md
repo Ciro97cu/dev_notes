@@ -4,11 +4,16 @@ Monorepo di appunti di studio personali, pubblicati come **hub** di 6 siti [docs
 
 Questo file raccoglie le regole **comuni a tutti i vault**. Ogni cartella ha un proprio `CLAUDE.md` con le regole **specifiche** del vault, che ha la precedenza dove più stringente. Entrambi si caricano da soli: il generale sempre, quello di cartella quando lavori su file di quel sottoalbero.
 
-## Lingua e registro
-- **Prosa in italiano**, diretta, senza fronzoli.
-- **Registro impersonale**: *"si usa"*, *"è possibile"*, *"si consideri"*. Mai "io"; "tu" evitato. Nei passi operativi delle ricette è ammesso l'infinito o l'imperativo (*"Eseguire…"*).
+## Lingua e registro — voce "professore"
+Questo è il registro **comune a tutti i vault**: gli altri `CLAUDE.md` lo richiamano e dichiarano solo le proprie eccezioni.
+
+- **Prosa in italiano, registro "professore"**: si spiega come farebbe un docente appassionato e chiaro a chi parte da zero — **prosa narrativa e distesa**, non telegrafica; ma diretta e **senza fronzoli** (distesa non vuol dire prolissa).
+- **Apertura in parole semplici**: ogni sezione/voce apre con una frase-definizione (cos'è, a cosa serve) prima dei dettagli; niente incipit telegrafici senza verbo. Ogni tecnicismo si introduce spiegandolo la prima volta, senza però tagliare la profondità tecnica.
+- **Registro impersonale**: *"si usa"*, *"è possibile"*, *"si consideri"*. Mai "io"; la seconda persona ("tu"/"puoi"/"vedi") è evitata nella teoria. Nei passi operativi delle ricette è ammesso l'infinito o l'imperativo (*"Eseguire…"*).
+- **Prosa, non elenchi spezzati** quando serve spiegare un concetto o un ragionamento; bullet e tabelle **solo** per enumerazioni vere (valori ammessi, stati, comandi). **Niente `→`** come connettivo di prosa nelle note: si usano le congiunzioni (*"così"*, *"quindi"*, *"perché"*, *"invece"*).
 - **Filename, titoli di sezione, nomi di API e keyword in inglese** — non tradurre i termini tecnici.
-- Quando un termine tecnico compare per la prima volta senza contesto, aprire una breve parentesi esplicativa.
+
+**Eccezioni** (dettagliate nei `CLAUDE.md` di cartella): le note atomiche `concetti/` di Angular restano **concise** (definizione essenziale + snippet); il glossario resta **contenuto** (spiegazione breve ma discorsiva, poi rimando); in Git i **comandi** stanno in tabella e i **passi delle ricette** vanno all'imperativo — la prosa narrativa è la spiegazione *attorno* ai comandi.
 
 ## Precisione contestuale (keyword di codice)
 Quando la prosa descrive un **meccanismo di codice**, citare il costrutto esatto in backtick invece di parafrasarlo con una parola italiana. Vale soprattutto per le keyword (`this`, `new`, `super`, …) facili da fondere in un dimostrativo: non *"questo tab"* quando il codice fa `currentTab() === this`, ma *"confronto d'identità con `this`"* (l'istanza corrente). Obiettivo: prosa fluida **e** ancorata al codice.
