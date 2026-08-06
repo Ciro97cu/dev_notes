@@ -47,8 +47,8 @@ Con 256 combinazioni un byte rappresenta tutti i caratteri di uno standard come 
 
 **Valore massimo — la regola (2ⁿ) − 1.** Rappresentando numeri interi da zero, una combinazione è occupata dallo `0`, quindi il valore più alto è il numero di combinazioni **meno uno**:
 
-- 3 bit → 2³ = 8 combinazioni → valore massimo `7` (da 0 a 7).
-- 8 bit → 2⁸ = 256 combinazioni → valore massimo `255` (da 0 a 255).
+- Con 3 bit si hanno 2³ = 8 combinazioni, quindi il valore massimo è `7` (da 0 a 7).
+- Con 8 bit si hanno 2⁸ = 256 combinazioni, quindi il valore massimo è `255` (da 0 a 255).
 
 > [!tip]
 > **Dai byte ai caratteri.** ASCII usa 1 byte per carattere (128 caratteri base, 256 con le estensioni): sufficiente per l'alfabeto latino. Per alfabeti non latini ed emoji serve **Unicode**, tipicamente con codifica **UTF-8**, che usa da 1 a 4 byte per carattere restando compatibile con ASCII sui primi 128 codici.

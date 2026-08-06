@@ -15,7 +15,7 @@ var somma = function (a, b) { return a + b; };
 ```
 
 Concetti chiave:
-- **Transpilazione** — traduce da un linguaggio di alto livello a un altro (qui: JS moderno → JS più vecchio ma equivalente). Diverso dalla **compilazione**, che traduce verso il linguaggio macchina.
+- **Transpilazione** — traduce da un linguaggio di alto livello a un altro (qui: da JS moderno a JS più vecchio ma equivalente). Diverso dalla **compilazione**, che traduce verso il linguaggio macchina.
 - **Plugin e preset** — un *plugin* trasforma una singola funzionalità (es. le arrow function); un *preset* è un insieme di plugin (es. `preset-env` per lo standard più recente).
 - **Configurabilità** — si sceglie con precisione cosa trasformare, ottimizzando l'output per il progetto.
 
@@ -23,7 +23,7 @@ Concetti chiave:
 
 SWC (*Speedy Web Compiler*) è un transpiler/compilatore per JavaScript e TypeScript, nato come alternativa **più veloce** a Babel. La differenza chiave: è scritto in **Rust** (non in JavaScript), il che gli permette di sfruttare più core della CPU ed essere molto più performante.
 
-Funzioni: transpilazione JS moderno → ES5, rimozione dei tipi da TypeScript, minificazione e bundling.
+Funzioni: transpilazione da JS moderno a ES5, rimozione dei tipi da TypeScript, minificazione e bundling.
 
 **SWC vs Babel:**
 - **SWC** quando la priorità è la **velocità** di build (progetti grandi). Adottato come compilatore predefinito da Next.js, Parcel, Deno.
@@ -54,8 +54,8 @@ Può anche eseguire binari di pacchetti locali del progetto (quelli in `node_mod
 ## Yarn
 
 Yarn è un gestore di pacchetti JavaScript, alternativa a NPM, che consuma anch'esso il registro npm. Nato in Facebook (con Google, Exponent, Tilde) per risolvere problemi storici di NPM su velocità e determinismo:
-- **Cache locale** dei pacchetti già scaricati → installazioni più rapide.
-- **Lockfile** (`yarn.lock`) → tutti gli sviluppatori installano le **stesse** versioni.
+- **Cache locale** dei pacchetti già scaricati, per installazioni più rapide.
+- **Lockfile** (`yarn.lock`): tutti gli sviluppatori installano le **stesse** versioni.
 - **Compatibilità** con il registro npm.
 
 > [!note]

@@ -9,7 +9,7 @@ L'interoperabilità è la capacità di sistemi, dispositivi o programmi diversi 
 ## Funzione pura
 
 Una funzione pura rispetta due condizioni:
-1. **Stesso input → stesso output**: dato lo stesso argomento restituisce sempre lo stesso risultato.
+1. **Stesso input, stesso output**: dato lo stesso argomento restituisce sempre lo stesso risultato.
 2. **Nessun side effect**: non modifica stato esterno e non dipende da stato esterno mutabile.
 
 ```js
@@ -41,17 +41,17 @@ Rende lo stato prevedibile e abilita confronti veloci per **riferimento** (*shal
 
 Cinque principi di design per il codice **object-oriented** (raccolti da Robert C. Martin) per renderlo più manutenibile, estensibile e testabile:
 
-- **S — Single Responsibility**: una classe ha **una sola responsabilità**, cioè un solo motivo per cambiare. ❌ `class User { save() {} sendEmail() {} }` → ✅ `User` + `UserRepository` (persistenza) + `Mailer` (invio).
-- **O — Open/Closed**: aperta all'**estensione**, chiusa alla **modifica** (si aggiunge comportamento senza riscrivere quello esistente). ❌ `if (s.tipo === 'cerchio') … else if (s.tipo === 'quadrato') …` → ✅ ogni forma implementa `area()`: una forma nuova si aggiunge senza toccare il codice esistente.
-- **L — Liskov Substitution**: un sottotipo deve poter **sostituire** il tipo base senza rompere la correttezza del programma. ❌ `class Penguin extends Bird { fly() { throw } }` → ✅ non ereditare `fly()` se il pinguino non vola.
-- **I — Interface Segregation**: meglio interfacce **piccole e mirate** che una grande e generica; un client non deve dipendere da metodi che non usa. ❌ `interface Machine { print(); scan(); fax(); }` → ✅ `Printer` / `Scanner` / `Fax` separate.
-- **D — Dependency Inversion**: dipendere da **astrazioni**, non da implementazioni concrete (alto e basso livello dipendono entrambi da un'interfaccia). È il principio dietro la **dependency injection**. ❌ `new EmailSender()` dentro la classe → ✅ `constructor(sender: MessageSender)` iniettato.
+- **S — Single Responsibility**: una classe ha **una sola responsabilità**, cioè un solo motivo per cambiare. Invece di accorpare tutto in `class User { save() {} sendEmail() {} }`, si separano le responsabilità in `User`, `UserRepository` (persistenza) e `Mailer` (invio).
+- **O — Open/Closed**: aperta all'**estensione**, chiusa alla **modifica**, cioè si aggiunge comportamento senza riscrivere quello esistente. Invece di uno switch come `if (s.tipo === 'cerchio') … else if (s.tipo === 'quadrato') …`, conviene che ogni forma implementi `area()`, così una forma nuova si aggiunge senza toccare il codice esistente.
+- **L — Liskov Substitution**: un sottotipo deve poter **sostituire** il tipo base senza rompere la correttezza del programma. Un `class Penguin extends Bird { fly() { throw } }` viola il principio, perché conviene non ereditare `fly()` quando il pinguino non vola.
+- **I — Interface Segregation**: meglio interfacce **piccole e mirate** che una grande e generica, perché un client non deve dipendere da metodi che non usa. Invece di un'unica `interface Machine { print(); scan(); fax(); }`, si separano `Printer`, `Scanner` e `Fax`.
+- **D — Dependency Inversion**: dipendere da **astrazioni**, non da implementazioni concrete, con alto e basso livello che dipendono entrambi da un'interfaccia. È il principio dietro la **dependency injection**: invece di istanziare `new EmailSender()` dentro la classe, si inietta il servizio con un `constructor(sender: MessageSender)`.
 
 Sono linee guida, non dogmi: si applicano dove riducono davvero la complessità.
 
 ## DRY (Don't Repeat Yourself)
 
-Ogni pezzo di **conoscenza** (una regola di business, una formula, una decisione) dovrebbe avere **una sola rappresentazione autorevole** nel sistema (Hunt & Thomas, *The Pragmatic Programmer*). In pratica: niente logica duplicata copia-incollata → la si estrae in una funzione/modulo, così una modifica si fa in **un punto solo**.
+Ogni pezzo di **conoscenza** (una regola di business, una formula, una decisione) dovrebbe avere **una sola rappresentazione autorevole** nel sistema (Hunt & Thomas, *The Pragmatic Programmer*). In pratica niente logica duplicata copia-incollata: la si estrae in una funzione o in un modulo, così una modifica si fa in **un punto solo**.
 
 ```js
 // prima ❌ — l'aliquota "1.22" ripetuta: per cambiarla va rincorsa ovunque
@@ -121,7 +121,7 @@ const a = new Config(); a.tema = "scuro";
 const b = new Config();  // b non sa nulla di a → b.tema è ancora "chiaro"
 ```
 
-✅ **La soluzione**: è la classe stessa a custodire l'unica istanza e a restituirla sempre; il costruttore non si usa dall'esterno.
+**La soluzione**: è la classe stessa a custodire l'unica istanza e a restituirla sempre; il costruttore non si usa dall'esterno.
 
 ```ts
 class Config {
@@ -137,7 +137,7 @@ Config.get().tema = "scuro";
 Config.get().tema; // "scuro" — è sempre lo stesso identico oggetto
 ```
 
-⚠️ Oggi è spesso considerato un **anti-pattern**: è stato globale mascherato, accoppia tutto a `Config.get()` e complica i test (non si può sostituire con una versione finta). I framework moderni preferiscono la **dependency injection** — un servizio registrato una volta sola e **iniettato** dove serve (→ *Dependency Inversion* di SOLID). Esempio completo nel vault TypeScript: [Programmazione a oggetti](../../typescript/docs/16-oop.md).
+⚠️ Oggi è spesso considerato un **anti-pattern**: è stato globale mascherato, accoppia tutto a `Config.get()` e complica i test (non si può sostituire con una versione finta). I framework moderni preferiscono la **dependency injection** — un servizio registrato una volta sola e **iniettato** dove serve (cioè la *Dependency Inversion* di SOLID). Esempio completo nel vault TypeScript: [Programmazione a oggetti](../../typescript/docs/16-oop.md).
 
 ### Factory Method *(creazionale)*
 
@@ -154,7 +154,7 @@ else                logger = new ConsoleLogger();
 // …più avanti, un altro punto ripete lo stesso if…
 ```
 
-✅ **La soluzione**: una sola fabbrica decide; il cliente chiede l'astrazione `Logger` e non sa (né gli importa) quale classe sia. Un tipo nuovo si aggiunge in un punto solo (rispetta *Open/Closed*).
+**La soluzione**: una sola fabbrica decide; il cliente chiede l'astrazione `Logger` e non sa (né gli importa) quale classe sia. Un tipo nuovo si aggiunge in un punto solo (rispetta *Open/Closed*).
 
 ```ts
 interface Logger { log(m: string): void; }
@@ -182,7 +182,7 @@ Costruisce un oggetto complesso **un pezzo alla volta**, con metodi che si conca
 new Query("utenti", ["nome"], "eta > 18", null, true, 30);
 ```
 
-✅ **La soluzione**: ogni opzione ha un metodo dal nome parlante; si impostano solo quelle che servono, in qualsiasi ordine, e si chiude con `build()`.
+**La soluzione**: ogni opzione ha un metodo dal nome parlante; si impostano solo quelle che servono, in qualsiasi ordine, e si chiude con `build()`.
 
 ```ts
 const query = new QueryBuilder()
@@ -192,7 +192,7 @@ const query = new QueryBuilder()
   .build();            // le opzioni non impostate restano ai loro default
 ```
 
-✅ **Quando**: un oggetto ha molte parti facoltative o va assemblato in fasi.
+**Quando**: un oggetto ha molte parti facoltative o va assemblato in fasi.
 
 ### Adapter *(strutturale)*
 
@@ -207,7 +207,7 @@ Fa da **traduttore** tra due interfacce incompatibili: avvolge un oggetto ed esp
 gatewayEsterno.fai_pagamento(euro * 100);
 ```
 
-✅ **La soluzione**: un adapter incapsula la libreria ed espone l'interfaccia comoda `Pagamenti`; il resto del codice parla solo con l'adapter.
+**La soluzione**: un adapter incapsula la libreria ed espone l'interfaccia comoda `Pagamenti`; il resto del codice parla solo con l'adapter.
 
 ```ts
 interface Pagamenti { paga(euro: number): void; }
@@ -238,7 +238,7 @@ class FlussoCifrato extends FileStream {}
 class FlussoCompressoECifrato extends FileStream {} // …e tutte le altre
 ```
 
-✅ **La soluzione**: ogni funzionalità è un decoratore che avvolge un flusso ed è a sua volta un flusso (stessa interfaccia). Si impilano liberamente, in qualsiasi ordine.
+**La soluzione**: ogni funzionalità è un decoratore che avvolge un flusso ed è a sua volta un flusso (stessa interfaccia). Si impilano liberamente, in qualsiasi ordine.
 
 ```ts
 let flusso: Flusso = new FileStream(file);
@@ -268,7 +268,7 @@ const bitrate = new BitrateReader().leggi(file, codec);
 // …altri dieci passaggi, in ordine preciso…
 ```
 
-✅ **La soluzione**: una facciata espone un solo metodo e orchestra il sottosistema al posto del cliente.
+**La soluzione**: una facciata espone un solo metodo e orchestra il sottosistema al posto del cliente.
 
 ```ts
 class VideoConverter {
@@ -301,7 +301,7 @@ class Store {
 }
 ```
 
-✅ **La soluzione**: gli interessati si **iscrivono** (subscribe) al subject; il subject li notifica in blocco senza conoscerli. Aggiungerne uno non tocca lo store.
+**La soluzione**: gli interessati si **iscrivono** (subscribe) al subject; il subject li notifica in blocco senza conoscerli. Aggiungerne uno non tocca lo store.
 
 ```ts
 class Store {
@@ -339,7 +339,7 @@ function costo(peso, metodo) {
 }
 ```
 
-✅ **La soluzione**: ogni algoritmo è una strategia a sé; si sceglie quella giusta e la si applica. Aggiungerne una non tocca le altre.
+**La soluzione**: ogni algoritmo è una strategia a sé; si sceglie quella giusta e la si applica. Aggiungerne una non tocca le altre.
 
 ```ts
 const strategie = {

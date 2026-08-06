@@ -59,8 +59,8 @@ In questo caso, alla riga 10 l'oggetto da cui si legge `nome` non è definito: v
 
 In fase di build si **minifica** e si **ottimizza** il codice per ridurre le dimensioni dei file (JS, CSS) e migliorare i tempi di caricamento — critico su connessioni lente e dispositivi modesti.
 
-- **Minificazione** — rimuove spazi e commenti e accorcia i nomi delle variabili: `function calcolaTotale(prezzo, quantita) {…}` → `function c(p,q){…}`.
-- **Ottimizzazione** — semplifica espressioni, elimina codice morto (*dead code elimination*), pre-calcola costanti (*constant folding*): `var x = 10 * 5;` → `var x = 50;`.
+- **Minificazione** — rimuove spazi e commenti e accorcia i nomi delle variabili, così `function calcolaTotale(prezzo, quantita) {…}` diventa `function c(p,q){…}`.
+- **Ottimizzazione** — semplifica espressioni, elimina codice morto (*dead code elimination*), pre-calcola costanti (*constant folding*), così `var x = 10 * 5;` diventa `var x = 50;`.
 
 ## Million.js
 
@@ -71,7 +71,7 @@ Due modalità:
 - **Manuale** — controllo completo: si aggiorna il DOM esplicitamente con i metodi della libreria. Più flessibile, per casi particolari.
 
 Personalizzazione della modalità automatica (oggetto `auto`):
-- `threshold` — soglia oltre cui un componente viene convertito; più alta → meno componenti ottimizzati.
+- `threshold` — soglia oltre cui un componente viene convertito; più alta è, meno componenti vengono ottimizzati.
 - `skip` — array di identificatori (nomi di hook, variabili, funzioni) da **saltare**.
 
 Casi utili:

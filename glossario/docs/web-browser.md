@@ -22,13 +22,13 @@ CORS funziona con header di risposta del **server**: `Access-Control-Allow-Origi
 
 Cosa conta come cross-origin rispetto a `https://example.com`:
 
-- `http://example.com` — diverso **schema** → cross-origin
-- `https://api.example.com` — diverso **host** (sottodominio) → cross-origin
-- `https://example.com:8080` — diversa **porta** → cross-origin
+- `http://example.com` — diverso **schema**, quindi cross-origin
+- `https://api.example.com` — diverso **host** (sottodominio), quindi cross-origin
+- `https://example.com:8080` — diversa **porta**, quindi cross-origin
 - `https://example.com/altra` — stessa origin (il **path** non conta)
 
 > [!tip]
-> Un errore CORS **non** è un errore applicativo del server: la richiesta parte (e spesso arriva), ma è il **browser** a impedire al JS di leggere la risposta. Si risolve **lato server** (header CORS corretti), non nel client. In Angular si manifesta di solito come `HttpErrorResponse` con `status === 0`. La distinzione same-origin/cross-origin è anche alla base dei cookie `SameSite` e della protezione XSRF → [Angular · Authentication](../../angular/capitoli/16-authentication-authorization.md).
+> Un errore CORS **non** è un errore applicativo del server: la richiesta parte (e spesso arriva), ma è il **browser** a impedire al JS di leggere la risposta. Si risolve **lato server** (header CORS corretti), non nel client. In Angular si manifesta di solito come `HttpErrorResponse` con `status === 0`. La distinzione same-origin/cross-origin è anche alla base dei cookie `SameSite` e della protezione XSRF (si veda [Angular · Authentication](../../angular/capitoli/16-authentication-authorization.md)).
 
 ## Cache
 
@@ -84,4 +84,4 @@ child.addEventListener('click', (e) => {
 ```
 
 > [!tip]
-> Prima del bubbling esiste una fase di **capturing** (dalla radice verso il target). Si attiva passando `{ capture: true }` come terzo argomento di `addEventListener`. Il modello completo è quindi *capture → target → bubbling*.
+> Prima del bubbling esiste una fase di **capturing** (dalla radice verso il target). Si attiva passando `{ capture: true }` come terzo argomento di `addEventListener`. Il modello completo è quindi *capture*, poi *target*, infine *bubbling*.
