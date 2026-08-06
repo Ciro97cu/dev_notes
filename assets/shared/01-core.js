@@ -98,7 +98,7 @@ window.NotesStore = (function () {
 // Chiude i popover dei pulsanti fissi (dati/preferiti/evidenziatore) tranne `keep`,
 // così aprendone uno gli altri non restano aperti in sovrapposizione.
 function dnCloseAllPops(keep) {
-  [['.dn-pop', '#dn-data-btn'], ['.dn-fav-list', '#dn-fav-btn'], ['.dn-hl-pop', '#dn-hl-btn']].forEach(function (pair) {
+  [['.dn-fav-list', '#dn-fav-btn'], ['.dn-hl-pop', '#dn-hl-btn']].forEach(function (pair) {
     var pop = document.querySelector(pair[0]);
     if (pop && pop !== keep && pop.classList.contains('open')) {
       pop.classList.remove('open');

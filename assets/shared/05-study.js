@@ -17,10 +17,10 @@
     '.markdown-section h2:hover .dn-star,.markdown-section h3:hover .dn-star,.markdown-section h4:hover .dn-star,.dn-star:focus-visible,.dn-star.is-fav{opacity:1}',
     '.dn-star:hover,.dn-star.is-fav{color:var(--link)}',
     // dock preferiti (stessa estetica del dock dati)
-    '#dn-fav{position:fixed;top:158px;right:16px;z-index:100}',
-    '#dn-fav-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
+    '#dn-fav{position:fixed;bottom:178px;right:16px;z-index:100}',
+    '#dn-fav-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
     '#dn-fav-btn:hover,#dn-fav-btn.has-fav{border-color:var(--link);color:var(--link)}',
-    '.dn-fav-list{position:absolute;top:0;right:48px;min-width:240px;max-width:320px;max-height:60vh;overflow:auto;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
+    '.dn-fav-list{position:absolute;bottom:0;right:48px;min-width:240px;max-width:320px;max-height:60vh;overflow:auto;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
     '.dn-fav-list.open{display:block}',
     '.dn-fav-list .dn-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;opacity:.6;padding:.35rem .6rem}',
     '.dn-fav-list .dn-empty{padding:.5rem .6rem;opacity:.6;font-size:.86rem}',
@@ -89,9 +89,10 @@ function studyProgressPlugin(hook, vm) {
     }
     return out;
   }
-  // Roll-up: il capitolo aperto è "letto" se tutte le sue sottosezioni lo sono
-  // (e viceversa). Serve a rendere significativa la % a livello di capitolo
-  // sull'hub anche quando si spuntano solo le sottosezioni. Ritorna true se cambia.
+  // Roll-up (azione ESPLICITA): sincronizza il capitolo aperto con le sue
+  // sottosezioni in entrambe le direzioni — lo marca se tutte lette, lo de-marca se
+  // ne resta una non letta. Usato SOLO da applyCascade (l'utente ha appena cliccato
+  // una casella), dove de-spuntare è il comportamento atteso. Ritorna true se cambia.
   function rollup(read) {
     var cur = (vm.route && vm.route.path) || '';
     if (!cur || DN_SKIP[cur]) return false;
@@ -102,6 +103,24 @@ function studyProgressPlugin(hook, vm) {
     if (allDone && ci < 0) { read.push(cur); return true; }
     if (!allDone && ci >= 0) { read.splice(ci, 1); return true; }
     return false;
+  }
+  // Roll-up PASSIVO (alla sola navigazione): non de-spunta MAI un capitolo — così
+  // rivisitarlo non ne perde il completamento. Se il capitolo è marcato "letto" ma
+  // le sottosezioni no (es. spuntato dalla sidebar da un'altra pagina, dove non erano
+  // nel DOM), le completa (roll-DOWN). Se invece tutte le sottosezioni sono lette,
+  // marca il capitolo (roll-UP). Ritorna true se cambia qualcosa.
+  function rollupPassive(read) {
+    var cur = (vm.route && vm.route.path) || '';
+    if (!cur || DN_SKIP[cur]) return false;
+    var subs = descendantIdents(cur);
+    if (!subs.length) return false;
+    var changed = false;
+    if (read.indexOf(cur) >= 0) {                   // capitolo marcato → completa i figli
+      subs.forEach(function (id) { if (read.indexOf(id) < 0) { read.push(id); changed = true; } });
+    } else if (subs.every(function (id) { return read.indexOf(id) >= 0; })) {
+      read.push(cur); changed = true;               // tutti i figli letti → marca il capitolo
+    }
+    return changed;
   }
   // Spunta/despunta `ident` e cascata sui suoi discendenti (stesso stato).
   function applyCascade(ident) {
@@ -189,7 +208,7 @@ function studyProgressPlugin(hook, vm) {
   }
   hook.doneEach(function () {
     var read = getRead();
-    if (rollup(read)) window.NotesStore.write('read', read);   // auto-completa se le sezioni erano già tutte spuntate (decorate via evento)
+    if (rollupPassive(read)) window.NotesStore.write('read', read);   // completa (mai de-spunta); decorate via evento
     else decorate();
   });
   document.addEventListener('notesstore:change', function (e) {
