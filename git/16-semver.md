@@ -1,6 +1,5 @@
 # SemVer (Semantic Versioning)
 
-## Concetto
 SemVer, abbreviazione di *Semantic Versioning*, è uno schema per numerare le versioni di un software in modo che il numero stesso comunichi cosa è cambiato rispetto alla versione precedente. Il formato è **`MAJOR.MINOR.PATCH`**, per esempio `2.3.1`, e si accompagna spesso ai [tag](11-tag.md) di Git con il prefisso `v`, come `v2.3.1`.
 
 Fonte: [semver.org](https://semver.org/) (versione 2.0.0).

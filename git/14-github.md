@@ -1,6 +1,5 @@
 # GitHub
 
-## Concetto
 GitHub è una piattaforma online che ospita repository Git remoti e vi costruisce sopra una serie di funzioni di collaborazione, come la gestione delle issue, le pull request e la revisione del codice. Conviene tenere ben distinti i due nomi: Git è lo strumento di versionamento vero e proprio, mentre GitHub è soltanto uno dei posti in cui conservare un repository remoto.
 
 ## Repo pubblico vs privato

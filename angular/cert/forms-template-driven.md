@@ -33,7 +33,7 @@ export class FlightSearch {
 ```
 
 ## `[(ngModel)]` e l'obbligo dell'attributo `name`
-`ngModel` ha tre forme:
+La direttiva `ngModel` è il cuore delle template-driven forms: applicata a un controllo, lo registra nella form e ne collega il valore alla classe. La si può usare in tre forme, che si distinguono per la direzione del legame fra controllo e proprietà.
 
 - **`[(ngModel)]="prop"`** — two-way binding (banana in a box): sincronizza il valore del controllo con la proprietà della classe in entrambe le direzioni.
 - **`[ngModel]="prop"`** — one-way: imposta il valore iniziale ma non ri-scrive sulla proprietà.
@@ -97,7 +97,7 @@ In template-driven i validatori sono **attributi HTML** che Angular mappa sulle 
 Gli errori finiscono in `emailCtrl.errors`, un oggetto `{ [key: string]: any } | null`: `required` produce `{ required: true }`, `minlength` produce `{ minlength: { requiredLength, actualLength } }`, ecc.
 
 ## `ngModelGroup`
-Raggruppa più controlli in un **sotto-oggetto** del modello, con stato e validità propri (annidamento senza dover dichiarare struttura nella classe).
+Con `ngModelGroup` si raggruppano più controlli in un **sotto-oggetto** del modello, dotato di stato e validità propri. È il modo per dare una struttura annidata ai dati del form senza doverla dichiarare nella classe, coerentemente col fatto che nel template-driven il modello resta implicito.
 
 ```html
 <form #f="ngForm">
@@ -142,7 +142,7 @@ input.ng-invalid.ng-touched {
 > Il vault non usa `ngModel`: adotta i **Signal Forms** (`@angular/forms/signals`), dove `form()` genera un albero di field reattivi e i validatori si dichiarano in uno schema (`required`, `minLength`, custom). Two-way binding, stato (`dirty`/`invalid`/`touched`) e submit diventano signal. Tutto in [[06-signal-forms]] (qui non ripetuto).
 
 > [!info] Stato attuale
-> `FormsModule` e le template-driven forms **non sono deprecate**: restano pienamente supportate e convivono con `@angular/forms/signals`. Da **Angular 22** i Signal Forms sono usciti dallo stato sperimentale e sono **stabili**, raccomandati per il codice nuovo, ma l'API classica resta valida per le codebase esistenti ([angular.dev/guide/forms/template-driven-forms](https://angular.dev/guide/forms/template-driven-forms) · [panoramica forms](https://angular.dev/guide/forms)).
+> `FormsModule` e le template-driven forms **non sono deprecate**: restano pienamente supportate e convivono con `@angular/forms/signals`. I **Signal Forms** sono l'approccio moderno raccomandato per il codice nuovo, ma in Angular 22 sono **ancora sperimentali** (package `@angular/forms/signals`, l'API può cambiare); l'API classica resta lo standard **stabile** delle codebase esistenti ([angular.dev/guide/forms/template-driven-forms](https://angular.dev/guide/forms/template-driven-forms) · [panoramica forms](https://angular.dev/guide/forms)).
 
 ## Ripasso lampo
 
@@ -171,4 +171,4 @@ input.ng-invalid.ng-touched {
 - `[(ngModel)]` per il two-way binding, con `name` obbligatorio dentro `<form>`; `#f="ngForm"` e `#ref="ngModel"` per accedere a stato e valore; submit via `(ngSubmit)`.
 - Validatori come **attributi** (`required`, `minlength`, `pattern`, `email`…); errori in `ctrl.errors`; `ngModelGroup` per sotto-oggetti.
 - Stati `touched`/`dirty`/`valid`/`pending` e classi CSS `ng-*` per lo styling; sync del modello **asincrona**.
-- Equivalente moderno = **Signal Forms** → [[06-signal-forms]]; il classico resta lo standard stabile (non deprecato), i Signal Forms sono ancora sperimentali.
+- Equivalente moderno = **Signal Forms**, in [[06-signal-forms]]; il classico resta lo standard stabile (non deprecato), i Signal Forms sono ancora sperimentali.

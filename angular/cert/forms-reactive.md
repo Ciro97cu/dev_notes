@@ -58,7 +58,7 @@ form.controls.to.valid;     // accesso tipizzato ai figli
 ```
 
 ## `FormArray`
-Come `FormGroup` ma con figli **indicizzati** (lista dinamica): si aggiungono/rimuovono controlli a runtime con `push`/`removeAt`/`insert`/`clear`.
+Un `FormArray` è il fratello dinamico del `FormGroup`: aggrega i figli non per chiave ma per **indice**, come una lista. È la struttura giusta quando il numero di controlli non è noto in anticipo e cambia a runtime — si aggiungono e si rimuovono con `push`, `removeAt`, `insert` e `clear`, e il suo valore è l'array dei valori dei figli.
 
 ```ts
 import { FormArray, FormControl } from '@angular/forms';
@@ -128,6 +128,8 @@ export function uniqueCodeValidator(api: FlightApi): AsyncValidatorFn {
 Gli async validator si passano nel **terzo** slot (o come `asyncValidators` nelle opzioni). Vedi [[rxjs]] per gli operatori usati.
 
 ## `setValue` vs `patchValue`
+Entrambi i metodi scrivono programmaticamente il valore di un controllo o di un gruppo, ma differiscono per quanto sono esigenti sull'oggetto che ricevono.
+
 - **`setValue(v)`** — richiede un oggetto **completo**, con **tutte** le chiavi del gruppo; una chiave mancante o in più è un errore. Utile per garantire coerenza.
 - **`patchValue(v)`** — aggiorna solo le chiavi presenti, ignora il resto. Comodo per aggiornamenti parziali.
 
@@ -137,7 +139,7 @@ form.patchValue({ to: 'Vienna' });                                     // solo '
 ```
 
 ## `valueChanges` / `statusChanges`
-Ogni `AbstractControl` espone due `Observable`:
+Oltre allo stato leggibile in modo sincrono, ogni `AbstractControl` — un singolo controllo o un intero gruppo — espone il proprio andamento nel tempo come due `Observable`, il punto di aggancio naturale per la programmazione reattiva sui form.
 
 - **`valueChanges`** — emette il nuovo valore a ogni cambiamento (rispettando `updateOn`).
 - **`statusChanges`** — emette lo stato di validità (`'VALID' | 'INVALID' | 'PENDING' | 'DISABLED'`).
@@ -151,7 +153,7 @@ this.form.controls.from.valueChanges
 È il punto di innesto tipico degli operatori RxJS ([[rxjs]]): `debounceTime`, `switchMap` verso una ricerca, ecc.
 
 ## Direttive di binding nel template
-Il modello dichiarato nella classe si collega al DOM con:
+Una volta costruito l'albero nella classe, lo si collega al markup con un insieme di direttive di `ReactiveFormsModule`, ognuna delle quali aggancia un pezzo del modello all'elemento HTML corrispondente.
 
 - **`[formGroup]="form"`** — lega il `FormGroup` radice all'elemento (di solito `<form>`).
 - **`formControlName="from"`** — lega un input al figlio `from` del gruppo corrente.
@@ -213,6 +215,6 @@ Il modello dichiarato nella classe si collega al DOM con:
 **In sintesi:**
 - Reactive forms = modello **esplicito** nella classe (`FormControl`/`FormGroup`/`FormArray`), sincrono e immutabile; serve `ReactiveFormsModule`.
 - `FormBuilder` (`fb.group`/`control`/`array`, `nonNullable`) riduce il boilerplate; `Validators` built-in + validator custom `ValidatorFn` (sync) e `AsyncValidatorFn` (async, stato `pending`).
-- `setValue` (oggetto completo) vs `patchValue` (parziale); stato e valore osservabili via `valueChanges`/`statusChanges` (innesto per RxJS → [[rxjs]]).
+- `setValue` (oggetto completo) vs `patchValue` (parziale); stato e valore osservabili via `valueChanges`/`statusChanges` (innesto per RxJS, vedi [[rxjs]]).
 - Binding col template via `[formGroup]` + `formControlName`/`formGroupName`/`formArrayName` (o `[formControl]` per controlli isolati).
-- Equivalente moderno = **Signal Forms** → [[06-signal-forms]]; il classico resta lo standard stabile (non deprecato), i Signal Forms sono ancora sperimentali.
+- Equivalente moderno = **Signal Forms**, in [[06-signal-forms]]; il classico resta lo standard stabile (non deprecato), i Signal Forms sono ancora sperimentali.

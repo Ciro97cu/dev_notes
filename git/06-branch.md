@@ -1,6 +1,5 @@
 # Branch
 
-## Concetto
 Un branch (in italiano "ramo") è una linea di sviluppo parallela e indipendente all'interno dello stesso repository. Serve a lavorare su una nuova funzionalità o su una correzione tenendola isolata dal codice principale, che resta intatto finché il lavoro non è pronto. È anche il meccanismo che rende possibile la collaborazione: più persone possono procedere ognuna sul proprio ramo e poi riunire i rispettivi contributi con un'operazione di merge.
 
 ## master e main

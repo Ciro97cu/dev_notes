@@ -1,6 +1,5 @@
 # Merge
 
-## Concetto
 Il merge è l'operazione con cui Git unisce in un solo branch le modifiche sviluppate su due rami distinti. È il modo naturale per integrare un lavoro portato avanti in isolamento, come una feature completata sul proprio ramo che si vuole riportare dentro il branch principale.
 
 ```bash

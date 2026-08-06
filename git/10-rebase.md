@@ -1,6 +1,5 @@
 # Rebase
 
-## Concetto
 Il rebase prende i commit di un branch e li riapplica uno dopo l'altro sopra un'altra base, di solito la punta di `main`. Nel farlo riscrive la storia del ramo per renderla **lineare**, come se quel lavoro fosse partito fin dall'inizio dalla nuova base anziché da quella vecchia.
 
 Lo si usa principalmente in due situazioni. La prima è aggiornare un feature branch con le ultime modifiche di `main` senza introdurre un merge commit, mantenendo così una cronologia pulita. La seconda è riordinare la propria storia — accorpando, riscrivendo o riordinando i commit — prima di aprire una pull request.

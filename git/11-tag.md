@@ -1,6 +1,5 @@
 # Tag
 
-## Concetto
 Un tag è un'etichetta che assegna un nome fisso e stabile a un commit. Lo si usa tipicamente per marcare le release, cioè le versioni pubblicate di un software (come `v1.0.0`). A differenza di un branch, un tag non si sposta quando arrivano nuovi commit: resta ancorato per sempre a quel preciso punto della storia. Per convenzione i nomi seguono lo schema [SemVer](16-semver.md) preceduto dal prefisso `v`, per esempio `v2.3.1`.
 
 ## Tipi
