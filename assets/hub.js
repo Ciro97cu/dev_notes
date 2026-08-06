@@ -93,17 +93,7 @@
   var ICON_DL   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
   var ICON_UP   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
   var ICON_CAM  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
-  var ICON_LINK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
   var ICON_QR   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
-
-  var VAULT_META = {
-    git:        { n: 'Git',        a: '#f05133' },
-    javascript: { n: 'JavaScript', a: '#e6c200' },
-    typescript: { n: 'TypeScript', a: '#3178c6' },
-    angular:    { n: 'Angular',    a: '#dd0031' },
-    css:        { n: 'CSS',        a: '#1572b6' },
-    glossario:  { n: 'Glossario',  a: '#6366f1' }
-  };
 
   btn.innerHTML = ICON_DB;
 
@@ -111,7 +101,7 @@
   var mst = document.createElement('style');
   mst.textContent = [
     '#dn-qr-modal{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}',
-    '.dn-qr-box{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:1.4rem 1.6rem;max-width:320px;width:90%;position:relative;box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}',
+    '.dn-qr-box{background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:1.4rem 1rem;max-width:340px;width:90%;max-height:90vh;overflow:auto;position:relative;box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-sizing:border-box}',
     '.dn-qr-box h3{margin:0 0 .5rem;font-size:1rem;font-weight:700;color:var(--fg)}',
     '.dn-qr-box p{margin:0 0 .9rem;font-size:.82rem;color:var(--fg);opacity:.7;line-height:1.45}',
     '.dn-qr-close{position:absolute;top:.7rem;right:.9rem;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--fg);opacity:.55;line-height:1;padding:.1rem .3rem}',
@@ -119,12 +109,16 @@
     '.dn-qr-btn{width:100%;padding:.55rem;border-radius:8px;background:var(--grad-a);color:#fff;border:none;cursor:pointer;font-size:.88rem;font-weight:600}',
     '.dn-qr-btn:hover{opacity:.88}',
     '#dn-qr-video{width:100%;border-radius:8px;max-height:280px;object-fit:cover;background:#000;display:block}',
-    '#dn-qr-scan-hint{font-size:.8rem;color:var(--fg);opacity:.6;text-align:center;margin:.6rem 0 0}',
-    '#dn-hub-link-input{width:100%;border-radius:8px;border:1px solid var(--card-border);background:var(--bg);color:var(--fg);font:inherit;font-size:.85rem;padding:.6rem;resize:none;margin-bottom:.8rem;box-sizing:border-box}',
-    '#dn-qr-canvas{display:flex;justify-content:center;margin-bottom:1rem;background:#fff;border-radius:8px;padding:.75rem}',
-    '#dn-qr-canvas canvas,#dn-qr-canvas img{display:block!important}',
-    '.hub-vault-btn{padding:.3rem .75rem;border-radius:20px;border:1.5px solid var(--vac);background:transparent;color:var(--vac);font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s,color .15s}',
-    '.hub-vault-btn:hover,.hub-vault-btn.sel{background:var(--vac);color:#fff}'
+    '#dn-qr-scan-hint{font-size:.8rem;color:var(--fg);opacity:.7;text-align:center;margin:.6rem 0 0}',
+    '#dn-qr-canvas{display:flex;justify-content:center;align-items:center;box-sizing:border-box;width:100%;margin-bottom:.9rem;background:#fff;border-radius:8px;padding:.75rem;min-height:210px}',
+    // il QR non deve mai sforare: min-width:0 sblocca il restringimento del flex item
+    // (default min-width:auto lo terrebbe alla dimensione intrinseca 260px → overflow su box stretti);
+    // max-width:100% lo tiene dentro #dn-qr-canvas senza upscalare (nitido a 260 sui box larghi).
+    '#dn-qr-canvas canvas,#dn-qr-canvas img{display:block!important;max-width:100%!important;height:auto!important;min-width:0}',
+    // barra di avanzamento (blocchi catturati) per lo scan animato
+    '.dn-prog{height:8px;border-radius:5px;background:rgba(127,127,127,.25);overflow:hidden;margin:.7rem 0 .35rem}',
+    '.dn-prog>span{display:block;height:100%;width:0;background:var(--grad-a);transition:width .2s ease}',
+    '.dn-prog-lbl{font-size:.76rem;color:var(--fg);opacity:.7;text-align:center}'
   ].join('');
   document.head.appendChild(mst);
 
@@ -136,10 +130,9 @@
     '<button type="button" data-act="export">'      + ICON_DL   + 'Esporta tutto su file…</button>' +
     '<button type="button" data-act="import">'      + ICON_UP   + 'Importa da file…</button>' +
     '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
-    '<button type="button" data-act="qr-show">'     + ICON_QR   + 'Condividi via QR / Link…</button>' +
-    '<button type="button" data-act="qr-scan">'     + ICON_CAM  + 'Scannerizza QR…</button>' +
-    '<button type="button" data-act="link-import">' + ICON_LINK + 'Importa da link…</button>' +
-    '<div class="dn-note"><strong>File</strong>: backup completo tutti i vault. <strong>QR / Link</strong>: sync rapida per vault singolo.</div>';
+    '<button type="button" data-act="qr-show">'     + ICON_QR   + 'Condividi via QR animato…</button>' +
+    '<button type="button" data-act="qr-scan">'     + ICON_CAM  + 'Scannerizza QR animato…</button>' +
+    '<div class="dn-note"><strong>Tutti i vault insieme</strong> (progressi, preferiti, evidenziazioni). Il <strong>QR animato</strong> allinea cellulare ⇄ PC senza cavi né account.</div>';
   document.body.appendChild(pop);
 
   var fileIn = document.createElement('input');
@@ -152,9 +145,12 @@
   document.addEventListener('click', function (e) { if (!pop.contains(e.target) && e.target !== btn) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
-  // ── Export ────────────────────────────────────────────────────────────────
-  function exportAll() {
-    var PREFIX = 'dev-notes-', data = {};
+  // ── Raccolta / applicazione dati (condivisa da file e QR animato) ─────────
+  var PREFIX = 'dev-notes-';
+  var UNSAFE = { __proto__: 1, constructor: 1, prototype: 1 };
+
+  function collectData() {
+    var data = {};
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
@@ -164,7 +160,28 @@
         }
       }
     } catch (e) {}
-    var json = JSON.stringify({ app: 'dev-notes', version: 1, exportedAt: new Date().toISOString(), data: data }, null, 2);
+    return data;
+  }
+  // Scrive i dati (allowlist dev-notes-*, guardia proto-pollution). replace → svuota prima.
+  function applyData(data, replace) {
+    if (!data || typeof data !== 'object') throw new Error('formato non valido');
+    if (replace) {
+      var toRm = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf(PREFIX) === 0) toRm.push(k);
+      }
+      toRm.forEach(function (k) { try { localStorage.removeItem(k); } catch (_) {} });
+    }
+    Object.keys(data).forEach(function (key) {
+      if (UNSAFE[key] || key.indexOf(PREFIX) !== 0) return;
+      try { localStorage.setItem(key, JSON.stringify(data[key])); } catch (_) {}
+    });
+  }
+
+  // ── Export su file ──────────────────────────────────────────────────────
+  function exportAll() {
+    var json = JSON.stringify({ app: 'dev-notes', version: 1, exportedAt: new Date().toISOString(), data: collectData() }, null, 2);
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
     a.download = 'dev-notes-dati.json';
@@ -173,7 +190,7 @@
     close();
   }
 
-  // ── Import file ───────────────────────────────────────────────────────────
+  // ── Import da file ────────────────────────────────────────────────────────
   fileIn.addEventListener('change', function () {
     var f = fileIn.files && fileIn.files[0];
     if (!f) return;
@@ -185,81 +202,54 @@
         var obj = JSON.parse(ev.target.result);
         if (!obj || typeof obj !== 'object' || !obj.data || typeof obj.data !== 'object')
           throw new Error('formato non valido');
-        var PREFIX = 'dev-notes-';
-        var UNSAFE = { __proto__: 1, constructor: 1, prototype: 1 };
-        if (!merge) {
-          var toRm = [];
-          for (var i = 0; i < localStorage.length; i++) {
-            var k = localStorage.key(i);
-            if (k && k.indexOf(PREFIX) === 0) toRm.push(k);
-          }
-          toRm.forEach(function (k) { try { localStorage.removeItem(k); } catch (_) {} });
-        }
-        Object.keys(obj.data).forEach(function (key) {
-          if (UNSAFE[key] || key.indexOf(PREFIX) !== 0) return;
-          try { localStorage.setItem(key, JSON.stringify(obj.data[key])); } catch (_) {}
-        });
+        applyData(obj.data, !merge);
         location.reload();
       } catch (e) { alert('Import non riuscito: ' + e.message); }
     };
     r.readAsText(f);
   });
 
-  // ── Lazy libs (separate per non caricare 257 KB jsqr quando non serve) ────
+  // ── Lazy libs (caricate solo all'uso; jsqr da 257 KB solo per lo scan) ────
   function loadLib(src, cb) {
     var s = document.createElement('script'); s.src = src;
-    s.onload = cb; s.onerror = function () { console.warn('[hub-qr] cannot load', src); };
+    s.onload = cb; s.onerror = function () { console.warn('[hub-qr] impossibile caricare', src); };
     document.head.appendChild(s);
   }
-  function ensureLz(cb) {
-    if (window.LZString) { cb(); return; }
-    loadLib(LIB + 'lz-string.min.js', cb);
+  function chain(steps, cb) {                    // carica in sequenza solo ciò che manca
+    (function step(i) {
+      if (i >= steps.length) { cb(); return; }
+      if (steps[i].have()) { step(i + 1); return; }
+      loadLib(steps[i].src, function () { step(i + 1); });
+    })(0);
+  }
+  function ensureShare(cb) {
+    chain([
+      { have: function () { return window.LZString; },   src: LIB + 'lz-string.min.js' },
+      { have: function () { return window.QRCode; },     src: LIB + 'qrcode.min.js' },
+      { have: function () { return window.DnFountain; }, src: LIB + 'dn-fountain.js' }
+    ], cb);
   }
   function ensureScan(cb) {
-    ensureLz(function () {
-      if (window.jsQR) { cb(); return; }
-      loadLib(LIB + 'jsqr.min.js', cb);
-    });
-  }
-  function ensureQr(cb) {
-    ensureLz(function () {
-      if (window.QRCode) { cb(); return; }
-      loadLib(LIB + 'qrcode.min.js', cb);
-    });
+    chain([
+      { have: function () { return window.LZString; },   src: LIB + 'lz-string.min.js' },
+      { have: function () { return window.jsQR; },       src: LIB + 'jsqr.min.js' },
+      { have: function () { return window.DnFountain; }, src: LIB + 'dn-fountain.js' }
+    ], cb);
   }
 
-  // ── Decode e import da sync URL (scrive direttamente in localStorage) ────
-  function decode(str) {
-    try { return JSON.parse(LZString.decompressFromEncodedURIComponent(str)); }
-    catch (_) { return null; }
+  // Payload QR = stesso wrapper del file, compresso in byte (LZString → Uint8Array).
+  function snapshotBytes() {
+    return LZString.compressToUint8Array(JSON.stringify({ app: 'dev-notes', version: 1, data: collectData() }));
   }
-  var SYNC_KEYS = { read: 1, frac: 1, progress: 1, favorites: 1 };
-  function syncImport(obj) {
-    if (!obj || typeof obj !== 'object' || typeof obj.d !== 'object' || Array.isArray(obj.d)) return false;
-    if (!obj.vault) { alert('Dati non validi: vault mancante.'); return false; }
-    var UNSAFE = { __proto__: 1, constructor: 1, prototype: 1 };
-    var PREFIX = 'dev-notes-', count = 0;
-    Object.keys(obj.d).forEach(function (k) {
-      if (!SYNC_KEYS[k] || UNSAFE[k]) return;
-      try { localStorage.setItem(PREFIX + obj.vault + '-' + k, JSON.stringify(obj.d[k])); count++; } catch (_) {}
-    });
-    return count > 0;
+  function bytesToData(bytes) {
+    var obj = JSON.parse(LZString.decompressFromUint8Array(bytes));
+    if (!obj || obj.app !== 'dev-notes' || !obj.data || typeof obj.data !== 'object')
+      throw new Error('contenuto non riconosciuto');
+    return obj.data;
   }
 
-  // ── Snapshot e URL sync per vault (hub non ha vault attivo) ─────────────
-  var SYNC_KEYS_ARR = ['read', 'frac', 'progress', 'favorites'];
-  function hubSnapshot(vault) {
-    var PREFIX = 'dev-notes-', d = {};
-    SYNC_KEYS_ARR.forEach(function (k) {
-      var raw = localStorage.getItem(PREFIX + vault + '-' + k);
-      if (raw !== null) { try { d[k] = JSON.parse(raw); } catch (_) { d[k] = raw; } }
-    });
-    return { vault: vault, d: d };
-  }
-  function hubSyncUrl(vault) {
-    var encoded = LZString.compressToEncodedURIComponent(JSON.stringify(hubSnapshot(vault)));
-    return location.origin + '/' + vault + '/?sync=' + encoded;
-  }
+  // Parametri del QR animato: blocchi piccoli = QR meno denso e più facile da inquadrare.
+  var CHUNK = 300, FPS = 6, QR_PX = 260;
 
   // ── Modal comune ──────────────────────────────────────────────────────────
   function makeModal(label) {
@@ -268,35 +258,71 @@
     m.setAttribute('role', 'dialog');
     m.setAttribute('aria-modal', 'true');
     m.setAttribute('aria-label', label);
-    function closeM() { m.remove(); }
+    var prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';                  // blocca lo scroll della pagina sotto
+    function onKey(e) { if (e.key === 'Escape') m._close(); }
+    function closeM() {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+      m.remove();
+    }
     m.addEventListener('click', function (e) { if (e.target === m) closeM(); });
-    m.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeM(); });
+    document.addEventListener('keydown', onKey);
     m._close = closeM;
     return m;
   }
 
-  // ── Scan QR ───────────────────────────────────────────────────────────────
+  // ── Condividi via QR animato (tutti i vault, stream infinito di frame) ────
+  function shareOpen() {
+    if (document.getElementById('dn-qr-modal')) return;
+    ensureShare(function () {
+      var enc = DnFountain.createEncoder(snapshotBytes(), CHUNK);
+      var modal = makeModal('Condividi via QR animato');
+      modal.innerHTML =
+        '<div class="dn-qr-box">' +
+          '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
+          '<h3>Condividi via QR animato</h3>' +
+          '<div id="dn-qr-canvas"></div>' +
+          '<p id="dn-qr-scan-hint">Inquadra con «Scannerizza QR animato» sull\'altro dispositivo. Tieni aperto finché non completa (' + enc.K + ' blocchi).</p>' +
+        '</div>';
+      document.body.appendChild(modal);
+      modal.querySelector('.dn-qr-close').addEventListener('click', modal._close);
+
+      var box = modal.querySelector('#dn-qr-canvas');
+      var qr = new QRCode(box, { text: enc.next(), width: QR_PX, height: QR_PX, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.L });
+      var timer = setInterval(function () { qr.makeCode(enc.next()); }, Math.round(1000 / FPS));
+
+      var origClose = modal._close;
+      modal._close = function () { clearInterval(timer); origClose(); };
+      modal.querySelector('.dn-qr-close').onclick = modal._close;
+    });
+  }
+
+  // ── Scannerizza QR animato (raccoglie frame → fountain-decode → import) ───
   function scanOpen() {
     if (document.getElementById('dn-qr-modal')) return;
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       alert('Fotocamera non disponibile (richiede HTTPS o localhost).'); return;
     }
     ensureScan(function () {
-      var modal = makeModal('Scannerizza QR');
+      var dec = DnFountain.createDecoder();
+      var modal = makeModal('Scannerizza QR animato');
       modal.innerHTML =
         '<div class="dn-qr-box">' +
           '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
-          '<h3>Scannerizza QR</h3>' +
+          '<h3>Scannerizza QR animato</h3>' +
           '<video id="dn-qr-video" playsinline muted></video>' +
-          '<p id="dn-qr-scan-hint">Avvio fotocamera…</p>' +
+          '<div class="dn-prog"><span id="dn-prog-bar"></span></div>' +
+          '<p class="dn-prog-lbl" id="dn-prog-lbl">Avvio fotocamera…</p>' +
         '</div>';
       document.body.appendChild(modal);
       modal.querySelector('.dn-qr-close').addEventListener('click', modal._close);
 
       var video = modal.querySelector('#dn-qr-video');
-      var hint  = modal.querySelector('#dn-qr-scan-hint');
+      var bar   = modal.querySelector('#dn-prog-bar');
+      var lbl   = modal.querySelector('#dn-prog-lbl');
       var canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
-      var stream = null, rafId = null;
+      var stream = null, rafId = null, finished = false;
 
       function stopAll() {
         if (rafId) cancelAnimationFrame(rafId);
@@ -306,128 +332,43 @@
       modal._close = function () { stopAll(); origClose(); };
       modal.querySelector('.dn-qr-close').onclick = modal._close;
 
+      function finish() {
+        finished = true; stopAll();
+        var data;
+        try { data = bytesToData(dec.result()); }
+        catch (e) { lbl.textContent = 'Errore di lettura: ' + e.message; return; }
+        modal.remove();
+        var merge = confirm('Ricevuti i dati (' + Object.keys(data).length + ' voci).\n\nOK = unisci ai dati attuali\nAnnulla = sostituisci tutto');
+        applyData(data, !merge);
+        location.reload();
+      }
+
       navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } })
         .then(function (s) {
           stream = s; video.srcObject = s; video.play();
-          hint.textContent = 'Inquadra il QR generato nel vault…';
+          lbl.textContent = 'Inquadra il QR animato…';
           function tick() {
-            if (video.readyState < video.HAVE_ENOUGH_DATA) { rafId = requestAnimationFrame(tick); return; }
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-            ctx.drawImage(video, 0, 0);
-            var id = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var code = jsQR(id.data, id.width, id.height, { inversionAttempts: 'dontInvert' });
-            if (code && code.data) {
-              var m = code.data.match(/[?&]sync=([^&#]+)/);
-              if (m) {
-                stopAll(); modal.remove();
-                var obj = decode(m[1]);
-                if (obj && confirm('Importare i dati del vault "' + (obj.vault || '?') + '"?')) {
-                  if (syncImport(obj)) location.reload();
+            if (finished) return;
+            if (video.readyState >= video.HAVE_ENOUGH_DATA) {
+              canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+              ctx.drawImage(video, 0, 0);
+              var id = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              var code = jsQR(id.data, id.width, id.height, { inversionAttempts: 'dontInvert' });
+              if (code && code.data) {
+                var st = dec.addFrame(code.data);
+                if (st.K) {
+                  var pct = Math.round(st.have / st.K * 100);
+                  bar.style.width = pct + '%';
+                  lbl.textContent = 'Ricezione… ' + st.have + '/' + st.K + ' blocchi (' + pct + '%)';
                 }
-                return;
+                if (st.done) { finish(); return; }
               }
             }
             rafId = requestAnimationFrame(tick);
           }
           rafId = requestAnimationFrame(tick);
         })
-        .catch(function (err) {
-          hint.textContent = 'Fotocamera non disponibile: ' + err.message;
-        });
-    });
-  }
-
-  // ── Importa da link ───────────────────────────────────────────────────────
-  function linkImportOpen() {
-    if (document.getElementById('dn-qr-modal')) return;
-    var modal = makeModal('Importa da link');
-    modal.innerHTML =
-      '<div class="dn-qr-box">' +
-        '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
-        '<h3>Importa da link</h3>' +
-        '<p>Incolla il link di sincronizzazione generato in un vault.</p>' +
-        '<textarea id="dn-hub-link-input" placeholder="https://…?sync=…" rows="3" spellcheck="false"></textarea>' +
-        '<button class="dn-qr-btn" id="dn-hub-link-go">Importa</button>' +
-      '</div>';
-    document.body.appendChild(modal);
-    modal.querySelector('.dn-qr-close').addEventListener('click', modal._close);
-
-    var input = modal.querySelector('#dn-hub-link-input');
-    input.focus();
-    modal.querySelector('#dn-hub-link-go').addEventListener('click', function () {
-      var url = input.value.trim();
-      if (!url) return;
-      var m = url.match(/[?&]sync=([^&#]+)/);
-      if (!m) { alert('Link non valido: parametro ?sync= non trovato.'); return; }
-      var raw = m[1];
-      function proceed() {
-        var obj = decode(raw);
-        if (!obj) { alert('Dati non leggibili.'); return; }
-        modal.remove();
-        if (confirm('Importare i dati del vault "' + (obj.vault || '?') + '"?')) {
-          if (syncImport(obj)) location.reload();
-        }
-      }
-      if (window.LZString) { proceed(); return; }
-      loadLib(LIB + 'lz-string.min.js', proceed);
-    });
-  }
-
-  // ── Esporta QR / Link con selettore vault ────────────────────────────────
-  function qrExportOpen() {
-    if (document.getElementById('dn-qr-modal')) return;
-    ensureQr(function () {
-      var modal = makeModal('Condividi via QR / Link');
-      var vaultBtns = Object.keys(VAULT_META).map(function (v) {
-        return '<button type="button" class="hub-vault-btn" data-vault="' + v + '" style="--vac:' + VAULT_META[v].a + '">' + VAULT_META[v].n + '</button>';
-      }).join('');
-      modal.innerHTML =
-        '<div class="dn-qr-box" style="max-width:360px">' +
-          '<button class="dn-qr-close" type="button" aria-label="Chiudi">×</button>' +
-          '<h3>Condividi via QR / Link</h3>' +
-          '<p>Scegli il vault da condividere:</p>' +
-          '<div id="dn-vault-sel" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem">' + vaultBtns + '</div>' +
-          '<div id="dn-qr-canvas" style="display:none"></div>' +
-          '<button class="dn-qr-btn" id="dn-qr-copy" style="display:none" type="button">Copia link</button>' +
-        '</div>';
-      document.body.appendChild(modal);
-      modal.querySelector('.dn-qr-close').addEventListener('click', modal._close);
-
-      var currentUrl = '';
-      var qrCanvas = modal.querySelector('#dn-qr-canvas');
-      var copyBtn  = modal.querySelector('#dn-qr-copy');
-
-      modal.querySelector('#dn-vault-sel').addEventListener('click', function (e) {
-        var b = e.target.closest('.hub-vault-btn'); if (!b) return;
-        var vault = b.getAttribute('data-vault');
-        modal.querySelectorAll('.hub-vault-btn').forEach(function (el) { el.classList.remove('sel'); });
-        b.classList.add('sel');
-        currentUrl = hubSyncUrl(vault);
-        qrCanvas.innerHTML = ''; qrCanvas.style.display = 'flex';
-        new QRCode(qrCanvas, {
-          text: currentUrl, width: 210, height: 210,
-          colorDark: '#111111', colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-        copyBtn.style.display = '';
-        copyBtn.textContent = 'Copia link — ' + VAULT_META[vault].n;
-      });
-
-      copyBtn.addEventListener('click', function () {
-        if (!currentUrl) return;
-        var orig = copyBtn.textContent;
-        (navigator.clipboard ? navigator.clipboard.writeText(currentUrl) : Promise.reject())
-          .catch(function () {
-            var t = document.createElement('textarea');
-            t.value = currentUrl; t.style.cssText = 'position:fixed;opacity:0';
-            document.body.appendChild(t); t.focus(); t.select();
-            document.execCommand('copy'); t.remove();
-          })
-          .finally(function () {
-            copyBtn.textContent = 'Copiato!';
-            setTimeout(function () { copyBtn.textContent = orig; }, 1800);
-          });
-      });
+        .catch(function (err) { lbl.textContent = 'Fotocamera non disponibile: ' + err.message; });
     });
   }
 
@@ -436,11 +377,10 @@
     var b = e.target.closest('button[data-act]');
     if (!b) return;
     var act = b.getAttribute('data-act');
-    if      (act === 'export')      { exportAll(); }
-    else if (act === 'import')      { fileIn.value = ''; fileIn.click(); close(); }
-    else if (act === 'qr-show')     { close(); qrExportOpen(); }
-    else if (act === 'qr-scan')     { close(); scanOpen(); }
-    else if (act === 'link-import') { close(); linkImportOpen(); }
+    if      (act === 'export')  { exportAll(); }
+    else if (act === 'import')  { fileIn.value = ''; fileIn.click(); close(); }
+    else if (act === 'qr-show') { close(); shareOpen(); }
+    else if (act === 'qr-scan') { close(); scanOpen(); }
   });
 })();
 

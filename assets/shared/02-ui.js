@@ -1,21 +1,27 @@
 
-// ── Dock "Dati": Esporta / Importa il file dei progressi ──────────────────────
-// Pulsante fisso (sotto il toggle tema) che apre un popover. È UI globale, quindi
-// vive in un IIFE su DOMContentLoaded (non serve registrarlo come plugin docsify).
+// ── Stili condivisi dei pulsanti fissi ────────────────────────────────────────
+// Speed-dial "Strumenti", popover (.dn-pop di Preferiti/Evidenziatore), toggle tema
+// e i pulsanti docsify in basso a destra (home/menu/playground) resi theme-aware.
+// Il trasferimento dati (export/import, QR) vive solo nell'hub, non più nei vault.
 (function () {
   var css = [
-    // speed-dial "Strumenti": raggruppa i tool sotto un unico bottone (il tema resta a parte)
-    '#dn-tools{position:fixed;top:62px;right:16px;z-index:101}',
-    '#dn-tools-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
-    '#dn-data{position:fixed;top:110px;right:16px;z-index:100}',
-    '#dn-data-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
-    '#dn-data-btn:hover{border-color:var(--link);color:var(--link)}',
-    // i tool restano nascosti finché non si apre lo speed-dial
-    '#dn-data,#dn-fav,#dn-hl{opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s ease,transform .18s ease}',
-    'body.dn-tools-open #dn-data,body.dn-tools-open #dn-fav,body.dn-tools-open #dn-hl{opacity:1;pointer-events:auto;transform:none}',
+    // speed-dial "Strumenti" in basso a destra: il bottone-chiave sta sopra menu(70)+home(16),
+    // i tool si aprono verso l'alto. Il toggle tema resta da solo in alto a destra.
+    '#dn-tools{position:fixed;bottom:124px;right:16px;z-index:101}',
+    '#dn-tools-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}',
+    // Playground ("terminale") assorbito nella speed-dial: in cima alla colonna (opzionale:
+    // git/glossario non ce l'hanno) e nascosto finché il dial è chiuso. La posizione/misura
+    // dallo shared vince sul CSS del vault (lo <style> runtime è iniettato dopo styles.css);
+    // 44px per uniformarsi a menu/home, passo 54px come tra home(16)→menu(70)→chiave(124).
+    '#pg-toggle,#ng-play{top:auto;bottom:286px;right:16px;width:44px;height:44px}',
+    // i tool restano nascosti finché non si apre lo speed-dial (slittano su dal basso)
+    '#dn-fav,#dn-hl{opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease}',
+    '#pg-toggle,#ng-play{opacity:0;pointer-events:none;transition:opacity .18s ease}',
+    'body.dn-tools-open #dn-fav,body.dn-tools-open #dn-hl{opacity:1;pointer-events:auto;transform:none}',
+    'body.dn-tools-open #pg-toggle,body.dn-tools-open #ng-play{opacity:1;pointer-events:auto}',
     // hover uniforme di tutti i pulsanti fissi (icona che cambia colore, niente fondo pieno) + micro-zoom
-    '#dn-data-btn,#dn-fav-btn,#dn-hl-btn,#dn-tools-btn{transition:transform .15s ease,color .2s ease,border-color .2s ease}',
-    '#dn-data-btn:hover,#dn-fav-btn:hover,#dn-hl-btn:hover,#dn-tools-btn:hover{transform:scale(1.08)}',
+    '#dn-fav-btn,#dn-hl-btn,#dn-tools-btn{transition:transform .15s ease,color .2s ease,border-color .2s ease}',
+    '#dn-fav-btn:hover,#dn-hl-btn:hover,#dn-tools-btn:hover{transform:scale(1.08)}',
     '#dn-tools-btn:hover{border-color:var(--link);color:var(--link)}',
     // i pannelli si aprono a SINISTRA del bottone, così non finiscono dietro gli altri
     '.dn-pop{position:absolute;top:0;right:48px;min-width:210px;background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(0,0,0,.20);padding:.4rem;display:none}',
@@ -26,8 +32,9 @@
     '.dn-pop button svg{flex:0 0 auto;opacity:.8}',
     '.dn-pop .dn-note{font-size:.74rem;line-height:1.45;opacity:.7;padding:.4rem .6rem .3rem;border-top:1px solid var(--border);margin-top:.3rem}',
     '.dn-pop .dn-sep{border:none;border-top:1px solid var(--border);margin:.3rem .3rem}',
-    // il toggle tema usa un\'icona SVG come gli altri: centrala
-    '#theme-toggle{display:flex;align-items:center;justify-content:center}',
+    // il toggle tema usa un\'icona SVG come gli altri: centrala e uniformala a 44px
+    // (come menu/home/strumenti) — l\'override dallo shared vince sul styles.css del vault
+    '#theme-toggle{display:flex;align-items:center;justify-content:center;width:44px;height:44px}',
     '#theme-toggle svg{display:block}',
     // i pulsanti fissi in basso a destra (home/menu/playground) erano bianchi fissi:
     // li rendo theme-aware come quelli in alto, così cambiano col tema
@@ -42,71 +49,10 @@
   el.textContent = css;
   (document.head || document.documentElement).appendChild(el);
 
-  var ICON_DB  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
-  var ICON_DL  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
-  var ICON_UP  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
-  var ICON_QR   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
-  var ICON_CAM  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
-  var ICON_LINK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
-
-  function build() {
-    if (document.getElementById('dn-data')) return;
-    var wrap = document.createElement('div');
-    wrap.id = 'dn-data';
-    wrap.innerHTML =
-      '<button id="dn-data-btn" type="button" title="Dati e progressi" aria-label="Dati e progressi" aria-expanded="false">' + ICON_DB + '</button>' +
-      '<div class="dn-pop" role="menu">' +
-        '<div class="dn-title">Dati e progressi</div>' +
-        '<button type="button" data-act="export" role="menuitem">' + ICON_DL + 'Esporta su file…</button>' +
-        '<button type="button" data-act="import" role="menuitem">' + ICON_UP + 'Importa da file…</button>' +
-        '<hr class="dn-sep">' +
-        '<button type="button" data-act="qr-show" role="menuitem">' + ICON_QR + 'Condividi via QR / Link…</button>' +
-        '<button type="button" data-act="qr-scan" role="menuitem">' + ICON_CAM + 'Scannerizza QR…</button>' +
-        '<button type="button" data-act="link-import" role="menuitem">' + ICON_LINK + 'Importa da link…</button>' +
-        '<div class="dn-note"><strong>File</strong>: backup completo (incluse evidenziazioni). <strong>QR / Link</strong>: sincronizzazione rapida di progresso e segnalibri tra dispositivi.</div>' +
-      '</div>' +
-      '<input type="file" accept="application/json,.json" hidden>';
-    document.body.appendChild(wrap);
-
-    var btn = wrap.querySelector('#dn-data-btn');
-    var pop = wrap.querySelector('.dn-pop');
-    var file = wrap.querySelector('input[type=file]');
-    function close() { pop.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var willOpen = !pop.classList.contains('open');
-      dnCloseAllPops(pop);                       // chiudi gli altri popover
-      pop.classList.toggle('open', willOpen);
-      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-    });
-    document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-    pop.addEventListener('click', function (e) {
-      var b = e.target.closest && e.target.closest('button[data-act]');
-      if (!b) return;
-      var act = b.getAttribute('data-act');
-      if (act === 'export')   { window.NotesStore.download(); close(); }
-      else if (act === 'import')  { file.value = ''; file.click(); close(); }
-      else if (act === 'qr-show')    { close(); window.dnQrOpen && window.dnQrOpen(); }
-      else if (act === 'qr-scan')    { close(); window.dnScanOpen && window.dnScanOpen(); }
-      else if (act === 'link-import') { close(); window.dnLinkImportOpen && window.dnLinkImportOpen(); }
-    });
-    file.addEventListener('change', function () {
-      var f = file.files && file.files[0];
-      if (!f) return;
-      var merge = window.confirm('Importa "' + f.name + '".\n\nOK = unisci ai dati attuali\nAnnulla = sostituisci tutto');
-      window.NotesStore.importFile(f, merge ? 'merge' : 'replace', function (err) {
-        if (err) { window.alert('Import non riuscito: ' + err.message); return; }
-        location.reload();
-      });
-    });
-  }
-  if (document.body) build();
-  else document.addEventListener('DOMContentLoaded', build);
 })();
 
 // ── Speed-dial "Strumenti": un unico bottone (sotto il tema) che apre/chiude i
-// tool raggruppati (dati, preferiti, evidenziatore). Il tema resta separato.
+// tool raggruppati (preferiti, evidenziatore). Il tema resta separato.
 (function () {
   var TOOLS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>';
   var CLOSE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
