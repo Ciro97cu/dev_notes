@@ -1,6 +1,5 @@
 # Stash
 
-## Concetto
 Lo stash è un deposito temporaneo dove Git mette da parte le modifiche non ancora committate, senza però perderle. Torna utile quando serve interrompere il lavoro in corso — per cambiare branch o dedicarsi ad altro — ma non lo si vuole ancora cristallizzare in un commit incompleto: si "parcheggiano" le modifiche, si ottiene un working directory pulito e le si recupera in un secondo momento.
 
 ## Comandi

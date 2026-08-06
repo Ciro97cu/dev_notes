@@ -1,6 +1,5 @@
 # Introduzione a Git
 
-## Concetto
 Git è un sistema di controllo di versione **distribuito** (DVCS, *Distributed Version Control System*): uno strumento che registra l'evoluzione di un progetto nel tempo, tenendo traccia di ogni modifica ai file. Grazie a questa storia si può tornare a una versione precedente, capire chi ha cambiato cosa e quando, e lavorare in più persone sullo stesso codice senza sovrascriversi a vicenda. La parola "distribuito" è il cuore della faccenda: ogni copia del progetto è un repository completo, con l'intera storia dentro di sé. Non esiste quindi un unico server indispensabile, si lavora anche offline, e il proprio computer contiene già tutto il necessario per consultare il passato e creare nuove versioni.
 
 ## Git vs GitHub

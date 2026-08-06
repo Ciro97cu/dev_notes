@@ -26,6 +26,8 @@ AppComponent            (root — la CD parte qui)
 ```
 
 ## Strategie: `Default` vs `OnPush`
+Se Zone.js decide *quando* far partire la change detection, la **strategia** del singolo componente decide *se* quel componente vada davvero ricontrollato. È la leva principale con cui, nel modello classico, si evita di far lavorare la CD dove non serve. La si imposta con il metadato `changeDetection` del decoratore `@Component`, che accetta uno dei due valori dell'enum `ChangeDetectionStrategy`.
+
 ```ts
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
@@ -46,10 +48,10 @@ export class ItemComponent {
   3. una **`async` pipe** presente nel template emette un nuovo valore;
   4. si chiama esplicitamente **`markForCheck()`** sul suo `ChangeDetectorRef`.
 
-`OnPush` impone di lavorare con input **immutabili** → meno controlli, app più prevedibile e veloce.
+`OnPush` di fatto impone di lavorare con input **immutabili**: cambiare un dato significa creare un nuovo riferimento invece di mutare l'oggetto esistente. Il vincolo ripaga, perché Angular esegue molti meno controlli e il flusso dei dati diventa più prevedibile, oltre che più veloce.
 
 ## `ChangeDetectorRef`
-Permette di controllare manualmente la CD del componente.
+Quando la change detection automatica non basta — tipicamente con `OnPush`, dopo un aggiornamento che Angular non ha modo di intercettare da solo — si interviene a mano tramite `ChangeDetectorRef`, il servizio che dà a ogni componente il controllo esplicito sul proprio ciclo di detection. Lo si inietta nel costruttore e da lì si può marcare il componente come "da controllare", forzare subito un controllo, oppure staccarlo del tutto dall'albero.
 
 ```ts
 import { ChangeDetectorRef } from '@angular/core';
@@ -63,7 +65,7 @@ constructor(private cdr: ChangeDetectorRef) {}
 - **`reattach()`** — lo riattacca all'albero.
 
 ## `NgZone`
-Dà accesso alla zone di Angular per entrare/uscire dal contesto in cui la CD è attiva.
+`NgZone` è il servizio che rappresenta la zone di Angular, cioè il contesto di esecuzione dentro cui Zone.js intercetta l'async e fa scattare la CD. Iniettandolo si può deliberatamente **uscire** da quel contesto per eseguire codice che non deve innescare la detection, e poi **rientrarvi** solo nei momenti in cui serve davvero aggiornare la view.
 
 ```ts
 import { NgZone } from '@angular/core';
@@ -97,10 +99,10 @@ Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forza
 > - `runOutsideAngular` non "spegne" la reattività dei signal: in zoneless la CD è comunque notificata dai signal letti nel template.
 
 > [!info] vs Modern
-> Il moderno combina **signal + `OnPush` + zoneless**: i signal notificano puntualmente i soli componenti che li leggono, quindi la CD diventa granulare e non serve più né Zone.js né, spesso, il `markForCheck()` manuale. Il modello reattivo signal-based è nel vault → [[03-reactive-design-with-signals]] e [[02-signal-based-components]] (qui non ripetuto).
+> Il moderno combina **signal + `OnPush` + zoneless**: i signal notificano puntualmente i soli componenti che li leggono, quindi la CD diventa granulare e non serve più né Zone.js né, spesso, il `markForCheck()` manuale. Il modello reattivo signal-based è già spiegato nel vault, in [[03-reactive-design-with-signals]] e [[02-signal-based-components]] (qui non ripetuto).
 
 > [!info] Stato attuale
-> Da Angular **v20.2** l'API zoneless è **stabile** (`provideZonelessChangeDetection()`) e da **v21** le nuove app sono **zoneless di default** (Zone.js non più incluso). Senza Zone.js la CD è guidata dalle notifiche dei signal, da `markForCheck()`, dagli eventi del template e dalla `async` pipe — di fatto le stesse condizioni di `OnPush`. Il modello Zone.js resta pienamente supportato per le app esistenti. → [angular.dev/guide/zoneless](https://angular.dev/guide/zoneless)
+> Da Angular **v20.2** l'API zoneless è **stabile** (`provideZonelessChangeDetection()`) e da **v21** le nuove app sono **zoneless di default** (Zone.js non più incluso). Senza Zone.js la CD è guidata dalle notifiche dei signal, da `markForCheck()`, dagli eventi del template e dalla `async` pipe — di fatto le stesse condizioni di `OnPush`. Il modello Zone.js resta pienamente supportato per le app esistenti (vedi [angular.dev/guide/zoneless](https://angular.dev/guide/zoneless)).
 
 ## Ripasso lampo
 
@@ -129,4 +131,4 @@ Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forza
 - **`Default`** controlla sempre; **`OnPush`** salta il sottoalbero e ricontrolla solo su cambio riferimento di `@Input`, evento dal template, emissione `async` o `markForCheck()`.
 - `ChangeDetectorRef`: `markForCheck` (prossimo ciclo, risale agli antenati) / `detectChanges` (subito) / `detach`+`reattach`. `NgZone`: `runOutsideAngular` / `run`.
 - In dev, `ExpressionChangedAfterItHasBeenCheckedError` (NG0100) segnala un valore mutato dopo il check.
-- Moderno = signal + `OnPush` + **zoneless** (stabile da v20.2, default da v21) → [[03-reactive-design-with-signals]], [[02-signal-based-components]].
+- Moderno = signal + `OnPush` + **zoneless** (stabile da v20.2, default da v21), in [[03-reactive-design-with-signals]] e [[02-signal-based-components]].

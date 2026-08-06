@@ -26,8 +26,7 @@ Vale la **voce "professore"** del [root](../CLAUDE.md): la **spiegazione** (rego
 ```markdown
 # <Titolo>
 
-## Concetto
-Cosa è e perché, in **prosa narrativa e distesa** (non 2-4 righe telegrafiche).
+Cosa è e perché, in **prosa narrativa e distesa**, subito sotto il titolo — niente heading "Concetto": il titolo introduce già l'argomento.
 
 ## Comandi
 | Comando | Cosa fa |

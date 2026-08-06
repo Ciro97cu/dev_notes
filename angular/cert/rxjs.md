@@ -32,7 +32,7 @@ sub.unsubscribe(); // ferma lo stream ed esegue il teardown
 Un `Observable` emette zero o più valori con `next`, e termina con **`complete`** (successo) **o** `error` — mai entrambi; dopo la terminazione non emette più nulla. `next`/`error`/`complete` sono i tre metodi dell'`Observer`.
 
 ## Creazione
-Funzioni factory per ottenere un `Observable` senza istanziarlo a mano:
+Nella pratica un `Observable` si costruisce di rado a mano con `new`: la libreria offre una serie di **funzioni factory** che coprono i casi ricorrenti — partire da valori noti, da un array o una Promise, da eventi del DOM, oppure dal tempo — restituendo lo stream già pronto all'uso.
 
 ```ts
 import { of, from, fromEvent, interval, timer } from 'rxjs';
@@ -216,7 +216,7 @@ export class Legacy implements OnInit, OnDestroy {
 > `takeUntil` va messo **ultimo** nella `pipe` (o comunque dopo gli operator che creano nuove sottoscrizioni), altrimenti un inner observable a valle può restare attivo dopo il destroy. Regola pratica: `takeUntil`/`takeUntilDestroyed` per ultimo.
 
 > [!info] vs Modern
-> Il vault ragiona in **signals**: stato reattivo sincrono senza sottoscrizioni da chiudere. Per interoperare con codice RxJS esistente ci sono `toSignal` (Observable → signal, con unsubscribe automatico) e `toObservable` (signal → Observable). Reactive design, resource e interop sono in [[03-reactive-design-with-signals]] (qui non ripetuto). RxJS resta rilevante per HTTP, eventi e stream veri.
+> Il vault ragiona in **signals**: stato reattivo sincrono senza sottoscrizioni da chiudere. Per interoperare con codice RxJS esistente ci sono `toSignal` (da Observable a signal, con unsubscribe automatico) e `toObservable` (da signal a Observable). Reactive design, resource e interop sono in [[03-reactive-design-with-signals]] (qui non ripetuto). RxJS resta rilevante per HTTP, eventi e stream veri.
 
 > [!info] Stato attuale
 > RxJS **non è deprecato** né rimosso: `HttpClient`, `Router` ed `EventEmitter` restano Observable-based e i Signal Forms convivono con gli stream. Angular 22 gira su RxJS 7.x; l'interop `toSignal`/`toObservable` è stabile e `takeUntilDestroyed` è stabile dalla v19. Per il codice nuovo si preferiscono i signal per lo **stato**, riservando RxJS agli **eventi/stream** ([rxjs.dev/guide/observable](https://rxjs.dev/guide/observable) · [rxjs.dev/guide/subject](https://rxjs.dev/guide/subject) · [takeUntilDestroyed](https://angular.dev/api/core/rxjs-interop/takeUntilDestroyed)).
@@ -225,7 +225,7 @@ export class Legacy implements OnInit, OnDestroy {
 
 **1.** Cosa significa che un `Observable` è "cold" e come si vede la differenza con un `Subject`?
 > [!success]- Risposta
-> Cold = il produttore vive dentro l'Observable e **ogni** subscribe avvia un'esecuzione indipendente (due iscritti a `http.get` → due richieste). Un `Subject` è hot/multicast: un solo flusso condiviso, e i nuovi iscritti ricevono solo le emissioni successive alla loro sottoscrizione.
+> Cold = il produttore vive dentro l'Observable e **ogni** subscribe avvia un'esecuzione indipendente (due iscritti a `http.get` sono due richieste distinte). Un `Subject` è hot/multicast: un solo flusso condiviso, e i nuovi iscritti ricevono solo le emissioni successive alla loro sottoscrizione.
 
 **2.** Che differenza c'è fra `switchMap`, `mergeMap`, `concatMap` ed `exhaustMap`?
 > [!success]- Risposta
@@ -248,4 +248,4 @@ export class Legacy implements OnInit, OnDestroy {
 - Creazione con `of`/`from`/`fromEvent`/`interval`/`timer`; **multicasting** con `Subject` e varianti (`BehaviorSubject` per lo stato, `ReplaySubject`, `AsyncSubject`).
 - Operator pipeable per trasformare (`map`/`filter`/`scan`), temporizzare (`debounceTime`/`distinctUntilChanged`), combinare (`combineLatest`/`forkJoin`/`withLatestFrom`) e resistere agli errori (`catchError`/`retry`); flattening con `switchMap`/`mergeMap`/`concatMap`/`exhaustMap`.
 - **Unsubscribe** obbligatorio sugli stream infiniti: `takeUntilDestroyed`, `takeUntil(destroy$)`, o `async` pipe.
-- Equivalente moderno per lo **stato** = signals + interop `toSignal`/`toObservable` → [[03-reactive-design-with-signals]]; RxJS resta per eventi/stream, non deprecato.
+- Equivalente moderno per lo **stato** = signals + interop `toSignal`/`toObservable`, in [[03-reactive-design-with-signals]]; RxJS resta per eventi/stream, non deprecato.

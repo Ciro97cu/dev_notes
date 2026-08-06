@@ -9,7 +9,7 @@ livello: [mid, senior]
 Un **NgModule** è un contenitore che raggruppa componenti, direttive, pipe e provider correlati e dichiara come si compongono con il resto dell'app. Prima dei **standalone component** era l'unità organizzativa obbligatoria: ogni componente doveva appartenere a esattamente un NgModule. La cert lo chiede perché la stragrande maggioranza delle codebase esistenti è ancora module-based, e perché lazy loading, DI e librerie storiche si ragionano in termini di moduli.
 
 ## Il decoratore `@NgModule`
-La classe del modulo è vuota; tutto sta nei metadati del decoratore. I cinque campi principali:
+Un NgModule è, in pratica, una classe vuota: tutta la sua funzione sta nei **metadati** passati al decoratore `@NgModule`, che dichiarano cosa il modulo possiede, cosa importa da altri moduli e cosa rende visibile all'esterno. I campi principali sono cinque, ed è utile tenerne a mente il ruolo perché è su questa distinzione che poggiano visibilità, DI e bootstrap.
 
 ```ts
 // src/app/app.module.ts
@@ -36,7 +36,7 @@ export class AppModule {}
 - **`bootstrap`** — il/i componente/i radice istanziati all'avvio; presente **solo** nel root module.
 
 ## Bootstrap classico
-Senza `bootstrapApplication`, l'app parte istanziando il **root module**:
+Nel mondo module-based l'avvio dell'applicazione non passa da `bootstrapApplication`, ma dall'istanziazione del **root module**: si sceglie una *platform* e le si chiede di fare il bootstrap del modulo radice, che a sua volta, tramite il campo `bootstrap`, indica quale componente montare nella pagina.
 
 ```ts
 // src/main.ts
@@ -51,6 +51,8 @@ platformBrowserDynamic()
 `platformBrowserDynamic` compila i template a runtime (JIT); il `bootstrap: [AppComponent]` del modulo dice quale componente montare nel `<app-root>` dell'`index.html`.
 
 ## Root module, feature module, shared module
+Nelle app module-based i moduli si organizzano per ruolo, secondo una convenzione consolidata che ne distingue tre tipi, ciascuno con responsabilità e regole d'import proprie.
+
 - **Root module** (`AppModule`) — importa **`BrowserModule`** (una volta sola in tutta l'app) e ha il `bootstrap`.
 - **Feature module** — raggruppa una funzionalità (es. `BookingModule`); importa **`CommonModule`** (non `BrowserModule`) per avere `ngIf`/`ngFor`/pipe comuni.
 - **Shared module** — raccoglie dichiarabili riusabili e le **ri-esporta**, così i feature module importano un solo modulo invece di molti.
@@ -70,9 +72,9 @@ export class BookingModule {}
 
 > [!warning]
 > Errori tipici da esame:
-> - **`BrowserModule` in un feature module** → errore a runtime *"BrowserModule has already been loaded"*: va importato **solo** nel root module; altrove si usa `CommonModule`.
-> - Stessa dichiarabile in due `declarations` → *"Type X is part of the declarations of 2 modules"*. Ogni component/directive/pipe appartiene a **un** modulo (o si esporta da uno shared module).
-> - Usare un componente di un altro modulo **senza** che quel modulo lo `exports` → il template non lo riconosce.
+> - **`BrowserModule` in un feature module**: dà l'errore a runtime *"BrowserModule has already been loaded"*. Va importato **solo** nel root module; altrove si usa `CommonModule`.
+> - Stessa dichiarabile in due `declarations`: si ottiene *"Type X is part of the declarations of 2 modules"*. Ogni component/directive/pipe appartiene a **un** modulo (o si esporta da uno shared module).
+> - Usare un componente di un altro modulo **senza** che quel modulo lo `exports`: il template non lo riconosce.
 
 ## `forRoot()` / `forChild()`
 Convenzione per i moduli che offrono **provider globali** (tipicamente librerie e il router): `forRoot()` registra i singleton e va chiamato **una sola volta** nel root; `forChild()` aggiunge solo configurazione (es. rotte figlie) senza ri-registrare i service.
@@ -89,7 +91,7 @@ export class AppRoutingModule {}
 ```
 
 ## Lazy loading di un modulo
-Il router carica un feature module on-demand con `loadChildren`:
+Invece di includere un feature module nel bundle iniziale, lo si può caricare **on-demand**, cioè solo quando l'utente naviga verso le sue route. Nel classico questo si ottiene con `loadChildren`, a cui si passa una funzione che esegue un dynamic `import()` del modulo e ne restituisce la classe.
 
 ```ts
 const routes: Routes = [
@@ -105,7 +107,7 @@ const routes: Routes = [
 > Un `providers` dichiarato in un **modulo lazy** crea un **injector figlio**: il service è una **nuova istanza**, non il singleton del root. È una domanda-trabocchetto classica. Per un vero singleton usare `providedIn: 'root'` (vedi [[di-classic]]).
 
 > [!info] vs Modern
-> L'equivalente moderno non usa moduli: componenti **standalone** (`imports` direttamente sul `@Component`), `bootstrapApplication(App, { providers: [...] })`, `provideRouter(routes)` con `loadComponent`/`loadChildren`, e `providedIn: 'root'` per i singleton. Tutto questo è nel vault → [[01-getting-started]] e [[04-router-navigation-lazy-loading]] (qui non ripetuto).
+> L'equivalente moderno non usa moduli: componenti **standalone** (`imports` direttamente sul `@Component`), `bootstrapApplication(App, { providers: [...] })`, `provideRouter(routes)` con `loadComponent`/`loadChildren`, e `providedIn: 'root'` per i singleton. Tutto questo è già nel vault, in [[01-getting-started]] e [[04-router-navigation-lazy-loading]] (qui non ripetuto).
 
 > [!info] Stato attuale
 > Da Angular v17 il CLI genera app **standalone** e da v19 `standalone: true` è implicito. Gli NgModule **non sono deprecati**: restano pienamente supportati e interoperano con lo standalone (un modulo può importare componenti standalone, e un componente standalone può importare un NgModule). Per il codice nuovo si preferisce lo standalone.
@@ -132,4 +134,4 @@ const routes: Routes = [
 - Un `@NgModule` raggruppa dichiarabili (`declarations`) e le espone (`exports`), importa altri moduli (`imports`), offre service (`providers`) e — nel root — indica il componente radice (`bootstrap`).
 - `BrowserModule` solo nel root; `CommonModule` nei feature module; shared module per ri-esportare le dichiarabili comuni.
 - Lazy loading via `loadChildren`; attenzione all'**injector figlio** che duplica i provider del modulo lazy.
-- Equivalente moderno = standalone + `bootstrapApplication` + `provideRouter` → [[01-getting-started]]; NgModule non deprecati ma non più default.
+- Equivalente moderno = standalone + `bootstrapApplication` + `provideRouter`, in [[01-getting-started]]; NgModule non deprecati ma non più default.

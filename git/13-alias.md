@@ -1,6 +1,5 @@
 # Alias
 
-## Concetto
 Un alias è un soprannome che si assegna a un comando Git, un modo per abbreviare i comandi più lunghi o più frequenti e digitarli con poche lettere. Come per la configurazione, un alias può essere globale, e quindi valere in tutti i repository, oppure locale a un singolo repo.
 
 ## Creare

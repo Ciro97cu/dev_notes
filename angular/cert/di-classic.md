@@ -57,7 +57,7 @@ export const APP_CONFIG = new InjectionToken<AppConfig>('app.config', {
 Un'interfaccia TypeScript **non** può fare da token: sparisce alla compilazione, quindi a runtime non esiste una chiave. Per iniettare valori tipizzati da un'interfaccia serve un `InjectionToken<T>`.
 
 ## Le quattro recipe
-Nella forma estesa un provider è un oggetto `{ provide: TOKEN, ...recipe }`. Le recipe:
+La **recipe** è la parte del provider che dice all'injector *come* produrre il valore dietro un token. Nella forma estesa il provider è l'oggetto `{ provide: TOKEN, ...recipe }`, e la chiave che accompagna `provide` seleziona una fra quattro strategie: fornire una classe da istanziare, un valore già pronto, una factory che lo costruisce, oppure un alias verso un altro token.
 
 ```ts
 @NgModule({
@@ -102,7 +102,7 @@ Senza `multi: true` il secondo provider **sovrascriverebbe** il primo, restituen
 ## Injector gerarchici: `ModuleInjector` vs `ElementInjector`
 Angular non ha un solo injector, ma **due gerarchie parallele**:
 
-- **`ModuleInjector`** (o *environment injector*) — popolato da `providedIn`, dagli array `providers` degli `@NgModule` e dalle provider function. Gerarchia: `platform` → `root` → injector dei **moduli lazy**.
+- **`ModuleInjector`** (o *environment injector*) — popolato da `providedIn`, dagli array `providers` degli `@NgModule` e dalle provider function. La sua gerarchia va da `platform` a `root`, fino all'injector dei **moduli lazy**.
 - **`ElementInjector`** — creato per ogni elemento del DOM che ospita un componente/direttiva con un proprio `providers` (o `viewProviders`). Segue l'albero dei componenti.
 
 ```mermaid
@@ -118,10 +118,10 @@ graph TD
   C2 -. "se non trovato, ricade su" .-> R
 ```
 
-Ordine di risoluzione: Angular parte dall'`ElementInjector` del componente che chiede la dipendenza, **sale** l'albero degli `ElementInjector` fino alla radice, e **solo poi** passa alla gerarchia dei `ModuleInjector`. Il primo provider trovato vince → un `providers` a livello componente "oscura" (shadowing) quello root per quel sotto-albero.
+Ordine di risoluzione: Angular parte dall'`ElementInjector` del componente che chiede la dipendenza, **sale** l'albero degli `ElementInjector` fino alla radice, e **solo poi** passa alla gerarchia dei `ModuleInjector`. Vince il primo provider trovato, e da qui una conseguenza pratica: un `providers` dichiarato a livello di componente "oscura" (shadowing) quello root per l'intero sotto-albero di quel componente.
 
 ## Resolution modifier (forma decorator)
-Con l'injection via costruttore, quattro decoratori di parametro alterano la ricerca:
+I **resolution modifier** sono decoratori che si applicano ai parametri del costruttore per cambiare *come* l'injector risolve quella singola dipendenza: da dove cominciare a cercarla, dove fermarsi, e cosa fare se non la trova. Con l'injection via costruttore sono quattro, e si possono combinare tra loro.
 
 ```ts
 import { Optional, Self, SkipSelf, Host } from '@angular/core';
@@ -144,14 +144,14 @@ export class FlightCard {
 
 > [!warning]
 > Insidie da esame:
-> - **Interfaccia come token** → non funziona: le interfacce TypeScript non esistono a runtime. Serve una **classe** o un `InjectionToken<T>`.
-> - **`useFactory` senza `deps`** → gli argomenti della factory arrivano `undefined`. Le dipendenze vanno elencate, nell'ordine, in `deps`.
-> - **Provider ripetuto senza `multi: true`** → l'ultimo **sovrascrive** i precedenti invece di aggiungersi. Per collezioni (es. interceptor) serve `multi: true` su tutti.
-> - **`@Self()` su una dipendenza non provista localmente** → `NullInjectorError`: `@Self` non risale la gerarchia. Combinare con `@Optional()` se la dipendenza può mancare.
+> - **Interfaccia come token**: non funziona, perché le interfacce TypeScript non esistono a runtime. Serve una **classe** o un `InjectionToken<T>`.
+> - **`useFactory` senza `deps`**: gli argomenti della factory arrivano `undefined`. Le dipendenze vanno elencate, nell'ordine, in `deps`.
+> - **Provider ripetuto senza `multi: true`**: l'ultimo **sovrascrive** i precedenti invece di aggiungersi. Per collezioni (es. interceptor) serve `multi: true` su tutti.
+> - **`@Self()` su una dipendenza non provista localmente**: `NullInjectorError`, perché `@Self` non risale la gerarchia. Conviene combinarlo con `@Optional()` se la dipendenza può mancare.
 > - `providers` a livello **componente** crea un'istanza **per ogni istanza di componente** (nell'`ElementInjector`), non un singleton: attenzione a metterci per errore uno store condiviso.
 
 > [!info] vs Modern
-> Il moderno inietta con la funzione [[inject]]`(Token)` invece dei parametri del costruttore, chiamata in un [[injection-context]]; i resolution modifier diventano **opzioni**: `inject(Token, { optional: true, self: true, skipSelf: true, host: true })`. I [[providers]] si dichiarano con le **provider function** (`bootstrapApplication(App, { providers: [...] })`, `provideX()`) e i singleton con `providedIn: 'root'` / [[service|@Service()]]. Tutto questo è nel vault → [[05-state-management-services-signals]] (qui non ripetuto). Le **recipe** (`useClass`/`useValue`/`useFactory`/`useExisting`) e `multi: true` sono **identiche** nei due mondi: cambia *come* si legge la dipendenza, non *come* si configura il provider.
+> Il moderno inietta con la funzione [[inject]]`(Token)` invece dei parametri del costruttore, chiamata in un [[injection-context]]; i resolution modifier diventano **opzioni**: `inject(Token, { optional: true, self: true, skipSelf: true, host: true })`. I [[providers]] si dichiarano con le **provider function** (`bootstrapApplication(App, { providers: [...] })`, `provideX()`) e i singleton con `providedIn: 'root'` / [[service|@Service()]]. Tutto questo è già nel vault, in [[05-state-management-services-signals]] (qui non ripetuto). Le **recipe** (`useClass`/`useValue`/`useFactory`/`useExisting`) e `multi: true` restano invece **identiche** nei due mondi: cambia *come* si legge la dipendenza, non *come* si configura il provider.
 
 > [!info] Stato attuale
 > `@Injectable` e la constructor injection **non sono deprecati** e restano pienamente supportati (Angular 22+). Per il codice nuovo la guida ufficiale preferisce [[inject]]: è più componibile, tree-shakable e senza i limiti dei decoratori di parametro. `providedIn: 'root'` è tuttora la via consigliata per i singleton (nel vault, da Angular 22, l'annotazione equivalente è [[service|@Service()]]). Fonte: [angular.dev/guide/di](https://angular.dev/guide/di) e [angular.dev/guide/di/hierarchical-dependency-injection](https://angular.dev/guide/di/hierarchical-dependency-injection).
@@ -176,11 +176,11 @@ export class FlightCard {
 
 **5.** A cosa servono `@Optional`, `@Self`, `@SkipSelf`, `@Host`?
 > [!success]- Risposta
-> `@Optional` → inietta `null` invece di lanciare errore se il token manca. `@Self` → cerca solo nell'injector corrente, senza risalire. `@SkipSelf` → salta il corrente e parte dal padre. `@Host` → pone il limite superiore della ricerca all'injector del componente host.
+> `@Optional` inietta `null` invece di lanciare errore se il token manca. `@Self` cerca solo nell'injector corrente, senza risalire. `@SkipSelf` salta il corrente e parte dal padre. `@Host` pone il limite superiore della ricerca all'injector del componente host.
 
 **In sintesi:**
 - `@Injectable({ providedIn: 'root' | 'platform' | 'any' })` auto-registra un servizio tree-shakable; `'root'` è quasi sempre la scelta giusta.
 - Token = class token oppure `InjectionToken<T>` (obbligatorio per valori non-classe/interfacce); recipe = `useClass`/`useValue`/`useFactory`(+`deps`)/`useExisting`.
 - `multi: true` trasforma più provider dello stesso token in un array; senza, l'ultimo vince.
 - Due gerarchie di injector (`ElementInjector` prima, poi `ModuleInjector`); i resolution modifier `@Optional`/`@Self`/`@SkipSelf`/`@Host` regolano la ricerca.
-- Equivalente moderno = [[inject]] + opzioni + provider function → [[05-state-management-services-signals]]; le recipe e `multi` restano identiche.
+- Equivalente moderno = [[inject]] + opzioni + provider function, in [[05-state-management-services-signals]]; le recipe e `multi` restano identiche.

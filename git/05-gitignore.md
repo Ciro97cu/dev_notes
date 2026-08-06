@@ -1,6 +1,5 @@
 # .gitignore
 
-## Concetto
 Il file `.gitignore` indica a Git quali file o cartelle **non** deve tracciare, come i file temporanei, le configurazioni personali dell'ambiente o gli output di build: serve a tenere fuori dal repository tutto ciò che non ha senso versionare, evitando così di aggiungerlo per errore.
 
 Ogni riga del file è una regola espressa come pattern. Un aspetto importante da tenere presente è che `.gitignore` agisce **solo sui file non ancora tracciati**: se un file è già stato aggiunto al repository, elencarlo qui non basta a farlo ignorare, e occorre prima rimuoverlo dal tracking come mostrato più avanti.

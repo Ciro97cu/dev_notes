@@ -1,6 +1,5 @@
 # Commit
 
-## Concetto
 Un commit è un'istantanea salvata dello stato dei file tracciati in un dato momento, accompagnata da un messaggio che descrive cosa è cambiato. È il mattone con cui si costruisce la cronologia del progetto: ogni commit resta registrato nella storia, così è sempre possibile tornare a una versione precedente o confrontare due momenti diversi del lavoro.
 
 Il percorso che porta a un commit attraversa tre luoghi. Si comincia modificando i file nel *working directory*, cioè la cartella di lavoro così come appare sul disco; con `git add` le modifiche che si vogliono salvare vengono spostate nella **staging area**, una zona d'attesa in cui si compone il prossimo commit scegliendo cosa includere; infine `git commit` fotografa ciò che si trova in staging e lo fissa nella storia.

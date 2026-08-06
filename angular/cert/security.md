@@ -14,7 +14,7 @@ Quando un valore entra nel DOM da un template, Angular lo **sanitizza** in base 
 - **HTML** — valore interpretato come markup (es. binding `[innerHTML]`): Angular rimuove `<script>`, attributi `on*` e tag pericolosi.
 - **Style** — valore inserito in una proprietà CSS/`style`.
 - **URL** — URL usato come navigazione/link (es. `[href]`, `[src]` di immagini): blocca schemi pericolosi come `javascript:`.
-- **Resource URL** — URL **caricato ed eseguito come codice** (es. `[src]` di `<script>`/`<iframe>`): **non è sanitizzabile** perché il contenuto è arbitrario → Angular lo rifiuta a meno di un bypass esplicito.
+- **Resource URL** — URL **caricato ed eseguito come codice** (es. `[src]` di `<script>`/`<iframe>`): **non è sanitizzabile**, perché il contenuto è arbitrario, e Angular lo rifiuta a meno di un bypass esplicito.
 
 Non esiste sanitizzazione per il contesto *script*: Angular non consente di bindare codice eseguibile.
 
@@ -115,7 +115,7 @@ I **Trusted Types** (feature della piattaforma web che vincola le *sink* pericol
 Il modello di sicurezza vale per i **dati**, non per i **template**: costruire un template concatenando input dell'utente e compilarlo a runtime apre a *template injection*. La compilazione **AOT** (*Ahead-of-Time*, a build time) è la difesa strutturale — non spedisce il compilatore al browser, quindi un template ostile non può essere compilato lato client. La regola resta: **mai** generare template da dati dell'utente.
 
 > [!info] vs Modern
-> Il modello di sicurezza (sanitizzazione contestuale, `DomSanitizer`, XSRF, CSP, Trusted Types) è **identico** nell'Angular moderno: cambia solo la configurazione dell'HTTP, da `HttpClientXsrfModule` a `provideHttpClient(withXsrfConfiguration(...))`. I temi di **autenticazione/autorizzazione** (login, token, guard) sono trattati nel vault → [[16-authentication-authorization]]; qui non si ripetono.
+> Il modello di sicurezza (sanitizzazione contestuale, `DomSanitizer`, XSRF, CSP, Trusted Types) è **identico** nell'Angular moderno: cambia solo la configurazione dell'HTTP, da `HttpClientXsrfModule` a `provideHttpClient(withXsrfConfiguration(...))`. I temi di **autenticazione/autorizzazione** (login, token, guard) sono trattati nel vault, in [[16-authentication-authorization]]; qui non si ripetono.
 
 > [!info] Stato attuale
 > Sanitizzazione, `DomSanitizer`, XSRF, `CSP_NONCE`/`ngCspNonce` e il supporto Trusted Types sono **validi e non deprecati** su Angular 22. Nelle app standalone `HttpClientModule`/`HttpClientXsrfModule` sono sostituiti da `provideHttpClient(...)` con le funzioni `with…`, ma nome cookie/header di default e comportamento dell'interceptor restano invariati. L'AOT è il default di build da molte versioni: il rischio *template injection* riguarda quasi solo chi usa ancora la compilazione JIT.
@@ -147,7 +147,7 @@ Il modello di sicurezza vale per i **dati**, non per i **template**: costruire u
 - `DomSanitizer` + `bypassSecurityTrust…` aggirano la difesa: **solo** su valori fidati, **mai** su input utente.
 - **XSRF**: `HttpClient` invia il token dal cookie `XSRF-TOKEN` all'header `X-XSRF-TOKEN` (config via `HttpClientXsrfModule.withOptions` / `withXsrfConfiguration`); serve la validazione **lato server**.
 - **CSP** con nonce (`CSP_NONCE`/`ngCspNonce`) + **Trusted Types** come difesa in profondità; **AOT** previene la *template injection* (mai template da dati utente).
-- Autenticazione/autorizzazione → [[16-authentication-authorization]].
+- Autenticazione/autorizzazione: si veda [[16-authentication-authorization]].
 
 ---
 Fonti: [Security](https://angular.dev/best-practices/security) · [`DomSanitizer`](https://angular.dev/api/platform-browser/DomSanitizer) · [`SecurityContext`](https://angular.dev/api/core/SecurityContext) · [`withXsrfConfiguration`](https://angular.dev/api/common/http/withXsrfConfiguration) · [`CSP_NONCE`](https://angular.dev/api/core/CSP_NONCE) — angular.dev.

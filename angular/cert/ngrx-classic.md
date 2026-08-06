@@ -54,7 +54,7 @@ export const loadFlightsFailure = createAction(
 export const clearFlights = createAction('[Flight Search] Clear');
 ```
 
-Chiamata: `loadFlights({ from: 'Graz', to: 'Hamburg' })` → `{ type: '[Flight Search] Load Flights', from: 'Graz', to: 'Hamburg' }`.
+Chiamandolo, `loadFlights({ from: 'Graz', to: 'Hamburg' })` produce l'oggetto `{ type: '[Flight Search] Load Flights', from: 'Graz', to: 'Hamburg' }`.
 
 > [!tip]
 > Il pattern **trigger / success / failure** (tre action per un'operazione async) è la convenzione standard: l'action di trigger parte dalla UI, le altre due dall'Effect a seconda dell'esito. La parte `[Source]` del type deve identificare **chi** scatena l'action (utile nei DevTools).
@@ -266,7 +266,7 @@ export const { selectAll, selectEntities, selectIds, selectTotal } =
 È l'equivalente classico di `withEntities` del Signal Store: stessa idea (entity map + ids + updater), API a funzioni invece che a feature.
 
 > [!info] vs Modern
-> Il vault moderno **non** usa il pattern Redux con `@ngrx/store`: usa il **NgRx Signal Store** (`@ngrx/signals`), dove lo stato è fatto di **signal** e lo store si compone di *features* (`withState`, `withComputed`, `withMethods`…). I concetti si mappano così: reducer/selector → `patchState` + `withComputed`; Effects → `rxMethod`/`withMutations`; `@ngrx/entity` → `withEntities`; e c'è persino un'**Event API** (Flux/Redux) opzionale. Tutto questo è già spiegato → [[09-ngrx-signal-store]] (qui non ripetuto).
+> Il vault moderno **non** usa il pattern Redux con `@ngrx/store`: usa il **NgRx Signal Store** (`@ngrx/signals`), dove lo stato è fatto di **signal** e lo store si compone di *features* (`withState`, `withComputed`, `withMethods`…). I concetti si mappano così: reducer e selector diventano `patchState` con `withComputed`; gli Effects diventano `rxMethod`/`withMutations`; `@ngrx/entity` diventa `withEntities`; e c'è persino un'**Event API** (Flux/Redux) opzionale. Tutto questo è già spiegato in [[09-ngrx-signal-store]] (qui non ripetuto).
 
 > [!info] Stato attuale
 > NgRx Store (Redux) **non è deprecato**: è mantenuto e resta la scelta per chi vuole il pattern Redux "puro" con time-travel debugging. La versione attuale offre API **funzionali/standalone** che affiancano i moduli classici: `provideStore(reducers)`, `provideState(feature)`, `provideEffects([...])` al posto di `StoreModule`/`EffectsModule`; `createActionGroup` per dichiarare gruppi di action con meno codice; `createFeature` che accorpa reducer + selector auto-generati; **effect funzionali** (`createEffect` con `inject` invece della classe); e `store.selectSignal(selector)` (da NgRx v16) che ritorna un `Signal` invece di un `Observable`, per integrarsi con la reactivity a signal ([ngrx.io](https://ngrx.io/guide/store)).
@@ -275,7 +275,7 @@ export const { selectAll, selectEntities, selectIds, selectTotal } =
 
 **1.** Quali sono i tre principi Redux e da cosa deriva il "flusso unidirezionale"?
 > [!success]- Risposta
-> **Single source of truth** (un solo store immutabile), **stato read-only** (si cambia solo dispatchando action), **cambiamenti con funzioni pure** (i reducer). Ne deriva il flusso unidirezionale: l'intenzione entra come **action** → il **reducer** calcola il nuovo stato → i componenti leggono via **selector**; i side effect stanno fuori, negli **Effects**, che a loro volta dispatchano nuove action.
+> **Single source of truth** (un solo store immutabile), **stato read-only** (si cambia solo dispatchando action), **cambiamenti con funzioni pure** (i reducer). Ne deriva il flusso unidirezionale: l'intenzione entra come **action**, il **reducer** calcola il nuovo stato e i componenti leggono via **selector**; i side effect stanno fuori, negli **Effects**, che a loro volta dispatchano nuove action.
 
 **2.** Perché un reducer deve essere puro e immutabile, e dove finiscono i side effect?
 > [!success]- Risposta
@@ -295,6 +295,6 @@ export const { selectAll, selectEntities, selectIds, selectTotal } =
 
 **In sintesi:**
 - NgRx Store porta **Redux** in Angular: store unico immutabile, cambiato solo da **action** (`createAction`/`props`) applicate da **reducer** puri (`createReducer`/`on`), con flusso unidirezionale.
-- I **selector** (`createFeatureSelector`/`createSelector`) leggono e derivano lo stato in modo **memoizzato**; i **side effect** stanno negli **Effects** (`@ngrx/effects`: `Actions` + `ofType` + flattening operator → action di successo/fallimento).
+- I **selector** (`createFeatureSelector`/`createSelector`) leggono e derivano lo stato in modo **memoizzato**; i **side effect** stanno negli **Effects** (`@ngrx/effects`: `Actions` + `ofType` + flattening operator che producono le action di successo/fallimento).
 - Wiring classico via `StoreModule`/`EffectsModule` `forRoot`/`forFeature`; il componente usa `dispatch`/`select`. Le collection si gestiscono con `@ngrx/entity`.
-- Equivalente moderno = **NgRx Signal Store** (`@ngrx/signals`) → [[09-ngrx-signal-store]]; il classico non è deprecato e oggi offre API funzionali (`provideStore`/`provideEffects`, `createFeature`, `selectSignal`).
+- Equivalente moderno = **NgRx Signal Store** (`@ngrx/signals`), in [[09-ngrx-signal-store]]; il classico non è deprecato e oggi offre API funzionali (`provideStore`/`provideEffects`, `createFeature`, `selectSignal`).

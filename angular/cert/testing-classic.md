@@ -100,7 +100,7 @@ describe('FlightSearchComponent', () => {
 > Nei test la change detection **non** è automatica: va chiamata a mano con **`fixture.detectChanges()`**. La **prima** chiamata scatena `ngOnInit` e il primo data binding; senza, il template resta vuoto e i lifecycle hook non partono. (In produzione ci pensa Zone.js — vedi [[change-detection]].)
 
 ## Query sul DOM: `DebugElement` + `By.css`
-Il `debugElement` permette query sul DOM tramite **selettori CSS** (`By.css`) o per direttiva/componente (`By.directive`).
+Per verificare cosa il componente ha davvero renderizzato si interroga il suo `debugElement`, il wrapper con cui Angular avvolge il DOM della fixture. Le sue query accettano un **selettore CSS** tramite `By.css`, oppure il tipo di una direttiva o di un componente tramite `By.directive`, e restituiscono altri `DebugElement` da cui si raggiunge il nodo nativo e l'injector locale.
 
 ```ts
 import { By } from '@angular/platform-browser';
@@ -221,6 +221,8 @@ describe('FlightService', () => {
 > Prima delle API funzionali si importava il modulo **`HttpClientTestingModule`** in `imports`. È **deprecato** da Angular v18 a favore di `provideHttpClient()` + `provideHttpClientTesting()` ([angular.dev](https://angular.dev/guide/http/testing)). Il resto dell'API (`HttpTestingController`, `expectOne`/`flush`/`verify`) è invariato.
 
 ## Mock di service e di componenti figli
+Per testare un componente in isolamento occorre rimpiazzarne le dipendenze reali con sostituti controllabili, e i casi tipici sono due: i service da cui dipende e i componenti figli che compaiono nel suo template.
+
 - **Service** — si sostituisce via provider: `{ provide: X, useValue: mock }` (oggetto/spia), `{ provide: X, useClass: FakeX }`, oppure `jasmine.createSpyObj`.
 - **Componenti figli** — per isolare il componente sotto test (*shallow testing*) si sostituisce il figlio con uno **stub** che ha **stesso selector, stessi `@Input`/`@Output`**. In alternativa si aggiunge `NO_ERRORS_SCHEMA` (o `CUSTOM_ELEMENTS_SCHEMA`) allo `schemas` del `TestBed`, che fa ignorare gli elementi/attributi sconosciuti nel template.
 
@@ -247,7 +249,7 @@ await TestBed.configureTestingModule({
 **Karma** è il runner storico: legge `karma.conf.js`, avvia un browser reale (Chrome, oppure `ChromeHeadless` in CI), vi serve il bundle di test, esegue le spec (via `karma-jasmine`) e raccoglie i risultati. È il motore dietro `ng test` nelle versioni classiche della CLI.
 
 > [!info] vs Modern
-> Il vault moderno testa con **Vitest** (il runner di default della CLI): stessa filosofia AAA e stesso `TestBed`/`HttpTestingController`, ma componenti **standalone** in `imports` (niente `declarations`), globali di Vitest (`describe`/`it`/`vi`), spie `vi.spyOn`, mock HTTP con `provideHttpClientTesting`, fake timer `vi.useFakeTimers()` al posto di `fakeAsync`/`tick`, e locator ARIA (`page.getByRole`) al posto di `By.css`. Tutto in → [[07-testing-with-vitest]] (qui non ripetuto).
+> Il vault moderno testa con **Vitest** (il runner di default della CLI): stessa filosofia AAA e stesso `TestBed`/`HttpTestingController`, ma componenti **standalone** in `imports` (niente `declarations`), globali di Vitest (`describe`/`it`/`vi`), spie `vi.spyOn`, mock HTTP con `provideHttpClientTesting`, fake timer `vi.useFakeTimers()` al posto di `fakeAsync`/`tick`, e locator ARIA (`page.getByRole`) al posto di `By.css`. Tutto in [[07-testing-with-vitest]] (qui non ripetuto).
 
 > [!info] Stato attuale
 > **Karma è deprecato** (pubblicato su npm come *deprecated* dall'aprile 2023: non riceve più feature né bugfix generali) e Angular ha **rimosso il builder Karma** in v20; da **Angular 21 Vitest è il test runner di default** dei nuovi progetti ([angular.dev](https://angular.dev/guide/testing/migrating-to-vitest)). **Jasmine** come framework di asserzioni non è deprecato ma non è più il default. Nelle codebase esistenti Karma+Jasmine restano finché non si migra a Vitest (big-bang o progressiva).
@@ -264,7 +266,7 @@ await TestBed.configureTestingModule({
 
 **3.** Quando si usa `fakeAsync`/`tick` e quando `waitForAsync`/`whenStable`? Qual è il limite di `fakeAsync`?
 > [!success]- Risposta
-> `fakeAsync` esegue il test a **tempo virtuale**: si fanno avanzare i timer con `tick(ms)`/`flush()` — ideale per debounce e `setTimeout`, in modo deterministico. `waitForAsync` + `fixture.whenStable()` attende invece i task async **reali** (Promise). Limite: `fakeAsync` **non** funziona con una vera richiesta XHR → va usato con dati mockati (es. `HttpTestingController`, sincrono).
+> `fakeAsync` esegue il test a **tempo virtuale**: si fanno avanzare i timer con `tick(ms)`/`flush()` — ideale per debounce e `setTimeout`, in modo deterministico. `waitForAsync` + `fixture.whenStable()` attende invece i task async **reali** (Promise). Limite: `fakeAsync` **non** funziona con una vera richiesta XHR, quindi va usato con dati mockati (es. `HttpTestingController`, sincrono).
 
 **4.** Come si testa una chiamata HTTP con `HttpTestingController` e cosa fanno `expectOne`/`flush`/`verify`?
 > [!success]- Risposta
@@ -276,6 +278,6 @@ await TestBed.configureTestingModule({
 
 **In sintesi:**
 - **Jasmine** dà `describe`/`it`/`beforeEach` e `expect` + matcher (`toBe` = `===`, `toEqual` = profondo), più `spyOn`/`jasmine.createSpyObj` per spie e mock; **Karma** è il runner che li esegue in un browser reale.
-- Il **`TestBed`** monta i componenti (`declarations`/`imports`/`providers`, `createComponent` → `ComponentFixture`); la change detection è **manuale** (`fixture.detectChanges()`), le query DOM passano da `debugElement` + `By.css`.
+- Il **`TestBed`** monta i componenti (`declarations`/`imports`/`providers`, con `createComponent` che restituisce una `ComponentFixture`); la change detection è **manuale** (`fixture.detectChanges()`), le query DOM passano da `debugElement` + `By.css`.
 - Async: **`fakeAsync`/`tick`/`flush`** (tempo virtuale, no XHR reali) o **`waitForAsync`/`whenStable`**; HTTP mockato con **`HttpTestingController`** (`provideHttpClientTesting`, `expectOne`/`flush`/`verify`).
-- Equivalente moderno = **Vitest** → [[07-testing-with-vitest]]; Karma è deprecato e non più il default (Vitest da Angular 21), `HttpClientTestingModule` deprecato da v18.
+- Equivalente moderno = **Vitest**, in [[07-testing-with-vitest]]; Karma è deprecato e non più il default (Vitest da Angular 21), `HttpClientTestingModule` deprecato da v18.

@@ -26,7 +26,7 @@ Appunti di preparazione alla **certificazione Angular** di [certificates.dev](ht
 - [[security]] — XSS/sanitization, `DomSanitizer`, XSRF, CSP
 
 ## Già nel vault moderno (solo ripasso, non riscritto qui)
-Componenti e control flow, content projection, DI `inject()`, routing moderno e guard funzionali, signals e CD signal-based, interop `toSignal`/`toObservable`, `HttpClient`/`httpResource`, NgRx **Signal** Store, structural directive custom, testing con Vitest, defer/SSR, auth → vedi i rispettivi capitoli nel vault ([[00-index]]).
+Componenti e control flow, content projection, DI `inject()`, routing moderno e guard funzionali, signals e CD signal-based, interop `toSignal`/`toObservable`, `HttpClient`/`httpResource`, NgRx **Signal** Store, structural directive custom, testing con Vitest, defer/SSR, auth: per tutti questi temi si rimanda ai rispettivi capitoli nel vault ([[00-index]]).
 
 ---
 Fonti: [certificates.dev/angular](https://certificates.dev/angular) · [topic d'esame](https://support.certificates.dev/article/97-what-topics-are-covered-in-the-angular-certification-exams) · [angular.dev](https://angular.dev/) · [rxjs.dev](https://rxjs.dev/) · [ngrx.io](https://ngrx.io/).

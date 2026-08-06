@@ -6,7 +6,7 @@ livello: [mid]
 # Routing classico
 > Cert Angular · il Router in forma *module-based* — `RouterModule.forRoot`, guard/resolver class-based, `snapshot`; il setup moderno è nel vault ([[04-router-navigation-lazy-loading]])
 
-Nel Router classico la configurazione si registra con `RouterModule.forRoot`/`forChild` dentro gli `@NgModule`, guard e resolver sono **classi** `@Injectable` che implementano un'interfaccia, e i parametri si leggono spesso via `ActivatedRoute.snapshot`. La cert lo richiede perché è così che è cablata la maggior parte delle app esistenti, e perché il ciclo di navigazione (guard → resolve → activate) è materia d'esame.
+Nel Router classico la configurazione si registra con `RouterModule.forRoot`/`forChild` dentro gli `@NgModule`, guard e resolver sono **classi** `@Injectable` che implementano un'interfaccia, e i parametri si leggono spesso via `ActivatedRoute.snapshot`. La cert lo richiede perché è così che è cablata la maggior parte delle app esistenti, e perché il ciclo di navigazione (prima i guard, poi il resolve dei dati, infine l'attivazione) è materia d'esame.
 
 ## `RouterModule.forRoot` / `forChild`
 Il root module registra le route top-level e il servizio `Router` (singleton) con `forRoot`; i feature module aggiungono le proprie route con `forChild`, che **non** ri-registra i service.
@@ -45,7 +45,7 @@ export class BookingRoutingModule {}
 
 Il secondo argomento di `forRoot` è un `ExtraOptions`: tra le opzioni utili `useHash: true` (attiva `HashLocationStrategy`), `preloadingStrategy`, `bindToComponentInputs: true` (equivalente module-based di `withComponentInputBinding`), `paramsInheritanceStrategy`, `onSameUrlNavigation`.
 
-`<router-outlet>` (il placeholder in cui il Router monta il componente attivato), `routerLink` e `routerLinkActive` funzionano **identici** al moderno; in un'app module-based sono forniti da `RouterModule` (ri-esportato) invece di essere importati singolarmente. Dettagli e default route/matching → [[04-router-navigation-lazy-loading]].
+`<router-outlet>` (il placeholder in cui il Router monta il componente attivato), `routerLink` e `routerLinkActive` funzionano **identici** al moderno; in un'app module-based sono forniti da `RouterModule` (ri-esportato) invece di essere importati singolarmente. Dettagli e regole di default route/matching sono in [[04-router-navigation-lazy-loading]].
 
 ## Navigazione programmatica
 Si fa injection del `Router` e si naviga con `navigate` (array di segmenti + `NavigationExtras`) o `navigateByUrl` (URL come stringa già formata).
@@ -80,10 +80,10 @@ ngOnInit(): void {
 ```
 
 > [!warning]
-> Se una route naviga verso lo **stesso componente** con un parametro diverso (es. `/flight/1` → `/flight/2`), Angular **riusa l'istanza** e non chiama di nuovo `ngOnInit`: lo `snapshot` resta al valore vecchio. In questi casi va usato l'**Observable** `paramMap` per reagire al cambio. I parametri sono **sempre stringhe** → conversione a mano.
+> Se una route naviga verso lo **stesso componente** con un parametro diverso (per esempio da `/flight/1` a `/flight/2`), Angular **riusa l'istanza** e non chiama di nuovo `ngOnInit`: lo `snapshot` resta al valore vecchio. In questi casi va usato l'**Observable** `paramMap` per reagire al cambio. I parametri sono inoltre **sempre stringhe**, quindi la conversione va fatta a mano.
 
 ## Child routes e lazy loading di moduli
-Le viste annidate si dichiarano con `children`; un componente padre espone un proprio `<router-outlet>` interno (dettagli → [[04-router-navigation-lazy-loading]]).
+Le **child route** modellano le viste annidate: una route può portare un array `children`, e il componente che la serve espone un proprio `<router-outlet>` interno in cui il Router monta la vista figlia. Così l'URL finisce per rispecchiare la gerarchia della UI (i dettagli sono in [[04-router-navigation-lazy-loading]]).
 
 ```ts
 {
@@ -183,10 +183,10 @@ Registrazione nelle route (array, perché più guard possono concorrere):
 ```
 
 > [!warning]
-> `CanLoad` (deprecato) impediva solo il **caricamento del bundle** ma non faceva ri-valutare la route: con più route sullo stesso path non permetteva un fallback. `CanMatch`, valutato nel matching, se `false` fa **provare la route successiva** → più potente e va preferito.
+> `CanLoad` (deprecato) impediva solo il **caricamento del bundle** ma non faceva ri-valutare la route: con più route sullo stesso path non permetteva un fallback. `CanMatch`, valutato nel matching, se `false` fa **provare la route successiva**: è quindi più potente e va preferito.
 
 ## Resolver class-based
-Un resolver (`Resolve<T>`) carica i dati **prima** che la route si attivi, così il componente li trova già pronti.
+Un **resolver** (`Resolve<T>`) sposta il caricamento dei dati *prima* dell'attivazione della route: il Router attende che il dato sia risolto e solo allora monta il componente, che così lo trova già pronto invece di dover gestire da sé uno stato di caricamento iniziale.
 
 ```ts
 @Injectable({ providedIn: 'root' })
@@ -208,7 +208,7 @@ this.route.data.subscribe((d) => (this.flight = d['flight']));
 ```
 
 ## Router events
-Il `Router` espone un Observable `events` con l'intero ciclo di navigazione — utile per spinner globali, analytics, log.
+Il `Router` pubblica su un Observable `events` l'intero ciclo di ogni navigazione, dall'inizio alla fine (o all'annullamento). Iscrivendovisi si reagisce in modo trasversale a ciò che accade durante il routing, tipicamente per mostrare uno spinner globale, tracciare analytics o registrare log.
 
 ```ts
 import { NavigationEnd, Router } from '@angular/router';
@@ -225,7 +225,7 @@ Tra gli eventi principali, nell'ordine: `NavigationStart`, `RoutesRecognized`, `
 > Altre insidie: `forRoot` va chiamato **una sola volta** (root); ripeterlo in un feature module duplica il `Router`. E un guard che redirige dovrebbe restituire un **`UrlTree`** (via `createUrlTree`), non fare `this.router.navigate(...)` seguito da `return false`: il ritorno di `UrlTree` è la forma canonica, atomica e senza race.
 
 > [!info] vs Modern
-> Nel moderno il Router si registra con `provideRouter(routes, ...features)` invece di `RouterModule.forRoot`, e le **feature** (`withComponentInputBinding`, `withPreloading`, `withHashLocation`, `withDebugTracing`) sostituiscono gli `ExtraOptions`; il lazy loading usa `loadComponent`/`loadChildren` di **route** (non di NgModule). Guard e resolver diventano **funzioni** (`CanActivateFn`, `CanMatchFn`, `ResolveFn`) con [[inject]] al posto delle classi `@Injectable`. Outlet, `routerLink`, parametri e child routes sono **identici** e già spiegati nel vault → [[04-router-navigation-lazy-loading]] (setup, `withComponentInputBinding`, lazy) e [[12-initialization-route-changes]] (guard/resolver funzionali, router events). Qui non ripetuti.
+> Nel moderno il Router si registra con `provideRouter(routes, ...features)` invece di `RouterModule.forRoot`, e le **feature** (`withComponentInputBinding`, `withPreloading`, `withHashLocation`, `withDebugTracing`) sostituiscono gli `ExtraOptions`; il lazy loading usa `loadComponent`/`loadChildren` di **route** (non di NgModule). Guard e resolver diventano **funzioni** (`CanActivateFn`, `CanMatchFn`, `ResolveFn`) con [[inject]] al posto delle classi `@Injectable`. Outlet, `routerLink`, parametri e child routes sono **identici** e già spiegati nel vault, in [[04-router-navigation-lazy-loading]] (setup, `withComponentInputBinding`, lazy) e [[12-initialization-route-changes]] (guard/resolver funzionali, router events). Qui non ripetuti.
 
 > [!info] Stato attuale
 > Le **interfacce** dei guard/resolver class-based (`CanActivate`, `CanActivateChild`, `CanDeactivate`, `CanMatch`, `Resolve`) sono **deprecate dalla v15.2** in favore dei guard/resolver **funzionali**; `CanLoad` è deprecato ancora prima in favore di `CanMatch`. Una classe `@Injectable` resta comunque riusabile da un guard funzionale in migrazione — `canActivate: [() => inject(AuthGuard).canActivate(route, state)]` — o con gli helper `mapToCanActivate` & co. `RouterModule.forRoot`/`forChild` **non** sono deprecati e valgono per le app module-based. Fonte: [angular.dev/guide/routing](https://angular.dev/guide/routing) e l'issue di deprecazione [angular#50234](https://github.com/angular/angular/issues/50234).
@@ -238,11 +238,11 @@ Tra gli eventi principali, nell'ordine: `NavigationStart`, `RoutesRecognized`, `
 
 **2.** `snapshot` vs `paramMap` Observable: quando usare l'uno o l'altro?
 > [!success]- Risposta
-> Lo `snapshot` dà il valore del parametro **una tantum** all'attivazione: comodo, ma se si naviga verso lo **stesso componente** con un parametro diverso Angular riusa l'istanza, non richiama `ngOnInit` e lo snapshot resta vecchio. L'Observable `paramMap` (e `queryParamMap`, `data`, `fragment`) **emette a ogni cambio** senza ricreare il componente → va usato quando il parametro può cambiare a componente montato.
+> Lo `snapshot` dà il valore del parametro **una tantum** all'attivazione: comodo, ma se si naviga verso lo **stesso componente** con un parametro diverso Angular riusa l'istanza, non richiama `ngOnInit` e lo snapshot resta vecchio. L'Observable `paramMap` (e `queryParamMap`, `data`, `fragment`) **emette a ogni cambio** senza ricreare il componente, quindi va usato quando il parametro può cambiare a componente montato.
 
 **3.** Perché `CanMatch` è preferito a `CanLoad`?
 > [!success]- Risposta
-> `CanLoad` (deprecato) impediva solo il **caricamento del bundle lazy** ma non faceva ri-valutare la route, quindi non consentiva un fallback ad altre route sullo stesso path. `CanMatch` è valutato durante il **matching**: se restituisce `false` il Router **prova la route successiva** → più flessibile (route condizionali, A/B su feature flag).
+> `CanLoad` (deprecato) impediva solo il **caricamento del bundle lazy** ma non faceva ri-valutare la route, quindi non consentiva un fallback ad altre route sullo stesso path. `CanMatch` è valutato durante il **matching**: se restituisce `false` il Router **prova la route successiva**, ed è quindi più flessibile (route condizionali, A/B su feature flag).
 
 **4.** Come si scrive e registra un `CanDeactivate<T>` class-based?
 > [!success]- Risposta
@@ -257,4 +257,4 @@ Tra gli eventi principali, nell'ordine: `NavigationStart`, `RoutesRecognized`, `
 - Parametri via `ActivatedRoute`: `snapshot` una tantum, Observable `paramMap` per reagire ai cambi sullo stesso componente.
 - Guard/resolver = classi `@Injectable` (`CanActivate`/`CanActivateChild`/`CanDeactivate<T>`/`CanMatch`/`Resolve<T>`); `CanMatch` sostituisce `CanLoad`; redirigere con `UrlTree`.
 - Lazy loading di **NgModule** via `loadChildren` + dynamic `import()`; `Router.events` per il ciclo di navigazione.
-- Moderno = `provideRouter` + feature, guard/resolver **funzionali**, `loadComponent` → [[04-router-navigation-lazy-loading]] e [[12-initialization-route-changes]].
+- Moderno = `provideRouter` + feature, guard/resolver **funzionali**, `loadComponent`, in [[04-router-navigation-lazy-loading]] e [[12-initialization-route-changes]].

@@ -146,7 +146,7 @@ I **budget** impongono soglie di dimensione al build: la CLI emette un *warning*
 
 ## Evitare lavoro pesante nel template e nella CD
 Tutto ciò che sta in un binding del template viene rivalutato a ogni ciclo di CD. Da evitare:
-- **funzioni che restituiscono nuovi array/oggetti** nell'iterazione (`*ngFor="let x of filter(items)"`): creano un nuovo riferimento a ogni CD → ricreazione del DOM;
+- **funzioni che restituiscono nuovi array/oggetti** nell'iterazione (`*ngFor="let x of filter(items)"`): creano un nuovo riferimento a ogni CD, e quindi ricreano il DOM;
 - **getter che computano** (ordinamenti, riduzioni) usati come binding;
 - catene di **chiamate a metodo** nell'interpolazione.
 
@@ -180,7 +180,7 @@ export class TickerComponent implements OnInit, OnDestroy {
 > Un componente `detach`ato **non** si aggiorna più da solo: dimenticare `detectChanges()` (o `reattach()`) lascia la view congelata. È lo strumento giusto solo per casi ad alta frequenza misurati, non un'ottimizzazione da applicare a tappeto.
 
 > [!info] vs Modern
-> Con i **signal** la CD diventa granulare e i signal-based component si aggiornano solo quando cambia un signal letto nel template, rendendo di fatto obsoleti `markForCheck`/`detach` manuali → [[03-reactive-design-with-signals]]. Nel control flow moderno `@for` **richiede** l'espressione `track` (equivalente di `trackBy`, ma obbligatoria) e il caricamento differito passa da `@defer` con SSR/hydration incrementale → [[17-defer-ssr-hydration]]. Qui non si ripetono.
+> Con i **signal** la CD diventa granulare e i signal-based component si aggiornano solo quando cambia un signal letto nel template, rendendo di fatto obsoleti `markForCheck`/`detach` manuali, come spiegato in [[03-reactive-design-with-signals]]. Nel control flow moderno `@for` **richiede** l'espressione `track` (equivalente di `trackBy`, ma obbligatoria) e il caricamento differito passa da `@defer` con SSR/hydration incrementale, in [[17-defer-ssr-hydration]]. Qui non si ripetono.
 
 > [!info] Stato attuale
 > `trackBy`, `OnPush`, pure pipe, `PreloadingStrategy`, bundle budget e `detach` **non sono deprecati** e restano validi su Angular 22. Con lo standalone la preloading strategy si configura via `provideRouter(routes, withPreloading(PreloadAllModules))` invece di `RouterModule.forRoot`; i budget in `angular.json` sono invariati. `OnPush` resta utile finché convivono componenti Zone.js: nelle app *zoneless* + signals la sua rilevanza cala.
