@@ -7,12 +7,8 @@ Fonte: `modern-angular_v3_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagin
 > [!info] Versioning del vault
 > Gli appunti seguono la **v3.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info] Angular 22+` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
 
-## Tono e chiarezza (registro professore)
-Gli appunti spiegano come farebbe **un professore appassionato e chiaro** a uno studente alle prime armi: prosa **fluida e distesa**, non telegrafica. Fonte di verità del contenuto: sempre il PDF (v3.0.0). Esempio di riferimento del tono: [`concetti/signal.md`](concetti/signal.md).
-- **Registro impersonale** rigoroso: *"si legge"*, *"si usa"*, *"conviene"*. **Mai** la seconda persona (*"leggi"*, *"usi"*, *"puoi"*, *"vuoi"*) né l'imperativo nella teoria (l'imperativo resta ammesso solo nei passi operativi di una ricetta).
-- **Ogni sezione/nota apre con una frase-definizione in parole semplici** (cos'è e a cosa serve) prima dei dettagli. Evitare gli incipit telegrafici senza verbo (es. *"Primitiva di stato reattivo scrivibile."*).
-- **Ogni tecnicismo si introduce spiegandolo** la prima volta, con parole comuni; niente gergo non necessario. La **profondità tecnica e i termini corretti restano**: accessibile è *come* si spiega, non *quanto* si taglia.
-- **Niente `→` come connettivo di prosa**, né frasi spezzate in elenco quando serve un periodo: le relazioni si esprimono con congiunzioni (*"così"*, *"quindi"*, *"perché"*, *"invece"*).
+## Tono e chiarezza
+Vale la **voce "professore"** del [root](../CLAUDE.md) (prosa narrativa e distesa, impersonale, ogni tecnicismo spiegato senza tagliare la profondità tecnica). Copre i **capitoli** e le note **`cert/`** — queste spiegano temi *non trattati nel libro*, quindi vanno in **prosa distesa**, non in righe telegrafiche. Eccezione del vault: le note atomiche **`concetti/`** restano volutamente **concise** (definizione essenziale + snippet), lì la brevità è la feature. Esempio di riferimento del tono: [`concetti/signal.md`](concetti/signal.md). Fonte di verità del contenuto: sempre il PDF (v3.0.0).
 
 ## Struttura
 ```
@@ -127,7 +123,7 @@ aliases: [<sinonimi/varianti>]
 Appunti per la **cert Angular** di certificates.dev (target Senior). Coprono **solo** l'Angular *classico/legacy* che l'esame richiede e che **non** è nel libro *Modern Angular* (NgModules, template-driven & reactive forms, RxJS, DI e routing class-based, change detection con Zone.js, NgRx Redux, testing Jasmine/Karma, perf, security).
 - **Anti-duplicazione (regola dura)**: se un tema è già spiegato nei capitoli moderni, **non si riscrive** → si rimanda con `> [!info] vs Modern`. Fonte: [certificates.dev](https://certificates.dev/angular) + angular.dev / rxjs.dev / ngrx.io.
 - **Naming**: `cert/<topic-kebab>.md` (inglese), più `cert/00-index.md` (MOC + checklist spuntabile + link ai capitoli per i temi). NON usano il template capitolo (niente `pp.`).
-- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> Cert Angular · ...`; concept 2-4 righe; sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info] vs Modern` (link al capitolo moderno); `> [!info] Stato attuale` (deprecazione/default odierno + link); chiusura con **Ripasso lampo** e **In sintesi:**.
+- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> Cert Angular · ...`; **concetto in prosa narrativa e distesa** (il cert spiega temi non coperti altrove, quindi si spiega per esteso, non in 2-4 righe telegrafiche); sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info] vs Modern` (link al capitolo moderno); `> [!info] Stato attuale` (deprecazione/default odierno + link); chiusura con **Ripasso lampo** e **In sintesi:**.
 - **Manutenzione**: aggiungendo una nota `cert/`, aggiornare `cert/00-index.md` e la sezione `Cert` di `_sidebar.md`.
 
 ## Callout

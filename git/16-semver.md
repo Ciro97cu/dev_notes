@@ -1,9 +1,7 @@
 # SemVer (Semantic Versioning)
 
 ## Concetto
-SemVer è uno schema per numerare le versioni di un software in modo che il numero
-stesso dica cosa è cambiato. Formato: **`MAJOR.MINOR.PATCH`** (es. `2.3.1`). Si usa
-spesso con i [tag](11-tag.md) Git, con prefisso `v` (es. `v2.3.1`).
+SemVer, abbreviazione di *Semantic Versioning*, è uno schema per numerare le versioni di un software in modo che il numero stesso comunichi cosa è cambiato rispetto alla versione precedente. Il formato è **`MAJOR.MINOR.PATCH`**, per esempio `2.3.1`, e si accompagna spesso ai [tag](11-tag.md) di Git con il prefisso `v`, come `v2.3.1`.
 
 Fonte: [semver.org](https://semver.org/) (versione 2.0.0).
 
@@ -16,12 +14,10 @@ Dato `MAJOR.MINOR.PATCH`, si incrementa:
 | **MINOR** | nuove funzionalità **compatibili** con il passato | `1.4.2 → 1.5.0` |
 | **PATCH** | correzioni di bug **compatibili** con il passato | `1.4.2 → 1.4.3` |
 
-Quando si incrementa MAJOR, MINOR e PATCH tornano a 0. Quando si incrementa MINOR,
-PATCH torna a 0. (Es: `1.4.2` + breaking → `2.0.0`.)
+Quando si incrementa MAJOR, i numeri MINOR e PATCH tornano entrambi a 0; quando si incrementa MINOR, è PATCH a tornare a 0. Un cambiamento breaking su `1.4.2`, per esempio, porta a `2.0.0`.
 
 ## Versione 0.y.z (sviluppo iniziale)
-`0.y.z` indica sviluppo iniziale: tutto può cambiare in qualsiasi momento, l'API
-pubblica non è stabile. La versione `1.0.0` definisce l'API pubblica come stabile.
+Una versione nella forma `0.y.z` indica una fase di sviluppo iniziale, in cui tutto può cambiare in qualsiasi momento perché l'API pubblica non è ancora considerata stabile. È il rilascio della versione `1.0.0` a sancire che l'API pubblica diventa stabile.
 
 ## Pre-release
 Una versione di pre-rilascio si indica con un **trattino** dopo PATCH, seguito da

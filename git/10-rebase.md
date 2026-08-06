@@ -1,12 +1,9 @@
 # Rebase
 
 ## Concetto
-Rebase prende i commit di un branch e li riapplica sopra un'altra base (di solito
-`main`), riscrivendo la storia per renderla **lineare**.
+Il rebase prende i commit di un branch e li riapplica uno dopo l'altro sopra un'altra base, di solito la punta di `main`. Nel farlo riscrive la storia del ramo per renderla **lineare**, come se quel lavoro fosse partito fin dall'inizio dalla nuova base anziché da quella vecchia.
 
-Quando usarlo:
-- Aggiornare un feature branch con le ultime modifiche di `main` senza merge commit.
-- Pulire la storia (squash, reword, reorder) prima di una pull request.
+Lo si usa principalmente in due situazioni. La prima è aggiornare un feature branch con le ultime modifiche di `main` senza introdurre un merge commit, mantenendo così una cronologia pulita. La seconda è riordinare la propria storia — accorpando, riscrivendo o riordinando i commit — prima di aprire una pull request.
 
 ## Comandi
 | Comando | Cosa fa |
@@ -44,15 +41,12 @@ Cambiando `pick` con un'altra parola si sceglie l'azione:
 | `merge` (m) | crea un commit di merge |
 
 ## merge vs rebase
-- **Merge** → unisce le storie, crea (se serve) un merge commit, preserva la
-  cronologia originale.
-- **Rebase** → riscrive la storia in modo lineare e pulito, ma **cambia gli hash**
-  dei commit del feature branch.
+La differenza tra i due approcci sta in cosa fanno alla storia. Il **merge** unisce le storie dei due rami e, quando serve, crea un merge commit, preservando la cronologia originale così com'è avvenuta. Il **rebase** invece riscrive quella storia rendendola lineare e pulita, ma nel farlo **cambia gli hash** dei commit del feature branch, che di fatto diventano commit nuovi.
 
 ## Quando NON usarlo
 
 > [!warning]
-> - Su branch già pubblici e usati da altri → riscrivere la storia crea problemi a chi ha già basato il lavoro su quei commit.
+> - Su branch già pubblici e usati da altri, perché riscrivere la storia crea problemi a chi ha già basato il proprio lavoro su quei commit.
 > - Su `main` / `develop` o altri branch di riferimento condivisi.
 > - Se il progetto richiede audit trail con merge commit espliciti.
 

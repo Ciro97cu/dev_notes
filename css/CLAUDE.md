@@ -4,6 +4,9 @@
 
 Fonte: appunti personali (Google Doc), modernizzati e riscritti. Ogni claim non ovvio va verificato su **[MDN](https://developer.mozilla.org/en-US/docs/Web/CSS)**; per il supporto browser si cita **[Can I Use](https://caniuse.com/)** / [Baseline](https://web.dev/baseline).
 
+## Tono e chiarezza
+Vale la **voce "professore"** del [root](../CLAUDE.md): prosa narrativa e distesa, impersonale, ogni tecnicismo spiegato la prima volta. Le proprietà/valori CSS restano in inglese, in backtick.
+
 ## Policy sui contenuti — *modern-first* (regola cardine)
 Linea editoriale: la sintassi CSS **attuale (2026)** è il default; il legacy resta solo dove ha ancora valore (contesto storico, fallback). I moduli sono già scritti così — questa policy vale per ogni aggiunta o revisione.
 1. **Sintassi moderna in primo piano**: se una tecnica recente **sostituisce** quella vecchia, si spiega la moderna come default (es. `gap` nei flex/grid invece dei margini; `inset` invece di top/right/bottom/left; nesting nativo; range syntax nelle media query).
@@ -39,7 +42,7 @@ tags: [tipo/modulo, <tematici>]
 
 ## <Sezione>
 
-<Prosa breve in italiano. Proprietà/valori in backtick.>
+<Prosa distesa e discorsiva in italiano; proprietà/valori in backtick.>
 
 ```css
 /* esempio commentato, re-indentato */

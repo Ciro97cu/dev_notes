@@ -1,17 +1,14 @@
 # Annullare modifiche
 
-Tre comandi, tre scopi diversi. La scelta dipende da: modifiche salvate o no,
-commit pushato o no.
+Annullare in Git non è un'operazione sola: esistono tre comandi principali — `restore`, `reset` e `revert` — ciascuno con uno scopo diverso. Quale sia quello giusto dipende soprattutto da due domande: se le modifiche sono già state salvate in un commit oppure no, e se quel commit è già stato condiviso (pushato) oppure è ancora solo locale.
 
 ## Detached HEAD
-Si entra in "detached HEAD" spostandosi su un commit specifico invece che su un
-branch: `HEAD` punta a un commit, non a un branch.
+Ci si ritrova in stato di "detached HEAD" (HEAD staccato) spostandosi direttamente su un commit specifico anziché su un branch: in quella condizione `HEAD` punta a un singolo commit invece che a un ramo.
 
 ```bash
 git checkout a1b2c3d     # HEAD staccato sul commit a1b2c3d
 ```
-⚠️ I nuovi commit fatti qui non sono legati a nessun branch → si perdono cambiando
-branch. Per tornare a lavorare normalmente:
+⚠️ I nuovi commit creati in questo stato non sono legati ad alcun branch, quindi rischiano di andare persi non appena si cambia ramo. Per tornare a lavorare normalmente ci si riaggancia a un branch:
 ```bash
 git switch main          # ri-aggancia HEAD a un branch
 ```
@@ -21,8 +18,7 @@ git switch -c nuovo-branch
 ```
 
 ## git restore
-Annulla le modifiche ai file nel working directory, riportandoli a una versione
-precedente.
+Il comando `git restore` annulla le modifiche ai file nel working directory, riportandoli a una versione precedente — di norma quella dell'ultimo commit. Serve a buttare via il lavoro in corso su uno o più file quando si è deciso di non tenerlo.
 
 | Comando | Effetto |
 |---------|---------|
@@ -36,11 +32,10 @@ git restore app.js                      # scarta le modifiche su app.js
 git restore --staged app.js             # toglie da staging (modifiche restano)
 git restore --source=a1b2c3d app.js     # versione di app.js da quel commit
 ```
-⚠️ Le modifiche scartate **non** sono recuperabili, se non erano già in un commit.
+⚠️ Le modifiche scartate in questo modo **non** sono recuperabili, a meno che non fossero già state salvate in un commit.
 
 ## git reset
-Sposta `HEAD` e, a seconda dell'opzione, tocca anche staging e working directory.
-Usato per annullare commit o togliere file dalla staging.
+Il comando `git reset` sposta `HEAD` indietro nella storia e, a seconda dell'opzione scelta, agisce anche sulla staging area e sul working directory. Lo si usa per annullare uno o più commit oppure, in forma più mite, per togliere file dalla staging.
 
 | Comando | history | staging | working dir |
 |---------|---------|---------|-------------|
@@ -55,12 +50,10 @@ git reset HEAD~1            # (mixed) annulla il commit, modifiche nel working d
 git reset --hard HEAD~1     # ⚠️ annulla il commit E cancella le modifiche
 git reset app.js           # toglie app.js dalla staging
 ```
-⚠️ `--hard` elimina le modifiche non salvate, in modo definitivo. `reset` su commit
-già pushati riscrive la storia condivisa → non farlo (usa `revert`).
+⚠️ L'opzione `--hard` elimina in modo definitivo le modifiche non salvate. Inoltre un `reset` su commit già pushati riscrive la storia condivisa, quindi è da evitare: in quel caso si usa `revert`.
 
 ## git revert
-Annulla uno o più commit **creando un nuovo commit** che inverte le modifiche. Non
-cancella la cronologia.
+Il comando `git revert` annulla uno o più commit **creando un nuovo commit** che ne inverte le modifiche, invece di rimuoverli dalla storia. La cronologia non viene toccata: al commit indesiderato se ne aggiunge un altro che lo neutralizza, ed è proprio questo a renderlo l'opzione sicura quando i commit sono già stati condivisi.
 
 ```bash
 git revert HEAD            # annulla l'ultimo commit
@@ -70,8 +63,7 @@ git revert a1b2c3d         # annulla un commit specifico
 > `git revert` non riscrive la storia: è l'opzione sicura per i commit già pushati.
 
 ## reset vs revert (quale usare?)
-- Commit **non** pushato, solo locale → `reset`.
-- Commit **già pushato** / condiviso → `revert`.
+La regola pratica per scegliere è semplice: se il commit è ancora solo locale e non è stato pushato, si può usare `reset`; se invece è già stato pushato o comunque condiviso con altri, si usa `revert`.
 
 ## Collegamenti
 - [Commit](03-commit.md)

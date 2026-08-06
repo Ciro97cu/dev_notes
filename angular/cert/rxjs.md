@@ -135,8 +135,25 @@ this.searchTerm$.pipe(
 ```
 
 ## Hot vs cold
-- **Cold** — il produttore vive *dentro* l'Observable; ogni subscriber avvia una nuova esecuzione (es. `http.get`, `of`, `interval`). Due iscritti → due chiamate HTTP.
-- **Hot** — il produttore è *esterno* e condiviso; i subscriber si agganciano al flusso già in corso e perdono ciò che è passato prima (es. `Subject`, `fromEvent`). Un cold si rende hot/multicast con `share`/`shareReplay`.
+La differenza sta in **dove vive il produttore** dei valori, e di conseguenza se ogni sottoscrizione ottiene una propria esecuzione oppure ne condivide una sola.
+
+- **Cold** — il produttore è creato *dentro* l'Observable, così ogni `subscribe` ne avvia uno nuovo e indipendente. È il default della gran parte delle factory (`of`, `from`, `interval`, `http.get`): due iscritti a `http.get` sono due richieste HTTP separate, ciascuna col proprio flusso dall'inizio.
+- **Hot** — il produttore è *esterno* e preesistente, e i subscriber si limitano ad agganciarsi a un flusso già in corso, perdendo ciò che è passato prima della loro iscrizione. Un `Subject` è hot perché non ha una sorgente propria: ritrasmette solo ciò che gli si spinge dentro. `fromEvent(document, 'click')` è intrinsecamente hot perché i click del DOM avvengono comunque, a prescindere dalle sottoscrizioni, e l'Observable è soltanto una finestra su una sorgente che esiste già.
+
+Un cold si **condivide** (multicast) fra più iscritti con `share()`, che interpone un `Subject` e trasforma N esecuzioni in una sola. `shareReplay` fa lo stesso ma **rigioca** gli ultimi valori ai subscriber tardivi, utile come cache di una risposta HTTP consumata in più punti della UI:
+
+```ts
+import { shareReplay } from 'rxjs';
+
+const config$ = this.http.get<Config>('/api/config').pipe(
+  shareReplay({ bufferSize: 1, refCount: true }), // una sola richiesta, l'ultimo valore rigiocato ai nuovi iscritti
+);
+```
+
+> [!warning]
+> `shareReplay(1)` **senza** `refCount: true` tiene viva la sottoscrizione alla sorgente anche quando gli iscritti scendono a zero: su uno stream che non completa è un memory leak. Per flussi infiniti si usa `shareReplay({ bufferSize: 1, refCount: true })`, così la sorgente si chiude quando l'ultimo consumatore si disiscrive.
+
+Sotto, il multicasting nasce sempre da un `Subject` condiviso. La primitiva a basso livello è [`connectable(source)`](https://rxjs.dev/api/index/function/connectable), un Observable multicast che **non parte** finché non si chiama `.connect()` — uno stato "warm" (condiviso ma inerte fino al via), utile per iscrivere tutti i consumatori *prima* di avviare la sorgente. Gli operator storici `multicast`/`publish`/`refCount` fanno la stessa cosa ma sono **deprecati** in RxJS 7, a favore di `connectable` e di `share`/`shareReplay`.
 
 ## Pattern di unsubscribe
 Una sottoscrizione non chiusa su uno stream che non completa (`interval`, `valueChanges`, un `Subject`) è un **memory leak**: il callback resta appeso al componente distrutto. Tre pattern corretti:

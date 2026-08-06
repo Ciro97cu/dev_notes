@@ -5,7 +5,7 @@ Vault **catch-all**: raccoglie termini di sviluppo trasversali che non apparteng
 Struttura: contenuti in `docs/` raggruppati per **area tematica** (`web-browser.md`, `formati-e-fondamenti.md`, `tooling-javascript.md`, `react.md`, `concetti-programmazione.md`), più `_sidebar.md`, `_coverpage.md`, `README.md` (indice).
 
 ## Specifiche di contenuto
-- Ogni voce è un titolo `### <Termine>` con definizione concisa; i termini/API restano in inglese (backtick per i costrutti di codice).
+- Ogni voce è un titolo `### <Termine>` spiegato nella **voce "professore"** del [root](../CLAUDE.md): prosa **discorsiva**, non una definizione telegrafica da dizionario. Eccezione del vault: resta **contenuta** — è un glossario, non un capitolo — quindi spiegazione breve ma fluida, e quando il termine è già approfondito in un altro vault si dà il minimo e si rimanda lì. I termini/API restano in inglese (backtick per i costrutti di codice).
 - Voci ordinate per pertinenza dentro ogni area (non per forza alfabetico).
 - **Rimando, non duplicazione**: se un termine è approfondito in un altro vault, la voce dà la definizione breve e linka lì (es. Immutabilità → [[equality-immutability]] del vault Angular). Vale la regola *una fonte di verità* del root.
 - **Verifica prima di scrivere**: la fonte (glossario personale) può contenere imprecisioni o nozioni datate → correggere e aggiornare (es. stato di supporto browser di una feature).
