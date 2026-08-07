@@ -2,15 +2,12 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <!-- Content Security Policy: limita le origini esterne. Host SENZA schema
-       (cdn.jsdelivr.net, fonts.*) così combacia sia in http (locale) sia in https
-       (GitHub Pages). 'unsafe-inline'/'unsafe-eval' servono a docsify (e a Monaco dove
-       c'è il playground); worker-src abilita i web worker di Monaco (data:/blob:/CDN). -->
+  <!-- CSP: dipendenze self-hosted in assets/vendor/. Dove presente, cdn.jsdelivr.net serve solo all'editor Monaco del playground (JS/TS/CSS). -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net;
-    style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.googleapis.com;
-    font-src 'self' fonts.gstatic.com cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' cdn.jsdelivr.net;
+    font-src 'self' cdn.jsdelivr.net;
     img-src 'self' data: https:;
     worker-src 'self' blob: data: cdn.jsdelivr.net;
     child-src 'self' blob: data: cdn.jsdelivr.net;
@@ -22,10 +19,8 @@
   <meta name="description" content="Appunti di studio su CSS — moderno (2026), da zero a Grid/animazioni">
   <meta name="theme-color" content="#1572b6">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="../assets/vendor/fonts.css">
+  <link rel="stylesheet" href="../assets/vendor/vue.css">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
@@ -40,17 +35,17 @@
   <script src="../assets/shared/05-study.js"></script>
   <script src="../assets/shared/06-highlighter.js"></script>
   <script src="assets/app.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code@2"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-plugin-flexible-alerts"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-css.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-scss.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src="../assets/vendor/docsify.min.js"></script>
+  <script src="../assets/vendor/docsify-search.min.js"></script>
+  <script src="../assets/vendor/docsify-copy-code.min.js"></script>
+  <script src="../assets/vendor/docsify-pagination.min.js"></script>
+  <script src="../assets/vendor/docsify-flexible-alerts.min.js"></script>
+  <script src="../assets/vendor/prism-css.min.js"></script>
+  <script src="../assets/vendor/prism-scss.min.js"></script>
+  <script src="../assets/vendor/prism-markup.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <script src="../assets/vendor/prism-json.min.js"></script>
+  <script src="../assets/vendor/mermaid.min.js"></script>
 
   <!-- Playground CSS — editor Monaco + anteprima live (vedi assets/playground.js) -->
   <script src="assets/playground.js"></script>
