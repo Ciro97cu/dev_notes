@@ -34,7 +34,9 @@ html.dark {
 #theme-toggle svg { display: block; }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+/* overflow-x anche su html: su iOS lo scroller è html, e il solo body non basta a
+   fermare lo scroll orizzontale causato da elementi position:fixed / sfondo. */
+html, body { margin: 0; padding: 0; overflow-x: hidden; }
 body {
   min-height: 100vh;
   background: var(--bg);
