@@ -45,6 +45,20 @@ avanti o indietro rispetto al server. `git branch -r` li elenca.
 ## clone vs init
 La scelta tra i due comandi dipende dal punto di partenza: per un progetto nuovo, creato da zero, si usa `git init`, mentre per un progetto che esiste già su un remoto si usa `git clone` per portarsene una copia in locale.
 
+## Autenticazione: HTTPS o SSH
+Per clonare un repository privato o per inviare i propri commit con `push`, GitHub deve sapere chi sei: serve **autenticarsi**. Le strade sono due. Con **HTTPS** il remoto ha un URL del tipo `https://github.com/utente/repo.git` e l'accesso avviene tramite un *personal access token* (un gettone segreto che sostituisce la password dell'account). Con **SSH** il remoto ha la forma `git@github.com:utente/repo.git` e l'accesso si fonda su una **coppia di chiavi**: una chiave **privata**, che resta sul computer e non va mai condivisa né committata, e una chiave **pubblica**, che si carica una volta sola su GitHub. Al momento del collegamento GitHub verifica che le due combacino, senza che la privata lasci mai la macchina.
+
+La chiave si **crea** con `ssh-keygen`, non con `cat`: quest'ultimo si limita a *mostrare* il contenuto della pubblica (il file `.pub`) quando serve copiarla. Il nome del file segue l'algoritmo: `id_ed25519.pub` per una chiave ed25519 (quello consigliato oggi), `id_rsa.pub` per una vecchia chiave RSA.
+
+| Comando | Cosa fa |
+|---------|---------|
+| `ssh-keygen -t ed25519 -C "tua@email"` | **Crea** la coppia di chiavi: `~/.ssh/id_ed25519` (privata) e `id_ed25519.pub` (pubblica) |
+| `cat ~/.ssh/id_ed25519.pub` | **Mostra** la chiave pubblica, da copiare e incollare su GitHub |
+| `ssh -T git@github.com` | Verifica che GitHub riconosca la chiave (risponde col tuo username) |
+| `git remote set-url origin git@github.com:utente/repo.git` | Converte un remoto esistente da HTTPS a SSH |
+
+La configurazione si fa una volta sola: **generare** la coppia con `ssh-keygen`, **copiare** la pubblica con `cat ~/.ssh/id_ed25519.pub`, **incollarla** su GitHub in *Settings → SSH and GPG keys → New SSH key*, infine **verificare** con `ssh -T git@github.com`. I dettagli sono nella [guida ufficiale di GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh).
+
 ## GitHub Gists
 I Gist di GitHub sono frammenti di codice o note che si possono condividere al volo. Ogni gist è a tutti gli effetti un piccolo repository Git, quindi è clonabile e versionato come qualsiasi altro, e può essere pubblico, visibile a tutti, oppure segreto, raggiungibile solo da chi ne ha il link.
 
