@@ -178,6 +178,21 @@ function dnInit() {
   DN_COLORS.forEach(function (c) { var h = new Highlight(); dnHL[c.k] = h; CSS.highlights.set('dn-hl-' + c.k, h); });
 
   document.addEventListener('mouseup', function () { if (dnMode === 'color') setTimeout(function () { dnCapture(dnColor); }, 0); });
+  // Mobile/touch: dopo la selezione con le maniglie native non arriva un 'mouseup'
+  // affidabile → si cattura quando la selezione si ASSESTA (selectionchange con
+  // debounce), ma solo se l'ultima interazione era touch/pen: su mouse resta il
+  // percorso 'mouseup' (niente doppie evidenziazioni). Dopo dnCapture la selezione si
+  // svuota → il selectionchange successivo la trova collassata e non fa nulla.
+  var dnLastTouch = false, dnSelTimer = null;
+  document.addEventListener('pointerdown', function (e) { dnLastTouch = e.pointerType === 'touch' || e.pointerType === 'pen'; }, true);
+  document.addEventListener('selectionchange', function () {
+    if (dnMode !== 'color' || !dnLastTouch) return;
+    clearTimeout(dnSelTimer);
+    dnSelTimer = setTimeout(function () {
+      var sel = window.getSelection();
+      if (sel && !sel.isCollapsed && sel.rangeCount) dnCapture(dnColor);
+    }, 400);
+  });
   document.addEventListener('click', function (e) {
     if (dnMode !== 'erase') return;
     if (e.target.closest && e.target.closest('.markdown-section')) dnEraseAt(e.clientX, e.clientY);
