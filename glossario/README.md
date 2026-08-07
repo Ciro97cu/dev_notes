@@ -8,7 +8,7 @@ Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** 
 Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
 
 **[Rendering: CSR, SSR, SSG](docs/rendering-web.md)**
-Client-Side Rendering · Server-Side Rendering · Static Site Generation · quando scegliere quale e perché
+Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e crawler · idratazione · CDN vs server applicativo · quando scegliere quale
 
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
 CSV · XML · Bit e Byte · Base64 (btoa/atob) · WOFF2 (web font)

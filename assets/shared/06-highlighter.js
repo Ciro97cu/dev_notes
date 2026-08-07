@@ -6,14 +6,18 @@
 // testo-prima, testo-dopo}, ri-localizzata a ogni render (modello W3C
 // TextQuoteSelector); se il testo esatto viene editato l'evidenziazione diventa
 // orfana — conservata, non persa né crash. Storage cancellato → Esporta/Importa.
+// Colori in OKLCH a luminosità uniforme (L 0.80): vividi ma tutti abbastanza chiari
+// da reggere testo scuro. Opachi (niente shift di tono tra tema chiaro/scuro). Il
+// testo evidenziato è forzato scuro nella regola ::highlight() → leggibile in entrambi
+// i temi. L'accent prende tinta/saturazione del vault ma con la stessa L (relative color).
 var DN_COLORS = [
-  { k: 'yellow', label: 'Giallo',  bg: 'rgba(255,214,0,.45)' },
-  { k: 'green',  label: 'Verde',   bg: 'rgba(52,199,89,.42)' },
-  { k: 'blue',   label: 'Azzurro', bg: 'rgba(10,132,255,.38)' },
-  { k: 'pink',   label: 'Rosa',    bg: 'rgba(255,55,120,.38)' },
-  { k: 'purple', label: 'Viola',   bg: 'rgba(175,82,222,.40)' },
-  { k: 'orange', label: 'Arancio', bg: 'rgba(255,149,0,.45)' },
-  { k: 'accent', label: 'Tinta del vault', bg: 'color-mix(in srgb, var(--link) 42%, transparent)' }
+  { k: 'yellow', label: 'Giallo',  bg: 'oklch(0.8 0.185 100)' },
+  { k: 'green',  label: 'Verde',   bg: 'oklch(0.8 0.16 150)' },
+  { k: 'blue',   label: 'Azzurro', bg: 'oklch(0.8 0.11 245)' },
+  { k: 'pink',   label: 'Rosa',    bg: 'oklch(0.8 0.13 2)' },
+  { k: 'purple', label: 'Viola',   bg: 'oklch(0.8 0.13 305)' },
+  { k: 'orange', label: 'Arancio', bg: 'oklch(0.8 0.17 66)' },
+  { k: 'accent', label: 'Tinta del vault', bg: 'oklch(from var(--link) 0.8 c h)' }
 ];
 var DN_PEN = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>';
 var DN_ERASER = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>';
@@ -164,7 +168,8 @@ function dnInit() {
     'body.dn-hl-mode .markdown-section,body.dn-hl-mode .markdown-section *{cursor:text}',
     'body.dn-hl-erase .markdown-section,body.dn-hl-erase .markdown-section *{cursor:crosshair}'
   ];
-  DN_COLORS.forEach(function (c) { rules.push('::highlight(dn-hl-' + c.k + '){background-color:' + c.bg + '}'); });
+  // color:#1a1a1a → testo evidenziato sempre scuro, leggibile su ogni tinta in chiaro e scuro
+  DN_COLORS.forEach(function (c) { rules.push('::highlight(dn-hl-' + c.k + '){background-color:' + c.bg + ';color:#1a1a1a}'); });
   var st = document.createElement('style'); st.id = 'dn-hl-styles'; st.textContent = rules.join('');
   (document.head || document.documentElement).appendChild(st);
 
