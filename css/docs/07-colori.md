@@ -95,7 +95,22 @@ background: hwb(0 100% 0% / 50%); /* bianco al 50% */
 
 ## `oklch()` / `oklab()` — colore percettivamente uniforme
 
-`oklch()` è oggi la notazione **da preferire** per definire palette e sfumature. Esprime il colore nello spazio **Oklab** in coordinate polari, con tre canali:
+Prima la sostanza, in parole semplici. Ogni colore ha una **luminosità**: quanto appare chiaro o scuro all'occhio. Il guaio di `hsl()` è che la sua `L` (lightness) **non coincide** con la luminosità che si percepisce davvero: prendendo un giallo e un blu **entrambi a `L` 50%**, il giallo sembra accecante e il blu quasi notturno — stesso numero, occhio ingannato. `oklch()` nasce proprio per questo: la sua `L` è **tarata sulla percezione umana**, così due colori con la stessa `L` appaiono davvero ugualmente chiari. È questo il senso di "**percettivamente uniforme**".
+
+La differenza si vede a colpo d'occhio — in entrambe le strisce ogni tinta ha la **stessa** `L`, cambia solo la tinta (`H`):
+
+<div style="margin:1.1rem 0">
+  <div style="font-size:.82rem;opacity:.75;margin-bottom:.3rem"><code>hsl()</code> — tutte a <code>L 50%</code>: la luminosità "balla" (giallo e ciano sparano, blu e viola si spengono)</div>
+  <div style="display:flex;height:46px;border-radius:8px;overflow:hidden">
+    <span style="flex:1;background:hsl(30 95% 50%)"></span><span style="flex:1;background:hsl(60 95% 50%)"></span><span style="flex:1;background:hsl(140 95% 50%)"></span><span style="flex:1;background:hsl(200 95% 50%)"></span><span style="flex:1;background:hsl(260 95% 50%)"></span><span style="flex:1;background:hsl(320 95% 50%)"></span>
+  </div>
+  <div style="font-size:.82rem;opacity:.75;margin:.6rem 0 .3rem"><code>oklch()</code> — tutte a <code>L 0.65</code>: la luminosità percepita resta costante</div>
+  <div style="display:flex;height:46px;border-radius:8px;overflow:hidden">
+    <span style="flex:1;background:oklch(0.65 0.16 30)"></span><span style="flex:1;background:oklch(0.65 0.16 60)"></span><span style="flex:1;background:oklch(0.65 0.16 140)"></span><span style="flex:1;background:oklch(0.65 0.16 200)"></span><span style="flex:1;background:oklch(0.65 0.16 260)"></span><span style="flex:1;background:oklch(0.65 0.16 320)"></span>
+  </div>
+</div>
+
+Per questo `oklch()` è oggi la notazione **da preferire** per palette e sfumature: si fissa `L` (e `C`), si ruota solo `H`, e i colori restano equilibrati, nessuno "salta" fuori; le varianti più chiare o più scure si ottengono muovendo solo `L`. Tecnicamente esprime il colore nello spazio **Oklab** in coordinate polari, con tre canali:
 
 ```css
 color: oklch(0.7 0.15 200);        /* L=0.7  C=0.15  H=200 */

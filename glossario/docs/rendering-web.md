@@ -1,28 +1,35 @@
 # Rendering web: CSR, SSR, SSG
 
-Con "rendering" si intende **dove e quando** viene prodotto l'HTML che il browser mostra. La stessa pagina può nascere in tre momenti diversi — nel browser a runtime, su un server a ogni richiesta, oppure una volta sola in fase di build — e la scelta cambia prestazioni, SEO e complessità dell'infrastruttura. Le tre strategie principali sono CSR, SSR e SSG.
+Con "rendering" si intende **dove e quando** viene prodotto l'HTML che il browser mostra, cioè la pagina già pronta che l'utente vede. La stessa pagina può nascere in tre momenti diversi — nel browser mentre si naviga, su un server a ogni richiesta, oppure una volta sola quando si pubblica il sito — e la scelta cambia velocità, reperibilità sui motori di ricerca e complessità dell'infrastruttura.
+
+Due termini tornano in tutte e tre le strategie, quindi conviene chiarirli subito:
+
+- **Prima pittura** (*first paint*): l'istante in cui l'utente vede *qualcosa* sullo schermo invece di una pagina bianca. "Prima pittura veloce" significa che il contenuto appare quasi subito.
+- **SEO** (*Search Engine Optimization*): quanto bene una pagina si fa **trovare e catalogare dai motori di ricerca** come Google. I motori mandano in giro dei programmi automatici, i **crawler**, che visitano le pagine e ne leggono il contenuto per indicizzarle; se un crawler non riesce a leggere il testo, la pagina viene indicizzata male. "SEO piena" vuol dire che il crawler trova subito tutto il contenuto.
 
 ## CSR — Client-Side Rendering
 
-Nel Client-Side Rendering il server invia un HTML quasi vuoto insieme a un bundle JavaScript, ed è il **browser a costruire il contenuto a runtime**. Al primo accesso l'utente vede una pagina spoglia finché il JavaScript non è stato scaricato ed eseguito; da quel momento, però, la navigazione tra le pagine è istantanea, perché avviene tutta lato client senza ricaricare (è il modello delle SPA, Single Page Application).
+Nel Client-Side Rendering il server invia un HTML quasi **vuoto** insieme a un file JavaScript, ed è il **browser a costruire il contenuto a runtime**, cioè mentre la pagina è già aperta. Al primo accesso l'utente vede una pagina spoglia finché il JavaScript non è stato scaricato ed eseguito; da quel momento, però, spostarsi tra le pagine è istantaneo, perché avviene tutto nel browser senza ricaricare (è il modello delle **SPA**, *Single Page Application*: una sola pagina che si riscrive da sé invece di scaricarne una nuova a ogni click).
 
-Il pregio è la semplicità: non serve un server applicativo né una fase di build, perché bastano file statici, e tutta la logica vive in un posto solo. I difetti sono il rovescio della medaglia: la **prima pittura** è più lenta (schermata vuota finché gira il JS), la **SEO** è più debole perché i crawler devono eseguire il JavaScript per vedere il contenuto (Google lo fa, ma più lentamente e in modo meno affidabile, e molti altri bot non lo fanno affatto), e senza JavaScript non si vede nulla.
+Il pregio è la semplicità: bastano file statici, non serve un server che elabori nulla, e tutta la logica vive in un posto solo. I difetti sono il rovescio della medaglia: la **prima pittura** è più lenta (schermata vuota finché parte il JS), la **SEO** è più debole perché il crawler deve eseguire il JavaScript per vedere il contenuto (Google lo fa, ma più lentamente e in modo meno affidabile, e molti altri crawler non lo fanno affatto), e senza JavaScript non si vede nulla.
 
-Conviene quando SEO e prima pittura non contano: applicazioni dietro login come dashboard, strumenti interni e gestionali, oppure siti piccoli e personali dove la semplicità vale più dell'ottimizzazione. docsify — il motore di questo hub — è CSR.
+Conviene quando SEO e prima pittura non contano: applicazioni **dietro login** come dashboard, gestionali e strumenti interni, oppure siti piccoli e personali dove la semplicità vale più dell'ottimizzazione. docsify — il motore di questo hub — è CSR.
 
 ## SSR — Server-Side Rendering
 
-Nel Server-Side Rendering l'HTML viene generato **da un server a ogni richiesta**, con i dati aggiornati al momento, e spedito già pronto al browser; il JavaScript poi "idrata" la pagina, cioè le riaggancia gli event handler, per renderla interattiva.
+Nel Server-Side Rendering l'HTML viene generato **da un server a ogni richiesta**, con i dati aggiornati al momento, e spedito al browser già pronto e pieno. Il browser poi lo **idrata**: l'idratazione (*hydration*) è il passaggio in cui il JavaScript "riattiva" quell'HTML statico agganciandogli gli event handler, così che bottoni, form e interazioni tornino a funzionare. In pratica la pagina arriva già disegnata, quindi si vede subito, e un istante dopo diventa anche interattiva.
 
-Il pregio è avere insieme HTML immediato (prima pittura veloce), SEO piena e contenuto sempre fresco, che può essere personalizzato per il singolo utente. Il prezzo è l'infrastruttura: serve un server che gira e ricalcola a ogni richiesta, perché non bastano più file statici su una CDN, con il relativo costo e la relativa complessità.
+Il pregio è avere tre cose insieme: la pagina appare subito perché l'HTML è già pronto, la SEO è piena perché il crawler legge il testo senza dover eseguire nulla, e il contenuto è **sempre aggiornato**, dato che viene calcolato nell'istante della richiesta e può essere diverso per ogni utente. Il prezzo è l'infrastruttura: serve un **server che gira e ricalcola** a ogni richiesta — non bastano più semplici file statici — con il relativo costo e la relativa complessità.
 
 Conviene quando il contenuto è **dinamico e personalizzato** ma deve comunque essere veloce e indicizzabile: un e-commerce con prezzi e disponibilità in tempo reale, un feed che dipende dall'utente loggato, pagine che cambiano a ogni richiesta. In Angular è il ruolo di `@angular/ssr`, approfondito in [17 · Defer, SSR e Hydration](../../angular/capitoli/17-defer-ssr-hydration.md) del vault Angular.
 
 ## SSG — Static Site Generation
 
-Nella Static Site Generation l'HTML di **ogni** pagina viene pre-generato **una volta sola, in fase di build**: il risultato è un insieme di file statici, serviti da una CDN senza alcun server applicativo. Spesso il JavaScript idrata comunque le pagine, così dopo il primo caricamento la navigazione diventa fluida come in una SPA.
+Nella Static Site Generation l'HTML di **ogni** pagina viene pre-generato **una volta sola, quando si pubblica il sito** — la cosiddetta fase di *build* — e il risultato è un insieme di **file statici** già pronti. Spesso il JavaScript idrata comunque le pagine come nell'SSR, così dopo il primo caricamento la navigazione diventa fluida come in una SPA.
 
-I pregi sono quelli che rendono l'SSG lo standard per la documentazione: prima pittura immediata perché l'HTML è già pronto, SEO piena perché il crawler legge il testo senza eseguire nulla, pagine leggibili anche senza JavaScript e cache su CDN economica e scalabile. Il limite è che ogni modifica al contenuto richiede una **nuova build**, e che il modello non si adatta a contenuto che cambia per singolo utente o a ogni richiesta, che resta compito dell'SSR o dell'idratazione lato client.
+Questi file statici si servono da una **CDN** (*Content Delivery Network*): una rete di server sparsi per il mondo il cui unico compito è **consegnare file** (HTML, immagini, CSS, font…) dalla copia più vicina all'utente, in fretta e su larga scala. È diversa da un **server applicativo**, che invece *esegue codice* per costruire la risposta a ogni richiesta, come richiede l'SSR: una CDN non esegue nulla, spedisce e basta, e per questo è più economica, più veloce e più semplice, ma può servire solo contenuto **già pronto**. L'SSG produce esattamente quello, quindi non ha bisogno di alcun server applicativo — bastano dei file su una CDN.
+
+I pregi rendono l'SSG lo standard per la documentazione: prima pittura immediata perché l'HTML è già lì, SEO piena perché il crawler legge il testo senza eseguire nulla, pagine leggibili anche senza JavaScript e distribuzione su CDN economica e scalabile. Il limite è che ogni modifica al contenuto richiede una **nuova build**, e che il modello non si adatta a contenuto che cambia per singolo utente o a ogni richiesta, che resta compito dell'SSR.
 
 Conviene quando il contenuto è **prevalentemente statico e uguale per tutti**: documentazioni, blog, landing page, siti di marketing. È il modello dietro strumenti come Docusaurus, VitePress, MkDocs e Astro Starlight.
 
@@ -34,4 +41,4 @@ Conviene quando il contenuto è **prevalentemente statico e uguale per tutti**: 
 | **SSR** | su un server, a ogni richiesta | contenuto dinamico e per-utente che deve essere anche veloce e indicizzabile |
 | **SSG** | in fase di build, una volta sola | contenuto statico e uguale per tutti, dove SEO e velocità contano (documentazioni, blog) |
 
-La linea, oggi, è sfumata: framework come Next.js o Astro mescolano le tre strategie **per singola rotta** nello stesso progetto, e con le "islands" idratano solo i frammenti interattivi lasciando statico tutto il resto. Questo hub sta sul lato più semplice della scala, cioè CSR con docsify, per una scelta deliberata di zero-build; il perché è spiegato nell'architettura del progetto ([README](../../README.md)).
+La linea, oggi, è sfumata: framework come Next.js o Astro mescolano le tre strategie **per singola pagina** nello stesso progetto, e con le "islands" idratano solo i frammenti interattivi lasciando statico tutto il resto. Questo hub sta sul lato più semplice della scala, cioè CSR con docsify, per una scelta deliberata di zero-build; il perché è spiegato nell'architettura del progetto ([README](../../README.md)).
