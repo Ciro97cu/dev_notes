@@ -33,6 +33,7 @@ terminologia: se un termine è qui, si usa sempre questa parola negli appunti.
 - **fetch** — scarica gli aggiornamenti dal remoto senza però unirli al branch locale.
 - **pull** — è un `fetch` seguito da un `merge`: scarica gli aggiornamenti e li unisce.
 - **push** — invia i commit locali al remoto.
+- **SSH key** — è la coppia di chiavi (privata + pubblica) con cui ci si autentica al remoto senza password: la pubblica si carica su GitHub, la privata resta sul computer e non si condivide mai. La chiave si crea con `ssh-keygen`.
 - **fork** — è una copia indipendente di un repository remoto creata sul proprio account.
 - **pull request (PR)** — è la richiesta di unire un branch in un altro, sottoponendo le modifiche a una review del codice.
 - **blob** — è l'oggetto Git che contiene il contenuto di un file.
