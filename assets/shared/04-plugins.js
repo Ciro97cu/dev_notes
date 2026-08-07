@@ -13,7 +13,10 @@
     '.cover-about .about-inner ul{margin:.35rem 0 .85rem;padding-left:1.1rem}',
     '.cover-about .about-inner li{margin:.28rem 0}',
     '.cover-about .about-inner code{background:rgba(255,255,255,.14);padding:0 .3em;border-radius:4px}',
-    '@media (max-width:720px){.cover-about{grid-template-columns:1fr;max-width:460px}}'
+    '@media (max-width:720px){.cover-about{grid-template-columns:1fr;max-width:460px}}',
+    // Mobile: la cover non deve tagliare il contenuto (era overflow:hidden). Altezza
+    // auto + aria sopra/sotto, e spazio in fondo per non finire sotto i pulsanti fissi.
+    '@media (max-width:768px){section.cover{overflow:visible!important;height:auto!important;min-height:100vh}section.cover .cover-main{padding-top:3.5rem;padding-bottom:7.5rem}}'
   ].join('');
   var el = document.createElement('style');
   el.id = 'cover-about-styles';

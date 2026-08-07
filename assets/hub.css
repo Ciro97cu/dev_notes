@@ -99,20 +99,19 @@ body::before {
   background-clip: text;
   color: transparent;
 }
-.tagline {
-  margin: .9rem 0 0;
-  color: var(--fg-soft);
-  font-size: clamp(1rem, 2.4vw, 1.15rem);
-  font-weight: 500;
-}
-
 /* ---------- Griglia card ---------- */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.3rem;
 }
-@media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .wrap { padding: 2.75rem 1.1rem 1.75rem; }   /* meno spazio in cima, ritmo più equilibrato */
+  .hero { margin-bottom: 1.8rem; }
+  .logo { width: 68px; height: 68px; margin-bottom: .85rem; }
+  .card { padding: 1.05rem 1.15rem; }
+}
 /* Rinforza [hidden] contro CSS specificity più alta (es. display:flex della classe) */
 [hidden] { display: none !important; }
 
