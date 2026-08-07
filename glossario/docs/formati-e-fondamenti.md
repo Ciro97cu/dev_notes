@@ -69,19 +69,32 @@ I nomi sono controintuitivi: `btoa` **codifica**, `atob` **decodifica**.
 > [!warning]
 > `btoa` lavora byte per byte e lancia `InvalidCharacterError` sui caratteri fuori da Latin1 (emoji, molte lettere accentate): per una stringa Unicode va prima convertita in UTF-8 (es. con `TextEncoder`). In **Node.js** l'idioma è invece `Buffer.from(str).toString('base64')` / `Buffer.from(b64, 'base64').toString()`.
 
-## WOFF2 (Web Open Font Format 2)
+## Font sul web: TTF, OTF, WOFF, WOFF2
 
-Un file `.woff2` è un **font per il web**: contiene un carattere tipografico — le forme di lettere, cifre e simboli — in un formato pensato per essere scaricato da una pagina. Tecnicamente è un font OpenType/TrueType impacchettato e **compresso con Brotli**, il che lo rende molto più leggero dell'equivalente `.ttf`/`.otf`: un vantaggio decisivo, dato che il font viaggia sulla rete a ogni prima visita. È lo standard de facto dei web font, supportato da tutti i browser moderni, ed è il formato che servizi come Google Fonts distribuiscono.
+Un **font** è l'insieme delle forme di lettere, cifre e simboli di un carattere tipografico; un **file di font** le contiene, così il computer o il browser sa come disegnarle. I formati principali sono nati uno dopo l'altro, e conoscerne la piccola storia aiuta a orientarsi.
 
-Lo si dichiara in CSS con una regola `@font-face`, che lega un nome di famiglia a uno o più file:
+All'inizio c'erano i formati "da scrivania": **TrueType** (`.ttf`, ideato da Apple e Microsoft) e **OpenType** (`.otf`, arrivato dopo grazie a Microsoft e Adobe). Sono quelli che si installano sul sistema operativo e che usano programmi come Word o Photoshop. OpenType è in pratica un'estensione di TrueType — stessa idea di base, ma con in più funzioni tipografiche avanzate (legature, varianti stilistiche, set di caratteri più ricchi). Entrambi, però, nascono per il **desktop**, non per la rete: **non sono compressi**, quindi come file da scaricare a ogni visita di una pagina risultano pesanti. Per dare un'idea concreta: un singolo peso (per esempio il *regular*) di un tipico font latino sta sui **~150–250 KB** in TTF/OTF; le controparti compresse scendono a circa **~80–120 KB** in WOFF e **~50–80 KB** in WOFF2, a parità di identico disegno — cambia solo la compressione. (Le cifre variano molto con il font: un carattere ricchissimo di glifi, come quelli per cinese/giapponese/coreano, pesa svariati MB.)
+
+Per il web è nato **WOFF** (*Web Open Font Format*): non è un nuovo disegno di carattere, ma semplicemente un `.ttf`/`.otf` **incartato e compresso** — dove "comprimere" vuol dire rendere il file più piccolo (come si fa con uno zip), così si scarica prima. Poi è arrivato **WOFF2**, la sua seconda versione: usa una compressione ancora più efficiente, un algoritmo chiamato **Brotli**, e ottiene file più leggeri (circa il 30% in meno di un WOFF). Oggi **WOFF2 è lo standard**: lo supportano tutti i browser moderni ed è il formato che servizi come Google Fonts distribuiscono. Un WOFF si tiene al più come **ripiego** (*fallback*, cioè l'alternativa usata quando il preferito non è disponibile) per browser molto datati, mentre TTF e OTF restano per l'uso sul computer.
+
+Il riepilogo, a colpo d'occhio:
+
+| Formato | Cos'è | Peso sul web |
+| --- | --- | --- |
+| **TTF / OTF** | i font "da scrivania", installati sul sistema | non compressi → pesanti |
+| **WOFF** | un TTF/OTF compresso per il web (versione 1) | leggero |
+| **WOFF2** | come WOFF, ma con compressione **Brotli** (versione 2) | il più leggero, **standard di oggi** |
+
+### Come si usa un font in CSS
+Lo si dichiara con una regola `@font-face`, che dà un nome alla famiglia e indica dove trovare il file:
 
 ```css
 @font-face {
-  font-family: 'Hanken Grotesk';
+  font-family: 'Hanken Grotesk';       /* il nome con cui lo si richiama */
   src: url('fonts/hanken.woff2') format('woff2');
-  font-weight: 400;
-  font-display: swap;   /* mostra subito un font di sistema, poi lo sostituisce */
+  font-weight: 400;                    /* il "peso": 400 = normale, 700 = grassetto */
+  font-display: swap;                  /* mostra subito un font di sistema, poi lo sostituisce quando arriva */
 }
 ```
 
-Da quel momento un `font-family: 'Hanken Grotesk'` altrove nel CSS usa quel carattere. Un font viene di norma spezzato in più `.woff2`, uno per ogni **peso** (regular, bold…) e per ogni **subset** di caratteri (latino, latino esteso, cirillico…): grazie alla proprietà `unicode-range` il browser scarica **solo** i file dei caratteri che la pagina usa davvero, risparmiando banda. Esiste anche il predecessore `.woff` (versione 1, meno compressa), ormai usato solo come fallback per browser datati. In questo hub i font sono self-hosted esattamente così, come `.woff2` in `assets/vendor/fonts/`.
+Da lì in poi un `font-family: 'Hanken Grotesk'` nel resto del CSS usa quel carattere. Un font di solito è spezzato in più file: uno per ogni **peso** (normale, grassetto…) e per ogni **subset**, cioè una fetta di alfabeto (solo latino, solo cirillico…). Con la proprietà `unicode-range` ogni file dichiara **quali caratteri copre**, così il browser scarica soltanto i pezzi che servono davvero alla pagina, senza sprecare dati. In questo hub i font sono self-hosted esattamente così, come `.woff2` in `assets/vendor/fonts/`.

@@ -11,7 +11,7 @@ Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Ch
 Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e crawler · idratazione · CDN vs server applicativo · quando scegliere quale
 
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
-CSV · XML · Bit e Byte · Base64 (btoa/atob) · WOFF2 (web font)
+CSV · XML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOFF2)
 
 **[Tooling (ecosistema JavaScript)](docs/tooling-javascript.md)**
 Babel · SWC · NPM · NPX · Yarn · NVM · module.exports
