@@ -31,6 +31,13 @@ Quando la prosa descrive un **meccanismo di codice**, citare il costrutto esatto
 ## Diagrammi
 Mermaid **solo dove rende davvero** (flussi, gerarchie, sequenze non banali), non ovunque. **Nessun colore custom** (`classDef`/`style` con `fill` fissi): i siti hanno tema chiaro/scuro, i colori hardcoded rompono il dark mode → distinguere con le **forme**, non con i colori.
 
+## Architettura (zero-build) — tenerla documentata
+L'hub è **zero-build** e **client-side**: docsify rende i Markdown nel browser (CSR) e le dipendenze sono **self-hosted** in `assets/vendor/` (non da CDN), con la sola eccezione dell'editor Monaco del playground. La mappa completa — com'è fatto e **perché** questa scelta è stata preferita ad altre — vive in [README.md](README.md), sezione *Architettura*.
+
+Il *perché*, in sintesi: per appunti personali semplicità e zero attrito valgono più di SEO e prima-pittura (che qui non servono). Un **SSG** richiederebbe una build più una CI; un **bundler** sposterebbe file già pronti a vuoto (docsify è a runtime, non c'è nulla da compilare); un **framework** sarebbe sproporzionato per note in Markdown. Le dipendenze in locale tolgono il single-point-of-failure del CDN senza introdurre alcuna build.
+
+**Regola:** ogni **modifica architetturale** (dipendenze, motore/rendering, struttura di build o deploy, plugin, spostamenti tra CDN e locale) va **riflessa anche in [README.md](README.md)**, così la mappa resta aggiornata. E prima di reintrodurre build/bundler/framework, rileggere il *perché*: è una decisione già presa, non un default da cambiare a cuor leggero.
+
 ## Workflow di scrittura
 Quando l'utente chiede di scrivere o modificare una nota (di solito linkando un file):
 1. **Identifica il vault** dal path del file → si applicano root `CLAUDE.md` + il `CLAUDE.md` di quella cartella.
