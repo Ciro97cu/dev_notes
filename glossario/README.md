@@ -7,8 +7,11 @@ Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** 
 **[Web, browser e rete](docs/web-browser.md)**
 Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
 
+**[Rendering: CSR, SSR, SSG](docs/rendering-web.md)**
+Client-Side Rendering · Server-Side Rendering · Static Site Generation · quando scegliere quale e perché
+
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
-CSV · XML · Bit e Byte · Base64 (btoa/atob)
+CSV · XML · Bit e Byte · Base64 (btoa/atob) · WOFF2 (web font)
 
 **[Tooling (ecosistema JavaScript)](docs/tooling-javascript.md)**
 Babel · SWC · NPM · NPX · Yarn · NVM · module.exports

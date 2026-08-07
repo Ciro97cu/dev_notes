@@ -68,3 +68,20 @@ I nomi sono controintuitivi: `btoa` **codifica**, `atob` **decodifica**.
 
 > [!warning]
 > `btoa` lavora byte per byte e lancia `InvalidCharacterError` sui caratteri fuori da Latin1 (emoji, molte lettere accentate): per una stringa Unicode va prima convertita in UTF-8 (es. con `TextEncoder`). In **Node.js** l'idioma è invece `Buffer.from(str).toString('base64')` / `Buffer.from(b64, 'base64').toString()`.
+
+## WOFF2 (Web Open Font Format 2)
+
+Un file `.woff2` è un **font per il web**: contiene un carattere tipografico — le forme di lettere, cifre e simboli — in un formato pensato per essere scaricato da una pagina. Tecnicamente è un font OpenType/TrueType impacchettato e **compresso con Brotli**, il che lo rende molto più leggero dell'equivalente `.ttf`/`.otf`: un vantaggio decisivo, dato che il font viaggia sulla rete a ogni prima visita. È lo standard de facto dei web font, supportato da tutti i browser moderni, ed è il formato che servizi come Google Fonts distribuiscono.
+
+Lo si dichiara in CSS con una regola `@font-face`, che lega un nome di famiglia a uno o più file:
+
+```css
+@font-face {
+  font-family: 'Hanken Grotesk';
+  src: url('fonts/hanken.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;   /* mostra subito un font di sistema, poi lo sostituisce */
+}
+```
+
+Da quel momento un `font-family: 'Hanken Grotesk'` altrove nel CSS usa quel carattere. Un font viene di norma spezzato in più `.woff2`, uno per ogni **peso** (regular, bold…) e per ogni **subset** di caratteri (latino, latino esteso, cirillico…): grazie alla proprietà `unicode-range` il browser scarica **solo** i file dei caratteri che la pagina usa davvero, risparmiando banda. Esiste anche il predecessore `.woff` (versione 1, meno compressa), ormai usato solo come fallback per browser datati. In questo hub i font sono self-hosted esattamente così, come `.woff2` in `assets/vendor/fonts/`.
