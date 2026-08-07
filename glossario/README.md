@@ -10,6 +10,9 @@ Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Ch
 **[Rendering: CSR, SSR, SSG](docs/rendering-web.md)**
 Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e crawler · idratazione · CDN vs server applicativo · quando scegliere quale
 
+**[HTTP: codici di stato](docs/http-status.md)**
+1xx Informativi · 2xx Successo · 3xx Redirezione · 4xx Errore client · 5xx Errore server · con analogie e codici comuni (200, 301, 404, 429, 500…)
+
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
 CSV · XML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOFF2)
 
