@@ -53,7 +53,14 @@ function themeTogglePlugin(hook) {
       }
     }
     apply();
+    var themeAnimT;
     btn.addEventListener('click', function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) {                                   // colori in dissolvenza + icona che entra ruotando
+        document.documentElement.classList.add('dn-theme-anim');
+        clearTimeout(themeAnimT); themeAnimT = setTimeout(function () { document.documentElement.classList.remove('dn-theme-anim'); }, 380);
+        btn.classList.remove('dn-spin'); void btn.offsetWidth; btn.classList.add('dn-spin');
+      }
       dark = !dark;
       localStorage.setItem(KEY, dark ? 'dark' : 'light');
       apply();
@@ -156,6 +163,7 @@ function resumePlugin(hook, vm) {
     if (rec && rec.p && !SKIP[rec.p]) {
       card.setAttribute('href', '#' + rec.p + (rec.id ? '?id=' + rec.id : ''));
       card.style.display = '';
+      card.classList.remove('dn-resume-in'); void card.offsetWidth; card.classList.add('dn-resume-in');   // entra in dissolvenza + slide
     } else {
       card.style.display = 'none';
     }
@@ -169,4 +177,57 @@ function resumePlugin(hook, vm) {
     timer = setTimeout(persist, 200);
   }, true);
 }
+
+// ── Animazioni condivise (CSS + un solo observer) ────────────────────────────
+// Raccoglie i micro-tocchi trasversali: cross-fade del contenuto a ogni cambio
+// pagina, transizione morbida dei colori allo switch tema, spin dell'icona tema,
+// entrata del banner "Riprendi". Zero dipendenze; tutto rispetta prefers-reduced-motion.
+(function () {
+  var css = [
+    '@keyframes dn-page-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}',
+    '.markdown-section.dn-page-in{animation:dn-page-in .28s ease both}',
+    '@keyframes dn-spin-pop{0%{transform:rotate(-90deg) scale(.6);opacity:.4}100%{transform:none;opacity:1}}',
+    '#theme-toggle.dn-spin svg{animation:dn-spin-pop .4s ease}',
+    // transizione dei colori attiva SOLO durante lo switch (classe rimossa dopo ~380ms)
+    'html.dn-theme-anim body,html.dn-theme-anim .sidebar,html.dn-theme-anim .sidebar *,html.dn-theme-anim .content,html.dn-theme-anim .markdown-section,html.dn-theme-anim .markdown-section *{transition:background-color .32s ease,border-color .32s ease,color .32s ease !important}',
+    '@keyframes dn-resume-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}',
+    '#nav-resume.dn-resume-in{animation:dn-resume-in .34s cubic-bezier(.22,1,.36,1) both}',
+    '@media (prefers-reduced-motion: reduce){.markdown-section.dn-page-in,#theme-toggle.dn-spin svg,#nav-resume.dn-resume-in{animation:none}html.dn-theme-anim body,html.dn-theme-anim .sidebar,html.dn-theme-anim .sidebar *,html.dn-theme-anim .content,html.dn-theme-anim .markdown-section,html.dn-theme-anim .markdown-section *{transition:none !important}}'
+  ].join('');
+  var st = document.createElement('style'); st.id = 'dn-anim-styles'; st.textContent = css;
+  (document.head || document.documentElement).appendChild(st);
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;   // niente cross-fade di pagina se l'utente preferisce ridurre il moto
+
+  // Cross-fade del contenuto a ogni render. docsify a volte RICREA .markdown-section,
+  // a volte ne sostituisce solo i figli: copriamo entrambi osservando il contenitore e
+  // filtrando (le stelle/checkbox hanno per target un heading o la sidebar, non la
+  // sezione → nessun falso positivo, quindi nessun ri-fade spurio).
+  var scheduled = false;
+  function schedule() {
+    if (scheduled) return; scheduled = true;
+    requestAnimationFrame(function () {
+      scheduled = false;
+      var sec = document.querySelector('.markdown-section'); if (!sec) return;
+      sec.classList.remove('dn-page-in'); void sec.offsetWidth; sec.classList.add('dn-page-in');
+    });
+  }
+  function start() {
+    var box = document.querySelector('.content') || document.querySelector('main') || document.getElementById('app');
+    if (!box) { setTimeout(start, 60); return; }
+    schedule();   // fade della prima pagina
+    new MutationObserver(function (muts) {
+      for (var i = 0; i < muts.length; i++) {
+        var m = muts[i];
+        if (m.target && m.target.classList && m.target.classList.contains('markdown-section')) { schedule(); return; }   // contenuto sostituito (riuso della sezione)
+        for (var j = 0; j < m.addedNodes.length; j++) {
+          var n = m.addedNodes[j];
+          if (n.nodeType === 1 && n.classList && n.classList.contains('markdown-section')) { schedule(); return; }        // sezione ricreata
+        }
+      }
+    }).observe(box, { childList: true, subtree: true });
+  }
+  start();
+})();
 

@@ -240,9 +240,13 @@ body::before {
   border: 1px solid var(--card-border); border-radius: 12px;
   box-shadow: var(--card-shadow); padding: .4rem;
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  display: none;
+  opacity: 0; visibility: hidden; transform: scale(.94); transform-origin: top right;
+  transition: opacity .16s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1), visibility 0s linear .18s;
 }
-#hub-data-pop.open { display: block; }
+#hub-data-pop.open {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity .16s ease, transform .18s cubic-bezier(.34, 1.56, .64, 1);
+}
 #hub-data-pop .dn-title { font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; opacity: .6; padding: .35rem .6rem .2rem; }
 #hub-data-pop button { display: flex; gap: .55rem; align-items: center; width: 100%; padding: .5rem .6rem; border: 0; background: transparent; color: var(--fg); font: inherit; font-size: .9rem; cursor: pointer; border-radius: 8px; text-align: left; }
 #hub-data-pop button:hover { background: rgba(127,127,127,.14); }
@@ -258,3 +262,21 @@ footer {
   padding: 2.5rem 1rem 2rem;
 }
 footer code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; opacity: .8; }
+
+/* Animazioni delle due CTA (coerenti coi vault): l'icona del tema entra ruotando e i
+   colori della pagina passano in dissolvenza allo switch. Rispettano prefers-reduced-motion. */
+@keyframes dn-spin-pop { 0% { transform: rotate(-90deg) scale(.6); opacity: .4; } 100% { transform: none; opacity: 1; } }
+#theme-toggle.spin svg { animation: dn-spin-pop .4s ease; }
+html.theme-anim body,
+html.theme-anim .card,
+html.theme-anim .resume-banner,
+html.theme-anim #hub-data-btn,
+html.theme-anim #hub-data-pop,
+html.theme-anim .card-prog { transition: background-color .32s ease, border-color .32s ease, color .32s ease !important; }
+@media (prefers-reduced-motion: reduce) {
+  #theme-toggle.spin svg { animation: none; }
+  html.theme-anim body, html.theme-anim .card, html.theme-anim .resume-banner,
+  html.theme-anim #hub-data-btn, html.theme-anim #hub-data-pop, html.theme-anim .card-prog { transition: none !important; }
+  #hub-data-pop { transition: none; transform: none; }
+  #hub-data-pop.open { transition: none; }
+}
