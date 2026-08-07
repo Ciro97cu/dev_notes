@@ -14,11 +14,22 @@
     // dallo shared vince sul CSS del vault (lo <style> runtime è iniettato dopo styles.css);
     // 44px per uniformarsi a menu/home, passo 54px come tra home(16)→menu(70)→chiave(124).
     '#pg-toggle,#ng-play{top:auto;bottom:286px;right:16px;width:44px;height:44px}',
-    // i tool restano nascosti finché non si apre lo speed-dial (slittano su dal basso)
-    '#dn-fav,#dn-hl{opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease}',
-    '#pg-toggle,#ng-play{opacity:0;pointer-events:none;transition:opacity .18s ease}',
-    'body.dn-tools-open #dn-fav,body.dn-tools-open #dn-hl{opacity:1;pointer-events:auto;transform:none}',
-    'body.dn-tools-open #pg-toggle,body.dn-tools-open #ng-play{opacity:1;pointer-events:auto}',
+    // I tool sono nascosti finché il dial è chiuso: collassano DENTRO la chiave
+    // (traslati giù e rimpiccioliti), e all'apertura risalgono in colonna con
+    // partenza scaglionata (stagger) e un lieve rimbalzo (cubic-bezier con
+    // overshoot). Chiudendo, l'ordine si inverte (delay decrescenti dal basso).
+    // Zero dipendenze: solo transizioni CSS.
+    '#dn-fav,#dn-hl,#pg-toggle,#ng-play{transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .18s ease}',
+    '#dn-fav{opacity:0;pointer-events:none;transform:translate(0,54px) scale(.4);transition-delay:80ms}',
+    '#dn-hl{opacity:0;pointer-events:none;transform:translate(0,108px) scale(.4);transition-delay:40ms}',
+    '#pg-toggle,#ng-play{opacity:0;pointer-events:none;transform:translate(0,162px) scale(.4);transition-delay:0ms}',
+    'body.dn-tools-open #dn-fav{opacity:1;pointer-events:auto;transform:none;transition-delay:0ms}',
+    'body.dn-tools-open #dn-hl{opacity:1;pointer-events:auto;transform:none;transition-delay:45ms}',
+    'body.dn-tools-open #pg-toggle,body.dn-tools-open #ng-play{opacity:1;pointer-events:auto;transform:none;transition-delay:90ms}',
+    // stato aperto della chiave: bordo/icona in accento come feedback
+    'body.dn-tools-open #dn-tools-btn{border-color:var(--link);color:var(--link)}',
+    // reduced-motion: niente volo/scala/stagger, solo comparsa/scomparsa in dissolvenza
+    '@media (prefers-reduced-motion: reduce){#dn-fav,#dn-hl,#pg-toggle,#ng-play{transition:opacity .15s ease;transition-delay:0ms;transform:none}body.dn-tools-open #dn-fav,body.dn-tools-open #dn-hl,body.dn-tools-open #pg-toggle,body.dn-tools-open #ng-play{transform:none;transition-delay:0ms}}',
     // hover uniforme di tutti i pulsanti fissi (icona che cambia colore, niente fondo pieno) + micro-zoom
     '#dn-fav-btn,#dn-hl-btn,#dn-tools-btn{transition:transform .15s ease,color .2s ease,border-color .2s ease}',
     '#dn-fav-btn:hover,#dn-hl-btn:hover,#dn-tools-btn:hover{transform:scale(1.08)}',

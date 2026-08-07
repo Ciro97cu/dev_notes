@@ -8,8 +8,15 @@
   var MOON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
   var paint = function () { btn.innerHTML = isDark() ? SUN : MOON; btn.title = isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro'; };
   paint();
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var animT;
   btn.addEventListener('click', function () {
     var d = !isDark();
+    if (!reduce) {                                   // icona che ruota entrando + transizione morbida dei colori
+      document.documentElement.classList.add('theme-anim');
+      clearTimeout(animT); animT = setTimeout(function () { document.documentElement.classList.remove('theme-anim'); }, 380);
+      btn.classList.remove('spin'); void btn.offsetWidth; btn.classList.add('spin');
+    }
     document.documentElement.classList.toggle('dark', d);
     try { localStorage.setItem(KEY, d ? 'dark' : 'light'); } catch (e) {}
     paint();

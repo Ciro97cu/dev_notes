@@ -143,9 +143,11 @@ function dnSearchBuild() {
 // init: CSS + intercetta la casella di docsify (apre l'overlay) + nasconde il dropdown fuzzy
 (function () {
   var css = [
-    '#dn-search{position:fixed;inset:0;z-index:2147483500;display:none;justify-content:center;align-items:flex-start;background:rgba(0,0,0,.45)}',
-    '#dn-search.open{display:flex}',
-    '#dn-search .dn-s-box{margin-top:8vh;width:min(680px,92vw);max-height:80vh;display:flex;flex-direction:column;background:var(--bg-soft);color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.45);overflow:hidden}',
+    '#dn-search{position:fixed;inset:0;z-index:2147483500;display:flex;justify-content:center;align-items:flex-start;background:rgba(0,0,0,.45);opacity:0;visibility:hidden;transition:opacity .18s ease,visibility 0s linear .18s}',
+    '#dn-search.open{opacity:1;visibility:visible;transition:opacity .18s ease}',
+    '#dn-search .dn-s-box{margin-top:8vh;width:min(680px,92vw);max-height:80vh;display:flex;flex-direction:column;background:var(--bg-soft);color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.45);overflow:hidden;transform:translateY(-10px) scale(.98);transition:transform .2s cubic-bezier(.34,1.5,.64,1)}',
+    '#dn-search.open .dn-s-box{transform:none}',
+    '@media (prefers-reduced-motion: reduce){#dn-search{transition:none}#dn-search .dn-s-box{transition:none;transform:none}}',
     '#dn-search .dn-s-top{display:flex;align-items:center;gap:.5rem;padding:.6rem .7rem;border-bottom:1px solid var(--border)}',
     '#dn-search .dn-s-input{flex:1;min-width:0;border:0;background:transparent;color:var(--text);font:inherit;font-size:1rem;outline:none}',
     '#dn-search .dn-s-toggles{display:flex;gap:.25rem;flex:0 0 auto}',
