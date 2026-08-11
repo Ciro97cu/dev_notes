@@ -13,6 +13,9 @@ Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e c
 **[HTTP: codici di stato](docs/http-status.md)**
 1xx Informativi · 2xx Successo · 3xx Redirezione · 4xx Errore client · 5xx Errore server · con analogie e codici comuni (200, 301, 404, 429, 500…)
 
+**[Privacy, cookie e consenso](docs/privacy-cookie.md)**
+GDPR · ePrivacy (cookie law) · cookie banner · consenso granulare · Privacy/Cookie Policy · CMP · lato sviluppatore (con mockup)
+
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
 CSV · XML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOFF2)
 
