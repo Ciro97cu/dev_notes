@@ -16,7 +16,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [3. Braille e codici binari](docs/03-braille-and-binary-codes.md) — *Braille and Binary Codes*
 
 ## Parte 2 — Elettricità e interruttori
-- 4. Anatomia di una torcia — *Anatomy of a Flashlight*
+- [4. Anatomia di una torcia](docs/04-anatomy-of-a-flashlight.md) — *Anatomy of a Flashlight*
 - 5. Comunicare dietro l'angolo — *Communicating Around Corners*
 - 6. Logica con gli interruttori — *Logic with Switches*
 - 7. Telegrafi e relè — *Telegraphs and Relays*
