@@ -18,7 +18,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 ## Parte 2 — Elettricità e interruttori
 - [4. Anatomia di una torcia](docs/04-anatomy-of-a-flashlight.md) — *Anatomy of a Flashlight*
 - [5. Comunicare dietro l'angolo](docs/05-communicating-around-corners.md) — *Communicating Around Corners*
-- 6. Logica con gli interruttori — *Logic with Switches*
+- [6. Logica con gli interruttori](docs/06-logic-with-switches.md) — *Logic with Switches*
 - 7. Telegrafi e relè — *Telegraphs and Relays*
 - 8. Relè e porte logiche — *Relays and Gates*
 
