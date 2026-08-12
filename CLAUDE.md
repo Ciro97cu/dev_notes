@@ -24,6 +24,16 @@ Quando la prosa descrive un **meccanismo di codice**, citare il costrutto esatto
 - **Codice funzionante e re-indentato** fedelmente alle convenzioni del linguaggio (l'estrazione da PDF appiattisce l'indentazione → ricostruirla).
 - **Aggiunte oltre la fonte**: contenuto non presente nel libro/serie del vault va segnalato con una nota in corsivo prefissata dall'icona ➕ (es. *➕ Fuori dal libro …*), così si distingue a colpo d'occhio da ciò che viene dalla fonte.
 
+## Controllo periodico delle novità (ECMAScript / TypeScript / CSS)
+Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **ECMAScript** (sezione `moderno` di `javascript/`), **TypeScript** (versione del compilatore in `typescript/`), **CSS** (feature Baseline in `css/`). Per non lavorare su informazioni stale senza però appesantire ogni turno, vale una **verifica a cadenza mensile**:
+
+- **Quando**: il controllo è **mensile**, ancorato al **mese di calendario**. Se il mese di `currentDate` è **successivo** a quello indicato qui sotto (*Ultima verifica novità*), alla prima occasione utile eseguire il controllo; altrimenti **saltare** (costo zero sugli altri turni).
+- **Cosa**: una ricerca web mirata sullo stato più recente di ECMAScript (ultima edizione ratificata + proposte Stage 4), TypeScript (ultima release stabile) e CSS (feature entrate in Baseline). **Angular escluso per ora.**
+- **Come riportare**: **segnalare** le novità **in fondo al messaggio**, dopo aver completato ciò che era stato chiesto. L'integrazione nei vault **non** è automatica: se e come recepirle è **decisione dell'utente** (una volta decisa, si integra con le note storiche del caso — vedi sotto).
+- Dopo il controllo, **aggiornare la data** qui sotto al **primo giorno del mese corrente** (formato `AAAA-MM-01`).
+
+**Ultima verifica novità: 2026-08-01.**
+
 ## Organizzazione
 - **Una fonte di verità**: un concetto è spiegato in un solo punto; gli altri file rimandano con un link, non riscrivono.
 - Terminologia coerente in tutto il vault.
