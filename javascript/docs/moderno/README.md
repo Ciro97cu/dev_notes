@@ -20,6 +20,7 @@ Questa sezione √® **distaccata** dalla guida al libro: raccoglie le funzionalit√
 | [ES2023](es2023.md) | ES14 | `findLast`/`findLastIndex`, metodi *change-by-copy*, hashbang, Symbol come chiavi WeakMap |
 | [ES2024](es2024.md) | ES15 | `Object.groupBy`/`Map.groupBy`, `Promise.withResolvers`, RegExp flag `v`, resizable `ArrayBuffer` |
 | [ES2025](es2025.md) | ES16 | iterator helpers, metodi di `Set`, import attributes, `Promise.try`, `RegExp.escape`, `Float16Array` |
+| [ES2026](es2026.md) | ES17 | `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause` |
 
 ## Convenzioni
 

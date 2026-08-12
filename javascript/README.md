@@ -58,3 +58,4 @@ Sintesi ragionata e traduzione in italiano della serie **You Don't Know JS** di 
 - [ES2023 (ES14)](docs/moderno/es2023.md)
 - [ES2024 (ES15)](docs/moderno/es2024.md)
 - [ES2025 (ES16)](docs/moderno/es2025.md)
+- [ES2026 (ES17)](docs/moderno/es2026.md)
