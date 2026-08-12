@@ -18,3 +18,6 @@
   - [11. Bit dopo bit dopo bit](/docs/11-bit-by-bit-by-bit.md)
   - [12. Byte ed esadecimale](/docs/12-bytes-and-hexadecimal.md)
   - [13. Da ASCII a Unicode](/docs/13-from-ascii-to-unicode.md)
+
+- **Parte 4 — Aritmetica e memoria**
+  - [14. Sommare con le porte logiche](/docs/14-adding-with-logic-gates.md)

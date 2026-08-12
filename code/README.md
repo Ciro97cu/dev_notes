@@ -30,7 +30,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [13. Da ASCII a Unicode](docs/13-from-ascii-to-unicode.md) — *From ASCII to Unicode*
 
 ## Parte 4 — Aritmetica e memoria
-- 14. Sommare con le porte logiche — *Adding with Logic Gates*
+- [14. Sommare con le porte logiche](docs/14-adding-with-logic-gates.md) — *Adding with Logic Gates*
 - 15. Ma è tutto vero? — *Is This for Real?*
 - 16. E la sottrazione? — *But What About Subtraction?*
 - 17. Feedback e flip-flop — *Feedback and Flip-Flops*
