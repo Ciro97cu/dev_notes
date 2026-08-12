@@ -20,7 +20,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [5. Comunicare dietro l'angolo](docs/05-communicating-around-corners.md) — *Communicating Around Corners*
 - [6. Logica con gli interruttori](docs/06-logic-with-switches.md) — *Logic with Switches*
 - [7. Telegrafi e relè](docs/07-telegraphs-and-relays.md) — *Telegraphs and Relays*
-- 8. Relè e porte logiche — *Relays and Gates*
+- [8. Relè e porte logiche](docs/08-relays-and-gates.md) — *Relays and Gates*
 
 ## Parte 3 — Numeri e bit
 - 9. Le nostre dieci cifre — *Our Ten Digits*

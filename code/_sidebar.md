@@ -10,3 +10,4 @@
   - [5. Comunicare dietro l'angolo](/docs/05-communicating-around-corners.md)
   - [6. Logica con gli interruttori](/docs/06-logic-with-switches.md)
   - [7. Telegrafi e relè](/docs/07-telegraphs-and-relays.md)
+  - [8. Relè e porte logiche](/docs/08-relays-and-gates.md)
