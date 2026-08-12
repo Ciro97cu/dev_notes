@@ -14,3 +14,4 @@
 
 - **Parte 3 — Numeri e bit**
   - [9. Le nostre dieci cifre](/docs/09-our-ten-digits.md)
+  - [10. Dieci alternativi](/docs/10-alternative-10s.md)
