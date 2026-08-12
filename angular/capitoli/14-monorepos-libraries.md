@@ -389,33 +389,54 @@ Gli script specificano il numero di worker node e di processi paralleli per work
 
 ## Ripasso lampo
 
-**1.** Perché si crea il monorepo con `ng new logger --create-application false`? Come si generano poi app e librerie?
-> [!success]- Risposta
-> Senza `--create-application false` la CLI genererebbe la cartella `src` centrale con un'app singola; in un monorepo non serve perché il codice va diviso in subproject separati. App e librerie si aggiungono poi con `ng g app <nome>` e `ng g lib <nome>`, e finiscono in `projects/`.
+<details>
+<summary>Perché si crea il monorepo con <code>ng new logger --create-application false</code>? Come si generano poi app e librerie?</summary>
 
-**2.** Cos'è il `public-api.ts` e dove si configura l'entry point di una libreria?
-> [!success]- Risposta
-> È l'**entry point** della libreria: solo ciò che vi viene esportato (es. `export * from './lib/logger'`) è visibile dai consumer. Il nome del file di entry point si configura in `ng-package.json`, nel campo `lib.entryFile` (insieme a `dest`, la cartella di output della build).
+Senza `--create-application false` la CLI genererebbe la cartella `src` centrale con un'app singola; in un monorepo non serve perché il codice va diviso in subproject separati. App e librerie si aggiungono poi con `ng g app <nome>` e `ng g lib <nome>`, e finiscono in `projects/`.
 
-**3.** Perché far puntare i path mapping al **sorgente** anziché a `dist/`? E perché non usare il proprio path mapping **dentro** la libreria?
-> [!success]- Risposta
-> Puntando a `dist/` si dovrebbe **ricompilare la lib dopo ogni modifica** (tedioso ed error-prone); puntando al `public-api` sorgente i cambiamenti sono visibili subito. Dentro la libreria stessa non si usa il proprio path mapping né si importa dal proprio `public-api` perché crea **riferimenti circolari**.
+</details>
 
-**4.** Differenza tra `peerDependencies` e `dependencies` in una lib, e a cosa serve `allowedNonPeerDependencies`?
-> [!success]- Risposta
-> Le `peerDependencies` vanno installate **separatamente dal consumer** e supportano range di versioni, quindi non impongono una versione precisa (da preferire). Le `dependencies` sono installate **insieme** al pacchetto. A parte `tslib`, ogni `dependency` "convenzionale" va elencata esplicitamente in `allowedNonPeerDependencies` (in `ng-package.json`), altrimenti la CLI non la consente.
+<details>
+<summary>Cos'è il <code>public-api.ts</code> e dove si configura l'entry point di una libreria?</summary>
 
-**5.** Come si pubblica su un registry privato (Verdaccio) e come si evita di ripetere `--registry`?
-> [!success]- Risposta
-> Si avvia Verdaccio (`verdaccio`, di default su `http://localhost:4873`), si crea l'utente con `npm adduser --registry ...` e si pubblica con `npm publish dist/util-logger --registry ...`. Per non ripetere `--registry` si crea un `.npmrc` (formato .ini) nella root con `registry=...` (o `@my:registry=...` per singolo scope), versionabile per tutto il team.
+È l'**entry point** della libreria: solo ciò che vi viene esportato (es. `export * from './lib/logger'`) è visibile dai consumer. Il nome del file di entry point si configura in `ng-package.json`, nel campo `lib.entryFile` (insieme a `dest`, la cartella di output della build).
 
-**6.** Su quale livello operano i module boundaries di Nx e quando si combina con Sheriff?
-> [!success]- Risposta
-> Operano **per libreria e applicazione** (regola ESLint `@nx/enforce-module-boundaries` + tag `sourceTag`/`onlyDependOnLibsWithTags` nei `depConstraints`). Quando servono regole **più granulari, per-cartella**, si combina **Sheriff** con Nx; **Detective** aiuta a visualizzare i setup folder-based.
+</details>
 
-**7.** Cosa rende possibile, in Nx, build incrementali, cache distribuita e parallelizzazione?
-> [!success]- Risposta
-> Il **dependency graph** (lo stesso che disegna `nx graph`). Permette di capire quali progetti sono cambiati (build/test/lint incrementali con cache, locale o distribuita via **Nx Cloud**) e quali task possono girare in parallelo (parallelizzazione su main node + worker node).
+<details>
+<summary>Perché far puntare i path mapping al **sorgente** anziché a <code>dist/</code>? E perché non usare il proprio path mapping **dentro** la libreria?</summary>
+
+Puntando a `dist/` si dovrebbe **ricompilare la lib dopo ogni modifica** (tedioso ed error-prone); puntando al `public-api` sorgente i cambiamenti sono visibili subito. Dentro la libreria stessa non si usa il proprio path mapping né si importa dal proprio `public-api` perché crea **riferimenti circolari**.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>peerDependencies</code> e <code>dependencies</code> in una lib, e a cosa serve <code>allowedNonPeerDependencies</code>?</summary>
+
+Le `peerDependencies` vanno installate **separatamente dal consumer** e supportano range di versioni, quindi non impongono una versione precisa (da preferire). Le `dependencies` sono installate **insieme** al pacchetto. A parte `tslib`, ogni `dependency` "convenzionale" va elencata esplicitamente in `allowedNonPeerDependencies` (in `ng-package.json`), altrimenti la CLI non la consente.
+
+</details>
+
+<details>
+<summary>Come si pubblica su un registry privato (Verdaccio) e come si evita di ripetere <code>--registry</code>?</summary>
+
+Si avvia Verdaccio (`verdaccio`, di default su `http://localhost:4873`), si crea l'utente con `npm adduser --registry ...` e si pubblica con `npm publish dist/util-logger --registry ...`. Per non ripetere `--registry` si crea un `.npmrc` (formato .ini) nella root con `registry=...` (o `@my:registry=...` per singolo scope), versionabile per tutto il team.
+
+</details>
+
+<details>
+<summary>Su quale livello operano i module boundaries di Nx e quando si combina con Sheriff?</summary>
+
+Operano **per libreria e applicazione** (regola ESLint `@nx/enforce-module-boundaries` + tag `sourceTag`/`onlyDependOnLibsWithTags` nei `depConstraints`). Quando servono regole **più granulari, per-cartella**, si combina **Sheriff** con Nx; **Detective** aiuta a visualizzare i setup folder-based.
+
+</details>
+
+<details>
+<summary>Cosa rende possibile, in Nx, build incrementali, cache distribuita e parallelizzazione?</summary>
+
+Il **dependency graph** (lo stesso che disegna `nx graph`). Permette di capire quali progetti sono cambiati (build/test/lint incrementali con cache, locale o distribuita via **Nx Cloud**) e quali task possono girare in parallelo (parallelizzazione su main node + worker node).
+
+</details>
 
 **In sintesi:**
 - Un progetto Angular può essere un **monorepo/workspace** che raggruppa più app eseguibili e **librerie riutilizzabili**; le lib si pubblicano come pacchetti npm oppure si consumano solo localmente.

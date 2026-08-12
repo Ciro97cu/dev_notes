@@ -538,3 +538,15 @@ a[aria-label="Torna a Dev Notes"]:hover,
   color: var(--link) !important;
 }
 .sidebar-toggle:hover span { background-color: var(--link) !important; }
+
+/* ---------- Quiz collassabili (<details>) — stile Q&A unico del monorepo ---------- */
+.markdown-section details {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--link);
+  border-radius: 6px;
+  padding: .6em 1em;
+  margin: .8em 0;
+}
+.markdown-section details summary { cursor: pointer; font-weight: 600; color: var(--text); outline: none; }
+.markdown-section details[open] summary { margin-bottom: .6em; color: var(--link); }

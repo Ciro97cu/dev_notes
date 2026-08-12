@@ -607,37 +607,61 @@ export const PassengerStore = signalStore(
 
 ## Ripasso lampo
 
-**1.** Che cosa distingue, nel tipo esposto ai consumer, una proprietà `_flightClient` da una `flightClient`? E perché su `basket: {} as Record<...>` serve la type assertion?
-> [!success]- Risposta
-> Il prefisso `_` rende il membro **privato**: il type system del NgRx esclude i membri che iniziano con `_` dal tipo esposto ai consumer (non è solo convenzione, e vale per tutte le features). La type assertion serve perché TypeScript non riesce a inferire `Record<number, boolean>` dal valore iniziale `{}` (lo vedrebbe come oggetto vuoto). In alternativa si tipizza esplicitamente l'intero stato con `withState<FlightSearchState>({...})`.
+<details>
+<summary>Che cosa distingue, nel tipo esposto ai consumer, una proprietà <code>_flightClient</code> da una <code>flightClient</code>? E perché su <code>basket: {} as Record<...></code> serve la type assertion?</summary>
 
-**2.** `patchState`: differenza tra passare un partial state e una updater function? Perché lo stato va trattato come immutabile?
-> [!success]- Risposta
-> Un **partial state** (`patchState(store, { from, to })`) aggiorna solo le proprietà fornite. Una **updater function** (`(state) => partial`) riceve lo stato corrente e ne deriva il partial, utile quando il nuovo stato dipende dal vecchio (es. aggiornare un oggetto/array annidato). Lo stato va trattato come **immutabile** — si crea un nuovo oggetto (`{ ...state.basket, [id]: sel }`) invece di mutare quello esistente — così il cambio di riferimento è rilevabile e i signal a valle si ricalcolano correttamente.
+Il prefisso `_` rende il membro **privato**: il type system del NgRx esclude i membri che iniziano con `_` dal tipo esposto ai consumer (non è solo convenzione, e vale per tutte le features). La type assertion serve perché TypeScript non riesce a inferire `Record<number, boolean>` dal valore iniziale `{}` (lo vedrebbe come oggetto vuoto). In alternativa si tipizza esplicitamente l'intero stato con `withState<FlightSearchState>({...})`.
 
-**3.** Come disabilitare i Redux DevTools in produzione **rimuovendoli dal bundle**? Perché `isDevMode()` da solo non basta?
-> [!success]- Risposta
-> `isDevMode()` è un check a **runtime**: il ramo `withDevtools` resta comunque nel bundle di produzione. Per escluderlo dal bundle serve un check a **compile-time** basato su un valore costante: si genera `environment.ts` / `environment.development.ts` con `ng generate environments` (la CLI li scambia in dev), si espone in ciascuno un membro `withDevtools` (reale vs `withDevToolsStub`) e un helper `withDevToolsForDebugMode(name)` che chiama `environment.withDevtools(name)`; nello store si usa l'helper.
+</details>
 
-**4.** `httpMutation` vs `rxMutation`: cosa cambia per store e componente? Quali sono i quattro `operator` e qual è il default? Quali stati può avere il risultato della mutation?
-> [!success]- Risposta
-> Per **store e componente non cambia nulla**: entrambe aggiungono lo stesso metodo e gli stessi signal di stato (`...IsPending`, `...Error`). Differiscono solo nella definizione: `httpMutation` riceve una `request` (config HTTP), `rxMutation` una `operation` che ritorna un `Observable`. Gli operator: `switchOp` (annulla la precedente), `mergeOp` (parallelo), `concatOp` (in coda, **default**), `exhaustOp` (ignora le nuove mentre una è in corso). Il risultato (`Promise`) può essere `success`, `error` o `cancelled` (quest'ultimo solo con `switchOp`/`exhaustOp`).
+<details>
+<summary><code>patchState</code>: differenza tra passare un partial state e una updater function? Perché lo stato va trattato come immutabile?</summary>
 
-**5.** `rxMethod` vs `signalMethod`: differenze, gestione delle chiamate sovrapposte, e perché nel constructor si passa il signal mentre in `search` il valore?
-> [!success]- Risposta
-> `rxMethod` (da `@ngrx/signals/rxjs-interop`) lavora con un **Observable** e i suoi operator (incluso il flattening per le chiamate sovrapposte, es. `switchMap`); `signalMethod` (da `@ngrx/signals`) è una **funzione ordinaria** ri-eseguita per ogni nuovo valore e **non** ha meccanismi per le chiamate sovrapposte. Entrambi accettano valore plain o `Signal<T>`. Nel `constructor` si passa il **signal** (`updateFilter(this.filter)`): viene tracciato e la pipe rigira a ogni cambio. In `search` si passa il **valore corrente** (`updateFilter(this.filter())`): una sola esecuzione su richiesta. Entrambi vanno chiamati in un injection context (`rxMethod` usa un `effect` interno).
+Un **partial state** (`patchState(store, { from, to })`) aggiorna solo le proprietà fornite. Una **updater function** (`(state) => partial`) riceve lo stato corrente e ne deriva il partial, utile quando il nuovo stato dipende dal vecchio (es. aggiornare un oggetto/array annidato). Lo stato va trattato come **immutabile** — si crea un nuovo oggetto (`{ ...state.basket, [id]: sel }`) invece di mutare quello esistente — così il cambio di riferimento è rilevabile e i signal a valle si ricalcolano correttamente.
 
-**6.** Come sono memorizzate internamente le entità di `withEntities` (`entityMap`, `ids`, `entities`)? Cosa fanno `selectId`/`collection`? Perché normalizzare?
-> [!success]- Risposta
-> `withEntities` tiene un dizionario `entityMap` (ID → entità) più un signal `ids` (lista ordinata di ID); `entities` è un `computed` derivato dai due (riordinare = cambiare l'ordine in `ids`). `selectId` indica quale proprietà è l'identificatore quando non si chiama `id`; `collection` prefissa i signal generati (es. `flightEntities`, `flightEntityMap`, `flightIds`) per gestire più entità nello stesso store. Si **normalizza** per evitare duplicati e stati incoerenti (una sola istanza per entità) e per ricomporre facilmente le viste via `computed`, riferendo le entità solo tramite ID.
+</details>
 
-**7.** Event API: ruoli di `eventGroup`, `withReducer`/`on`, `withEventHandlers`, `Dispatcher`/`injectDispatch`? Perché i reducer sono sincroni e gli event handler no?
-> [!success]- Risposta
-> `eventGroup` definisce un gruppo di eventi (nome + tipo payload + `source`). `withReducer` + `on(event, fn)` collega un evento a un **reducer sincrono** che ritorna un partial state patchato. `withEventHandlers` definisce **event handler** (Observable) che ascoltano eventi via il service `Events`, eseguono side effect async (es. HTTP) e **emettono nuovi eventi** col risultato. I componenti dispatchano con `Dispatcher.dispatch(...)`, oppure ottengono metodi self-dispatching con `injectDispatch(eventGroup)`. I reducer sono **sincroni** perché aggiornano direttamente lo stato in modo deterministico; gli **event handler** gestiscono l'async/side effect, tenendolo separato dall'aggiornamento di stato.
+<details>
+<summary>Come disabilitare i Redux DevTools in produzione **rimuovendoli dal bundle**? Perché <code>isDevMode()</code> da solo non basta?</summary>
 
-**8.** Come si definisce una custom feature con `signalStoreFeature` e perché l'ordine delle features nello store è rilevante?
-> [!success]- Risposta
-> Una custom feature è una **factory** che ritorna `signalStoreFeature(...)`, combinando altre features (es. `withState` + `withComputed`); per cambiare lo stato meglio esporre **updater** (funzioni che ritornano un partial da passare a `patchState`) anziché metodi, per non inquinare lo store. L'**ordine conta** perché ogni feature aggiunge membri visibili solo alle features successive: se `withMethods` usa i membri di `withCallState`, quest'ultima va chiamata **prima**.
+`isDevMode()` è un check a **runtime**: il ramo `withDevtools` resta comunque nel bundle di produzione. Per escluderlo dal bundle serve un check a **compile-time** basato su un valore costante: si genera `environment.ts` / `environment.development.ts` con `ng generate environments` (la CLI li scambia in dev), si espone in ciascuno un membro `withDevtools` (reale vs `withDevToolsStub`) e un helper `withDevToolsForDebugMode(name)` che chiama `environment.withDevtools(name)`; nello store si usa l'helper.
+
+</details>
+
+<details>
+<summary><code>httpMutation</code> vs <code>rxMutation</code>: cosa cambia per store e componente? Quali sono i quattro <code>operator</code> e qual è il default? Quali stati può avere il risultato della mutation?</summary>
+
+Per **store e componente non cambia nulla**: entrambe aggiungono lo stesso metodo e gli stessi signal di stato (`...IsPending`, `...Error`). Differiscono solo nella definizione: `httpMutation` riceve una `request` (config HTTP), `rxMutation` una `operation` che ritorna un `Observable`. Gli operator: `switchOp` (annulla la precedente), `mergeOp` (parallelo), `concatOp` (in coda, **default**), `exhaustOp` (ignora le nuove mentre una è in corso). Il risultato (`Promise`) può essere `success`, `error` o `cancelled` (quest'ultimo solo con `switchOp`/`exhaustOp`).
+
+</details>
+
+<details>
+<summary><code>rxMethod</code> vs <code>signalMethod</code>: differenze, gestione delle chiamate sovrapposte, e perché nel constructor si passa il signal mentre in <code>search</code> il valore?</summary>
+
+`rxMethod` (da `@ngrx/signals/rxjs-interop`) lavora con un **Observable** e i suoi operator (incluso il flattening per le chiamate sovrapposte, es. `switchMap`); `signalMethod` (da `@ngrx/signals`) è una **funzione ordinaria** ri-eseguita per ogni nuovo valore e **non** ha meccanismi per le chiamate sovrapposte. Entrambi accettano valore plain o `Signal<T>`. Nel `constructor` si passa il **signal** (`updateFilter(this.filter)`): viene tracciato e la pipe rigira a ogni cambio. In `search` si passa il **valore corrente** (`updateFilter(this.filter())`): una sola esecuzione su richiesta. Entrambi vanno chiamati in un injection context (`rxMethod` usa un `effect` interno).
+
+</details>
+
+<details>
+<summary>Come sono memorizzate internamente le entità di <code>withEntities</code> (<code>entityMap</code>, <code>ids</code>, <code>entities</code>)? Cosa fanno <code>selectId</code>/<code>collection</code>? Perché normalizzare?</summary>
+
+`withEntities` tiene un dizionario `entityMap` (ID → entità) più un signal `ids` (lista ordinata di ID); `entities` è un `computed` derivato dai due (riordinare = cambiare l'ordine in `ids`). `selectId` indica quale proprietà è l'identificatore quando non si chiama `id`; `collection` prefissa i signal generati (es. `flightEntities`, `flightEntityMap`, `flightIds`) per gestire più entità nello stesso store. Si **normalizza** per evitare duplicati e stati incoerenti (una sola istanza per entità) e per ricomporre facilmente le viste via `computed`, riferendo le entità solo tramite ID.
+
+</details>
+
+<details>
+<summary>Event API: ruoli di <code>eventGroup</code>, <code>withReducer</code>/<code>on</code>, <code>withEventHandlers</code>, <code>Dispatcher</code>/<code>injectDispatch</code>? Perché i reducer sono sincroni e gli event handler no?</summary>
+
+`eventGroup` definisce un gruppo di eventi (nome + tipo payload + `source`). `withReducer` + `on(event, fn)` collega un evento a un **reducer sincrono** che ritorna un partial state patchato. `withEventHandlers` definisce **event handler** (Observable) che ascoltano eventi via il service `Events`, eseguono side effect async (es. HTTP) e **emettono nuovi eventi** col risultato. I componenti dispatchano con `Dispatcher.dispatch(...)`, oppure ottengono metodi self-dispatching con `injectDispatch(eventGroup)`. I reducer sono **sincroni** perché aggiornano direttamente lo stato in modo deterministico; gli **event handler** gestiscono l'async/side effect, tenendolo separato dall'aggiornamento di stato.
+
+</details>
+
+<details>
+<summary>Come si definisce una custom feature con <code>signalStoreFeature</code> e perché l'ordine delle features nello store è rilevante?</summary>
+
+Una custom feature è una **factory** che ritorna `signalStoreFeature(...)`, combinando altre features (es. `withState` + `withComputed`); per cambiare lo stato meglio esporre **updater** (funzioni che ritornano un partial da passare a `patchState`) anziché metodi, per non inquinare lo store. L'**ordine conta** perché ogni feature aggiunge membri visibili solo alle features successive: se `withMethods` usa i membri di `withCallState`, quest'ultima va chiamata **prima**.
+
+</details>
 
 **In sintesi:**
 - Lo store NgRx modella lo stato di feature come **signal** e separa nettamente letture (superficie read-only + view model derivati) e scritture (incapsulate dietro l'API dello store, sempre via `patchState`), realizzando il flusso unidirezionale del [[08-sustainable-architectures|cap.8]].

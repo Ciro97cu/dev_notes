@@ -338,29 +338,47 @@ Collegamenti: [[07-colori]] · [[06-unita-valori-funzioni]]
 
 ## Ripasso lampo
 
-**1.** In una lista di sfondi multipli separati da virgola, quale layer viene disegnato sopra?
-> [!success]- Risposta
-> Il **primo** della lista sta in cima; l'ultimo fa da fondale. Il colore (`background-color`) può stare solo nell'ultimo layer.
+<details>
+<summary>In una lista di sfondi multipli separati da virgola, quale layer viene disegnato sopra?</summary>
 
-**2.** Che differenza c'è tra `background-size: cover` e `contain`?
-> [!success]- Risposta
-> Entrambi mantengono le proporzioni. `cover` **riempie** il box tagliando l'eccedenza; `contain` fa **rientrare** tutta l'immagine, lasciando eventuali bande vuote.
+Il **primo** della lista sta in cima; l'ultimo fa da fondale. Il colore (`background-color`) può stare solo nell'ultimo layer.
 
-**3.** Come si ottiene un testo riempito da un gradiente?
-> [!success]- Risposta
-> `background-image` con un gradiente + `background-clip: text` (con `-webkit-background-clip: text` per Safari) + `color: transparent`. Prevedere un fallback di colore.
+</details>
 
-**4.** Quando serve `filter: drop-shadow()` invece di `box-shadow`?
-> [!success]- Risposta
-> Quando l'ombra deve seguire la **sagoma reale** (PNG con trasparenza, elemento con `clip-path`) e non il box rettangolare. `box-shadow` rispetta solo il box e il suo `border-radius`.
+<details>
+<summary>Che differenza c'è tra <code>background-size: cover</code> e <code>contain</code>?</summary>
 
-**5.** Perché un `backdrop-filter` a volte "non si vede"?
-> [!success]- Risposta
-> Perché serve uno sfondo **parzialmente trasparente** sull'elemento per lasciar vedere ciò che sta dietro; inoltre un `opacity < 1`, un `filter` o una `mask` su un antenato possono interrompere l'effetto creando un contesto isolato.
+Entrambi mantengono le proporzioni. `cover` **riempie** il box tagliando l'eccedenza; `contain` fa **rientrare** tutta l'immagine, lasciando eventuali bande vuote.
 
-**6.** `clip-path` o `mask` per una dissolvenza graduale del bordo?
-> [!success]- Risposta
-> `mask` (con un gradiente `black → transparent`): fa un ritaglio **morbido** basato su opacità/luminanza. `clip-path` produce solo tagli **netti** su forme geometriche.
+</details>
+
+<details>
+<summary>Come si ottiene un testo riempito da un gradiente?</summary>
+
+`background-image` con un gradiente + `background-clip: text` (con `-webkit-background-clip: text` per Safari) + `color: transparent`. Prevedere un fallback di colore.
+
+</details>
+
+<details>
+<summary>Quando serve <code>filter: drop-shadow()</code> invece di <code>box-shadow</code>?</summary>
+
+Quando l'ombra deve seguire la **sagoma reale** (PNG con trasparenza, elemento con `clip-path`) e non il box rettangolare. `box-shadow` rispetta solo il box e il suo `border-radius`.
+
+</details>
+
+<details>
+<summary>Perché un <code>backdrop-filter</code> a volte "non si vede"?</summary>
+
+Perché serve uno sfondo **parzialmente trasparente** sull'elemento per lasciar vedere ciò che sta dietro; inoltre un `opacity < 1`, un `filter` o una `mask` su un antenato possono interrompere l'effetto creando un contesto isolato.
+
+</details>
+
+<details>
+<summary><code>clip-path</code> o <code>mask</code> per una dissolvenza graduale del bordo?</summary>
+
+`mask` (con un gradiente `black → transparent`): fa un ritaglio **morbido** basato su opacità/luminanza. `clip-path` produce solo tagli **netti** su forme geometriche.
+
+</details>
 
 **In sintesi:**
 - `background` è una famiglia di 8 sotto-proprietà; lo shorthand azzera al default tutto ciò che si omette e vuole `position / size`. Sfondi multipli: virgola, **il primo sta sopra**.

@@ -474,29 +474,47 @@ Collegamenti: [[providers]] · [[inject]] · pattern di store condiviso in [[lig
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza tra **View** e **Content** di un componente, e quale coppia di query interroga ciascuno?
-> [!success]- Risposta
-> **View** = ciò che il componente definisce nel **proprio template**. **Content** = il markup che il **chiamante** passa e che Angular proietta in `<ng-content>`. La View si interroga con `viewChild`/`viewChildren`, il Content con `contentChild`/`contentChildren`.
+<details>
+<summary>Qual è la differenza tra **View** e **Content** di un componente, e quale coppia di query interroga ciascuno?</summary>
 
-**2.** Nella variante *injection* come fa un `Tab` a registrarsi nel padre, e come lo rendi tollerante all'assenza di un `TabbedPane`?
-> [!success]- Risposta
-> Il `Tab` **inietta** il padre con `inject(TabbedPane)` e nel costruttore chiama `this.pane.registerTab(this)`, passando `this` (la propria istanza). Per renderlo tollerante: `inject(TabbedPane, { optional: true })` → se il token non si risolve Angular restituisce `undefined`; poi proteggi la chiamata con l'optional chaining: `this.pane?.registerTab(this)`.
+**View** = ciò che il componente definisce nel **proprio template**. **Content** = il markup che il **chiamante** passa e che Angular proietta in `<ng-content>`. La View si interroga con `viewChild`/`viewChildren`, il Content con `contentChild`/`contentChildren`.
 
-**3.** Cosa restituisce `contentChildren(Tab)` e in cosa differisce da `contentChild`? Quali due tipi di filtro accettano?
-> [!success]- Risposta
-> `contentChildren(Tab)` restituisce un **signal** il cui valore è l'**array** delle istanze `Tab` proiettate nel Content. `contentChild` restituisce **un solo** elemento (il primo che combacia). Entrambi accettano due tipi di filtro: per **tipo di componente** (`Tab`) o per **template reference** (`'tab'`).
+</details>
 
-**4.** Perché gli autori sconsigliano `viewChild`/`viewChildren`? In quali tre casi lo ritengono giustificato?
-> [!success]- Risposta
-> Perché sostituisce il **data binding dichiarativo** (feature centrale di Angular) con codice imperativo: più difficile da leggere/mantenere, e gli update diretti delle proprietà possono innescare cicli di change detection. Giustificato solo quando: (1) un controllo di terze parti non espone data binding per certe proprietà; (2) ti serve il **DOM** (es. Chart.js); (3) un padre deve **chiamare un metodo** di un figlio.
+<details>
+<summary>Nella variante *injection* come fa un <code>Tab</code> a registrarsi nel padre, e come lo rendi tollerante all'assenza di un <code>TabbedPane</code>?</summary>
 
-**5.** A cosa serve `static: true` in una query e quando *non* si può usare? Cosa si usa per reagire quando gli elementi sono pronti?
-> [!success]- Risposta
-> `static: true` dichiara che l'elemento esiste **prima** della change detection, così il signal della query ha un valore prima. **Non** si può usare se l'elemento è dentro `@if`/`@for` (compare solo dopo). In quei casi si reagisce con `afterRenderEffect` o `afterNextRender`: i content children sono pronti dopo il check del content, i view children dopo l'init della view.
+Il `Tab` **inietta** il padre con `inject(TabbedPane)` e nel costruttore chiama `this.pane.registerTab(this)`, passando `this` (la propria istanza). Per renderlo tollerante: `inject(TabbedPane, { optional: true })` → se il token non si risolve Angular restituisce `undefined`; poi proteggi la chiamata con l'optional chaining: `this.pane?.registerTab(this)`.
 
-**6.** Confronta comunicazione via **template variable** e via **service**: pro e contro di ciascuna in termini di esplicitezza e accoppiamento.
-> [!success]- Risposta
-> **Template variable** (`#pane` → `pane.activate(1)`): comunicazione **esplicita**, si vede a colpo d'occhio chi parla con chi; ma è un riferimento diretto, limitato al template in cui è dichiarata. **Service** (es. `TabRegistry` nei `providers`): **accoppiamento lasco** — pane e tab dipendono solo dal contratto condiviso, non l'uno dall'altro — e attraversa più livelli di gerarchia; ma la comunicazione è **implicita**, a prima vista non si capisce chi comunica con chi.
+</details>
+
+<details>
+<summary>Cosa restituisce <code>contentChildren(Tab)</code> e in cosa differisce da <code>contentChild</code>? Quali due tipi di filtro accettano?</summary>
+
+`contentChildren(Tab)` restituisce un **signal** il cui valore è l'**array** delle istanze `Tab` proiettate nel Content. `contentChild` restituisce **un solo** elemento (il primo che combacia). Entrambi accettano due tipi di filtro: per **tipo di componente** (`Tab`) o per **template reference** (`'tab'`).
+
+</details>
+
+<details>
+<summary>Perché gli autori sconsigliano <code>viewChild</code>/<code>viewChildren</code>? In quali tre casi lo ritengono giustificato?</summary>
+
+Perché sostituisce il **data binding dichiarativo** (feature centrale di Angular) con codice imperativo: più difficile da leggere/mantenere, e gli update diretti delle proprietà possono innescare cicli di change detection. Giustificato solo quando: (1) un controllo di terze parti non espone data binding per certe proprietà; (2) ti serve il **DOM** (es. Chart.js); (3) un padre deve **chiamare un metodo** di un figlio.
+
+</details>
+
+<details>
+<summary>A cosa serve <code>static: true</code> in una query e quando *non* si può usare? Cosa si usa per reagire quando gli elementi sono pronti?</summary>
+
+`static: true` dichiara che l'elemento esiste **prima** della change detection, così il signal della query ha un valore prima. **Non** si può usare se l'elemento è dentro `@if`/`@for` (compare solo dopo). In quei casi si reagisce con `afterRenderEffect` o `afterNextRender`: i content children sono pronti dopo il check del content, i view children dopo l'init della view.
+
+</details>
+
+<details>
+<summary>Confronta comunicazione via **template variable** e via **service**: pro e contro di ciascuna in termini di esplicitezza e accoppiamento.</summary>
+
+**Template variable** (`#pane` → `pane.activate(1)`): comunicazione **esplicita**, si vede a colpo d'occhio chi parla con chi; ma è un riferimento diretto, limitato al template in cui è dichiarata. **Service** (es. `TabRegistry` nei `providers`): **accoppiamento lasco** — pane e tab dipendono solo dal contratto condiviso, non l'uno dall'altro — e attraversa più livelli di gerarchia; ma la comunicazione è **implicita**, a prima vista non si capisce chi comunica con chi.
+
+</details>
 
 **In sintesi:**
 - La **Content Projection** (`<ng-content>`) mostra il markup passato dal chiamante; **View** = template del componente, **Content** = markup proiettato.

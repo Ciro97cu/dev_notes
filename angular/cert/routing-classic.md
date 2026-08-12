@@ -232,25 +232,40 @@ Tra gli eventi principali, nell'ordine: `NavigationStart`, `RoutesRecognized`, `
 
 ## Ripasso lampo
 
-**1.** Differenza tra `RouterModule.forRoot` e `forChild`?
-> [!success]- Risposta
-> `forRoot(routes, options)` va chiamato **una sola volta** nel root module: registra il servizio `Router` (singleton), le route top-level e le `ExtraOptions`. `forChild(routes)` va nei feature module: aggiunge solo route **senza** ri-registrare i service. Entrambi ri-esportano `RouterModule` per rendere disponibili le directive (`router-outlet`, `routerLink`).
+<details>
+<summary>Differenza tra <code>RouterModule.forRoot</code> e <code>forChild</code>?</summary>
 
-**2.** `snapshot` vs `paramMap` Observable: quando usare l'uno o l'altro?
-> [!success]- Risposta
-> Lo `snapshot` dà il valore del parametro **una tantum** all'attivazione: comodo, ma se si naviga verso lo **stesso componente** con un parametro diverso Angular riusa l'istanza, non richiama `ngOnInit` e lo snapshot resta vecchio. L'Observable `paramMap` (e `queryParamMap`, `data`, `fragment`) **emette a ogni cambio** senza ricreare il componente, quindi va usato quando il parametro può cambiare a componente montato.
+`forRoot(routes, options)` va chiamato **una sola volta** nel root module: registra il servizio `Router` (singleton), le route top-level e le `ExtraOptions`. `forChild(routes)` va nei feature module: aggiunge solo route **senza** ri-registrare i service. Entrambi ri-esportano `RouterModule` per rendere disponibili le directive (`router-outlet`, `routerLink`).
 
-**3.** Perché `CanMatch` è preferito a `CanLoad`?
-> [!success]- Risposta
-> `CanLoad` (deprecato) impediva solo il **caricamento del bundle lazy** ma non faceva ri-valutare la route, quindi non consentiva un fallback ad altre route sullo stesso path. `CanMatch` è valutato durante il **matching**: se restituisce `false` il Router **prova la route successiva**, ed è quindi più flessibile (route condizionali, A/B su feature flag).
+</details>
 
-**4.** Come si scrive e registra un `CanDeactivate<T>` class-based?
-> [!success]- Risposta
-> È una classe `@Injectable` che implementa `CanDeactivate<T>`, generica sul tipo del componente da cui si esce; il metodo `canDeactivate(component: T)` riceve l'istanza e restituisce `boolean`/`UrlTree`/`Observable`/`Promise`. Si registra nella route con `canDeactivate: [PendingChangesGuard]`. Tipicamente `T` è un'interfaccia (`CanComponentDeactivate`) implementata dai componenti-form.
+<details>
+<summary><code>snapshot</code> vs <code>paramMap</code> Observable: quando usare l'uno o l'altro?</summary>
 
-**5.** Come si carica lazy un modulo e qual è la vecchia sintassi rimossa?
-> [!success]- Risposta
-> Con `loadChildren: () => import('./x/x.module').then((m) => m.XModule)`; il modulo registra le sue route con `RouterModule.forChild`. La vecchia sintassi a **stringa** (`loadChildren: './x/x.module#XModule'`) è stata **rimossa con Ivy (v9)**. Il segmento del path viene prefissato a tutte le route del modulo lazy.
+Lo `snapshot` dà il valore del parametro **una tantum** all'attivazione: comodo, ma se si naviga verso lo **stesso componente** con un parametro diverso Angular riusa l'istanza, non richiama `ngOnInit` e lo snapshot resta vecchio. L'Observable `paramMap` (e `queryParamMap`, `data`, `fragment`) **emette a ogni cambio** senza ricreare il componente, quindi va usato quando il parametro può cambiare a componente montato.
+
+</details>
+
+<details>
+<summary>Perché <code>CanMatch</code> è preferito a <code>CanLoad</code>?</summary>
+
+`CanLoad` (deprecato) impediva solo il **caricamento del bundle lazy** ma non faceva ri-valutare la route, quindi non consentiva un fallback ad altre route sullo stesso path. `CanMatch` è valutato durante il **matching**: se restituisce `false` il Router **prova la route successiva**, ed è quindi più flessibile (route condizionali, A/B su feature flag).
+
+</details>
+
+<details>
+<summary>Come si scrive e registra un <code>CanDeactivate<T></code> class-based?</summary>
+
+È una classe `@Injectable` che implementa `CanDeactivate<T>`, generica sul tipo del componente da cui si esce; il metodo `canDeactivate(component: T)` riceve l'istanza e restituisce `boolean`/`UrlTree`/`Observable`/`Promise`. Si registra nella route con `canDeactivate: [PendingChangesGuard]`. Tipicamente `T` è un'interfaccia (`CanComponentDeactivate`) implementata dai componenti-form.
+
+</details>
+
+<details>
+<summary>Come si carica lazy un modulo e qual è la vecchia sintassi rimossa?</summary>
+
+Con `loadChildren: () => import('./x/x.module').then((m) => m.XModule)`; il modulo registra le sue route con `RouterModule.forChild`. La vecchia sintassi a **stringa** (`loadChildren: './x/x.module#XModule'`) è stata **rimossa con Ivy (v9)**. Il segmento del path viene prefissato a tutte le route del modulo lazy.
+
+</details>
 
 **In sintesi:**
 - Setup classico via `RouterModule.forRoot(routes, options)` (una volta, root) + `forChild` nei feature module; `ExtraOptions` per hash location, preloading, input binding.

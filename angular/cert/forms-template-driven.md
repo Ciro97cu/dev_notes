@@ -146,25 +146,40 @@ input.ng-invalid.ng-touched {
 
 ## Ripasso lampo
 
-**1.** Perché un `ngModel` dentro un `<form>` richiede l'attributo `name`?
-> [!success]- Risposta
-> Perché `name` è la chiave con cui il controllo si registra nel `NgForm` e con cui compare in `f.value`. Senza, si ha un errore a runtime; l'unica alternativa è dichiararlo `[ngModelOptions]="{ standalone: true }"` per escluderlo dal modello.
+<details>
+<summary>Perché un <code>ngModel</code> dentro un <code><form></code> richiede l'attributo <code>name</code>?</summary>
 
-**2.** Che differenza c'è fra `[(ngModel)]`, `[ngModel]` e `ngModel` da solo?
-> [!success]- Risposta
-> `[(ngModel)]` è two-way (legge e scrive la proprietà); `[ngModel]` è one-way (imposta solo il valore iniziale); `ngModel` senza binding registra il controllo per validazione/stato senza legarlo ad alcuna proprietà.
+Perché `name` è la chiave con cui il controllo si registra nel `NgForm` e con cui compare in `f.value`. Senza, si ha un errore a runtime; l'unica alternativa è dichiararlo `[ngModelOptions]="{ standalone: true }"` per escluderlo dal modello.
 
-**3.** Come si ottiene il riferimento alla form e a un singolo controllo nel template?
-> [!success]- Risposta
-> Con template reference variable che esportano le direttive: `#f="ngForm"` dà il `NgForm` (valore/validità dell'intera form), `#ctrl="ngModel"` dà il singolo `NgModel` (per errori e stato del campo).
+</details>
 
-**4.** Perché conviene combinare `invalid` con `touched` prima di mostrare un errore?
-> [!success]- Risposta
-> Per non mostrare l'errore appena la form si carica (quando il campo è vuoto ma l'utente non l'ha ancora toccato). `invalid && touched` rivela il messaggio solo dopo che l'utente ha interagito (blur) col campo.
+<details>
+<summary>Che differenza c'è fra <code>[(ngModel)]</code>, <code>[ngModel]</code> e <code>ngModel</code> da solo?</summary>
 
-**5.** Quali classi CSS applica Angular a un input non valido e già visitato?
-> [!success]- Risposta
-> `ng-invalid` e `ng-touched` (oltre a `ng-dirty` se modificato). Si può quindi stilizzare con un selettore come `input.ng-invalid.ng-touched`.
+`[(ngModel)]` è two-way (legge e scrive la proprietà); `[ngModel]` è one-way (imposta solo il valore iniziale); `ngModel` senza binding registra il controllo per validazione/stato senza legarlo ad alcuna proprietà.
+
+</details>
+
+<details>
+<summary>Come si ottiene il riferimento alla form e a un singolo controllo nel template?</summary>
+
+Con template reference variable che esportano le direttive: `#f="ngForm"` dà il `NgForm` (valore/validità dell'intera form), `#ctrl="ngModel"` dà il singolo `NgModel` (per errori e stato del campo).
+
+</details>
+
+<details>
+<summary>Perché conviene combinare <code>invalid</code> con <code>touched</code> prima di mostrare un errore?</summary>
+
+Per non mostrare l'errore appena la form si carica (quando il campo è vuoto ma l'utente non l'ha ancora toccato). `invalid && touched` rivela il messaggio solo dopo che l'utente ha interagito (blur) col campo.
+
+</details>
+
+<details>
+<summary>Quali classi CSS applica Angular a un input non valido e già visitato?</summary>
+
+`ng-invalid` e `ng-touched` (oltre a `ng-dirty` se modificato). Si può quindi stilizzare con un selettore come `input.ng-invalid.ng-touched`.
+
+</details>
 
 **In sintesi:**
 - Template-driven = modello e validazione **impliciti**, guidati dalle direttive nel template; serve `FormsModule`.

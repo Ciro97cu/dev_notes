@@ -324,29 +324,47 @@ Collegamenti: [[13-grid]] · [[05-box-model]] · [[09-display-posizionamento]]
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza tra `justify-content` e `align-items`, e da cosa dipende quale dei due agisce in orizzontale?
-> [!success]- Risposta
-> `justify-content` allinea sull'**asse principale**, `align-items` sull'**asse trasversale**. Quale sia orizzontale dipende da `flex-direction`: con `row` il principale è orizzontale, con `column` diventa verticale (i due si scambiano).
+<details>
+<summary>Qual è la differenza tra <code>justify-content</code> e <code>align-items</code>, e da cosa dipende quale dei due agisce in orizzontale?</summary>
 
-**2.** Perché si preferisce `gap` ai margini per spaziare i flex item?
-> [!success]- Risposta
-> `gap` mette spazio solo **tra** gli item (non ai bordi esterni), non richiede di azzerare il margine sul primo/ultimo elemento e non soffre di margin collapsing. È **Baseline** dal 2021 (Safari 14.1) ed è il modo standard oggi.
+`justify-content` allinea sull'**asse principale**, `align-items` sull'**asse trasversale**. Quale sia orizzontale dipende da `flex-direction`: con `row` il principale è orizzontale, con `column` diventa verticale (i due si scambiano).
 
-**3.** A cosa si espande `flex: 1` e in cosa differisce da `flex: auto`?
-> [!success]- Risposta
-> `flex: 1` = `1 1 0%`: gli item si dividono lo spazio in **parti uguali** ignorando il contenuto (base `0`). `flex: auto` = `1 1 auto`: crescono anch'essi, ma **partendo dal contenuto**, quindi risultano proporzionali a esso.
+</details>
 
-**4.** Quando `align-content` ha effetto e quando invece è inutile?
-> [!success]- Risposta
-> Ha effetto solo con **più righe** (`flex-wrap: wrap` e item che vanno a capo), perché distribuisce lo spazio tra le righe. Su un container a riga singola (`nowrap`, il default) non fa nulla.
+<details>
+<summary>Perché si preferisce <code>gap</code> ai margini per spaziare i flex item?</summary>
 
-**5.** Perché `order` va usato con cautela?
-> [!success]- Risposta
-> Cambia solo l'ordine **visivo**, non quello del DOM: tastiera e screen reader seguono il markup. Il disallineamento danneggia l'accessibilità (WCAG 1.3); l'ordine logico va tenuto nell'HTML.
+`gap` mette spazio solo **tra** gli item (non ai bordi esterni), non richiede di azzerare il margine sul primo/ultimo elemento e non soffre di margin collapsing. È **Baseline** dal 2021 (Safari 14.1) ed è il modo standard oggi.
 
-**6.** Flexbox o Grid?
-> [!success]- Risposta
-> Flexbox per il layout **monodimensionale** (una riga o una colonna, con eventuale wrap); Grid per il **bidimensionale** (righe e colonne allineate insieme). Spesso si combinano: vedi [[13-grid]].
+</details>
+
+<details>
+<summary>A cosa si espande <code>flex: 1</code> e in cosa differisce da <code>flex: auto</code>?</summary>
+
+`flex: 1` = `1 1 0%`: gli item si dividono lo spazio in **parti uguali** ignorando il contenuto (base `0`). `flex: auto` = `1 1 auto`: crescono anch'essi, ma **partendo dal contenuto**, quindi risultano proporzionali a esso.
+
+</details>
+
+<details>
+<summary>Quando <code>align-content</code> ha effetto e quando invece è inutile?</summary>
+
+Ha effetto solo con **più righe** (`flex-wrap: wrap` e item che vanno a capo), perché distribuisce lo spazio tra le righe. Su un container a riga singola (`nowrap`, il default) non fa nulla.
+
+</details>
+
+<details>
+<summary>Perché <code>order</code> va usato con cautela?</summary>
+
+Cambia solo l'ordine **visivo**, non quello del DOM: tastiera e screen reader seguono il markup. Il disallineamento danneggia l'accessibilità (WCAG 1.3); l'ordine logico va tenuto nell'HTML.
+
+</details>
+
+<details>
+<summary>Flexbox o Grid?</summary>
+
+Flexbox per il layout **monodimensionale** (una riga o una colonna, con eventuale wrap); Grid per il **bidimensionale** (righe e colonne allineate insieme). Spesso si combinano: vedi [[13-grid]].
+
+</details>
 
 **In sintesi:**
 - `display: flex`/`inline-flex` sul container rende i **figli diretti** flex item, disposti lungo un **asse principale** (orientato da `flex-direction`) e allineati sull'**asse trasversale**.

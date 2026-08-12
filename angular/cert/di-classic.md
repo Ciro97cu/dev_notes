@@ -158,25 +158,40 @@ export class FlightCard {
 
 ## Ripasso lampo
 
-**1.** Quando serve un `InjectionToken<T>` invece di usare la classe come token?
-> [!success]- Risposta
-> Quando la dipendenza **non è una classe**: un valore di configurazione, una stringa, una funzione, o un valore tipizzato da un'**interfaccia**. Le interfacce spariscono alla compilazione, quindi non esistono a runtime e non possono fare da token; un `InjectionToken<T>` fornisce una chiave concreta (spesso con `factory` + `providedIn: 'root'` per renderlo tree-shakable).
+<details>
+<summary>Quando serve un <code>InjectionToken<T></code> invece di usare la classe come token?</summary>
 
-**2.** Differenza tra `useClass`, `useValue`, `useFactory` (con `deps`) e `useExisting`?
-> [!success]- Risposta
-> `useClass` istanzia una classe dietro il token; `useValue` fornisce un valore già pronto senza istanziare nulla; `useFactory` costruisce il valore con una funzione, i cui argomenti vengono iniettati elencandoli in `deps` (nell'ordine); `useExisting` è un **alias** che restituisce l'istanza già esistente di un altro token, senza crearne una nuova.
+Quando la dipendenza **non è una classe**: un valore di configurazione, una stringa, una funzione, o un valore tipizzato da un'**interfaccia**. Le interfacce spariscono alla compilazione, quindi non esistono a runtime e non possono fare da token; un `InjectionToken<T>` fornisce una chiave concreta (spesso con `factory` + `providedIn: 'root'` per renderlo tree-shakable).
 
-**3.** Cosa fa `multi: true` e cosa succede senza?
-> [!success]- Risposta
-> Con `multi: true` più provider per lo stesso token vengono raccolti in un **array** (es. `HTTP_INTERCEPTORS`). Senza, l'ultimo provider **sovrascrive** i precedenti e l'injector restituisce un solo valore. `multi: true` va messo su tutti i provider dello stesso token.
+</details>
 
-**4.** `ModuleInjector` vs `ElementInjector` e in che ordine Angular risolve una dipendenza?
-> [!success]- Risposta
-> Il `ModuleInjector` (environment) è popolato da `providedIn`/`@NgModule.providers`/provider function con gerarchia `platform → root → moduli lazy`; l'`ElementInjector` nasce sugli elementi con `providers`/`viewProviders` e segue l'albero dei componenti. Angular parte dall'`ElementInjector` del richiedente, **sale** l'albero degli ElementInjector, e **solo dopo** passa ai ModuleInjector; vince il primo provider trovato.
+<details>
+<summary>Differenza tra <code>useClass</code>, <code>useValue</code>, <code>useFactory</code> (con <code>deps</code>) e <code>useExisting</code>?</summary>
 
-**5.** A cosa servono `@Optional`, `@Self`, `@SkipSelf`, `@Host`?
-> [!success]- Risposta
-> `@Optional` inietta `null` invece di lanciare errore se il token manca. `@Self` cerca solo nell'injector corrente, senza risalire. `@SkipSelf` salta il corrente e parte dal padre. `@Host` pone il limite superiore della ricerca all'injector del componente host.
+`useClass` istanzia una classe dietro il token; `useValue` fornisce un valore già pronto senza istanziare nulla; `useFactory` costruisce il valore con una funzione, i cui argomenti vengono iniettati elencandoli in `deps` (nell'ordine); `useExisting` è un **alias** che restituisce l'istanza già esistente di un altro token, senza crearne una nuova.
+
+</details>
+
+<details>
+<summary>Cosa fa <code>multi: true</code> e cosa succede senza?</summary>
+
+Con `multi: true` più provider per lo stesso token vengono raccolti in un **array** (es. `HTTP_INTERCEPTORS`). Senza, l'ultimo provider **sovrascrive** i precedenti e l'injector restituisce un solo valore. `multi: true` va messo su tutti i provider dello stesso token.
+
+</details>
+
+<details>
+<summary><code>ModuleInjector</code> vs <code>ElementInjector</code> e in che ordine Angular risolve una dipendenza?</summary>
+
+Il `ModuleInjector` (environment) è popolato da `providedIn`/`@NgModule.providers`/provider function con gerarchia `platform → root → moduli lazy`; l'`ElementInjector` nasce sugli elementi con `providers`/`viewProviders` e segue l'albero dei componenti. Angular parte dall'`ElementInjector` del richiedente, **sale** l'albero degli ElementInjector, e **solo dopo** passa ai ModuleInjector; vince il primo provider trovato.
+
+</details>
+
+<details>
+<summary>A cosa servono <code>@Optional</code>, <code>@Self</code>, <code>@SkipSelf</code>, <code>@Host</code>?</summary>
+
+`@Optional` inietta `null` invece di lanciare errore se il token manca. `@Self` cerca solo nell'injector corrente, senza risalire. `@SkipSelf` salta il corrente e parte dal padre. `@Host` pone il limite superiore della ricerca all'injector del componente host.
+
+</details>
 
 **In sintesi:**
 - `@Injectable({ providedIn: 'root' | 'platform' | 'any' })` auto-registra un servizio tree-shakable; `'root'` è quasi sempre la scelta giusta.

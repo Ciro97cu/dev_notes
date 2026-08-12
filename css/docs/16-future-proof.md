@@ -175,29 +175,47 @@ Collegamenti: [[04-cascade-specificita-ereditarieta]] · [[06-unita-valori-funzi
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza tra *progressive enhancement* e *graceful degradation*?
-> [!success]- Risposta
-> **Progressive enhancement**: si parte da una base che funziona ovunque e si *aggiunge* il miglioramento dove supportato (direzione preferita). **Graceful degradation**: si parte dalla versione ricca e si prevede un ripiego per chi non la regge. La prima ha una base più solida.
+<details>
+<summary>Qual è la differenza tra *progressive enhancement* e *graceful degradation*?</summary>
 
-**2.** Come si usa una feature nuova con un fallback, in CSS puro?
-> [!success]- Risposta
-> Con `@supports`: si scrive prima la regola di fallback senza condizioni, poi si sovrascrive dentro `@supports (property: value) { … }`. Per i selettori nuovi si usa la forma `@supports selector(:has(a))`. Mescolando `and`/`or` servono le parentesi.
+**Progressive enhancement**: si parte da una base che funziona ovunque e si *aggiunge* il miglioramento dove supportato (direzione preferita). **Graceful degradation**: si parte dalla versione ricca e si prevede un ripiego per chi non la regge. La prima ha una base più solida.
 
-**3.** Perché oggi non si scrivono più i vendor prefix a mano?
-> [!success]- Risposta
-> Perché quasi tutte le proprietà sono supportate senza prefisso e i motori usano flag sperimentali, non prefissi in produzione. Quando servono ancora, li aggiunge **Autoprefixer** (PostCSS) in base ai browser-target (Browserslist), non l'intuito dello sviluppatore.
+</details>
 
-**4.** Cosa risolve BEM e quali feature native oggi coprono parte dello stesso problema?
-> [!success]- Risposta
-> BEM (`block__element--modifier`) tiene classi piatte, a bassa specificità, evitando collisioni di nomi. Oggi le **custom properties** parametrizzano i componenti e i **cascade layer** (`@layer`) governano l'ordine di vittoria a prescindere dalla specificità.
+<details>
+<summary>Come si usa una feature nuova con un fallback, in CSS puro?</summary>
 
-**5.** Cosa significa che "il CSS è modulare"?
-> [!success]- Risposta
-> Dopo CSS 2.1 lo standard è spezzato in **moduli** indipendenti (Selectors, Grid, Color…), ognuno con un proprio **livello** e stato di maturità, curati dal **CSS Working Group**. Le feature avanzano a velocità diverse; "CSS3" non è una versione precisa.
+Con `@supports`: si scrive prima la regola di fallback senza condizioni, poi si sovrascrive dentro `@supports (property: value) { … }`. Per i selettori nuovi si usa la forma `@supports selector(:has(a))`. Mescolando `and`/`or` servono le parentesi.
 
-**6.** Quando ha ancora senso usare Sass nel 2026?
-> [!success]- Risposta
-> Quando servono **logica di generazione** (`@each`/`@for`/`@function`) o organizzazione a moduli con `@use`/`@forward`. Per variabili, nesting e calcoli semplici il CSS nativo (custom properties, nesting, `clamp()`) basta e non richiede build step.
+</details>
+
+<details>
+<summary>Perché oggi non si scrivono più i vendor prefix a mano?</summary>
+
+Perché quasi tutte le proprietà sono supportate senza prefisso e i motori usano flag sperimentali, non prefissi in produzione. Quando servono ancora, li aggiunge **Autoprefixer** (PostCSS) in base ai browser-target (Browserslist), non l'intuito dello sviluppatore.
+
+</details>
+
+<details>
+<summary>Cosa risolve BEM e quali feature native oggi coprono parte dello stesso problema?</summary>
+
+BEM (`block__element--modifier`) tiene classi piatte, a bassa specificità, evitando collisioni di nomi. Oggi le **custom properties** parametrizzano i componenti e i **cascade layer** (`@layer`) governano l'ordine di vittoria a prescindere dalla specificità.
+
+</details>
+
+<details>
+<summary>Cosa significa che "il CSS è modulare"?</summary>
+
+Dopo CSS 2.1 lo standard è spezzato in **moduli** indipendenti (Selectors, Grid, Color…), ognuno con un proprio **livello** e stato di maturità, curati dal **CSS Working Group**. Le feature avanzano a velocità diverse; "CSS3" non è una versione precisa.
+
+</details>
+
+<details>
+<summary>Quando ha ancora senso usare Sass nel 2026?</summary>
+
+Quando servono **logica di generazione** (`@each`/`@for`/`@function`) o organizzazione a moduli con `@use`/`@forward`. Per variabili, nesting e calcoli semplici il CSS nativo (custom properties, nesting, `clamp()`) basta e non richiede build step.
+
+</details>
 
 **In sintesi:**
 - Il supporto è **per versione**: si decide con **Can I Use** (dettaglio) e **Baseline** (stadi *Newly*/*Widely available*), preferendo il **progressive enhancement**.

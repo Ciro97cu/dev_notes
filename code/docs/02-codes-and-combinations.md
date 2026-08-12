@@ -127,30 +127,40 @@ Il Morse si dice **binario** (letteralmente "due per due") perché è fatto di d
 
 ## Ripasso lampo
 
-**1.** Perché ricevere il Morse è più difficile che trasmetterlo?
+<details>
+<summary>Perché ricevere il Morse è più difficile che trasmetterlo?</summary>
 
-> [!success]- Risposta
-> Perché ricevere impone di lavorare **a ritroso**, dalla sequenza di punti e linee alla lettera. La tabella lettera → codice non aiuta nel verso opposto, e nei punti/linee non c'è alcun "ordine alfabetico" a cui appoggiarsi. Serve un'organizzazione diversa (per numero di simboli, o un albero).
+Perché ricevere impone di lavorare **a ritroso**, dalla sequenza di punti e linee alla lettera. La tabella lettera → codice non aiuta nel verso opposto, e nei punti/linee non c'è alcun "ordine alfabetico" a cui appoggiarsi. Serve un'organizzazione diversa (per numero di simboli, o un albero).
 
-**2.** Quanti codici si ottengono con `n` simboli, e perché?
+</details>
 
-> [!success]- Risposta
-> **2ⁿ**. Ogni tabella contiene tutti i codici della precedente seguiti da un punto **più** tutti quelli seguiti da una linea: aggiungere un simbolo **raddoppia** le possibilità, quindi si moltiplica 2 per sé stesso `n` volte.
+<details>
+<summary>Quanti codici si ottengono con <code>n</code> simboli, e perché?</summary>
 
-**3.** Seguendo l'albero, quale lettera è `•—•`?
+**2ⁿ**. Ogni tabella contiene tutti i codici della precedente seguiti da un punto **più** tutti quelli seguiti da una linea: aggiungere un simbolo **raddoppia** le possibilità, quindi si moltiplica 2 per sé stesso `n` volte.
 
-> [!success]- Risposta
-> **R.** Da sinistra: il punto porta a **E**, poi la linea porta ad **A**, poi il punto porta a **R**.
+</details>
 
-**4.** In che senso il Morse è "binario"?
+<details>
+<summary>Seguendo l'albero, quale lettera è <code>•—•</code>?</summary>
 
-> [!success]- Risposta
-> Perché è composto da **due sole** entità, il punto e la linea — esattamente come una moneta ha solo testa e croce. Le combinazioni di elementi binari si contano sempre con le potenze di due.
+**R.** Da sinistra: il punto porta a **E**, poi la linea porta ad **A**, poi il punto porta a **R**.
 
-**5.** Quanti codici in totale fino a sei simboli, e che cosa succede a quelli non usati?
+</details>
 
-> [!success]- Risposta
-> 2 + 4 + 8 + 16 + 32 + 64 = **126**. Sono molti più dei caratteri necessari, quindi tanti restano **non definiti**: ricevere un codice non definito indica quasi sempre un errore di trasmissione.
+<details>
+<summary>In che senso il Morse è "binario"?</summary>
+
+Perché è composto da **due sole** entità, il punto e la linea — esattamente come una moneta ha solo testa e croce. Le combinazioni di elementi binari si contano sempre con le potenze di due.
+
+</details>
+
+<details>
+<summary>Quanti codici in totale fino a sei simboli, e che cosa succede a quelli non usati?</summary>
+
+2 + 4 + 8 + 16 + 32 + 64 = **126**. Sono molti più dei caratteri necessari, quindi tanti restano **non definiti**: ricevere un codice non definito indica quasi sempre un errore di trasmissione.
+
+</details>
 
 **In sintesi:**
 

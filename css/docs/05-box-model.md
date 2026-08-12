@@ -170,29 +170,47 @@ Collegamenti: [[06-unita-valori-funzioni]] · [[09-display-posizionamento]]
 
 ## Ripasso lampo
 
-**1.** Con `box-sizing: content-box`, quanto occupa in larghezza `width: 200px; padding: 20px; border: 5px solid`?
-> [!success]- Risposta
-> **250px**: `200 + 20·2 + 5·2`. Con `content-box` (default) padding e border si sommano al `width`. Con `border-box` occuperebbe esattamente 200px.
+<details>
+<summary>Con <code>box-sizing: content-box</code>, quanto occupa in larghezza <code>width: 200px; padding: 20px; border: 5px solid</code>?</summary>
 
-**2.** Cosa fa il reset `*, *::before, *::after { box-sizing: border-box; }` e perché è utile?
-> [!success]- Risposta
-> Fa sì che `width`/`height` includano padding e border su **tutti** gli elementi (pseudo-elementi compresi). Così la misura dichiarata è quella davvero occupata: `width: 50%` resta 50% qualunque sia il padding, e i layout "tornano" senza calcoli.
+**250px**: `200 + 20·2 + 5·2`. Con `content-box` (default) padding e border si sommano al `width`. Con `border-box` occuperebbe esattamente 200px.
 
-**3.** Cos'è il margin collapsing e su quale asse avviene?
-> [!success]- Risposta
-> Due margini **verticali** (block) di scatole *block* nel normale flusso che si toccano collassano in un margine unico pari al **maggiore** dei due (non si sommano). Avviene solo sull'asse verticale, mai su quello orizzontale.
+</details>
 
-**4.** Come si spiega la regola TRBL in `margin: 10px 20px 30px`?
-> [!success]- Risposta
-> Tre valori = **top | orizzontale | bottom**: `margin-top: 10px`, destra e sinistra `20px`, `margin-bottom: 30px`. Con 2 valori sarebbe verticale | orizzontale; con 4, in senso orario top-right-bottom-left.
+<details>
+<summary>Cosa fa il reset <code>*, *::before, *::after { box-sizing: border-box; }</code> e perché è utile?</summary>
 
-**5.** Perché `border: 2px crimson` non mostra alcun bordo?
-> [!success]- Risposta
-> Manca lo **style**, il cui default è `none`. Senza uno stile esplicito (`solid`, `dashed`, …) il bordo non viene disegnato, anche con width e color impostati.
+Fa sì che `width`/`height` includano padding e border su **tutti** gli elementi (pseudo-elementi compresi). Così la misura dichiarata è quella davvero occupata: `width: 50%` resta 50% qualunque sia il padding, e i layout "tornano" senza calcoli.
 
-**6.** Quali modi ci sono per impedire il margin collapsing tra genitore e figlio?
-> [!success]- Risposta
-> Aggiungere `padding` o `border` al genitore, dargli un `overflow` diverso da `visible` (o `display: flow-root`), oppure usare un contenitore **flex/grid** (dove i margini non collassano mai).
+</details>
+
+<details>
+<summary>Cos'è il margin collapsing e su quale asse avviene?</summary>
+
+Due margini **verticali** (block) di scatole *block* nel normale flusso che si toccano collassano in un margine unico pari al **maggiore** dei due (non si sommano). Avviene solo sull'asse verticale, mai su quello orizzontale.
+
+</details>
+
+<details>
+<summary>Come si spiega la regola TRBL in <code>margin: 10px 20px 30px</code>?</summary>
+
+Tre valori = **top | orizzontale | bottom**: `margin-top: 10px`, destra e sinistra `20px`, `margin-bottom: 30px`. Con 2 valori sarebbe verticale | orizzontale; con 4, in senso orario top-right-bottom-left.
+
+</details>
+
+<details>
+<summary>Perché <code>border: 2px crimson</code> non mostra alcun bordo?</summary>
+
+Manca lo **style**, il cui default è `none`. Senza uno stile esplicito (`solid`, `dashed`, …) il bordo non viene disegnato, anche con width e color impostati.
+
+</details>
+
+<details>
+<summary>Quali modi ci sono per impedire il margin collapsing tra genitore e figlio?</summary>
+
+Aggiungere `padding` o `border` al genitore, dargli un `overflow` diverso da `visible` (o `display: flow-root`), oppure usare un contenitore **flex/grid** (dove i margini non collassano mai).
+
+</details>
 
 **In sintesi:**
 - Quattro aree concentriche: **content → padding → border → margin**. `width`/`height` misurano il content; il margin non entra mai nella dimensione della scatola.

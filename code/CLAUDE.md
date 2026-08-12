@@ -55,11 +55,14 @@ index.html       app docsify (mermaid, callout, prism-bash)
 
 ## Ripasso lampo
 
-**1.** <domanda>
-> [!success]- Risposta
-> <risposta concisa>
+<details>
+<summary><domanda></summary>
 
-(3-6 domande, ognuna con la risposta in callout pieghevole)
+<risposta concisa>
+
+</details>
+
+(3-6 domande, ognuna in un `<details>` pieghevole; backtick della domanda resi come `<code>` nel `<summary>`)
 
 **In sintesi:** <2-4 bullet con i punti chiave.>
 ```
@@ -67,7 +70,7 @@ index.html       app docsify (mermaid, callout, prism-bash)
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (da ricordare) **senza** titolo custom.
 - `> [!info]` mantiene il titolo quando è informativo.
-- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **Ripasso lampo**.
+- Le risposte del **Ripasso lampo** vanno in un **`<details>`** (`<summary>` = domanda), non nel callout.
 
 ## Le 6 parti (raggruppamento editoriale; il libro è lineare)
 1. **I codici** (capp. 1-3) · 2. **Elettricità e interruttori** (4-8) · 3. **Numeri e bit** (9-13) · 4. **Aritmetica e memoria** (14-19) · 5. **Il processore** (20-24) · 6. **Dal computer al software** (25-28).

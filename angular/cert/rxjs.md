@@ -223,25 +223,40 @@ export class Legacy implements OnInit, OnDestroy {
 
 ## Ripasso lampo
 
-**1.** Cosa significa che un `Observable` è "cold" e come si vede la differenza con un `Subject`?
-> [!success]- Risposta
-> Cold = il produttore vive dentro l'Observable e **ogni** subscribe avvia un'esecuzione indipendente (due iscritti a `http.get` sono due richieste distinte). Un `Subject` è hot/multicast: un solo flusso condiviso, e i nuovi iscritti ricevono solo le emissioni successive alla loro sottoscrizione.
+<details>
+<summary>Cosa significa che un <code>Observable</code> è "cold" e come si vede la differenza con un <code>Subject</code>?</summary>
 
-**2.** Che differenza c'è fra `switchMap`, `mergeMap`, `concatMap` ed `exhaustMap`?
-> [!success]- Risposta
-> Tutti mappano un valore a un inner Observable. `switchMap` annulla l'inner precedente (typeahead); `mergeMap` li esegue tutti in parallelo; `concatMap` li accoda in ordine; `exhaustMap` ignora i nuovi finché l'inner corrente non completa (evita doppi submit).
+Cold = il produttore vive dentro l'Observable e **ogni** subscribe avvia un'esecuzione indipendente (due iscritti a `http.get` sono due richieste distinte). Un `Subject` è hot/multicast: un solo flusso condiviso, e i nuovi iscritti ricevono solo le emissioni successive alla loro sottoscrizione.
 
-**3.** Quando scegliere `BehaviorSubject` invece di `Subject`?
-> [!success]- Risposta
-> Quando serve uno "stato corrente" con valore iniziale, da leggere anche in ritardo: `BehaviorSubject` richiede un valore iniziale, emette **l'ultimo** valore a ogni nuovo iscritto ed espone `.value`. Un `Subject` puro non ha valore iniziale né replay.
+</details>
 
-**4.** Come si evita un memory leak da sottoscrizione in un componente?
-> [!success]- Risposta
-> Chiudendo lo stream alla distruzione: `takeUntilDestroyed()` (idiomatico, richiede injection context o `DestroyRef`), oppure il classico `takeUntil(destroy$)` con un `Subject` chiuso in `ngOnDestroy`, oppure delegando all'`async` pipe che si disiscrive da sola.
+<details>
+<summary>Che differenza c'è fra <code>switchMap</code>, <code>mergeMap</code>, <code>concatMap</code> ed <code>exhaustMap</code>?</summary>
 
-**5.** Cosa succede allo stream dopo un `error`, e dove va messo `catchError` in una search box?
-> [!success]- Risposta
-> L'`error` **termina** lo stream: nessuna emissione successiva. In una search box il `catchError` va sull'**inner observable** dentro lo `switchMap` (per non spegnere la pipeline esterna); metterlo sull'outer farebbe morire l'intera ricerca al primo errore.
+Tutti mappano un valore a un inner Observable. `switchMap` annulla l'inner precedente (typeahead); `mergeMap` li esegue tutti in parallelo; `concatMap` li accoda in ordine; `exhaustMap` ignora i nuovi finché l'inner corrente non completa (evita doppi submit).
+
+</details>
+
+<details>
+<summary>Quando scegliere <code>BehaviorSubject</code> invece di <code>Subject</code>?</summary>
+
+Quando serve uno "stato corrente" con valore iniziale, da leggere anche in ritardo: `BehaviorSubject` richiede un valore iniziale, emette **l'ultimo** valore a ogni nuovo iscritto ed espone `.value`. Un `Subject` puro non ha valore iniziale né replay.
+
+</details>
+
+<details>
+<summary>Come si evita un memory leak da sottoscrizione in un componente?</summary>
+
+Chiudendo lo stream alla distruzione: `takeUntilDestroyed()` (idiomatico, richiede injection context o `DestroyRef`), oppure il classico `takeUntil(destroy$)` con un `Subject` chiuso in `ngOnDestroy`, oppure delegando all'`async` pipe che si disiscrive da sola.
+
+</details>
+
+<details>
+<summary>Cosa succede allo stream dopo un <code>error</code>, e dove va messo <code>catchError</code> in una search box?</summary>
+
+L'`error` **termina** lo stream: nessuna emissione successiva. In una search box il `catchError` va sull'**inner observable** dentro lo `switchMap` (per non spegnere la pipeline esterna); metterlo sull'outer farebbe morire l'intera ricerca al primo errore.
+
+</details>
 
 **In sintesi:**
 - `Observable` = stream lazy/cold; `Observer` (`next`/`error`/`complete`) consuma, `Subscription.unsubscribe()` ferma; terminazione con `complete` **o** `error`, mai entrambi.

@@ -698,29 +698,47 @@ Esegue i test e genera un sito statico in `coverage/<project-name>` (es. `covera
 
 ## Ripasso lampo
 
-**1.** Cosa rappresentano `describe` e `it`, perché non vanno importati, e cos'è il pattern AAA?
-> [!success]- Risposta
-> `describe` definisce una test **suite** (gruppo di casi correlati), `it` un test **case** (verifica una porzione di funzionalità). Non si importano perché Vitest le rende **globali** durante l'esecuzione (come `beforeEach`, `expect`, `vi`). Il pattern **AAA** struttura il caso in tre fasi: *Arrange* (prepara), *Act* (esegue l'azione da testare), *Assert* (verifica il risultato con `expect` + matcher).
+<details>
+<summary>Cosa rappresentano <code>describe</code> e <code>it</code>, perché non vanno importati, e cos'è il pattern AAA?</summary>
 
-**2.** Perché in browser mode si preferisce l'oggetto `page` (+ `expect.element`) al `debugElement`? Perché i locator usano ARIA e non `id`/`name`?
-> [!success]- Risposta
-> `page` è meno verboso, orientato ad ARIA e ha **retry** integrato fino a un timeout; il `debugElement` è di basso livello (selettori CSS, niente retry, l'evento `input` va dispatchato a mano). I locator indirizzano ruoli e attributi **ARIA** di proposito, per spingere a costruire app accessibili; non offrono accesso per `id`/`name`. Come ultima spiaggia c'è `getByTestId` (`data-testid`), da usare con parsimonia perché mina l'accessibilità.
+`describe` definisce una test **suite** (gruppo di casi correlati), `it` un test **case** (verifica una porzione di funzionalità). Non si importano perché Vitest le rende **globali** durante l'esecuzione (come `beforeEach`, `expect`, `vi`). Il pattern **AAA** struttura il caso in tre fasi: *Arrange* (prepara), *Act* (esegue l'azione da testare), *Assert* (verifica il risultato con `expect` + matcher).
 
-**3.** Cosa fa `provideHttpClientTesting()`, e a cosa servono `request.flush(...)` e `ctrl.verify()`?
-> [!success]- Risposta
-> `provideHttpClientTesting()` sostituisce i servizi interni dell'`HttpClient` con mock che **intercettano** le richieste e restituiscono risposte fake (vale anche per `httpResource`). Ogni richiesta resta in pausa finché non la si risolve con `request.flush(...)` (la risposta fake). `ctrl.verify()` lancia un'eccezione se restano richieste **senza risposta** → tipicamente in `afterEach`.
+</details>
 
-**4.** Perché serve `vi.waitFor(() => ctrl.expectOne(...))` quando il dato arriva da un `httpResource`?
-> [!success]- Risposta
-> Perché l'`httpResource` **non** parte subito: usa un `effect` che osserva il request signal, e gli effect girano in un **microtask successivo**. Al momento dell'`expectOne` la richiesta potrebbe non esistere ancora. `vi.waitFor` riprova la funzione finché ha successo o scatta il timeout (spesso basta `{ interval: 0 }`), aspettando che l'effect parta.
+<details>
+<summary>Perché in browser mode si preferisce l'oggetto <code>page</code> (+ <code>expect.element</code>) al <code>debugElement</code>? Perché i locator usano ARIA e non <code>id</code>/<code>name</code>?</summary>
 
-**5.** Differenza tra mockare i ritardi (settings object) e usare i fake timer? Perché con `httpResource` + fake timer servono due `runAllTimersAsync()`?
-> [!success]- Risposta
-> Mockare il ritardo significa azzerarlo alla fonte: si spia il getter `debounceTimeMs` e si forza `0` con `mockReturnValue(0)` (più semplice; va fatto **prima** di `createComponent`). I **fake timer** (`vi.useFakeTimers`) invece simulano lo scorrere del tempo e si fanno avanzare con `runAllTimersAsync`. Con `httpResource` ne servono due: uno **prima** di `expectOne` (scaduto il debounce, l'effect che lancia l'HTTP gira in un microtask) e uno **dopo** il `flush` (la resource risolve una Promise → altro microtask).
+`page` è meno verboso, orientato ad ARIA e ha **retry** integrato fino a un timeout; il `debugElement` è di basso livello (selettori CSS, niente retry, l'evento `input` va dispatchato a mano). I locator indirizzano ruoli e attributi **ARIA** di proposito, per spingere a costruire app accessibili; non offrono accesso per `id`/`name`. Come ultima spiaggia c'è `getByTestId` (`data-testid`), da usare con parsimonia perché mina l'accessibilità.
 
-**6.** Come si testa un componente che dipende dalla rotta corrente? E un servizio in isolamento?
-> [!success]- Risposta
-> Per il componente routed si usa il **`RouterTestingHarness`**: lo si crea con `RouterTestingHarness.create()` e si simula la navigazione con `harness.navigateByUrl('/...')`. Per il servizio in isolamento valgono `TestBed`, mock e spy come per i componenti, ma invece di creare una fixture lo si recupera direttamente con `TestBed.inject(...)` e se ne testano i metodi.
+</details>
+
+<details>
+<summary>Cosa fa <code>provideHttpClientTesting()</code>, e a cosa servono <code>request.flush(...)</code> e <code>ctrl.verify()</code>?</summary>
+
+`provideHttpClientTesting()` sostituisce i servizi interni dell'`HttpClient` con mock che **intercettano** le richieste e restituiscono risposte fake (vale anche per `httpResource`). Ogni richiesta resta in pausa finché non la si risolve con `request.flush(...)` (la risposta fake). `ctrl.verify()` lancia un'eccezione se restano richieste **senza risposta** → tipicamente in `afterEach`.
+
+</details>
+
+<details>
+<summary>Perché serve <code>vi.waitFor(() => ctrl.expectOne(...))</code> quando il dato arriva da un <code>httpResource</code>?</summary>
+
+Perché l'`httpResource` **non** parte subito: usa un `effect` che osserva il request signal, e gli effect girano in un **microtask successivo**. Al momento dell'`expectOne` la richiesta potrebbe non esistere ancora. `vi.waitFor` riprova la funzione finché ha successo o scatta il timeout (spesso basta `{ interval: 0 }`), aspettando che l'effect parta.
+
+</details>
+
+<details>
+<summary>Differenza tra mockare i ritardi (settings object) e usare i fake timer? Perché con <code>httpResource</code> + fake timer servono due <code>runAllTimersAsync()</code>?</summary>
+
+Mockare il ritardo significa azzerarlo alla fonte: si spia il getter `debounceTimeMs` e si forza `0` con `mockReturnValue(0)` (più semplice; va fatto **prima** di `createComponent`). I **fake timer** (`vi.useFakeTimers`) invece simulano lo scorrere del tempo e si fanno avanzare con `runAllTimersAsync`. Con `httpResource` ne servono due: uno **prima** di `expectOne` (scaduto il debounce, l'effect che lancia l'HTTP gira in un microtask) e uno **dopo** il `flush` (la resource risolve una Promise → altro microtask).
+
+</details>
+
+<details>
+<summary>Come si testa un componente che dipende dalla rotta corrente? E un servizio in isolamento?</summary>
+
+Per il componente routed si usa il **`RouterTestingHarness`**: lo si crea con `RouterTestingHarness.create()` e si simula la navigazione con `harness.navigateByUrl('/...')`. Per il servizio in isolamento valgono `TestBed`, mock e spy come per i componenti, ma invece di creare una fixture lo si recupera direttamente con `TestBed.inject(...)` e se ne testano i metodi.
+
+</details>
 
 **In sintesi:**
 - **Vitest** è il test runner di default della CLI; la maggioranza dei test sono **component test** in **browser mode** (provider Playwright) che imitano l'utente via locator ARIA + `page` + `expect.element`.

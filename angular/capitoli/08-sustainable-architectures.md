@@ -385,37 +385,61 @@ Collegamenti: [[lightweight-store]] · [[providers]] · [[service]] · [[05-stat
 
 ## Ripasso lampo
 
-**1.** Differenza tra vertical slicing e horizontal layering? Cosa si intende per "verticale"?
-> [!success]- Risposta
-> Il **vertical slicing** taglia il sistema per **business domain**: ogni verticale è responsabile di un dominio (o parte di esso) e implementa use case correlati sullo **stesso domain model**. Il **layering orizzontale** separa invece per **funzione tecnica**. I due si combinano: i verticali danno l'ordine per dominio, i layer (feature/ui/data/util) l'ordine tecnico dentro ciascun verticale.
+<details>
+<summary>Differenza tra vertical slicing e horizontal layering? Cosa si intende per "verticale"?</summary>
 
-**2.** Quali sono le tre euristiche per trovare i boundaries e cosa si fa quando si contraddicono?
-> [!success]- Risposta
-> **Language** (stessi termini, stesso significato → stesso contesto; significato diverso → contesti diversi), **Responsibilities** (responsabilità diverse → modelli diversi) e **Pivotal Events** (punti di svolta decisivi, spesso handover a un altro ruolo). Quando si contraddicono non c'è la soluzione perfetta: si prende una **decisione consapevole** pesando le conseguenze insieme a team e domain expert, sapendo che non è scolpita nella pietra e si può raffinare con il refactoring.
+Il **vertical slicing** taglia il sistema per **business domain**: ogni verticale è responsabile di un dominio (o parte di esso) e implementa use case correlati sullo **stesso domain model**. Il **layering orizzontale** separa invece per **funzione tecnica**. I due si combinano: i verticali danno l'ordine per dominio, i layer (feature/ui/data/util) l'ordine tecnico dentro ciascun verticale.
 
-**3.** Cosa rappresentano le quattro categorie della Architecture Matrix (feature/ui/data/util) e quali due regole di dipendenza le governano?
-> [!success]- Risposta
-> **feature** = use case con smart component che parlano col backend; **ui** = dumb/presentational component riusabili (solo properties & events); **data** = domain model lato client + service (validazione, backend, state management/view model); **util** = helper generici (logging, auth, date). Regole: (1) ogni dominio comunica solo con i propri moduli + `shared`; (2) ogni modulo accede solo ai **layer sottostanti** nella matrice. Servono a disaccoppiare ed evitare cicli.
+</details>
 
-**4.** Barrel `index.ts` vs convenzione `internal/`: pro e contro? Cosa fa `enableBarrelLess: true` in Sheriff?
-> [!success]- Risposta
-> Il **barrel** (`index.ts`) ri-esporta la public API, ma è noioso da mantenere e **rompe tree-shaking/lazy loading** (carica anche costrutti non usati dietro lo stesso barrel). La convenzione **`internal/`** (barrel-less) mette i costrutti privati in quella cartella e lascia pubblico tutto il resto, senza ri-esportazioni. `enableBarrelLess: true` dice a Sheriff di **non richiedere** barrel: senza `index.ts`, è privato solo ciò che sta in `internal/`. Se invece un `index.ts` esiste, Sheriff lo tratta come public API e bypassarlo è errore di lint.
+<details>
+<summary>Quali sono le tre euristiche per trovare i boundaries e cosa si fa quando si contraddicono?</summary>
 
-**5.** A cosa servono Sheriff e Detective, e in cosa differiscono?
-> [!success]- Risposta
-> **Sheriff** *impone* l'architettura via **linting**: definisci tag per i moduli e `depRules`, e le violazioni diventano errori in IDE e console (automatizzabili in CI). **Detective** *visualizza* moduli e dipendenze come **dependency graph** (numero/spessore degli import) e offre metodi di analisi forense. In breve: Sheriff fa rispettare le regole, Detective mostra com'è fatta davvero la modularizzazione.
+**Language** (stessi termini, stesso significato → stesso contesto; significato diverso → contesti diversi), **Responsibilities** (responsabilità diverse → modelli diversi) e **Pivotal Events** (punti di svolta decisivi, spesso handover a un altro ruolo). Quando si contraddicono non c'è la soluzione perfetta: si prende una **decisione consapevole** pesando le conseguenze insieme a team e domain expert, sapendo che non è scolpita nella pietra e si può raffinare con il refactoring.
 
-**6.** Cos'è il flusso dati unidirezionale e perché rende il sistema più facile da ragionare?
-> [!success]- Risposta
-> I dati scorrono in **una sola direzione**: un evento manda una **intention** allo store (chiamando un metodo), lo store **processa** e **aggiorna lo stato**, i signal fanno **scendere** il nuovo stato ai component (eventualmente proiettato in view model). Per ogni evento c'è un percorso ben definito — **su, a destra, giù** — che evita le cascate di cambiamenti reattivi e rende prevedibile l'impatto delle modifiche.
+</details>
 
-**7.** In quali layer può stare un lightweight store, e quando si usa `{ providedIn: 'root' }` invece di `providers: [...]` sul component?
-> [!success]- Risposta
-> In **tutti i layer** (feature, ui, data, util) — anche i component UI hanno stato. Si usa `providers: [Store]` sul component quando serve **un'istanza per istanza di component** (es. dumb component come uno scheduler ripetuto in pagina, ognuno col proprio stato), perché così lo store è locale a quel component e ai suoi figli. Negli altri casi, se l'isolamento non serve, si fornisce lo store a **root** (`{ providedIn: 'root' }`, ovvero `@Service()` da Angular 22): è il default raccomandato per la maggior parte dei service.
+<details>
+<summary>Cosa rappresentano le quattro categorie della Architecture Matrix (feature/ui/data/util) e quali due regole di dipendenza le governano?</summary>
 
-**8.** Tre modi per far comunicare due store: quale è il più pulito sul coupling e quale rischio principale evita il layering?
-> [!success]- Risposta
-> **Accesso diretto** store-to-store (semplice ma crea coupling/cicli, ok solo se un layer superiore *legge* da uno inferiore), **service di orchestrazione** (combina più store per i feature component, es. `SummaryStore`) ed **eventing** (uno store pubblica, gli altri si sottoscrivono). L'**eventing** è il più pulito sul coupling (store disaccoppiati, niente cicli) ma aggiunge indirezione. Il **layering** + la regola "no accesso reciproco tra store" evita i **cicli**.
+**feature** = use case con smart component che parlano col backend; **ui** = dumb/presentational component riusabili (solo properties & events); **data** = domain model lato client + service (validazione, backend, state management/view model); **util** = helper generici (logging, auth, date). Regole: (1) ogni dominio comunica solo con i propri moduli + `shared`; (2) ogni modulo accede solo ai **layer sottostanti** nella matrice. Servono a disaccoppiare ed evitare cicli.
+
+</details>
+
+<details>
+<summary>Barrel <code>index.ts</code> vs convenzione <code>internal/</code>: pro e contro? Cosa fa <code>enableBarrelLess: true</code> in Sheriff?</summary>
+
+Il **barrel** (`index.ts`) ri-esporta la public API, ma è noioso da mantenere e **rompe tree-shaking/lazy loading** (carica anche costrutti non usati dietro lo stesso barrel). La convenzione **`internal/`** (barrel-less) mette i costrutti privati in quella cartella e lascia pubblico tutto il resto, senza ri-esportazioni. `enableBarrelLess: true` dice a Sheriff di **non richiedere** barrel: senza `index.ts`, è privato solo ciò che sta in `internal/`. Se invece un `index.ts` esiste, Sheriff lo tratta come public API e bypassarlo è errore di lint.
+
+</details>
+
+<details>
+<summary>A cosa servono Sheriff e Detective, e in cosa differiscono?</summary>
+
+**Sheriff** *impone* l'architettura via **linting**: definisci tag per i moduli e `depRules`, e le violazioni diventano errori in IDE e console (automatizzabili in CI). **Detective** *visualizza* moduli e dipendenze come **dependency graph** (numero/spessore degli import) e offre metodi di analisi forense. In breve: Sheriff fa rispettare le regole, Detective mostra com'è fatta davvero la modularizzazione.
+
+</details>
+
+<details>
+<summary>Cos'è il flusso dati unidirezionale e perché rende il sistema più facile da ragionare?</summary>
+
+I dati scorrono in **una sola direzione**: un evento manda una **intention** allo store (chiamando un metodo), lo store **processa** e **aggiorna lo stato**, i signal fanno **scendere** il nuovo stato ai component (eventualmente proiettato in view model). Per ogni evento c'è un percorso ben definito — **su, a destra, giù** — che evita le cascate di cambiamenti reattivi e rende prevedibile l'impatto delle modifiche.
+
+</details>
+
+<details>
+<summary>In quali layer può stare un lightweight store, e quando si usa <code>{ providedIn: 'root' }</code> invece di <code>providers: [...]</code> sul component?</summary>
+
+In **tutti i layer** (feature, ui, data, util) — anche i component UI hanno stato. Si usa `providers: [Store]` sul component quando serve **un'istanza per istanza di component** (es. dumb component come uno scheduler ripetuto in pagina, ognuno col proprio stato), perché così lo store è locale a quel component e ai suoi figli. Negli altri casi, se l'isolamento non serve, si fornisce lo store a **root** (`{ providedIn: 'root' }`, ovvero `@Service()` da Angular 22): è il default raccomandato per la maggior parte dei service.
+
+</details>
+
+<details>
+<summary>Tre modi per far comunicare due store: quale è il più pulito sul coupling e quale rischio principale evita il layering?</summary>
+
+**Accesso diretto** store-to-store (semplice ma crea coupling/cicli, ok solo se un layer superiore *legge* da uno inferiore), **service di orchestrazione** (combina più store per i feature component, es. `SummaryStore`) ed **eventing** (uno store pubblica, gli altri si sottoscrivono). L'**eventing** è il più pulito sul coupling (store disaccoppiati, niente cicli) ma aggiunge indirezione. Il **layering** + la regola "no accesso reciproco tra store" evita i **cicli**.
+
+</details>
 
 **In sintesi:**
 - **Vertical slicing**: struttura l'app per **business domain** (verticali con modello condiviso) → low coupling, high cohesion, ownership chiara (Inverse Conway Maneuver), meno carico cognitivo.

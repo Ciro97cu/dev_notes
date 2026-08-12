@@ -762,33 +762,54 @@ Collegamenti: [[signal-input]] · [[signal-output]] · [[model-signal]] · [[two
 
 ## Ripasso lampo
 
-**1.** Perché `signal<Flight[]>([])` ha il tipo esplicito mentre `signal({ from, to })` no?
-> [!success]- Risposta
-> Il tipo di un signal si inferisce dal valore iniziale. `{ from: 'Hamburg', to: 'Graz' }` porta abbastanza informazione per inferire la forma dell'oggetto. Un **array vuoto** `[]` invece non dice nulla sul tipo degli elementi, quindi va dato esplicitamente con il type parameter: `signal<Flight[]>([])`.
+<details>
+<summary>Perché <code>signal<Flight[]>([])</code> ha il tipo esplicito mentre <code>signal({ from, to })</code> no?</summary>
 
-**2.** Quando usare `HttpClient` e quando `httpResource`? Cosa garantisce `httpResource` sulle race condition?
-> [!success]- Risposta
-> `HttpClient` per la comunicazione diretta e per **tutti** i verbi (save/delete inclusi): ritorna Observable a cui ci si iscrive. `httpResource` per il **fetch (GET) reattivo** signal-based: la lambda reattiva ricarica al cambio dei signal letti, ed espone `value`/`error`/`isLoading`/`status`. Sulle race condition tiene **solo l'ultima** richiesta scartando le risposte precedenti (come `switchMap`); `reload()` invece ignora le chiamate sovrapposte (come `exhaustMap`).
+Il tipo di un signal si inferisce dal valore iniziale. `{ from: 'Hamburg', to: 'Graz' }` porta abbastanza informazione per inferire la forma dell'oggetto. Un **array vuoto** `[]` invece non dice nulla sul tipo degli elementi, quindi va dato esplicitamente con il type parameter: `signal<Flight[]>([])`.
 
-**3.** Perché il `track` nel `@for` è obbligatorio e cosa gli si può passare?
-> [!success]- Risposta
-> Identifica univocamente ogni elemento così Angular, al cambio d'ordine, **sposta** i nodi DOM esistenti invece di ri-renderizzare tutta la lista. Idealmente una proprietà univoca come `track flight.id`; in mancanza, `track $index` o l'oggetto stesso `track flight`.
+</details>
 
-**4.** Differenza tra `input()`, `output()` e `model()`? Cos'è `$event` in un event binding?
-> [!success]- Risposta
-> `input()` crea un **InputSignal** di sola lettura (dato dal padre verso il figlio). `output()` crea un **OutputEmitterRef** su cui chiamare `.emit()` (evento dal figlio verso il padre). `model()` crea un input **scrivibile** (ModelSignal): genera proprietà **e** evento `<nome>Change` per il two-way binding. `$event` è la variabile speciale del template che, in un event binding, contiene il valore emesso (es. il `boolean` di `selectedChange.emit`).
+<details>
+<summary>Quando usare <code>HttpClient</code> e quando <code>httpResource</code>? Cosa garantisce <code>httpResource</code> sulle race condition?</summary>
 
-**5.** Cosa fa `[(value)]="x"` sotto il cofano? Quali condizioni di naming richiede?
-> [!success]- Risposta
-> È zucchero sintattico ("banana in a box") per un property binding `[value]="x()"` **più** un event binding `(valueChange)="x.set($event)"`. Richiede la convenzione di naming `prop` + `propChange`, con l'evento che emette direttamente il nuovo valore. `model()` la fornisce out-of-the-box, ma funziona anche con `input.required` + `output`. Nota: nel `[(value)]="x"` si passa il signal **senza** chiamarne il getter.
+`HttpClient` per la comunicazione diretta e per **tutti** i verbi (save/delete inclusi): ritorna Observable a cui ci si iscrive. `httpResource` per il **fetch (GET) reattivo** signal-based: la lambda reattiva ricarica al cambio dei signal letti, ed espone `value`/`error`/`isLoading`/`status`. Sulle race condition tiene **solo l'ultima** richiesta scartando le risposte precedenti (come `switchMap`); `reload()` invece ignora le chiamate sovrapposte (come `exhaustMap`).
 
-**6.** Perché aggiorni il basket con lo spread invece di mutarlo?
-> [!success]- Risposta
-> `this.basket.update((b) => ({ ...b, [id]: selected }))` crea un **nuovo** oggetto (nuovo riferimento). Mutare l'oggetto esistente non cambierebbe il riferimento e Angular potrebbe non rilevare la modifica; un nuovo riferimento (immutabilità) fa scattare in modo affidabile la change detection.
+</details>
 
-**7.** Cosa permette la **content projection** e cosa cambia con `select` e il contenuto di default?
-> [!success]- Risposta
-> `<ng-content>` fa sì che il padre inietti contenuto arbitrario (HTML o componenti) nel figlio senza toccarne l'implementazione: al render Angular sostituisce il segnaposto col contenuto proiettato. Un `<ng-content>` può avere un **contenuto di default** (mostrato se il padre non proietta nulla) e si possono definire **più slot**, ciascuno con `select="<selettore-CSS>"` per accogliere un contenuto specifico (es. per nome di classe).
+<details>
+<summary>Perché il <code>track</code> nel <code>@for</code> è obbligatorio e cosa gli si può passare?</summary>
+
+Identifica univocamente ogni elemento così Angular, al cambio d'ordine, **sposta** i nodi DOM esistenti invece di ri-renderizzare tutta la lista. Idealmente una proprietà univoca come `track flight.id`; in mancanza, `track $index` o l'oggetto stesso `track flight`.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>input()</code>, <code>output()</code> e <code>model()</code>? Cos'è <code>$event</code> in un event binding?</summary>
+
+`input()` crea un **InputSignal** di sola lettura (dato dal padre verso il figlio). `output()` crea un **OutputEmitterRef** su cui chiamare `.emit()` (evento dal figlio verso il padre). `model()` crea un input **scrivibile** (ModelSignal): genera proprietà **e** evento `<nome>Change` per il two-way binding. `$event` è la variabile speciale del template che, in un event binding, contiene il valore emesso (es. il `boolean` di `selectedChange.emit`).
+
+</details>
+
+<details>
+<summary>Cosa fa <code>[(value)]="x"</code> sotto il cofano? Quali condizioni di naming richiede?</summary>
+
+È zucchero sintattico ("banana in a box") per un property binding `[value]="x()"` **più** un event binding `(valueChange)="x.set($event)"`. Richiede la convenzione di naming `prop` + `propChange`, con l'evento che emette direttamente il nuovo valore. `model()` la fornisce out-of-the-box, ma funziona anche con `input.required` + `output`. Nota: nel `[(value)]="x"` si passa il signal **senza** chiamarne il getter.
+
+</details>
+
+<details>
+<summary>Perché aggiorni il basket con lo spread invece di mutarlo?</summary>
+
+`this.basket.update((b) => ({ ...b, [id]: selected }))` crea un **nuovo** oggetto (nuovo riferimento). Mutare l'oggetto esistente non cambierebbe il riferimento e Angular potrebbe non rilevare la modifica; un nuovo riferimento (immutabilità) fa scattare in modo affidabile la change detection.
+
+</details>
+
+<details>
+<summary>Cosa permette la **content projection** e cosa cambia con <code>select</code> e il contenuto di default?</summary>
+
+`<ng-content>` fa sì che il padre inietti contenuto arbitrario (HTML o componenti) nel figlio senza toccarne l'implementazione: al render Angular sostituisce il segnaposto col contenuto proiettato. Un `<ng-content>` può avere un **contenuto di default** (mostrato se il padre non proietta nulla) e si possono definire **più slot**, ciascuno con `select="<selettore-CSS>"` per accogliere un contenuto specifico (es. per nome di classe).
+
+</details>
 
 **In sintesi:**
 - Lo stato dei componenti si modella con i **signal** (`signal`/`computed`/`set`/`update`); il template usa interpolation, property/event/two-way binding, il control flow `@if`/`@for`/`@switch` (con `@empty`, multi-value e `@default never`) e le pipe.

@@ -187,25 +187,40 @@ export class TickerComponent implements OnInit, OnDestroy {
 
 ## Ripasso lampo
 
-**1.** Perché aggiungere `trackBy` a un `*ngFor` migliora le performance?
-> [!success]- Risposta
-> Senza `trackBy` Angular identifica gli item per riferimento all'oggetto: rimpiazzando la collezione considera tutto nuovo e ricrea l'intero DOM. `trackBy` fornisce una chiave stabile (es. `id`), così Angular riusa i nodi esistenti e aggiorna solo gli item effettivamente cambiati.
+<details>
+<summary>Perché aggiungere <code>trackBy</code> a un <code>*ngFor</code> migliora le performance?</summary>
 
-**2.** Un `@Input` con `OnPush` viene mutato in place e la view non si aggiorna: perché?
-> [!success]- Risposta
-> `OnPush` ricontrolla il componente solo quando cambia il **riferimento** dell'input (oltre a eventi, `async` pipe, `markForCheck`). Mutare in place (`obj.prop = x`, `arr.push(...)`) non cambia il riferimento, quindi la CD salta il componente. Serve creare un nuovo oggetto/array (dati immutabili).
+Senza `trackBy` Angular identifica gli item per riferimento all'oggetto: rimpiazzando la collezione considera tutto nuovo e ricrea l'intero DOM. `trackBy` fornisce una chiave stabile (es. `id`), così Angular riusa i nodi esistenti e aggiorna solo gli item effettivamente cambiati.
 
-**3.** Quando conviene una pure pipe al posto di una chiamata a metodo nel template?
-> [!success]- Risposta
-> Quasi sempre per trasformazioni di visualizzazione: un metodo nell'interpolazione gira a **ogni** ciclo di CD, mentre una pure pipe è memoizzata e riesegue `transform` **solo** se cambia il riferimento di un input. Una pipe *impura* invece perde questo vantaggio e gira come una chiamata a metodo.
+</details>
 
-**4.** Cosa fanno `NoPreloading`, `PreloadAllModules` e una strategy custom?
-> [!success]- Risposta
-> `NoPreloading` (default) non precarica nulla: ogni modulo lazy arriva alla prima navigazione. `PreloadAllModules` scarica in background tutti i bundle lazy dopo il bootstrap. Una strategy custom implementa `PreloadingStrategy.preload(route, load)` e decide caso per caso cosa precaricare (es. solo le rotte con `data: { preload: true }`).
+<details>
+<summary>Un <code>@Input</code> con <code>OnPush</code> viene mutato in place e la view non si aggiorna: perché?</summary>
 
-**5.** A cosa servono i bundle budget in `angular.json` e cosa succede al superamento?
-> [!success]- Risposta
-> Impongono soglie di dimensione (es. `type: "initial"`, `anyComponentStyle`): superata `maximumWarning` la CLI mostra un warning, superata `maximumError` il **build fallisce**. Prevengono regressioni silenziose sul peso del bundle.
+`OnPush` ricontrolla il componente solo quando cambia il **riferimento** dell'input (oltre a eventi, `async` pipe, `markForCheck`). Mutare in place (`obj.prop = x`, `arr.push(...)`) non cambia il riferimento, quindi la CD salta il componente. Serve creare un nuovo oggetto/array (dati immutabili).
+
+</details>
+
+<details>
+<summary>Quando conviene una pure pipe al posto di una chiamata a metodo nel template?</summary>
+
+Quasi sempre per trasformazioni di visualizzazione: un metodo nell'interpolazione gira a **ogni** ciclo di CD, mentre una pure pipe è memoizzata e riesegue `transform` **solo** se cambia il riferimento di un input. Una pipe *impura* invece perde questo vantaggio e gira come una chiamata a metodo.
+
+</details>
+
+<details>
+<summary>Cosa fanno <code>NoPreloading</code>, <code>PreloadAllModules</code> e una strategy custom?</summary>
+
+`NoPreloading` (default) non precarica nulla: ogni modulo lazy arriva alla prima navigazione. `PreloadAllModules` scarica in background tutti i bundle lazy dopo il bootstrap. Una strategy custom implementa `PreloadingStrategy.preload(route, load)` e decide caso per caso cosa precaricare (es. solo le rotte con `data: { preload: true }`).
+
+</details>
+
+<details>
+<summary>A cosa servono i bundle budget in <code>angular.json</code> e cosa succede al superamento?</summary>
+
+Impongono soglie di dimensione (es. `type: "initial"`, `anyComponentStyle`): superata `maximumWarning` la CLI mostra un warning, superata `maximumError` il **build fallisce**. Prevengono regressioni silenziose sul peso del bundle.
+
+</details>
 
 **In sintesi:**
 - **Meno DOM ricreato**: `trackBy` (chiave stabile) in `*ngFor`.

@@ -256,25 +256,40 @@ await TestBed.configureTestingModule({
 
 ## Ripasso lampo
 
-**1.** Differenza tra `toBe` e `toEqual`, e a cosa servono `spyOn` e `jasmine.createSpyObj`?
-> [!success]- Risposta
-> `toBe` confronta con `===` (identità di riferimento); `toEqual` fa un confronto **strutturale/profondo** (per oggetti e array si guarda il contenuto). `spyOn(obj, 'metodo')` avvolge un metodo **esistente** registrandone le chiamate (con `.and.returnValue`/`.and.callThrough`/`.and.callFake`); `jasmine.createSpyObj('Nome', ['a', 'b'])` crea da zero un **mock** con più metodi-spia, utile per sostituire un intero service.
+<details>
+<summary>Differenza tra <code>toBe</code> e <code>toEqual</code>, e a cosa servono <code>spyOn</code> e <code>jasmine.createSpyObj</code>?</summary>
 
-**2.** Cosa contiene una `ComponentFixture` e perché serve `fixture.detectChanges()`?
-> [!success]- Risposta
-> Espone `componentInstance` (l'istanza della classe), `nativeElement` (nodo DOM), `debugElement` (query + injector), `detectChanges()` (change detection) e `whenStable()` (Promise sui task async). Serve `detectChanges()` perché nei test la CD **non** è automatica: la prima chiamata scatena `ngOnInit` e il primo binding; senza, il DOM resta vuoto.
+`toBe` confronta con `===` (identità di riferimento); `toEqual` fa un confronto **strutturale/profondo** (per oggetti e array si guarda il contenuto). `spyOn(obj, 'metodo')` avvolge un metodo **esistente** registrandone le chiamate (con `.and.returnValue`/`.and.callThrough`/`.and.callFake`); `jasmine.createSpyObj('Nome', ['a', 'b'])` crea da zero un **mock** con più metodi-spia, utile per sostituire un intero service.
 
-**3.** Quando si usa `fakeAsync`/`tick` e quando `waitForAsync`/`whenStable`? Qual è il limite di `fakeAsync`?
-> [!success]- Risposta
-> `fakeAsync` esegue il test a **tempo virtuale**: si fanno avanzare i timer con `tick(ms)`/`flush()` — ideale per debounce e `setTimeout`, in modo deterministico. `waitForAsync` + `fixture.whenStable()` attende invece i task async **reali** (Promise). Limite: `fakeAsync` **non** funziona con una vera richiesta XHR, quindi va usato con dati mockati (es. `HttpTestingController`, sincrono).
+</details>
 
-**4.** Come si testa una chiamata HTTP con `HttpTestingController` e cosa fanno `expectOne`/`flush`/`verify`?
-> [!success]- Risposta
-> Si forniscono `provideHttpClient()` + `provideHttpClientTesting()` (un tempo `HttpClientTestingModule`, ora deprecato). Ci si sottoscrive al metodo, poi `httpMock.expectOne(url)` recupera la richiesta attesa, `req.flush(body)` invia la risposta fake sbloccando la subscribe, e `httpMock.verify()` (in `afterEach`) fallisce se restano richieste non gestite.
+<details>
+<summary>Cosa contiene una <code>ComponentFixture</code> e perché serve <code>fixture.detectChanges()</code>?</summary>
 
-**5.** Come si isola un componente dai suoi figli e perché `NO_ERRORS_SCHEMA` va usato con cautela?
-> [!success]- Risposta
-> Con lo **shallow testing**: si sostituisce il figlio con uno **stub** che ha stesso selector e stessi `@Input`/`@Output`, oppure si aggiunge `NO_ERRORS_SCHEMA` allo `schemas`. `NO_ERRORS_SCHEMA` è rischioso perché silenzia **tutti** gli errori di template (anche binding sbagliati o componenti davvero mancanti); lo stub tipizzato è più sicuro perché verifica il contratto del figlio.
+Espone `componentInstance` (l'istanza della classe), `nativeElement` (nodo DOM), `debugElement` (query + injector), `detectChanges()` (change detection) e `whenStable()` (Promise sui task async). Serve `detectChanges()` perché nei test la CD **non** è automatica: la prima chiamata scatena `ngOnInit` e il primo binding; senza, il DOM resta vuoto.
+
+</details>
+
+<details>
+<summary>Quando si usa <code>fakeAsync</code>/<code>tick</code> e quando <code>waitForAsync</code>/<code>whenStable</code>? Qual è il limite di <code>fakeAsync</code>?</summary>
+
+`fakeAsync` esegue il test a **tempo virtuale**: si fanno avanzare i timer con `tick(ms)`/`flush()` — ideale per debounce e `setTimeout`, in modo deterministico. `waitForAsync` + `fixture.whenStable()` attende invece i task async **reali** (Promise). Limite: `fakeAsync` **non** funziona con una vera richiesta XHR, quindi va usato con dati mockati (es. `HttpTestingController`, sincrono).
+
+</details>
+
+<details>
+<summary>Come si testa una chiamata HTTP con <code>HttpTestingController</code> e cosa fanno <code>expectOne</code>/<code>flush</code>/<code>verify</code>?</summary>
+
+Si forniscono `provideHttpClient()` + `provideHttpClientTesting()` (un tempo `HttpClientTestingModule`, ora deprecato). Ci si sottoscrive al metodo, poi `httpMock.expectOne(url)` recupera la richiesta attesa, `req.flush(body)` invia la risposta fake sbloccando la subscribe, e `httpMock.verify()` (in `afterEach`) fallisce se restano richieste non gestite.
+
+</details>
+
+<details>
+<summary>Come si isola un componente dai suoi figli e perché <code>NO_ERRORS_SCHEMA</code> va usato con cautela?</summary>
+
+Con lo **shallow testing**: si sostituisce il figlio con uno **stub** che ha stesso selector e stessi `@Input`/`@Output`, oppure si aggiunge `NO_ERRORS_SCHEMA` allo `schemas`. `NO_ERRORS_SCHEMA` è rischioso perché silenzia **tutti** gli errori di template (anche binding sbagliati o componenti davvero mancanti); lo stub tipizzato è più sicuro perché verifica il contratto del figlio.
+
+</details>
 
 **In sintesi:**
 - **Jasmine** dà `describe`/`it`/`beforeEach` e `expect` + matcher (`toBe` = `===`, `toEqual` = profondo), più `spyOn`/`jasmine.createSpyObj` per spie e mock; **Karma** è il runner che li esegue in un browser reale.

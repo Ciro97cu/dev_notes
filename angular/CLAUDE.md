@@ -78,15 +78,21 @@ Collegamenti: [[concetto]], [[NN-altro-capitolo]]
 
 ## Ripasso lampo
 
-**1.** <domanda>
-> [!success]- Risposta
-> <risposta concisa>
+<details>
+<summary><domanda></summary>
 
-**2.** <domanda>
-> [!success]- Risposta
-> <risposta concisa>
+<risposta concisa>
 
-(3-6 domande di autovalutazione, ognuna con la risposta in callout pieghevole)
+</details>
+
+<details>
+<summary><domanda></summary>
+
+<risposta concisa>
+
+</details>
+
+(3-6 domande di autovalutazione, ognuna in un `<details>` pieghevole; backtick della domanda resi come `<code>` nel `<summary>`)
 
 **In sintesi:** <2-4 bullet con i punti chiave.>
 ```
@@ -129,7 +135,7 @@ Appunti per la **cert Angular** di certificates.dev (target Senior). Coprono **s
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) vanno **senza titolo custom** — niente "Gotcha"/"Take-away": Obsidian mostra l'etichetta di default.
 - `> [!info]` mantiene il titolo quando è informativo (es. `[!info] Angular 22+`, `[!info] Versioning del vault`).
-- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **Ripasso lampo**.
+- Le risposte del **Ripasso lampo** vanno in un **`<details>`** (`<summary>` = domanda), stile Q&A unico del monorepo — non nel callout.
 - La sezione di chiusura del capitolo si chiama **In sintesi:** (non "Take-away").
 
 ## Tag controllati

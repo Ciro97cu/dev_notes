@@ -216,25 +216,40 @@ Collegamenti: [[15-transizioni-animazioni]] · [[09-display-posizionamento]]
 
 ## Ripasso lampo
 
-**1.** Applicare una `transform` sposta i box vicini nel layout?
-> [!success]- Risposta
-> No. La transform cambia **solo la resa visiva**; l'elemento continua a occupare la sua posizione e dimensione originali nel flusso. Per questo è ideale per animazioni performanti.
+<details>
+<summary>Applicare una <code>transform</code> sposta i box vicini nel layout?</summary>
 
-**2.** Che vantaggio hanno le proprietà `translate`/`rotate`/`scale` rispetto alla singola `transform`?
-> [!success]- Risposta
-> Sono **componibili** senza ricordare un ordine (non si sovrascrivono) e si possono **animare indipendentemente** (es. solo la scala). Con `transform` un secondo valore azzera il primo. Quando coesistono, l'ordine è `translate → rotate → scale`, poi `transform`. Per `skew` e le matrici serve ancora `transform`.
+No. La transform cambia **solo la resa visiva**; l'elemento continua a occupare la sua posizione e dimensione originali nel flusso. Per questo è ideale per animazioni performanti.
 
-**3.** In `transform: rotate(45deg) translateX(100px)`, invertire le due funzioni cambia il risultato?
-> [!success]- Risposta
-> Sì. Le funzioni si applicano da sinistra a destra e ognuna opera nel sistema di coordinate ridefinito dalla precedente: ruotando prima, il `translateX` segue l'asse già inclinato (spostamento in diagonale).
+</details>
 
-**4.** Dove va la proprietà `perspective` e cosa cambia un valore piccolo?
-> [!success]- Risposta
-> Sul **genitore** che contiene gli elementi 3D. Un valore piccolo (es. `200px`) rende l'effetto di profondità più **marcato**; uno grande lo attenua. La funzione `perspective()` dentro `transform` dà invece prospettiva al singolo elemento.
+<details>
+<summary>Che vantaggio hanno le proprietà <code>translate</code>/<code>rotate</code>/<code>scale</code> rispetto alla singola <code>transform</code>?</summary>
 
-**5.** Perché animare `transform` è più fluido che animare `width` o `left`?
-> [!success]- Risposta
-> `transform` (e `opacity`) sono gestiti dal **compositor sulla GPU**, senza far ripartire layout e paint. Animare `width`/`left` innesca un **reflow** a ogni frame, molto più costoso.
+Sono **componibili** senza ricordare un ordine (non si sovrascrivono) e si possono **animare indipendentemente** (es. solo la scala). Con `transform` un secondo valore azzera il primo. Quando coesistono, l'ordine è `translate → rotate → scale`, poi `transform`. Per `skew` e le matrici serve ancora `transform`.
+
+</details>
+
+<details>
+<summary>In <code>transform: rotate(45deg) translateX(100px)</code>, invertire le due funzioni cambia il risultato?</summary>
+
+Sì. Le funzioni si applicano da sinistra a destra e ognuna opera nel sistema di coordinate ridefinito dalla precedente: ruotando prima, il `translateX` segue l'asse già inclinato (spostamento in diagonale).
+
+</details>
+
+<details>
+<summary>Dove va la proprietà <code>perspective</code> e cosa cambia un valore piccolo?</summary>
+
+Sul **genitore** che contiene gli elementi 3D. Un valore piccolo (es. `200px`) rende l'effetto di profondità più **marcato**; uno grande lo attenua. La funzione `perspective()` dentro `transform` dà invece prospettiva al singolo elemento.
+
+</details>
+
+<details>
+<summary>Perché animare <code>transform</code> è più fluido che animare <code>width</code> o <code>left</code>?</summary>
+
+`transform` (e `opacity`) sono gestiti dal **compositor sulla GPU**, senza far ripartire layout e paint. Animare `width`/`left` innesca un **reflow** a ogni frame, molto più costoso.
+
+</details>
 
 **In sintesi:**
 - Le transform cambiano solo l'aspetto: l'elemento **non lascia** il suo posto nel flusso → animazioni leggere.

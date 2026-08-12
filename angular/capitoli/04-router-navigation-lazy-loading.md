@@ -549,29 +549,47 @@ Collegamenti: [[providers]] · [[17-defer-ssr-hydration]].
 
 ## Ripasso lampo
 
-**1.** Perché la default route `path: ''` richiede `pathMatch: 'full'` e perché il catch-all `**` va per ultimo?
-> [!success]- Risposta
-> Di default Angular fa **prefix matching** e in JavaScript la stringa vuota è prefisso di qualunque stringa: senza `pathMatch: 'full'` la default route `path: ''` matcherebbe **sempre**. `pathMatch: 'full'` la fa scattare solo quando l'intero path è vuoto. Il `**` va ultimo perché le route si valutano dall'alto e vince la prima che matcha: essendo un catch-all, se messo prima "ingoierebbe" tutte le route successive.
+<details>
+<summary>Perché la default route <code>path: ''</code> richiede <code>pathMatch: 'full'</code> e perché il catch-all <code>**</code> va per ultimo?</summary>
 
-**2.** `ActivatedRoute.paramMap` vs `withComponentInputBinding()`: come si legge un parametro nei due modi e che vantaggio dà il secondo?
-> [!success]- Risposta
-> Con `ActivatedRoute` si fa `inject(ActivatedRoute)` e ci si **subscribe** a `paramMap` (Observable), leggendo i valori con `paramMap.get('id')` (sempre stringhe, da convertire a mano). Con `withComponentInputBinding()` (feature di `provideRouter`) il Router lega automaticamente i parametri a [[signal-input|input()]] omonimi: niente subscribe manuale, gli input diventano la fonte reattiva, e i transformer `numberAttribute` / `booleanAttribute` si occupano della conversione di tipo.
+Di default Angular fa **prefix matching** e in JavaScript la stringa vuota è prefisso di qualunque stringa: senza `pathMatch: 'full'` la default route `path: ''` matcherebbe **sempre**. `pathMatch: 'full'` la fa scattare solo quando l'intero path è vuoto. Il `**` va ultimo perché le route si valutano dall'alto e vince la prima che matcha: essendo un catch-all, se messo prima "ingoierebbe" tutte le route successive.
 
-**3.** Come si configura un parametro di segmento nelle route, e cosa diventa un oggetto passato nell'array di `routerLink`?
-> [!success]- Risposta
-> Nella config si dichiarano solo i parametri di **segmento**, prefissati con i due punti: `{ path: 'flight-edit/:id', component: FlightEdit }`. Matrix e query non si dichiarano (riconosciuti a runtime). In `routerLink` un **oggetto** dentro l'array diventa un insieme di **matrix parameter**: `['../flight-edit', 3, { showDetails: true }]` → `../flight-edit/3;showDetails=true`.
+</details>
 
-**4.** Differenza tra `loadChildren` e `loadComponent`? Quando si può omettere il `.then`?
-> [!success]- Risposta
-> `loadChildren` carica lazy un'intera **config di route** (un array `Routes`); `loadComponent` carica lazy un **singolo componente**. Entrambi usano una lambda con un dynamic `import()`. Si può omettere il `.then` quando il file importato espone un **default export** (`export default ...`): il Router lo prende automaticamente.
+<details>
+<summary><code>ActivatedRoute.paramMap</code> vs <code>withComponentInputBinding()</code>: come si legge un parametro nei due modi e che vantaggio dà il secondo?</summary>
 
-**5.** Cosa fa `PreloadAllModules` e in cosa differisce dal lazy loading puro?
-> [!success]- Risposta
-> `PreloadAllModules` (attivata con `withPreloading`) precarica **tutte** le route lazy in background subito dopo lo startup: l'app parte veloce senza i bundle lazy, che vengono scaricati durante i tempi morti così da essere pronti al bisogno. Il lazy loading puro scarica un bundle **solo** quando la sua route viene attivata. Se l'utente attiva una route prima che il preloading l'abbia caricata, si ricade comunque nel lazy loading classico.
+Con `ActivatedRoute` si fa `inject(ActivatedRoute)` e ci si **subscribe** a `paramMap` (Observable), leggendo i valori con `paramMap.get('id')` (sempre stringhe, da convertire a mano). Con `withComponentInputBinding()` (feature di `provideRouter`) il Router lega automaticamente i parametri a [[signal-input|input()]] omonimi: niente subscribe manuale, gli input diventano la fonte reattiva, e i transformer `numberAttribute` / `booleanAttribute` si occupano della conversione di tipo.
 
-**6.** `PathLocationStrategy` vs `HashLocationStrategy`: cosa richiede ciascuna e perché l'hash routing rompe l'SSR?
-> [!success]- Risposta
-> `PathLocationStrategy` (default) mette la route nel path (`/booking/flight-search`): richiede che il server **rediriga a `index.html`** ogni richiesta dell'app e un elemento `<base href>` in `index.html`. `HashLocationStrategy` (attivata con `withHashLocation`) mette la route nell'hash (`#/booking/flight-search`): non serve né redirect server-side né `<base>`, perché la separazione client/server è data dall'hash. Proprio per questo rompe l'**SSR** delle singole route: l'hash fragment **non viene inviato al server**, quindi il server non sa quale route renderizzare.
+</details>
+
+<details>
+<summary>Come si configura un parametro di segmento nelle route, e cosa diventa un oggetto passato nell'array di <code>routerLink</code>?</summary>
+
+Nella config si dichiarano solo i parametri di **segmento**, prefissati con i due punti: `{ path: 'flight-edit/:id', component: FlightEdit }`. Matrix e query non si dichiarano (riconosciuti a runtime). In `routerLink` un **oggetto** dentro l'array diventa un insieme di **matrix parameter**: `['../flight-edit', 3, { showDetails: true }]` → `../flight-edit/3;showDetails=true`.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>loadChildren</code> e <code>loadComponent</code>? Quando si può omettere il <code>.then</code>?</summary>
+
+`loadChildren` carica lazy un'intera **config di route** (un array `Routes`); `loadComponent` carica lazy un **singolo componente**. Entrambi usano una lambda con un dynamic `import()`. Si può omettere il `.then` quando il file importato espone un **default export** (`export default ...`): il Router lo prende automaticamente.
+
+</details>
+
+<details>
+<summary>Cosa fa <code>PreloadAllModules</code> e in cosa differisce dal lazy loading puro?</summary>
+
+`PreloadAllModules` (attivata con `withPreloading`) precarica **tutte** le route lazy in background subito dopo lo startup: l'app parte veloce senza i bundle lazy, che vengono scaricati durante i tempi morti così da essere pronti al bisogno. Il lazy loading puro scarica un bundle **solo** quando la sua route viene attivata. Se l'utente attiva una route prima che il preloading l'abbia caricata, si ricade comunque nel lazy loading classico.
+
+</details>
+
+<details>
+<summary><code>PathLocationStrategy</code> vs <code>HashLocationStrategy</code>: cosa richiede ciascuna e perché l'hash routing rompe l'SSR?</summary>
+
+`PathLocationStrategy` (default) mette la route nel path (`/booking/flight-search`): richiede che il server **rediriga a `index.html`** ogni richiesta dell'app e un elemento `<base href>` in `index.html`. `HashLocationStrategy` (attivata con `withHashLocation`) mette la route nell'hash (`#/booking/flight-search`): non serve né redirect server-side né `<base>`, perché la separazione client/server è data dall'hash. Proprio per questo rompe l'**SSR** delle singole route: l'hash fragment **non viene inviato al server**, quindi il server non sa quale route renderizzare.
+
+</details>
 
 **In sintesi:**
 - Il Router mappa **path → componenti**, attivati in un `<router-outlet>`; `provideRouter(routes)` lo registra. Si naviga con `routerLink`/`routerLinkActive` o programmaticamente con `Router.navigate([...])`; da Angular 21.1 `isActive(path, router)` dà lo stato attivo come `Signal<boolean>`.

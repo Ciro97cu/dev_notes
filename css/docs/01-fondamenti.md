@@ -77,21 +77,33 @@ Collegamenti: [[02-selettori-combinatori]] · [[04-cascade-specificita-ereditari
 
 ## Ripasso lampo
 
-**1.** Da cosa è composta una regola CSS?
-> [!success]- Risposta
-> Da un **selettore** (quali elementi colpire) e da un **blocco di dichiarazioni** tra `{ }`, dove ogni dichiarazione è una coppia `property: value;`.
+<details>
+<summary>Da cosa è composta una regola CSS?</summary>
 
-**2.** Perché il foglio esterno con `<link>` è preferito a stile interno e inline?
-> [!success]- Risposta
-> Separa stile e contenuto, è **riutilizzabile** su più pagine ed è **cacheabile** dal browser. Lo stile interno vale per una sola pagina; l'inline mescola tutto ed è difficilissimo da sovrascrivere (specificità altissima).
+Da un **selettore** (quali elementi colpire) e da un **blocco di dichiarazioni** tra `{ }`, dove ogni dichiarazione è una coppia `property: value;`.
 
-**3.** Come si scrive un commento in CSS? Esiste il commento di riga `//`?
-> [!success]- Risposta
-> Solo `/* … */`. Il `//` **non** esiste in CSS puro (è una feature di preprocessori come Sass).
+</details>
 
-**4.** Perché si sconsiglia `@import` per il CSS di produzione?
-> [!success]- Risposta
-> Gli `@import` si scaricano in serie invece che in parallelo, ritardando il rendering. Meglio più `<link>` o un bundler; `@import` resta utile solo con media query o cascade layer.
+<details>
+<summary>Perché il foglio esterno con <code><link></code> è preferito a stile interno e inline?</summary>
+
+Separa stile e contenuto, è **riutilizzabile** su più pagine ed è **cacheabile** dal browser. Lo stile interno vale per una sola pagina; l'inline mescola tutto ed è difficilissimo da sovrascrivere (specificità altissima).
+
+</details>
+
+<details>
+<summary>Come si scrive un commento in CSS? Esiste il commento di riga <code>//</code>?</summary>
+
+Solo `/* … */`. Il `//` **non** esiste in CSS puro (è una feature di preprocessori come Sass).
+
+</details>
+
+<details>
+<summary>Perché si sconsiglia <code>@import</code> per il CSS di produzione?</summary>
+
+Gli `@import` si scaricano in serie invece che in parallelo, ritardando il rendering. Meglio più `<link>` o un bundler; `@import` resta utile solo con media query o cascade layer.
+
+</details>
 
 **In sintesi:**
 - CSS descrive la **presentazione**; l'HTML il **contenuto**. Una regola = selettore + dichiarazioni `property: value;`.

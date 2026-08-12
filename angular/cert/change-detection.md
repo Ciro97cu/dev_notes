@@ -106,25 +106,40 @@ Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forza
 
 ## Ripasso lampo
 
-**1.** Cosa fa Zone.js e come fa scattare la change detection?
-> [!success]- Risposta
-> Fa monkey-patch delle API asincrone (`setTimeout`, eventi DOM, `Promise`, `XHR`). Al termine di un callback async, quando la coda dei microtask si svuota, notifica Angular (`onMicrotaskEmpty`) che lancia un ciclo di CD sull'intero albero: per questo non serve segnalare a mano gli aggiornamenti.
+<details>
+<summary>Cosa fa Zone.js e come fa scattare la change detection?</summary>
 
-**2.** Quali sono le condizioni che fanno controllare un componente `OnPush`?
-> [!success]- Risposta
-> (1) cambio di **riferimento** di un `@Input`; (2) **evento** dal template del componente o di un figlio; (3) emissione di una **`async` pipe** nel template; (4) chiamata esplicita a **`markForCheck()`**. Altrimenti il componente e il suo sottoalbero vengono saltati.
+Fa monkey-patch delle API asincrone (`setTimeout`, eventi DOM, `Promise`, `XHR`). Al termine di un callback async, quando la coda dei microtask si svuota, notifica Angular (`onMicrotaskEmpty`) che lancia un ciclo di CD sull'intero albero: per questo non serve segnalare a mano gli aggiornamenti.
 
-**3.** Differenza fra `markForCheck()` e `detectChanges()`?
-> [!success]- Risposta
-> `markForCheck()` **marca** il componente e i suoi antenati come da controllare al **prossimo** ciclo (tipico con `OnPush` dopo un update async). `detectChanges()` esegue la CD **immediatamente** sul componente e i suoi figli.
+</details>
 
-**4.** A cosa serve `runOutsideAngular`?
-> [!success]- Risposta
-> A eseguire codice async **fuori** dalla zone di Angular, così i suoi callback non scatenano la CD: utile per lavori ad alta frequenza (animazioni, polling). Per aggiornare la view si rientra con `NgZone.run()`.
+<details>
+<summary>Quali sono le condizioni che fanno controllare un componente <code>OnPush</code>?</summary>
 
-**5.** Quando appare `ExpressionChangedAfterItHasBeenCheckedError` e come si risolve?
-> [!success]- Risposta
-> Solo in dev, quando un valore usato nel template cambia fra il primo e il secondo giro di CD (es. modificato in `ngAfterViewInit`). Si risolve spostando l'update prima (`ngOnInit`), forzando `cdr.detectChanges()`, o differendo con `Promise.resolve().then(...)`.
+(1) cambio di **riferimento** di un `@Input`; (2) **evento** dal template del componente o di un figlio; (3) emissione di una **`async` pipe** nel template; (4) chiamata esplicita a **`markForCheck()`**. Altrimenti il componente e il suo sottoalbero vengono saltati.
+
+</details>
+
+<details>
+<summary>Differenza fra <code>markForCheck()</code> e <code>detectChanges()</code>?</summary>
+
+`markForCheck()` **marca** il componente e i suoi antenati come da controllare al **prossimo** ciclo (tipico con `OnPush` dopo un update async). `detectChanges()` esegue la CD **immediatamente** sul componente e i suoi figli.
+
+</details>
+
+<details>
+<summary>A cosa serve <code>runOutsideAngular</code>?</summary>
+
+A eseguire codice async **fuori** dalla zone di Angular, così i suoi callback non scatenano la CD: utile per lavori ad alta frequenza (animazioni, polling). Per aggiornare la view si rientra con `NgZone.run()`.
+
+</details>
+
+<details>
+<summary>Quando appare <code>ExpressionChangedAfterItHasBeenCheckedError</code> e come si risolve?</summary>
+
+Solo in dev, quando un valore usato nel template cambia fra il primo e il secondo giro di CD (es. modificato in `ngAfterViewInit`). Si risolve spostando l'update prima (`ngOnInit`), forzando `cdr.detectChanges()`, o differendo con `Promise.resolve().then(...)`.
+
+</details>
 
 **In sintesi:**
 - **Zone.js** intercetta l'async e fa partire la CD sull'intero albero, che scende **top-down** dalla radice.

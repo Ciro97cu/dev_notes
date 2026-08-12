@@ -538,33 +538,54 @@ Collegamenti: [[inject]] · [[providers]] · [[16-authentication-authorization]]
 
 ## Ripasso lampo
 
-**1.** Quando un application initializer **blocca** il bootstrap? Cosa deve ritornare la funzione per far attendere Angular?
-> [!success]- Risposta
-> Un application initializer (`provideAppInitializer`) gira durante `bootstrapApplication`. Se la funzione ritorna una **Promise** o un **Observable**, Angular **attende** che si completi prima di renderizzare i componenti. È il posto giusto per caricare config a runtime; il rovescio è che **ritarda il primo render**.
+<details>
+<summary>Quando un application initializer **blocca** il bootstrap? Cosa deve ritornare la funzione per far attendere Angular?</summary>
 
-**2.** Differenza tra `provideAppInitializer`, `provideEnvironmentInitializer` e `providePlatformInitializer`: scope e momento di esecuzione?
-> [!success]- Risposta
-> `provideAppInitializer` è **globale** (root injector), durante il bootstrap dell'app. `provideEnvironmentInitializer` gira quando viene creato un **environment injector** → setup *feature-/route-scoped* (provider a livello di rotta). `providePlatformInitializer` gira alla creazione della **platform**, *prima* del bootstrap; serve soprattutto ad Angular stesso e a librerie infrastrutturali di basso livello.
+Un application initializer (`provideAppInitializer`) gira durante `bootstrapApplication`. Se la funzione ritorna una **Promise** o un **Observable**, Angular **attende** che si completi prima di renderizzare i componenti. È il posto giusto per caricare config a runtime; il rovescio è che **ritarda il primo render**.
 
-**3.** Cosa ritorna un `CanActivateFn` per redirigere invece di bloccare/consentire? E perché `canActivate` è un array?
-> [!success]- Risposta
-> Per consentire ritorna `true`, per bloccare `false`; per **redirigere** ritorna un `UrlTree` (es. `router.createUrlTree(['/home'])`). `canActivate` è un **array** perché si possono comporre più guard: la navigazione procede solo se **tutti** ritornano `true` (o un `UrlTree`); basta un `false` per bloccarla.
+</details>
 
-**4.** Quale parametro speciale riceve un `CanDeactivateFn` che un `CanActivateFn` non ha, e a cosa serve?
-> [!success]- Risposta
-> Riceve come **primo parametro l'istanza del componente** che si sta per lasciare (`CanDeactivateFn<FormComponent>` → `component: FormComponent`). Serve a interrogarne lo stato — qui `component.isDirty()` — per decidere se chiedere conferma all'utente prima di abbandonare la rotta (es. form modificato e non salvato).
+<details>
+<summary>Differenza tra <code>provideAppInitializer</code>, <code>provideEnvironmentInitializer</code> e <code>providePlatformInitializer</code>: scope e momento di esecuzione?</summary>
 
-**5.** Quali router events vanno gestiti, oltre a `NavigationStart`/`NavigationEnd`, per spegnere correttamente uno spinner?
-> [!success]- Risposta
-> Anche `NavigationCancel` (un guard ha bloccato la navigazione) e `NavigationError` (eccezione durante il cambio). Se spegni lo spinner solo su `NavigationEnd`, l'overlay resta appeso quando la navigazione viene annullata o fallisce.
+`provideAppInitializer` è **globale** (root injector), durante il bootstrap dell'app. `provideEnvironmentInitializer` gira quando viene creato un **environment injector** → setup *feature-/route-scoped* (provider a livello di rotta). `providePlatformInitializer` gira alla creazione della **platform**, *prima* del bootstrap; serve soprattutto ad Angular stesso e a librerie infrastrutturali di basso livello.
 
-**6.** Perché un resolver risolve il problema del "loading indicator spento troppo presto"? Due modi per consumare il valore risolto?
-> [!success]- Risposta
-> Perché un `ResolveFn<T>` gira **prima** dell'attivazione della rotta e il router **attende** la sua Promise/Observable: `NavigationEnd` arriva solo dopo il completamento, quindi lo spinner basato sugli eventi resta coerente e il componente trova i dati già pronti (niente `null` transitorio). Consumo: (1) via `route.data` (Observable con i dati sotto le stesse chiavi, es. `data['passenger']`); (2) facendo pilotare al resolver uno **store** che il componente legge via `inject()`.
+</details>
 
-**7.** Perché in un interceptor va clonata la richiesta? Cosa stabilisce l'ordine in `withInterceptors([...])`?
-> [!success]- Risposta
-> Perché `HttpRequest` e `HttpHeaders` sono **immutabili**: non si possono mutare in place, e serve `req.clone({ ... })` per produrre una richiesta modificata. L'**ordine dell'array** in `withInterceptors([...])` determina l'ordine della catena (Chain of Responsibility): ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa a `next`.
+<details>
+<summary>Cosa ritorna un <code>CanActivateFn</code> per redirigere invece di bloccare/consentire? E perché <code>canActivate</code> è un array?</summary>
+
+Per consentire ritorna `true`, per bloccare `false`; per **redirigere** ritorna un `UrlTree` (es. `router.createUrlTree(['/home'])`). `canActivate` è un **array** perché si possono comporre più guard: la navigazione procede solo se **tutti** ritornano `true` (o un `UrlTree`); basta un `false` per bloccarla.
+
+</details>
+
+<details>
+<summary>Quale parametro speciale riceve un <code>CanDeactivateFn</code> che un <code>CanActivateFn</code> non ha, e a cosa serve?</summary>
+
+Riceve come **primo parametro l'istanza del componente** che si sta per lasciare (`CanDeactivateFn<FormComponent>` → `component: FormComponent`). Serve a interrogarne lo stato — qui `component.isDirty()` — per decidere se chiedere conferma all'utente prima di abbandonare la rotta (es. form modificato e non salvato).
+
+</details>
+
+<details>
+<summary>Quali router events vanno gestiti, oltre a <code>NavigationStart</code>/<code>NavigationEnd</code>, per spegnere correttamente uno spinner?</summary>
+
+Anche `NavigationCancel` (un guard ha bloccato la navigazione) e `NavigationError` (eccezione durante il cambio). Se spegni lo spinner solo su `NavigationEnd`, l'overlay resta appeso quando la navigazione viene annullata o fallisce.
+
+</details>
+
+<details>
+<summary>Perché un resolver risolve il problema del "loading indicator spento troppo presto"? Due modi per consumare il valore risolto?</summary>
+
+Perché un `ResolveFn<T>` gira **prima** dell'attivazione della rotta e il router **attende** la sua Promise/Observable: `NavigationEnd` arriva solo dopo il completamento, quindi lo spinner basato sugli eventi resta coerente e il componente trova i dati già pronti (niente `null` transitorio). Consumo: (1) via `route.data` (Observable con i dati sotto le stesse chiavi, es. `data['passenger']`); (2) facendo pilotare al resolver uno **store** che il componente legge via `inject()`.
+
+</details>
+
+<details>
+<summary>Perché in un interceptor va clonata la richiesta? Cosa stabilisce l'ordine in <code>withInterceptors([...])</code>?</summary>
+
+Perché `HttpRequest` e `HttpHeaders` sono **immutabili**: non si possono mutare in place, e serve `req.clone({ ... })` per produrre una richiesta modificata. L'**ordine dell'array** in `withInterceptors([...])` determina l'ordine della catena (Chain of Responsibility): ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa a `next`.
+
+</details>
 
 **In sintesi:**
 - **Initializers**: `provideAppInitializer` blocca il bootstrap finché il lavoro async (Promise/Observable) finisce; gli environment initializer scopano il setup a rotta/feature; i platform initializer sono per infrastruttura di basso livello.

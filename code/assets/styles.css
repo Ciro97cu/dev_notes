@@ -583,18 +583,34 @@ html.dark { --cl-ans-bg: #0f2417; --cl-ans-bd: #1f4a2f; --cl-ans-tx: #57c785; }
   background: var(--cl-ans-bg); border-color: var(--cl-ans-bd) !important;
 }
 .markdown-section .alert.callout.callout-answer .title { color: var(--cl-ans-tx); }
-/* Risposte Ripasso collassabili */
+/* Risposte Ripasso collassabili — la banda "Risposta" riempie tutto il box (padding
+   azzerato sul callout e spostato sul toggle): niente cornice/gap interno, così
+   l'hover evidenzia la barra a tutta larghezza invece di una barretta inset. */
+.markdown-section .alert.callout.callout-answer.is-collapsible { padding: 0; overflow: hidden; }
 .markdown-section .callout-answer.is-collapsible .title.answer-toggle {
-  cursor: pointer; user-select: none; margin: 0; border-radius: 6px; transition: background .15s ease;
+  cursor: pointer; user-select: none; margin: 0; border-radius: 0;
+  padding: .6em 1.1em; transition: background .15s ease;
 }
 .markdown-section .callout-answer.is-collapsible .title.answer-toggle:hover {
-  background: color-mix(in oklab, var(--cl-ans-tx) 10%, transparent);
+  background: color-mix(in oklab, var(--cl-ans-tx) 12%, transparent);
 }
 .markdown-section .callout-answer.is-collapsible .title.answer-toggle::after {
   content: "▸"; margin-left: auto; font-size: .85em; transition: transform .2s ease;
 }
 .markdown-section .callout-answer.is-collapsible.open .title.answer-toggle::after { transform: rotate(90deg); }
-.markdown-section .callout-answer.is-collapsible .answer-body { display: none; }
-.markdown-section .callout-answer.is-collapsible.open .answer-body { display: block; }
+.markdown-section .callout-answer.is-collapsible .answer-body { display: none; padding: 0 1.1em; }
+.markdown-section .callout-answer.is-collapsible.open .answer-body { display: block; padding-bottom: .85em; }
 .markdown-section .callout-answer.is-collapsible.open .answer-body > :first-child { margin-top: .3em; }
 .markdown-section .callout-answer.is-collapsible.open .answer-body > :last-child { margin-bottom: 0; }
+
+/* ---------- Quiz collassabili (<details>) — stile Q&A unico del monorepo ---------- */
+.markdown-section details {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--link);
+  border-radius: 6px;
+  padding: .6em 1em;
+  margin: .8em 0;
+}
+.markdown-section details summary { cursor: pointer; font-weight: 600; color: var(--text); outline: none; }
+.markdown-section details[open] summary { margin-bottom: .6em; color: var(--link); }

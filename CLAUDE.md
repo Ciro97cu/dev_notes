@@ -1,6 +1,6 @@
 # Dev Notes — regole comuni
 
-Monorepo di appunti di studio personali, pubblicati come **hub** di 6 siti [docsify](https://docsify.js.org/) statici e indipendenti (zero build): [`git/`](git/), [`javascript/`](javascript/), [`typescript/`](typescript/), [`angular/`](angular/), [`css/`](css/), [`glossario/`](glossario/). Vedi [README.md](README.md) per l'architettura del sito.
+Monorepo di appunti di studio personali, pubblicati come **hub** di 7 siti [docsify](https://docsify.js.org/) statici e indipendenti (zero build): [`git/`](git/), [`javascript/`](javascript/), [`typescript/`](typescript/), [`angular/`](angular/), [`css/`](css/), [`glossario/`](glossario/), [`code/`](code/). Vedi [README.md](README.md) per l'architettura del sito.
 
 Questo file raccoglie le regole **comuni a tutti i vault**. Ogni cartella ha un proprio `CLAUDE.md` con le regole **specifiche** del vault, che ha la precedenza dove più stringente. Entrambi si caricano da soli: il generale sempre, quello di cartella quando lavori su file di quel sottoalbero.
 
@@ -45,3 +45,13 @@ Quando l'utente chiede di scrivere o modificare una nota (di solito linkando un 
 3. **Verifica l'accuratezza** (regole qui sopra) prima di scrivere.
 4. **Stile coerente col contorno**: registro, callout e struttura come le note vicine.
 5. **Aggiorna i file di supporto** (indice, `_sidebar.md`, glossario…) secondo la checklist del `CLAUDE.md` di cartella quando aggiungi o rinomini una nota.
+
+## Creare un nuovo vault — checklist e trappole
+Aggiungere un vault è una **modifica architetturale** (va riflessa nel [README.md](README.md) di root). Lezioni imparate sul campo, da non riperdere:
+
+- **Da dove clonare il boilerplate**: copiare `index.html`/`app.js`/`styles.css` da un vault che ha **già** le feature che servono, **non** da `git/` se il nuovo vault avrà sezioni domanda/risposta. Il vault `git/` non ha "Domande", quindi il suo `styles.css` **non** definisce le variabili `--cl-ans-*` né le regole del **callout "Risposta" collassabile**: clonando da lì, le risposte non diventano box pieghevoli. Per un vault con Ripasso, clonare da **`css/`** o **`angular/`**.
+- **Sidebar / alberatura a sinistra**: serve `_sidebar.md` **e**, se i contenuti stanno in `docs/`, nel `app.js` l'`alias` `'/docs/_sidebar.md' → '/_sidebar.md'` (più `'/.*/_sidebar.md'`). Senza, docsify ripiega su una sidebar **auto-generata** dai titoli della pagina, diversa dal tree curato degli altri vault.
+- **Box domanda/risposta — stile unico del monorepo**: la sezione di auto-valutazione a fine capitolo usa il **`<details>` nativo** — `<details>` + `<summary>domanda</summary>` + riga vuota + risposta in markdown + `</details>` — con i backtick della domanda resi `<code>` nel `<summary>`. Lo stile del box è nel `styles.css` di ogni vault (`.markdown-section details`, con bordo sinistro nel colore brand `var(--link)`); i vault che clonano da uno che già ce l'ha lo ereditano. La sezione si chiama **`## Ripasso lampo`** (in JS/TS storicamente **`## Domande`**). **Non** usare il vecchio callout `> [!success]-` (dismesso).
+- **Registrare il vault nell'hub**: card in [index.html](index.html) (con `--accent` distinto), voce in [assets/hub.js](assets/hub.js) `VAULTS` (banner "Riprendi" + % di lettura sulle card), riga in tabella + conteggio "N raccolte" + nota di architettura in [README.md](README.md).
+- **Dopo aver aggiunto file/vault: riavviare il server locale** e fare hard refresh. Un server statico avviato **prima** vede i nuovi file come **404** e la sidebar come auto-generata — non è un bug del vault (verificabile con `curl`: se i file rispondono 200, è cache/server stale).
+- **Identità**: `theme-color` e `favicon.svg` propri, colore accent **distinto** dagli altri.

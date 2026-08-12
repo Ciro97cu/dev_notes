@@ -268,29 +268,47 @@ Collegamenti: [[02-selettori-combinatori]] · [[04-cascade-specificita-ereditari
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza tra `:` e `::`, e perché esiste?
-> [!success]- Risposta
-> Il colon singolo (`:`) introduce una **pseudo-classe** (stato o posizione di un elemento esistente: `:hover`, `:first-child`). Il doppio colon (`::`) introduce un **pseudo-elemento** (una sotto-parte o un box generato: `::before`, `::marker`). Il `::` rende esplicito che si stilizza una porzione, non l'elemento intero; i quattro pseudo-elementi storici accettano ancora `:` per retrocompatibilità.
+<details>
+<summary>Qual è la differenza tra <code>:</code> e <code>::</code>, e perché esiste?</summary>
 
-**2.** Cosa rende speciale `:has()` e come si scrive una card che contiene un'immagine?
-> [!success]- Risposta
-> È il **parent selector**: permette di stilizzare un elemento in base ai suoi discendenti/relativi, cosa prima impossibile in CSS. Esempio: `.card:has(img) { … }`. Con i combinatori seleziona anche un fratello precedente (`label:has(+ input:invalid)`). Baseline dal dicembre 2023.
+Il colon singolo (`:`) introduce una **pseudo-classe** (stato o posizione di un elemento esistente: `:hover`, `:first-child`). Il doppio colon (`::`) introduce un **pseudo-elemento** (una sotto-parte o un box generato: `::before`, `::marker`). Il `::` rende esplicito che si stilizza una porzione, non l'elemento intero; i quattro pseudo-elementi storici accettano ancora `:` per retrocompatibilità.
 
-**3.** `:nth-child(2n+1)` a cosa equivale, e in che cosa differisce da `:nth-of-type()`?
-> [!success]- Risposta
-> `2n+1` equivale a `odd`: posizioni 1, 3, 5… `:nth-child()` conta **tutti** i fratelli (poi filtra per tipo del selettore), mentre `:nth-of-type()` conta solo i fratelli **dello stesso tag**.
+</details>
 
-**4.** Perché preferire `:focus-visible` a `:focus`?
-> [!success]- Risposta
-> `:focus` mostra il focus ring sempre, anche al click del mouse (spesso considerato invadente e rimosso a scapito dell'accessibilità). `:focus-visible` lo mostra solo quando serve davvero — tipicamente da tastiera — grazie a un'euristica del browser. È il modo moderno di stilizzare il focus senza rinunciare all'accessibilità.
+<details>
+<summary>Cosa rende speciale <code>:has()</code> e come si scrive una card che contiene un'immagine?</summary>
 
-**5.** Differenza tra `:placeholder-shown` e `::placeholder`?
-> [!success]- Risposta
-> `:placeholder-shown` è una **pseudo-classe**: matcha il *campo* mentre mostra il placeholder (cioè vuoto). `::placeholder` è un **pseudo-elemento**: stilizza il *testo* del placeholder (colore, corsivo…).
+È il **parent selector**: permette di stilizzare un elemento in base ai suoi discendenti/relativi, cosa prima impossibile in CSS. Esempio: `.card:has(img) { … }`. Con i combinatori seleziona anche un fratello precedente (`label:has(+ input:invalid)`). Baseline dal dicembre 2023.
 
-**6.** Cosa matcha `button:not(.primary, :disabled)` e quanta specificità aggiunge `:not()`?
-> [!success]- Risposta
-> Tutti i `button` che **non** hanno classe `.primary` e **non** sono `:disabled` (il moderno `:not()` accetta liste di selettori). La pseudo-classe in sé non aggiunge peso: la specificità è quella del selettore più specifico al suo interno (qui, una classe).
+</details>
+
+<details>
+<summary><code>:nth-child(2n+1)</code> a cosa equivale, e in che cosa differisce da <code>:nth-of-type()</code>?</summary>
+
+`2n+1` equivale a `odd`: posizioni 1, 3, 5… `:nth-child()` conta **tutti** i fratelli (poi filtra per tipo del selettore), mentre `:nth-of-type()` conta solo i fratelli **dello stesso tag**.
+
+</details>
+
+<details>
+<summary>Perché preferire <code>:focus-visible</code> a <code>:focus</code>?</summary>
+
+`:focus` mostra il focus ring sempre, anche al click del mouse (spesso considerato invadente e rimosso a scapito dell'accessibilità). `:focus-visible` lo mostra solo quando serve davvero — tipicamente da tastiera — grazie a un'euristica del browser. È il modo moderno di stilizzare il focus senza rinunciare all'accessibilità.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>:placeholder-shown</code> e <code>::placeholder</code>?</summary>
+
+`:placeholder-shown` è una **pseudo-classe**: matcha il *campo* mentre mostra il placeholder (cioè vuoto). `::placeholder` è un **pseudo-elemento**: stilizza il *testo* del placeholder (colore, corsivo…).
+
+</details>
+
+<details>
+<summary>Cosa matcha <code>button:not(.primary, :disabled)</code> e quanta specificità aggiunge <code>:not()</code>?</summary>
+
+Tutti i `button` che **non** hanno classe `.primary` e **non** sono `:disabled` (il moderno `:not()` accetta liste di selettori). La pseudo-classe in sé non aggiunge peso: la specificità è quella del selettore più specifico al suo interno (qui, una classe).
+
+</details>
 
 **In sintesi:**
 - **Pseudo-classi** (`:`) = stato/posizione di un elemento esistente; **pseudo-elementi** (`::`) = sotto-parte o box generato. Nel codice nuovo, sempre `::` sui pseudo-elementi.

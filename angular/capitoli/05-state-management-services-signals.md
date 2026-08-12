@@ -839,33 +839,54 @@ Implementare store con service + signal è abbastanza semplice (incapsulare sign
 
 ## Ripasso lampo
 
-**1.** Cosa garantisce `@Service()` (o `{ providedIn: 'root' }`) e qual è la relazione con `providers: [FlightClient]` in `app.config.ts`?
-> [!success]- Risposta
-> `@Service()` registra la classe nel **root injector**: una sola istanza (singleton) per tutta l'app, accessibile da chiunque conosca il tipo. Mettere `FlightClient` (o `{ provide: FlightClient, useClass: FlightClient }`) nei `providers` di `app.config.ts` è **equivalente**: configura lo stesso provider a livello applicazione anziché tramite il decoratore.
+<details>
+<summary>Cosa garantisce <code>@Service()</code> (o <code>{ providedIn: 'root' }</code>) e qual è la relazione con <code>providers: [FlightClient]</code> in <code>app.config.ts</code>?</summary>
 
-**2.** Cos'è un injection context valido? Cosa fanno `runInInjectionContext` e `assertInInjectionContext`?
-> [!success]- Risposta
-> È un'area dove `inject` è lecito: **field initializer** e **constructor** (più le aree definite da Angular/librerie). `runInInjectionContext(injector, fn)` crea un contesto valido attorno a `fn` passando un `Injector`. `assertInInjectionContext(fn)` a inizio metodo lancia un errore (con il nome della funzione/metodo) se viene chiamato fuori da un contesto valido.
+`@Service()` registra la classe nel **root injector**: una sola istanza (singleton) per tutta l'app, accessibile da chiunque conosca il tipo. Mettere `FlightClient` (o `{ provide: FlightClient, useClass: FlightClient }`) nei `providers` di `app.config.ts` è **equivalente**: configura lo stesso provider a livello applicazione anziché tramite il decoratore.
 
-**3.** Perché il token di un service scambiabile è una **classe astratta** e non un'interfaccia? Differenza tra `useClass`, `useValue`, `useFactory`, `useExisting`?
-> [!success]- Risposta
-> Perché TypeScript **rimuove le interfacce** in compilazione, mentre `inject` ha bisogno del base type **a runtime**: le classi astratte sopravvivono alla compilazione. Strategie: `useClass` = istanza di una classe; `useValue` = valore costante (anche per token non-classe); `useFactory` = factory che può avere dipendenze; `useExisting` = **alias** verso un token già provisto (non crea una nuova istanza).
+</details>
 
-**4.** Stesso token fornito a livello app **e** a livello componente: chi vince e quante istanze esistono?
-> [!success]- Risposta
-> Lo scope più interno fa **shadowing**: il componente (e i suoi figli) riceve l'implementazione provista a livello componente, il resto dell'albero quella a livello app. E anche con la **stessa** implementazione a entrambi i livelli, **ogni scope ottiene la sua istanza** → con stato possono divergere.
+<details>
+<summary>Cos'è un injection context valido? Cosa fanno <code>runInInjectionContext</code> e <code>assertInInjectionContext</code>?</summary>
 
-**5.** Perché lo store espone signal `asReadonly()` e tiene privati i writable? Come si ricostruisce un valore bindabile da un signal read-only?
-> [!success]- Risposta
-> Per impedire manipolazioni dirette dall'esterno: i consumer vedono solo signal read-only e metodi di update **controllato**, mentre i writable (`_from`, ...), la resource e il `FlightClient` restano incapsulati. Per bindare un read-only a un input si usa un [[linked-signal|linkedSignal]] (copia di lavoro locale aggiornabile, che non tocca l'originale).
+È un'area dove `inject` è lecito: **field initializer** e **constructor** (più le aree definite da Angular/librerie). `runInInjectionContext(injector, fn)` crea un contesto valido attorno a `fn` passando un `Injector`. `assertInInjectionContext(fn)` a inizio metodo lancia un errore (con il nome della funzione/metodo) se viene chiamato fuori da un contesto valido.
 
-**6.** Come si ottiene una UX reattiva bindando la form allo store senza il bottone *Search*, e perché serve il `debounce`?
-> [!success]- Risposta
-> Da **Angular 22.1** con un [[linked-signal|linkedSignal]] che, oltre alla lettura, riceve un'opzione **`set`**: a ogni modifica il `set` richiama `updateFilter` e riscrive subito nello store (lo store aggiorna i signal, il linked signal ricalcola, restano in sync). Il `debounce` (via schema della `filterForm`) evita di ritriggerare la resource a ogni tasto. *(Prima di 22.1 serviva l'helper custom `delegatedSignal`, vedi [[delegated-signal]].)*
+</details>
 
-**7.** Come cambia il lifetime dello stato tra scope **root**, **component-local** e **route-local**? Cosa aggiunge l'Auto Cleanup?
-> [!success]- Risposta
-> **root**: lo stato vive quanto l'app (cleanup manuale per evitare stato obsoleto). **component-local**: un'istanza per componente, ripulita automaticamente quando il componente è distrutto. **route-local** (Environment Provider): condiviso su componente di rotta e child route; di default non distrutto, ma con **Auto Cleanup** (`withExperimentalAutoCleanupInjectors`, da Angular 21.1, sperimentale) viene distrutto navigando via.
+<details>
+<summary>Perché il token di un service scambiabile è una **classe astratta** e non un'interfaccia? Differenza tra <code>useClass</code>, <code>useValue</code>, <code>useFactory</code>, <code>useExisting</code>?</summary>
+
+Perché TypeScript **rimuove le interfacce** in compilazione, mentre `inject` ha bisogno del base type **a runtime**: le classi astratte sopravvivono alla compilazione. Strategie: `useClass` = istanza di una classe; `useValue` = valore costante (anche per token non-classe); `useFactory` = factory che può avere dipendenze; `useExisting` = **alias** verso un token già provisto (non crea una nuova istanza).
+
+</details>
+
+<details>
+<summary>Stesso token fornito a livello app **e** a livello componente: chi vince e quante istanze esistono?</summary>
+
+Lo scope più interno fa **shadowing**: il componente (e i suoi figli) riceve l'implementazione provista a livello componente, il resto dell'albero quella a livello app. E anche con la **stessa** implementazione a entrambi i livelli, **ogni scope ottiene la sua istanza** → con stato possono divergere.
+
+</details>
+
+<details>
+<summary>Perché lo store espone signal <code>asReadonly()</code> e tiene privati i writable? Come si ricostruisce un valore bindabile da un signal read-only?</summary>
+
+Per impedire manipolazioni dirette dall'esterno: i consumer vedono solo signal read-only e metodi di update **controllato**, mentre i writable (`_from`, ...), la resource e il `FlightClient` restano incapsulati. Per bindare un read-only a un input si usa un [[linked-signal|linkedSignal]] (copia di lavoro locale aggiornabile, che non tocca l'originale).
+
+</details>
+
+<details>
+<summary>Come si ottiene una UX reattiva bindando la form allo store senza il bottone *Search*, e perché serve il <code>debounce</code>?</summary>
+
+Da **Angular 22.1** con un [[linked-signal|linkedSignal]] che, oltre alla lettura, riceve un'opzione **`set`**: a ogni modifica il `set` richiama `updateFilter` e riscrive subito nello store (lo store aggiorna i signal, il linked signal ricalcola, restano in sync). Il `debounce` (via schema della `filterForm`) evita di ritriggerare la resource a ogni tasto. *(Prima di 22.1 serviva l'helper custom `delegatedSignal`, vedi [[delegated-signal]].)*
+
+</details>
+
+<details>
+<summary>Come cambia il lifetime dello stato tra scope **root**, **component-local** e **route-local**? Cosa aggiunge l'Auto Cleanup?</summary>
+
+**root**: lo stato vive quanto l'app (cleanup manuale per evitare stato obsoleto). **component-local**: un'istanza per componente, ripulita automaticamente quando il componente è distrutto. **route-local** (Environment Provider): condiviso su componente di rotta e child route; di default non distrutto, ma con **Auto Cleanup** (`withExperimentalAutoCleanupInjectors`, da Angular 21.1, sperimentale) viene distrutto navigando via.
+
+</details>
 
 **In sintesi:**
 - I **service** sono classi iniettabili e **scambiabili** via providers (`useClass`/`useValue`/`useFactory`/`useExisting`); il token dice *cosa chiedi*, la strategia *cosa ottieni*. Per i tipi base usa classi astratte (sopravvivono alla compilazione, a differenza delle interfacce).

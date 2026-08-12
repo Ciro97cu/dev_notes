@@ -324,33 +324,54 @@ Le soluzioni community **ngx-translate** e **Transloco** **invertono** vantaggi 
 
 ## Ripasso lampo
 
-**1.** Perché la I18N del compiler genera un set di bundle separato per ogni lingua, e che prezzo si paga a runtime?
-> [!success]- Risposta
-> Perché il compiler sostituisce i testi tradotti **direttamente nei bundle a compile-time**: ogni lingua ottiene il proprio set completo. Vantaggio: a runtime **nessun costo** per caricare o mostrare i testi (sono parte del bundle). Prezzo: devi distribuire più versioni e il cambio lingua avviene caricando **una nuova app** via hyperlink → si perde lo stato della SPA precedente.
+<details>
+<summary>Perché la I18N del compiler genera un set di bundle separato per ogni lingua, e che prezzo si paga a runtime?</summary>
 
-**2.** Cosa rappresentano le tre parti del valore di `i18n` (`meaning|description@@id`) e perché conviene assegnare l'ID a mano?
-> [!success]- Risposta
-> **meaning** e **description** danno contesto allo studio di traduzione (utili quando una parola ha più traduzioni). L'**ID** (dopo `@@`) serve al compiler per ricollocare il testo tradotto. Conviene assegnarlo a mano perché l'ID auto-generato **può cambiare quando il template cambia**, e allora il compiler fatica ad abbinare la traduzione.
+Perché il compiler sostituisce i testi tradotti **direttamente nei bundle a compile-time**: ogni lingua ottiene il proprio set completo. Vantaggio: a runtime **nessun costo** per caricare o mostrare i testi (sono parte del bundle). Prezzo: devi distribuire più versioni e il cambio lingua avviene caricando **una nuova app** via hyperlink → si perde lo stato della SPA precedente.
 
-**3.** Come si traduce una stringa creata nella component class? Va importato `$localize`?
-> [!success]- Risposta
-> Con una **tagged string** `$localize`: backtick preceduti dalla funzione tag, contenuto che inizia con i metadati tra **due `:`** seguiti dal valore di default, es. `` $localize`:meaning|description@@id:Hello World!` ``. `$localize` **non va importato**: `@angular/localize` lo registra come funzione globale.
+</details>
 
-**4.** Qual è il flusso `extract-i18n` → traduzione → `ng build --localize`? Dove si registrano i file in `angular.json`?
-> [!success]- Risposta
-> 1) `ng extract-i18n` genera `messages.xlf` (XLIFF) con una `trans-unit` per ogni testo. 2) Si duplica per lingua (`messages.de.xlf`) e si aggiunge un nodo `<target>` con la traduzione in ogni `trans-unit`. 3) Si registrano i file nel nodo `i18n` di `angular.json`, sotto `projects/<nome>`: `locales` mappa ogni locale al suo file, `sourceLocale` indica la lingua dei template non tradotti. 4) `ng build --localize` produce una sottocartella per locale nella `dist`.
+<details>
+<summary>Cosa rappresentano le tre parti del valore di <code>i18n</code> (<code>meaning|description@@id</code>) e perché conviene assegnare l'ID a mano?</summary>
 
-**5.** Come si fa partire `ng serve` in una lingua specifica, dato che manca lo switch nativo?
-> [!success]- Risposta
-> Servono due configurazioni in `angular.json`: una sotto `build` che imposta la lingua (`"localize": ["de"]`) e una sotto `serve` che la referenzia via `buildTarget` (`flight-app:build:de`). Poi si lancia `ng serve --configuration de`. Per ogni lingua extra serve una nuova coppia di configurazioni.
+**meaning** e **description** danno contesto allo studio di traduzione (utili quando una parola ha più traduzioni). L'**ID** (dopo `@@`) serve al compiler per ricollocare il testo tradotto. Conviene assegnarlo a mano perché l'ID auto-generato **può cambiare quando il template cambia**, e allora il compiler fatica ad abbinare la traduzione.
 
-**6.** A cosa servono `plural` e `select` (ICU)? Quali categorie plurali esistono?
-> [!success]- Risposta
-> Sono la grammatica ICU per le **forme grammaticali**. `plural` distingue singolare/plurale (es. `=1 {1 flight found} other {# flights found}}`, con `#` che riporta il valore); `select` sceglie il testo in base a un valore discreto come il genere (`male`/`female`/`other`). Le categorie plurali supportate sono `zero`, `one`, `two`, `few`, `many`, `other`, oltre ai valori concreti come `=1`.
+</details>
 
-**7.** Differenza chiave tra compiler I18N e soluzioni come ngx-translate/Transloco?
-> [!success]- Risposta
-> **Compiler I18N**: massima performance (testi tessuti nei bundle, niente data binding), ma niente cambio lingua a runtime → solo hyperlink ad altre versioni. **ngx-translate/Transloco**: invertono il trade-off → load e switch di lingua a runtime grazie al data binding, al costo di un possibile impatto sulla performance.
+<details>
+<summary>Come si traduce una stringa creata nella component class? Va importato <code>$localize</code>?</summary>
+
+Con una **tagged string** `$localize`: backtick preceduti dalla funzione tag, contenuto che inizia con i metadati tra **due `:`** seguiti dal valore di default, es. `` $localize`:meaning|description@@id:Hello World!` ``. `$localize` **non va importato**: `@angular/localize` lo registra come funzione globale.
+
+</details>
+
+<details>
+<summary>Qual è il flusso <code>extract-i18n</code> → traduzione → <code>ng build --localize</code>? Dove si registrano i file in <code>angular.json</code>?</summary>
+
+1) `ng extract-i18n` genera `messages.xlf` (XLIFF) con una `trans-unit` per ogni testo. 2) Si duplica per lingua (`messages.de.xlf`) e si aggiunge un nodo `<target>` con la traduzione in ogni `trans-unit`. 3) Si registrano i file nel nodo `i18n` di `angular.json`, sotto `projects/<nome>`: `locales` mappa ogni locale al suo file, `sourceLocale` indica la lingua dei template non tradotti. 4) `ng build --localize` produce una sottocartella per locale nella `dist`.
+
+</details>
+
+<details>
+<summary>Come si fa partire <code>ng serve</code> in una lingua specifica, dato che manca lo switch nativo?</summary>
+
+Servono due configurazioni in `angular.json`: una sotto `build` che imposta la lingua (`"localize": ["de"]`) e una sotto `serve` che la referenzia via `buildTarget` (`flight-app:build:de`). Poi si lancia `ng serve --configuration de`. Per ogni lingua extra serve una nuova coppia di configurazioni.
+
+</details>
+
+<details>
+<summary>A cosa servono <code>plural</code> e <code>select</code> (ICU)? Quali categorie plurali esistono?</summary>
+
+Sono la grammatica ICU per le **forme grammaticali**. `plural` distingue singolare/plurale (es. `=1 {1 flight found} other {# flights found}}`, con `#` che riporta il valore); `select` sceglie il testo in base a un valore discreto come il genere (`male`/`female`/`other`). Le categorie plurali supportate sono `zero`, `one`, `two`, `few`, `many`, `other`, oltre ai valori concreti come `=1`.
+
+</details>
+
+<details>
+<summary>Differenza chiave tra compiler I18N e soluzioni come ngx-translate/Transloco?</summary>
+
+**Compiler I18N**: massima performance (testi tessuti nei bundle, niente data binding), ma niente cambio lingua a runtime → solo hyperlink ad altre versioni. **ngx-translate/Transloco**: invertono il trade-off → load e switch di lingua a runtime grazie al data binding, al costo di un possibile impatto sulla performance.
+
+</details>
 
 **In sintesi:**
 - La I18N integrata è **compile-time**: marca i testi con `i18n` (template) o `$localize` (classe), estrai con `ng extract-i18n`, traduci i `<target>`, registra i locale in `angular.json` e builda con `ng build --localize`.

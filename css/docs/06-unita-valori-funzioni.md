@@ -281,29 +281,47 @@ Collegamenti: [[05-box-model]] · [[07-colori]] · [[10-sfondi-effetti]] · [[11
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza tra `em` e `rem`, e quando si preferisce l'una all'altra?
-> [!success]- Risposta
-> `em` è relativa al font-size dell'**elemento** (e **si compone** nelle gerarchie annidate); `rem` è relativa al font-size della **root** (`<html>`) e **non si compone**. Per la tipografia e le spaziature globali si usa `rem` (prevedibile); `em` per spaziature che devono seguire il testo locale (es. padding di un bottone).
+<details>
+<summary>Qual è la differenza tra <code>em</code> e <code>rem</code>, e quando si preferisce l'una all'altra?</summary>
 
-**2.** Perché `100vh` dà problemi su mobile e cosa lo risolve?
-> [!success]- Risposta
-> `vh` (≡ `lvh`) non tiene conto della barra degli indirizzi che appare/scompare durante lo scroll, quindi `100vh` risulta più alto dell'area visibile. Si usano le unità dinamiche: `svh` (viewport minimo, sicuro e stabile), `lvh` (massimo) e `dvh` (si adatta in tempo reale alla UI del browser).
+`em` è relativa al font-size dell'**elemento** (e **si compone** nelle gerarchie annidate); `rem` è relativa al font-size della **root** (`<html>`) e **non si compone**. Per la tipografia e le spaziature globali si usa `rem` (prevedibile); `em` per spaziature che devono seguire il testo locale (es. padding di un bottone).
 
-**3.** Cosa significa `clamp(2rem, 5vw, 4rem)` e a cosa equivale con `min()`/`max()`?
-> [!success]- Risposta
-> Un valore fluido: preferito `5vw`, ma mai sotto `2rem` né sopra `4rem`. Equivale a `max(2rem, min(5vw, 4rem))`. Serve per tipografia/spaziatura fluida senza media query.
+</details>
 
-**4.** Cosa distingue una custom property da una variabile di Sass?
-> [!success]- Risposta
-> La custom property CSS (`--nome`, letta con `var()`) è **viva nel browser**: eredita nella cascade, si sovrascrive per sottoalbero e si legge/scrive da JavaScript a runtime. Le variabili Sass sono risolte a build-time e producono valori fissi.
+<details>
+<summary>Perché <code>100vh</code> dà problemi su mobile e cosa lo risolve?</summary>
 
-**5.** Perché serve `@property` per animare una variabile?
-> [!success]- Risposta
-> Una custom property non registrata è per il browser un flusso di testo di tipo *discrete*: passa a scatti. `@property` la registra con un `syntax` (es. `"<angle>"`), così il browser sa interpolarla e l'animazione diventa fluida. Richiede `syntax` e `inherits`, più `initial-value` (salvo `syntax: "*"`).
+`vh` (≡ `lvh`) non tiene conto della barra degli indirizzi che appare/scompare durante lo scroll, quindi `100vh` risulta più alto dell'area visibile. Si usano le unità dinamiche: `svh` (viewport minimo, sicuro e stabile), `lvh` (massimo) e `dvh` (si adatta in tempo reale alla UI del browser).
 
-**6.** Il `px` del CSS è un pixel fisico dello schermo?
-> [!success]- Risposta
-> No: è un pixel **di riferimento** (logico). Su schermi ad alta densità il **device pixel ratio** (DPR) mappa 1 px CSS su più pixel fisici (DPR 2 → griglia 2×2). `pixel fisici = pixel CSS × devicePixelRatio`.
+</details>
+
+<details>
+<summary>Cosa significa <code>clamp(2rem, 5vw, 4rem)</code> e a cosa equivale con <code>min()</code>/<code>max()</code>?</summary>
+
+Un valore fluido: preferito `5vw`, ma mai sotto `2rem` né sopra `4rem`. Equivale a `max(2rem, min(5vw, 4rem))`. Serve per tipografia/spaziatura fluida senza media query.
+
+</details>
+
+<details>
+<summary>Cosa distingue una custom property da una variabile di Sass?</summary>
+
+La custom property CSS (`--nome`, letta con `var()`) è **viva nel browser**: eredita nella cascade, si sovrascrive per sottoalbero e si legge/scrive da JavaScript a runtime. Le variabili Sass sono risolte a build-time e producono valori fissi.
+
+</details>
+
+<details>
+<summary>Perché serve <code>@property</code> per animare una variabile?</summary>
+
+Una custom property non registrata è per il browser un flusso di testo di tipo *discrete*: passa a scatti. `@property` la registra con un `syntax` (es. `"<angle>"`), così il browser sa interpolarla e l'animazione diventa fluida. Richiede `syntax` e `inherits`, più `initial-value` (salvo `syntax: "*"`).
+
+</details>
+
+<details>
+<summary>Il <code>px</code> del CSS è un pixel fisico dello schermo?</summary>
+
+No: è un pixel **di riferimento** (logico). Su schermi ad alta densità il **device pixel ratio** (DPR) mappa 1 px CSS su più pixel fisici (DPR 2 → griglia 2×2). `pixel fisici = pixel CSS × devicePixelRatio`.
+
+</details>
 
 **In sintesi:**
 - I valori hanno un **tipo** (keyword, lunghezza, numero, percentuale, funzione); numero ≠ lunghezza (`line-height: 1.5` vs `1.5rem`).

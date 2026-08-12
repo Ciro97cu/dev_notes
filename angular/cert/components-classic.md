@@ -157,25 +157,40 @@ Ordine al primo render (poi i `…Checked` si ripetono a ogni ciclo di CD):
 
 ## Ripasso lampo
 
-**1.** In quale hook sono garantiti risolti i `@ViewChild` con `{ static: false }`? E i `@ContentChild`?
-> [!success]- Risposta
-> I `@ViewChild` (static:false) in **`ngAfterViewInit`**; i `@ContentChild` in **`ngAfterContentInit`**. Con `{ static: true }` un `@ViewChild` è già disponibile in `ngOnInit`, ma solo se il target non è condizionale.
+<details>
+<summary>In quale hook sono garantiti risolti i <code>@ViewChild</code> con <code>{ static: false }</code>? E i <code>@ContentChild</code>?</summary>
 
-**2.** Quando *non* scatta `ngOnChanges`?
-> [!success]- Risposta
-> Quando il componente non ha `@Input` bound dal template, o quando si muta un oggetto/array **in-place** senza cambiarne il riferimento. `ngOnChanges` reagisce al cambio di **riferimento** dell'input, non alle mutazioni interne.
+I `@ViewChild` (static:false) in **`ngAfterViewInit`**; i `@ContentChild` in **`ngAfterContentInit`**. Con `{ static: true }` un `@ViewChild` è già disponibile in `ngOnInit`, ma solo se il target non è condizionale.
 
-**3.** Qual è la differenza fra `@ViewChild` e `@ContentChild`?
-> [!success]- Risposta
-> `@ViewChild` interroga la **view** del componente, cioè gli elementi/componenti del suo template. `@ContentChild` interroga il **contenuto proiettato** dall'esterno tramite `<ng-content>`. Sono due alberi distinti.
+</details>
 
-**4.** Qual è l'ordine degli hook al primo render?
-> [!success]- Risposta
-> Nell'ordine: `ngOnChanges`, `ngOnInit`, `ngDoCheck`, `ngAfterContentInit`, `ngAfterContentChecked`, `ngAfterViewInit`, `ngAfterViewChecked`; `ngOnDestroy` alla distruzione. Gli hook `…Checked` si ripetono a ogni ciclo di CD.
+<details>
+<summary>Quando *non* scatta <code>ngOnChanges</code>?</summary>
 
-**5.** A cosa serve `{ static: true }` in una query e quando non si può usare?
-> [!success]- Risposta
-> Risolve la query **prima** della change detection, rendendola disponibile già in `ngOnInit`. Non si può usare se il target è dietro `*ngIf`/`*ngFor` o è dinamico: in quel caso sarà `undefined` e serve `{ static: false }`.
+Quando il componente non ha `@Input` bound dal template, o quando si muta un oggetto/array **in-place** senza cambiarne il riferimento. `ngOnChanges` reagisce al cambio di **riferimento** dell'input, non alle mutazioni interne.
+
+</details>
+
+<details>
+<summary>Qual è la differenza fra <code>@ViewChild</code> e <code>@ContentChild</code>?</summary>
+
+`@ViewChild` interroga la **view** del componente, cioè gli elementi/componenti del suo template. `@ContentChild` interroga il **contenuto proiettato** dall'esterno tramite `<ng-content>`. Sono due alberi distinti.
+
+</details>
+
+<details>
+<summary>Qual è l'ordine degli hook al primo render?</summary>
+
+Nell'ordine: `ngOnChanges`, `ngOnInit`, `ngDoCheck`, `ngAfterContentInit`, `ngAfterContentChecked`, `ngAfterViewInit`, `ngAfterViewChecked`; `ngOnDestroy` alla distruzione. Gli hook `…Checked` si ripetono a ogni ciclo di CD.
+
+</details>
+
+<details>
+<summary>A cosa serve <code>{ static: true }</code> in una query e quando non si può usare?</summary>
+
+Risolve la query **prima** della change detection, rendendola disponibile già in `ngOnInit`. Non si può usare se il target è dietro `*ngIf`/`*ngFor` o è dinamico: in quel caso sarà `undefined` e serve `{ static: false }`.
+
+</details>
 
 **In sintesi:**
 - `@Input()` (con alias, `required`, setter) porta i dati dal padre; `@Output()` + `EventEmitter.emit()` mandano eventi al padre.

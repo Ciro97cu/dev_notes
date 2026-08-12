@@ -273,25 +273,40 @@ export const { selectAll, selectEntities, selectIds, selectTotal } =
 
 ## Ripasso lampo
 
-**1.** Quali sono i tre principi Redux e da cosa deriva il "flusso unidirezionale"?
-> [!success]- Risposta
-> **Single source of truth** (un solo store immutabile), **stato read-only** (si cambia solo dispatchando action), **cambiamenti con funzioni pure** (i reducer). Ne deriva il flusso unidirezionale: l'intenzione entra come **action**, il **reducer** calcola il nuovo stato e i componenti leggono via **selector**; i side effect stanno fuori, negli **Effects**, che a loro volta dispatchano nuove action.
+<details>
+<summary>Quali sono i tre principi Redux e da cosa deriva il "flusso unidirezionale"?</summary>
 
-**2.** Perché un reducer deve essere puro e immutabile, e dove finiscono i side effect?
-> [!success]- Risposta
-> Perché deve essere **deterministico** (`(stato, action) → nuovo stato`) e senza effetti collaterali: niente HTTP/timer/mutazioni. L'immutabilità (`{ ...state }`) rende rilevabile il cambio per riferimento (necessario a `OnPush` e ai selector memoizzati) e abilita il time-travel dei DevTools. I side effect (HTTP, navigazione, ecc.) vanno negli **Effects**, che li mappano a nuove action.
+**Single source of truth** (un solo store immutabile), **stato read-only** (si cambia solo dispatchando action), **cambiamenti con funzioni pure** (i reducer). Ne deriva il flusso unidirezionale: l'intenzione entra come **action**, il **reducer** calcola il nuovo stato e i componenti leggono via **selector**; i side effect stanno fuori, negli **Effects**, che a loro volta dispatchano nuove action.
 
-**3.** Cosa fa `createFeatureSelector` e perché `createSelector` è importante per le performance?
-> [!success]- Risposta
-> `createFeatureSelector<T>('chiave')` estrae lo slice di stato di una feature dalla sua chiave nello store (deve coincidere con quella di `forFeature`). `createSelector` compone selector e **memoizza**: ricalcola solo quando uno degli input cambia per riferimento, altrimenti ritorna il valore cachato — così la logica derivata non gira a ogni change detection.
+</details>
 
-**4.** Com'è fatto un Effect e perché il `catchError` va sull'inner observable?
-> [!success]- Risposta
-> Un Effect ascolta `actions$`, filtra con `ofType`, esegue l'async (via un flattening operator come `switchMap`) verso un service e **mappa il risultato a nuove action** (`...Success`/`...Failure`). Il `catchError` va **dentro** `switchMap` (sull'inner): se si mettesse sull'outer (`actions$`), al primo errore lo stream esterno morirebbe e l'Effect smetterebbe di reagire. Nell'inner si ritorna invece `of(...failure())` e l'outer resta vivo.
+<details>
+<summary>Perché un reducer deve essere puro e immutabile, e dove finiscono i side effect?</summary>
 
-**5.** Come si registrano store ed effects in un'app module-based e come li consuma un componente?
-> [!success]- Risposta
-> Root: `StoreModule.forRoot({})` + `EffectsModule.forRoot([])`. Feature: `StoreModule.forFeature('chiave', reducer)` + `EffectsModule.forFeature([Effects])`. Il componente inietta lo `Store`, dispatcha con `store.dispatch(action)` e legge con `store.select(selector)` (un `Observable`, consumato nel template con `| async`).
+Perché deve essere **deterministico** (`(stato, action) → nuovo stato`) e senza effetti collaterali: niente HTTP/timer/mutazioni. L'immutabilità (`{ ...state }`) rende rilevabile il cambio per riferimento (necessario a `OnPush` e ai selector memoizzati) e abilita il time-travel dei DevTools. I side effect (HTTP, navigazione, ecc.) vanno negli **Effects**, che li mappano a nuove action.
+
+</details>
+
+<details>
+<summary>Cosa fa <code>createFeatureSelector</code> e perché <code>createSelector</code> è importante per le performance?</summary>
+
+`createFeatureSelector<T>('chiave')` estrae lo slice di stato di una feature dalla sua chiave nello store (deve coincidere con quella di `forFeature`). `createSelector` compone selector e **memoizza**: ricalcola solo quando uno degli input cambia per riferimento, altrimenti ritorna il valore cachato — così la logica derivata non gira a ogni change detection.
+
+</details>
+
+<details>
+<summary>Com'è fatto un Effect e perché il <code>catchError</code> va sull'inner observable?</summary>
+
+Un Effect ascolta `actions$`, filtra con `ofType`, esegue l'async (via un flattening operator come `switchMap`) verso un service e **mappa il risultato a nuove action** (`...Success`/`...Failure`). Il `catchError` va **dentro** `switchMap` (sull'inner): se si mettesse sull'outer (`actions$`), al primo errore lo stream esterno morirebbe e l'Effect smetterebbe di reagire. Nell'inner si ritorna invece `of(...failure())` e l'outer resta vivo.
+
+</details>
+
+<details>
+<summary>Come si registrano store ed effects in un'app module-based e come li consuma un componente?</summary>
+
+Root: `StoreModule.forRoot({})` + `EffectsModule.forRoot([])`. Feature: `StoreModule.forFeature('chiave', reducer)` + `EffectsModule.forFeature([Effects])`. Il componente inietta lo `Store`, dispatcha con `store.dispatch(action)` e legge con `store.select(selector)` (un `Observable`, consumato nel template con `| async`).
+
+</details>
 
 **In sintesi:**
 - NgRx Store porta **Redux** in Angular: store unico immutabile, cambiato solo da **action** (`createAction`/`props`) applicate da **reducer** puri (`createReducer`/`on`), con flusso unidirezionale.

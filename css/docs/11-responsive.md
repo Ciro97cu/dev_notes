@@ -271,29 +271,47 @@ Collegamenti: [[06-unita-valori-funzioni]] · [[07-colori]] · [[12-flexbox]] ·
 
 ## Ripasso lampo
 
-**1.** A cosa serve `<meta name="viewport" content="width=device-width, initial-scale=1">` e cosa succede senza?
-> [!success]- Risposta
-> Dice al browser mobile di usare la larghezza **reale** del dispositivo come viewport di layout (`width=device-width`) allo zoom 100% (`initial-scale=1`). Senza, il browser simula un viewport virtuale largo ~980px e rimpicciolisce tutto: le media query e `100vw` non corrispondono allo schermo e la pagina appare minuscola.
+<details>
+<summary>A cosa serve <code><meta name="viewport" content="width=device-width, initial-scale=1"></code> e cosa succede senza?</summary>
 
-**2.** Perché si preferisce l'approccio mobile-first con `min-width`?
-> [!success]- Risposta
-> Lo stile base (mobile) è il più semplice e le media query *aggiungono* complessità salendo di larghezza, invece di disfarla. Si evita di sovrascrivere, il CSS resta più corto e il caso mobile — il più comune e fragile — parte già ottimizzato.
+Dice al browser mobile di usare la larghezza **reale** del dispositivo come viewport di layout (`width=device-width`) allo zoom 100% (`initial-scale=1`). Senza, il browser simula un viewport virtuale largo ~980px e rimpicciolisce tutto: le media query e `100vw` non corrispondono allo schermo e la pagina appare minuscola.
 
-**3.** Come si riscrive `(min-width: 400px) and (max-width: 900px)` in range syntax?
-> [!success]- Risposta
-> `@media (400px <= width <= 900px)` — un intervallo chiuso in una sola parentesi, senza `and`.
+</details>
 
-**4.** Qual è il limite delle media query che le container query superano, e come?
-> [!success]- Risposta
-> Le media query reagiscono **solo al viewport**, quindi un componente non può adattarsi al posto in cui è inserito. Con `container-type: inline-size` sul contenitore e `@container (width >= …)` sui discendenti, il componente reagisce alla larghezza del **proprio contenitore** — diventa davvero riutilizzabile in sidebar strette o colonne larghe.
+<details>
+<summary>Perché si preferisce l'approccio mobile-first con <code>min-width</code>?</summary>
 
-**5.** Perché `aspect-ratio: 16 / 9` a volte "non fa niente"?
-> [!success]- Risposta
-> Perché ha effetto solo se **almeno una** dimensione resta automatica. Se sia `width` sia `height` sono fissate, il rapporto viene ignorato.
+Lo stile base (mobile) è il più semplice e le media query *aggiungono* complessità salendo di larghezza, invece di disfarla. Si evita di sovrascrivere, il CSS resta più corto e il caso mobile — il più comune e fragile — parte già ottimizzato.
 
-**6.** Dove si mette un breakpoint, e in quale unità?
-> [!success]- Risposta
-> Dove il **contenuto** si rompe (righe troppo lunghe, colonne troppo strette), non alla larghezza di un dispositivo specifico. Meglio in `rem`/`em`, così rispondono a zoom e font-size di base.
+</details>
+
+<details>
+<summary>Come si riscrive <code>(min-width: 400px) and (max-width: 900px)</code> in range syntax?</summary>
+
+`@media (400px <= width <= 900px)` — un intervallo chiuso in una sola parentesi, senza `and`.
+
+</details>
+
+<details>
+<summary>Qual è il limite delle media query che le container query superano, e come?</summary>
+
+Le media query reagiscono **solo al viewport**, quindi un componente non può adattarsi al posto in cui è inserito. Con `container-type: inline-size` sul contenitore e `@container (width >= …)` sui discendenti, il componente reagisce alla larghezza del **proprio contenitore** — diventa davvero riutilizzabile in sidebar strette o colonne larghe.
+
+</details>
+
+<details>
+<summary>Perché <code>aspect-ratio: 16 / 9</code> a volte "non fa niente"?</summary>
+
+Perché ha effetto solo se **almeno una** dimensione resta automatica. Se sia `width` sia `height` sono fissate, il rapporto viene ignorato.
+
+</details>
+
+<details>
+<summary>Dove si mette un breakpoint, e in quale unità?</summary>
+
+Dove il **contenuto** si rompe (righe troppo lunghe, colonne troppo strette), non alla larghezza di un dispositivo specifico. Meglio in `rem`/`em`, così rispondono a zoom e font-size di base.
+
+</details>
 
 **In sintesi:**
 - Il meta **viewport** (`width=device-width, initial-scale=1`) è il prerequisito HTML del responsive; non disabilitare mai lo zoom.

@@ -577,29 +577,47 @@ Collegamenti: [[computed]] · [[resource]] · [[equality-immutability]] · [[02-
 
 ## Ripasso lampo
 
-**1.** Perché preferire `computed` a `effect` per derivare un valore? Cosa significa che i computed sono *lazy*?
-> [!success]- Risposta
-> Un `computed` è **dichiarativo** (descrive *da cosa* deriva il valore), tracciato automaticamente e read-only; un `effect` non ritorna un valore e serve solo per side effect, va usato con parsimonia e può innescare catene difficili da debuggare. *Lazy* significa che un `computed` ricalcola **solo quando viene letto** (in un template o tramite il getter nel codice), non a ogni cambio della dipendenza.
+<details>
+<summary>Perché preferire <code>computed</code> a <code>effect</code> per derivare un valore? Cosa significa che i computed sono *lazy*?</summary>
 
-**2.** Tre resource a confronto: differenza tra `httpResource`, `rxResource` e `resource`? Come si **disattiva** una resource e come gestiscono le race condition?
-> [!success]- Risposta
-> `httpResource` è l'API di alto livello per la richiesta HTTP (usa `HttpClient`, supporta gli interceptor); `rxResource` usa uno `stream` che ritorna un `Observable` (ideale se si hanno già servizi RxJS); `resource` è la base Promise-based (un `loader` che ritorna una Promise), raramente usata in diretta. Si **disattiva** ritornando `undefined` dalla request/`params` function. Tutte gestiscono le race condition usando solo il risultato dell'ultima richiesta: `httpResource`/`rxResource` **cancellano** le richieste obsolete, `resource` ne **ignora** il risultato (le Promise non sono cancellabili; serve un `AbortSignal`).
+Un `computed` è **dichiarativo** (descrive *da cosa* deriva il valore), tracciato automaticamente e read-only; un `effect` non ritorna un valore e serve solo per side effect, va usato con parsimonia e può innescare catene difficili da debuggare. *Lazy* significa che un `computed` ricalcola **solo quando viene letto** (in un template o tramite il getter nel codice), non a ogni cambio della dipendenza.
 
-**3.** Quali sono i due *reactive context* dal punto di vista dello sviluppatore? Cos'è il tracking transitivo e perché rende rischioso chiamare business logic in un effect?
-> [!success]- Risposta
-> I due contesti reattivi sono il **template** e l'**effect** (i `computed` usano il contesto di chi li legge). Il tracking è **transitivo**: vengono tracciati anche i signal letti in metodi/funzioni chiamati dentro il contesto. Chiamare business logic in un `effect` è rischioso perché se quella logica legge altri signal internamente (`isLoading`, `userId`...) anche quelli vengono tracciati → re-run inattesi; per giunta l'effect, a differenza della Resource API, **non gestisce le race condition**.
+</details>
 
-**4.** Cosa garantisce la proprietà *glitch-free*? Perché i signal non sono adatti agli stream di eventi?
-> [!success]- Risposta
-> *Glitch-free* garantisce che un consumer reattivo (template/effect) **non veda mai stati intermedi incoerenti**: cambiando più signal di fila, il contesto gira **una sola volta** con i valori finali. Proprio per questo i signal **non** sono adatti a eventi/stream temporali: i valori intermedi (messaggi rapidamente seguiti da altri) vengono persi. Per quegli scenari si usano RxJS/Observable.
+<details>
+<summary>Tre resource a confronto: differenza tra <code>httpResource</code>, <code>rxResource</code> e <code>resource</code>? Come si **disattiva** una resource e come gestiscono le race condition?</summary>
 
-**5.** Perché aggiornando un oggetto/array bound occorre creare una nuova istanza? Che relazione c'è con `===` e con OnPush?
-> [!success]- Risposta
-> Sull'aggiornamento Angular confronta col precedente usando `===`. Su oggetti/array `===` confronta il **riferimento**, non il contenuto: se lo si muta in place (push, assegnazione di proprietà) il riferimento resta lo stesso → `===` dà `true` → Angular non rileva il cambio e la UI non si aggiorna. Creando una **nuova istanza** (spread) il riferimento cambia e il cambio viene rilevato. Lo stesso `===` è usato da **OnPush** nel `@for ... track flight.id` per decidere quale `FlightCard` ridisegnare.
+`httpResource` è l'API di alto livello per la richiesta HTTP (usa `HttpClient`, supporta gli interceptor); `rxResource` usa uno `stream` che ritorna un `Observable` (ideale se si hanno già servizi RxJS); `resource` è la base Promise-based (un `loader` che ritorna una Promise), raramente usata in diretta. Si **disattiva** ritornando `undefined` dalla request/`params` function. Tutte gestiscono le race condition usando solo il risultato dell'ultima richiesta: `httpResource`/`rxResource` **cancellano** le richieste obsolete, `resource` ne **ignora** il risultato (le Promise non sono cancellabili; serve un `AbortSignal`).
 
-**6.** Cosa permettono di fare gli **Snapshot** delle resource (Angular 21.2+) e quale problema risolvono?
-> [!success]- Risposta
-> Prima si potevano derivare solo singole proprietà di una resource (`value`/`error`/`isLoading`), non lo stato intero. Da Angular 21.2 ogni resource espone `snapshot()` (`status` + `value` in un unico oggetto signal-aware): lo si trasforma con un [[linked-signal]] e lo si ri-converte in resource con `resourceFromSnapshots`. Permette di **comporre** resource in helper riutilizzabili — es. filtrare i risultati (`withMinWeight`) o mantenere visibile l'ultimo valore caricato durante un reload (`withPreviousValue`) invece di mostrare `undefined`.
+</details>
+
+<details>
+<summary>Quali sono i due *reactive context* dal punto di vista dello sviluppatore? Cos'è il tracking transitivo e perché rende rischioso chiamare business logic in un effect?</summary>
+
+I due contesti reattivi sono il **template** e l'**effect** (i `computed` usano il contesto di chi li legge). Il tracking è **transitivo**: vengono tracciati anche i signal letti in metodi/funzioni chiamati dentro il contesto. Chiamare business logic in un `effect` è rischioso perché se quella logica legge altri signal internamente (`isLoading`, `userId`...) anche quelli vengono tracciati → re-run inattesi; per giunta l'effect, a differenza della Resource API, **non gestisce le race condition**.
+
+</details>
+
+<details>
+<summary>Cosa garantisce la proprietà *glitch-free*? Perché i signal non sono adatti agli stream di eventi?</summary>
+
+*Glitch-free* garantisce che un consumer reattivo (template/effect) **non veda mai stati intermedi incoerenti**: cambiando più signal di fila, il contesto gira **una sola volta** con i valori finali. Proprio per questo i signal **non** sono adatti a eventi/stream temporali: i valori intermedi (messaggi rapidamente seguiti da altri) vengono persi. Per quegli scenari si usano RxJS/Observable.
+
+</details>
+
+<details>
+<summary>Perché aggiornando un oggetto/array bound occorre creare una nuova istanza? Che relazione c'è con <code>===</code> e con OnPush?</summary>
+
+Sull'aggiornamento Angular confronta col precedente usando `===`. Su oggetti/array `===` confronta il **riferimento**, non il contenuto: se lo si muta in place (push, assegnazione di proprietà) il riferimento resta lo stesso → `===` dà `true` → Angular non rileva il cambio e la UI non si aggiorna. Creando una **nuova istanza** (spread) il riferimento cambia e il cambio viene rilevato. Lo stesso `===` è usato da **OnPush** nel `@for ... track flight.id` per decidere quale `FlightCard` ridisegnare.
+
+</details>
+
+<details>
+<summary>Cosa permettono di fare gli **Snapshot** delle resource (Angular 21.2+) e quale problema risolvono?</summary>
+
+Prima si potevano derivare solo singole proprietà di una resource (`value`/`error`/`isLoading`), non lo stato intero. Da Angular 21.2 ogni resource espone `snapshot()` (`status` + `value` in un unico oggetto signal-aware): lo si trasforma con un [[linked-signal]] e lo si ri-converte in resource con `resourceFromSnapshots`. Permette di **comporre** resource in helper riutilizzabili — es. filtrare i risultati (`withMinWeight`) o mantenere visibile l'ultimo valore caricato durante un reload (`withPreviousValue`) invece di mostrare `undefined`.
+
+</details>
 
 **In sintesi:**
 - Design reattivo = **dichiarativo**: si descrivono le relazioni tra valori (computed/resource), Angular propaga i cambi. I `computed` derivano valori sincroni e lazy; le `resource` proiettano async input → output gestendo le race condition (stabili da Angular 22).

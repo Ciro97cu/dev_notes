@@ -235,29 +235,47 @@ Collegamenti: [[06-unita-valori-funzioni]] · [[10-sfondi-effetti]] · [[11-resp
 
 ## Ripasso lampo
 
-**1.** Come si scrive un rosso semitrasparente con la sintassi moderna di `rgb()`, e qual è la forma legacy equivalente?
-> [!success]- Risposta
-> Moderna: `rgb(255 0 0 / 50%)` (canali separati da spazi, alpha dopo `/`). Legacy: `rgba(255, 0, 0, 0.5)` con le virgole. Oggi `rgba()` è solo un alias di `rgb()`.
+<details>
+<summary>Come si scrive un rosso semitrasparente con la sintassi moderna di <code>rgb()</code>, e qual è la forma legacy equivalente?</summary>
 
-**2.** Perché `oklch()` è preferibile a `hsl()` per costruire una palette?
-> [!success]- Risposta
-> Perché è **percettivamente uniforme**: a parità di `L` (lightness) tinte diverse appaiono ugualmente chiare, quindi ruotare solo `H` dà colori bilanciati. In più copre un **gamut più ampio** (Display P3), oltre l'sRGB di `hsl()`.
+Moderna: `rgb(255 0 0 / 50%)` (canali separati da spazi, alpha dopo `/`). Legacy: `rgba(255, 0, 0, 0.5)` con le virgole. Oggi `rgba()` è solo un alias di `rgb()`.
 
-**3.** Che differenza c'è tra `background: rgb(0 0 0 / .5)` e `opacity: .5` sullo stesso elemento?
-> [!success]- Risposta
-> L'alpha nel colore rende semitrasparente **solo lo sfondo**; testo e bordi restano opachi. `opacity` sbiadisce l'**intero elemento** (figli compresi) e crea un nuovo stacking context.
+</details>
 
-**4.** A cosa serve `color-mix(in oklch, var(--brand), white 20%)`?
-> [!success]- Risposta
-> A mescolare `--brand` con il 20% di bianco nello spazio `oklch`, ottenendo una variante più chiara del colore di brand senza preprocessori.
+<details>
+<summary>Perché <code>oklch()</code> è preferibile a <code>hsl()</code> per costruire una palette?</summary>
 
-**5.** Cosa fa `oklch(from var(--brand) l c h / 50%)` e cos'è `currentColor`?
-> [!success]- Risposta
-> La *relative color syntax* prende `--brand`, ne estrae i canali `l c h` e li riemette invariati ma con alpha al 50% — cioè la stessa tinta semitrasparente. `currentColor` invece risolve al valore calcolato della proprietà `color`, così bordi/sfondi/SVG possono "seguire" il colore del testo.
+Perché è **percettivamente uniforme**: a parità di `L` (lightness) tinte diverse appaiono ugualmente chiare, quindi ruotare solo `H` dà colori bilanciati. In più copre un **gamut più ampio** (Display P3), oltre l'sRGB di `hsl()`.
 
-**6.** A cosa serve impostare `color-scheme: light dark` su `:root`?
-> [!success]- Risposta
-> Dichiara che la pagina supporta entrambi i temi: gli elementi resi dallo user agent (scrollbar, controlli di form, colori di sistema) si adeguano al tema del SO, e si sblocca la funzione `light-dark()` per scegliere due colori senza media query.
+</details>
+
+<details>
+<summary>Che differenza c'è tra <code>background: rgb(0 0 0 / .5)</code> e <code>opacity: .5</code> sullo stesso elemento?</summary>
+
+L'alpha nel colore rende semitrasparente **solo lo sfondo**; testo e bordi restano opachi. `opacity` sbiadisce l'**intero elemento** (figli compresi) e crea un nuovo stacking context.
+
+</details>
+
+<details>
+<summary>A cosa serve <code>color-mix(in oklch, var(--brand), white 20%)</code>?</summary>
+
+A mescolare `--brand` con il 20% di bianco nello spazio `oklch`, ottenendo una variante più chiara del colore di brand senza preprocessori.
+
+</details>
+
+<details>
+<summary>Cosa fa <code>oklch(from var(--brand) l c h / 50%)</code> e cos'è <code>currentColor</code>?</summary>
+
+La *relative color syntax* prende `--brand`, ne estrae i canali `l c h` e li riemette invariati ma con alpha al 50% — cioè la stessa tinta semitrasparente. `currentColor` invece risolve al valore calcolato della proprietà `color`, così bordi/sfondi/SVG possono "seguire" il colore del testo.
+
+</details>
+
+<details>
+<summary>A cosa serve impostare <code>color-scheme: light dark</code> su <code>:root</code>?</summary>
+
+Dichiara che la pagina supporta entrambi i temi: gli elementi resi dallo user agent (scrollbar, controlli di form, colori di sistema) si adeguano al tema del SO, e si sblocca la funzione `light-dark()` per scegliere due colori senza media query.
+
+</details>
 
 **In sintesi:**
 - Un colore si può scrivere in molti modi; per palette curate preferire **`oklch()`** (uniforme e wide-gamut), tenendo hex/`rgb()`/`hsl()` per casi comuni e valori ereditati.

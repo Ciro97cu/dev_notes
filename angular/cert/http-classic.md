@@ -161,25 +161,40 @@ find(): Observable<Flight[]> {
 
 ## Ripasso lampo
 
-**1.** `HttpClientModule` vs `provideHttpClient`: come si abilita `HttpClient` nei due mondi?
-> [!success]- Risposta
-> Nel classico si importa `HttpClientModule` **una volta** nel root module (`@NgModule.imports`); da lì `HttpClient` è iniettabile ovunque. Nel moderno si chiama la provider function `provideHttpClient(...)` nei provider di bootstrap. `HttpClientModule` è deprecato dalla v18.
+<details>
+<summary><code>HttpClientModule</code> vs <code>provideHttpClient</code>: come si abilita <code>HttpClient</code> nei due mondi?</summary>
 
-**2.** Cosa cambia tra `observe: 'body'`, `'response'` e `'events'`?
-> [!success]- Risposta
-> `'body'` (default) fa emettere solo il corpo tipizzato (`T`). `'response'` emette l'intera `HttpResponse<T>`, con `status` e `headers` oltre a `body`. `'events'` emette lo stream di `HttpEvent` (utile con `reportProgress: true` per il progress di upload/download). Cambiare `observe` cambia il **tipo** emesso dall'Observable.
+Nel classico si importa `HttpClientModule` **una volta** nel root module (`@NgModule.imports`); da lì `HttpClient` è iniettabile ovunque. Nel moderno si chiama la provider function `provideHttpClient(...)` nei provider di bootstrap. `HttpClientModule` è deprecato dalla v18.
 
-**3.** Perché in un interceptor si clona la richiesta e come si registra un interceptor class-based?
-> [!success]- Risposta
-> Perché `HttpRequest` è **immutabile**: per aggiungere header o modificarla si usa `req.clone({ ... })` e si inoltra il clone con `next.handle(...)`. La registrazione avviene sul token **multi** `HTTP_INTERCEPTORS`: `{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }`.
+</details>
 
-**4.** Cosa succede se si dimentica `multi: true` su `HTTP_INTERCEPTORS`?
-> [!success]- Risposta
-> Il provider senza `multi: true` **sovrascrive** i precedenti invece di accodarsi: si registra un solo interceptor e gli altri vengono persi. `multi: true` va messo su **tutti** i provider del token, così Angular li raccoglie in un array/catena.
+<details>
+<summary>Cosa cambia tra <code>observe: 'body'</code>, <code>'response'</code> e <code>'events'</code>?</summary>
 
-**5.** Cosa indica `HttpErrorResponse.status === 0` e come si ritenta una richiesta?
-> [!success]- Risposta
-> `status === 0` indica un errore **lato client/rete** (offline, CORS, richiesta mai partita): non c'è risposta dal server e `err.error` contiene l'errore JS, non un body del backend. Per ritentare si mette `retry(n)` nella pipe **prima** di `catchError(...)`, che intercetta l'`HttpErrorResponse` e in genere ri-lancia con `throwError(() => ...)`.
+`'body'` (default) fa emettere solo il corpo tipizzato (`T`). `'response'` emette l'intera `HttpResponse<T>`, con `status` e `headers` oltre a `body`. `'events'` emette lo stream di `HttpEvent` (utile con `reportProgress: true` per il progress di upload/download). Cambiare `observe` cambia il **tipo** emesso dall'Observable.
+
+</details>
+
+<details>
+<summary>Perché in un interceptor si clona la richiesta e come si registra un interceptor class-based?</summary>
+
+Perché `HttpRequest` è **immutabile**: per aggiungere header o modificarla si usa `req.clone({ ... })` e si inoltra il clone con `next.handle(...)`. La registrazione avviene sul token **multi** `HTTP_INTERCEPTORS`: `{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }`.
+
+</details>
+
+<details>
+<summary>Cosa succede se si dimentica <code>multi: true</code> su <code>HTTP_INTERCEPTORS</code>?</summary>
+
+Il provider senza `multi: true` **sovrascrive** i precedenti invece di accodarsi: si registra un solo interceptor e gli altri vengono persi. `multi: true` va messo su **tutti** i provider del token, così Angular li raccoglie in un array/catena.
+
+</details>
+
+<details>
+<summary>Cosa indica <code>HttpErrorResponse.status === 0</code> e come si ritenta una richiesta?</summary>
+
+`status === 0` indica un errore **lato client/rete** (offline, CORS, richiesta mai partita): non c'è risposta dal server e `err.error` contiene l'errore JS, non un body del backend. Per ritentare si mette `retry(n)` nella pipe **prima** di `catchError(...)`, che intercetta l'`HttpErrorResponse` e in genere ri-lancia con `throwError(() => ...)`.
+
+</details>
 
 **In sintesi:**
 - Setup classico via `HttpClientModule` (root); moderno via `provideHttpClient()` (deprecazione di `HttpClientModule` dalla v18).

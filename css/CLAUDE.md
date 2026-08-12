@@ -62,11 +62,14 @@ Collegamenti: [[NN-altro-modulo]]
 
 ## Ripasso lampo
 
-**1.** <domanda>
-> [!success]- Risposta
-> <risposta concisa>
+<details>
+<summary><domanda></summary>
 
-(3-6 domande, ognuna con risposta in callout pieghevole)
+<risposta concisa>
+
+</details>
+
+(3-6 domande, ognuna in un `<details>` pieghevole; backtick della domanda resi come `<code>` nel `<summary>`)
 
 **In sintesi:** <2-4 bullet con i punti chiave.>
 ```
@@ -74,7 +77,7 @@ Collegamenti: [[NN-altro-modulo]]
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) **senza** titolo custom.
 - `> [!info]` mantiene il titolo quando è informativo: usare `> [!info] Legacy` per la sintassi vecchia, `> [!info] Baseline` per lo stato di supporto di una feature moderna.
-- `> [!success]- Risposta` (collassato, nota il `-`) per le risposte del **Ripasso lampo**.
+- Le risposte del **Ripasso lampo** vanno in un **`<details>`** (`<summary>` = domanda), stile Q&A unico del monorepo — non nel callout.
 
 ## Aggiunte e modernizzazioni
 Contenuto aggiunto perché utile/moderno **non** va marcato ogni volta (il modern-first è la linea editoriale): si integra e basta. Riservare la nota in corsivo ➕ (es. `➕ *Approfondimento — …*`) solo per **tangenti/approfondimenti** che escono dal filo del modulo.

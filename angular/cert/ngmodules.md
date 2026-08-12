@@ -114,21 +114,33 @@ const routes: Routes = [
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza fra `imports` ed `exports` di un `@NgModule`?
-> [!success]- Risposta
-> `imports` elenca **altri NgModule** di cui si vogliono usare gli export dentro questo modulo. `exports` elenca cosa **questo** modulo rende visibile ai moduli che lo importano. Ciò che è solo `declarations` (senza export) resta privato.
+<details>
+<summary>Qual è la differenza fra <code>imports</code> ed <code>exports</code> di un <code>@NgModule</code>?</summary>
 
-**2.** Perché `BrowserModule` va importato una volta sola e cosa si usa nei feature module?
-> [!success]- Risposta
-> `BrowserModule` include i provider necessari all'avvio dell'app nel browser e va importato **solo nel root module**; reimportarlo altrove dà un errore a runtime. Nei feature module si importa **`CommonModule`**, che fornisce `ngIf`/`ngFor`/`ngSwitch` e le pipe comuni senza i provider di bootstrap.
+`imports` elenca **altri NgModule** di cui si vogliono usare gli export dentro questo modulo. `exports` elenca cosa **questo** modulo rende visibile ai moduli che lo importano. Ciò che è solo `declarations` (senza export) resta privato.
 
-**3.** Cosa succede ai `providers` di un modulo caricato in lazy loading?
-> [!success]- Risposta
-> Il modulo lazy ottiene un **injector figlio**: i suoi `providers` producono **istanze separate**, non i singleton del root injector. Per un singleton condiviso si usa `providedIn: 'root'`.
+</details>
 
-**4.** A cosa serve la convenzione `forRoot()`/`forChild()`?
-> [!success]- Risposta
-> A distinguere il modulo che **registra i provider globali** (`forRoot()`, una volta nel root) da chi aggiunge solo configurazione (`forChild()`, nei feature module) **senza** ri-registrare i service. Il caso tipico è `RouterModule`.
+<details>
+<summary>Perché <code>BrowserModule</code> va importato una volta sola e cosa si usa nei feature module?</summary>
+
+`BrowserModule` include i provider necessari all'avvio dell'app nel browser e va importato **solo nel root module**; reimportarlo altrove dà un errore a runtime. Nei feature module si importa **`CommonModule`**, che fornisce `ngIf`/`ngFor`/`ngSwitch` e le pipe comuni senza i provider di bootstrap.
+
+</details>
+
+<details>
+<summary>Cosa succede ai <code>providers</code> di un modulo caricato in lazy loading?</summary>
+
+Il modulo lazy ottiene un **injector figlio**: i suoi `providers` producono **istanze separate**, non i singleton del root injector. Per un singleton condiviso si usa `providedIn: 'root'`.
+
+</details>
+
+<details>
+<summary>A cosa serve la convenzione <code>forRoot()</code>/<code>forChild()</code>?</summary>
+
+A distinguere il modulo che **registra i provider globali** (`forRoot()`, una volta nel root) da chi aggiunge solo configurazione (`forChild()`, nei feature module) **senza** ri-registrare i service. Il caso tipico è `RouterModule`.
+
+</details>
 
 **In sintesi:**
 - Un `@NgModule` raggruppa dichiarabili (`declarations`) e le espone (`exports`), importa altri moduli (`imports`), offre service (`providers`) e — nel root — indica il componente radice (`bootstrap`).

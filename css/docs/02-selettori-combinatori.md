@@ -237,29 +237,47 @@ Collegamenti: [[01-fondamenti]] · [[03-pseudo-classi-elementi]] · [[04-cascade
 
 ## Ripasso lampo
 
-**1.** Che differenza c'è tra `.a.b` e `.a .b`?
-> [!success]- Risposta
-> `.a.b` (senza spazio) colpisce **un unico elemento** che ha *entrambe* le classi. `.a .b` (con spazio) è un combinatore discendente: colpisce un `.b` che sta *dentro* un `.a`.
+<details>
+<summary>Che differenza c'è tra <code>.a.b</code> e <code>.a .b</code>?</summary>
 
-**2.** Come si selezionano tutti i link che finiscono in `.pdf`, ignorando maiuscole/minuscole?
-> [!success]- Risposta
-> Con il selettore di attributo "suffisso" e il flag case-insensitive: `a[href$=".pdf" i]`.
+`.a.b` (senza spazio) colpisce **un unico elemento** che ha *entrambe* le classi. `.a .b` (con spazio) è un combinatore discendente: colpisce un `.b` che sta *dentro* un `.a`.
 
-**3.** Qual è la differenza tra i combinatori `+` e `~`?
-> [!success]- Risposta
-> `h2 + p` colpisce **solo il primo** `<p>` immediatamente successivo a un fratello `h2`. `h2 ~ p` colpisce **tutti** i `<p>` fratelli che seguono un `h2`. Entrambi guardano solo in avanti tra fratelli dello stesso genitore.
+</details>
 
-**4.** `:is()` e `:where()` selezionano allo stesso modo: perché sceglierne uno o l'altro?
-> [!success]- Risposta
-> Per la **specificità**. `:is()` prende quella del suo argomento più specifico; `:where()` vale sempre **zero**, quindi è facilissimo da sovrascrivere. `:where()` è perfetto per stili di default/reset; `:is()` quando serve mantenere il peso del selettore.
+<details>
+<summary>Come si selezionano tutti i link che finiscono in <code>.pdf</code>, ignorando maiuscole/minuscole?</summary>
 
-**5.** Nel nesting nativo, perché `&.active` e `& .active` danno risultati diversi?
-> [!success]- Risposta
-> `&.active` (attaccato) → `.parent.active`: lo *stesso* elemento con la classe `active`. `& .active` (con spazio) → `.parent .active`: un discendente. Per pseudo-classi e classi sullo stesso elemento il `&` è obbligatorio.
+Con il selettore di attributo "suffisso" e il flag case-insensitive: `a[href$=".pdf" i]`.
 
-**6.** Cosa significa che le liste di `:is()`/`:where()` sono "forgiving"?
-> [!success]- Risposta
-> Se un selettore nella lista è invalido o non supportato, viene **ignorato** e gli altri continuano a valere. In una lista separata da virgole classica, invece, un solo selettore invalido scarta l'intera regola.
+</details>
+
+<details>
+<summary>Qual è la differenza tra i combinatori <code>+</code> e <code>~</code>?</summary>
+
+`h2 + p` colpisce **solo il primo** `<p>` immediatamente successivo a un fratello `h2`. `h2 ~ p` colpisce **tutti** i `<p>` fratelli che seguono un `h2`. Entrambi guardano solo in avanti tra fratelli dello stesso genitore.
+
+</details>
+
+<details>
+<summary><code>:is()</code> e <code>:where()</code> selezionano allo stesso modo: perché sceglierne uno o l'altro?</summary>
+
+Per la **specificità**. `:is()` prende quella del suo argomento più specifico; `:where()` vale sempre **zero**, quindi è facilissimo da sovrascrivere. `:where()` è perfetto per stili di default/reset; `:is()` quando serve mantenere il peso del selettore.
+
+</details>
+
+<details>
+<summary>Nel nesting nativo, perché <code>&.active</code> e <code>& .active</code> danno risultati diversi?</summary>
+
+`&.active` (attaccato) → `.parent.active`: lo *stesso* elemento con la classe `active`. `& .active` (con spazio) → `.parent .active`: un discendente. Per pseudo-classi e classi sullo stesso elemento il `&` è obbligatorio.
+
+</details>
+
+<details>
+<summary>Cosa significa che le liste di <code>:is()</code>/<code>:where()</code> sono "forgiving"?</summary>
+
+Se un selettore nella lista è invalido o non supportato, viene **ignorato** e gli altri continuano a valere. In una lista separata da virgole classica, invece, un solo selettore invalido scarta l'intera regola.
+
+</details>
 
 **In sintesi:**
 - I mattoni base sono **tipo**, **classe** (uso quotidiano), **id** (evitare per lo stile, alta specificità) e **universale** `*`; concatenando classi senza spazio (`.a.b`) si combinano più condizioni sullo stesso elemento.

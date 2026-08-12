@@ -150,29 +150,47 @@ Non sostituisce nemmeno le **interviste agli stakeholder** (product manager, svi
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza fra il coupling derivato dagli `import`/`export` e il **change coupling**? Cosa rivela quest'ultimo che il primo non vede?
-> [!success]- Risposta
-> Il coupling da `import`/`export` deriva dalle dipendenze statiche fra moduli ECMAScript: si legge dal codice. Il **change coupling** è ricavato dai **dati storici** del version control e identifica i file **cambiati frequentemente insieme**: dipendenze *logiche* non ovvie che gli import non mostrano, e che possono segnalare boundary deboli (cambiamenti che attraversano più domini).
+<details>
+<summary>Qual è la differenza fra il coupling derivato dagli <code>import</code>/<code>export</code> e il **change coupling**? Cosa rivela quest'ultimo che il primo non vede?</summary>
 
-**2.** Perché un alto **code churn** non è di per sé critico? Come si pesa contro la complessità e quale metrica usa Detective (vs. Code Scene)?
-> [!success]- Risposta
-> Un file semplice (es. la lista delle voci di menu) può avere churn alto senza essere problematico, perché la sua struttura non è complessa. Per questo Tornhill pesa il **churn × complessità** → **Hotspot Score**. Detective supporta **entrambe** le metriche di complessità: **Lines of Code** (usata da Tornhill nel libro) e **cyclomatic complexity di McCabe** (usata nel prodotto Code Scene).
+Il coupling da `import`/`export` deriva dalle dipendenze statiche fra moduli ECMAScript: si legge dal codice. Il **change coupling** è ricavato dai **dati storici** del version control e identifica i file **cambiati frequentemente insieme**: dipendenze *logiche* non ovvie che gli import non mostrano, e che possono segnalare boundary deboli (cambiamenti che attraversano più domini).
 
-**3.** Cos'è l'**Hotspot Score** e perché non esiste una soglia universale? Perché Detective aggrega a livello di modulo e omette le medie?
-> [!success]- Risposta
-> È churn × complessità: più alto = area potenzialmente più rischiosa. Non c'è una soglia assoluta che indichi un problema serio; lo score è solo una **proposta di prioritizzazione**. Detective aggrega **per modulo** per il suo taglio architetturale (vedi a colpo d'occhio quanti file sopra soglia ha ogni dominio), e **omette le medie** così che tanti file non critici non nascondano i pochi critici.
+</details>
 
-**4.** Cosa afferma **Conway's Law** e cos'è l'**Inverse Conway Maneuver**? Come si verifica se l'allineamento team/dominio è davvero praticato?
-> [!success]- Risposta
-> Conway's Law: la struttura del software riflette le strutture di comunicazione di chi lo costruisce (tre team → compilatore a tre fasi). L'**Inverse Conway Maneuver** ribalta la cosa: si allinea volutamente la struttura dei team all'architettura desiderata (un team per dominio → low coupling, meno carico cognitivo). Per verificare se è praticato si **analizzano i commit** (dopo aver mappato gli username ai team), controllando se ciascun team si concentra davvero sul proprio dominio.
+<details>
+<summary>Perché un alto **code churn** non è di per sé critico? Come si pesa contro la complessità e quale metrica usa Detective (vs. Code Scene)?</summary>
 
-**5.** Quali sono i quattro layer tipici (`feature` / `ui` / `domain` / `util`) e perché un layer può comunicare solo con quelli inferiori?
-> [!success]- Risposta
-> `feature` = smart component (controllo del caso d'uso, non riusabili); `ui` = dumb/presentational component (riusabili, indipendenti dal caso d'uso); `domain` = tipi degli oggetti + servizi verso il backend; `util` = funzioni ausiliarie (authentication, logging). Il vincolo "solo verso layer inferiori" rende la comunicazione **unidirezionale**, così non si formano catene di dipendenze né **cicli**.
+Un file semplice (es. la lista delle voci di menu) può avere churn alto senza essere problematico, perché la sua struttura non è complessa. Per questo Tornhill pesa il **churn × complessità** → **Hotspot Score**. Detective supporta **entrambe** le metriche di complessità: **Lines of Code** (usata da Tornhill nel libro) e **cyclomatic complexity di McCabe** (usata nel prodotto Code Scene).
 
-**6.** Perché la forensic analysis NON sostituisce una valutazione qualitativa dell'architettura?
-> [!success]- Risposta
-> È solo un pezzo del puzzle: i valori non sono target, ma indicatori di aree da esaminare. Restano da valutare qualitativamente cose che i dati storici non dicono — se l'architettura supporta gli obiettivi (performance, security, usability), se le decisioni sui temi chiave sono deliberate, se i pattern hanno ancora senso, se i trade-off iniziali reggono. E non sostituisce le **interviste agli stakeholder**, che spesso hanno una forte intuizione delle aree critiche.
+</details>
+
+<details>
+<summary>Cos'è l'**Hotspot Score** e perché non esiste una soglia universale? Perché Detective aggrega a livello di modulo e omette le medie?</summary>
+
+È churn × complessità: più alto = area potenzialmente più rischiosa. Non c'è una soglia assoluta che indichi un problema serio; lo score è solo una **proposta di prioritizzazione**. Detective aggrega **per modulo** per il suo taglio architetturale (vedi a colpo d'occhio quanti file sopra soglia ha ogni dominio), e **omette le medie** così che tanti file non critici non nascondano i pochi critici.
+
+</details>
+
+<details>
+<summary>Cosa afferma **Conway's Law** e cos'è l'**Inverse Conway Maneuver**? Come si verifica se l'allineamento team/dominio è davvero praticato?</summary>
+
+Conway's Law: la struttura del software riflette le strutture di comunicazione di chi lo costruisce (tre team → compilatore a tre fasi). L'**Inverse Conway Maneuver** ribalta la cosa: si allinea volutamente la struttura dei team all'architettura desiderata (un team per dominio → low coupling, meno carico cognitivo). Per verificare se è praticato si **analizzano i commit** (dopo aver mappato gli username ai team), controllando se ciascun team si concentra davvero sul proprio dominio.
+
+</details>
+
+<details>
+<summary>Quali sono i quattro layer tipici (<code>feature</code> / <code>ui</code> / <code>domain</code> / <code>util</code>) e perché un layer può comunicare solo con quelli inferiori?</summary>
+
+`feature` = smart component (controllo del caso d'uso, non riusabili); `ui` = dumb/presentational component (riusabili, indipendenti dal caso d'uso); `domain` = tipi degli oggetti + servizi verso il backend; `util` = funzioni ausiliarie (authentication, logging). Il vincolo "solo verso layer inferiori" rende la comunicazione **unidirezionale**, così non si formano catene di dipendenze né **cicli**.
+
+</details>
+
+<details>
+<summary>Perché la forensic analysis NON sostituisce una valutazione qualitativa dell'architettura?</summary>
+
+È solo un pezzo del puzzle: i valori non sono target, ma indicatori di aree da esaminare. Restano da valutare qualitativamente cose che i dati storici non dicono — se l'architettura supporta gli obiettivi (performance, security, usability), se le decisioni sui temi chiave sono deliberate, se i pattern hanno ancora senso, se i trade-off iniziali reggono. E non sostituisce le **interviste agli stakeholder**, che spesso hanno una forte intuizione delle aree critiche.
+
+</details>
 
 **In sintesi:**
 - La **forensic analysis** guarda non solo al codice attuale ma alla sua **storia nel version control**, scoprendo pattern non ovvi; richiede una repo **Git**.

@@ -190,25 +190,40 @@ Collegamenti: [[01-fondamenti]] · [[02-selettori-combinatori]] · [[03-pseudo-c
 
 ## Ripasso lampo
 
-**1.** In quale ordine la cascade decide il valore vincente?
-> [!success]- Risposta
-> **1) Origine e importanza** (browser/utente/autore + `!important`, layer inclusi) → **2) specificità** → **3) ordine di apparizione** (vince l'ultima). Si passa al criterio successivo solo in caso di parità.
+<details>
+<summary>In quale ordine la cascade decide il valore vincente?</summary>
 
-**2.** Un selettore con 11 classi (`0-11-0`) batte uno con un solo id (`1-0-0`)?
-> [!success]- Risposta
-> **No.** Le colonne si confrontano da sinistra e non "riportano": la colonna ID (`1` vs `0`) decide subito a favore dell'id. Nessun numero di classi raggiunge un id.
+**1) Origine e importanza** (browser/utente/autore + `!important`, layer inclusi) → **2) specificità** → **3) ordine di apparizione** (vince l'ultima). Si passa al criterio successivo solo in caso di parità.
 
-**3.** Che differenza c'è fra `unset` e `revert`?
-> [!success]- Risposta
-> `unset` = `inherit` se la proprietà eredita, altrimenti `initial` (valore della spec). `revert` invece torna al valore dell'**origine precedente**, di norma il foglio di stile **user-agent** del browser.
+</details>
 
-**4.** Perché `@layer` è preferibile a `!important` per gestire i conflitti?
-> [!success]- Risposta
-> `@layer` stabilisce una priorità **esplicita fra gruppi di stili** che agisce *prima* della specificità, senza inquinare le singole dichiarazioni. `!important` invece innesca una escalation (si sovrascrive solo con altro `!important`) e rende il CSS fragile.
+<details>
+<summary>Un selettore con 11 classi (<code>0-11-0</code>) batte uno con un solo id (<code>1-0-0</code>)?</summary>
 
-**5.** Qual è la specificità di `:where(#app) .btn` e di `#app .btn`?
-> [!success]- Risposta
-> `:where(#app) .btn` → **`0-1-0`** (l'`#app` dentro `:where()` non conta). `#app .btn` → **`1-1-0`**. `:where()` azzera sempre il proprio contenuto: utile per stili base sovrascrivibili.
+**No.** Le colonne si confrontano da sinistra e non "riportano": la colonna ID (`1` vs `0`) decide subito a favore dell'id. Nessun numero di classi raggiunge un id.
+
+</details>
+
+<details>
+<summary>Che differenza c'è fra <code>unset</code> e <code>revert</code>?</summary>
+
+`unset` = `inherit` se la proprietà eredita, altrimenti `initial` (valore della spec). `revert` invece torna al valore dell'**origine precedente**, di norma il foglio di stile **user-agent** del browser.
+
+</details>
+
+<details>
+<summary>Perché <code>@layer</code> è preferibile a <code>!important</code> per gestire i conflitti?</summary>
+
+`@layer` stabilisce una priorità **esplicita fra gruppi di stili** che agisce *prima* della specificità, senza inquinare le singole dichiarazioni. `!important` invece innesca una escalation (si sovrascrive solo con altro `!important`) e rende il CSS fragile.
+
+</details>
+
+<details>
+<summary>Qual è la specificità di <code>:where(#app) .btn</code> e di <code>#app .btn</code>?</summary>
+
+`:where(#app) .btn` → **`0-1-0`** (l'`#app` dentro `:where()` non conta). `#app .btn` → **`1-1-0`**. `:where()` azzera sempre il proprio contenuto: utile per stili base sovrascrivibili.
+
+</details>
 
 **In sintesi:**
 - La cascade risolve i conflitti in tre passi: **origine/importanza → specificità → ordine**; si scende solo a parità.

@@ -122,25 +122,40 @@ Il modello di sicurezza vale per i **dati**, non per i **template**: costruire u
 
 ## Ripasso lampo
 
-**1.** Cosa significa che la sanitizzazione di Angular è "contestuale" e quali sono i contesti?
-> [!success]- Risposta
-> Il modo in cui un valore viene ripulito dipende da **dove** finisce nel DOM: i contesti sono **HTML** (`[innerHTML]`), **Style** (CSS), **URL** (link/`href`) e **Resource URL** (risorse eseguite come codice, es. `<iframe src>`). Il resource URL non è sanitizzabile e richiede un bypass esplicito; non esiste sanitizzazione per il contesto *script*.
+<details>
+<summary>Cosa significa che la sanitizzazione di Angular è "contestuale" e quali sono i contesti?</summary>
 
-**2.** Bindare `[innerHTML]="userInput"` è pericoloso?
-> [!success]- Risposta
-> No di per sé: Angular sanitizza il valore nel contesto HTML, mantenendo il markup sicuro e rimuovendo `<script>`, attributi `on*` e tag pericolosi. Diventa pericoloso solo se si aggira la sanitizzazione con `bypassSecurityTrustHtml` su dati non fidati.
+Il modo in cui un valore viene ripulito dipende da **dove** finisce nel DOM: i contesti sono **HTML** (`[innerHTML]`), **Style** (CSS), **URL** (link/`href`) e **Resource URL** (risorse eseguite come codice, es. `<iframe src>`). Il resource URL non è sanitizzabile e richiede un bypass esplicito; non esiste sanitizzazione per il contesto *script*.
 
-**3.** Quando si usa `DomSanitizer.bypassSecurityTrust…` e quale è la regola d'oro?
-> [!success]- Risposta
-> Solo quando serve iniettare un valore che la sanitizzazione bloccherebbe (tipicamente un resource URL costante). La regola d'oro: **mai** su input dell'utente — significa disattivare la difesa anti-XSS — e chiamarlo il più vicino possibile alla sorgente del valore fidato.
+</details>
 
-**4.** Come protegge `HttpClient` dall'XSRF e cosa deve fare il server?
-> [!success]- Risposta
-> Un interceptor legge un token dal cookie `XSRF-TOKEN` (default) e lo rispedisce nell'header `X-XSRF-TOKEN` sulle richieste mutanti same-origin. Poiché solo il codice same-origin legge il cookie, un sito terzo non può replicarlo. Il **server** deve però impostare il cookie e **validare** l'header a ogni richiesta mutante: senza la controparte server la difesa non esiste.
+<details>
+<summary>Bindare <code>[innerHTML]="userInput"</code> è pericoloso?</summary>
 
-**5.** A cosa serve la CSP in un'app Angular e cosa richiede a runtime?
-> [!success]- Risposta
-> È una difesa *defense-in-depth* contro l'XSS: dichiara le sorgenti ammesse per script e stili. La policy minima per Angular usa `script-src`/`style-src` con un **nonce**, che va fornito al framework (token `CSP_NONCE` o attributo `ngCspNonce` sulla root) perché marchi gli `<style>` iniettati a runtime. In aggiunta si raccomandano i **Trusted Types**.
+No di per sé: Angular sanitizza il valore nel contesto HTML, mantenendo il markup sicuro e rimuovendo `<script>`, attributi `on*` e tag pericolosi. Diventa pericoloso solo se si aggira la sanitizzazione con `bypassSecurityTrustHtml` su dati non fidati.
+
+</details>
+
+<details>
+<summary>Quando si usa <code>DomSanitizer.bypassSecurityTrust…</code> e quale è la regola d'oro?</summary>
+
+Solo quando serve iniettare un valore che la sanitizzazione bloccherebbe (tipicamente un resource URL costante). La regola d'oro: **mai** su input dell'utente — significa disattivare la difesa anti-XSS — e chiamarlo il più vicino possibile alla sorgente del valore fidato.
+
+</details>
+
+<details>
+<summary>Come protegge <code>HttpClient</code> dall'XSRF e cosa deve fare il server?</summary>
+
+Un interceptor legge un token dal cookie `XSRF-TOKEN` (default) e lo rispedisce nell'header `X-XSRF-TOKEN` sulle richieste mutanti same-origin. Poiché solo il codice same-origin legge il cookie, un sito terzo non può replicarlo. Il **server** deve però impostare il cookie e **validare** l'header a ogni richiesta mutante: senza la controparte server la difesa non esiste.
+
+</details>
+
+<details>
+<summary>A cosa serve la CSP in un'app Angular e cosa richiede a runtime?</summary>
+
+È una difesa *defense-in-depth* contro l'XSS: dichiara le sorgenti ammesse per script e stili. La policy minima per Angular usa `script-src`/`style-src` con un **nonce**, che va fornito al framework (token `CSP_NONCE` o attributo `ngCspNonce` sulla root) perché marchi gli `<style>` iniettati a runtime. In aggiunta si raccomandano i **Trusted Types**.
+
+</details>
 
 **In sintesi:**
 - Angular **sanitizza per contesto** (HTML, Style, URL, Resource URL) ogni valore che entra nel DOM; l'**interpolation** fa escaping (testo, mai markup) e `[innerHTML]` resta sanitizzato.

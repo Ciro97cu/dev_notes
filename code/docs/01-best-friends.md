@@ -88,30 +88,40 @@ E qui sta il punto che regge tutto il libro. Due tipi di lampo, due suoni vocali
 
 ## Ripasso lampo
 
-**1.** Perché il sistema "conta i lampi" (A = 1, B = 2, …, Z = 26) è tanto meno efficiente del Morse?
+<details>
+<summary>Perché il sistema "conta i lampi" (A = 1, B = 2, …, Z = 26) è tanto meno efficiente del Morse?</summary>
 
-> [!success]- Risposta
-> Perché ignora la frequenza delle lettere e usa tanti lampi tutti uguali: "How are you?" richiede 131 lampi contro i 32 del Morse, e per di più non prevede la punteggiatura. Il Morse usa due tipi di segnale e dà i codici corti alle lettere più comuni.
+Perché ignora la frequenza delle lettere e usa tanti lampi tutti uguali: "How are you?" richiede 131 lampi contro i 32 del Morse, e per di più non prevede la punteggiatura. Il Morse usa due tipi di segnale e dà i codici corti alle lettere più comuni.
 
-**2.** Qual è la differenza tra punto e linea, e quali sono le regole di pausa?
+</details>
 
-> [!success]- Risposta
-> La linea dura circa **tre volte** il punto. Le pause sono relative al punto: **un punto** tra i segnali della stessa lettera, circa **una linea** (tre punti) tra lettere diverse, circa **due linee** tra parole.
+<details>
+<summary>Qual è la differenza tra punto e linea, e quali sono le regole di pausa?</summary>
 
-**3.** Che cos'è un "codice" nella definizione del libro?
+La linea dura circa **tre volte** il punto. Le pause sono relative al punto: **un punto** tra i segnali della stessa lettera, circa **una linea** (tre punti) tra lettere diverse, circa **due linee** tra parole.
 
-> [!success]- Risposta
-> Un sistema per **trasferire informazioni**: tra persone, tra persone e computer, o all'interno del computer stesso. Parlato, lingue dei segni, scrittura, Braille, stenografia e Morse sono tutti codici; se ne usano tanti perché ognuno è comodo dove gli altri non lo sono.
+</details>
 
-**4.** Perché E e T hanno i codici Morse più corti?
+<details>
+<summary>Che cos'è un "codice" nella definizione del libro?</summary>
 
-> [!success]- Risposta
-> Perché sono le lettere più **frequenti** in inglese. Assegnare le sequenze più brevi ai simboli più comuni rende il codice più efficiente da trasmettere.
+Un sistema per **trasferire informazioni**: tra persone, tra persone e computer, o all'interno del computer stesso. Parlato, lingue dei segni, scrittura, Braille, stenografia e Morse sono tutti codici; se ne usano tanti perché ognuno è comodo dove gli altri non lo sono.
 
-**5.** Qual è "la parola chiave" del capitolo, e perché conta?
+</details>
 
-> [!success]- Risposta
-> **Due.** Due tipi di lampo (o due suoni, o due stati qualunque), combinati opportunamente, bastano a rappresentare ogni informazione. È l'anticipazione diretta del **binario**, il tema del capitolo 2.
+<details>
+<summary>Perché E e T hanno i codici Morse più corti?</summary>
+
+Perché sono le lettere più **frequenti** in inglese. Assegnare le sequenze più brevi ai simboli più comuni rende il codice più efficiente da trasmettere.
+
+</details>
+
+<details>
+<summary>Qual è "la parola chiave" del capitolo, e perché conta?</summary>
+
+**Due.** Due tipi di lampo (o due suoni, o due stati qualunque), combinati opportunamente, bastano a rappresentare ogni informazione. È l'anticipazione diretta del **binario**, il tema del capitolo 2.
+
+</details>
 
 **In sintesi:**
 

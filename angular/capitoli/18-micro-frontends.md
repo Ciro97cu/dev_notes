@@ -463,37 +463,61 @@ Il platform team **non deve essere grande**: l'autore ha visto **3 persone suppo
 
 ## Ripasso lampo
 
-**1.** Qual è la motivazione *principale* dietro i Micro Frontends nella pratica, oltre ai benefici tecnici? Perché mischiare più framework è di norma un anti-pattern ma a volte utile?
-> [!success]- Risposta
-> La motivazione principale è la **team autonomy**: i team non si bloccano a vicenda e possono **deployare indipendentemente** in qualsiasi momento — vitale nei progetti multi-team con catene di comunicazione lunghe. Mischiare più framework client-side nella stessa app è un anti-pattern (incoerenza, overhead), ma può abilitare un **percorso di migrazione** verso un nuovo stack, dato che in azienda le soluzioni software sopravvivono allo stack tecnologico medio.
+<details>
+<summary>Qual è la motivazione *principale* dietro i Micro Frontends nella pratica, oltre ai benefici tecnici? Perché mischiare più framework è di norma un anti-pattern ma a volte utile?</summary>
 
-**2.** Cosa significa passare da *compile-time integration* a *runtime integration* e perché è la sfida più grande?
-> [!success]- Risposta
-> Significa che app sviluppate e deployate **separatamente** non vengono più integrate e verificate dal compiler in fase di build, ma iniziano a interagire solo **a runtime**. È la sfida più grande perché non si prevedono facilmente i conflitti che emergono lì, e i framework SPA come Angular sono pensati per **ottimizzazioni a compile-time** (type check, tree-shaking, build CLI ottimizzata): l'uso off-label per i micro frontend mina alcuni di quei vantaggi.
+La motivazione principale è la **team autonomy**: i team non si bloccano a vicenda e possono **deployare indipendentemente** in qualsiasi momento — vitale nei progetti multi-team con catene di comunicazione lunghe. Mischiare più framework client-side nella stessa app è un anti-pattern (incoerenza, overhead), ma può abilitare un **percorso di migrazione** verso un nuovo stack, dato che in azienda le soluzioni software sopravvivono allo stack tecnologico medio.
 
-**3.** Cos'è un Self-Contained System e come integra i frontend? Pro e contro rispetto a Native Federation?
-> [!success]- Risposta
-> Un **SCS** separa il sistema in tanti sistemi indipendenti, molto debolmente accoppiati, ciascuno con backend + frontend (buoni candidati: Domain/Bounded Context DDD). I frontend si integrano **unicamente via hyperlink**. **Pro**: semplicissimo, zero infrastruttura, integra anche stack diversi. **Contro**: si perdono i benefici della SPA — seguire un link carica un'intera nuova app e scarica la precedente con tutto il suo stato. Native Federation costa più infrastruttura ma dà un'integrazione fine mantenendo la continuità della SPA.
+</details>
 
-**4.** Cosa fa Native Federation in più rispetto a Module Federation, e quali tecnologie browser-native usa? Quante volte viene caricato Angular?
-> [!success]- Risposta
-> Native Federation porta lo stesso mental model di Module Federation **fuori da webpack**: stesse opzioni e configurazione, ma funziona con qualsiasi build tool (gira prima e dopo il bundler, collegato via adapter). Usa tecnologie **browser-native**: **ECMAScript modules** e **Import Maps**, per supporto a lungo termine. Le dipendenze condivise (come **Angular**) vengono caricate **una sola volta**, anche se più micro frontend le usano.
+<details>
+<summary>Cosa significa passare da *compile-time integration* a *runtime integration* e perché è la sfida più grande?</summary>
 
-**5.** Differenza tra `loadComponent`/`loadRemoteModule` ed esporre una router config con `loadChildren`? Perché serve un default export (o `then`)?
-> [!success]- Risposta
-> `loadComponent` + `loadRemoteModule('miles', './Component')` carica un **singolo componente** esposto dal remote. Esporre una **router config** sotto `./Routes` e instradarla con `loadChildren` carica un'**intera feature** di più componenti (più pratico). In entrambi i casi `loadRemoteModule` ritorna l'**intero modulo ECMAScript**: il router prende il **default export**, quindi il componente/le routes devono essere `export default`; in mancanza, si punta all'export desiderato con una clausola `.then(m => m.MilesOverview)` o `.then(m => m.routes)`.
+Significa che app sviluppate e deployate **separatamente** non vengono più integrate e verificate dal compiler in fase di build, ma iniziano a interagire solo **a runtime**. È la sfida più grande perché non si prevedono facilmente i conflitti che emergono lì, e i framework SPA come Angular sono pensati per **ottimizzazioni a compile-time** (type check, tree-shaking, build CLI ottimizzata): l'uso off-label per i micro frontend mina alcuni di quei vantaggi.
 
-**6.** Come si integra un micro frontend basato su un *altro* framework? Ruolo di `@angular/elements`, `createCustomElement` e del componente `Wrapper`.
-> [!success]- Risposta
-> Si **astrae** il micro frontend dentro un **Web Component** a grana grossa. Con `@angular/elements`, `createCustomElement` trasforma uno standalone component in web component, registrato via `customElements.define('mfe2-root', ...)` (il nome deve contenere un trattino). Lato shell, poiché l'Angular Router lavora solo con Angular Components, il `Wrapper` (un componente Angular) carica il Web Component via `loadRemoteModule` in un `effect` e ne crea l'elemento HTML con `document.createElement`, ricevendo la config via `input` per essere riutilizzabile.
+</details>
 
-**7.** Quando un Web Component ha route proprie, come si evita che i due router litighino? Cosa fanno `UrlMatcher`/`startsWith` e `connectRouter`?
-> [!success]- Risposta
-> Si dà a ogni route del micro frontend un **prefisso univoco** e si dice alla shell di guardare **solo il primo segmento**: in base a quello carica il micro frontend, che decide il routing sui segmenti restanti. Un **`UrlMatcher`** (es. `startsWith`) dice al router se attivare la route in base al prefisso. **`connectRouter`** sincronizza il router del micro frontend con l'URL del browser, così non vanno fuori sync. Attenzione: `startsWith` e `connectRouter` sono helper di esempio (`module-federation-plugin-example`), non API ufficiali.
+<details>
+<summary>Cos'è un Self-Contained System e come integra i frontend? Pro e contro rispetto a Native Federation?</summary>
 
-**8.** Perché un platform team è il vero costo dei Micro Frontends?
-> [!success]- Risposta
-> Perché l'architettura Micro Frontend **non arriva premendo un pulsante** né con `ng new`: qualcuno deve sviluppare le soluzioni (combinare più router in una shell, ecc.) e offrire **guideline, esempi e librerie interne**. Il costo è prevalentemente **organizzativo**, non solo tecnico — anche se il team può essere piccolo (3 persone per 80+ feature team). Senza quel supporto l'architettura non regge allo scaling.
+Un **SCS** separa il sistema in tanti sistemi indipendenti, molto debolmente accoppiati, ciascuno con backend + frontend (buoni candidati: Domain/Bounded Context DDD). I frontend si integrano **unicamente via hyperlink**. **Pro**: semplicissimo, zero infrastruttura, integra anche stack diversi. **Contro**: si perdono i benefici della SPA — seguire un link carica un'intera nuova app e scarica la precedente con tutto il suo stato. Native Federation costa più infrastruttura ma dà un'integrazione fine mantenendo la continuità della SPA.
+
+</details>
+
+<details>
+<summary>Cosa fa Native Federation in più rispetto a Module Federation, e quali tecnologie browser-native usa? Quante volte viene caricato Angular?</summary>
+
+Native Federation porta lo stesso mental model di Module Federation **fuori da webpack**: stesse opzioni e configurazione, ma funziona con qualsiasi build tool (gira prima e dopo il bundler, collegato via adapter). Usa tecnologie **browser-native**: **ECMAScript modules** e **Import Maps**, per supporto a lungo termine. Le dipendenze condivise (come **Angular**) vengono caricate **una sola volta**, anche se più micro frontend le usano.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>loadComponent</code>/<code>loadRemoteModule</code> ed esporre una router config con <code>loadChildren</code>? Perché serve un default export (o <code>then</code>)?</summary>
+
+`loadComponent` + `loadRemoteModule('miles', './Component')` carica un **singolo componente** esposto dal remote. Esporre una **router config** sotto `./Routes` e instradarla con `loadChildren` carica un'**intera feature** di più componenti (più pratico). In entrambi i casi `loadRemoteModule` ritorna l'**intero modulo ECMAScript**: il router prende il **default export**, quindi il componente/le routes devono essere `export default`; in mancanza, si punta all'export desiderato con una clausola `.then(m => m.MilesOverview)` o `.then(m => m.routes)`.
+
+</details>
+
+<details>
+<summary>Come si integra un micro frontend basato su un *altro* framework? Ruolo di <code>@angular/elements</code>, <code>createCustomElement</code> e del componente <code>Wrapper</code>.</summary>
+
+Si **astrae** il micro frontend dentro un **Web Component** a grana grossa. Con `@angular/elements`, `createCustomElement` trasforma uno standalone component in web component, registrato via `customElements.define('mfe2-root', ...)` (il nome deve contenere un trattino). Lato shell, poiché l'Angular Router lavora solo con Angular Components, il `Wrapper` (un componente Angular) carica il Web Component via `loadRemoteModule` in un `effect` e ne crea l'elemento HTML con `document.createElement`, ricevendo la config via `input` per essere riutilizzabile.
+
+</details>
+
+<details>
+<summary>Quando un Web Component ha route proprie, come si evita che i due router litighino? Cosa fanno <code>UrlMatcher</code>/<code>startsWith</code> e <code>connectRouter</code>?</summary>
+
+Si dà a ogni route del micro frontend un **prefisso univoco** e si dice alla shell di guardare **solo il primo segmento**: in base a quello carica il micro frontend, che decide il routing sui segmenti restanti. Un **`UrlMatcher`** (es. `startsWith`) dice al router se attivare la route in base al prefisso. **`connectRouter`** sincronizza il router del micro frontend con l'URL del browser, così non vanno fuori sync. Attenzione: `startsWith` e `connectRouter` sono helper di esempio (`module-federation-plugin-example`), non API ufficiali.
+
+</details>
+
+<details>
+<summary>Perché un platform team è il vero costo dei Micro Frontends?</summary>
+
+Perché l'architettura Micro Frontend **non arriva premendo un pulsante** né con `ng new`: qualcuno deve sviluppare le soluzioni (combinare più router in una shell, ecc.) e offrire **guideline, esempi e librerie interne**. Il costo è prevalentemente **organizzativo**, non solo tecnico — anche se il team può essere piccolo (3 persone per 80+ feature team). Senza quel supporto l'architettura non regge allo scaling.
+
+</details>
 
 **In sintesi:**
 - I Micro Frontends spezzano il sistema in app **deployabili separatamente** → autonomia dei team e rilasci più rapidi, ma al prezzo della **runtime integration** e di confini verticali difficili da definire.

@@ -781,33 +781,54 @@ Collegamenti: [[model-signal]] · [[two-way-binding]] · [[signal-input|input()]
 
 ## Ripasso lampo
 
-**1.** Perché lo stato della form parte da un [[linked-signal|linkedSignal]] e non direttamente dal signal dello store?
-> [!success]- Risposta
-> Lo store pubblica dati **read-only** per garantire la consistenza, ma la form deve modificarli con un two-way binding. Serve quindi una **copia di lavoro locale** scrivibile: il `linkedSignal` la deriva dallo store (qui via `normalizeFlight(this.store.flight())`) e si ri-aggancia quando la sorgente cambia, restando però modificabile dalla form.
+<details>
+<summary>Perché lo stato della form parte da un [[linked-signal|linkedSignal]] e non direttamente dal signal dello store?</summary>
 
-**2.** Cos'è un FieldTree e come accedi a `value`/`dirty`/`invalid`/`errors` di un campo annidato?
-> [!success]- Risposta
-> Un **FieldTree** è come un signal profondamente annidato: ogni proprietà del dato è un signal che invocato (`flightForm.date()`) restituisce il field state, a sua volta fatto di signal. Es.: `flightForm.date().value()`, `.dirty()`, `.invalid()`, `.errors()`. Per i livelli annidati segui la struttura del dato: `flightForm.aircraft.type().value()`, `flightForm.prices[0].amount().value()`.
+Lo store pubblica dati **read-only** per garantire la consistenza, ma la form deve modificarli con un two-way binding. Serve quindi una **copia di lavoro locale** scrivibile: il `linkedSignal` la deriva dallo store (qui via `normalizeFlight(this.store.flight())`) e si ri-aggancia quando la sorgente cambia, restando però modificabile dalla form.
 
-**3.** Differenza fra `apply`, `applyEach` e `applyWhen`/`applyWhenValue`?
-> [!success]- Risposta
-> `apply(path, schema)` include un altro schema su un **oggetto** (anche annidato, es. `apply(path.aircraft, aircraftSchema)`). `applyEach(path.array, schema)` applica lo schema a **ogni elemento** di un array. `applyWhenValue(path, predicate, schema)` applica uno schema solo se il **valore** soddisfa il predicato; `applyWhen` è la variante in cui il predicato riceve il `ctx` (con `valueOf`/`stateOf`) invece del solo valore.
+</details>
 
-**4.** Cosa fa la direttiva `formRoot` e come si definisce la logica di submit? A cosa serve `ignoreValidators`?
-> [!success]- Risposta
-> `formRoot` fa tre cose: disabilita il submit nativo, disabilita la validazione HTML del browser e collega l'`action` all'evento submit (funziona anche con Invio). La logica si definisce nel nodo `submission` delle opzioni di `form()` (`action`, `onInvalid`). `ignoreValidators` controlla quando il submit può partire: `none` (default, bloccato se un validatore fallisce o è pending), `pending` (ignora solo i pending), `all` (ignora tutto).
+<details>
+<summary>Cos'è un FieldTree e come accedi a <code>value</code>/<code>dirty</code>/<code>invalid</code>/<code>errors</code> di un campo annidato?</summary>
 
-**5.** Come scrivi un multi-field validator (es. `from` ≠ `to`) e dove finisce l'errore? Cosa cambia con `validateTree`?
-> [!success]- Risposta
-> Lo si mette su un **livello genitore comune** con `validate(path, ctx => ...)` e si confrontano i campi via `ctx.fieldTree.from().value()` (o `ctx.valueOf(path.from)`). L'errore resta associato al **livello validato** (il flight intero), quindi va letto da `flightForm().errors()`/`errorSummary()`, non da `from`/`to`. Con `validateTree` si possono invece definire errori per **tutti i livelli**, indicando il campo affetto nella proprietà `field` del `ValidationError`; potendo restituire un array, un tree validator emette anche più errori su campi diversi, il che lo rende adatto alle regole complesse.
+Un **FieldTree** è come un signal profondamente annidato: ogni proprietà del dato è un signal che invocato (`flightForm.date()`) restituisce il field state, a sua volta fatto di signal. Es.: `flightForm.date().value()`, `.dirty()`, `.invalid()`, `.errors()`. Per i livelli annidati segui la struttura del dato: `flightForm.aircraft.type().value()`, `flightForm.prices[0].amount().value()`.
 
-**6.** Perché Signal Forms rifiuta `undefined`? Come si gestiscono i campi opzionali?
-> [!success]- Risposta
-> Perché `undefined` significa semanticamente "il campo non esiste": `form()` non saprebbe che dovrebbe esistere né troverebbe i suoi metadata. Si distingue allora il **domain model** (campo opzionale/`undefined`) dal **form model** (campo sempre presente, con default sensato come `delay: 0`), e si convertono i due con funzioni di mapping (`toFlightFormModel`/`toFlightDomainModel`), tipicamente collegate da un `linkedSignal`.
+</details>
 
-**7.** Quale interfaccia deve implementare un custom control per funzionare con `[formField]`, e cosa richiede?
-> [!success]- Risposta
-> **`FormValueControl<T>`**: richiede soltanto un `model()` chiamato `value` (più proprietà opzionali come `disabled` ed `errors`). Sostituisce il vecchio Control Value Accessor. Per le checkbox esiste l'interfaccia dedicata `FormCheckboxControl` (con `checked` obbligatoria e `value` opzionale).
+<details>
+<summary>Differenza fra <code>apply</code>, <code>applyEach</code> e <code>applyWhen</code>/<code>applyWhenValue</code>?</summary>
+
+`apply(path, schema)` include un altro schema su un **oggetto** (anche annidato, es. `apply(path.aircraft, aircraftSchema)`). `applyEach(path.array, schema)` applica lo schema a **ogni elemento** di un array. `applyWhenValue(path, predicate, schema)` applica uno schema solo se il **valore** soddisfa il predicato; `applyWhen` è la variante in cui il predicato riceve il `ctx` (con `valueOf`/`stateOf`) invece del solo valore.
+
+</details>
+
+<details>
+<summary>Cosa fa la direttiva <code>formRoot</code> e come si definisce la logica di submit? A cosa serve <code>ignoreValidators</code>?</summary>
+
+`formRoot` fa tre cose: disabilita il submit nativo, disabilita la validazione HTML del browser e collega l'`action` all'evento submit (funziona anche con Invio). La logica si definisce nel nodo `submission` delle opzioni di `form()` (`action`, `onInvalid`). `ignoreValidators` controlla quando il submit può partire: `none` (default, bloccato se un validatore fallisce o è pending), `pending` (ignora solo i pending), `all` (ignora tutto).
+
+</details>
+
+<details>
+<summary>Come scrivi un multi-field validator (es. <code>from</code> ≠ <code>to</code>) e dove finisce l'errore? Cosa cambia con <code>validateTree</code>?</summary>
+
+Lo si mette su un **livello genitore comune** con `validate(path, ctx => ...)` e si confrontano i campi via `ctx.fieldTree.from().value()` (o `ctx.valueOf(path.from)`). L'errore resta associato al **livello validato** (il flight intero), quindi va letto da `flightForm().errors()`/`errorSummary()`, non da `from`/`to`. Con `validateTree` si possono invece definire errori per **tutti i livelli**, indicando il campo affetto nella proprietà `field` del `ValidationError`; potendo restituire un array, un tree validator emette anche più errori su campi diversi, il che lo rende adatto alle regole complesse.
+
+</details>
+
+<details>
+<summary>Perché Signal Forms rifiuta <code>undefined</code>? Come si gestiscono i campi opzionali?</summary>
+
+Perché `undefined` significa semanticamente "il campo non esiste": `form()` non saprebbe che dovrebbe esistere né troverebbe i suoi metadata. Si distingue allora il **domain model** (campo opzionale/`undefined`) dal **form model** (campo sempre presente, con default sensato come `delay: 0`), e si convertono i due con funzioni di mapping (`toFlightFormModel`/`toFlightDomainModel`), tipicamente collegate da un `linkedSignal`.
+
+</details>
+
+<details>
+<summary>Quale interfaccia deve implementare un custom control per funzionare con <code>[formField]</code>, e cosa richiede?</summary>
+
+**`FormValueControl<T>`**: richiede soltanto un `model()` chiamato `value` (più proprietà opzionali come `disabled` ed `errors`). Sostituisce il vecchio Control Value Accessor. Per le checkbox esiste l'interfaccia dedicata `FormCheckboxControl` (con `checked` obbligatoria e `value` opzionale).
+
+</details>
 
 **In sintesi:**
 - **Signal Forms** modella stato, valori e validazione come signal: tutto reattivo e componibile (API moderna ma **sperimentale**, package `@angular/forms/signals`).

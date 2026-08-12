@@ -199,25 +199,40 @@ La pipe `async` collega direttamente uno stream al template: si sottoscrive a un
 
 ## Ripasso lampo
 
-**1.** A cosa serve `trackBy` in `*ngFor`?
-> [!success]- Risposta
-> Fornisce una chiave stabile per identificare gli elementi. Senza, Angular li identifica per riferimento e, se l'array viene rimpiazzato, ricrea tutti i nodi DOM. Con `trackBy` riusa i nodi esistenti: meglio per performance, focus e animazioni.
+<details>
+<summary>A cosa serve <code>trackBy</code> in <code>*ngFor</code>?</summary>
 
-**2.** Qual è la differenza fra pipe pura e impura? Quando serve un'impura?
-> [!success]- Risposta
-> La pura ricalcola **solo** al cambio di riferimento dell'input (memoizzata, efficiente). L'impura (`pure: false`) ricalcola a **ogni** ciclo di CD. Serve quando l'input muta in-place senza cambiare riferimento (es. filtrare un array mutato), ma è costosa.
+Fornisce una chiave stabile per identificare gli elementi. Senza, Angular li identifica per riferimento e, se l'array viene rimpiazzato, ricrea tutti i nodi DOM. Con `trackBy` riusa i nodi esistenti: meglio per performance, focus e animazioni.
 
-**3.** Come si annidano due structural directive sullo stesso elemento?
-> [!success]- Risposta
-> Non si può: su un elemento c'è al massimo un `*`. Si usa un `<ng-container>` come wrapper logico (senza nodo DOM) per ospitare la seconda direttiva, es. `<ng-container *ngFor="...">` con dentro `<tr *ngIf="...">`.
+</details>
 
-**4.** Cosa fa la pipe `async` oltre a mostrare il valore?
-> [!success]- Risposta
-> Sottoscrive automaticamente l'`Observable`/`Promise`, ne mostra l'ultimo valore emesso e **si disiscrive** alla distruzione del componente. Elimina la gestione manuale di `subscribe`/`unsubscribe` e i relativi memory leak.
+<details>
+<summary>Qual è la differenza fra pipe pura e impura? Quando serve un'impura?</summary>
 
-**5.** Differenza fra `<ng-container>` e `<ng-template>`?
-> [!success]- Risposta
-> `<ng-container>` è un raggruppamento logico renderizzato subito, che **non** aggiunge nodi al DOM. `<ng-template>` definisce un blocco che **non** viene renderizzato finché non è istanziato (da una structural directive o da un `ViewContainerRef`).
+La pura ricalcola **solo** al cambio di riferimento dell'input (memoizzata, efficiente). L'impura (`pure: false`) ricalcola a **ogni** ciclo di CD. Serve quando l'input muta in-place senza cambiare riferimento (es. filtrare un array mutato), ma è costosa.
+
+</details>
+
+<details>
+<summary>Come si annidano due structural directive sullo stesso elemento?</summary>
+
+Non si può: su un elemento c'è al massimo un `*`. Si usa un `<ng-container>` come wrapper logico (senza nodo DOM) per ospitare la seconda direttiva, es. `<ng-container *ngFor="...">` con dentro `<tr *ngIf="...">`.
+
+</details>
+
+<details>
+<summary>Cosa fa la pipe <code>async</code> oltre a mostrare il valore?</summary>
+
+Sottoscrive automaticamente l'`Observable`/`Promise`, ne mostra l'ultimo valore emesso e **si disiscrive** alla distruzione del componente. Elimina la gestione manuale di `subscribe`/`unsubscribe` e i relativi memory leak.
+
+</details>
+
+<details>
+<summary>Differenza fra <code><ng-container></code> e <code><ng-template></code>?</summary>
+
+`<ng-container>` è un raggruppamento logico renderizzato subito, che **non** aggiunge nodi al DOM. `<ng-template>` definisce un blocco che **non** viene renderizzato finché non è istanziato (da una structural directive o da un `ViewContainerRef`).
+
+</details>
 
 **In sintesi:**
 - `*ngIf` (con `then`/`else`), `*ngFor` (`index`/`first`/`last`/`even`/`odd` + `trackBy`) e `*ngSwitch` sono zucchero sui `<ng-template>`; un solo `*` per elemento, `<ng-container>` per annidarli senza wrapper.

@@ -310,29 +310,47 @@ Collegamenti: [[14-transforms]] · [[03-pseudo-classi-elementi]] · [[11-respons
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza di fondo tra una transizione e un'animazione `@keyframes`?
-> [!success]- Risposta
-> Una **transizione** interpola tra due soli stati e ha bisogno di un **trigger** (un cambio di valore, es. `:hover` o una classe). Un'**animazione** definisce una sequenza di più tappe con `@keyframes`, **parte da sola** e può ripetersi (`infinite`) senza alcun trigger.
+<details>
+<summary>Qual è la differenza di fondo tra una transizione e un'animazione <code>@keyframes</code>?</summary>
 
-**2.** Perché per muovere o far comparire un elemento si preferiscono `transform` e `opacity`?
-> [!success]- Risposta
-> Perché sono gestite dal **compositor** (spesso su GPU) senza ricalcolare il layout né ridipingere. Animare `width`, `top`, `margin` ecc. forza reflow e repaint a ogni fotogramma → animazioni a scatti. Dettagli in [[14-transforms]].
+Una **transizione** interpola tra due soli stati e ha bisogno di un **trigger** (un cambio di valore, es. `:hover` o una classe). Un'**animazione** definisce una sequenza di più tappe con `@keyframes`, **parte da sola** e può ripetersi (`infinite`) senza alcun trigger.
 
-**3.** Nello shorthand `transition: transform 300ms 50ms`, cosa sono `300ms` e `50ms`?
-> [!success]- Risposta
-> Il **primo** valore di tempo è sempre la **durata** (`transition-duration`), il **secondo** è il **delay** (`transition-delay`). Quindi 300 ms di durata e 50 ms di ritardo prima di partire.
+</details>
 
-**4.** Un `fade-in` con `@keyframes` da `opacity: 0` a `opacity: 1` sparisce di nuovo appena finisce. Perché, e come si risolve?
-> [!success]- Risposta
-> A fine animazione l'elemento torna allo stato definito nel CSS (fuori dai keyframe). Serve `animation-fill-mode: forwards` (o `both`) per **conservare** l'ultimo keyframe.
+<details>
+<summary>Perché per muovere o far comparire un elemento si preferiscono <code>transform</code> e <code>opacity</code>?</summary>
 
-**5.** Come si rende accessibile un'interfaccia animata rispetto al movimento?
-> [!success]- Risposta
-> Rispettando `@media (prefers-reduced-motion: reduce)`: non togliere tutto, ma offrire un'alternativa sobria (dissolvenze al posto di grandi spostamenti) o azzerare le durate. È Baseline dal 2020.
+Perché sono gestite dal **compositor** (spesso su GPU) senza ricalcolare il layout né ridipingere. Animare `width`, `top`, `margin` ecc. forza reflow e repaint a ogni fotogramma → animazioni a scatti. Dettagli in [[14-transforms]].
 
-**6.** A cosa servono `@starting-style` e `transition-behavior: allow-discrete`?
-> [!success]- Risposta
-> `@starting-style` fornisce i valori **di partenza** per animare l'**entrata** di un elemento (prima renderizzazione o ritorno da `display: none`); `allow-discrete` abilita la transizione sulle proprietà **discrete** come `display`/`overlay`, tenendo l'elemento visibile per tutta l'uscita. Riguardano solo le transizioni, non i `@keyframes`.
+</details>
+
+<details>
+<summary>Nello shorthand <code>transition: transform 300ms 50ms</code>, cosa sono <code>300ms</code> e <code>50ms</code>?</summary>
+
+Il **primo** valore di tempo è sempre la **durata** (`transition-duration`), il **secondo** è il **delay** (`transition-delay`). Quindi 300 ms di durata e 50 ms di ritardo prima di partire.
+
+</details>
+
+<details>
+<summary>Un <code>fade-in</code> con <code>@keyframes</code> da <code>opacity: 0</code> a <code>opacity: 1</code> sparisce di nuovo appena finisce. Perché, e come si risolve?</summary>
+
+A fine animazione l'elemento torna allo stato definito nel CSS (fuori dai keyframe). Serve `animation-fill-mode: forwards` (o `both`) per **conservare** l'ultimo keyframe.
+
+</details>
+
+<details>
+<summary>Come si rende accessibile un'interfaccia animata rispetto al movimento?</summary>
+
+Rispettando `@media (prefers-reduced-motion: reduce)`: non togliere tutto, ma offrire un'alternativa sobria (dissolvenze al posto di grandi spostamenti) o azzerare le durate. È Baseline dal 2020.
+
+</details>
+
+<details>
+<summary>A cosa servono <code>@starting-style</code> e <code>transition-behavior: allow-discrete</code>?</summary>
+
+`@starting-style` fornisce i valori **di partenza** per animare l'**entrata** di un elemento (prima renderizzazione o ritorno da `display: none`); `allow-discrete` abilita la transizione sulle proprietà **discrete** come `display`/`overlay`, tenendo l'elemento visibile per tutta l'uscita. Riguardano solo le transizioni, non i `@keyframes`.
+
+</details>
 
 **In sintesi:**
 - **Transizioni**: interpolano tra due stati su un trigger; shorthand `transition: proprietà durata curva delay`, primo tempo = durata, secondo = delay. Evitare `all`.

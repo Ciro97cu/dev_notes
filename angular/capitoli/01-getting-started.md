@@ -233,29 +233,47 @@ Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal
 
 ## Ripasso lampo
 
-**1.** Che differenza c'è tra `npm i <pkg>` e `ng add <pkg>`?
-> [!success]- Risposta
-> `npm i <pkg>` (alias di `npm install`) si limita a **installare** la libreria. `ng add <pkg>` la installa **e esegue passi di setup aggiuntivi** — es. `ng add @angular/material` configura theming e tipografia di Material nel progetto.
+<details>
+<summary>Che differenza c'è tra <code>npm i <pkg></code> e <code>ng add <pkg></code>?</summary>
 
-**2.** Come si legge e come si aggiorna il valore di un `signal`? Perché si dichiara `readonly`?
-> [!success]- Risposta
-> Lo si **legge chiamandolo come funzione**: `this.title()`. Lo si **aggiorna** con `.set()` (es. `this.title.set('...')`). Si dichiara `readonly` perché i signal **non si rimpiazzano, si aggiornano**: il riferimento all'oggetto signal resta lo stesso, cambia il valore che contiene.
+`npm i <pkg>` (alias di `npm install`) si limita a **installare** la libreria. `ng add <pkg>` la installa **e esegue passi di setup aggiuntivi** — es. `ng add @angular/material` configura theming e tipografia di Material nel progetto.
 
-**3.** Cosa fa `bootstrapApplication` e dove si registrano i servizi globali?
-> [!success]- Risposta
-> In `main.ts`, `bootstrapApplication(App, appConfig)` fa il **bootstrap** del root component, da cui Angular mostra l'intero albero di componenti. I servizi globali si registrano nell'array `providers` di `appConfig` (in `app.config.ts`) tramite **provider functions** come `provideRouter()` e `provideBrowserGlobalErrorListeners()`.
+</details>
 
-**4.** A cosa serve `OnPush` e perché i signal lo rendono conveniente?
-> [!success]- Risposta
-> `OnPush` aggiorna un componente **solo quando i suoi dati cambiano**, invece di ricontrollare l'intera app a ogni ciclo → change detection più efficiente. I signal notificano esplicitamente i cambi di valore, quindi calzano perfettamente con OnPush. Da **Angular 22** è la strategia di default.
+<details>
+<summary>Come si legge e come si aggiorna il valore di un <code>signal</code>? Perché si dichiara <code>readonly</code>?</summary>
 
-**5.** Quali file si guardano per capire root component, bootstrap e start page?
-> [!success]- Risposta
-> Root component: `src/app/app.ts` (logica) e `src/app/app.html` (template). Bootstrap: `src/main.ts` (chiama `bootstrapApplication`) e `src/app/app.config.ts` (i servizi globali). Start page: `src/index.html`, che contiene `<app-root></app-root>` come punto di innesto.
+Lo si **legge chiamandolo come funzione**: `this.title()`. Lo si **aggiorna** con `.set()` (es. `this.title.set('...')`). Si dichiara `readonly` perché i signal **non si rimpiazzano, si aggiornano**: il riferimento all'oggetto signal resta lo stesso, cambia il valore che contiene.
 
-**6.** Perché il libro scrive `changeDetection: ChangeDetectionStrategy.OnPush` esplicitamente se da Angular 22 è già il default?
-> [!success]- Risposta
-> Per due ragioni: rende la scelta **visibile a colpo d'occhio** in ogni componente (codice auto-documentante) e resta **retrocompatibile** con versioni di Angular precedenti alla 22, dove il default non era OnPush — così chi copia gli snippet in un progetto più vecchio ottiene lo stesso comportamento.
+</details>
+
+<details>
+<summary>Cosa fa <code>bootstrapApplication</code> e dove si registrano i servizi globali?</summary>
+
+In `main.ts`, `bootstrapApplication(App, appConfig)` fa il **bootstrap** del root component, da cui Angular mostra l'intero albero di componenti. I servizi globali si registrano nell'array `providers` di `appConfig` (in `app.config.ts`) tramite **provider functions** come `provideRouter()` e `provideBrowserGlobalErrorListeners()`.
+
+</details>
+
+<details>
+<summary>A cosa serve <code>OnPush</code> e perché i signal lo rendono conveniente?</summary>
+
+`OnPush` aggiorna un componente **solo quando i suoi dati cambiano**, invece di ricontrollare l'intera app a ogni ciclo → change detection più efficiente. I signal notificano esplicitamente i cambi di valore, quindi calzano perfettamente con OnPush. Da **Angular 22** è la strategia di default.
+
+</details>
+
+<details>
+<summary>Quali file si guardano per capire root component, bootstrap e start page?</summary>
+
+Root component: `src/app/app.ts` (logica) e `src/app/app.html` (template). Bootstrap: `src/main.ts` (chiama `bootstrapApplication`) e `src/app/app.config.ts` (i servizi globali). Start page: `src/index.html`, che contiene `<app-root></app-root>` come punto di innesto.
+
+</details>
+
+<details>
+<summary>Perché il libro scrive <code>changeDetection: ChangeDetectionStrategy.OnPush</code> esplicitamente se da Angular 22 è già il default?</summary>
+
+Per due ragioni: rende la scelta **visibile a colpo d'occhio** in ogni componente (codice auto-documentante) e resta **retrocompatibile** con versioni di Angular precedenti alla 22, dove il default non era OnPush — così chi copia gli snippet in un progetto più vecchio ottiene lo stesso comportamento.
+
+</details>
 
 **In sintesi:**
 - La CLI genera una struttura professionale con un solo `ng new` (compiler, test, build, ottimizzazioni); `ng serve -o` avvia il dev server con live reload.

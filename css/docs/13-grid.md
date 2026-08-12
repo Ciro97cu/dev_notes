@@ -286,29 +286,47 @@ Collegamenti: [[12-flexbox]] · [[11-responsive]] · [[05-box-model]] · [[09-di
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza di fondo tra Grid e Flexbox?
-> [!success]- Risposta
-> Grid è **bidimensionale** (controlla righe **e** colonne insieme), Flexbox è **unidimensionale** (un asse alla volta, riga *o* colonna). Grid per l'impianto a griglia/di pagina, Flexbox per una singola fila/colonna di elementi. Vedi [[12-flexbox]].
+<details>
+<summary>Qual è la differenza di fondo tra Grid e Flexbox?</summary>
 
-**2.** Cosa rappresenta l'unità `fr` e come interagisce con `auto` e le tracce fisse?
-> [!success]- Risposta
-> `fr` è una **frazione dello spazio libero** rimasto dopo aver assegnato tracce fisse (`px`) e tracce `auto` (dimensionate sul contenuto). `1fr 1fr` divide a metà lo spazio residuo; `2fr 1fr` in rapporto `2:1`.
+Grid è **bidimensionale** (controlla righe **e** colonne insieme), Flexbox è **unidimensionale** (un asse alla volta, riga *o* colonna). Grid per l'impianto a griglia/di pagina, Flexbox per una singola fila/colonna di elementi. Vedi [[12-flexbox]].
 
-**3.** In `repeat(auto-fit, minmax(200px, 1fr))` cosa cambia usando `auto-fill` al posto di `auto-fit`?
-> [!success]- Risposta
-> `auto-fill` crea tutte le colonne che entrano **anche se vuote** (restano a occupare spazio); `auto-fit` **collassa a `0` le tracce vuote**, così gli item presenti si allargano fino a riempire la riga.
+</details>
 
-**4.** Come si fa a far occupare a un item 2 colonne senza sapere la linea finale? E se due item si sovrappongono, cosa decide chi sta sopra?
-> [!success]- Risposta
-> Con `span`: `grid-column: 2 / span 2` (oppure `grid-column-end: span 2`). Se gli item si sovrappongono, lo stacking si controlla con `z-index` ([[09-display-posizionamento]]).
+<details>
+<summary>Cosa rappresenta l'unità <code>fr</code> e come interagisce con <code>auto</code> e le tracce fisse?</summary>
 
-**5.** A cosa servono `justify-items`/`align-items` rispetto a `justify-content`/`align-content`?
-> [!success]- Risposta
-> Il primo gruppo allinea **ogni item dentro la propria cella** (`start`/`center`/`end`/`stretch`, sugli assi inline e block). Il secondo allinea l'**intera griglia dentro il contenitore** quando le tracce non lo riempiono, con in più `space-between`/`space-around`/`space-evenly`.
+`fr` è una **frazione dello spazio libero** rimasto dopo aver assegnato tracce fisse (`px`) e tracce `auto` (dimensionate sul contenuto). `1fr 1fr` divide a metà lo spazio residuo; `2fr 1fr` in rapporto `2:1`.
 
-**6.** Cosa fa `subgrid` e qual è il suo stato di supporto?
-> [!success]- Risposta
-> Fa **ereditare a un grid annidato le tracce (e le linee con nome e i `gap`) del genitore**, invece di crearne di proprie — così i livelli restano allineati (es. header/corpo/footer di più card). È **Baseline** dal 2023, usabile in produzione.
+</details>
+
+<details>
+<summary>In <code>repeat(auto-fit, minmax(200px, 1fr))</code> cosa cambia usando <code>auto-fill</code> al posto di <code>auto-fit</code>?</summary>
+
+`auto-fill` crea tutte le colonne che entrano **anche se vuote** (restano a occupare spazio); `auto-fit` **collassa a `0` le tracce vuote**, così gli item presenti si allargano fino a riempire la riga.
+
+</details>
+
+<details>
+<summary>Come si fa a far occupare a un item 2 colonne senza sapere la linea finale? E se due item si sovrappongono, cosa decide chi sta sopra?</summary>
+
+Con `span`: `grid-column: 2 / span 2` (oppure `grid-column-end: span 2`). Se gli item si sovrappongono, lo stacking si controlla con `z-index` ([[09-display-posizionamento]]).
+
+</details>
+
+<details>
+<summary>A cosa servono <code>justify-items</code>/<code>align-items</code> rispetto a <code>justify-content</code>/<code>align-content</code>?</summary>
+
+Il primo gruppo allinea **ogni item dentro la propria cella** (`start`/`center`/`end`/`stretch`, sugli assi inline e block). Il secondo allinea l'**intera griglia dentro il contenitore** quando le tracce non lo riempiono, con in più `space-between`/`space-around`/`space-evenly`.
+
+</details>
+
+<details>
+<summary>Cosa fa <code>subgrid</code> e qual è il suo stato di supporto?</summary>
+
+Fa **ereditare a un grid annidato le tracce (e le linee con nome e i `gap`) del genitore**, invece di crearne di proprie — così i livelli restano allineati (es. header/corpo/footer di più card). È **Baseline** dal 2023, usabile in produzione.
+
+</details>
 
 **In sintesi:**
 - Grid è il layout **bidimensionale**: `display: grid` sul contenitore, tracce con `grid-template-columns`/`-rows`, unità `fr`, più `repeat()` e `minmax()`; spaziatura con `gap`.

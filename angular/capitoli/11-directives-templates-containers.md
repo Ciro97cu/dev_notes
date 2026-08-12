@@ -845,33 +845,54 @@ Collegamenti: [[inject]] · [[injection-context]] · [[providers]].
 
 ## Ripasso lampo
 
-**1.** Perché si dice che "un componente è solo una directive con un template"? Cosa manca alla `@Directive` rispetto a `@Component`?
-> [!success]- Risposta
-> Un componente è una directive che, in più, **aggiunge una view** agli elementi a cui si applica (definita dal `template`). Per questo la `@Directive` ha quasi tutte le proprietà di `@Component`: mancano solo quelle legate al template — `template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`.
+<details>
+<summary>Perché si dice che "un componente è solo una directive con un template"? Cosa manca alla <code>@Directive</code> rispetto a <code>@Component</code>?</summary>
 
-**2.** A cosa serve `exportAs` e come lo si usa con una template variable?
-> [!success]- Risposta
-> `exportAs` assegna un **nome univoco** alla directive, così la si può referenziare con una template variable quando dietro un elemento ci sono più directive. Con `exportAs: 'clickWithWarning'` scrivi `#cww="clickWithWarning"` e poi chiami i metodi pubblici dell'istanza, es. `cww.handleClick(true)`. Sui componenti di solito è superfluo: Angular assegna già l'istanza alla template variable senza valore esplicito.
+Un componente è una directive che, in più, **aggiunge una view** agli elementi a cui si applica (definita dal `template`). Per questo la `@Directive` ha quasi tutte le proprietà di `@Component`: mancano solo quelle legate al template — `template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`.
 
-**3.** Perché nel `SimpleTooltip` serve `afterRenderEffect` e non un `effect`? E perché `DestroyRef`?
-> [!success]- Risposta
-> `afterRenderEffect` gira **dopo** il render, quando l'host è già posizionato: con un `effect` normale la logica girerebbe troppo presto e il tooltip finirebbe nel posto sbagliato. `DestroyRef.onDestroy(...)` registra il cleanup che rimuove dal DOM gli elementi creati a mano quando la directive viene distrutta, evitando memory leak e nodi orfani.
+</details>
 
-**4.** Fai il desugaring di `*appTableField="let data; provide: 'id'; title: 'Flight Id'"`: cosa diventa, e come si costruiscono i nomi delle proprietà?
-> [!success]- Risposta
-> Diventa un `<ng-template>` con la directive applicata in forma di attributo: `<ng-template appTableField [appTableFieldProvide]="'id'" [appTableFieldTitle]="'Flight Id'" let-data>...</ng-template>`. I separatori `;` sono ignorati; i nomi della microsyntax vengono **prefissati col selector** (`provide` → `appTableFieldProvide`, `title` → `appTableFieldTitle`). `let data` cattura `$implicit`.
+<details>
+<summary>A cosa serve <code>exportAs</code> e come lo si usa con una template variable?</summary>
 
-**5.** Cos'è `$implicit` in un context object e come lo si cattura nel template?
-> [!success]- Risposta
-> `$implicit` è il parametro **"di default"** del context: tiene un valore usabile senza nominare la proprietà. Lo si cattura con `let-x` (senza `="..."`); gli altri parametri vanno nominati esplicitamente (`let-y="text"`). Quindi `let-title="$implicit"` si abbrevia in `let-title`.
+`exportAs` assegna un **nome univoco** alla directive, così la si può referenziare con una template variable quando dietro un elemento ci sono più directive. Con `exportAs: 'clickWithWarning'` scrivi `#cww="clickWithWarning"` e poi chiami i metodi pubblici dell'istanza, es. `cww.handleClick(true)`. Sui componenti di solito è superfluo: Angular assegna già l'istanza alla template variable senza valore esplicito.
 
-**6.** Differenza tra `createEmbeddedView` e `createComponent` su `ViewContainerRef`? E tra `ngTemplateOutlet` e `ngComponentOutlet`?
-> [!success]- Risposta
-> `createEmbeddedView` istanzia un **template** (`TemplateRef`) nel container; `createComponent` istanzia dinamicamente un **componente**. Le directive corrispondenti sono `ngTemplateOutlet` (renderizza un template, con un context object) e `ngComponentOutlet` (renderizza un componente, ricevendone il tipo e un injector).
+</details>
 
-**7.** Nel `DialogService`, come arrivano i dati al componente-dialog e perché serve un injector figlio? Come viene aggiunto l'outlet senza metterlo nel template?
-> [!success]- Risposta
-> I dati arrivano **per DI**: il `DialogOutlet` crea con `Injector.create` un **injector figlio** che fornisce `DIALOG_DATA = event.data` (con `parent` l'injector dell'outlet), e il dialog li legge con `inject(DIALOG_DATA)` — non come `@Input`. L'outlet ricrea e distrugge l'injector ad ogni evento. Senza metterlo nel template, lo si aggiunge via codice con `createComponent(DialogOutlet, ...)` + `appRef.attachView(...)` + `document.body.appendChild(...)`, fatto da `DialogOutletService.ensureOutlet()` (idempotente).
+<details>
+<summary>Perché nel <code>SimpleTooltip</code> serve <code>afterRenderEffect</code> e non un <code>effect</code>? E perché <code>DestroyRef</code>?</summary>
+
+`afterRenderEffect` gira **dopo** il render, quando l'host è già posizionato: con un `effect` normale la logica girerebbe troppo presto e il tooltip finirebbe nel posto sbagliato. `DestroyRef.onDestroy(...)` registra il cleanup che rimuove dal DOM gli elementi creati a mano quando la directive viene distrutta, evitando memory leak e nodi orfani.
+
+</details>
+
+<details>
+<summary>Fai il desugaring di <code>*appTableField="let data; provide: 'id'; title: 'Flight Id'"</code>: cosa diventa, e come si costruiscono i nomi delle proprietà?</summary>
+
+Diventa un `<ng-template>` con la directive applicata in forma di attributo: `<ng-template appTableField [appTableFieldProvide]="'id'" [appTableFieldTitle]="'Flight Id'" let-data>...</ng-template>`. I separatori `;` sono ignorati; i nomi della microsyntax vengono **prefissati col selector** (`provide` → `appTableFieldProvide`, `title` → `appTableFieldTitle`). `let data` cattura `$implicit`.
+
+</details>
+
+<details>
+<summary>Cos'è <code>$implicit</code> in un context object e come lo si cattura nel template?</summary>
+
+`$implicit` è il parametro **"di default"** del context: tiene un valore usabile senza nominare la proprietà. Lo si cattura con `let-x` (senza `="..."`); gli altri parametri vanno nominati esplicitamente (`let-y="text"`). Quindi `let-title="$implicit"` si abbrevia in `let-title`.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>createEmbeddedView</code> e <code>createComponent</code> su <code>ViewContainerRef</code>? E tra <code>ngTemplateOutlet</code> e <code>ngComponentOutlet</code>?</summary>
+
+`createEmbeddedView` istanzia un **template** (`TemplateRef`) nel container; `createComponent` istanzia dinamicamente un **componente**. Le directive corrispondenti sono `ngTemplateOutlet` (renderizza un template, con un context object) e `ngComponentOutlet` (renderizza un componente, ricevendone il tipo e un injector).
+
+</details>
+
+<details>
+<summary>Nel <code>DialogService</code>, come arrivano i dati al componente-dialog e perché serve un injector figlio? Come viene aggiunto l'outlet senza metterlo nel template?</summary>
+
+I dati arrivano **per DI**: il `DialogOutlet` crea con `Injector.create` un **injector figlio** che fornisce `DIALOG_DATA = event.data` (con `parent` l'injector dell'outlet), e il dialog li legge con `inject(DIALOG_DATA)` — non come `@Input`. L'outlet ricrea e distrugge l'injector ad ogni evento. Senza metterlo nel template, lo si aggiunge via codice con `createComponent(DialogOutlet, ...)` + `appRef.attachView(...)` + `document.body.appendChild(...)`, fatto da `DialogOutletService.ensureOutlet()` (idempotente).
+
+</details>
 
 **In sintesi:**
 - Le **directive** sono comportamento riusabile con `input`/`output` e **host bindings/listeners**, senza una view propria; per casi non coperti da astrazioni alte possono fare DOM manipulation controllata (sempre con cleanup via `DestroyRef`).

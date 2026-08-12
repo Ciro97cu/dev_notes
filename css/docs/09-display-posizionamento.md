@@ -218,29 +218,47 @@ Collegamenti: [[05-box-model]] · [[10-sfondi-effetti]] · [[12-flexbox]] · [[1
 
 ## Ripasso lampo
 
-**1.** Che differenza c'è tra `display: none`, `visibility: hidden` e `opacity: 0`?
-> [!success]- Risposta
-> `display: none` rimuove la scatola dal flusso (nessuno spazio, non renderizzata, non interattiva, invisibile agli screen reader). `visibility: hidden` la nasconde ma **ne conserva lo spazio** e non è interattiva. `opacity: 0` la rende trasparente ma **resta presente e attiva**: occupa spazio, è cliccabile/focusabile e viene letta dagli screen reader.
+<details>
+<summary>Che differenza c'è tra <code>display: none</code>, <code>visibility: hidden</code> e <code>opacity: 0</code>?</summary>
 
-**2.** Rispetto a cosa si posiziona un elemento `absolute`, e come si calcola una sua `width: 50%`?
-> [!success]- Risposta
-> Rispetto all'**antenato posizionato più vicino** (primo con `position` diverso da `static`), sul suo **padding box**. `width: 50%` è quindi metà della larghezza di quel containing block. Con `fixed` il riferimento è il **viewport**; con `static`/`relative` è il **genitore diretto**.
+`display: none` rimuove la scatola dal flusso (nessuno spazio, non renderizzata, non interattiva, invisibile agli screen reader). `visibility: hidden` la nasconde ma **ne conserva lo spazio** e non è interattiva. `opacity: 0` la rende trasparente ma **resta presente e attiva**: occupa spazio, è cliccabile/focusabile e viene letta dagli screen reader.
 
-**3.** Ho messo `z-index: 9999` su un elemento ma resta dietro a un altro con `z-index: 2`. Perché?
-> [!success]- Risposta
-> L'elemento è confinato in uno **stacking context** creato da un suo antenato (spesso per un `opacity < 1`, un `transform`, o un `position` con `z-index`). Il `9999` conta solo *dentro* quel contesto: se il contesto padre ha z-index più basso del rivale, il figlio non lo scavalca. Va corretto il livello dove nasce il contesto.
+</details>
 
-**4.** Qual è la differenza tra `overflow: hidden` e `overflow: clip`?
-> [!success]- Risposta
-> Entrambi tagliano il contenuto in eccesso, ma `hidden` crea uno *scroll container* (scorrimento possibile via script/tastiera), mentre `clip` no — è solo un ritaglio, più leggero e senza scorrimento.
+<details>
+<summary>Rispetto a cosa si posiziona un elemento <code>absolute</code>, e come si calcola una sua <code>width: 50%</code>?</summary>
 
-**5.** Cosa serve perché un `position: sticky` si incolli davvero?
-> [!success]- Risposta
-> Almeno una soglia di offset (`top`, `bottom`, ecc.), altrimenti resta `relative`. E nessun antenato deve avere un `overflow` che ne tagli lo scorrimento.
+Rispetto all'**antenato posizionato più vicino** (primo con `position` diverso da `static`), sul suo **padding box**. `width: 50%` è quindi metà della larghezza di quel containing block. Con `fixed` il riferimento è il **viewport**; con `static`/`relative` è il **genitore diretto**.
 
-**6.** Come si contengono i float in un contenitore, oggi?
-> [!success]- Risposta
-> Con **`display: flow-root`** sul contenitore (Baseline): crea un block formatting context che ingloba i float. Sostituisce il vecchio **clearfix** (`::after { content: ""; display: block; clear: both; }`).
+</details>
+
+<details>
+<summary>Ho messo <code>z-index: 9999</code> su un elemento ma resta dietro a un altro con <code>z-index: 2</code>. Perché?</summary>
+
+L'elemento è confinato in uno **stacking context** creato da un suo antenato (spesso per un `opacity < 1`, un `transform`, o un `position` con `z-index`). Il `9999` conta solo *dentro* quel contesto: se il contesto padre ha z-index più basso del rivale, il figlio non lo scavalca. Va corretto il livello dove nasce il contesto.
+
+</details>
+
+<details>
+<summary>Qual è la differenza tra <code>overflow: hidden</code> e <code>overflow: clip</code>?</summary>
+
+Entrambi tagliano il contenuto in eccesso, ma `hidden` crea uno *scroll container* (scorrimento possibile via script/tastiera), mentre `clip` no — è solo un ritaglio, più leggero e senza scorrimento.
+
+</details>
+
+<details>
+<summary>Cosa serve perché un <code>position: sticky</code> si incolli davvero?</summary>
+
+Almeno una soglia di offset (`top`, `bottom`, ecc.), altrimenti resta `relative`. E nessun antenato deve avere un `overflow` che ne tagli lo scorrimento.
+
+</details>
+
+<details>
+<summary>Come si contengono i float in un contenitore, oggi?</summary>
+
+Con **`display: flow-root`** sul contenitore (Baseline): crea un block formatting context che ingloba i float. Sostituisce il vecchio **clearfix** (`::after { content: ""; display: block; clear: both; }`).
+
+</details>
 
 **In sintesi:**
 - `display` sceglie il tipo di scatola: **block** (va a capo, rispetta width/height), **inline** (scorre nel testo, ignora width/height e margini verticali), **inline-block** (ibrido), **none** (sparisce dal flusso). `flex`/`grid` → [[12-flexbox]]/[[13-grid]].

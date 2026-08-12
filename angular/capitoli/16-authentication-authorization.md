@@ -244,45 +244,61 @@ Collegamenti: [[12-initialization-route-changes]] (auth guard come usability; `a
 
 ## Ripasso lampo
 
-**1.** Cosa fanno i tre attributi `HttpOnly`, `Secure`, `SameSite` e chi li imposta?
+<details>
+<summary>Cosa fanno i tre attributi <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite</code> e chi li imposta?</summary>
 
-> [!success]- Risposta
-> `HttpOnly`: il cookie **non è leggibile da JavaScript** (no furto diretto). `Secure`: il cookie viaggia **solo su HTTPS**. `SameSite`: limita l'invio del cookie nelle richieste **cross-origin**. Li imposta il **server** quando emette il cookie; il client non può influenzarli.
+`HttpOnly`: il cookie **non è leggibile da JavaScript** (no furto diretto). `Secure`: il cookie viaggia **solo su HTTPS**. `SameSite`: limita l'invio del cookie nelle richieste **cross-origin**. Li imposta il **server** quando emette il cookie; il client non può influenzarli.
 
-**2.** Come previene `HttpClient` il CSRF out of the box? Quali nomi di cookie/header usa di default e come li personalizzi?
+</details>
 
-> [!success]- Risposta
-> Alla load `HttpClient` legge il token dal cookie `XSRF-TOKEN`, ne memorizza il valore e lo rispedisce a ogni richiesta nell'header `X-XSRF-TOKEN`. Il server emette il cookie e verifica l'header (con un token nuovo e imprevedibile dopo ogni login). Per personalizzare i nomi: `withXsrfConfiguration({ cookieName, headerName })` dentro `provideHttpClient`.
+<details>
+<summary>Come previene <code>HttpClient</code> il CSRF out of the box? Quali nomi di cookie/header usa di default e come li personalizzi?</summary>
 
-**3.** Perché il server non deve rifiutare le richieste prive di header `Origin`/`Referer`?
+Alla load `HttpClient` legge il token dal cookie `XSRF-TOKEN`, ne memorizza il valore e lo rispedisce a ogni richiesta nell'header `X-XSRF-TOKEN`. Il server emette il cookie e verifica l'header (con un token nuovo e imprevedibile dopo ogni login). Per personalizzare i nomi: `withXsrfConfiguration({ cookieName, headerName })` dentro `provideHttpClient`.
 
-> [!success]- Risposta
-> Perché quegli header possono mancare per **motivi legittimi**: privacy tool, estensioni del browser e proxy aziendali li rimuovono, e alcuni client vecchi/bloccati non li inviano. L'assenza va trattata come **inconcludente**; rifiutare taglierebbe fuori utenti validi.
+</details>
 
-**4.** Qual è la differenza tra **access token** (OAuth 2) e **ID token** (OIDC)? Che formato ha sempre l'ID token?
+<details>
+<summary>Perché il server non deve rifiutare le richieste prive di header <code>Origin</code>/<code>Referer</code>?</summary>
 
-> [!success]- Risposta
-> L'**access token** serve al client per accedere al **backend** (i resource server) per conto dell'utente, e può anche non essere leggibile dal client. L'**ID token** (introdotto da OIDC) permette al client di leggere **direttamente** le info utente. L'ID token è **sempre un JSON Web Token (JWT)**, firmabile e/o cifrabile.
+Perché quegli header possono mancare per **motivi legittimi**: privacy tool, estensioni del browser e proxy aziendali li rimuovono, e alcuni client vecchi/bloccati non li inviano. L'assenza va trattata come **inconcludente**; rifiutare taglierebbe fuori utenti validi.
 
-**5.** Cosa indicano i claim `nbf`, `exp`, `aud`, `iss`, `sub`? Cosa significa `alg: RS256`?
+</details>
 
-> [!success]- Risposta
-> `nbf` (not before) / `exp` (expiration) = finestra di **validità** (UNIX timestamp). `aud` = **audience**, le parti per cui il token è emesso. `iss` = **issuer**, chi l'ha emesso. `sub` = **subject**, il soggetto descritto (qui uno user ID). `RS256` = hash **SHA-256** sui claim + firma digitale **RSA** (asimmetrica): si firma con chiave privata, si verifica con chiave pubblica.
+<details>
+<summary>Qual è la differenza tra **access token** (OAuth 2) e **ID token** (OIDC)? Che formato ha sempre l'ID token?</summary>
 
-**6.** Quale flow si raccomanda oggi per le SPA e quale è deprecato? A cosa serve PKCE?
+L'**access token** serve al client per accedere al **backend** (i resource server) per conto dell'utente, e può anche non essere leggibile dal client. L'**ID token** (introdotto da OIDC) permette al client di leggere **direttamente** le info utente. L'ID token è **sempre un JSON Web Token (JWT)**, firmabile e/o cifrabile.
 
-> [!success]- Risposta
-> Oggi si raccomanda l'**Authorization Code Flow + PKCE**; l'**Implicit Flow** (originariamente pensato per le SPA) è **deprecato** con OAuth 2.1. **PKCE** (Proof Key for Code Exchange) lega lo scambio del code a un `code_verifier`/`code_challenge` generato dal client, così un authorization code intercettato non basta a ottenere il token.
+</details>
 
-**7.** Perché OAuth 2 client-side è rischioso e perché i refresh token sono vietati nel browser?
+<details>
+<summary>Cosa indicano i claim <code>nbf</code>, <code>exp</code>, <code>aud</code>, <code>iss</code>, <code>sub</code>? Cosa significa <code>alg: RS256</code>?</summary>
 
-> [!success]- Risposta
-> L'access token è **solo una stringa** senza storage sicuro nel browser: un'iniezione XSS può rubarlo (gli injection attack figurano da anni in alto nella OWASP Top 10). Inoltre non c'è un buon modo di rinfrescare i token client-side. Un **refresh token** rubato consente di impersonare l'utente **a lungo termine**, perciò OAuth 2 **non ne consente l'uso nei browser**.
+`nbf` (not before) / `exp` (expiration) = finestra di **validità** (UNIX timestamp). `aud` = **audience**, le parti per cui il token è emesso. `iss` = **issuer**, chi l'ha emesso. `sub` = **subject**, il soggetto descritto (qui uno user ID). `RS256` = hash **SHA-256** sui claim + firma digitale **RSA** (asimmetrica): si firma con chiave privata, si verifica con chiave pubblica.
 
-**8.** Come funziona il pattern server-side OAuth 2 / BFF e cosa vede il browser?
+</details>
 
-> [!success]- Risposta
-> Il flow OAuth 2 gira **sul server**; access e refresh token restano in una **session server-side** dietro il gateway/BFF (Authentication Gateway). Tutte le chiamate del client passano per il gateway, che ottiene/rinfresca i token e li inoltra al resource server. Il browser riceve **solo un cookie HTTP-only** di sessione: non vede mai i token, quindi molti attacchi non si applicano.
+<details>
+<summary>Quale flow si raccomanda oggi per le SPA e quale è deprecato? A cosa serve PKCE?</summary>
+
+Oggi si raccomanda l'**Authorization Code Flow + PKCE**; l'**Implicit Flow** (originariamente pensato per le SPA) è **deprecato** con OAuth 2.1. **PKCE** (Proof Key for Code Exchange) lega lo scambio del code a un `code_verifier`/`code_challenge` generato dal client, così un authorization code intercettato non basta a ottenere il token.
+
+</details>
+
+<details>
+<summary>Perché OAuth 2 client-side è rischioso e perché i refresh token sono vietati nel browser?</summary>
+
+L'access token è **solo una stringa** senza storage sicuro nel browser: un'iniezione XSS può rubarlo (gli injection attack figurano da anni in alto nella OWASP Top 10). Inoltre non c'è un buon modo di rinfrescare i token client-side. Un **refresh token** rubato consente di impersonare l'utente **a lungo termine**, perciò OAuth 2 **non ne consente l'uso nei browser**.
+
+</details>
+
+<details>
+<summary>Come funziona il pattern server-side OAuth 2 / BFF e cosa vede il browser?</summary>
+
+Il flow OAuth 2 gira **sul server**; access e refresh token restano in una **session server-side** dietro il gateway/BFF (Authentication Gateway). Tutte le chiamate del client passano per il gateway, che ottiene/rinfresca i token e li inoltra al resource server. Il browser riceve **solo un cookie HTTP-only** di sessione: non vede mai i token, quindi molti attacchi non si applicano.
+
+</details>
 
 **In sintesi:**
 

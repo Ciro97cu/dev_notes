@@ -752,29 +752,47 @@ Fornire un solo esempio (**one-shot prompting**) migliora la performance del mod
 
 ## Ripasso lampo
 
-**1.** Perché la API key dell'LLM non va nel frontend e cosa permette di fare `transformRequestOptions` nel backend?
-> [!success]- Risposta
-> Una key nel frontend verrebbe pubblicata sul web ed esposta a chiunque; si interpone perciò un backend proxy snello tra frontend e LLM, e la key vive solo lì. `transformRequestOptions` permette al backend di **integrare o sovrascrivere** le opzioni mandate dal frontend (es. forzare il modello economico `gemini-2.5-flash`, imporre una system instruction che limita l'ambito): è il punto in cui si applicano i guardrail server-side e si controllano i costi.
+<details>
+<summary>Perché la API key dell'LLM non va nel frontend e cosa permette di fare <code>transformRequestOptions</code> nel backend?</summary>
 
-**2.** Cosa distingue `chatResource`, `uiChatResource` e `structuredCompletionResource`? Quale è stateless e perché?
-> [!success]- Risposta
-> `chatResource` = chat testuale con tool calling. `uiChatResource` = drop-in di `chatResource` che oltre ai tool fa **rispondere con componenti** (generative UI). Entrambe sono conversazioni: mantengono la chat history e la rimandano al modello a ogni richiesta. `structuredCompletionResource` è **stateless**: non è una conversazione ma una **singola** richiesta→risposta (qui un oggetto con messaggio + codice generato), quindi non serve trascinarsi dietro la history.
+Una key nel frontend verrebbe pubblicata sul web ed esposta a chiunque; si interpone perciò un backend proxy snello tra frontend e LLM, e la key vive solo lì. `transformRequestOptions` permette al backend di **integrare o sovrascrivere** le opzioni mandate dal frontend (es. forzare il modello economico `gemini-2.5-flash`, imporre una system instruction che limita l'ambito): è il punto in cui si applicano i guardrail server-side e si controllano i costi.
 
-**3.** Cosa definisce `createTool` (name/description/schema/handler) e perché la `description` è critica per l'LLM? Skillet descrive anche il valore di ritorno?
-> [!success]- Risposta
-> `createTool` definisce `name` (univoco, valido come identificatore TS), `description`, `schema` Skillet degli argomenti e `handler` (esegue il tool, può iniettare con `inject` e restituire valori al modello). La `description` (e i testi nello schema) è ciò con cui l'LLM **decide se il tool è rilevante** per il task. Skillet **non** descrive il valore di ritorno dei tool del `chatResource`: per informare il modello sulla struttura del risultato si scrive testo libero nella `description`.
+</details>
 
-**4.** Cos'è la generative UI con `exposeComponent` + `hb-render-message`? A cosa serve `emulateStructuredOutput`?
-> [!success]- Risposta
-> `exposeComponent` descrive un componente Angular per l'LLM (`name`, `description` su quando usarlo, schema Skillet di ogni `input`); l'LLM risponde scegliendo i componenti via **structured output** (JSON), che `hb-render-message` renderizza nella chat. `emulateStructuredOutput: true` è il fallback per i modelli (es. Gemini) che **non supportano structured output + tool calling insieme**: Hashbrown definisce uno pseudo-tool con cui il modello seleziona i componenti.
+<details>
+<summary>Cosa distingue <code>chatResource</code>, <code>uiChatResource</code> e <code>structuredCompletionResource</code>? Quale è stateless e perché?</summary>
 
-**5.** Differenza tra one-shot e few-shot prompting? Dove si possono mettere gli esempi e cosa fa il tag template `prompt`?
-> [!success]- Risposta
-> **One-shot** = un solo esempio nel prompt; **few-shot** = più esempi. Migliorano la qualità delle risposte, soprattutto dei modelli più deboli. Gli esempi si mettono nel **system prompt** della resource e/o dentro la `description` di un input (es. per inferire lo `status`). Il tag template `prompt` valida gli esempi (in un dialetto XML) contro i componenti **registrati**, evitando esempi che citano componenti/parametri inesistenti; funziona però **solo** per il system prompt della resource, non per le descrizioni dei componenti né se il prompt è sovrascritto lato server.
+`chatResource` = chat testuale con tool calling. `uiChatResource` = drop-in di `chatResource` che oltre ai tool fa **rispondere con componenti** (generative UI). Entrambe sono conversazioni: mantengono la chat history e la rimandano al modello a ogni richiesta. `structuredCompletionResource` è **stateless**: non è una conversazione ma una **singola** richiesta→risposta (qui un oggetto con messaggio + codice generato), quindi non serve trascinarsi dietro la history.
 
-**6.** Nel code generation, che ruolo hanno `createRuntime`, `createRuntimeFunction` e `createToolJavaScript`? Perché l'esecuzione avviene in sandbox?
-> [!success]- Risposta
-> `createRuntimeFunction` definisce una singola funzione che il codice generato può chiamare (`name`, `description`, `args`, `result` schematizzato, `handler`) — es. `loadFlights` (source) e `generateChart` (sink). `createRuntime` raccoglie queste funzioni e crea la runtime JS. `createToolJavaScript` registra la runtime come **tool** della resource, così l'LLM può inoltrarle il codice. L'esecuzione è in **sandbox** per sicurezza: il codice generato dall'LLM non ha accesso diretto all'app, solo all'**allow-list** di funzioni esposte.
+</details>
+
+<details>
+<summary>Cosa definisce <code>createTool</code> (name/description/schema/handler) e perché la <code>description</code> è critica per l'LLM? Skillet descrive anche il valore di ritorno?</summary>
+
+`createTool` definisce `name` (univoco, valido come identificatore TS), `description`, `schema` Skillet degli argomenti e `handler` (esegue il tool, può iniettare con `inject` e restituire valori al modello). La `description` (e i testi nello schema) è ciò con cui l'LLM **decide se il tool è rilevante** per il task. Skillet **non** descrive il valore di ritorno dei tool del `chatResource`: per informare il modello sulla struttura del risultato si scrive testo libero nella `description`.
+
+</details>
+
+<details>
+<summary>Cos'è la generative UI con <code>exposeComponent</code> + <code>hb-render-message</code>? A cosa serve <code>emulateStructuredOutput</code>?</summary>
+
+`exposeComponent` descrive un componente Angular per l'LLM (`name`, `description` su quando usarlo, schema Skillet di ogni `input`); l'LLM risponde scegliendo i componenti via **structured output** (JSON), che `hb-render-message` renderizza nella chat. `emulateStructuredOutput: true` è il fallback per i modelli (es. Gemini) che **non supportano structured output + tool calling insieme**: Hashbrown definisce uno pseudo-tool con cui il modello seleziona i componenti.
+
+</details>
+
+<details>
+<summary>Differenza tra one-shot e few-shot prompting? Dove si possono mettere gli esempi e cosa fa il tag template <code>prompt</code>?</summary>
+
+**One-shot** = un solo esempio nel prompt; **few-shot** = più esempi. Migliorano la qualità delle risposte, soprattutto dei modelli più deboli. Gli esempi si mettono nel **system prompt** della resource e/o dentro la `description` di un input (es. per inferire lo `status`). Il tag template `prompt` valida gli esempi (in un dialetto XML) contro i componenti **registrati**, evitando esempi che citano componenti/parametri inesistenti; funziona però **solo** per il system prompt della resource, non per le descrizioni dei componenti né se il prompt è sovrascritto lato server.
+
+</details>
+
+<details>
+<summary>Nel code generation, che ruolo hanno <code>createRuntime</code>, <code>createRuntimeFunction</code> e <code>createToolJavaScript</code>? Perché l'esecuzione avviene in sandbox?</summary>
+
+`createRuntimeFunction` definisce una singola funzione che il codice generato può chiamare (`name`, `description`, `args`, `result` schematizzato, `handler`) — es. `loadFlights` (source) e `generateChart` (sink). `createRuntime` raccoglie queste funzioni e crea la runtime JS. `createToolJavaScript` registra la runtime come **tool** della resource, così l'LLM può inoltrarle il codice. L'esecuzione è in **sandbox** per sicurezza: il codice generato dall'LLM non ha accesso diretto all'app, solo all'**allow-list** di funzioni esposte.
+
+</details>
 
 **In sintesi:**
 - **Hashbrown** connette Angular a più provider LLM e gestisce il plumbing ripetitivo (l'idraulica: tutto il lavoro di collegamento noioso e ripetitivo sotto il cofano); sicurezza e costi si controllano con un **backend proxy** (system instruction, scelta del modello via `transformRequestOptions`).

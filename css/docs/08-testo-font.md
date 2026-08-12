@@ -268,29 +268,47 @@ Collegamenti: [[06-unita-valori-funzioni]] · [[07-colori]]
 
 ## Ripasso lampo
 
-**1.** Perché `font-family` elenca più font e deve finire con una generic family?
-> [!success]- Risposta
-> È una **catena di ripiego**: il browser usa il primo font disponibile e scala al successivo se manca. Elencare più font copre l'attesa del web font e le diverse piattaforme; la **generic family** finale (`sans-serif`, `serif`…) garantisce sempre un ripiego sensato invece del default del documento.
+<details>
+<summary>Perché <code>font-family</code> elenca più font e deve finire con una generic family?</summary>
 
-**2.** Qual è l'ordine della shorthand `font` e quali componenti sono obbligatori?
-> [!success]- Risposta
-> `font-style font-variant font-weight` (opzionali, prima) → `font-size[/line-height]` → `font-family`. **`font-size` e `font-family` sono obbligatori**; `line-height` si attacca alla size con lo slash (`1rem/1.6`). La shorthand azzera i longhand che non può esprimere (es. `font-variation-settings`).
+È una **catena di ripiego**: il browser usa il primo font disponibile e scala al successivo se manca. Elencare più font copre l'attesa del web font e le diverse piattaforme; la **generic family** finale (`sans-serif`, `serif`…) garantisce sempre un ripiego sensato invece del default del documento.
 
-**3.** Differenza tra `font-display: swap` e `optional`?
-> [!success]- Risposta
-> `swap` mostra subito un fallback e sostituisce il web font appena arriva (FOUT, ma testo sempre leggibile) — buono per il testo di lettura. `optional` dà una finestra minima e poi **può rinunciare** al web font se non è pronto: zero scatti di layout, ideale per font non essenziali.
+</details>
 
-**4.** Quando usare `text-wrap: balance` e quando `pretty`?
-> [!success]- Risposta
-> `balance` per **testi brevi** (titoli, didascalie): bilancia i caratteri per riga, ma solo entro poche righe. `pretty` per **paragrafi** lunghi: wrapping curato che evita soprattutto la riga orfana finale.
+<details>
+<summary>Qual è l'ordine della shorthand <code>font</code> e quali componenti sono obbligatori?</summary>
 
-**5.** Quali tre proprietà servono per l'ellissi su una riga sola?
-> [!success]- Risposta
-> `overflow: hidden;` (diverso da `visible`), `white-space: nowrap;` (una sola riga) e `text-overflow: ellipsis;`. Da sola `text-overflow` non forza alcun troncamento.
+`font-style font-variant font-weight` (opzionali, prima) → `font-size[/line-height]` → `font-family`. **`font-size` e `font-family` sono obbligatori**; `line-height` si attacca alla size con lo slash (`1rem/1.6`). La shorthand azzera i longhand che non può esprimere (es. `font-variation-settings`).
 
-**6.** Come si dichiara e usa un variable font sul peso?
-> [!success]- Risposta
-> In `@font-face` si mette un **range** (`font-weight: 100 900`): questo attiva la variabilità. Poi si usa `font-weight` con qualsiasi valore del range (es. `625`). Per assi non mappati si ricorre a `font-variation-settings: "opsz" 32` (tag di 4 lettere), ma le proprietà standard sono preferibili.
+</details>
+
+<details>
+<summary>Differenza tra <code>font-display: swap</code> e <code>optional</code>?</summary>
+
+`swap` mostra subito un fallback e sostituisce il web font appena arriva (FOUT, ma testo sempre leggibile) — buono per il testo di lettura. `optional` dà una finestra minima e poi **può rinunciare** al web font se non è pronto: zero scatti di layout, ideale per font non essenziali.
+
+</details>
+
+<details>
+<summary>Quando usare <code>text-wrap: balance</code> e quando <code>pretty</code>?</summary>
+
+`balance` per **testi brevi** (titoli, didascalie): bilancia i caratteri per riga, ma solo entro poche righe. `pretty` per **paragrafi** lunghi: wrapping curato che evita soprattutto la riga orfana finale.
+
+</details>
+
+<details>
+<summary>Quali tre proprietà servono per l'ellissi su una riga sola?</summary>
+
+`overflow: hidden;` (diverso da `visible`), `white-space: nowrap;` (una sola riga) e `text-overflow: ellipsis;`. Da sola `text-overflow` non forza alcun troncamento.
+
+</details>
+
+<details>
+<summary>Come si dichiara e usa un variable font sul peso?</summary>
+
+In `@font-face` si mette un **range** (`font-weight: 100 900`): questo attiva la variabilità. Poi si usa `font-weight` con qualsiasi valore del range (es. `625`). Per assi non mappati si ricorre a `font-variation-settings: "opsz" 32` (tag di 4 lettere), ma le proprietà standard sono preferibili.
+
+</details>
 
 **In sintesi:**
 - `font-family` è uno **stack di ripiego** che chiude su una generic family; `font-size` in `rem`, `line-height` come **numero puro**.

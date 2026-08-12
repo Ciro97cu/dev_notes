@@ -390,33 +390,54 @@ Collegamenti: [[inject]] · [[12-initialization-route-changes|cap.12]] ([[glossa
 
 ## Ripasso lampo
 
-**1.** Cosa fanno `@placeholder`, `@loading` e `@error` in un blocco `@defer`? A cosa servono `minimum` e `after`?
-> [!success]- Risposta
-> `@placeholder` mostra contenuto alternativo finché il trigger non scatta (così il layout non salta); `@loading` è mostrato **mentre** si scarica il bundle; `@error` se il caricamento fallisce. `minimum` (su `@placeholder`/`@loading`) impone una durata minima di visualizzazione per evitare flicker; `after` (su `@loading`) ritarda lo spinner finché il caricamento non supera la soglia indicata.
+<details>
+<summary>Cosa fanno <code>@placeholder</code>, <code>@loading</code> e <code>@error</code> in un blocco <code>@defer</code>? A cosa servono <code>minimum</code> e <code>after</code>?</summary>
 
-**2.** Elenca i trigger di `@defer`. Quali richiedono un `@placeholder` e come si può aggirare? Cosa fa `prefetch on immediate`?
-> [!success]- Risposta
-> `on idle` (default), `on viewport`, `on interaction`, `on hover`, `on immediate`, `on timer(duration)`, `when (condition)`. Di default `on viewport`, `on interaction` e `on hover` richiedono un `@placeholder`; si aggira riferendo un altro elemento via template variable, es. `on viewport(recommendations)` con `#recommendations`. `prefetch on immediate` anticipa il download del bundle appena possibile, ma scambia il contenuto solo allo scattare del trigger principale.
+`@placeholder` mostra contenuto alternativo finché il trigger non scatta (così il layout non salta); `@loading` è mostrato **mentre** si scarica il bundle; `@error` se il caricamento fallisce. `minimum` (su `@placeholder`/`@loading`) impone una durata minima di visualizzazione per evitare flicker; `after` (su `@loading`) ritarda lo spinner finché il caricamento non supera la soglia indicata.
 
-**3.** Qual è la differenza tra `@defer (on …)` e la clausola `hydrate on …`? Cosa fa da placeholder fino all'hydration?
-> [!success]- Risposta
-> `on …` decide **quando caricare** il bundle e renderizzare la regione (anche in una SPA client-only); `hydrate on …` decide **quando rendere interattiva** (idratare) una regione già renderizzata dal server. Fino all'hydration, è **il markup server-rendered** a fare da placeholder. `hydrate` agisce solo sul render iniziale: navigando a una nuova route sul client, Angular renderizza tutto sul client e l'incremental hydration non si applica.
+</details>
 
-**4.** Cosa risolve l'Event Replay e qual è la "Uncanny Valley"? È attivo di default?
-> [!success]- Risposta
-> La **Uncanny Valley** è il periodo tra *First Meaningful Paint* e *Time to Interactive*: l'utente vede la pagina ma il JS delle interazioni non è ancora caricato, quindi click e input andrebbero persi. L'**Event Replay** registra quelle interazioni con un piccolo script nell'HTML server-rendered e le **rigioca** una volta che l'app è interattiva. Con il setup SSR integrato di Angular è **attivo di default** (`withEventReplay()` con la config standard).
+<details>
+<summary>Elenca i trigger di <code>@defer</code>. Quali richiedono un <code>@placeholder</code> e come si può aggirare? Cosa fa <code>prefetch on immediate</code>?</summary>
 
-**5.** Due modi per avere implementazioni diverse server/client: quando usare la DI (`useClass`) e quando `isPlatformBrowser`/`isPlatformServer`?
-> [!success]- Risposta
-> **DI con `useClass`**: quando un intero servizio ha responsabilità diverse sui due ambienti — definisci una classe astratta come token e fornisci la classe server in `app.config.server.ts` e quella client in `app.config.ts`. **`isPlatformBrowser`/`isPlatformServer`** (sul token `PLATFORM_ID`): quando solo una piccola parte di un componente/servizio è platform-specific, conviene ramificare a runtime senza creare due classi.
+`on idle` (default), `on viewport`, `on interaction`, `on hover`, `on immediate`, `on timer(duration)`, `when (condition)`. Di default `on viewport`, `on interaction` e `on hover` richiedono un `@placeholder`; si aggira riferendo un altro elemento via template variable, es. `on viewport(recommendations)` con `#recommendations`. `prefetch on immediate` anticipa il download del bundle appena possibile, ma scambia il contenuto solo allo scattare del trigger principale.
 
-**6.** Differenza tra `RenderMode.Client`, `Prerender` e `Server`? A cosa servono `getPrerenderParams` e `fallback`?
-> [!success]- Risposta
-> `Client` = niente SSR sulla richiesta iniziale, SPA classica; `Prerender` = HTML statico generato a **build time**; `Server` = renderizzato sul server a **ogni richiesta** (server e prerender valgono solo per il render iniziale). `getPrerenderParams` è una funzione async che ritorna le combinazioni di parametri per cui prerenderizzare le pagine; `fallback` (default `PrerenderFallback.Server`) decide cosa fare quando si richiede un parametro non prerenderizzato.
+</details>
 
-**7.** Cosa fanno i token `REQUEST`, `REQUEST_CONTEXT` e `RESPONSE_INIT`? Perché serve un null-check?
-> [!success]- Risposta
-> `REQUEST` è l'oggetto request standard di Node/fetch; `REQUEST_CONTEXT` è contesto opzionale fornito dal server (es. sessione utente); `RESPONSE_INIT` imposta status code e header della risposta. Serve un null-check perché `REQUEST` e `REQUEST_CONTEXT` esistono **solo lato server** e sono `null` quando il codice gira nel browser.
+<details>
+<summary>Qual è la differenza tra <code>@defer (on …)</code> e la clausola <code>hydrate on …</code>? Cosa fa da placeholder fino all'hydration?</summary>
+
+`on …` decide **quando caricare** il bundle e renderizzare la regione (anche in una SPA client-only); `hydrate on …` decide **quando rendere interattiva** (idratare) una regione già renderizzata dal server. Fino all'hydration, è **il markup server-rendered** a fare da placeholder. `hydrate` agisce solo sul render iniziale: navigando a una nuova route sul client, Angular renderizza tutto sul client e l'incremental hydration non si applica.
+
+</details>
+
+<details>
+<summary>Cosa risolve l'Event Replay e qual è la "Uncanny Valley"? È attivo di default?</summary>
+
+La **Uncanny Valley** è il periodo tra *First Meaningful Paint* e *Time to Interactive*: l'utente vede la pagina ma il JS delle interazioni non è ancora caricato, quindi click e input andrebbero persi. L'**Event Replay** registra quelle interazioni con un piccolo script nell'HTML server-rendered e le **rigioca** una volta che l'app è interattiva. Con il setup SSR integrato di Angular è **attivo di default** (`withEventReplay()` con la config standard).
+
+</details>
+
+<details>
+<summary>Due modi per avere implementazioni diverse server/client: quando usare la DI (<code>useClass</code>) e quando <code>isPlatformBrowser</code>/<code>isPlatformServer</code>?</summary>
+
+**DI con `useClass`**: quando un intero servizio ha responsabilità diverse sui due ambienti — definisci una classe astratta come token e fornisci la classe server in `app.config.server.ts` e quella client in `app.config.ts`. **`isPlatformBrowser`/`isPlatformServer`** (sul token `PLATFORM_ID`): quando solo una piccola parte di un componente/servizio è platform-specific, conviene ramificare a runtime senza creare due classi.
+
+</details>
+
+<details>
+<summary>Differenza tra <code>RenderMode.Client</code>, <code>Prerender</code> e <code>Server</code>? A cosa servono <code>getPrerenderParams</code> e <code>fallback</code>?</summary>
+
+`Client` = niente SSR sulla richiesta iniziale, SPA classica; `Prerender` = HTML statico generato a **build time**; `Server` = renderizzato sul server a **ogni richiesta** (server e prerender valgono solo per il render iniziale). `getPrerenderParams` è una funzione async che ritorna le combinazioni di parametri per cui prerenderizzare le pagine; `fallback` (default `PrerenderFallback.Server`) decide cosa fare quando si richiede un parametro non prerenderizzato.
+
+</details>
+
+<details>
+<summary>Cosa fanno i token <code>REQUEST</code>, <code>REQUEST_CONTEXT</code> e <code>RESPONSE_INIT</code>? Perché serve un null-check?</summary>
+
+`REQUEST` è l'oggetto request standard di Node/fetch; `REQUEST_CONTEXT` è contesto opzionale fornito dal server (es. sessione utente); `RESPONSE_INIT` imposta status code e header della risposta. Serve un null-check perché `REQUEST` e `REQUEST_CONTEXT` esistono **solo lato server** e sono `null` quando il codice gira nel browser.
+
+</details>
 
 **In sintesi:**
 - Le **deferrable views** (`@defer`) riducono il bundle iniziale caricando le regioni UI non critiche solo allo scattare di un trigger (`on idle/viewport/interaction/hover/immediate/timer/when`, con `prefetch`).

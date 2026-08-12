@@ -192,25 +192,40 @@ Una volta costruito l'albero nella classe, lo si collega al markup con un insiem
 
 ## Ripasso lampo
 
-**1.** Qual è la differenza di fondo fra reactive e template-driven forms?
-> [!success]- Risposta
-> Nelle reactive il modello (`FormControl`/`FormGroup`/`FormArray`) è dichiarato **esplicitamente nella classe**, sincrono e immutabile; il template vi si lega con direttive. Nelle template-driven ([[forms-template-driven]]) il modello è **implicito**, costruito da `ngModel` nel template, e la sincronizzazione è asincrona.
+<details>
+<summary>Qual è la differenza di fondo fra reactive e template-driven forms?</summary>
 
-**2.** Quando usare `setValue` e quando `patchValue`?
-> [!success]- Risposta
-> `setValue` richiede un oggetto **completo** con tutte le chiavi del gruppo (errore se ne manca una): utile per garantire coerenza. `patchValue` aggiorna solo le chiavi fornite e ignora le altre: comodo per aggiornamenti parziali.
+Nelle reactive il modello (`FormControl`/`FormGroup`/`FormArray`) è dichiarato **esplicitamente nella classe**, sincrono e immutabile; il template vi si lega con direttive. Nelle template-driven ([[forms-template-driven]]) il modello è **implicito**, costruito da `ngModel` nel template, e la sincronizzazione è asincrona.
 
-**3.** Che firma hanno un validator sync e uno async, e cosa ritornano?
-> [!success]- Risposta
-> Sync: `ValidatorFn = (control) => ValidationErrors | null` (`null` se valido). Async: `AsyncValidatorFn = (control) => Observable<ValidationErrors | null> | Promise<...>`; durante l'attesa il controllo è `pending`.
+</details>
 
-**4.** A cosa serve `updateOn` e quali valori accetta?
-> [!success]- Risposta
-> Decide **quando** il controllo aggiorna valore e validità: `'change'` (default, a ogni tasto), `'blur'` (all'uscita dal campo), `'submit'` (solo al submit). Riduce validazioni/emissioni inutili.
+<details>
+<summary>Quando usare <code>setValue</code> e quando <code>patchValue</code>?</summary>
 
-**5.** Perché `formControlName` dà errore se gli passo un'istanza di `FormControl`?
-> [!success]- Risposta
-> Perché `formControlName` vuole il **nome** (stringa) del figlio nel `[formGroup]` padre, non l'istanza. Per legare direttamente un `FormControl` isolato si usa `[formControl]="ctrl"`.
+`setValue` richiede un oggetto **completo** con tutte le chiavi del gruppo (errore se ne manca una): utile per garantire coerenza. `patchValue` aggiorna solo le chiavi fornite e ignora le altre: comodo per aggiornamenti parziali.
+
+</details>
+
+<details>
+<summary>Che firma hanno un validator sync e uno async, e cosa ritornano?</summary>
+
+Sync: `ValidatorFn = (control) => ValidationErrors | null` (`null` se valido). Async: `AsyncValidatorFn = (control) => Observable<ValidationErrors | null> | Promise<...>`; durante l'attesa il controllo è `pending`.
+
+</details>
+
+<details>
+<summary>A cosa serve <code>updateOn</code> e quali valori accetta?</summary>
+
+Decide **quando** il controllo aggiorna valore e validità: `'change'` (default, a ogni tasto), `'blur'` (all'uscita dal campo), `'submit'` (solo al submit). Riduce validazioni/emissioni inutili.
+
+</details>
+
+<details>
+<summary>Perché <code>formControlName</code> dà errore se gli passo un'istanza di <code>FormControl</code>?</summary>
+
+Perché `formControlName` vuole il **nome** (stringa) del figlio nel `[formGroup]` padre, non l'istanza. Per legare direttamente un `FormControl` isolato si usa `[formControl]="ctrl"`.
+
+</details>
 
 **In sintesi:**
 - Reactive forms = modello **esplicito** nella classe (`FormControl`/`FormGroup`/`FormArray`), sincrono e immutabile; serve `ReactiveFormsModule`.
