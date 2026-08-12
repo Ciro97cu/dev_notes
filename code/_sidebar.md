@@ -16,3 +16,4 @@
   - [9. Le nostre dieci cifre](/docs/09-our-ten-digits.md)
   - [10. Dieci alternativi](/docs/10-alternative-10s.md)
   - [11. Bit dopo bit dopo bit](/docs/11-bit-by-bit-by-bit.md)
+  - [12. Byte ed esadecimale](/docs/12-bytes-and-hexadecimal.md)
