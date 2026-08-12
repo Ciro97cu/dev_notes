@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <!-- CSP: tutte le dipendenze sono self-hosted in assets/vendor/, nessuna esterna. -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval';
+    style-src 'self' 'unsafe-inline';
+    font-src 'self';
+    img-src 'self' data: https:;
+    worker-src 'self' blob: data:;
+    child-src 'self' blob: data:;
+    frame-src 'self';
+    connect-src 'self';
+  " />
+  <title>Code — Il linguaggio nascosto di hardware e software</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Appunti su «Code» di Charles Petzold (2ª ed.): come funziona un computer, dai codici e dal binario fino alla CPU e al software.">
+  <meta name="theme-color" content="#059669">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/vendor/vue.css">
+  <link rel="stylesheet" href="../assets/vendor/fonts.css">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <!-- Ritorno all'hub Dev Notes (fuori da #app: docsify non lo intercetta) -->
+  <a href="../" title="Torna a Dev Notes" aria-label="Torna a Dev Notes" style="position:fixed;right:16px;bottom:16px;z-index:2147483000;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#fff;color:#24292e;font-size:20px;line-height:1;text-decoration:none;box-shadow:0 2px 10px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.08)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></a>
+  <div id="app">Caricamento…</div>
+  <!-- Bootstrap: codice condiviso dell'hub + config specifica del vault (prima del core docsify) -->
+  <script src="../assets/shared/01-core.js"></script>
+  <script src="../assets/shared/02-ui.js"></script>
+  <script src="../assets/shared/03-search.js"></script>
+  <script src="../assets/shared/04-plugins.js"></script>
+  <script src="../assets/shared/05-study.js"></script>
+  <script src="../assets/shared/06-highlighter.js"></script>
+  <script src="assets/app.js"></script>
+  <script src="../assets/vendor/docsify.min.js"></script>
+  <script src="../assets/vendor/docsify-search.min.js"></script>
+  <script src="../assets/vendor/docsify-copy-code.min.js"></script>
+  <script src="../assets/vendor/docsify-pagination.min.js"></script>
+  <script src="../assets/vendor/docsify-flexible-alerts.min.js"></script>
+  <script src="../assets/vendor/prism-bash.min.js"></script>
+  <!-- Diagrammi (mermaid): il vault è visual-first, molti capitoli usano schemi di logica/circuiti/CPU -->
+  <script src="../assets/vendor/mermaid.min.js"></script>
+</body>
+</html>

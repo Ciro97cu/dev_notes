@@ -1,0 +1,574 @@
+/* ============================================================
+   Appunti Git — tema personalizzato
+   Brand Code (Petzold): verde smeraldo #059669 (il libro Code). Tema chiaro + scuro.
+   Override del tema "vue" di docsify. Solo CSS, nessuna dipendenza.
+   ============================================================ */
+
+:root {
+  --code-emerald: #059669;
+  --code-emerald-dark: #047857;
+  --code-emerald-light: #d1fae5;
+
+  --theme-color: var(--code-emerald-dark);
+  --on-accent: #fff;
+
+  --bg: #ffffff;
+  --bg-soft: #f6f8fa;
+  --text: #24292e;
+  --text-soft: #57606a;
+  --strong: #14181c;
+  --border: #eaecef;
+  --sidebar-bg: #f6f8fa;
+  --code-bg: #f6f8fa;
+  --code-inline-bg: #f6f8fa;
+  --code-inline-text: #047857;
+  --link: #047857;
+  --quote-bg: #f0fdf4;
+  --quote-border: var(--code-emerald);
+  --details-bg: #f6f8fa;
+  --details-border: #eaecef;
+  --table-head-bg: #f6f8fa;
+}
+
+html.dark {
+  --theme-color: #34d399;
+  --on-accent: #111;
+
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --text: #e6edf3;
+  --text-soft: #9198a1;
+  --strong: #ffffff;
+  --border: #30363d;
+  --sidebar-bg: #0d1117;
+  --code-bg: #161b22;
+  --code-inline-bg: #0c1f18;
+  --code-inline-text: #6ee7b7;
+  --link: #6ee7b7;
+  --quote-bg: #0c1a14;
+  --quote-border: var(--code-emerald);
+  --details-bg: #161b22;
+  --details-border: #30363d;
+  --table-head-bg: #161b22;
+}
+
+/* ---------- Base ---------- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+.content,
+.markdown-section {
+  color: var(--text);
+}
+
+.markdown-section {
+  max-width: 850px;
+}
+
+.markdown-section p,
+.markdown-section li {
+  line-height: 1.7;
+  color: var(--text);
+}
+
+/* ---------- Titoli ---------- */
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.markdown-section h1 {
+  border-bottom: 3px solid var(--code-emerald);
+  padding-bottom: 0.3em;
+}
+
+.markdown-section h2 {
+  border-left: 4px solid var(--code-emerald);
+  padding-left: 0.5rem;
+  border-bottom: none;
+  margin-top: 2.2rem;
+}
+
+.markdown-section h3 {
+  color: var(--text-soft);
+}
+
+.markdown-section a {
+  color: var(--link);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.markdown-section a:hover {
+  border-bottom-color: var(--code-emerald);
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+}
+
+.sidebar-nav {
+  line-height: 1.9;
+}
+
+.sidebar ul li a {
+  color: var(--text-soft);
+  font-size: 14px;
+}
+
+.sidebar ul li a:hover {
+  color: var(--link);
+}
+
+.sidebar-nav > ul > p,
+.sidebar-nav strong {
+  color: var(--text);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 1rem;
+  display: block;
+}
+
+.sidebar-nav li.active > a {
+  color: var(--code-emerald-dark);
+  border-left: 4px solid var(--code-emerald);
+  background: var(--code-emerald-light);
+  padding-left: 0.5rem;
+  font-weight: 700;
+}
+
+html.dark .sidebar-nav li.active > a {
+  color: var(--code-emerald);
+  background: #0c1f18;
+}
+
+.app-name-link {
+  color: var(--code-emerald) !important;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+/* ---------- Codice ---------- */
+.markdown-section code {
+  background: var(--code-inline-bg);
+  color: var(--code-inline-text);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 0.85em;
+}
+
+.markdown-section pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--code-emerald);
+  border-radius: 8px;
+}
+
+.markdown-section pre > code {
+  background: transparent;
+  color: var(--text);
+  font-size: 0.86em;
+}
+
+/* ---------- Citazioni / note ---------- */
+.markdown-section blockquote {
+  background: var(--quote-bg);
+  border-left: 4px solid var(--quote-border);
+  border-radius: 0 6px 6px 0;
+  color: var(--text);
+  padding: 0.6em 1em;
+}
+
+.markdown-section blockquote p {
+  color: var(--text);
+}
+
+/* ---------- Tabelle ---------- */
+.markdown-section table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.markdown-section tr {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.markdown-section th {
+  background: var(--table-head-bg);
+  color: var(--text);
+}
+
+.markdown-section td,
+.markdown-section th {
+  border: 1px solid var(--border);
+}
+
+/* ---------- Dettagli collassabili (<details>) ---------- */
+.markdown-section details {
+  background: var(--details-bg);
+  border: 1px solid var(--details-border);
+  border-left: 4px solid var(--code-emerald);
+  border-radius: 6px;
+  padding: 0.6em 1em;
+  margin: 0.8em 0;
+}
+
+.markdown-section details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+}
+
+.markdown-section details[open] summary {
+  margin-bottom: 0.6em;
+  color: var(--link);
+}
+
+/* ---------- Ricerca ---------- */
+.search input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.search .results-panel {
+  background: var(--bg);
+}
+
+.search h2,
+.search .matching-post h2 {
+  color: var(--link);
+}
+
+.search p {
+  color: var(--text-soft);
+}
+
+/* ---------- Paginazione (Precedente / Successivo) ---------- */
+.docsify-pagination-container {
+  border-top: 1px solid var(--border);
+  color: var(--text-soft);
+}
+
+.pagination-item-label,
+.pagination-item-title {
+  color: var(--link);
+}
+
+.pagination-item-title {
+  font-weight: 600;
+}
+
+/* ---------- Copia codice ---------- */
+.docsify-copy-code-button {
+  background: var(--code-emerald-dark) !important;
+  color: #fff !important;
+}
+
+.docsify-copy-code-button:hover {
+  background: var(--code-emerald) !important;
+}
+
+/* ---------- Coverpage (hero centrato · puntini interattivi su fondo brand) ---------- */
+/* I puntini sono su un <canvas> (coverDotsPlugin, ../assets/shared.js): al passaggio
+   del cursore vengono respinti. Qui solo il fondo brand + il layout dell'hero. */
+section.cover {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 100% at 12% 6%, rgba(255, 255, 255, .15), transparent 45%) center / cover no-repeat,
+    linear-gradient(135deg, #047857 0%, #059669 55%, #065f46 100%) center / cover no-repeat,
+    #059669 !important;
+}
+section.cover #cover-dots { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+section.cover .cover-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 clamp(1.4rem, 5vw, 4rem);
+  text-align: center;
+}
+.cover-wrap { display: flex; flex-direction: column; align-items: center; }
+.cover-logo {
+  width: 92px;
+  height: 92px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, .28));
+}
+section.cover .cover-wrap h1 {
+  margin: .2rem 0 .1rem;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .22);
+}
+.cover-wrap .cover-sub { margin: 0 0 1rem; font-size: clamp(1.05rem, 1.8vw, 1.3rem); font-weight: 600; color: #fff; opacity: .95; }
+.cover-wrap .cover-desc { max-width: 60ch; margin: 0 auto; font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.6; color: #fff; opacity: .92; }
+
+/* azioni: pill icona+testo, a capo su mobile */
+.cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .8rem;
+  margin: 1.9rem 0 1.5rem;
+}
+.cover-actions .cover-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .72rem 1.35rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff !important;
+  text-decoration: none !important;
+  background: rgba(255, 255, 255, .14);
+  border: 1px solid rgba(255, 255, 255, .4);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.cover-actions .cover-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, .24);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
+}
+.cover-actions .cover-btn.is-primary {
+  background: #fff;
+  border-color: #fff;
+  color: var(--code-emerald-dark) !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .25);
+}
+.cover-actions .cover-btn.is-resume { border-color: rgba(255, 255, 255, .75); }
+
+.cover-wrap .cover-disclaimer {
+  max-width: 60ch;
+  margin: .4rem auto 0;
+  font-size: .74rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .82);
+}
+
+@media (max-width: 720px) {
+  .cover-actions .cover-btn { font-size: .92rem; padding: .62rem 1.1rem; }
+}
+
+section.cover.show ~ .sidebar,
+section.cover.show ~ .content { display: none; }
+
+/* ---------- Callout (flexible-alerts) — box tintati, uniformi tra le sezioni ---------- */
+:root {
+  --cl-warn-bg: #fdf3e2;  --cl-warn-bd: #efd6a4;  --cl-warn-tx: #7a5600;
+  --cl-tip-bg:  #e8f6f0;  --cl-tip-bd:  #bfe6d4;  --cl-tip-tx:  #0a6e49;
+  --cl-note-bg: #eaf2fd;  --cl-note-bd: #cfe0fa;  --cl-note-tx: #0a5bb5;
+}
+html.dark {
+  --cl-warn-bg: #241d0e; --cl-warn-bd: #4a3d18; --cl-warn-tx: #e3b341;
+  --cl-tip-bg:  #0f241c; --cl-tip-bd:  #1f4838; --cl-tip-tx:  #56d4a0;
+  --cl-note-bg: #0f1d2e; --cl-note-bd: #1f3a5a; --cl-note-tx: #6cb6ff;
+}
+.markdown-section .alert.callout {
+  border: 1px solid var(--border);
+  border-left: 1px solid var(--border) !important; /* annulla la barra 4px del plugin */
+  border-radius: 10px;
+  background: var(--bg-soft);
+  padding: .85em 1.1em;
+  margin: 1.1em 0;
+  box-shadow: none;
+}
+/* Grassetti: seguono il tema (vue.css li hardcoda scuro → si perdono in dark). */
+.markdown-section strong,
+.markdown-section b { color: var(--strong); }
+.markdown-section .alert strong,
+.markdown-section .alert b { color: inherit; }
+.markdown-section hr { border: 0; border-top: 1px solid var(--border); }
+.markdown-section .alert.callout > p { color: var(--text); }
+.markdown-section .alert.callout .title {
+  font-weight: 700; display: flex; align-items: center; gap: .5em; margin: 0 0 .4em;
+}
+.markdown-section .alert.callout .title .icon { opacity: .95; }
+.markdown-section .alert.callout.warning { background: var(--cl-warn-bg); border-color: var(--cl-warn-bd) !important; }
+.markdown-section .alert.callout.warning .title { color: var(--cl-warn-tx); }
+.markdown-section .alert.callout.tip { background: var(--cl-tip-bg); border-color: var(--cl-tip-bd) !important; }
+.markdown-section .alert.callout.tip .title { color: var(--cl-tip-tx); }
+.markdown-section .alert.callout.note { background: var(--cl-note-bg); border-color: var(--cl-note-bd) !important; }
+.markdown-section .alert.callout.note .title { color: var(--cl-note-tx); }
+
+/* ---------- Titoli — banda tinta soft, colore brand (uniforme tra le sezioni) ---------- */
+.markdown-section h1 {
+  color: var(--link);
+  border-bottom: 3px solid var(--theme-color);
+  padding-bottom: .3em;
+  border-left: 0;
+  padding-left: 0;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
+.markdown-section h2 {
+  color: var(--link);
+  background: color-mix(in srgb, var(--theme-color) 12%, var(--bg));
+  border-left: 4px solid var(--theme-color);
+  border-bottom: 0;
+  border-radius: 0 8px 8px 0;
+  padding: .42em .7em;
+  margin-top: 2.2rem;
+}
+.markdown-section h3 {
+  color: var(--link);
+  font-weight: 700;
+}
+.markdown-section h4 {
+  color: var(--link);
+  font-weight: 600;
+}
+.markdown-section h5,
+.markdown-section h6 {
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .95rem;
+}
+/* prefisso hash "###" — segnala livello e gerarchia (brand attenuato, mono) */
+.markdown-section h3::before,
+.markdown-section h4::before,
+.markdown-section h5::before,
+.markdown-section h6::before {
+  font-family: var(--font-mono, "SFMono-Regular", Menlo, Consolas, monospace);
+  color: var(--theme-color);
+  opacity: .5;
+  font-weight: 700;
+  margin-right: .5em;
+}
+.markdown-section h3::before { content: "###"; }
+.markdown-section h4::before { content: "####"; }
+.markdown-section h5::before { content: "#####"; opacity: .4; }
+.markdown-section h6::before { content: "######"; opacity: .4; }
+/* i titoli non ereditano lo stile link: niente doppio underline, niente 600 su <a>/<span> */
+.markdown-section h1 a, .markdown-section h1 a:hover, .markdown-section h1 a span,
+.markdown-section h2 a, .markdown-section h2 a:hover, .markdown-section h2 a span,
+.markdown-section h3 a, .markdown-section h3 a:hover, .markdown-section h3 a span,
+.markdown-section h4 a, .markdown-section h4 a:hover, .markdown-section h4 a span,
+.markdown-section h5 a, .markdown-section h5 a:hover, .markdown-section h5 a span,
+.markdown-section h6 a, .markdown-section h6 a:hover, .markdown-section h6 a span {
+  color: inherit;
+  font-weight: inherit;
+  border-bottom: 0;
+  text-decoration: none;
+}
+
+/* ---------- Font caricati (Hanken Grotesk + JetBrains Mono) — pesi reali fino a 900 ---------- */
+:root {
+  --font-sans: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+}
+body { font-family: var(--font-sans); }
+.markdown-section code,
+.markdown-section pre,
+.markdown-section pre > code { font-family: var(--font-mono); }
+
+/* ---------- Pulsante toggle tema ---------- */
+#theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+
+#theme-toggle:hover { transform: scale(1.08); color: var(--link); border-color: var(--link); }
+
+@media (max-width: 768px) {
+  #theme-toggle {
+    top: 10px;
+    right: 56px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+
+/* ---------- Bottoni flottanti: menu (sidebar-toggle) + hover uniforme ---------- */
+/* Il button menu ha la stessa forma del button home (cerchio bianco, bordo, ombra),
+   in basso a destra sopra il button home. La geometria usa !important per battere le
+   regole di stato di docsify (es. body.close .sidebar-toggle { width: auto }). */
+.sidebar-toggle {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: 16px !important;
+  bottom: 70px !important;      /* sopra il button home (bottom: 16px) */
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  z-index: 2147483000;          /* come il button home: sopra sidebar e overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* le tre barre dell'hamburger, centrate e scure come l'icona home */
+.sidebar-toggle .sidebar-toggle-button { position: static; padding: 0; }
+.sidebar-toggle span {
+  position: static;
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 2px 0;
+  border-radius: 1px;
+  background-color: #24292e;
+  transition: background-color 0.2s ease;
+}
+/* docsify sbiadisce le barre in hover: lo annullo, il contrasto lo dà --on-accent */
+.sidebar-toggle:hover .sidebar-toggle-button { opacity: 1; }
+
+/* transizione per l'hover del button home (lo stile base resta inline nell'HTML) */
+a[aria-label="Torna a Dev Notes"] {
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* ---------- Hover uniforme e identitario per tutti e 3 i bottoni ---------- */
+/* Riempimento col colore del doc (--theme-color, già adattato a chiaro/scuro) e
+   icona/testo con contrasto garantito in entrambi i temi (--on-accent). */
+a[aria-label="Torna a Dev Notes"]:hover,
+.sidebar-toggle:hover,
+#theme-toggle:hover {
+  transform: scale(1.08);
+  border-color: var(--link) !important;
+  color: var(--link) !important;
+}
+.sidebar-toggle:hover span { background-color: var(--link) !important; }

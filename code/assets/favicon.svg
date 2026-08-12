@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect x="1.5" y="1.5" width="29" height="29" rx="7" fill="#059669"/>
+  <!-- Simbolo on/off: l'intero libro parte da qui — acceso/spento, 1/0, il bit. -->
+  <g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round">
+    <path d="M16 8 V15"/>
+    <path d="M10.9 11.3 A7 7 0 1 0 21.1 11.3"/>
+  </g>
+</svg>

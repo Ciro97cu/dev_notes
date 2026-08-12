@@ -31,7 +31,8 @@
   var VAULTS = {
     git: { n: 'Git', a: '#f05133' }, javascript: { n: 'JavaScript', a: '#e6c200' },
     typescript: { n: 'TypeScript', a: '#3178c6' }, angular: { n: 'Angular', a: '#dd0031' },
-    css: { n: 'CSS', a: '#1572b6' }, glossario: { n: 'Glossario', a: '#6366f1' }
+    css: { n: 'CSS', a: '#1572b6' }, glossario: { n: 'Glossario', a: '#6366f1' },
+    code: { n: 'Code', a: '#059669' }
   };
   var SKIP = { '/': 1, '/README': 1, '/_coverpage': 1, '': 1 };
   var best = null;
