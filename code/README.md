@@ -12,7 +12,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 
 ## Parte 1 — I codici
 - [1. Migliori amici](docs/01-best-friends.md) — orig. *Best Friends*
-- 2. Codici e combinazioni — *Codes and Combinations*
+- [2. Codici e combinazioni](docs/02-codes-and-combinations.md) — orig. *Codes and Combinations*
 - 3. Braille e codici binari — *Braille and Binary Codes*
 
 ## Parte 2 — Elettricità e interruttori
