@@ -56,6 +56,24 @@ Il diagramma qui sotto mostra la lettera **A** (`•—`): un impulso corto, una
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La A in Morse: acceso-breve, spento-breve, acceso-lungo. Le durate sono <em>relative</em> al punto, non assolute.</figcaption>
 </figure>
 
+Con le stesse regole si compongono parole intere. Qui sotto **hello**: si riconoscono i quattro punti della *h*, il punto singolo della *e*, il `·—··` di ciascuna *l* e le tre linee della *o*, con le pause tra lettere che tengono tutto leggibile.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 453 46" role="img" aria-label="Codice Morse di « hello » come sequenza di lampi" style="width:100%;max-width:453px;height:auto;color:inherit">
+  <g fill="currentColor"><rect x="6" y="14" width="9" height="20" rx="3"/><rect x="24" y="14" width="9" height="20" rx="3"/><rect x="42" y="14" width="9" height="20" rx="3"/><rect x="60" y="14" width="9" height="20" rx="3"/><rect x="96" y="14" width="9" height="20" rx="3"/><rect x="132" y="14" width="9" height="20" rx="3"/><rect x="150" y="14" width="27" height="20" rx="3"/><rect x="186" y="14" width="9" height="20" rx="3"/><rect x="204" y="14" width="9" height="20" rx="3"/><rect x="240" y="14" width="9" height="20" rx="3"/><rect x="258" y="14" width="27" height="20" rx="3"/><rect x="294" y="14" width="9" height="20" rx="3"/><rect x="312" y="14" width="9" height="20" rx="3"/><rect x="348" y="14" width="27" height="20" rx="3"/><rect x="384" y="14" width="27" height="20" rx="3"/><rect x="420" y="14" width="27" height="20" rx="3"/></g>
+</svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">«hello» in lampi: <code>····</code> (h) · <code>·</code> (e) · <code>·—··</code> (l) · <code>·—··</code> (l) · <code>———</code> (o). Le barre corte sono punti, quelle lunghe linee.</figcaption>
+</figure>
+
+E **hi there**: qui lo **spazio più ampio** al centro separa le due parole (un vuoto lungo circa due linee).
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 462 46" role="img" aria-label="Codice Morse di « hi there » come sequenza di lampi" style="width:100%;max-width:462px;height:auto;color:inherit">
+  <g fill="currentColor"><rect x="6" y="14" width="9" height="20" rx="3"/><rect x="24" y="14" width="9" height="20" rx="3"/><rect x="42" y="14" width="9" height="20" rx="3"/><rect x="60" y="14" width="9" height="20" rx="3"/><rect x="96" y="14" width="9" height="20" rx="3"/><rect x="114" y="14" width="9" height="20" rx="3"/><rect x="177" y="14" width="27" height="20" rx="3"/><rect x="231" y="14" width="9" height="20" rx="3"/><rect x="249" y="14" width="9" height="20" rx="3"/><rect x="267" y="14" width="9" height="20" rx="3"/><rect x="285" y="14" width="9" height="20" rx="3"/><rect x="321" y="14" width="9" height="20" rx="3"/><rect x="357" y="14" width="9" height="20" rx="3"/><rect x="375" y="14" width="27" height="20" rx="3"/><rect x="411" y="14" width="9" height="20" rx="3"/><rect x="447" y="14" width="9" height="20" rx="3"/></g>
+</svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">«hi there»: <code>····</code> <code>··</code> (hi) — stacco largo — <code>—</code> <code>····</code> <code>·</code> <code>·—·</code> <code>·</code> (there).</figcaption>
+</figure>
+
 Poiché tutto è relativo al punto, non conta la velocità *assoluta*: la linea di chi trasmette veloce può durare quanto il punto di chi va piano. Dopo una lettera o due, però, chi riceve capisce da sé cos'è punto e cos'è linea. La lunghezza in tempo dei lampi non è insomma fissata: dipende da quanto in fretta si preme il pulsante della torcia.
 
 ## La struttura del codice

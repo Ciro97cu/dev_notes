@@ -2,7 +2,7 @@
 
 **Vault docsify**. Appunti di studio sul libro **«Code — The Hidden Language of Computer Hardware and Software»** di **Charles Petzold** (2ª edizione, 2023): come funziona un computer, partendo da zero (codici, binario, elettricità) e salendo un gradino alla volta fino alla CPU e al software. Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
 
-Fonte: `the-hidden-language-of-computer-hardware-and-software.pdf` (in locale, `.gitignore`d). **28 capitoli**, ordine e titoli fedeli al libro.
+Fonte: `code/code.pdf` (in locale, `.gitignore`d). ⚠️ È una **scansione**: ogni pagina è un'immagine, **senza testo estraibile** (né `pypdf` né PyMuPDF ne cavano testo). Per lavorare su un capitolo si **rendono le pagine a immagine** con PyMuPDF (`import fitz; fitz.open("code/code.pdf")[n].get_pixmap(dpi=150).save("out.png")`) e si leggono con lo strumento immagini, **oppure** si incolla il testo del capitolo in chat (come è stato fatto per i capp. 1-5). **28 capitoli**, ordine e titoli fedeli al libro.
 
 ## Specifiche di contenuto
 - **Fedeltà al libro e accuratezza assoluta**: struttura, ordine e contenuto ricalcano i 28 capitoli di Petzold. Ogni claim, numero, tabella e passaggio va **verificato sul PDF** prima di scrivere. **Niente allucinazioni, niente fretta**: la precisione viene prima della quantità.
