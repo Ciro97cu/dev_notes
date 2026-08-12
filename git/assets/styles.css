@@ -572,3 +572,6 @@ a[aria-label="Torna a Dev Notes"]:hover,
   color: var(--link) !important;
 }
 .sidebar-toggle:hover span { background-color: var(--link) !important; }
+
+/* Zebra tabelle theme-aware: vue.css hardcoda #f8f8f8 sulle righe pari (invisibile in dark). */
+.markdown-section table tr:nth-child(2n) { background: var(--bg-soft); }

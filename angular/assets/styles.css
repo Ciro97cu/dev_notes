@@ -550,3 +550,6 @@ a[aria-label="Torna a Dev Notes"]:hover,
 }
 .markdown-section details summary { cursor: pointer; font-weight: 600; color: var(--text); outline: none; }
 .markdown-section details[open] summary { margin-bottom: .6em; color: var(--link); }
+
+/* Zebra tabelle theme-aware: vue.css hardcoda #f8f8f8 sulle righe pari (invisibile in dark). */
+.markdown-section table tr:nth-child(2n) { background: var(--bg-soft); }

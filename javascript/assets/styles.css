@@ -749,3 +749,6 @@ a[aria-label="Torna a Dev Notes"]:hover,
   #pg-dialog .pg-body { flex-direction: column; }
   #pg-dialog .pg-pane + .pg-pane { border-left: 0; border-top: 1px solid var(--border); }
 }
+
+/* Zebra tabelle theme-aware: vue.css hardcoda #f8f8f8 sulle righe pari (invisibile in dark). */
+.markdown-section table tr:nth-child(2n) { background: var(--bg-soft); }

@@ -160,13 +160,16 @@
   // ── Raccolta / applicazione dati (condivisa da file e QR animato) ─────────
   var PREFIX = 'dev-notes-';
   var UNSAFE = { __proto__: 1, constructor: 1, prototype: 1 };
+  // Chiavi "nostre": i dati dev-notes-* e le posizioni "Riprendi" (<vault>-last-page,
+  // salvate senza prefisso da 04-plugins.js) — così l'export/import/QR le include.
+  function isOurKey(k) { return !!k && (k.indexOf(PREFIX) === 0 || /-last-page$/.test(k)); }
 
   function collectData() {
     var data = {};
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
-        if (key && key.indexOf(PREFIX) === 0) {
+        if (isOurKey(key)) {
           try { data[key] = JSON.parse(localStorage.getItem(key)); }
           catch (_) { data[key] = localStorage.getItem(key); }
         }
@@ -174,19 +177,19 @@
     } catch (e) {}
     return data;
   }
-  // Scrive i dati (allowlist dev-notes-*, guardia proto-pollution). replace → svuota prima.
+  // Scrive i dati (allowlist dev-notes-* + *-last-page, guardia proto-pollution). replace → svuota prima.
   function applyData(data, replace) {
     if (!data || typeof data !== 'object') throw new Error('formato non valido');
     if (replace) {
       var toRm = [];
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf(PREFIX) === 0) toRm.push(k);
+        if (isOurKey(k)) toRm.push(k);
       }
       toRm.forEach(function (k) { try { localStorage.removeItem(k); } catch (_) {} });
     }
     Object.keys(data).forEach(function (key) {
-      if (UNSAFE[key] || key.indexOf(PREFIX) !== 0) return;
+      if (UNSAFE[key] || !isOurKey(key)) return;
       try { localStorage.setItem(key, JSON.stringify(data[key])); } catch (_) {}
     });
   }

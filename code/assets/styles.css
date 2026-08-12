@@ -614,3 +614,6 @@ html.dark { --cl-ans-bg: #0f2417; --cl-ans-bd: #1f4a2f; --cl-ans-tx: #57c785; }
 }
 .markdown-section details summary { cursor: pointer; font-weight: 600; color: var(--text); outline: none; }
 .markdown-section details[open] summary { margin-bottom: .6em; color: var(--link); }
+
+/* Zebra tabelle theme-aware: vue.css hardcoda #f8f8f8 sulle righe pari (invisibile in dark). */
+.markdown-section table tr:nth-child(2n) { background: var(--bg-soft); }
