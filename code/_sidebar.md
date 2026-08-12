@@ -7,3 +7,4 @@
 
 - **Parte 2 — Elettricità e interruttori**
   - [4. Anatomia di una torcia](/docs/04-anatomy-of-a-flashlight.md)
+  - [5. Comunicare dietro l'angolo](/docs/05-communicating-around-corners.md)
