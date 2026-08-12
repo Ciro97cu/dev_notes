@@ -29,6 +29,17 @@ code {
 > [!tip]
 > Chiudere sempre lo stack con una generic family. Senza, se tutti i font elencati mancano il browser cade sul default del documento, spesso un serif indesiderato.
 
+### La generic family `math`
+
+Tra le generic family ne esiste una di nicchia, **`math`**, pensata per il rendering di contenuti **matematici** (MathML): seleziona un font ottimizzato per le formule — indici, radici, parentesi che si estendono su più righe, glifi a doppia barratura. Gli user agent la applicano di default agli elementi `<math>`, ma la si può richiamare anche esplicitamente:
+
+```css
+math { font-family: math; }
+```
+
+> [!info] Baseline
+> La generic family `math` è **Baseline: newly available (2026)**: Chrome/Edge (dal 2023) e Firefox la supportavano da tempo, Safari 26.2 ha completato il supporto di recente. [MDN — font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) · [Can I Use](https://caniuse.com/mdn-css_properties_font-family_math).
+
 ## Dimensione, peso, stile
 
 - **`font-size`** — la dimensione del testo. Da preferire l'unità **`rem`** (relativa alla dimensione di root), che scala con le preferenze di accessibilità dell'utente meglio dei `px` fissi; dettagli su unità relative e `clamp()` per la tipografia fluida in [[06-unita-valori-funzioni]].
@@ -310,8 +321,15 @@ In `@font-face` si mette un **range** (`font-weight: 100 900`): questo attiva la
 
 </details>
 
+<details>
+<summary>Cos'è la generic family <code>math</code> in <code>font-family</code>?</summary>
+
+È una generic family di nicchia pensata per i contenuti **matematici** (MathML): richiede al browser un font ottimizzato per le formule (indici, radici, parentesi multiriga). Si usa con `math { font-family: math; }`. Baseline newly available (2026), completata da Safari 26.2.
+
+</details>
+
 **In sintesi:**
-- `font-family` è uno **stack di ripiego** che chiude su una generic family; `font-size` in `rem`, `line-height` come **numero puro**.
+- `font-family` è uno **stack di ripiego** che chiude su una generic family (`sans-serif`, `system-ui`… e la specialistica `math` per le formule); `font-size` in `rem`, `line-height` come **numero puro**.
 - La shorthand `font` ha ordine fisso (`size`/`family` obbligatori) e resetta i longhand non espressi.
 - I web font si caricano con `@font-face` + **WOFF2**; **`font-display`** ne governa la comparsa (`swap` per il testo, `optional` per l'accessorio); le **variable font** si attivano con un range di peso.
 - La tipografia moderna sfrutta **`text-wrap: balance/pretty`** (Baseline 2024) per gli a capo; overflow gestito con il pattern `overflow: hidden` + `white-space: nowrap` + `text-overflow: ellipsis`.

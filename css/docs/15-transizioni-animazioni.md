@@ -267,6 +267,23 @@ Ci sono due scenari:
 > [!info] Baseline
 > Le view transitions **same-document** sono **Baseline: Newly available** (da fine 2025: Chrome/Edge dal 2023, Safari 18, Firefox 144). [MDN — startViewTransition()](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition)
 
+Mentre una transizione same-document è in corso, la radice del documento si può stilizzare con la pseudo-classe **`:active-view-transition`**, che matcha `:root` per tutta la durata dell'animazione e smette di farlo appena questa finisce. Serve ad applicare stili validi **solo** durante la transizione — per esempio bloccare temporaneamente l'interazione. La variante **`:active-view-transition-type(<type>)`** restringe il match a un tipo dichiarato (i type passati a `startViewTransition()`, o con `@view-transition { types: … }` nel caso cross-document), così si differenziano gli stili in base al tipo di navigazione:
+
+```css
+/* stili attivi solo mentre una view transition è in corso */
+:active-view-transition {
+  pointer-events: none;        /* niente click accidentali durante l'animazione */
+}
+
+/* stili condizionati al tipo di transizione */
+:active-view-transition-type(forward) {
+  /* regole specifiche per la navigazione "in avanti" */
+}
+```
+
+> [!info] Baseline
+> `:active-view-transition` e `:active-view-transition-type()` fanno parte delle view transitions **same-document** e sono **Baseline: newly available**, completate a fine 2025 con Firefox 144 (Chrome/Edge dal 2023, Safari 18). [MDN — :active-view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/:active-view-transition)
+
 > [!warning]
 > Le view transitions **cross-document** (`@view-transition`) hanno invece **disponibilità limitata**: al momento solo su Chrome/Edge, con Firefox e Safari in corso d'opera. Vanno adottate come progressive enhancement, verificando il supporto su [Can I Use](https://caniuse.com/view-transitions). L'approfondimento esula da questo modulo. [MDN — @view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition)
 
@@ -352,11 +369,16 @@ Rispettando `@media (prefers-reduced-motion: reduce)`: non togliere tutto, ma of
 
 </details>
 
+<details>
+<summary>Cosa seleziona <code>:active-view-transition</code> e a cosa serve?</summary>
+
+Matcha la radice del documento (`:root`) **mentre è in corso una view transition same-document**, e smette appena finisce: permette di applicare stili validi solo durante l'animazione (es. `pointer-events: none`). La variante `:active-view-transition-type(<type>)` limita il match a un tipo di transizione dichiarato. Baseline newly available da fine 2025.
+
+</details>
+
 **In sintesi:**
 - **Transizioni**: interpolano tra due stati su un trigger; shorthand `transition: proprietà durata curva delay`, primo tempo = durata, secondo = delay. Evitare `all`.
 - **Animazioni**: `@keyframes` (from/to o percentuali) + proprietà `animation-*`; `infinite`, `alternate` e soprattutto `fill-mode: forwards` per conservare lo stato finale.
 - Animare **`transform`/`opacity`** (economiche); le **timing functions** (`ease`, `cubic-bezier()`, `steps()`, `linear()`) modellano la curva del movimento.
 - **Accessibilità**: rispettare sempre `prefers-reduced-motion` (Baseline).
-- **Moderno**: `@starting-style` + `allow-discrete` per animare entrata e `display:none` (Baseline 2024); **view transitions** same-document (Baseline fine 2025) e cross-document (limitate); **scroll-driven animations** (`animation-timeline: scroll()/view()`) come progressive enhancement con `@supports` (non ancora Baseline).
-</content>
-</invoke>
+- **Moderno**: `@starting-style` + `allow-discrete` per animare entrata e `display:none` (Baseline 2024); **view transitions** same-document (Baseline fine 2025, con `:active-view-transition` per stilizzare la radice durante la transizione) e cross-document (limitate); **scroll-driven animations** (`animation-timeline: scroll()/view()`) come progressive enhancement con `@supports` (non ancora Baseline).

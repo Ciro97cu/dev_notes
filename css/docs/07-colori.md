@@ -215,6 +215,25 @@ body {
 
 `color-scheme` è Baseline dal 2022; `light-dark()` è **newly available** dal 2024 e **richiede** che `color-scheme` sia impostato. Riferimenti: [color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme) e [light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark) su MDN.
 
+## `contrast-color()` — il colore di massimo contrasto
+
+Scegliere il colore del testo sopra uno sfondo variabile — un badge tinto col colore di brand, una chip generata a runtime — è un problema ricorrente: su sfondi chiari serve testo scuro, su sfondi scuri testo chiaro. `contrast-color()` lo risolve in CSS puro: dato un colore, **restituisce automaticamente il bianco o il nero**, quello dei due che garantisce il contrasto migliore rispetto a quel colore.
+
+```css
+.badge {
+  background: var(--brand);
+  color: contrast-color(var(--brand));   /* bianco o nero, secondo lo sfondo */
+}
+```
+
+Il colore passato è di norma lo stesso usato come sfondo: così, se `--brand` cambia (tema, override locale), anche il testo si riadatta da sé, senza calcoli manuali né JavaScript. È lo strumento ideale per componenti "tematizzabili", dove il colore di sfondo non è noto in anticipo.
+
+> [!info] Baseline
+> `contrast-color()` è **Baseline: newly available** (dal 10 aprile 2026): Chrome/Edge 147, Firefox 146, Safari 26. Usabile ma non ancora "widely available" (prevista per il 2028), quindi nei progetti che devono coprire browser più datati conviene proteggerla con `@supports (color: contrast-color(red))` o affiancarle un fallback esplicito. Riferimenti: [contrast-color() — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/contrast-color) · [Can I Use](https://caniuse.com/?search=contrast-color).
+
+> [!info] Legacy
+> Una proposta precedente si chiamava `color-contrast()` e aveva sintassi diversa: accettava un colore di base **più una lista di candidati** tra cui scegliere il più contrastante. Non è mai stata standardizzata in quella forma; nel codice nuovo si usa `contrast-color()`, che sceglie semplicemente tra bianco e nero.
+
 ## `accent-color` — tinta dei controlli di form
 
 `accent-color` re-tinta i controlli nativi (`checkbox`, `radio`, `range`, `<progress>`) con il colore del brand, mantenendone l'aspetto di sistema:
@@ -277,8 +296,15 @@ Dichiara che la pagina supporta entrambi i temi: gli elementi resi dallo user ag
 
 </details>
 
+<details>
+<summary>A cosa serve <code>color: contrast-color(var(--brand))</code>?</summary>
+
+Restituisce automaticamente il **bianco o il nero** — quello di contrasto maggiore rispetto a `--brand` — così il testo resta leggibile su uno sfondo che cambia (temi, colori generati a runtime) senza calcoli manuali. È Baseline newly available dal 2026: da proteggere con `@supports` sui target più datati.
+
+</details>
+
 **In sintesi:**
 - Un colore si può scrivere in molti modi; per palette curate preferire **`oklch()`** (uniforme e wide-gamut), tenendo hex/`rgb()`/`hsl()` per casi comuni e valori ereditati.
 - Sintassi moderna di `rgb()`/`hsl()`: **spazi** tra i canali e **alpha dopo `/`**; la forma con **virgole** (`rgba()`/`hsla()`) è legacy ma valida.
 - `color-mix()` mescola, la **relative color syntax** deriva varianti: gestione della palette in CSS puro, senza Sass.
-- **Alpha** = trasparenza di un singolo colore; **`opacity`** = trasparenza dell'intero elemento. `color-scheme` + `light-dark()` per il tema chiaro/scuro; `accent-color` per i controlli di form.
+- **Alpha** = trasparenza di un singolo colore; **`opacity`** = trasparenza dell'intero elemento. `color-scheme` + `light-dark()` per il tema chiaro/scuro; `contrast-color()` per il testo di massimo contrasto su sfondi variabili; `accent-color` per i controlli di form.

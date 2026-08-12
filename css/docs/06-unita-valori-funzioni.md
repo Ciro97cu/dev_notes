@@ -89,6 +89,25 @@ h1   { font-size: 2rem; }   /* 32px, ma scala se l'utente ingrandisce */
 article { max-width: 70ch; }   /* righe leggibili senza dipendere dai px */
 ```
 
+### `lh` / `rlh` — relative all'altezza di riga
+
+`1lh` è la **`line-height` calcolata dell'elemento corrente**; `1rlh` è la `line-height` dell'elemento **root** (`<html>`). Stanno a `line-height` come `em`/`rem` stanno a `font-size`: la prima segue il testo locale, la seconda un riferimento globale. Servono a dimensionare qualcosa in "numero di righe" invece che in pixel — l'altezza esatta di una riga per un badge o un'icona inline, o spaziature verticali agganciate al *ritmo* tipografico della pagina.
+
+```css
+.badge {
+  height: 1lh;                 /* alto esattamente quanto una riga di testo */
+  display: inline-flex;
+  align-items: center;
+}
+
+.note {
+  padding-block: 0.5rlh;       /* mezza riga sopra e sotto, coerente col root */
+}
+```
+
+> [!info] Baseline
+> `lh`/`rlh` sono **Baseline: widely available**: Chrome/Edge 109 (gennaio 2023), Safari 16.4 (marzo 2023), Firefox 120 (novembre 2023). Ormai utilizzabili senza fallback ([Can I Use](https://caniuse.com/mdn-css_types_length_lh)).
+
 ## Unità viewport dinamiche (`dvh`/`svh`/`lvh`)
 
 Su mobile `100vh` ha un difetto storico: **non tiene conto della barra degli indirizzi** che appare e scompare durante lo scroll. Un `height: 100vh` risulta *più alto* dell'area realmente visibile quando la barra è presente, tagliando il contenuto in fondo. Per risolverlo il CSS definisce **tre misure** del viewport, ciascuna con la famiglia completa (`vh`/`vw`/`vmin`/`vmax`/`vi`/`vb`):
@@ -323,8 +342,15 @@ No: è un pixel **di riferimento** (logico). Su schermi ad alta densità il **de
 
 </details>
 
+<details>
+<summary>Cosa valgono <code>1lh</code> e <code>1rlh</code>, e quando tornano utili?</summary>
+
+`1lh` è la `line-height` **calcolata dell'elemento corrente**; `1rlh` quella dell'elemento **root** (stanno a `line-height` come `em`/`rem` a `font-size`). Servono a misurare in "numero di righe" invece che in pixel: `height: 1lh` per un badge alto quanto una riga, `padding-block: 0.5rlh` per spaziature agganciate al ritmo tipografico. Baseline widely available.
+
+</details>
+
 **In sintesi:**
 - I valori hanno un **tipo** (keyword, lunghezza, numero, percentuale, funzione); numero ≠ lunghezza (`line-height: 1.5` vs `1.5rem`).
-- Su schermo l'unica assoluta utile è `px`; le relative scalano: `rem` (tipografia/spaziatura), `em` (relativa al testo), `%`/`vw`/`vh` (layout), `svh`/`dvh` (altezze mobile), `ch` (misura di riga).
+- Su schermo l'unica assoluta utile è `px`; le relative scalano: `rem` (tipografia/spaziatura), `em` (relativa al testo), `%`/`vw`/`vh` (layout), `svh`/`dvh` (altezze mobile), `ch` (misura di riga), `lh`/`rlh` (altezza di riga).
 - `calc()` mischia unità (spazi obbligatori attorno a `+`/`-`); `clamp()`/`min()`/`max()` danno dimensioni fluide senza media query.
 - Le **custom properties** (`--nome` + `var(--nome, fallback)`) sono variabili vive: ereditano, si sovrascrivono nella cascade e si pilotano da JS; `@property` le tipizza per poterle **animare**.

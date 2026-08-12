@@ -168,6 +168,24 @@ Impostando i due assi con un solo valore misto vale la scorciatoia `overflow: hi
 > [!tip]
 > Con `overflow: auto`/`scroll` la comparsa della scrollbar può spostare il layout. `scrollbar-gutter: stable` **riserva sempre** lo spazio della scrollbar, evitando lo "sfarfallio" quando appare o scompare ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter)). Supporto recente (Safari da fine 2024): verificare su [Can I Use](https://caniuse.com/mdn-css_properties_scrollbar-gutter).
 
+## `content-visibility` e `contain-intrinsic-size` — saltare il rendering fuori schermo
+
+`content-visibility: auto` è un'ottimizzazione di rendering: dice al browser di **non disegnare il contenuto di un elemento finché non serve**, cioè finché è lontano dal viewport. Il contenuto fuori schermo viene "saltato" (niente layout né paint dei figli) e renderizzato solo quando si avvicina allo scroll, alleggerendo il primo caricamento di pagine lunghe.
+
+C'è però un effetto collaterale: un elemento il cui contenuto non è ancora stato calcolato non ha altezza propria, così la barra di scorrimento "salta" quando quel contenuto compare. `contain-intrinsic-size` lo evita fornendo una **dimensione segnaposto** da usare finché il contenuto resta saltato, mantenendo il layout stabile.
+
+```css
+.section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;   /* alta ~400px finché non è renderizzata */
+}
+```
+
+Il valore accetta una o due lunghezze (larghezza e altezza) e la keyword `auto`: con `auto <length>` il browser **ricorda** la dimensione reale dopo il primo rendering dell'elemento, usando la lunghezza indicata solo come stima iniziale. Più la stima è vicina al vero, meno si percepisce lo spostamento dello scroll.
+
+> [!info] Baseline
+> `content-visibility` e `contain-intrinsic-size` sono **Baseline: newly available** (da settembre 2024, con Safari 18 a completare il supporto; Chrome/Edge e Firefox da prima). Sono un *enhancement* di performance: dove non supportati, il contenuto viene semplicemente renderizzato subito. [MDN — content-visibility](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility) · [Can I Use](https://caniuse.com/css-content-visibility).
+
 ## Float
 
 > [!info] Legacy
@@ -260,10 +278,18 @@ Con **`display: flow-root`** sul contenitore (Baseline): crea un block formattin
 
 </details>
 
+<details>
+<summary>A cosa serve <code>contain-intrinsic-size</code> insieme a <code>content-visibility: auto</code>?</summary>
+
+`content-visibility: auto` salta il rendering del contenuto fuori schermo per alleggerire il caricamento, ma un elemento non renderizzato non ha altezza: la scrollbar "salta" quando il contenuto compare. `contain-intrinsic-size` fornisce una **dimensione segnaposto** (es. `contain-intrinsic-size: auto 400px`) che tiene stabile il layout finché il contenuto è saltato. Baseline newly available (2024).
+
+</details>
+
 **In sintesi:**
 - `display` sceglie il tipo di scatola: **block** (va a capo, rispetta width/height), **inline** (scorre nel testo, ignora width/height e margini verticali), **inline-block** (ibrido), **none** (sparisce dal flusso). `flex`/`grid` → [[12-flexbox]]/[[13-grid]].
 - Nascondere: `display:none` toglie tutto, `visibility:hidden` lascia lo spazio, `opacity:0` lascia spazio **e** interattività (trappola di accessibilità).
 - `position`: `static` (default), `relative` (offset da sé, resta nel flusso), `absolute` (dall'antenato posizionato), `fixed` (viewport), `sticky` (con soglia). Offset moderni con `inset`; la larghezza % dipende dal **containing block** (le tre regole).
 - `z-index` ordina **solo dentro il proprio stacking context**: quando "non funziona", cercare dove nasce il contesto (spesso `opacity`/`transform`).
 - `overflow`: `visible`/`hidden`/`scroll`/`auto`/`clip`, per asse con `overflow-x`/`-y`; `scrollbar-gutter: stable` evita lo sfarfallio.
+- **`content-visibility: auto`** salta il rendering del contenuto fuori schermo (performance); `contain-intrinsic-size` gli dà una dimensione segnaposto per non far saltare lo scroll (Baseline 2024).
 - **Float** è legacy per il layout (sì per il testo attorno alle immagini); float contenuti con `display: flow-root`. **Anchor positioning** è la via moderna per tooltip/popover ancorati, ma non ancora Baseline: usarlo come progressive enhancement.

@@ -235,6 +235,33 @@ li.done::marker { content: "✓ "; }
 > [!warning]
 > `::marker` non è ancora pienamente Baseline: MDN lo segnala a **disponibilità limitata**, perché il set di proprietà supportate varia tra browser (gli usi comuni con `color` e `font-*` funzionano ovunque). Per personalizzazioni spinte del bullet, verificare il supporto ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/::marker)). Alternativa storica: `list-style-type` / `list-style-image`.
 
+### `@counter-style` — marcatori di lista su misura
+
+Dove `::marker` ritocca solo colore e font del bullet, l'at-rule **`@counter-style`** definisce un marcatore di lista **completamente personalizzato**, poi riutilizzabile come valore di `list-style` (o `list-style-type`). Si dà un nome allo stile e si descrive come generare ogni simbolo:
+
+```css
+@counter-style pollici {
+  system: cyclic;      /* ripete in ciclo i simboli elencati */
+  symbols: "👍";       /* il/i simbolo/i del marcatore */
+  suffix: " ";         /* cosa segue il simbolo (default: ". ") */
+}
+
+ul.valutazioni {
+  list-style: pollici;
+}
+```
+
+I descrittori principali:
+
+- **`system`** — l'algoritmo di numerazione: `cyclic` (ripete i simboli in ciclo), `numeric`, `alphabetic`, `fixed` (usa i simboli una volta, poi ripiega), `additive` (sistemi come i numeri romani).
+- **`symbols`** — la lista dei simboli (stringhe, immagini o identificatori).
+- **`prefix`** / **`suffix`** — testo prima e dopo ogni marcatore.
+- **`range`** — l'intervallo di valori per cui lo stile è valido; fuori da lì interviene il `fallback`.
+- **`fallback`** — lo stile a cui delegare quando questo non sa rappresentare un valore (default `decimal`).
+
+> [!info] Baseline
+> `@counter-style` è **Baseline: widely available** (dal settembre 2023, con Safari 17 a completare il supporto; Chrome/Edge e Firefox da molto prima). [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style) · [Can I Use](https://caniuse.com/css-at-counter-style).
+
 ## `::selection`, `::placeholder` e cenno a `::backdrop`
 
 `::selection` stilizza la porzione di testo **evidenziata** dall'utente (accetta poche proprietà: `color`, `background-color`, `text-decoration`…):
@@ -310,8 +337,15 @@ Tutti i `button` che **non** hanno classe `.primary` e **non** sono `:disabled` 
 
 </details>
 
+<details>
+<summary>Quando serve <code>@counter-style</code> invece di <code>::marker</code>?</summary>
+
+`::marker` permette solo di ritoccare colore e font del bullet esistente; `@counter-style` definisce un marcatore **completamente personalizzato** (i suoi simboli, `prefix`/`suffix`, `range`, `fallback`) da richiamare con `list-style`. Esempio: `@counter-style pollici { system: cyclic; symbols: "👍"; suffix: " "; }` e poi `ul { list-style: pollici; }`. Baseline widely available.
+
+</details>
+
 **In sintesi:**
 - **Pseudo-classi** (`:`) = stato/posizione di un elemento esistente; **pseudo-elementi** (`::`) = sotto-parte o box generato. Nel codice nuovo, sempre `::` sui pseudo-elementi.
 - `:has()` (Baseline 2023) è la grande novità: **parent selector** e selettore di fratello precedente, ideale per layout condizionali e form validation a livello di contenitore.
 - Sintassi moderna in primo piano: `:not()` con liste di selettori, `:focus-visible` per il focus ring accessibile, `:nth-child(… of S)` per contare filtrando.
-- `::before`/`::after` richiedono `content` (anche `""`) e servono solo a decorare, mai a veicolare contenuto essenziale.
+- `::before`/`::after` richiedono `content` (anche `""`) e servono solo a decorare, mai a veicolare contenuto essenziale. `::marker` mira al bullet; `@counter-style` definisce marcatori di lista su misura (Baseline).
