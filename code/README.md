@@ -23,7 +23,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [8. Relè e porte logiche](docs/08-relays-and-gates.md) — *Relays and Gates*
 
 ## Parte 3 — Numeri e bit
-- 9. Le nostre dieci cifre — *Our Ten Digits*
+- [9. Le nostre dieci cifre](docs/09-our-ten-digits.md) — *Our Ten Digits*
 - 10. Dieci alternativi — *Alternative 10s*
 - 11. Bit dopo bit dopo bit — *Bit by Bit by Bit*
 - 12. Byte ed esadecimale — *Bytes and Hexadecimal*

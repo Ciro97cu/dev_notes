@@ -11,3 +11,6 @@
   - [6. Logica con gli interruttori](/docs/06-logic-with-switches.md)
   - [7. Telegrafi e relè](/docs/07-telegraphs-and-relays.md)
   - [8. Relè e porte logiche](/docs/08-relays-and-gates.md)
+
+- **Parte 3 — Numeri e bit**
+  - [9. Le nostre dieci cifre](/docs/09-our-ten-digits.md)
