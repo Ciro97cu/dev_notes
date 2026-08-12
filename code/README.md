@@ -19,7 +19,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [4. Anatomia di una torcia](docs/04-anatomy-of-a-flashlight.md) — *Anatomy of a Flashlight*
 - [5. Comunicare dietro l'angolo](docs/05-communicating-around-corners.md) — *Communicating Around Corners*
 - [6. Logica con gli interruttori](docs/06-logic-with-switches.md) — *Logic with Switches*
-- 7. Telegrafi e relè — *Telegraphs and Relays*
+- [7. Telegrafi e relè](docs/07-telegraphs-and-relays.md) — *Telegraphs and Relays*
 - 8. Relè e porte logiche — *Relays and Gates*
 
 ## Parte 3 — Numeri e bit
