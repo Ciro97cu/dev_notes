@@ -18,7 +18,7 @@ Nel 1820 il fisico danese Hans Christian Ørsted mostrò che una corrente elettr
   <g fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--link,#059669)">
     <path d="M35 45 V65"/><rect x="26" y="65" width="18" height="36" rx="3"/><path d="M35 101 V125 H150"/>
     <path d="M35 45 H150 V72"/>
-    <circle cx="75" cy="45" r="2.6" style="fill:var(--link,#059669)"/><circle cx="105" cy="45" r="2.6" style="fill:var(--link,#059669)"/><path d="M75 45 L103 37"/>
+    <circle cx="75" cy="45" r="2.6" style="fill:var(--link,#059669)"/><circle cx="105" cy="45" r="2.6" style="fill:var(--link,#059669)"/><path d="M75 45 L100 39 L105 45"/>
   </g>
   <!-- nucleo di ferro -->
   <rect x="150" y="72" width="120" height="30" rx="4" fill="currentColor" opacity=".12" stroke="currentColor" stroke-width="1.4"/>

@@ -46,7 +46,7 @@ Il contatto elettrico con il terreno si chiama *earth* in Inghilterra e **ground
   <g fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--link,#059669)">
     <path d="M60 50 H393"/>
     <path d="M60 50 V150"/><path d="M410 65 V150"/>
-    <circle cx="152" cy="50" r="2.6" style="fill:var(--link,#059669)"/><circle cx="188" cy="50" r="2.6" style="fill:var(--link,#059669)"/><path d="M152 50 L184 41"/>
+    <circle cx="152" cy="50" r="2.6" style="fill:var(--link,#059669)"/><circle cx="188" cy="50" r="2.6" style="fill:var(--link,#059669)"/><path d="M152 50 L180 44 L188 50"/>
     <circle cx="410" cy="50" r="15" style="fill:var(--link,#059669);fill-opacity:.18"/>
     <path d="M403 50 l4 -6 l4 11 l4 -6"/>
     <g><line x1="410" y1="30" x2="410" y2="24"/><line x1="432" y1="50" x2="438" y2="50"/><line x1="388" y1="50" x2="382" y2="50"/></g>
