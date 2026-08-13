@@ -106,7 +106,7 @@ article { max-width: 70ch; }   /* righe leggibili senza dipendere dai px */
 ```
 
 > [!info] Baseline
-> `lh`/`rlh` sono **Baseline: widely available**: Chrome/Edge 109 (gennaio 2023), Safari 16.4 (marzo 2023), Firefox 120 (novembre 2023). Ormai utilizzabili senza fallback ([Can I Use](https://caniuse.com/mdn-css_types_length_lh)).
+> `lh`/`rlh` sono **Baseline: widely available**: Chrome/Edge 109 (gennaio 2023), Safari 16.4 (marzo 2023), Firefox 120 (novembre 2023). Ormai utilizzabili senza fallback ([Can I Use](https://caniuse.com/mdn-css_types_length_lh)). *(verificato: 2026-08-13)*
 
 ## Unità viewport dinamiche (`dvh`/`svh`/`lvh`)
 

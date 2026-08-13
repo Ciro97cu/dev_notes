@@ -77,6 +77,7 @@ Collegamenti: [[NN-altro-modulo]]
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) **senza** titolo custom.
 - `> [!info]` mantiene il titolo quando è informativo: usare `> [!info] Legacy` per la sintassi vecchia, `> [!info] Baseline` per lo stato di supporto di una feature moderna.
+- **Data di verifica nei callout Baseline**: quando un `> [!info] Baseline` riporta uno stato **ancora in evoluzione** (`newly available`, disponibilità limitata, "in diffusione"), chiudere la nota con la data di verifica in corsivo — `*(verificato: AAAA-MM-GG)*`. Così, se il modulo non viene toccato per un po', il lettore capisce quanto è fresca l'informazione e sa di doverla ricontrollare su MDN / Can I Use. Per feature ormai `widely available` (stabili) la data è facoltativa.
 - Le risposte del **Ripasso lampo** vanno in un **`<details>`** (`<summary>` = domanda), stile Q&A unico del monorepo — non nel callout.
 
 ## Aggiunte e modernizzazioni

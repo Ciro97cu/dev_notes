@@ -184,7 +184,7 @@ C'è però un effetto collaterale: un elemento il cui contenuto non è ancora st
 Il valore accetta una o due lunghezze (larghezza e altezza) e la keyword `auto`: con `auto <length>` il browser **ricorda** la dimensione reale dopo il primo rendering dell'elemento, usando la lunghezza indicata solo come stima iniziale. Più la stima è vicina al vero, meno si percepisce lo spostamento dello scroll.
 
 > [!info] Baseline
-> `content-visibility` e `contain-intrinsic-size` sono **Baseline: newly available** (da settembre 2024, con Safari 18 a completare il supporto; Chrome/Edge e Firefox da prima). Sono un *enhancement* di performance: dove non supportati, il contenuto viene semplicemente renderizzato subito. [MDN — content-visibility](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility) · [Can I Use](https://caniuse.com/css-content-visibility).
+> `content-visibility` e `contain-intrinsic-size` sono **Baseline: newly available** (da settembre 2024, con Safari 18 a completare il supporto; Chrome/Edge e Firefox da prima). Sono un *enhancement* di performance: dove non supportati, il contenuto viene semplicemente renderizzato subito. [MDN — content-visibility](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility) · [Can I Use](https://caniuse.com/css-content-visibility). *(verificato: 2026-08-13)*
 
 ## Float
 

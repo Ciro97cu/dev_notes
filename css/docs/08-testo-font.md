@@ -38,7 +38,7 @@ math { font-family: math; }
 ```
 
 > [!info] Baseline
-> La generic family `math` è **Baseline: newly available (2026)**: Chrome/Edge (dal 2023) e Firefox la supportavano da tempo, Safari 26.2 ha completato il supporto di recente. [MDN — font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) · [Can I Use](https://caniuse.com/mdn-css_properties_font-family_math).
+> La generic family `math` è **Baseline: newly available (2026)**: Chrome/Edge (dal 2023) e Firefox la supportavano da tempo, Safari 26.2 ha completato il supporto di recente. [MDN — font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) · [Can I Use](https://caniuse.com/mdn-css_properties_font-family_math). *(verificato: 2026-08-13)*
 
 ## Dimensione, peso, stile
 

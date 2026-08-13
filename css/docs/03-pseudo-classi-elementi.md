@@ -260,7 +260,7 @@ I descrittori principali:
 - **`fallback`** — lo stile a cui delegare quando questo non sa rappresentare un valore (default `decimal`).
 
 > [!info] Baseline
-> `@counter-style` è **Baseline: widely available** (dal settembre 2023, con Safari 17 a completare il supporto; Chrome/Edge e Firefox da molto prima). [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style) · [Can I Use](https://caniuse.com/css-at-counter-style).
+> `@counter-style` è **Baseline: widely available** (dal settembre 2023, con Safari 17 a completare il supporto; Chrome/Edge e Firefox da molto prima). [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style) · [Can I Use](https://caniuse.com/css-at-counter-style). *(verificato: 2026-08-13)*
 
 ## `::selection`, `::placeholder` e cenno a `::backdrop`
 

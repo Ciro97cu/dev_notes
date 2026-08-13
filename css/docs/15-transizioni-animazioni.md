@@ -282,7 +282,7 @@ Mentre una transizione same-document è in corso, la radice del documento si pu�
 ```
 
 > [!info] Baseline
-> `:active-view-transition` e `:active-view-transition-type()` fanno parte delle view transitions **same-document** e sono **Baseline: newly available**, completate a fine 2025 con Firefox 144 (Chrome/Edge dal 2023, Safari 18). [MDN — :active-view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/:active-view-transition)
+> `:active-view-transition` e `:active-view-transition-type()` fanno parte delle view transitions **same-document** e sono **Baseline: newly available**, completate a fine 2025 con Firefox 144 (Chrome/Edge dal 2023, Safari 18). [MDN — :active-view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/:active-view-transition) *(verificato: 2026-08-13)*
 
 > [!warning]
 > Le view transitions **cross-document** (`@view-transition`) hanno invece **disponibilità limitata**: al momento solo su Chrome/Edge, con Firefox e Safari in corso d'opera. Vanno adottate come progressive enhancement, verificando il supporto su [Can I Use](https://caniuse.com/view-transitions). L'approfondimento esula da questo modulo. [MDN — @view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition)
