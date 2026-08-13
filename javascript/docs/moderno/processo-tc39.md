@@ -57,7 +57,7 @@ Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine
 
 - **Stage 1 (2017)** — Maggie Johnson-Pint presenta l'idea al comitato: c'è un problema chiaro (`Date`) e una direzione, così il TC39 accetta di studiarla.
 - **Stage 2 (2019)** — esce la prima **bozza di specifica** e prendono forma i tipi distinti (`PlainDate`, `ZonedDateTime`, `Duration`…): il comitato si aspetta ormai che entri nel linguaggio.
-- **Stage 3 (2021)** — la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo — **circa cinque anni** — per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai calendari non gregoriani).
+- **Stage 3 (2021)** — la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo — **circa cinque anni** — per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai [calendari non gregoriani](es2026.md)).
 - **Stage 4 (11 marzo 2026)** — due implementazioni superano i test di conformità, la pull request alla specifica è approvata e `Temporal` entra ufficialmente in **ES2026** ([Igalia](https://www.igalia.com/2026/03/13/Temporal-Reaches-Stage-4.html)). Poco dopo, Node.js 26 lo abilita di default.
 
 **La soluzione.** Nove anni dall'idea allo standard: un promemoria di quanto lo Stage 4 sia una garanzia, non una formalità. Il risultato è l'API descritta nella pagina di [ES2026](es2026.md) — immutabile, con i mesi che partono da 1 e supporto nativo a fusi orari e calendari.
@@ -97,6 +97,9 @@ A questo punto sorge spontanea una domanda: perché una feature impiega **nove a
 | **Costo per i motori** | alto: molto codice più i dati di fuso/calendario; nel 2024 l'API è stata perfino **ridotta** perché gli implementatori la giudicavano troppo grande | banale: poche righe per motore |
 
 In sintesi, ad allungare il percorso sono soprattutto quattro elementi: la **dimensione** dell'API (più superficie significa più decisioni, più testo di specifica, più test), la **difficoltà intrinseca** dei problemi da risolvere, la quantità di **rodaggio allo Stage 3** necessaria prima che una proposta si possa dire "definitiva" — è lì che `Temporal` ha speso circa cinque anni, arrivando addirittura a *ridurre* l'API su richiesta dei motori — e le **dipendenze esterne** verso altri enti di standardizzazione o insiemi di dati. `RegExp.escape` non ha nulla di tutto ciò: è piccola, autoconclusa e senza dipendenze, e per questo vola. È anche il motivo per cui lo Stage 4 di una proposta enorme come `Temporal` va visto come una conquista, non come una formalità.
+
+> [!info]
+> Due sigle citate nella tabella: **IANA** è l'ente che mantiene il *time zone database*, l'elenco standard dei fusi orari del mondo (`Europe/Rome`, `America/New_York`…) con le rispettive regole di ora legale; **CLDR** (*Common Locale Data Repository*) è il database di Unicode con i dati «locali» — formati di data e numero, nomi dei mesi, dati dei calendari — per ogni lingua e regione. `Temporal` si appoggia a entrambi per fusi orari e calendari.
 
 ## Perché documentiamo (di norma) solo lo Stage 4
 
