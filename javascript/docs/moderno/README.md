@@ -7,6 +7,8 @@ Questa sezione è **distaccata** dalla guida al libro: raccoglie le funzionalit�
 > [!tip]
 > Il modello annuale ha reso l'etichetta di versione meno importante del **supporto effettivo** nell'ambiente target. In pratica si ragiona per singola feature: ogni pagina indica l'edizione in cui la feature è stata standardizzata, ma la maggior parte è disponibile da anni in tutti i motori evergreen (V8, SpiderMonkey, JavaScriptCore) e in Node.js recente.
 
+Se termini come **Stage 4**, *finished proposals* o **TC39** non sono familiari, la pagina [Il processo TC39 e gli stage](processo-tc39.md) spiega chi governa il linguaggio, cosa sono gli stage e come si segue una proposta sul web.
+
 ## Le edizioni
 
 | Edizione | Anno | Temi principali |

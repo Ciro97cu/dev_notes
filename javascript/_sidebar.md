@@ -47,6 +47,7 @@
 
 - **JavaScript moderno — oltre YDKJS**
   - [Panoramica](docs/moderno/README.md)
+  - [Il processo TC39 e gli stage](docs/moderno/processo-tc39.md)
   - [ES2017 (ES8)](docs/moderno/es2017.md)
   - [ES2018 (ES9)](docs/moderno/es2018.md)
   - [ES2019 (ES10)](docs/moderno/es2019.md)
