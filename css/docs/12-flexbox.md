@@ -36,11 +36,10 @@ Tutto in Flexbox ruota attorno a **due assi perpendicolari**:
 
 Quale sia orizzontale e quale verticale **non è fisso**: lo decide `flex-direction`. Questa è la chiave per non confondersi con le proprietà di allineamento.
 
-```mermaid
-graph TD
-  FD["flex-direction"] -->|row| A1["main axis = orizzontale<br/>cross axis = verticale"]
-  FD -->|column| A2["main axis = verticale<br/>cross axis = orizzontale"]
-```
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 430 190" role="img" aria-label="Flexbox: asse principale (justify-content) e trasversale (align-items)" style="width:100%;max-width:470px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><text x="235" y="30" font-size="11" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">flex-direction: row</text><rect x="70" y="44" width="330" height="86" rx="8" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="84" y="60" width="84" height="54" rx="6" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.4"/><text x="126" y="92" font-size="15" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">1</text><rect x="188" y="60" width="84" height="54" rx="6" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.4"/><text x="230" y="92" font-size="15" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">2</text><rect x="292" y="60" width="84" height="54" rx="6" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.4"/><text x="334" y="92" font-size="15" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">3</text><line x1="70" y1="150" x2="398" y2="150" stroke="currentColor" stroke-width="1.6"/><path d="M398 146 L404 150 L398 154 Z" fill="currentColor"/><text x="237" y="170" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">asse principale — justify-content</text><line x1="44" y1="44" x2="44" y2="126" stroke="currentColor" stroke-width="1.6"/><path d="M40 126 L44 132 L48 126 Z" fill="currentColor"/><text x="20" y="88" font-size="11" font-weight="700" text-anchor="middle" fill="currentColor" transform="rotate(-90 20 88)">asse trasversale — align-items</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">I due assi di un flex container: <code>justify-content</code> allinea lungo l'<strong>asse principale</strong> (orizzontale con <code>flex-direction: row</code>), <code>align-items</code> lungo l'<strong>asse trasversale</strong>. Con <code>column</code> i due assi si scambiano.</figcaption>
+</figure>
 
 La regola mnemonica: **`justify-content` allinea sull'asse principale**, **`align-items` sull'asse trasversale**. Se si cambia `flex-direction`, il significato "orizzontale/verticale" di queste due proprietà si scambia di conseguenza.
 
