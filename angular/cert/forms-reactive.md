@@ -92,7 +92,7 @@ La tupla `[valoreIniziale, validators, asyncValidators]` è la scorciatoia per `
 ## `Validators` built-in
 Funzioni statiche di `Validators` da passare a controlli e gruppi: `required`, `requiredTrue` (per checkbox), `min`, `max`, `minLength`, `maxLength`, `pattern`, `email`, più i combinatori `compose` / `composeAsync`. Producono la stessa forma di errori vista in [[forms-template-driven]] (`{ required: true }`, `{ minlength: { requiredLength, actualLength } }`, …).
 
-## Validatore custom **sincrono** (`ValidatorFn`)
+## Validatore custom sincrono (`ValidatorFn`)
 Una `ValidatorFn` è `(control: AbstractControl) => ValidationErrors | null`: ritorna `null` se valido, altrimenti un oggetto d'errore che finisce in `control.errors`.
 
 ```ts
@@ -110,7 +110,7 @@ export function cityValidator(allowed: string[]): ValidatorFn {
 
 Applicato a un `FormGroup`, un `ValidatorFn` diventa un **cross-field validator** (es. confronto password/conferma): riceve il gruppo e valida più campi insieme.
 
-## Validatore custom **asincrono** (`AsyncValidatorFn`)
+## Validatore custom asincrono (`AsyncValidatorFn`)
 Una `AsyncValidatorFn` ritorna un `Observable` o una `Promise` di `ValidationErrors | null`. Mentre è in corso, il controllo è in stato `pending`. Tipico per controlli lato server (es. unicità).
 
 ```ts

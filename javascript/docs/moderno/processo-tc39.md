@@ -79,7 +79,7 @@ La pagina principale (il `README`) elenca in **tabelle** le proposte dallo Stage
 
 Un esempio concreto, `Temporal` (la nuova API per le date vista nella pagina di [ES2026](es2026.md)): cercando "temporal" si arriva al repository `tc39/proposal-temporal`, il cui README dichiara **Stage 4**; e infatti la si ritrova in `finished-proposals.md` sotto l'edizione **ES2026**. Conclusione: è ufficiale, fa parte dello standard.
 
-## Attenzione: lo stage **non** è il supporto nei browser
+## Attenzione: lo stage non è il supporto nei browser
 
 C'è un ultimo equivoco da sciogliere, ed è importante. Lo **stage** misura la maturità di una feature **nella specifica** (il processo di TC39). Il **supporto nei browser** è tutt'altra cosa: dice se i motori (V8, SpiderMonkey, JavaScriptCore) l'hanno *davvero* implementata e distribuita agli utenti. Sono **due assi indipendenti**:
 

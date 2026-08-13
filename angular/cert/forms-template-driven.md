@@ -70,7 +70,7 @@ Qui `f` è un `NgForm` (con `f.value`, `f.valid`, `f.controls`…) e `fromCtrl` 
 ## `(ngSubmit)`
 `(ngSubmit)` è l'evento emesso da `NgForm` al submit: va preferito a un `(click)` sul bottone perché intercetta anche l'invio da tastiera e **previene** il reload di default del browser. Il bottone di submit non richiede `type="submit"` esplicito se è l'unico bottone nel form, ma dichiararlo è buona pratica.
 
-## Validatori come **attributi**
+## Validatori come attributi
 In template-driven i validatori sono **attributi HTML** che Angular mappa sulle relative `Validators` (vedi le stesse in [[forms-reactive]]):
 
 | Attributo | Effetto |
