@@ -233,7 +233,7 @@ li.done::marker { content: "✓ "; }
 ```
 
 > [!warning]
-> `::marker` non è ancora pienamente Baseline: MDN lo segnala a **disponibilità limitata**, perché il set di proprietà supportate varia tra browser (gli usi comuni con `color` e `font-*` funzionano ovunque). Per personalizzazioni spinte del bullet, verificare il supporto ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/::marker)). Alternativa storica: `list-style-type` / `list-style-image`.
+> `::marker` non è ancora pienamente Baseline: MDN lo segnala a **disponibilità limitata**, perché il set di proprietà supportate varia tra browser (gli usi comuni con `color` e `font-*` funzionano ovunque). Per personalizzazioni spinte del bullet, verificare il supporto ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/::marker)). Alternativa storica: `list-style-type` / `list-style-image`. *(verificato: 2026-08-13)*
 
 ### `@counter-style` — marcatori di lista su misura
 

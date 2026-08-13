@@ -55,7 +55,7 @@ Tre modi per "far sparire" qualcosa, con conseguenze molto diverse su spazio occ
 > Un elemento a `opacity: 0` cattura ancora i click e riceve il focus da tastiera: è una trappola di accessibilità e di UX (bottoni "invisibili" ma premibili). Per un pannello che deve sparire davvero, usare `display: none` o combinare `opacity` con `visibility`/`pointer-events`.
 
 > [!tip]
-> `opacity` è l'unica delle tre a essere **animabile in modo continuo** (fade graduale); `display` e `visibility` cambiano a scatti. Oggi si può comunque transizionare *da/verso* `display: none` abbinando `transition-behavior: allow-discrete` e `@starting-style` — supporto recente, da verificare su [Can I Use](https://caniuse.com/mdn-css_properties_transition-behavior).
+> `opacity` è l'unica delle tre a essere **animabile in modo continuo** (fade graduale); `display` e `visibility` cambiano a scatti. Oggi si può comunque transizionare *da/verso* `display: none` abbinando `transition-behavior: allow-discrete` e `@starting-style` — supporto recente, da verificare su [Can I Use](https://caniuse.com/mdn-css_properties_transition-behavior). *(verificato: 2026-08-13)*
 
 ### `flex` e `grid`
 
@@ -166,7 +166,7 @@ Il punto chiave: **uno stacking context è atomico**. Una volta che un elemento 
 Impostando i due assi con un solo valore misto vale la scorciatoia `overflow: hidden auto` (prima X, poi Y). Un valore diverso da `visible`/`clip` su una scatola crea un *block formatting context*, utile anche per **contenere i float** e per fermare il *margin collapsing* (vedi [[05-box-model]]).
 
 > [!tip]
-> Con `overflow: auto`/`scroll` la comparsa della scrollbar può spostare il layout. `scrollbar-gutter: stable` **riserva sempre** lo spazio della scrollbar, evitando lo "sfarfallio" quando appare o scompare ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter)). Supporto recente (Safari da fine 2024): verificare su [Can I Use](https://caniuse.com/mdn-css_properties_scrollbar-gutter).
+> Con `overflow: auto`/`scroll` la comparsa della scrollbar può spostare il layout. `scrollbar-gutter: stable` **riserva sempre** lo spazio della scrollbar, evitando lo "sfarfallio" quando appare o scompare ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter)). Supporto recente (Safari da fine 2024): verificare su [Can I Use](https://caniuse.com/mdn-css_properties_scrollbar-gutter). *(verificato: 2026-08-13)*
 
 ## `content-visibility` e `contain-intrinsic-size` — saltare il rendering fuori schermo
 
@@ -230,7 +230,7 @@ Ancorare un elemento a un altro — un *tooltip* sotto un bottone, un menu accan
 ```
 
 > [!warning]
-> Supporto **non ancora Baseline** (a metà 2026): implementato in Chromium (Chrome/Edge), ma Firefox e Safari sono indietro. Va usato come *progressive enhancement*, con un fallback e una verifica `@supports`. Controllare lo stato su [Can I Use](https://caniuse.com/css-anchor-positioning) prima di adottarlo in produzione.
+> Supporto **non ancora Baseline** (a metà 2026): implementato in Chromium (Chrome/Edge), ma Firefox e Safari sono indietro. Va usato come *progressive enhancement*, con un fallback e una verifica `@supports`. Controllare lo stato su [Can I Use](https://caniuse.com/css-anchor-positioning) prima di adottarlo in produzione. *(verificato: 2026-08-13)*
 
 Collegamenti: [[05-box-model]] · [[10-sfondi-effetti]] · [[12-flexbox]] · [[13-grid]]
 

@@ -184,7 +184,7 @@ Combinato coi layer (o da solo), `:where()` serve a pubblicare stili **base faci
 Introduce anche un criterio di cascade in più — la **scoping proximity**: a parità di specificità, vince la regola il cui scope-root è **più vicino** (meno "salti" nel DOM) all'elemento. Nell'ordine dell'algoritmo si colloca **fra specificità e ordine di apparizione**.
 
 > [!info] Baseline
-> `@scope` è **Baseline "newly available" da fine 2025**: supportato nelle versioni recenti di Chrome, Edge, Firefox e Safari, ma **da verificare** su browser più datati ([Can I Use](https://caniuse.com/css-cascade-scope)). Per ora, in produzione con base utenti eterogenea, valutare un fallback.
+> `@scope` è **Baseline "newly available" da fine 2025**: supportato nelle versioni recenti di Chrome, Edge, Firefox e Safari, ma **da verificare** su browser più datati ([Can I Use](https://caniuse.com/css-cascade-scope)). Per ora, in produzione con base utenti eterogenea, valutare un fallback. *(verificato: 2026-08-13)*
 
 Collegamenti: [[01-fondamenti]] · [[02-selettori-combinatori]] · [[03-pseudo-classi-elementi]]
 

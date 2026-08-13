@@ -231,7 +231,7 @@ La pseudo-classe **`:scope`** rappresenta il *punto di riferimento* rispetto al 
 ```
 
 > [!info] Baseline
-> `:scope` è Baseline (dal 2020). La at-rule `@scope`, invece, è più recente: verificarne il supporto su [Can I Use](https://caniuse.com/css-cascade-scope) prima di usarla in produzione, o adottarla come progressive enhancement.
+> `:scope` è Baseline (dal 2020). La at-rule `@scope`, invece, è più recente: verificarne il supporto su [Can I Use](https://caniuse.com/css-cascade-scope) prima di usarla in produzione, o adottarla come progressive enhancement. *(verificato: 2026-08-13)*
 
 Collegamenti: [[01-fondamenti]] · [[03-pseudo-classi-elementi]] · [[04-cascade-specificita-ereditarieta]]
 

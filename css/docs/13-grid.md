@@ -281,6 +281,8 @@ Il layout **masonry** (a "mattoni", stile Pinterest) tiene un asse a griglia reg
 >   .masonry { grid-template-rows: masonry; }
 > }
 > ```
+>
+> *(verificato: 2026-08-13)*
 
 Collegamenti: [[12-flexbox]] · [[11-responsive]] · [[05-box-model]] · [[09-display-posizionamento]]
 

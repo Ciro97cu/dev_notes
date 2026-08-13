@@ -244,7 +244,7 @@ Storicamente non si poteva animare l'**apparizione** di un elemento appena inser
 Si ragiona quindi su **tre stati**: quello di partenza (`@starting-style`), quello a regime e quello finale. Per specificità pari, `@starting-style` va posto **dopo** la regola normale.
 
 > [!info] Baseline
-> `@starting-style` e `transition-behavior: allow-discrete` sono **Baseline: Newly available** (da agosto 2024). Ottimi come *enhancement*; su browser più vecchi l'elemento appare senza animazione, senza rompersi. [MDN — @starting-style](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) · [MDN — transition-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-behavior)
+> `@starting-style` e `transition-behavior: allow-discrete` sono **Baseline: Newly available** (da agosto 2024). Ottimi come *enhancement*; su browser più vecchi l'elemento appare senza animazione, senza rompersi. [MDN — @starting-style](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) · [MDN — transition-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/transition-behavior) *(verificato: 2026-08-13)*
 
 > [!warning]
 > `@starting-style` riguarda **solo le transizioni**, non le animazioni `@keyframes` (che hanno già uno stato iniziale nei keyframe). Va inoltre incluso `display` (e `overlay` per popover/`<dialog>`) tra le proprietà in transizione, altrimenti l'uscita non si vede.
@@ -265,7 +265,7 @@ Ci sono due scenari:
 ```
 
 > [!info] Baseline
-> Le view transitions **same-document** sono **Baseline: Newly available** (da fine 2025: Chrome/Edge dal 2023, Safari 18, Firefox 144). [MDN — startViewTransition()](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition)
+> Le view transitions **same-document** sono **Baseline: Newly available** (da fine 2025: Chrome/Edge dal 2023, Safari 18, Firefox 144). [MDN — startViewTransition()](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition) *(verificato: 2026-08-13)*
 
 Mentre una transizione same-document è in corso, la radice del documento si può stilizzare con la pseudo-classe **`:active-view-transition`**, che matcha `:root` per tutta la durata dell'animazione e smette di farlo appena questa finisce. Serve ad applicare stili validi **solo** durante la transizione — per esempio bloccare temporaneamente l'interazione. La variante **`:active-view-transition-type(<type>)`** restringe il match a un tipo dichiarato (i type passati a `startViewTransition()`, o con `@view-transition { types: … }` nel caso cross-document), così si differenziano gli stili in base al tipo di navigazione:
 
@@ -285,7 +285,7 @@ Mentre una transizione same-document è in corso, la radice del documento si pu�
 > `:active-view-transition` e `:active-view-transition-type()` fanno parte delle view transitions **same-document** e sono **Baseline: newly available**, completate a fine 2025 con Firefox 144 (Chrome/Edge dal 2023, Safari 18). [MDN — :active-view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/:active-view-transition) *(verificato: 2026-08-13)*
 
 > [!warning]
-> Le view transitions **cross-document** (`@view-transition`) hanno invece **disponibilità limitata**: al momento solo su Chrome/Edge, con Firefox e Safari in corso d'opera. Vanno adottate come progressive enhancement, verificando il supporto su [Can I Use](https://caniuse.com/view-transitions). L'approfondimento esula da questo modulo. [MDN — @view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition)
+> Le view transitions **cross-document** (`@view-transition`) hanno invece **disponibilità limitata**: al momento solo su Chrome/Edge, con Firefox e Safari in corso d'opera. Vanno adottate come progressive enhancement, verificando il supporto su [Can I Use](https://caniuse.com/view-transitions). L'approfondimento esula da questo modulo. [MDN — @view-transition](https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition) *(verificato: 2026-08-13)*
 
 ## Moderno emergente: scroll-driven animations
 
@@ -315,7 +315,7 @@ Con `animation-range` si delimita *dove* lungo la timeline l'animazione si svolg
 > `animation-timeline` è **reset-only** nello shorthand `animation`: va dichiarata **dopo** l'eventuale shorthand, altrimenti viene riazzerata a `auto`.
 
 > [!info] Baseline
-> Le scroll-driven animations hanno **disponibilità limitata** (non ancora Baseline): supportate su Chrome/Edge e Firefox recenti, non ancora su Safari. Da usare come *progressive enhancement* con feature detection, così i browser senza supporto mostrano il contenuto senza animazione. [MDN — animation-timeline](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline)
+> Le scroll-driven animations hanno **disponibilità limitata** (non ancora Baseline): supportate su Chrome/Edge e Firefox recenti, non ancora su Safari. Da usare come *progressive enhancement* con feature detection, così i browser senza supporto mostrano il contenuto senza animazione. [MDN — animation-timeline](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline) *(verificato: 2026-08-13)*
 
 ```css
 @supports (animation-timeline: scroll()) {
