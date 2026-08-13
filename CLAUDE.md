@@ -41,6 +41,20 @@ Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **EC
 ## Diagrammi
 Mermaid **solo dove rende davvero** (flussi, gerarchie, sequenze non banali), non ovunque. **Nessun colore custom** (`classDef`/`style` con `fill` fissi): i siti hanno tema chiaro/scuro, i colori hardcoded rompono il dark mode → distinguere con le **forme**, non con i colori.
 
+### SVG inline — verifica visiva obbligatoria
+Un SVG scritto a mano ha coordinate "alla cieca": **overlap**, **testo tagliato dal viewBox** e **collisioni** tra elementi non si vedono nel codice, solo guardando l'immagine. Perciò, prima di committare un SVG non banale, **renderizzarlo e ispezionarlo con l'occhio** (come si fa con le pagine di un PDF):
+
+```
+python3 scripts/svg-preview.py <file.md|file.svg>   # genera un PNG da leggere; usa PyMuPDF
+```
+
+(su macOS, in alternativa per un singolo file: `qlmanage -t -s 1000 -o . x.svg`). Nel PNG i colori `currentColor`/`var(--link,…)` escono scuri: va bene, serve a controllare il **layout**, non il tema. Linee guida per sbagliare meno a monte:
+
+- **Margini abbondanti** nel `viewBox`; mai testo a ridosso dei bordi (verrebbe tagliato). Se un'etichetta sfora, allargare `viewBox`/altezza.
+- **Connettori e frecce da bordo a bordo** degli elementi, mai da centro a centro (sennò passano *sopra* i nodi).
+- **Niente testo in spazi stretti** tra due elementi (collide): accorciare l'etichetta, allargare lo spazio, o spostarla nella `figcaption`.
+- Preferire poche etichette essenziali nell'SVG e demandare il resto alla **didascalia** in prosa sotto la figura.
+
 ## Architettura (zero-build) — tenerla documentata
 L'hub è **zero-build** e **client-side**: docsify rende i Markdown nel browser (CSR) e le dipendenze sono **self-hosted** in `assets/vendor/` (non da CDN), con la sola eccezione dell'editor Monaco del playground. La mappa completa — com'è fatto e **perché** questa scelta è stata preferita ad altre — vive in [README.md](README.md), sezione *Architettura*.
 
