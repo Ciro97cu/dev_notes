@@ -73,7 +73,7 @@ Ogni byte, essendo di otto bit, è esattamente **due cifre esadecimali**, da `00
     <text x="272" y="104" font-size="12" opacity=".7">nibble basso</text>
     <text x="102" y="132" font-size="22" font-weight="700" fill="var(--link,#059669)">B</text>
     <text x="272" y="132" font-size="22" font-weight="700" fill="var(--link,#059669)">6</text>
-    <text x="372" y="132" font-size="16" font-weight="700">= B6h</text>
+    <text x="396" y="132" font-size="16" font-weight="700" text-anchor="end">= B6h</text>
   </g>
 </svg>
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>1011</code> vale B, <code>0110</code> vale 6: il byte <code>10110110</code> è <strong>B6h</strong>. Allo stesso modo <code>01010111</code> è <strong>57h</strong>.</figcaption>

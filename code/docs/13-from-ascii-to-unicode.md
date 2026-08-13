@@ -132,8 +132,8 @@ Ora tutti i pezzi sono al loro posto. In quell'email, l'apostrofo di *We've* non
       <path d="M215 112 V150" marker-end="url(#av)"/>
     </g>
     <defs><marker id="av" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="currentColor"/></marker></defs>
-    <text x="215" y="30" font-size="13" text-anchor="middle">come <tspan font-weight="700">UTF-8</tspan> → ’ (un carattere: U+2019)</text>
-    <text x="215" y="168" font-size="13" text-anchor="middle">come <tspan font-weight="700">Windows-1252</tspan> → â € ™ (tre caratteri)</text>
+    <text x="215" y="30" font-size="13" text-anchor="middle">come UTF-8 → ’ (un carattere: U+2019)</text>
+    <text x="215" y="168" font-size="13" text-anchor="middle">come Windows-1252 → â € ™ (tre caratteri)</text>
   </g>
 </svg>
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Stessi byte, due letture diverse: dichiarare la code page sbagliata trasforma un apostrofo in <code>â€™</code>. Mistero risolto.</figcaption>

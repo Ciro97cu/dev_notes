@@ -72,7 +72,7 @@ L'esempio principe del capitolo è il codice a barre che sta su quasi ogni confe
 Un UPC completo è fatto di **95 bit**, letti sempre come una sequenza fissa di barre e spazi tutti della stessa larghezza di base. La struttura è simmetrica:
 
 <figure style="margin:1rem 0;text-align:center">
-<svg viewBox="0 0 400 96" role="img" aria-label="Anatomia dei 95 bit di un codice UPC" style="width:100%;max-width:440px;height:auto;color:inherit">
+<svg viewBox="-16 0 432 96" role="img" aria-label="Anatomia dei 95 bit di un codice UPC" style="width:100%;max-width:440px;height:auto;color:inherit">
   <g stroke="currentColor" stroke-width="1.2">
     <rect x="10" y="16" width="12" height="40" fill="var(--link,#059669)" fill-opacity=".75"/>
     <rect x="22" y="16" width="168" height="40" fill="var(--link,#059669)" fill-opacity=".14"/>
