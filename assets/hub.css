@@ -108,11 +108,17 @@ body::before {
   gap: 1.3rem;
 }
 @media (max-width: 640px) {
-  .grid { grid-template-columns: 1fr; }
+  /* minmax(0,…): la traccia si comprime, così la card non sborda mai fuori dallo schermo.
+     Un `1fr` "nudo" vale minmax(auto,1fr): il suo minimo è il min-content della card, e su
+     schermi molto stretti quello faceva uscire le card dal bordo. */
+  .grid { grid-template-columns: minmax(0, 1fr); }
   .wrap { padding: 2.75rem 1.1rem 1.75rem; }   /* meno spazio in cima, ritmo più equilibrato */
   .hero { margin-bottom: 1.8rem; }
   .logo { width: 68px; height: 68px; margin-bottom: .85rem; }
-  .card { padding: 1.05rem 1.15rem; }
+  .card { padding: 1.05rem 1.15rem; gap: .85rem; }
+  .card .arrow { display: none; }              /* su mobile la card è già toccabile: la freccia toglie solo spazio */
+  .tile { width: 48px; height: 48px; font-size: 1.9rem; }
+  .tile svg { width: 42px; height: 42px; }
 }
 /* Rinforza [hidden] contro CSS specificity più alta (es. display:flex della classe) */
 [hidden] { display: none !important; }
@@ -137,6 +143,7 @@ body::before {
 .resume-banner:hover .resume-arrow { transform: translateX(4px); }
 .card {
   position: relative;
+  min-width: 0;                 /* grid item: consente alla card di comprimersi senza sbordare */
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -185,8 +192,8 @@ body::before {
 .tile svg { width: 48px; height: 48px; }
 
 .body { flex: 1 1 auto; min-width: 0; }
-.title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; }
-.desc  { display: block; margin-top: .2rem; color: var(--fg-soft); font-size: .92rem; line-height: 1.45; }
+.title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.desc  { display: block; margin-top: .2rem; color: var(--fg-soft); font-size: .92rem; line-height: 1.45; overflow-wrap: anywhere; }
 
 .arrow {
   flex: 0 0 auto;
