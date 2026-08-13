@@ -37,6 +37,11 @@ git pull                     # scarica E unisce
 ```
 Se il branch remoto non esiste ancora, `git push` lo crea.
 
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 580 170" role="img" aria-label="06-locale-remoto" style="width:100%;max-width:620px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="40" y="60" width="150" height="70" rx="6" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><rect x="360" y="60" width="170" height="70" rx="6" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="115" y="90" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Locale</text><text x="115" y="110" font-size="10" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">(il tuo PC)</text><text x="445" y="90" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Remoto</text><text x="445" y="110" font-size="10" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">GitHub / origin</text><line x1="360" y1="78" x2="196" y2="78" stroke="currentColor" stroke-width="1.6"/><path d="M196 74 L190 78 L196 82 Z" fill="currentColor"/><text x="275" y="68" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">clone / fetch / pull</text><line x1="190" y1="112" x2="354" y2="112" stroke="currentColor" stroke-width="1.6"/><path d="M354 108 L360 112 L354 116 Z" fill="currentColor"/><text x="275" y="132" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">push</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>clone</code> copia il remoto in locale; <code>fetch</code>/<code>pull</code> scaricano gli aggiornamenti; <code>push</code> invia i tuoi commit al remoto.</figcaption>
+</figure>
+
 ## Remote tracking branch
 Un remote tracking branch (es. `origin/main`) è un branch locale speciale che tiene
 traccia dello stato di un branch sul remoto. Serve a sapere se il proprio branch è
