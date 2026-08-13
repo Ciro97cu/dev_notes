@@ -1,6 +1,6 @@
 # Indice completo
 
-Raccolta di termini di sviluppo **trasversali**: concetti che non appartengono a uno dei vault tematici dell'hub ([Git](../git/), [JavaScript](../javascript/), [TypeScript](../typescript/), [Angular](../angular/)) e che quindi trovano casa qui.
+Raccolta di termini di sviluppo **trasversali**: concetti che non appartengono a uno dei vault tematici dell'hub (<a href="../git/" target="_blank" rel="noopener">Git</a>, <a href="../javascript/" target="_blank" rel="noopener">JavaScript</a>, <a href="../typescript/" target="_blank" rel="noopener">TypeScript</a>, <a href="../angular/" target="_blank" rel="noopener">Angular</a>) e che quindi trovano casa qui.
 
 Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** invece di duplicarlo (una fonte di verità).
 

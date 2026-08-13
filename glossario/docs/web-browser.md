@@ -28,7 +28,7 @@ Cosa conta come cross-origin rispetto a `https://example.com`:
 - `https://example.com/altra` — stessa origin (il **path** non conta)
 
 > [!tip]
-> Un errore CORS **non** è un errore applicativo del server: la richiesta parte (e spesso arriva), ma è il **browser** a impedire al JS di leggere la risposta. Si risolve **lato server** (header CORS corretti), non nel client. In Angular si manifesta di solito come `HttpErrorResponse` con `status === 0`. La distinzione same-origin/cross-origin è anche alla base dei cookie `SameSite` e della protezione XSRF (si veda [Angular · Authentication](../../angular/capitoli/16-authentication-authorization.md)).
+> Un errore CORS **non** è un errore applicativo del server: la richiesta parte (e spesso arriva), ma è il **browser** a impedire al JS di leggere la risposta. Si risolve **lato server** (header CORS corretti), non nel client. In Angular si manifesta di solito come `HttpErrorResponse` con `status === 0`. La distinzione same-origin/cross-origin è anche alla base dei cookie `SameSite` e della protezione XSRF (si veda <a href="../angular/#/capitoli/16-authentication-authorization" target="_blank" rel="noopener">Angular · Authentication</a>).
 
 ## Cache
 

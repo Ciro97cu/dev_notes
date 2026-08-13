@@ -22,7 +22,7 @@ In un progetto "normale" (es. con Webpack/Vite) la risoluzione avviene a **build
 > Le import map **non** sono più una proposta sperimentale: sono uno standard supportato dai browser moderni (Chrome/Edge 89+, Firefox 108+, Safari 16.4+). Vanno però dichiarate **prima** di qualsiasi `<script type="module">`.
 
 > [!tip]
-> Il vault Angular usa le import map in un contesto diverso — **Native Federation** — descritto in [ch18 · Micro Frontends](../../angular/capitoli/18-micro-frontends.md).
+> Il vault Angular usa le import map in un contesto diverso — **Native Federation** — descritto in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">ch18 · Micro Frontends</a>.
 
 ### SystemJS
 
@@ -38,7 +38,7 @@ Serve perché `System.import()` non è una funzione standard del linguaggio: Sys
 
 ## Gestione stato con NgRx classico (Store + Effects)
 
-Prima del [Signal Store](../../angular/capitoli/09-ngrx-signal-store.md), NgRx implementava il pattern **Redux** con quattro elementi: **actions**, **reducers**, **selectors**, **effects**.
+Prima del <a href="../angular/#/capitoli/09-ngrx-signal-store" target="_blank" rel="noopener">Signal Store</a>, NgRx implementava il pattern **Redux** con quattro elementi: **actions**, **reducers**, **selectors**, **effects**.
 
 **Cos'è uno "state".** Nel frontend lo *stato* è la condizione corrente di un componente o dell'intera app: la rappresentazione di tutti i dati dinamici che cambiano quando l'utente interagisce. NgRx centralizza questa gestione per ottenere coerenza, prevedibilità e manutenibilità.
 

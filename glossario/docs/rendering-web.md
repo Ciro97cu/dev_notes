@@ -26,7 +26,7 @@ Nel Server-Side Rendering l'HTML viene generato **da un server a ogni richiesta*
 
 Il pregio è avere tre cose insieme: la pagina appare subito perché l'HTML è già pronto, la SEO è piena perché il crawler legge il testo senza dover eseguire nulla, e il contenuto è **sempre aggiornato**, dato che viene calcolato nell'istante della richiesta e può essere diverso per ogni utente. Il prezzo è l'infrastruttura: serve un **server che gira e ricalcola** a ogni richiesta — non bastano più semplici file statici — con il relativo costo e la relativa complessità.
 
-Conviene quando il contenuto è **dinamico e personalizzato** ma deve comunque essere veloce e indicizzabile: un e-commerce con prezzi e disponibilità in tempo reale, un feed che dipende dall'utente loggato, pagine che cambiano a ogni richiesta. In Angular è il ruolo di `@angular/ssr`, approfondito in [17 · Defer, SSR e Hydration](../../angular/capitoli/17-defer-ssr-hydration.md) del vault Angular.
+Conviene quando il contenuto è **dinamico e personalizzato** ma deve comunque essere veloce e indicizzabile: un e-commerce con prezzi e disponibilità in tempo reale, un feed che dipende dall'utente loggato, pagine che cambiano a ogni richiesta. In Angular è il ruolo di `@angular/ssr`, approfondito in <a href="../angular/#/capitoli/17-defer-ssr-hydration" target="_blank" rel="noopener">17 · Defer, SSR e Hydration</a> del vault Angular.
 
 ## SSG — Static Site Generation
 

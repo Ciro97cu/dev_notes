@@ -84,4 +84,4 @@ const saluta = require('./myModule');
 ```
 
 > [!tip]
-> È la controparte CommonJS di `export` / `import` degli **ES Modules** (lo standard moderno). Vedi [ES6 Modules](../../javascript/docs/libro6/03-organizzazione.md) nel vault JavaScript.
+> È la controparte CommonJS di `export` / `import` degli **ES Modules** (lo standard moderno). Vedi <a href="../javascript/#/docs/libro6/03-organizzazione" target="_blank" rel="noopener">ES6 Modules</a> nel vault JavaScript.

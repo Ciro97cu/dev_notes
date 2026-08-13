@@ -35,7 +35,7 @@ const nuovoStato = { ...stato, nome: 'nuovo' }; // nuovo riferimento
 Rende lo stato prevedibile e abilita confronti veloci per **riferimento** (*shallow comparison*): se il riferimento è cambiato, lo stato è cambiato — senza ispezionare ogni proprietà. È il motivo per cui librerie come Redux/NgRx richiedono un nuovo oggetto a ogni aggiornamento.
 
 > [!tip]
-> Nel contesto Angular/signals questo tema è approfondito nel concetto [equality-immutability](../../angular/concetti/equality-immutability.md).
+> Nel contesto Angular/signals questo tema è approfondito nel concetto <a href="../angular/#/concetti/equality-immutability" target="_blank" rel="noopener">equality-immutability</a>.
 
 ## SOLID
 
@@ -137,7 +137,7 @@ Config.get().tema = "scuro";
 Config.get().tema; // "scuro" — è sempre lo stesso identico oggetto
 ```
 
-⚠️ Oggi è spesso considerato un **anti-pattern**: è stato globale mascherato, accoppia tutto a `Config.get()` e complica i test (non si può sostituire con una versione finta). I framework moderni preferiscono la **dependency injection** — un servizio registrato una volta sola e **iniettato** dove serve (cioè la *Dependency Inversion* di SOLID). Esempio completo nel vault TypeScript: [Programmazione a oggetti](../../typescript/docs/16-oop.md).
+⚠️ Oggi è spesso considerato un **anti-pattern**: è stato globale mascherato, accoppia tutto a `Config.get()` e complica i test (non si può sostituire con una versione finta). I framework moderni preferiscono la **dependency injection** — un servizio registrato una volta sola e **iniettato** dove serve (cioè la *Dependency Inversion* di SOLID). Esempio completo nel vault TypeScript: <a href="../typescript/#/docs/16-oop" target="_blank" rel="noopener">Programmazione a oggetti</a>.
 
 ### Factory Method *(creazionale)*
 
@@ -250,7 +250,7 @@ flusso.scrivi(dati);               // cifra → comprime → scrive su file
 È *composition over inheritance* in azione: capacità assemblate a strati invece di gerarchie rigide.
 
 > [!warning]
-> Da non confondere con i **decorator del linguaggio** (`@log`) di TypeScript/JavaScript: sono ispirati a questa idea ma sono una feature sintattica a sé. Vedi [Decorators](../../typescript/docs/29-decorators.md) nel vault TypeScript.
+> Da non confondere con i **decorator del linguaggio** (`@log`) di TypeScript/JavaScript: sono ispirati a questa idea ma sono una feature sintattica a sé. Vedi <a href="../typescript/#/docs/29-decorators" target="_blank" rel="noopener">Decorators</a> nel vault TypeScript.
 
 ### Facade *(strutturale)*
 
