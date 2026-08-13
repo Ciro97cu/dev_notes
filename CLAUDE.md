@@ -41,18 +41,19 @@ Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **EC
 ## Diagrammi
 Mermaid **solo dove rende davvero** (flussi, gerarchie, sequenze non banali), non ovunque. **Nessun colore custom** (`classDef`/`style` con `fill` fissi): i siti hanno tema chiaro/scuro, i colori hardcoded rompono il dark mode → distinguere con le **forme**, non con i colori.
 
-### SVG inline — verifica visiva obbligatoria
-Un SVG scritto a mano ha coordinate "alla cieca": **overlap**, **testo tagliato dal viewBox** e **collisioni** tra elementi non si vedono nel codice, solo guardando l'immagine. Perciò, prima di committare un SVG non banale, **renderizzarlo e ispezionarlo con l'occhio** (come si fa con le pagine di un PDF):
+### SVG inline — verifica obbligatoria (XML + resa WebKit)
+Un SVG scritto a mano ha due classi di difetti invisibili nel codice: **(1) XML non valido** — una `&` o un `<` grezzi nel testo (es. `A & B`, `opacity < 1`) rompono il parsing e il browser smette di disegnare l'SVG; vanno scritti `&amp;`/`&lt;`. **(2) Layout** — testo tagliato dal viewBox, frecce/etichette sovrapposte: dipendono dai **font del motore di rendering**, quindi si vedono solo guardando l'immagine resa dallo **stesso motore del browser**. Prima di committare un SVG non banale, eseguire:
 
 ```
-python3 scripts/svg-preview.py <file.md|file.svg>   # genera un PNG da leggere; usa PyMuPDF
+python3 scripts/svg-preview.py <file.md|file.svg>
 ```
 
-(su macOS, in alternativa per un singolo file: `qlmanage -t -s 1000 -o . x.svg`). Nel PNG i colori `currentColor`/`var(--link,…)` escono scuri: va bene, serve a controllare il **layout**, non il tema. Linee guida per sbagliare meno a monte:
+Lo script **valida l'XML** di ogni SVG e li **renderizza con `qlmanage`** (Quick Look = **WebKit**, il motore che vede l'utente), poi impila i risultati in un PNG da **ispezionare a occhio**. ⚠️ **Non** verificare con **PyMuPDF**: usa metriche di font diverse dal browser e ha un parser XML permissivo → i difetti sfuggono (una `&` grezza "passa" e poi rompe il render reale). Linee guida per sbagliare meno a monte:
 
+- **Escapare** sempre nel testo SVG: `&` → `&amp;`, `<` → `&lt;`.
 - **Margini abbondanti** nel `viewBox`; mai testo a ridosso dei bordi (verrebbe tagliato). Se un'etichetta sfora, allargare `viewBox`/altezza.
 - **Connettori e frecce da bordo a bordo** degli elementi, mai da centro a centro (sennò passano *sopra* i nodi).
-- **Niente testo in spazi stretti** tra due elementi (collide): accorciare l'etichetta, allargare lo spazio, o spostarla nella `figcaption`.
+- **Niente testo in spazi stretti** tra due elementi, né linee che attraversano etichette: accorciare, allargare lo spazio, o spostare nella `figcaption`.
 - Preferire poche etichette essenziali nell'SVG e demandare il resto alla **didascalia** in prosa sotto la figura.
 
 ## Architettura (zero-build) — tenerla documentata
