@@ -44,9 +44,9 @@ Il contatto elettrico con il terreno si chiama *earth* in Inghilterra e **ground
     <text x="60" y="22">Casa tua</text><text x="410" y="22">Casa amico</text>
   </g>
   <g fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--link,#059669)">
-    <path d="M60 50 H150"/><path d="M150 50 H190"/><path d="M190 50 H393"/>
+    <path d="M60 50 H393"/>
     <path d="M60 50 V150"/><path d="M410 65 V150"/>
-    <circle cx="150" cy="50" r="3" style="fill:var(--link,#059669)"/><circle cx="190" cy="50" r="3" style="fill:var(--link,#059669)"/>
+    <circle cx="152" cy="50" r="2.6" style="fill:var(--link,#059669)"/><circle cx="188" cy="50" r="2.6" style="fill:var(--link,#059669)"/><path d="M152 50 L184 41"/>
     <circle cx="410" cy="50" r="15" style="fill:var(--link,#059669);fill-opacity:.18"/>
     <path d="M403 50 l4 -6 l4 11 l4 -6"/>
     <g><line x1="410" y1="30" x2="410" y2="24"/><line x1="432" y1="50" x2="438" y2="50"/><line x1="388" y1="50" x2="382" y2="50"/></g>
@@ -54,7 +54,7 @@ Il contatto elettrico con il terreno si chiama *earth* in Inghilterra e **ground
     <g><line x1="410" y1="150" x2="410" y2="162"/><line x1="399" y1="162" x2="421" y2="162"/><line x1="403" y1="167" x2="417" y2="167"/><line x1="406" y1="172" x2="414" y2="172"/></g>
   </g>
   <text x="46" y="106" fill="currentColor" font-family="system-ui,Arial,sans-serif" font-size="15" font-weight="700">V</text>
-  <text x="170" y="40" text-anchor="middle" fill="currentColor" font-family="system-ui,Arial,sans-serif" font-size="11" opacity=".7">interruttore</text>
+  <text x="168" y="30" text-anchor="middle" fill="currentColor" font-family="system-ui,Arial,sans-serif" font-size="11" opacity=".7">interruttore</text>
 </svg>
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Un solo filo tra le case: la corrente torna attraverso la <strong>Terra</strong>, collegata a entrambe le estremità con la massa. La <strong>V</strong> a sinistra è il generatore.</figcaption>
 </figure>
