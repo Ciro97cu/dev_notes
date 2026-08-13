@@ -1,6 +1,6 @@
 # Date, calendari e tempo
 
-Misurare il tempo sembra una cosa universale, ma non lo è: **che giorno** è oggi e **che anno** stiamo vivendo dipendono dal *calendario* che si usa. Questa pagina raccoglie i fondamenti che tornano utili ogni volta che si lavora con le date — e che spiegano, per esempio, perché una libreria come [`Temporal`](../../javascript/docs/moderno/es2026.md) del vault JavaScript porta con sé calendari e fusi orari.
+Misurare il tempo sembra una cosa universale, ma non lo è: **che giorno** è oggi e **che anno** stiamo vivendo dipendono dal *calendario* che si usa. Questa pagina raccoglie i fondamenti che tornano utili ogni volta che si lavora con le date — e che spiegano, per esempio, perché una libreria come <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener"><code>Temporal</code></a> del vault JavaScript porta con sé calendari e fusi orari.
 
 ## Calendari diversi: cosa vuol dire "non gregoriano"
 
@@ -38,4 +38,4 @@ Il calcolo è: 365 + 1/4 − 1/100 + 1/400 = **365,2425 giorni/anno**, quasi ide
 
 ## Perché conta per il software
 
-Messe insieme, queste due cose — calendari diversi *e* la regola dei bisestili, a cui si aggiungono i **fusi orari** e l'ora legale — spiegano perché gestire le date "a mano" è così insidioso, e perché sono nate librerie dedicate. In JavaScript è il compito di [`Temporal`](../../javascript/docs/moderno/es2026.md), che accetta un parametro `calendar` e conosce le regole di ciascun sistema.
+Messe insieme, queste due cose — calendari diversi *e* la regola dei bisestili, a cui si aggiungono i **fusi orari** e l'ora legale — spiegano perché gestire le date "a mano" è così insidioso, e perché sono nate librerie dedicate. In JavaScript è il compito di <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener"><code>Temporal</code></a>, che accetta un parametro `calendar` e conosce le regole di ciascun sistema.

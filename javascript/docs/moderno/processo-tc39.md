@@ -57,7 +57,7 @@ Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine
 
 - **Stage 1 (2017)** — Maggie Johnson-Pint presenta l'idea al comitato: c'è un problema chiaro (`Date`) e una direzione, così il TC39 accetta di studiarla.
 - **Stage 2 (2019)** — esce la prima **bozza di specifica** e prendono forma i tipi distinti (`PlainDate`, `ZonedDateTime`, `Duration`…): il comitato si aspetta ormai che entri nel linguaggio.
-- **Stage 3 (2021)** — la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo — **circa cinque anni** — per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai [calendari non gregoriani](../../glossario/docs/date-calendari-tempo.md)).
+- **Stage 3 (2021)** — la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo — **circa cinque anni** — per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai <a href="../glossario/#/docs/date-calendari-tempo" target="_blank" rel="noopener">calendari non gregoriani</a>).
 - **Stage 4 (11 marzo 2026)** — due implementazioni superano i test di conformità, la pull request alla specifica è approvata e `Temporal` entra ufficialmente in **ES2026** ([Igalia](https://www.igalia.com/2026/03/13/Temporal-Reaches-Stage-4.html)). Poco dopo, Node.js 26 lo abilita di default.
 
 **La soluzione.** Nove anni dall'idea allo standard: un promemoria di quanto lo Stage 4 sia una garanzia, non una formalità. Il risultato è l'API descritta nella pagina di [ES2026](es2026.md) — immutabile, con i mesi che partono da 1 e supporto nativo a fusi orari e calendari.
