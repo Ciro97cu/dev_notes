@@ -6,7 +6,7 @@ Misurare il tempo sembra una cosa universale, ma non lo è: **che giorno** è og
 
 Il **calendario gregoriano** — quello usato a livello internazionale, introdotto da papa Gregorio XIII nel 1582 — è solo *uno* dei modi di contare i giorni. È un calendario **solare**: l'anno segue il giro della Terra attorno al Sole (365 giorni e un quarto, come si vede più sotto) e ha dodici mesi di lunghezza fissa. Molte culture però ne usano altri, che partono da un'origine diversa (un *epoch*) e misurano il tempo in un altro modo:
 
-- **Islamico (*Hijri*)** — puramente **lunare**: dodici mesi che seguono le fasi della Luna, ~354 giorni in tutto, undici in meno dell'anno solare. Per questo "scivola" indietro di ~11 giorni l'anno rispetto alle stagioni (è il motivo per cui il Ramadan cade ogni anno un po' prima). Conta gli anni dall'*Egira* (622 d.C.): al 2026 corrisponde grossomodo l'anno **1447**.
+- **Islamico (*Hijri*)** — puramente **lunare**: dodici mesi che seguono le fasi della Luna, circa 354 giorni in tutto, undici in meno dell'anno solare. Per questo "scivola" indietro di circa 11 giorni l'anno rispetto alle stagioni (è il motivo per cui il Ramadan cade ogni anno un po' prima). Conta gli anni dall'*Egira* (622 d.C.): al 2026 corrisponde grossomodo l'anno **1447**.
 - **Ebraico** e **cinese** — **lunisolari**, una via di mezzo: i mesi seguono la Luna, ma ogni due-tre anni si aggiunge un *mese intercalare* per non perdere il passo con le stagioni. L'anno ebraico conta da un'origine molto remota (il 2026 è circa il **5786**); quello cinese usa un ciclo di 60 anni con i dodici segni animali (il 2026 è l'**anno del Cavallo**).
 - **Giapponese** — usa gli stessi mesi del gregoriano, ma **numera gli anni per era imperiale** (*nengō*): il 2026 è *Reiwa 8*, l'ottavo anno dell'era cominciata nel 2019.
 
@@ -19,13 +19,13 @@ Lo stesso identico giorno, insomma, ha un numero d'anno — e a volte un mese e 
 
 ## 365 giorni e un quarto: perché esistono gli anni bisestili
 
-Il punto di partenza è un fatto astronomico scomodo: **la Terra non impiega un numero intero di giorni** per girare attorno al Sole. Un giro completo — il tempo che serve alle stagioni per ripetersi, detto **anno tropico** — dura circa **365,2422 giorni**, cioè 365 giorni più circa 5 ore e 49 minuti. Quel pezzetto in più, ~0,2422 di giorno, è "**un quarto**" arrotondato.
+Il punto di partenza è un fatto astronomico scomodo: **la Terra non impiega un numero intero di giorni** per girare attorno al Sole. Un giro completo — il tempo che serve alle stagioni per ripetersi, detto **anno tropico** — dura circa **365,2422 giorni**, cioè 365 giorni più circa 5 ore e 49 minuti. Quel pezzetto in più, circa 0,2422 di giorno, è "**un quarto**" arrotondato.
 
-Il problema è che un calendario deve avere un numero **intero** di giorni per anno. Se si dicesse "l'anno è 365 giorni" e basta, ogni anno resterebbe indietro di ~¼ di giorno rispetto al Sole: dopo 4 anni un giorno intero, dopo ~120 anni un mese. Col tempo le stagioni "girerebbero" nel calendario, con il solstizio d'estate che a poco a poco slitta verso l'autunno.
+Il problema è che un calendario deve avere un numero **intero** di giorni per anno. Se si dicesse "l'anno è 365 giorni" e basta, ogni anno resterebbe indietro di circa ¼ di giorno rispetto al Sole: dopo 4 anni un giorno intero, dopo circa 120 anni un mese. Col tempo le stagioni "girerebbero" nel calendario, con il solstizio d'estate che a poco a poco slitta verso l'autunno.
 
 **La prima toppa (Giulio Cesare, 46 a.C.): l'anno bisestile.** Si accumula quel quarto e ogni **4 anni** si aggiunge un giorno (il 29 febbraio). Così la media diventa 365 + 1/4 = **365,25 giorni/anno**. È il calendario *giuliano*, e per secoli è bastato.
 
-**Il difetto della toppa.** Quel resto però non è *esattamente* un quarto: è 0,2422, un filo **meno** di 0,25. Aggiungere un giorno pieno ogni 4 anni corregge quindi *troppo*, di ~11 minuti l'anno — un giorno di troppo ogni ~128 anni. Sembra poco, ma entro il 1582 il giuliano era finito **~10 giorni avanti** rispetto alle stagioni.
+**Il difetto della toppa.** Quel resto però non è *esattamente* un quarto: è 0,2422, un filo **meno** di 0,25. Aggiungere un giorno pieno ogni 4 anni corregge quindi *troppo*, di circa 11 minuti l'anno — un giorno di troppo ogni 128 anni circa. Sembra poco, ma entro il 1582 il giuliano era finito **circa 10 giorni avanti** rispetto alle stagioni.
 
 **La rifinitura (papa Gregorio XIII, 1582): il calendario gregoriano.** Per avvicinare la media ai veri 365,2422 si tolgono un po' di bisestili di troppo, con questa regola: è bisestile ogni anno divisibile per 4, **tranne** quelli divisibili per 100, **a meno che** non siano divisibili anche per 400.
 
@@ -34,7 +34,7 @@ Il problema è che un calendario deve avere un numero **intero** di giorni per a
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La regola degli anni bisestili. Il <strong>2000</strong> è stato bisestile (divisibile per 400), ma il <strong>1900</strong> e il <strong>2100</strong> no: sono le eccezioni che rifiniscono il conto.</figcaption>
 </figure>
 
-Il calcolo è: 365 + 1/4 − 1/100 + 1/400 = **365,2425 giorni/anno**, quasi identico ai 365,2422 reali. L'errore residuo è di appena **~1 giorno ogni ~3300 anni** (contro un giorno ogni 128 anni del giuliano). Nel 1582, per rimettersi subito in pari col Sole, si **saltarono anche 10 giorni** di colpo: al 4 ottobre seguì direttamente il 15 ottobre.
+Il calcolo è: 365 + 1/4 − 1/100 + 1/400 = **365,2425 giorni/anno**, quasi identico ai 365,2422 reali. L'errore residuo è di appena **circa 1 giorno ogni 3300 anni** (contro un giorno ogni 128 anni del giuliano). Nel 1582, per rimettersi subito in pari col Sole, si **saltarono anche 10 giorni** di colpo: al 4 ottobre seguì direttamente il 15 ottobre.
 
 ## Perché conta per il software
 

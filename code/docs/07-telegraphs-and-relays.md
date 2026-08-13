@@ -44,7 +44,7 @@ Notificato l'ufficio brevetti nel 1836 e ottenuto il finanziamento del Congresso
 
 ## Il problema della distanza → il relè
 
-C'è però il limite già visto nel capitolo 5: **più lungo è il filo, più resistenza**, e il segnale si indebolisce. Le linee arrivavano a ~300 volt su ~300 miglia, ma non oltre. La soluzione è un **sistema a relè**: ogni paio di centinaia di miglia, una persona con tasto e sounder **riceve** il messaggio e lo **ritrasmette** con energia fresca.
+C'è però il limite già visto nel capitolo 5: **più lungo è il filo, più resistenza**, e il segnale si indebolisce. Le linee arrivavano a circa 300 volt su circa 300 miglia, ma non oltre. La soluzione è un **sistema a relè**: ogni paio di centinaia di miglia, una persona con tasto e sounder **riceve** il messaggio e lo **ritrasmette** con energia fresca.
 
 Immagina di essere tu quell'addetto, in una capanna tra New York e la California: dalla finestra a est arriva un filo collegato a un sounder, il tuo tasto è collegato a una batteria e a un filo che esce a ovest. A furia di ripetere, noti che il braccio del sounder rimbalza esattamente come rimbalza il tasto — così colleghi i due con un pezzo di legno e dello spago, e il ritrasmettitore **funziona da solo**. Questo dispositivo, che Morse aveva capito da subito, si chiama **relè** (o *repeater*): una corrente in ingresso alimenta un elettromagnete che tira una leva; ma la leva è parte di un **interruttore che collega una batteria all'uscita**. Così un segnale in ingresso **debole** viene "amplificato" in un segnale in uscita **forte**.
 

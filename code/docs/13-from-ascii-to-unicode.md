@@ -82,7 +82,7 @@ Verso la metà degli anni '90 fu chiaro che 16 bit non bastavano: servivano scri
 
 Un conto è il code point (il *numero* del carattere), un altro è **come** lo si scrive in memoria: quest'ultima è la **codifica**, e Unicode ne definisce tre, dette *Unicode Transformation Format* (UTF).
 
-- **UTF-32** — ogni carattere in **4 byte** fissi. Semplice ma sprecone: *Moby-Dick*, che in ASCII pesa ~1,25 milioni di byte, diventerebbe ~5 milioni. Dei 32 bit se ne usano solo 21, 11 sono buttati.
+- **UTF-32** — ogni carattere in **4 byte** fissi. Semplice ma sprecone: *Moby-Dick*, che in ASCII pesa circa 1,25 milioni di byte, diventerebbe circa 5 milioni. Dei 32 bit se ne usano solo 21, 11 sono buttati.
 - **UTF-16** — la maggior parte dei caratteri in **2 byte**, quelli oltre `U+FFFF` in 4 (usando l'intervallo `U+D800`-`U+DFFF`, tenuto libero apposta).
 - **UTF-8** — il più importante: circa il **97% delle pagine web** lo usa, ed è il default di Notepad e TextEdit. Codifica ogni carattere con **da 1 a 4 byte** secondo il valore.
 
