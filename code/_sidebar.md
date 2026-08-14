@@ -26,3 +26,6 @@
   - [17. Feedback e flip-flop](/docs/17-feedback-and-flip-flops.md)
   - [18. Costruiamo un orologio!](/docs/18-lets-build-a-clock.md)
   - [19. Un assemblaggio di memoria](/docs/19-an-assemblage-of-memory.md)
+
+- **Parte 5 — Il processore**
+  - [20. Automatizzare l'aritmetica](/docs/20-automating-arithmetic.md)

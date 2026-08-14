@@ -38,7 +38,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [19. Un assemblaggio di memoria](docs/19-an-assemblage-of-memory.md) — *An Assemblage of Memory*
 
 ## Parte 5 — Il processore
-- 20. Automatizzare l'aritmetica — *Automating Arithmetic*
+- [20. Automatizzare l'aritmetica](docs/20-automating-arithmetic.md) — *Automating Arithmetic*
 - 21. L'unità aritmetico-logica — *The Arithmetic Logic Unit*
 - 22. Registri e bus — *Registers and Busses*
 - 23. I segnali di controllo della CPU — *CPU Control Signals*
