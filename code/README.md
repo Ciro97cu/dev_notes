@@ -7,8 +7,8 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 > [!tip]
 > Nuovo qui? Parti dal [capitolo 1](docs/01-best-friends.md). I capitoli si leggono **in sequenza**: ognuno poggia sul precedente.
 
-> [!info] In costruzione
-> Il vault cresce un capitolo alla volta, con calma e verificato sul libro. I titoli **senza link** sono in preparazione. Il raggruppamento in "parti" è editoriale (il libro è un unico percorso lineare), serve solo a orientarsi.
+> [!info] Percorso completo
+> Tutti i **28 capitoli** sono disponibili, in prosa italiana distesa e verificati sul libro. Il raggruppamento in "parti" è editoriale (il libro è un unico percorso lineare), serve solo a orientarsi.
 
 ## Parte 1 — I codici
 - [1. Migliori amici](docs/01-best-friends.md) — orig. *Best Friends*
@@ -48,7 +48,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [25. Periferiche](docs/25-peripherals.md) — *Peripherals*
 - [26. Il sistema operativo](docs/26-the-operating-system.md) — *The Operating System*
 - [27. Programmare](docs/27-coding.md) — *Coding*
-- 28. Il cervello del mondo — *The World Brain*
+- [28. Il cervello del mondo](docs/28-the-world-brain.md) — *The World Brain*
 
 ---
 Appunti personali di studio, fedeli al libro di Charles Petzold, verificati capitolo per capitolo.
