@@ -41,7 +41,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [20. Automatizzare l'aritmetica](docs/20-automating-arithmetic.md) — *Automating Arithmetic*
 - [21. L'unità aritmetico-logica](docs/21-the-arithmetic-logic-unit.md) — *The Arithmetic Logic Unit*
 - [22. Registri e bus](docs/22-registers-and-busses.md) — *Registers and Busses*
-- 23. I segnali di controllo della CPU — *CPU Control Signals*
+- [23. I segnali di controllo della CPU](docs/23-cpu-control-signals.md) — *CPU Control Signals*
 - 24. Cicli, salti e chiamate — *Loops, Jumps, and Calls*
 
 ## Parte 6 — Dal computer al software
