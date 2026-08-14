@@ -31,7 +31,7 @@
     "    if (typeof v === 'symbol') return v.toString();",
     "    if (v === undefined) return 'undefined';",
     "    if (v === null) return 'null';",
-    "    if (v instanceof Error) return (v.stack || (v.name + ': ' + v.message));",
+    "    if (v instanceof Error) return v.name + ': ' + v.message;",
     "    try { return JSON.stringify(v, null, 2); } catch (e) { return String(v); }",
     "  }",
     "  function send(level, args){",
@@ -113,6 +113,7 @@
     });
 
     makeDraggable(dialog, dialog.querySelector(".pg-head"));
+    dialog.addEventListener("close", function () { document.documentElement.classList.remove("pg-open"); });
 
     window.addEventListener("message", function (e) {
       var d = e.data;
@@ -127,6 +128,7 @@
   function openWith(code) {
     pendingValue = (typeof code === "string") ? code : null;
     dialog.showModal();
+    document.documentElement.classList.add("pg-open");
     ensureEditor();
   }
 

@@ -108,6 +108,7 @@
     });
 
     makeDraggable(dialog, dialog.querySelector(".pg-head"));
+    dialog.addEventListener("close", function () { document.documentElement.classList.remove("pg-open"); });
 
     window.__pgOpen = openWith;   // API per il bottone «▶ Prova» sui blocchi di codice
   }
@@ -117,6 +118,7 @@
   function openWith(css) {
     pendingCss = (typeof css === "string") ? css : null;
     dialog.showModal();
+    document.documentElement.classList.add("pg-open");
     ensureEditor();
   }
 
