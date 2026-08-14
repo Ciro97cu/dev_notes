@@ -1,6 +1,6 @@
 // ── Evidenziatore (modalità pennarello, stile macOS Preview) ──────────────────
 // Scegli un colore UNA volta: poi ogni selezione di testo si evidenzia in quel
-// colore finché non cambi colore, passi alla gomma o esci (Esc). Rendering con
+// colore finché non cambi colore o esci (Esc); tap = parola, ritocca per togliere. Rendering con
 // CSS Custom Highlight API (nessuna mutazione del DOM → non rompe copy-code né i
 // re-render). Persistenza robusta: ogni evidenziazione è {colore, heading, quote,
 // testo-prima, testo-dopo}, ri-localizzata a ogni render (modello W3C
@@ -20,12 +20,11 @@ var DN_COLORS = [
   { k: 'accent', label: 'Tinta del vault', bg: 'oklch(from var(--link) 0.8 c h)' }
 ];
 var DN_PEN = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 11-6 6v3h9l3-3"/><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"/></svg>';
-var DN_ERASER = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>';
 
-var dnMode = 'off';   // 'off' | 'color' | 'erase'
+var dnMode = 'off';   // 'off' | 'color'
 var dnColor = 'yellow';
 var dnHL = null;      // { colorKey: Highlight }
-var dnRendered = [];  // [{range, item}] della pagina corrente (per la gomma)
+var dnRendered = [];  // [{range, item}] evidenziazioni rese nella pagina corrente
 var dnInited = false;
 
 function dnSupported() { return !!(window.CSS && CSS.highlights && window.Highlight); }
@@ -92,6 +91,41 @@ function dnRender(path) {
     dnRendered.push({ range: range, item: hl });
   });
 }
+// Offset globali [start,end] di un'evidenziazione salvata, dal suo testo-ancora.
+function dnItemOffsets(index, hl) {
+  var needle = (hl.pre || '') + hl.q + (hl.suf || '');
+  var at = index.text.indexOf(needle);
+  if (at >= 0) { var qs = at + (hl.pre || '').length; return [qs, qs + hl.q.length]; }
+  at = index.text.indexOf(hl.q);
+  return at >= 0 ? [at, at + hl.q.length] : null;
+}
+// Caret sotto il punto (x,y), con fallback tra i due standard.
+function dnCaretAt(x, y) {
+  if (document.caretRangeFromPoint) { var r = document.caretRangeFromPoint(x, y); return r ? { node: r.startContainer, offset: r.startOffset } : null; }
+  if (document.caretPositionFromPoint) { var p = document.caretPositionFromPoint(x, y); return p ? { node: p.offsetNode, offset: p.offset } : null; }
+  return null;
+}
+// Range della PAROLA sotto il punto (per il tap singolo su mobile).
+function dnWordRangeAt(x, y) {
+  var pos = dnCaretAt(x, y); if (!pos || pos.node.nodeType !== 3) return null;
+  var sec = document.querySelector('.markdown-section');
+  if (!sec || !sec.contains(pos.node)) return null;
+  var t = pos.node.nodeValue, off = pos.offset, isW = function (ch) { return ch && /[\p{L}\p{N}_]/u.test(ch); };
+  if (off >= t.length) off = t.length - 1;
+  if (off < 0) return null;
+  if (!isW(t[off])) { if (off > 0 && isW(t[off - 1])) off--; else return null; }
+  var s = off, e = off + 1;
+  while (s > 0 && isW(t[s - 1])) s--;
+  while (e < t.length && isW(t[e])) e++;
+  if (e <= s) return null;
+  var r = document.createRange(); r.setStart(pos.node, s); r.setEnd(pos.node, e); return r;
+}
+// Evidenzia (o toglie) la parola sotto il punto, riusando dnCapture (toggle).
+function dnHighlightWordAt(x, y) {
+  var r = dnWordRangeAt(x, y); if (!r) return;
+  var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+  dnCapture(dnColor);
+}
 function dnCapture(color) {
   var sel = window.getSelection();
   if (!sel || sel.isCollapsed || !sel.rangeCount) return;
@@ -103,46 +137,32 @@ function dnCapture(color) {
   var gs = dnGlobalOffset(index, range.startContainer, range.startOffset);
   var ge = dnGlobalOffset(index, range.endContainer, range.endOffset);
   if (gs < 0 || ge < 0 || ge <= gs) return;
-  var item = { c: color, scope: dnScopeFor(range.startContainer), q: quote,
-               pre: index.text.slice(Math.max(0, gs - 32), gs), suf: index.text.slice(ge, ge + 32) };
   var all = window.NotesStore.read('highlights', {}), p = dnPath();
   if (!all || typeof all !== 'object') all = {};
   if (!Array.isArray(all[p])) all[p] = [];
-  all[p].push(item);
+  // Toggle: se la nuova selezione tocca evidenziazioni esistenti, le RIMUOVE (niente gomma).
+  var removed = false;
+  for (var i = all[p].length - 1; i >= 0; i--) {
+    var off = dnItemOffsets(index, all[p][i]); if (!off) continue;
+    if (gs < off[1] && off[0] < ge) { all[p].splice(i, 1); removed = true; }
+  }
+  if (!removed) {
+    all[p].push({ c: color, scope: dnScopeFor(range.startContainer), q: quote,
+                  pre: index.text.slice(Math.max(0, gs - 32), gs), suf: index.text.slice(ge, ge + 32) });
+  }
   window.NotesStore.write('highlights', all);
   sel.removeAllRanges();
   dnRender(p);
-}
-function dnEraseAt(x, y) {
-  for (var i = 0; i < dnRendered.length; i++) {
-    var rects = dnRendered[i].range.getClientRects();
-    for (var j = 0; j < rects.length; j++) {
-      var r = rects[j];
-      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
-        var it = dnRendered[i].item, all = window.NotesStore.read('highlights', {}), p = dnPath();
-        if (!all || typeof all !== 'object') all = {};
-        var list = Array.isArray(all[p]) ? all[p] : [];
-        for (var k = 0; k < list.length; k++) {
-          if (list[k].q === it.q && list[k].pre === it.pre && list[k].suf === it.suf && list[k].c === it.c) { list.splice(k, 1); break; }
-        }
-        all[p] = list; window.NotesStore.write('highlights', all);
-        dnRender(p); return true;
-      }
-    }
-  }
-  return false;
 }
 function dnSetMode(mode, color) {
   dnMode = mode;
   if (color) dnColor = color;
   document.body.classList.toggle('dn-hl-mode', mode === 'color');
-  document.body.classList.toggle('dn-hl-erase', mode === 'erase');
   var btn = document.getElementById('dn-hl-btn');
   if (btn) btn.classList.toggle('is-on', mode !== 'off');
   var pop = document.querySelector('.dn-hl-pop');
   if (pop) {
     [].forEach.call(pop.querySelectorAll('.dn-swatch'), function (s) { s.classList.toggle('active', mode === 'color' && s.getAttribute('data-c') === dnColor); });
-    var er = pop.querySelector('[data-act=erase]'); if (er) er.classList.toggle('active', mode === 'erase');
   }
 }
 function dnInit() {
@@ -166,8 +186,7 @@ function dnInit() {
     '.dn-hl-actions button:hover{border-color:var(--link)}',
     '.dn-hl-actions button.active{border-color:var(--link);color:var(--link)}',
     '.dn-hl-hint{font-size:.72rem;opacity:.6;margin-top:.5rem;padding:0 .25rem;line-height:1.4}',
-    'body.dn-hl-mode .markdown-section,body.dn-hl-mode .markdown-section *{cursor:text}',
-    'body.dn-hl-erase .markdown-section,body.dn-hl-erase .markdown-section *{cursor:crosshair}'
+    'body.dn-hl-mode .markdown-section,body.dn-hl-mode .markdown-section *{cursor:text}'
   ];
   // color:#1a1a1a → testo evidenziato sempre scuro, leggibile su ogni tinta in chiaro e scuro
   DN_COLORS.forEach(function (c) { rules.push('::highlight(dn-hl-' + c.k + '){background-color:' + c.bg + ';color:#1a1a1a}'); });
@@ -193,9 +212,15 @@ function dnInit() {
       if (sel && !sel.isCollapsed && sel.rangeCount) dnCapture(dnColor);
     }, 400);
   });
+  // Tap singolo (touch/pen) in modalità colore → evidenzia/toglie la PAROLA toccata.
+  // La pressione lunga fa partire la selezione nativa (estendibile con le maniglie),
+  // catturata invece dal selectionchange qui sopra.
   document.addEventListener('click', function (e) {
-    if (dnMode !== 'erase') return;
-    if (e.target.closest && e.target.closest('.markdown-section')) dnEraseAt(e.clientX, e.clientY);
+    if (dnMode !== 'color' || !dnLastTouch) return;
+    if (!(e.target.closest && e.target.closest('.markdown-section'))) return;
+    var sel = window.getSelection();
+    if (sel && !sel.isCollapsed && sel.rangeCount) return;   // selezione da long-press → la gestisce il selectionchange
+    dnHighlightWordAt(e.clientX, e.clientY);
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && dnMode !== 'off') dnSetMode('off'); });
 }
@@ -209,8 +234,8 @@ function dnBuildToolbar() {
     '<button id="dn-hl-btn" type="button" title="Evidenziatore" aria-label="Evidenziatore" aria-expanded="false">' + DN_PEN + '</button>' +
     '<div class="dn-hl-pop" role="menu"><div class="dn-title">Evidenziatore</div>' +
       '<div class="dn-swatches">' + sw + '</div>' +
-      '<div class="dn-hl-actions"><button type="button" data-act="erase">' + DN_ERASER + 'Gomma</button><button type="button" data-act="off">Chiudi</button></div>' +
-      '<div class="dn-hl-hint">Scegli un colore, poi seleziona il testo. Gomma → clic per rimuovere.</div>' +
+      '<div class="dn-hl-actions"><button type="button" data-act="off">Chiudi</button></div>' +
+      '<div class="dn-hl-hint">Scegli un colore, poi tocca una parola o seleziona il testo. Ripassaci sopra per togliere l\'evidenziazione.</div>' +
     '</div>';
   document.body.appendChild(w);
   var btn = w.querySelector('#dn-hl-btn'), pop = w.querySelector('.dn-hl-pop');
@@ -226,7 +251,7 @@ function dnBuildToolbar() {
     var s = e.target.closest && e.target.closest('.dn-swatch');
     if (s) { dnSetMode('color', s.getAttribute('data-c')); return; }
     var a = e.target.closest && e.target.closest('[data-act]');
-    if (a) dnSetMode(a.getAttribute('data-act') === 'erase' ? 'erase' : 'off');
+    if (a) dnSetMode('off');
   });
 }
 // Plugin: costruisce la toolbar (una volta) e ri-applica le evidenziazioni a ogni pagina.
