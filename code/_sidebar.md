@@ -36,3 +36,4 @@
 
 - **Parte 6 — Dal computer al software**
   - [25. Periferiche](/docs/25-peripherals.md)
+  - [26. Il sistema operativo](/docs/26-the-operating-system.md)

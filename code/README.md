@@ -46,7 +46,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 
 ## Parte 6 — Dal computer al software
 - [25. Periferiche](docs/25-peripherals.md) — *Peripherals*
-- 26. Il sistema operativo — *The Operating System*
+- [26. Il sistema operativo](docs/26-the-operating-system.md) — *The Operating System*
 - 27. Programmare — *Coding*
 - 28. Il cervello del mondo — *The World Brain*
 
