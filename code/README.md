@@ -34,7 +34,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [15. Ma è tutto vero?](docs/15-is-this-for-real.md) — *Is This for Real?*
 - [16. E la sottrazione?](docs/16-but-what-about-subtraction.md) — *But What About Subtraction?*
 - [17. Feedback e flip-flop](docs/17-feedback-and-flip-flops.md) — *Feedback and Flip-Flops*
-- 18. Costruiamo un orologio! — *Let's Build a Clock!*
+- [18. Costruiamo un orologio!](docs/18-lets-build-a-clock.md) — *Let's Build a Clock!*
 - 19. Un assemblaggio di memoria — *An Assemblage of Memory*
 
 ## Parte 5 — Il processore
