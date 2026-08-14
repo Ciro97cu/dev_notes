@@ -45,7 +45,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 - [24. Cicli, salti e chiamate](docs/24-loops-jumps-and-calls.md) — *Loops, Jumps, and Calls*
 
 ## Parte 6 — Dal computer al software
-- 25. Periferiche — *Peripherals*
+- [25. Periferiche](docs/25-peripherals.md) — *Peripherals*
 - 26. Il sistema operativo — *The Operating System*
 - 27. Programmare — *Coding*
 - 28. Il cervello del mondo — *The World Brain*

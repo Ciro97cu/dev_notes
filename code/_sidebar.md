@@ -33,3 +33,6 @@
   - [22. Registri e bus](/docs/22-registers-and-busses.md)
   - [23. I segnali di controllo della CPU](/docs/23-cpu-control-signals.md)
   - [24. Cicli, salti e chiamate](/docs/24-loops-jumps-and-calls.md)
+
+- **Parte 6 — Dal computer al software**
+  - [25. Periferiche](/docs/25-peripherals.md)
