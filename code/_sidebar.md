@@ -21,3 +21,4 @@
 
 - **Parte 4 — Aritmetica e memoria**
   - [14. Sommare con le porte logiche](/docs/14-adding-with-logic-gates.md)
+  - [15. Ma è tutto vero?](/docs/15-is-this-for-real.md)
