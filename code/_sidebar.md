@@ -25,3 +25,4 @@
   - [16. E la sottrazione?](/docs/16-but-what-about-subtraction.md)
   - [17. Feedback e flip-flop](/docs/17-feedback-and-flip-flops.md)
   - [18. Costruiamo un orologio!](/docs/18-lets-build-a-clock.md)
+  - [19. Un assemblaggio di memoria](/docs/19-an-assemblage-of-memory.md)
