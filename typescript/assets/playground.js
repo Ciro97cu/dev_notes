@@ -53,6 +53,7 @@
     "  window.addEventListener('unhandledrejection', function(e){",
     "    parent.postMessage({ __pg: true, level: 'error', text: 'Uncaught (in promise) ' + fmt(e.reason) }, '*');",
     "  });",
+    "  window.__pgError = function(e){ send('error', [e]); };",
     "})();"
   ].join("\n");
 
@@ -251,7 +252,7 @@
     runner.srcdoc =
       '<!doctype html><html><head><meta charset="utf-8"></head><body>' +
       "<script>" + HARNESS + "</script>" +
-      "<script>\n" + code + "\n</script>" +
+      "<script>\ntry {\n" + code + "\n} catch (e) { window.__pgError(e); }\n</script>" +
       "</body></html>";
     dialog.appendChild(runner);
   }
@@ -263,6 +264,7 @@
     var dragging = false, sx, sy, sl, st;
     handle.addEventListener("pointerdown", function (e) {
       if (e.target.closest("button")) return;   // la ✕ non avvia il drag
+      if (window.matchMedia("(max-width: 640px)").matches) return;   // su mobile è full-screen: niente drag
       var r = dlg.getBoundingClientRect();
       dlg.style.position = "fixed";
       dlg.style.margin = "0";

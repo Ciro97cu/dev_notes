@@ -226,6 +226,7 @@
     var dragging = false, sx, sy, sl, st;
     handle.addEventListener("pointerdown", function (e) {
       if (e.target.closest("button")) return;   // la ✕ non avvia il drag
+      if (window.matchMedia("(max-width: 640px)").matches) return;   // su mobile è full-screen: niente drag
       var r = dlg.getBoundingClientRect();
       dlg.style.position = "fixed";
       dlg.style.margin = "0";
