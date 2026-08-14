@@ -30,3 +30,4 @@
 - **Parte 5 — Il processore**
   - [20. Automatizzare l'aritmetica](/docs/20-automating-arithmetic.md)
   - [21. L'unità aritmetico-logica](/docs/21-the-arithmetic-logic-unit.md)
+  - [22. Registri e bus](/docs/22-registers-and-busses.md)
