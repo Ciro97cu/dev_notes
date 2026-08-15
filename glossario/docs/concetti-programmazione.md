@@ -30,6 +30,7 @@ Le prime tre sono **in-processo** (una chiamata di funzione nella stessa macchin
 
 > [!tip]
 > **API e namespace** non sono in contraddizione: descrivono aspetti diversi. Il **namespace** è il *contenitore di nomi* (`Temporal.*` fa da "cartella" che raggruppa i nomi correlati); l'**API** è l'*insieme di operazioni usabili* (i metodi con il loro contratto). `Temporal` è quindi un namespace che **espone** un'API — come una REST API vive a un URL base (il contenitore) ed espone degli *endpoint* (le operazioni).
+> Questo tipo di *namespace* — un oggetto globale che fa da contenitore — è descritto in <a href="../javascript/#/docs/libro2/03-funzioni-blocchi" target="_blank" rel="noopener">Global namespaces</a> nel vault JS. Da non confondere con la keyword `namespace` di **TypeScript**, che è un costrutto (ormai legacy) del linguaggio, non un oggetto.
 
 L'API web (con same-origin e CORS) è approfondita in [Web, browser e rete](web-browser.md); `Temporal` come API del linguaggio è in <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener">ES2026</a>. In TypeScript, inoltre, la keyword `interface` è la stessa idea di contratto, applicata però ai **tipi**.
 
