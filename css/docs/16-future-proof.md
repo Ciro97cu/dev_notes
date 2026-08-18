@@ -127,13 +127,30 @@ BEM risolve un problema reale — collisioni di nomi e specificità che sfugge d
 
 Non esiste "il CSS" come singola specifica: dopo CSS 2.1 lo standard è stato spezzato in **moduli** indipendenti (Selectors, Grid Layout, Color, Cascade & Inheritance, …), ognuno con un **livello** proprio (es. *Selectors Level 4*) e un proprio stato di maturità. A curarli è il **[CSS Working Group](https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group)** del W3C. Questo spiega perché feature diverse avanzano a velocità diverse e perché "supporta CSS3" non vuol dire nulla di preciso: ogni modulo fa storia a sé.
 
+Nel nome di un modulo convivono però **due cose diverse** che è facile confondere. Il **livello** (*Level*) è la sua **edizione**: sale quando il gruppo apre una nuova tornata per aggiungere feature, di solito quando la precedente è già solida — è una scelta editoriale, non una metrica automatica (ecco perché a volte un numero viene saltato, come *Cascading and Inheritance 3 → 5*). Lo **stadio** (Working Draft, Candidate Recommendation…) dice invece quanto quella edizione è **matura**. I due assi sono indipendenti: *Selectors Level 3* è una Recommendation conclusa — quella che i browser implementano — mentre *Selectors Level 4*, che aggiunge `:has()`, `:is()` e altro, è ancora un Working Draft. Un livello più alto quindi **non** significa "più pronto": è la versione successiva, spesso ancora acerba.
+
 ### Gli stadi di maturità di un modulo
 
 Ogni modulo attraversa una **scala di maturità** fissata dal processo del W3C, che dice quanto la specifica è stabile. Si parte dal **Working Draft** (bozza ancora in movimento), si passa alla **Candidate Recommendation** — la fase di test, in cui la specifica è considerata pronta ma deve dimostrare **due implementazioni indipendenti** di ogni feature prima di andare avanti — poi alla **Proposed Recommendation** (in attesa dell'approvazione formale del W3C) e infine alla **Recommendation**, lo standard concluso. In pratica una feature si considera *instabile* finché non arriva almeno alla Candidate Recommendation ([stato dei moduli CSS](https://www.w3.org/Style/CSS/current-work)).
 
+Il W3C stesso riassume in **tre livelli di stabilità** — WD, CR e REC, con la PR poco prima della fine. Sulla pagina ufficiale, però, si incontrano altre sigle: sono l'inizio, le sotto-forme e i capolinea di questo stesso percorso, non tappe nuove in mezzo. La legenda per intero:
+
+| Sigla | Significato | Ruolo |
+|---|---|---|
+| **FPWD** | First Public Working Draft | il primissimo WD: il gruppo prende in carico il modulo |
+| **WD** | Working Draft | bozza di lavoro, si itera |
+| **CR** | Candidate Recommendation | fase di test: servono due implementazioni indipendenti per uscirne |
+| **CRD** | Candidate Recommendation Draft | un aggiornamento di lavoro della CR fra una revisione formale e l'altra |
+| **PR** | Proposed Recommendation | congelata, in attesa dell'approvazione del W3C |
+| **REC** | Recommendation | lo standard concluso |
+| **SPSD** | Superseded Recommendation | una REC rimpiazzata da un'edizione più nuova |
+| **NOTE** | Working Group Note | fuori dal binario standard: documenti informativi (anche i CSS Snapshot sono NOTE) o moduli abbandonati |
+
+Sulla pagina [CSS Current Work](https://www.w3.org/Style/CSS/current-work) le colonne *Current* e *Upcoming* indicano lo stadio attuale e quello previsto; i raggruppamenti (*Refining*, *Revising*, *Completed*, *Abandoned*…) sono invece i "cassetti" di lavoro del gruppo, non stadi.
+
 ### Nessuna edizione annuale: il confronto con ECMAScript
 
-Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2025/)** (l'ultimo è *CSS Snapshot 2025*), ma non è una release di feature nuove: è solo la fotografia di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
+Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2026/)** (l'ultimo è *CSS Snapshot 2026*, pubblicato come nota del gruppo), ma non è una release di feature nuove: è solo la fotografia di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
 
 | | JavaScript | CSS |
 |---|---|---|
@@ -242,7 +259,7 @@ Dopo CSS 2.1 lo standard è spezzato in **moduli** indipendenti (Selectors, Grid
 <details>
 <summary>Il CSS ha un'edizione annuale come ECMAScript?</summary>
 
-No. Il **TC39** raccoglie ogni anno le proposte mature in un'edizione ECMAScript datata; il CSS è **modulare** e ogni modulo avanza per conto suo lungo gli stadi **WD → CR → PR → REC**. Il documento più simile a un riepilogo annuale è il **CSS Snapshot** (es. *CSS Snapshot 2025*), ma fotografa solo quali moduli compongono "il CSS" stabile, non raccoglie feature nuove. Il segnale pratico "posso usarlo?" è **Baseline**.
+No. Il **TC39** raccoglie ogni anno le proposte mature in un'edizione ECMAScript datata; il CSS è **modulare** e ogni modulo avanza per conto suo lungo gli stadi **WD → CR → PR → REC**. Il documento più simile a un riepilogo annuale è il **CSS Snapshot** (l'ultimo è *CSS Snapshot 2026*), ma fotografa solo quali moduli compongono "il CSS" stabile, non raccoglie feature nuove. Il segnale pratico "posso usarlo?" è **Baseline**.
 
 </details>
 
