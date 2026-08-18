@@ -42,12 +42,22 @@ La cache è una memoria temporanea in cui si conservano dati usati di frequente,
 > [!warning]
 > La cache è la causa più comune di "ho aggiornato ma vedo la versione vecchia". In fase di debug conviene disattivarla (DevTools → *Network* → *Disable cache*) o fare un hard reload.
 
-## Blink
+## Motori del browser: Blink, WebKit, Gecko
 
-Blink è il **motore di rendering** che trasforma HTML, CSS e JavaScript in ciò che appare a schermo. È usato dai browser basati su Chromium: Google Chrome, Microsoft Edge (versioni recenti), Opera, Brave, Vivaldi. Safari usa invece WebKit (da cui Blink deriva come fork) e Firefox usa Gecko.
+Il **motore del browser** (o *motore di rendering*) è la parte che legge HTML e CSS, decide dove va ogni elemento e disegna la pagina sullo schermo. Da solo però non basta: il **JavaScript** lo esegue un motore a parte, affiancato al primo. È la distinzione da tenere a mente — Blink, WebKit e Gecko sono motori di **rendering** (HTML e CSS); il codice JavaScript lo fa girare un altro motore.
+
+Oggi i motori in uso sono tre, ognuno con il suo motore JavaScript:
+
+| Browser | Motore di rendering | Motore JavaScript |
+|---|---|---|
+| Chrome · Edge · Opera · Brave | **Blink** | **V8** |
+| Safari | **WebKit** | **JavaScriptCore** |
+| Firefox | **Gecko** | **SpiderMonkey** |
+
+Tre legami utili da ricordare: **Blink** è nato nel 2013 da una costola di **WebKit** (ecco perché Chrome e Safari partono da una radice comune); **V8** è di Google e gira anche fuori dal browser, per esempio dentro **Node.js**; **SpiderMonkey** è il primo motore JavaScript mai scritto, opera di Brendan Eich, l'inventore di JavaScript.
 
 > [!tip]
-> A grandi linee la **pipeline di rendering**: il markup diventa **DOM**, il CSS diventa **CSSOM**, i due si combinano nel *render tree*; seguono **layout** (posizione e dimensioni di ogni elemento), **paint** (riempimento dei pixel) e **composite** (composizione dei layer). Il motore JavaScript (in Chromium è **V8**) è un componente separato dal motore di rendering, ma collabora con esso.
+> Come nasce la pagina, in breve: l'HTML diventa **DOM**, il CSS diventa **CSSOM**, i due si uniscono nel *render tree*; poi vengono il **layout** (dove sta e quanto è grande ogni elemento), il **paint** (i pixel colorati) e il **composite** (i livelli messi insieme). Il motore JavaScript entra qui: modifica il DOM, e ogni sua modifica può far ripartire layout e paint.
 
 ## Debugger (Chrome DevTools)
 

@@ -10,7 +10,7 @@ Scrivere CSS **a prova di futuro** significa usare feature nuove senza rompere i
 
 ## Il supporto browser non è un interruttore
 
-Una feature CSS non è "supportata" o "non supportata" in assoluto: lo è **per versione**, e i motori (Blink di Chrome/Edge, WebKit di Safari, Gecko di Firefox) la implementano in tempi diversi. Il codice va quindi pensato per un **ventaglio** di browser, non per quello sul proprio schermo.
+Una feature CSS non è "supportata" o "non supportata" in assoluto: lo è **per versione**, e i **motori del browser** — <a href="../glossario/#/docs/web-browser" target="_blank" rel="noopener">Blink (Chrome/Edge), WebKit (Safari), Gecko (Firefox)</a> — la implementano in tempi diversi. Il codice va quindi pensato per un **ventaglio** di browser, non per quello sul proprio schermo.
 
 Due strumenti rispondono alla domanda "posso usarlo?":
 
@@ -123,17 +123,17 @@ Oggi servono **raramente** per il CSS: la convergenza dei motori e Baseline hann
 
 BEM risolve un problema reale — collisioni di nomi e specificità che sfugge di mano — ma oggi parte di quel problema è affrontabile a livello di linguaggio: le **custom properties** ([[06-unita-valori-funzioni]]) parametrizzano i componenti senza moltiplicare le classi, e i **cascade layer** (`@layer`, [[04-cascade-specificita-ereditarieta]]) governano l'ordine di vittoria a prescindere dalla specificità. BEM resta valido e diffuso, ma non è più l'unica difesa contro il caos della cascade.
 
-## Il CSS è modulare: CSS WG e i moduli dello standard
+## Come si standardizza ed evolve il CSS
 
 Non esiste "il CSS" come singola specifica: dopo CSS 2.1 lo standard è stato spezzato in **moduli** indipendenti (Selectors, Grid Layout, Color, Cascade & Inheritance, …), ognuno con un **livello** proprio (es. *Selectors Level 4*) e un proprio stato di maturità. A curarli è il **[CSS Working Group](https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group)** del W3C. Questo spiega perché feature diverse avanzano a velocità diverse e perché "supporta CSS3" non vuol dire nulla di preciso: ogni modulo fa storia a sé.
 
-A ridurre le divergenze tra motori contribuisce **[Interop](https://web.dev/blog/interop-2026)**, l'iniziativa annuale in cui Apple, Google, Microsoft, Mozilla e Igalia concordano un set di feature prioritarie e ne misurano l'interoperabilità con test comuni ([dashboard su wpt.fyi](https://github.com/web-platform-tests/interop)). È il motore per cui, anno dopo anno, "funziona in tutti i browser" diventa sempre più vero.
+### Gli stadi di maturità di un modulo
 
-### Come matura una feature — e il confronto con ECMAScript
+Ogni modulo attraversa una **scala di maturità** fissata dal processo del W3C, che dice quanto la specifica è stabile. Si parte dal **Working Draft** (bozza ancora in movimento), si passa alla **Candidate Recommendation** — la fase di test, in cui la specifica è considerata pronta ma deve dimostrare **due implementazioni indipendenti** di ogni feature prima di andare avanti — poi alla **Proposed Recommendation** (in attesa dell'approvazione formale del W3C) e infine alla **Recommendation**, lo standard concluso. In pratica una feature si considera *instabile* finché non arriva almeno alla Candidate Recommendation ([stato dei moduli CSS](https://www.w3.org/Style/CSS/current-work)).
 
-Ogni modulo attraversa una **scala di maturità** fissata dal processo del W3C, che dice quanto la specifica è stabile: si parte dal **Working Draft** (bozza in evoluzione, ancora instabile), si passa alla **Candidate Recommendation** — la fase di test, in cui la specifica si considera pronta ma deve dimostrare **due implementazioni indipendenti** di ogni feature prima di avanzare — poi alla **Proposed Recommendation** (in attesa dell'approvazione formale del W3C) e infine alla **Recommendation**, lo standard concluso. Una feature si considera *instabile* finché non raggiunge almeno la Candidate Recommendation ([stato dei moduli CSS](https://www.w3.org/Style/CSS/current-work)).
+### Nessuna edizione annuale: il confronto con ECMAScript
 
-Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne fotografi le novità dell'anno. Il documento che più gli somiglia è il **[CSS Snapshot](https://www.w3.org/TR/css-2025/)** (l'ultimo è *CSS Snapshot 2025*), ma non è una release di feature nuove: è solo la fotografia di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
+Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2025/)** (l'ultimo è *CSS Snapshot 2025*), ma non è una release di feature nuove: è solo la fotografia di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
 
 | | JavaScript | CSS |
 |---|---|---|
@@ -143,6 +143,20 @@ Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organi
 | **"Posso usarlo?"** | supporto dei motori | **Baseline** · Can I Use · Interop |
 
 Il processo TC39 è approfondito nel vault JavaScript, <a href="../javascript/#/docs/moderno/processo-tc39" target="_blank" rel="noopener">Il processo TC39 e gli stage</a>.
+
+### Dove seguire le novità
+
+Senza un'edizione unica, restare aggiornati vuol dire sapere **quale canale guardare per ogni fase** della vita di una feature — dalla proposta ancora in discussione fino al "posso usarlo in produzione":
+
+| Cosa si cerca | Dove guardare |
+|---|---|
+| Proposte in discussione | repo GitHub **[w3c/csswg-drafts](https://github.com/w3c/csswg-drafts)** (issue + Editor's Draft) |
+| Maturità di ogni modulo | **[CSS Current Work](https://www.w3.org/Style/CSS/current-work)** (W3C) |
+| Cosa sta arrivando nei motori | **[Chrome Platform Status](https://chromestatus.com/)**, **[WebKit blog](https://webkit.org/blog/)**, [Firefox release notes](https://www.mozilla.org/en-US/firefox/releases/) |
+| "Posso già usarlo?" | **[Baseline](https://web.dev/baseline)** (con i *digest mensili*) e **[Can I Use](https://caniuse.com/)** |
+| Convergenza tra browser | **[Interop](https://web.dev/blog/interop-2026)** (test comuni, [dashboard](https://github.com/web-platform-tests/interop)) |
+
+Due punti di riferimento pratici, per non perdersi in mezzo a tutti questi. Per le **proposte** ancora acerbe il posto dove si discute davvero è **GitHub `w3c/csswg-drafts`**, l'esatto equivalente di `tc39/proposals` in JavaScript. Per il "cosa è appena diventato usabile", invece, il polso regolare sono i **digest mensili di Baseline** su web.dev — è da lì, per dire, che arrivano notizie come le style query diventate Baseline a maggio 2026. A ridurre le divergenze tra motori lavora infine **Interop**, l'iniziativa annuale in cui Apple, Google, Microsoft, Mozilla e Igalia concordano ogni anno un set di feature prioritarie e ne misurano l'interoperabilità con test comuni: è il motore per cui, anno dopo anno, "funziona in tutti i browser" diventa sempre più vero.
 
 ## Sass — cosa aggiunge ancora
 

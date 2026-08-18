@@ -5,7 +5,7 @@ Raccolta di termini di sviluppo **trasversali**: concetti che non appartengono a
 Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** invece di duplicarlo (una fonte di verità).
 
 **[Web, browser e rete](docs/web-browser.md)**
-Dominio · Sottodominio · Cross-origin (CORS) · Cache · Blink · Debugger (Chrome DevTools) · Event bubbling
+Dominio · Sottodominio · Cross-origin (CORS) · Cache · Motori del browser (Blink/WebKit/Gecko) · Debugger (Chrome DevTools) · Event bubbling
 
 **[Rendering: CSR, SSR, SSG](docs/rendering-web.md)**
 Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e crawler · idratazione · CDN vs server applicativo · quando scegliere quale
