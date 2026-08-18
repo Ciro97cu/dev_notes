@@ -224,9 +224,52 @@ Dentro un `@container` (e non solo) si possono usare unità **relative al conten
 > Non si può interrogare un elemento su sé stesso: `@container` guarda l'**antenato contenitore più vicino** e stila i discendenti. Per questo la card sta dentro un `.card-wrapper` che fa da contenitore — il wrapper si misura, la card si adatta. È il motivo per cui le container query superano le media query per i **componenti**: rendono un pezzo di UI davvero riutilizzabile, reattivo al posto in cui vive.
 
 > [!info] Baseline
-> Le **container query** (dimensione + unità `cq*`) sono **Baseline: Widely available** (Chrome 105/106, Safari 16, Firefox 110; ampiamente disponibili da agosto 2025). [MDN — Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)
+> Le container query **di dimensione** (con le unità `cq*`) sono **Baseline: Widely available** (Chrome 105/106, Safari 16, Firefox 110; ampiamente disponibili da agosto 2025). [MDN — Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries)
 
-*➕ Approfondimento — esistono anche le **style query** (`@container style(--tema: scuro)`), che reagiscono al valore di una custom property del contenitore invece che alla sua dimensione: supporto più recente, da verificare su Can I Use.*
+Quella di dimensione è però solo la **prima di tre varianti** di `@container`: oltre alla dimensione, si può interrogare lo **stile** del contenitore e il suo **stato di scroll**.
+
+### Style query — reagire a una custom property
+
+Una **style query** applica stili in base al **valore di una custom property** del contenitore, invece che alla sua dimensione. Serve a far cambiare tema o variante a un componente a seconda del contesto in cui è inserito, senza aggiungere classi.
+
+```css
+.pannello { --tema: scuro; }
+
+@container style(--tema: scuro) {
+  .card { background: #111; color: #eee; }
+}
+```
+
+> [!info] Baseline
+> Le **style query** su custom property sono **Baseline: newly available** (dal *Baseline digest di maggio 2026*): presenti su tutti i browser core, ma essendo recenti conviene ancora il progressive enhancement sui target datati. [MDN — size & style queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries) *(verificato: 2026-08-18)*
+
+### Scroll-state query — reagire allo scroll (emergente)
+
+Una **scroll-state query** fa reagire un elemento allo **stato di scorrimento** del suo contenitore, senza JavaScript. Si dichiara con `container-type: scroll-state` e si interroga con quattro descrittori: `stuck` (un `position: sticky` si è "incollato" a un bordo), `snapped` (agganciato a uno scroll-snap), `scrollable` (può ancora scorrere in una direzione) e `scrolled` (è stato scrollato di recente).
+
+```css
+header {
+  container-type: scroll-state;
+  position: sticky;
+  top: 0;
+}
+
+/* quando l'header è "incollato" in alto, compattane il titolo */
+@container scroll-state(stuck: top) {
+  h1 { font-size: 1rem; }
+}
+```
+
+> [!warning]
+> Le **scroll-state query** sono **emergenti, non Baseline**: attive senza flag su tutti i browser Chromium (da ~aprile 2026), ma Firefox e Safari devono ancora recuperare. Da usare solo come progressive enhancement dietro `@supports`, così chi non le regge resta sul comportamento normale:
+>
+> ```css
+> @supports (container-type: scroll-state) {
+>   /* miglioramenti legati allo scroll */
+> }
+> ```
+>
+> [MDN — scroll-state queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Conditional_rules/Container_scroll-state_queries) *(verificato: 2026-08-18)*
 
 ## Rapporto d'aspetto con `aspect-ratio`
 

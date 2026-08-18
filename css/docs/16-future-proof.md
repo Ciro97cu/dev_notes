@@ -129,6 +129,21 @@ Non esiste "il CSS" come singola specifica: dopo CSS 2.1 lo standard è stato sp
 
 A ridurre le divergenze tra motori contribuisce **[Interop](https://web.dev/blog/interop-2026)**, l'iniziativa annuale in cui Apple, Google, Microsoft, Mozilla e Igalia concordano un set di feature prioritarie e ne misurano l'interoperabilità con test comuni ([dashboard su wpt.fyi](https://github.com/web-platform-tests/interop)). È il motore per cui, anno dopo anno, "funziona in tutti i browser" diventa sempre più vero.
 
+### Come matura una feature — e il confronto con ECMAScript
+
+Ogni modulo attraversa una **scala di maturità** fissata dal processo del W3C, che dice quanto la specifica è stabile: si parte dal **Working Draft** (bozza in evoluzione, ancora instabile), si passa alla **Candidate Recommendation** — la fase di test, in cui la specifica si considera pronta ma deve dimostrare **due implementazioni indipendenti** di ogni feature prima di avanzare — poi alla **Proposed Recommendation** (in attesa dell'approvazione formale del W3C) e infine alla **Recommendation**, lo standard concluso. Una feature si considera *instabile* finché non raggiunge almeno la Candidate Recommendation ([stato dei moduli CSS](https://www.w3.org/Style/CSS/current-work)).
+
+Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne fotografi le novità dell'anno. Il documento che più gli somiglia è il **[CSS Snapshot](https://www.w3.org/TR/css-2025/)** (l'ultimo è *CSS Snapshot 2025*), ma non è una release di feature nuove: è solo la fotografia di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
+
+| | JavaScript | CSS |
+|---|---|---|
+| **Chi decide** | comitato **TC39** | **CSS Working Group** (W3C) |
+| **Stadi** | Stage 0 → 4 | WD → CR → PR → REC |
+| **"Edizione" annuale** | sì: ECMAScript (ES2015, ES2026…) | no: moduli con *Level* propri; il *CSS Snapshot* è solo una fotografia |
+| **"Posso usarlo?"** | supporto dei motori | **Baseline** · Can I Use · Interop |
+
+Il processo TC39 è approfondito nel vault JavaScript, <a href="../javascript/#/docs/moderno/processo-tc39" target="_blank" rel="noopener">Il processo TC39 e gli stage</a>.
+
 ## Sass — cosa aggiunge ancora
 
 **[Sass](https://sass-lang.com/)** è un **preprocessore**: si scrivono file `.scss` con costrutti extra e un compilatore li traduce in CSS standard. Storicamente colmava buchi enormi del CSS (variabili, annidamento, moduli). Oggi molti di quei buchi il CSS li copre **nativamente** — nesting, custom properties, `min()`/`max()`/`clamp()` ([[06-unita-valori-funzioni]]), `color-mix()` ([[07-colori]]) — quindi spesso Sass **non serve**.
@@ -211,6 +226,13 @@ Dopo CSS 2.1 lo standard è spezzato in **moduli** indipendenti (Selectors, Grid
 </details>
 
 <details>
+<summary>Il CSS ha un'edizione annuale come ECMAScript?</summary>
+
+No. Il **TC39** raccoglie ogni anno le proposte mature in un'edizione ECMAScript datata; il CSS è **modulare** e ogni modulo avanza per conto suo lungo gli stadi **WD → CR → PR → REC**. Il documento più simile a un riepilogo annuale è il **CSS Snapshot** (es. *CSS Snapshot 2025*), ma fotografa solo quali moduli compongono "il CSS" stabile, non raccoglie feature nuove. Il segnale pratico "posso usarlo?" è **Baseline**.
+
+</details>
+
+<details>
 <summary>Quando ha ancora senso usare Sass nel 2026?</summary>
 
 Quando servono **logica di generazione** (`@each`/`@for`/`@function`) o organizzazione a moduli con `@use`/`@forward`. Per variabili, nesting e calcoli semplici il CSS nativo (custom properties, nesting, `clamp()`) basta e non richiede build step.
@@ -221,5 +243,5 @@ Quando servono **logica di generazione** (`@each`/`@for`/`@function`) o organizz
 - Il supporto è **per versione**: si decide con **Can I Use** (dettaglio) e **Baseline** (stadi *Newly*/*Widely available*), preferendo il **progressive enhancement**.
 - **`@supports`** è lo strumento moderno per usare feature nuove con fallback; testa `property: value`, `selector(...)`, con `not`/`and`/`or`.
 - Legacy relegato a contesto: **prefissi a mano** → oggi Autoprefixer/Baseline; **Modernizr/polyfill** → raramente necessari; **Bootstrap** → datato per progetti nuovi.
-- **BEM** resta valido, ma custom properties e `@layer` coprono parte di ciò che risolveva; il CSS è **modulare** (CSS WG + Interop lo rendono sempre più uniforme).
+- **BEM** resta valido, ma custom properties e `@layer` coprono parte di ciò che risolveva; il CSS è **modulare** (CSS WG + Interop lo rendono sempre più uniforme), matura per stadi (WD → CR → PR → REC) e **non** ha un'edizione annuale come ECMAScript — il *CSS Snapshot* è solo una fotografia.
 - **Sass** aggiunge ancora moduli, mixin, funzioni e loop, ma il CSS nativo moderno l'ha reso spesso superfluo.
