@@ -125,32 +125,36 @@ BEM risolve un problema reale — collisioni di nomi e specificità che sfugge d
 
 ## Come si standardizza ed evolve il CSS
 
-Non esiste "il CSS" come singola specifica: dopo CSS 2.1 lo standard è stato spezzato in **moduli** indipendenti (Selectors, Grid Layout, Color, Cascade & Inheritance, …), ognuno con un **livello** proprio (es. *Selectors Level 4*) e un proprio stato di maturità. A curarli è il **[CSS Working Group](https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group)** del W3C. Questo spiega perché feature diverse avanzano a velocità diverse e perché "supporta CSS3" non vuol dire nulla di preciso: ogni modulo fa storia a sé.
+Per anni "il CSS" è stato **un solo documento**: l'ultima versione monolitica è **CSS 2.1**, completata come standard nel 2011, che in un unico testo definiva selettori, box model, testo, colori e tutto il resto. Un blocco così grande era però ingestibile — bastava una parte non ancora pronta a tenere ferma l'intera specifica. Da lì il **[CSS Working Group](https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group)** del W3C ha cambiato rotta e ha spezzato il CSS in **moduli** indipendenti — Selectors, Grid Layout, Color, Cascade & Inheritance… — ciascuno libero di avanzare per conto proprio. È per questo che "supporta CSS3" non vuol dire nulla di preciso: non c'è "il CSS3" come blocco unico, ci sono decine di moduli, ognuno a un punto diverso del suo cammino.
 
-Nel nome di un modulo convivono però **due cose diverse** che è facile confondere. Il **livello** (*Level*) è la sua **edizione**: sale quando il gruppo apre una nuova tornata per aggiungere feature, di solito quando la precedente è già solida — è una scelta editoriale, non una metrica automatica (ecco perché a volte un numero viene saltato, come *Cascading and Inheritance 3 → 5*). Lo **stadio** (Working Draft, Candidate Recommendation…) dice invece quanto quella edizione è **matura**. I due assi sono indipendenti: *Selectors Level 3* è una Recommendation conclusa — quella che i browser implementano — mentre *Selectors Level 4*, che aggiunge `:has()`, `:is()` e altro, è ancora un Working Draft. Un livello più alto quindi **non** significa "più pronto": è la versione successiva, spesso ancora acerba.
+### Due assi da non confondere: la versione (*Level*) e la maturità
 
-### Gli stadi di maturità di un modulo
+Di ogni modulo si leggono due etichette che raccontano cose diverse. La prima è il **livello** (*Level*): è, molto semplicemente, il **numero di versione** del modulo, come il "v3" o "v4" di un programma. *Selectors Level 4* è la versione successiva di *Selectors Level 3*, e nasce quando il gruppo apre una tornata per **aggiungere feature** a un modulo ormai maturo. È una decisione editoriale, non un contatore automatico: ecco perché a volte un numero viene saltato (si passa da *Cascading and Inheritance 3* direttamente al *5*). La seconda etichetta è lo **stadio**, che dice quanto quella versione è **matura**, cioè quanto è vicina a diventare uno standard definitivo.
 
-Ogni modulo attraversa una **scala di maturità** fissata dal processo del W3C, che dice quanto la specifica è stabile. Si parte dal **Working Draft** (bozza ancora in movimento), si passa alla **Candidate Recommendation** — la fase di test, in cui la specifica è considerata pronta ma deve dimostrare **due implementazioni indipendenti** di ogni feature prima di andare avanti — poi alla **Proposed Recommendation** (in attesa dell'approvazione formale del W3C) e infine alla **Recommendation**, lo standard concluso. In pratica una feature si considera *instabile* finché non arriva almeno alla Candidate Recommendation ([stato dei moduli CSS](https://www.w3.org/Style/CSS/current-work)).
+Il punto da fissare è che **i due assi sono indipendenti**, ed è qui che l'intuito inganna. *Selectors Level 3* è uno standard già concluso — quello che i browser implementano oggi — mentre *Selectors Level 4*, la versione che aggiunge `:has()`, `:is()` e altro, è ancora una bozza. Quindi un numero di livello più alto **non** significa "più pronto": è semplicemente la versione dopo, di norma ancora acerba mentre la precedente è già stabile.
 
-Il W3C stesso riassume in **tre livelli di stabilità** — WD, CR e REC, con la PR poco prima della fine. Sulla pagina ufficiale, però, si incontrano altre sigle: sono l'inizio, le sotto-forme e i capolinea di questo stesso percorso, non tappe nuove in mezzo. La legenda per intero:
+### Il cammino di un modulo, dall'idea allo standard
 
-| Sigla | Significato | Ruolo |
+Lo stadio racconta questo viaggio. Una versione nasce come **First Public Working Draft** (FPWD), la prima bozza pubblica con cui il gruppo dichiara di volerci lavorare; resta poi a lungo un **Working Draft** (WD), che viene *iterato* — cioè riscritto e ripubblicato più volte, un giro dopo l'altro, mentre arrivano commenti e si sistemano i problemi. Quando il testo è considerato completo passa a **Candidate Recommendation** (CR), la prova sul campo: per superarla ogni feature deve avere **due implementazioni indipendenti**, cioè essere realizzata da almeno due browser diversi — ognuno partendo dalla sola specifica — che poi superano gli stessi test. È la garanzia che la regola sia davvero realizzabile e che due team, letta la stessa pagina, ottengano lo stesso risultato, invece di qualcosa che funziona solo sulla carta. Dopo la CR arriva la **Proposed Recommendation** (PR), un ultimo congelamento in attesa del via libera formale del W3C, e infine la **Recommendation** (REC), lo standard concluso. In pratica una feature resta *instabile* finché non tocca almeno la CR.
+
+Sulla pagina ufficiale compaiono anche altre sigle, ma **non sono tappe nuove nel mezzo**: sono l'inizio, una sotto-forma o un capolinea dello stesso percorso. Ecco la legenda completa, così quella pagina diventa leggibile:
+
+| Sigla | Nome | Cosa indica |
 |---|---|---|
-| **FPWD** | First Public Working Draft | il primissimo WD: il gruppo prende in carico il modulo |
-| **WD** | Working Draft | bozza di lavoro, si itera |
-| **CR** | Candidate Recommendation | fase di test: servono due implementazioni indipendenti per uscirne |
-| **CRD** | Candidate Recommendation Draft | un aggiornamento di lavoro della CR fra una revisione formale e l'altra |
-| **PR** | Proposed Recommendation | congelata, in attesa dell'approvazione del W3C |
+| **FPWD** | First Public Working Draft | la prima bozza pubblica: il gruppo prende in carico il modulo |
+| **WD** | Working Draft | bozza di lavoro, riscritta e ripubblicata a più giri |
+| **CR** | Candidate Recommendation | prova sul campo: servono due browser che la implementano in modo indipendente |
+| **CRD** | Candidate Recommendation Draft | un aggiornamento "di lavoro" della CR fra una pubblicazione formale e l'altra |
+| **PR** | Proposed Recommendation | versione congelata, in attesa dell'ok formale del W3C |
 | **REC** | Recommendation | lo standard concluso |
-| **SPSD** | Superseded Recommendation | una REC rimpiazzata da un'edizione più nuova |
-| **NOTE** | Working Group Note | fuori dal binario standard: documenti informativi (anche i CSS Snapshot sono NOTE) o moduli abbandonati |
+| **SPSD** | Superseded Recommendation | una versione vecchia **rimpiazzata** da una più recente — per esempio *CSS Level 1* (1996), oggi soppiantato |
+| **NOTE** | Working Group Note | un documento **fuori dal percorso degli standard**: o solo informativo (i *CSS Snapshot* sono NOTE, vedi sotto), o un modulo il cui lavoro è stato **abbandonato** |
 
-Sulla pagina [CSS Current Work](https://www.w3.org/Style/CSS/current-work) le colonne *Current* e *Upcoming* indicano lo stadio attuale e quello previsto; i raggruppamenti (*Refining*, *Revising*, *Completed*, *Abandoned*…) sono invece i "cassetti" di lavoro del gruppo, non stadi.
+Due chiavi finali per quella pagina: le colonne *Current* e *Upcoming* sono lo stadio di adesso e quello previsto; e i titoloni (*Refining*, *Revising*, *Completed*, *Abandoned*…) non sono stadi, ma i "cassetti" con cui il gruppo tiene in ordine il proprio lavoro.
 
 ### Nessuna edizione annuale: il confronto con ECMAScript
 
-Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2026/)** (l'ultimo è *CSS Snapshot 2026*, pubblicato come nota del gruppo), ma non è una release di feature nuove: è solo la fotografia di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
+Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2026/)** (l'ultimo è *CSS Snapshot 2026*), ma non è una release di feature nuove: è solo la fotografia — pubblicata proprio come *Working Group Note* — di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
 
 | | JavaScript | CSS |
 |---|---|---|
