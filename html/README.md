@@ -12,5 +12,6 @@ Appunti di **HTML moderno**, orientati alle **decisioni** che contano — quale 
 | 02 | [Il `<head>` e i metadati](docs/02-head-metadati.md) | `charset`, `<title>`, viewport, `description`, Open Graph, `<link>`, `<script defer>` |
 | 03 | [Semantica e struttura](docs/03-semantica-struttura.md) | Landmark, `<article>`/`<section>`, outline dei titoli, elementi semantici, quando `<div>`/`<span>` |
 | 04 | [Testo e link](docs/04-testo-link.md) | `<strong>`/`<em>` vs `<b>`/`<i>`, liste, `<a>` (testo descrittivo, `rel="noopener"`), tabelle accessibili (`caption`, `scope`) |
+| 05 | [Form](docs/05-form.md) | `method`, tipi di `<input>`, `<label>`, `<fieldset>`, validazione nativa + Constraint Validation API, `name`/`autocomplete` |
 
-*Moduli in arrivo:* Form · Media e contenuti embedded · Accessibilità e ARIA · Evoluzione dell'HTML (Living Standard).
+*Moduli in arrivo:* Media e contenuti embedded · Accessibilità e ARIA · Evoluzione dell'HTML (Living Standard).
