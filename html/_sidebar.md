@@ -5,3 +5,6 @@
 - **Fondamenti**
   - [01 · Il documento e il DOM](/docs/01-documento-dom.md)
   - [02 · `<head>` e metadati](/docs/02-head-metadati.md)
+
+- **Struttura e contenuto**
+  - [03 · Semantica e struttura](/docs/03-semantica-struttura.md)
