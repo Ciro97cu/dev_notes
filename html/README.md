@@ -11,5 +11,6 @@ Appunti di **HTML moderno**, orientati alle **decisioni** che contano — quale 
 | 01 | [Il documento e il DOM](docs/01-documento-dom.md) | Scheletro di una pagina (`<!doctype>`, `<html lang>`, `<head>`/`<body>`), come il markup diventa DOM, rapporto con CSS/JS |
 | 02 | [Il `<head>` e i metadati](docs/02-head-metadati.md) | `charset`, `<title>`, viewport, `description`, Open Graph, `<link>`, `<script defer>` |
 | 03 | [Semantica e struttura](docs/03-semantica-struttura.md) | Landmark, `<article>`/`<section>`, outline dei titoli, elementi semantici, quando `<div>`/`<span>` |
+| 04 | [Testo e link](docs/04-testo-link.md) | `<strong>`/`<em>` vs `<b>`/`<i>`, liste, `<a>` (testo descrittivo, `rel="noopener"`), tabelle accessibili (`caption`, `scope`) |
 
-*Moduli in arrivo:* Testo e link · Form · Media e contenuti embedded · Accessibilità e ARIA · Evoluzione dell'HTML (Living Standard).
+*Moduli in arrivo:* Form · Media e contenuti embedded · Accessibilità e ARIA · Evoluzione dell'HTML (Living Standard).

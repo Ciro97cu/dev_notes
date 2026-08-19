@@ -8,3 +8,4 @@
 
 - **Struttura e contenuto**
   - [03 · Semantica e struttura](/docs/03-semantica-struttura.md)
+  - [04 · Testo e link](/docs/04-testo-link.md)
