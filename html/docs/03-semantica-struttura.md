@@ -55,7 +55,7 @@ Oltre ai landmark, alcuni elementi danno significato a contenuti specifici ed ev
 `<div>` e `<span>` restano legittimi, ma sono l'**ultima scelta**: si usano quando **nessun** elemento semantico calza e serve solo un contenitore per stilare o agganciare JavaScript. `<div>` raggruppa a blocco, `<span>` in linea (una porzione di testo). Non hanno significato — ed è esattamente il punto: non aggiungerne dove non ce n'è.
 
 > [!warning]
-> L'antipattern più comune è la **"divite"**: costruire tutto con `<div>` e ricreare a mano, con ARIA e CSS, ciò che un elemento nativo darebbe gratis. Un `<button>` è preferibile a un `<div onclick>`, un `<nav>` a un `<div class="nav">`. Vale la regola d'oro dell'accessibilità — *use the right element* — approfondita nel modulo Accessibilità e ARIA.
+> L'antipattern più comune è la **"divite"**: costruire tutto con `<div>` e ricreare a mano, con ARIA e CSS, ciò che un elemento nativo darebbe gratis. Un `<button>` è preferibile a un `<div onclick>`, un `<nav>` a un `<div class="nav">`. Vale la regola d'oro dell'accessibilità — *use the right element* — approfondita in [[07-accessibilita-aria]].
 
 ## Ripasso lampo
 

@@ -6,7 +6,7 @@ tags: [tipo/modulo, form, accessibilita]
 # 05 · Form
 > modulo 5 — *HTML* · rif. MDN
 
-I form sono il modo in cui l'utente **inserisce dati** e li invia: campi, caselle, menu a tendina e un pulsante di invio. È l'area di HTML dove si sbaglia di più in usabilità e accessibilità, perché è fatta di tante piccole decisioni — quale tipo di campo, come etichettarlo, come validarlo — ognuna con conseguenze concrete su chi compila. La buona notizia è che HTML, se lo si asseconda, offre gratis moltissimo: tastiere giuste, validazione, supporto ai password manager.
+I form sono il modo in cui l'utente **inserisce dati** e li invia: campi, caselle, menu a tendina e un pulsante di invio. È l'area di HTML dove si sbaglia di più in usabilità e accessibilità, perché è fatta di tante piccole decisioni — quale tipo di campo, come etichettarlo, come validarlo — ognuna con conseguenze concrete su chi compila. La buona notizia è che HTML, se lo si asseconda, offre gratis moltissimo: tastiere giuste, validazione, supporto ai password manager. L'accessibilità dei form si intreccia con quella generale, ripresa in [[07-accessibilita-aria]].
 
 ## L'ossatura: `<form>` e i controlli
 
