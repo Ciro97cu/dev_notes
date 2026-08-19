@@ -15,3 +15,6 @@
 
 - **Media**
   - [06 · Media e contenuti embedded](/docs/06-media-embedded.md)
+
+- **Accessibilità**
+  - [07 · Accessibilità e ARIA](/docs/07-accessibilita-aria.md)

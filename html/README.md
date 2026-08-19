@@ -14,5 +14,6 @@ Appunti di **HTML moderno**, orientati alle **decisioni** che contano — quale 
 | 04 | [Testo e link](docs/04-testo-link.md) | `<strong>`/`<em>` vs `<b>`/`<i>`, liste, `<a>` (testo descrittivo, `rel="noopener"`), tabelle accessibili (`caption`, `scope`) |
 | 05 | [Form](docs/05-form.md) | `method`, tipi di `<input>`, `<label>`, `<fieldset>`, validazione nativa + Constraint Validation API, `name`/`autocomplete` |
 | 06 | [Media e contenuti embedded](docs/06-media-embedded.md) | `<img>` e `alt`, immagini responsive (`srcset`/`<picture>`), `<video>`/`<track>`, `<iframe>` (`title`/`sandbox`), SVG inline vs `<img>` |
+| 07 | [Accessibilità e ARIA](docs/07-accessibilita-aria.md) | Albero di accessibilità, regola d'oro di ARIA, nome accessibile, tastiera/focus, WCAG, tooling (axe, Lighthouse, screen reader) |
 
-*Moduli in arrivo:* Accessibilità e ARIA · Evoluzione dell'HTML (Living Standard).
+*Moduli in arrivo:* Evoluzione dell'HTML (Living Standard).
