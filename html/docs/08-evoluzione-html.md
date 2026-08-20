@@ -48,7 +48,7 @@ Per controllare che il proprio markup sia corretto resta utile il **[validatore 
 
 La strategia è la stessa vista per il CSS: **progressive enhancement**. Si parte da una base in **HTML semantico** che funziona ovunque — anche senza CSS e senza JavaScript — e la si arricchisce dove il browser regge. Un markup solido, semantico e accessibile invecchia bene quasi per definizione, perché poggia sulle fondamenta più stabili della piattaforma.
 
-*➕ Fuori dal filo di questo modulo, ma utile saperlo: i **Web Components** (in particolare i Custom Elements) permettono di definire propri elementi — `<mio-widget>` — estendendo il vocabolario dell'HTML. È un tema a sé, che vive a metà tra HTML e JavaScript.*
+*➕ Fuori dal filo di questo modulo, ma utile saperlo: i **Web Components** (in particolare i Custom Elements) permettono di definire propri elementi — `<mio-widget>` — estendendo il vocabolario dell'HTML. È un tema a sé, approfondito nel modulo [[09-web-components]].*
 
 ## Ripasso lampo
 

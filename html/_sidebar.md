@@ -21,3 +21,6 @@
 
 - **Evoluzione**
   - [08 · Evoluzione dell'HTML](/docs/08-evoluzione-html.md)
+
+- **Componenti**
+  - [09 · Web Components](/docs/09-web-components.md)

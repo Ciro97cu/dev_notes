@@ -17,7 +17,7 @@ Linea editoriale: HTML *sintatticamente* è banale (tag e attributi), quindi il 
 
 ## Struttura
 ```
-README.md        home/MOC: indice degli 8 moduli
+README.md        home/MOC: indice dei moduli
 _coverpage.md    copertina docsify
 _sidebar.md      navigazione (un solo file, alias per docs/)
 docs/            moduli tematici (NN-kebab-italiano.md)

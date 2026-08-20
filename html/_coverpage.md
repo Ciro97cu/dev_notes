@@ -11,7 +11,7 @@
   <div class="cover-about">
     <div class="about-col">
       <button class="about-head" type="button" aria-expanded="false">Com'è organizzato</button>
-      <div class="about-body"><div class="about-inner">8 moduli, dalla struttura del documento all'accessibilità:
+      <div class="about-body"><div class="about-inner">9 moduli, dalla struttura del documento ai Web Components:
         <ul>
           <li><strong>Fondamenti</strong>: il documento, il DOM, <code>&lt;head&gt;</code> e metadati.</li>
           <li><strong>Contenuto</strong>: semantica, testo e link, tabelle.</li>
