@@ -699,3 +699,8 @@ a[aria-label="Torna a Dev Notes"]:hover,
 
 /* Zebra tabelle theme-aware: vue.css hardcoda #f8f8f8 sulle righe pari (invisibile in dark). */
 .markdown-section table tr:nth-child(2n) { background: var(--bg-soft); }
+
+/* Tabelle larghe su mobile: scorrono in orizzontale invece di sforare la viewport. */
+@media (max-width: 640px) {
+  .markdown-section table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
