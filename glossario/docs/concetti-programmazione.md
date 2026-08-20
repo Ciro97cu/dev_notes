@@ -108,7 +108,9 @@ const fib = (n) => n < 2 ? n : fib(n - 1) + fib(n - 2);
 
 La differenza è enorme: con *n* = 1000, un algoritmo O(n) fa mille passi, uno O(n²) un milione, uno O(2ⁿ) un numero più grande degli atomi dell'universo osservabile. Per questo scegliere l'ordine di crescita giusto conta molto più che ottimizzare le costanti.
 
-**Nel frontend** non è teoria astratta: la differenza tra O(n) e O(n²) è quella tra una lista che scorre liscia e una che "impunta". Il caso più comune è cercare dati correlati *dentro* un ciclo — un `find` (o `includes`) annidato in un `map`:
+### Nel frontend
+
+Non è teoria astratta: la differenza tra O(n) e O(n²) è quella tra una lista che scorre liscia e una che "impunta". Il caso più comune è cercare dati correlati *dentro* un ciclo — un `find` (o `includes`) annidato in un `map`:
 
 ```js
 // O(n²): per ogni item ri-scorre TUTTI gli utenti
@@ -129,6 +131,8 @@ Due altri punti dove Big O guida le scelte del frontend:
 - **I framework confrontano il DOM in O(n), non alla lettera.** Un confronto esatto tra due alberi sarebbe O(n³); React e Angular usano euristiche **O(n)**, e le `key` nelle liste servono proprio a rendere lineare quel confronto.
 - **Liste molto lunghe → virtualizzazione.** Rendere *N* nodi nel DOM costa O(n) in tempo e memoria: oltre un certo *N* si rende solo la porzione visibile (*windowing*), tenendo il costo quasi costante a schermo.
 
+### O, Ω e Θ: la famiglia completa
+
 Big O non è però sola: fa parte di una famiglia di tre notazioni asintotiche, che limitano la crescita da lati diversi.
 
 | Notazione | Limita | In parole |
@@ -141,6 +145,29 @@ Nella pratica si cita quasi sempre solo **Big O**, perché di un algoritmo inter
 
 > [!tip]
 > Piccolo abuso diffuso: spesso si scrive "O(n)" intendendo che l'algoritmo cresce *esattamente* come *n* — che formalmente è **Θ(n)**. Big O è solo il tetto (per dire, `n log n` è comunque O(n²), pur crescendo molto meno); ma nell'uso quotidiano "Big O" ha finito per significare, più liberamente, "l'ordine di crescita" e basta.
+
+## Ricorsione
+
+Una funzione **ricorsiva** è una funzione che, per risolvere un problema, **chiama sé stessa** su una versione più piccola dello stesso problema, fino ad arrivare a un caso abbastanza semplice da risolvere direttamente. Ogni funzione ricorsiva ha perciò due parti obbligatorie:
+
+- il **caso base** — la condizione che ferma la ricorsione (senza, la funzione si richiamerebbe all'infinito fino a esaurire la memoria: *stack overflow*);
+- il **caso ricorsivo** — la chiamata a sé stessa su un input ridotto, che avvicina al caso base.
+
+```js
+const fact = (n) => n <= 1 ? 1 : n * fact(n - 1);
+//                   └ caso base   └ caso ricorsivo
+fact(3); // 3 * fact(2) → 3 * 2 * fact(1) → 3 * 2 * 1 = 6
+```
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 460 220" role="img" aria-label="Stack delle chiamate di fact(3): le chiamate scendono fino al caso base fact(1), poi risalgono restituendo 1, 2, 6" style="width:100%;max-width:460px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="80" y="16" font-size="9.5" text-anchor="middle" opacity=".7">chiama (n−1)</text><text x="360" y="16" font-size="9.5" text-anchor="middle" opacity=".7">restituisce</text><path d="M80 32 L80 186" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M80 192 L75 183 L85 183 Z" fill="currentColor"/><path d="M360 188 L360 34" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M360 28 L355 37 L365 37 Z" fill="currentColor"/><rect x="115" y="26" width="130" height="42" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="180" y="52" font-size="12" text-anchor="middle" font-weight="700">fact(3)</text><text x="252" y="51" font-size="11" opacity=".85">→ 6</text><rect x="115" y="90" width="130" height="42" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="180" y="116" font-size="12" text-anchor="middle" font-weight="700">fact(2)</text><text x="252" y="115" font-size="11" opacity=".85">→ 2</text><rect x="115" y="154" width="130" height="42" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="180" y="180" font-size="12" text-anchor="middle" font-weight="700">fact(1)</text><text x="252" y="179" font-size="11" opacity=".85">→ 1</text><text x="180" y="212" font-size="9.5" text-anchor="middle" opacity=".7">caso base</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Ogni chiamata resta in attesa sullo <strong>stack</strong> finché la sotto-chiamata non le restituisce un risultato: le chiamate <em>scendono</em> fino al caso base <code>fact(1)</code>, poi <em>risalgono</em> srotolandosi (1, poi 2, poi 6).</figcaption>
+</figure>
+
+La ricorsione è spesso il modo più naturale di descrivere problemi e strutture *auto-simili* — alberi, file system, algoritmi divide-et-impera — ma non è gratis: ogni chiamata occupa spazio sullo stack, e se una chiamata ne genera più d'una il costo può esplodere.
+
+> [!tip]
+> Quando ogni chiamata ne fa **più di una**, le chiamate formano un *albero* che si allarga: è il caso del Fibonacci ingenuo (`fib(n-1) + fib(n-2)`), la cui ricorsione ramificata costa **O(2ⁿ)** — vedi [Big O notation](concetti-programmazione.md?id=big-o-notation). Molte ricorsioni si possono riscrivere in forma **iterativa** (con un ciclo) quando lo stack o le prestazioni diventano un problema.
 
 ## SOLID
 
