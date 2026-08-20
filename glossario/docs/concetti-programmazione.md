@@ -65,6 +65,33 @@ Rende lo stato prevedibile e abilita confronti veloci per **riferimento** (*shal
 > [!tip]
 > Nel contesto Angular/signals questo tema è approfondito nel concetto <a href="../angular/#/concetti/equality-immutability" target="_blank" rel="noopener">equality-immutability</a>.
 
+## Big O notation
+
+La **Big O notation** è il modo standard per descrivere **come cresce** il costo di un algoritmo — il tempo di esecuzione o la memoria — al crescere della dimensione dell'input *n*. Non misura i secondi (che dipendono dalla macchina), ma l'**ordine di grandezza** con cui il lavoro aumenta: risponde alla domanda "**come scala** quando i dati diventano tanti?".
+
+Per farlo ignora i dettagli che non contano sui grandi numeri — le costanti moltiplicative e i termini di ordine inferiore. Un algoritmo che compie `3n + 10` passi è semplicemente **O(n)**: per *n* grande, il `3` e il `+ 10` non ne cambiano la sostanza. Di norma la notazione esprime il **caso peggiore**, cioè un limite superiore garantito.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 480 290" role="img" aria-label="Curve di crescita delle classi di complessità Big O, dalla costante O(1) all'esponenziale O(2 alla n)" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><path d="M56 250 L56 40" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M56 37 L52 47 L60 47 Z" fill="currentColor"/><path d="M56 250 L398 250" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M401 250 L393 245 L393 255 Z" fill="currentColor"/><text x="46" y="32" font-size="9.5" opacity=".7">operazioni</text><text x="226" y="276" font-size="9.5" text-anchor="middle" opacity=".7">n (dimensione dell'input)</text><path d="M56 240 L392 240" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="243" font-size="10">O(1)</text><path d="M56 250 C 110 205, 240 180, 392 170" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="173" font-size="10">O(log n)</text><path d="M56 250 L392 132" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="135" font-size="10">O(n)</text><path d="M56 250 C 190 195, 300 145, 392 100" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="103" font-size="10">O(n log n)</text><path d="M56 250 C 230 245, 330 155, 392 66" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="69" font-size="10">O(n²)</text><path d="M56 250 C 95 250, 122 130, 150 46" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="150" y="40" font-size="10" text-anchor="middle">O(2ⁿ)</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Come cresce il numero di operazioni al crescere di <em>n</em>: più la curva sale ripida, peggio "scala" l'algoritmo. <strong>O(1)</strong> resta piatta, mentre <strong>O(n²)</strong> e soprattutto <strong>O(2ⁿ)</strong> esplodono. Contano la <em>forma</em> della crescita, non le costanti.</figcaption>
+</figure>
+
+Le classi che si incontrano più spesso, dalla più efficiente alla peggiore:
+
+| Notazione | Nome | Esempio tipico |
+|---|---|---|
+| **O(1)** | costante | accedere a un elemento di un array per indice |
+| **O(log n)** | logaritmica | ricerca binaria in un array ordinato |
+| **O(n)** | lineare | scorrere una volta tutti gli elementi |
+| **O(n log n)** | linearitmica | i buoni algoritmi di ordinamento (merge sort) |
+| **O(n²)** | quadratica | due cicli annidati (bubble sort) |
+| **O(2ⁿ)** | esponenziale | provare tutti i sottoinsiemi (forza bruta) |
+
+La differenza è enorme: con *n* = 1000, un algoritmo O(n) fa mille passi, uno O(n²) un milione, uno O(2ⁿ) un numero più grande degli atomi dell'universo osservabile. Per questo scegliere l'ordine di crescita giusto conta molto più che ottimizzare le costanti.
+
+> [!tip]
+> Big O è il **limite superiore** (in pratica il caso peggiore). Ha due parenti per gli altri casi: **Ω** (Big Omega) per il limite **inferiore** (caso migliore) e **Θ** (Big Theta) quando i due coincidono, cioè per una crescita "esatta". Nella pratica quotidiana si cita quasi sempre soltanto Big O.
+
 ## SOLID
 
 Cinque principi di design per il codice **object-oriented** (raccolti da Robert C. Martin) per renderlo più manutenibile, estensibile e testabile:
