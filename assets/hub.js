@@ -274,12 +274,16 @@
     m.setAttribute('role', 'dialog');
     m.setAttribute('aria-modal', 'true');
     m.setAttribute('aria-label', label);
-    var prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';                  // blocca lo scroll della pagina sotto
+    // blocca lo scroll della pagina sotto: su questo hub lo scroller è <html>
+    // (documentElement), quindi il solo body:overflow non basta.
+    var prevBody = document.body.style.overflow, prevHtml = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
     function onKey(e) { if (e.key === 'Escape') m._close(); }
     function closeM() {
       document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevHtml;
       m.remove();
     }
     m.addEventListener('click', function (e) { if (e.target === m) closeM(); });

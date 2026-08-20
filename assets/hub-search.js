@@ -322,11 +322,24 @@
 
   function isOpen() { return overlay && overlay.classList.contains('open'); }
 
+  // Blocca lo scroll della pagina sotto: su questo hub lo scroller è <html>
+  // (documentElement), non <body> — quindi il solo body:overflow non basta.
+  var _ovHtml = '', _ovBody = '';
+  function scrollLock(on) {
+    var h = document.documentElement, b = document.body;
+    if (on) {
+      _ovHtml = h.style.overflow; _ovBody = b.style.overflow;
+      h.style.overflow = 'hidden'; b.style.overflow = 'hidden';
+    } else {
+      h.style.overflow = _ovHtml; b.style.overflow = _ovBody;
+    }
+  }
+
   function open() {
     if (!overlay) build();
     if (isOpen()) return;
     lastFocus = document.activeElement;
-    document.body.style.overflow = 'hidden';
+    scrollLock(true);
     overlay.classList.add('open');
     input.value = '';
     render('');
@@ -340,7 +353,7 @@
   function close() {
     if (!isOpen()) return;
     overlay.classList.remove('open');
-    document.body.style.overflow = '';
+    scrollLock(false);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
 
