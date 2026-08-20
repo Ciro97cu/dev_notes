@@ -23,7 +23,7 @@ CSV · XML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOF
 Calendario gregoriano e non (solare · lunare · lunisolare · ere imperiali) · anni bisestili (regola 4/100/400) · anno tropico · perché serve alle librerie di date
 
 **[Tooling (ecosistema JavaScript)](docs/tooling-javascript.md)**
-Babel · SWC · NPM · NPX · Yarn · NVM · module.exports · Barrel (barrel file)
+Babel · SWC · NPM · NPX · Yarn · NVM · Tarball (.tgz) · module.exports · Barrel (barrel file)
 
 **[React](docs/react.md)**
 Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
