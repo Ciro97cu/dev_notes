@@ -108,6 +108,27 @@ const fib = (n) => n < 2 ? n : fib(n - 1) + fib(n - 2);
 
 La differenza è enorme: con *n* = 1000, un algoritmo O(n) fa mille passi, uno O(n²) un milione, uno O(2ⁿ) un numero più grande degli atomi dell'universo osservabile. Per questo scegliere l'ordine di crescita giusto conta molto più che ottimizzare le costanti.
 
+**Nel frontend** non è teoria astratta: la differenza tra O(n) e O(n²) è quella tra una lista che scorre liscia e una che "impunta". Il caso più comune è cercare dati correlati *dentro* un ciclo — un `find` (o `includes`) annidato in un `map`:
+
+```js
+// O(n²): per ogni item ri-scorre TUTTI gli utenti
+items.map(i => users.find(u => u.id === i.userId));
+
+// O(n): costruisci una volta una Map (O(n)), poi fai lookup diretti O(1)
+const byId = new Map(users.map(u => [u.id, u]));
+items.map(i => byId.get(i.userId));
+```
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 640 224" role="img" aria-label="Confronto: map+find fa n per n confronti (O di n quadro); con una Map ogni item fa un accesso diretto (O di n)" style="width:100%;max-width:620px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="164" y="26" font-size="12" text-anchor="middle" font-weight="700">map + find → O(n²)</text><text x="486" y="26" font-size="12" text-anchor="middle" font-weight="700">Map + get → O(n)</text><g stroke="currentColor" stroke-width="0.9" opacity="0.42"><line x1="104" y1="74" x2="224" y2="74"/><line x1="104" y1="74" x2="224" y2="116"/><line x1="104" y1="74" x2="224" y2="158"/><line x1="104" y1="116" x2="224" y2="74"/><line x1="104" y1="116" x2="224" y2="116"/><line x1="104" y1="116" x2="224" y2="158"/><line x1="104" y1="158" x2="224" y2="74"/><line x1="104" y1="158" x2="224" y2="116"/><line x1="104" y1="158" x2="224" y2="158"/></g><rect x="36" y="60" width="68" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="70" y="78" font-size="11" text-anchor="middle">item</text><rect x="36" y="102" width="68" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="70" y="120" font-size="11" text-anchor="middle">item</text><rect x="36" y="144" width="68" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="70" y="162" font-size="11" text-anchor="middle">item</text><rect x="224" y="60" width="68" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="258" y="78" font-size="11" text-anchor="middle">utente</text><rect x="224" y="102" width="68" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="258" y="120" font-size="11" text-anchor="middle">utente</text><rect x="224" y="144" width="68" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="258" y="162" font-size="11" text-anchor="middle">utente</text><text x="164" y="196" font-size="10" text-anchor="middle" opacity=".7">9 confronti (3 × 3)</text><g stroke="currentColor" stroke-width="1.3"><line x1="416" y1="74" x2="536" y2="97"/><line x1="416" y1="116" x2="536" y2="109"/><line x1="416" y1="158" x2="536" y2="121"/></g><path d="M540 97 L532 93 L532 101 Z" fill="currentColor"/><path d="M540 109 L532 105 L532 113 Z" fill="currentColor"/><path d="M540 121 L532 117 L532 125 Z" fill="currentColor"/><rect x="352" y="60" width="64" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="384" y="78" font-size="11" text-anchor="middle">item</text><rect x="352" y="102" width="64" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="384" y="120" font-size="11" text-anchor="middle">item</text><rect x="352" y="144" width="64" height="28" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="384" y="162" font-size="11" text-anchor="middle">item</text><rect x="540" y="73" width="84" height="72" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="582" y="105" font-size="11" text-anchor="middle" font-weight="700">Map</text><text x="582" y="121" font-size="8.5" text-anchor="middle" opacity=".7">id → utente</text><text x="486" y="196" font-size="10" text-anchor="middle" opacity=".7">3 accessi diretti</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">A sinistra, cercare ogni item tra <em>tutti</em> gli utenti: <em>n</em> × <em>n</em> confronti (O(n²)). A destra, una <code>Map</code> costruita una volta sola permette un accesso diretto per item: <em>n</em> operazioni (O(n)).</figcaption>
+</figure>
+
+Due altri punti dove Big O guida le scelte del frontend:
+
+- **I framework confrontano il DOM in O(n), non alla lettera.** Un confronto esatto tra due alberi sarebbe O(n³); React e Angular usano euristiche **O(n)**, e le `key` nelle liste servono proprio a rendere lineare quel confronto.
+- **Liste molto lunghe → virtualizzazione.** Rendere *N* nodi nel DOM costa O(n) in tempo e memoria: oltre un certo *N* si rende solo la porzione visibile (*windowing*), tenendo il costo quasi costante a schermo.
+
 Big O non è però sola: fa parte di una famiglia di tre notazioni asintotiche, che limitano la crescita da lati diversi.
 
 | Notazione | Limita | In parole |
