@@ -83,16 +83,28 @@ Per farlo ignora i dettagli che non contano sui grandi numeri — le costanti mo
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Come cresce il numero di operazioni al crescere di <em>n</em>: più la curva sale ripida, peggio "scala" l'algoritmo. <strong>O(1)</strong> resta piatta, mentre <strong>O(n²)</strong> e soprattutto <strong>O(2ⁿ)</strong> esplodono. Contano la <em>forma</em> della crescita, non le costanti.</figcaption>
 </figure>
 
-Le classi che si incontrano più spesso, dalla più efficiente alla peggiore:
+Le classi che si incontrano più spesso, dalla più efficiente alla peggiore — e che aspetto hanno nel codice:
 
-| Notazione | Nome | Esempio tipico |
-|---|---|---|
-| **O(1)** | costante | accedere a un elemento di un array per indice |
-| **O(log n)** | logaritmica | ricerca binaria in un array ordinato |
-| **O(n)** | lineare | scorrere una volta tutti gli elementi |
-| **O(n log n)** | linearitmica | i buoni algoritmi di ordinamento (merge sort) |
-| **O(n²)** | quadratica | due cicli annidati (bubble sort) |
-| **O(2ⁿ)** | esponenziale | provare tutti i sottoinsiemi (forza bruta) |
+```js
+// O(1) — costante: il costo non dipende da n
+const primo = arr[0];                     // accesso per indice
+
+// O(log n) — logaritmica: a ogni passo lo spazio da esaminare si dimezza
+while (lo <= hi) { const mid = (lo + hi) >> 1; /* ricerca binaria */ }
+
+// O(n) — lineare: un solo giro su tutti gli elementi
+for (const x of arr) { /* … */ }
+
+// O(n log n) — n elementi per log n livelli di divisione
+arr.sort();                               // i "buoni" ordinamenti (merge/quick sort)
+
+// O(n²) — quadratica: due cicli annidati sugli stessi dati
+for (const a of arr)
+  for (const b of arr) { /* confronto a coppie: bubble sort */ }
+
+// O(2ⁿ) — esponenziale: una ricorsione che a ogni passo si biforca
+const fib = (n) => n < 2 ? n : fib(n - 1) + fib(n - 2);
+```
 
 La differenza è enorme: con *n* = 1000, un algoritmo O(n) fa mille passi, uno O(n²) un milione, uno O(2ⁿ) un numero più grande degli atomi dell'universo osservabile. Per questo scegliere l'ordine di crescita giusto conta molto più che ottimizzare le costanti.
 
