@@ -240,7 +240,7 @@
         var url = d.route + (anchor ? '?id=' + anchor : '');
         var id = 'dn-opt-' + (uid++);
         var snHtml = (sn.pre ? '…' : '') + highlight(sn.text, hit.toks) + (sn.post ? '…' : '');
-        html += '<a class="dn-pal-opt" role="option" id="' + id + '" href="' + esc(url) + '" data-i="' + rows.length + '">'
+        html += '<a class="dn-pal-opt" role="option" tabindex="-1" id="' + id + '" href="' + esc(url) + '" data-i="' + rows.length + '">'
              +    '<span class="dn-pal-opt-title">' + highlight(d.title, hit.toks) + '</span>'
              +    '<span class="dn-pal-opt-snip">' + snHtml + '</span>'
              +  '</a>';
@@ -307,6 +307,7 @@
     input.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Tab') { e.preventDefault(); move(e.shiftKey ? -1 : 1); }   // trap: Tab non lascia l'input
       else if (e.key === 'Enter') { e.preventDefault(); go(active < 0 ? 0 : active); }
       else if (e.key === 'Escape') { e.preventDefault(); close(); }
     });
@@ -335,12 +336,28 @@
     }
   }
 
+  // Rende inerte (non focalizzabile, fuori dal tab order e dall'albero a11y) tutto
+  // il resto della pagina mentre la palette è aperta → il focus resta intrappolato.
+  var _inerted = [];
+  function bgInert(on) {
+    if (on) {
+      _inerted = [];
+      [].forEach.call(document.body.children, function (el) {
+        if (el !== overlay && !el.hasAttribute('inert')) { el.setAttribute('inert', ''); _inerted.push(el); }
+      });
+    } else {
+      _inerted.forEach(function (el) { el.removeAttribute('inert'); });
+      _inerted = [];
+    }
+  }
+
   function open() {
     if (!overlay) build();
     if (isOpen()) return;
     lastFocus = document.activeElement;
     scrollLock(true);
     overlay.classList.add('open');
+    bgInert(true);
     input.value = '';
     render('');
     input.focus();
@@ -353,6 +370,7 @@
   function close() {
     if (!isOpen()) return;
     overlay.classList.remove('open');
+    bgInert(false);
     scrollLock(false);
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
