@@ -89,8 +89,18 @@ Le classi che si incontrano più spesso, dalla più efficiente alla peggiore:
 
 La differenza è enorme: con *n* = 1000, un algoritmo O(n) fa mille passi, uno O(n²) un milione, uno O(2ⁿ) un numero più grande degli atomi dell'universo osservabile. Per questo scegliere l'ordine di crescita giusto conta molto più che ottimizzare le costanti.
 
+Big O non è però sola: fa parte di una famiglia di tre notazioni asintotiche, che limitano la crescita da lati diversi.
+
+| Notazione | Limita | In parole |
+|---|---|---|
+| **O** (Big O) | **dall'alto** | "non cresce più di…" — il caso peggiore |
+| **Ω** (Big Omega) | **dal basso** | "non cresce meno di…" — il caso migliore |
+| **Θ** (Big Theta) | **da entrambi** | "cresce esattamente come…" — quando O e Ω coincidono |
+
+Nella pratica si cita quasi sempre solo **Big O**, perché di un algoritmo interessa soprattutto la garanzia sul **caso peggiore**.
+
 > [!tip]
-> Big O è il **limite superiore** (in pratica il caso peggiore). Ha due parenti per gli altri casi: **Ω** (Big Omega) per il limite **inferiore** (caso migliore) e **Θ** (Big Theta) quando i due coincidono, cioè per una crescita "esatta". Nella pratica quotidiana si cita quasi sempre soltanto Big O.
+> Piccolo abuso diffuso: spesso si scrive "O(n)" intendendo che l'algoritmo cresce *esattamente* come *n* — che formalmente è **Θ(n)**. Big O è solo il tetto (per dire, `n log n` è comunque O(n²), pur crescendo molto meno); ma nell'uso quotidiano "Big O" ha finito per significare, più liberamente, "l'ordine di crescita" e basta.
 
 ## SOLID
 
