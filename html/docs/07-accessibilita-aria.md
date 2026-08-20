@@ -6,7 +6,7 @@ tags: [tipo/modulo, accessibilita, aria]
 # 07 · Accessibilità e ARIA
 > modulo 7 — *HTML* · rif. MDN · WAI-ARIA
 
-L'accessibilità (spesso abbreviata in **a11y**) è la pratica di rendere il web usabile da **tutti**, comprese le persone che navigano con uno screen reader, con la sola tastiera, con comandi vocali, con lo schermo ingrandito, o che hanno differenze visive, uditive, motorie o cognitive. Non è una nicchia: è un requisito di qualità — e in Europa anche di legge, con l'*European Accessibility Act* in vigore dal 2025 — e quasi sempre ciò che la migliora migliora l'esperienza di chiunque. La buona notizia, ripetuta in tutto questo vault, è che **l'HTML semantico dà gratis gran parte dell'accessibilità**: questo modulo spiega perché, e cosa fare quando il semantico non basta.
+L'accessibilità (spesso abbreviata in **a11y**) è la pratica di rendere il web usabile da **tutti**, comprese le persone che navigano con uno screen reader, con la sola tastiera, con comandi vocali, con lo schermo ingrandito, o che hanno differenze visive, uditive, motorie o cognitive. Non è una nicchia: è un requisito di qualità — e in Europa anche di legge, con l'*European Accessibility Act* in vigore dal 2025 — e quasi sempre ciò che la migliora torna utile a chiunque. La buona notizia, ripetuta in tutto questo vault, è che **l'HTML semantico dà gratis gran parte dell'accessibilità**: questo modulo spiega perché, e cosa fare quando il semantico non basta.
 
 ## L'albero di accessibilità
 
