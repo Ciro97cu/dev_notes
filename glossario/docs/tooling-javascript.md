@@ -85,3 +85,20 @@ const saluta = require('./myModule');
 
 > [!tip]
 > È la controparte CommonJS di `export` / `import` degli **ES Modules** (lo standard moderno). Vedi <a href="../javascript/#/docs/libro6/03-organizzazione" target="_blank" rel="noopener">ES6 Modules</a> nel vault JavaScript.
+
+## Barrel (barrel file)
+
+Un **barrel** è un file — tipicamente un `index.ts` (o `index.js`) — che **ri-esporta** i costrutti pubblici di una cartella da un unico punto d'ingresso, così chi lo usa importa da un solo percorso invece di raggiungere i singoli file:
+
+```ts
+// feature/index.ts  ← il barrel
+export * from './button';
+export { Card } from './card';
+
+// altrove: un solo import invece di tre
+import { Button, Card } from './feature';
+```
+
+Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il tree-shaking** e il lazy-loading, perché importare un solo nome può trascinare nel bundle tutto ciò che il barrel ri-esporta.
+
+Il meccanismo di ri-esportazione è spiegato in <a href="../typescript/#/docs/31-moduli-namespaces?id=re-export" target="_blank" rel="noopener">TypeScript · Moduli (Re-export)</a>; i trade-off e l'alternativa *barrel-less* (convenzione `internal/` + Sheriff) sono approfonditi in <a href="../angular/#/capitoli/08-sustainable-architectures" target="_blank" rel="noopener">Angular · Sustainable architectures</a>.
