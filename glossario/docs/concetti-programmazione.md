@@ -2,6 +2,13 @@
 
 Concetti trasversali, non legati a un linguaggio o framework specifico.
 
+## Costrutto
+
+Un **costrutto** (in inglese *construct*) è un **elemento di base che un linguaggio di programmazione mette a disposizione** per scrivere codice: una variabile, una funzione, una classe, un'interfaccia, un ciclo, una condizione, una keyword, un tipo. È, in sostanza, un "mattone" del linguaggio — un pezzo del suo vocabolario e della sua grammatica con cui si costruisce un programma. Quando in questi appunti si parla dei "costrutti pubblici" di un modulo, si intendono le funzioni, le classi, le costanti e i tipi che quel modulo espone.
+
+> [!tip]
+> Da non confondere con il **costruttore** (*constructor*): quello è il metodo speciale che inizializza una nuova istanza di una classe — un costrutto *particolare*, non il termine generico.
+
 ## Interoperabilità
 
 L'interoperabilità è la capacità di sistemi, dispositivi o programmi diversi di **lavorare insieme** scambiando dati o servizi, tipicamente appoggiandosi a standard o protocolli comuni. Componenti interoperabili comunicano e collaborano senza attriti anche se sviluppati da parti diverse o con tecnologie diverse (es. un client JavaScript e un backend Java che dialogano via JSON su HTTP).

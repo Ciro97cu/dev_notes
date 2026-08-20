@@ -88,7 +88,7 @@ const saluta = require('./myModule');
 
 ## Barrel (barrel file)
 
-Un **barrel** è un file — tipicamente un `index.ts` (o `index.js`) — che **ri-esporta** i costrutti pubblici di una cartella da un unico punto d'ingresso, così chi lo usa importa da un solo percorso invece di raggiungere i singoli file:
+Un **barrel** è un file — tipicamente un `index.ts` (o `index.js`) — che **ri-esporta** i [costrutti](concetti-programmazione.md?id=costrutto) pubblici di una cartella da un unico punto d'ingresso, così chi lo usa importa da un solo percorso invece di raggiungere i singoli file:
 
 ```ts
 // feature/index.ts  ← il barrel
