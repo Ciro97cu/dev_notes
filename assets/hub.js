@@ -24,9 +24,13 @@
 
   // Scorciatoie da tastiera dell'hub (in coppia con quelle dei vault). Ignora se
   // stai scrivendo (es. nella ricerca) o se ci sono modificatori.
+  function hubLock(on) {   // blocca lo scroll della pagina sotto (html è lo scroller)
+    document.documentElement.style.overflow = on ? 'hidden' : '';
+    document.body.style.overflow = on ? 'hidden' : '';
+  }
   function hubHelp() {
     var h = document.getElementById('hub-keyhelp');
-    if (h) { h.classList.toggle('open'); return; }
+    if (h) { var willOpen = !h.classList.contains('open'); h.classList.toggle('open', willOpen); hubLock(willOpen); return; }
     var st = document.createElement('style'); st.id = 'hub-keyhelp-styles';
     st.textContent = '#hub-keyhelp{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5)}'
       + '#hub-keyhelp.open{display:flex}'
@@ -44,12 +48,12 @@
       + '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>'
       + '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>'
       + '</dl></div>';
-    h.addEventListener('click', function (e) { if (e.target === h) h.classList.remove('open'); });
+    h.addEventListener('click', function (e) { if (e.target === h) { h.classList.remove('open'); hubLock(false); } });
     document.body.appendChild(h);
-    h.classList.add('open');
+    h.classList.add('open'); hubLock(true);
   }
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { var hh = document.getElementById('hub-keyhelp'); if (hh && hh.classList.contains('open')) hh.classList.remove('open'); }
+    if (e.key === 'Escape') { var hh = document.getElementById('hub-keyhelp'); if (hh && hh.classList.contains('open')) { hh.classList.remove('open'); hubLock(false); } }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var a = document.activeElement;
     if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return;

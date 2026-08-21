@@ -120,13 +120,17 @@
       '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>' +
       '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>' +
       '</dl></div>';
-    h.addEventListener('click', function (e) { if (e.target === h) h.classList.remove('open'); });
+    h.addEventListener('click', function (e) { if (e.target === h) { h.classList.remove('open'); lockScroll(false); } });
     (document.body || document.documentElement).appendChild(h);
     return h;
   }
   function typing() {
     var a = document.activeElement; if (!a) return false;
     var t = a.tagName; return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || a.isContentEditable;
+  }
+  function lockScroll(on) {   // blocca lo scroll della pagina sotto (html è lo scroller)
+    document.documentElement.style.overflow = on ? 'hidden' : '';
+    document.body.style.overflow = on ? 'hidden' : '';
   }
   document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {   // ⌘K / Ctrl+K: apre/chiude la ricerca (come nell'hub)
@@ -136,8 +140,8 @@
       return;
     }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.key === '?') { e.preventDefault(); help().classList.toggle('open'); return; }
-    if (e.key === 'Escape') { var h = document.getElementById('dn-keyhelp'); if (h && h.classList.contains('open')) { h.classList.remove('open'); return; } }
+    if (e.key === '?') { if (typing()) return; e.preventDefault(); var hp = help(); var op = !hp.classList.contains('open'); hp.classList.toggle('open', op); lockScroll(op); return; }
+    if (e.key === 'Escape') { var h = document.getElementById('dn-keyhelp'); if (h && h.classList.contains('open')) { h.classList.remove('open'); lockScroll(false); return; } }
     if (e.key === '/') {
       if (typing()) return;
       e.preventDefault();
