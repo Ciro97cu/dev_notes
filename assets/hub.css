@@ -338,6 +338,17 @@ html.theme-anim .card-prog { transition: background-color .32s ease, border-colo
 .dn-pal-head svg { flex: 0 0 auto; color: var(--grad-a); display: block; }
 .dn-pal-input { flex: 1 1 auto; min-width: 0; border: 0; background: transparent; color: var(--fg); font: inherit; font-size: 1.05rem; outline: none; }
 .dn-pal-input::placeholder { color: var(--fg-soft); }
+.dn-pal-toggles { display: flex; gap: .25rem; flex: 0 0 auto; }
+.dn-pal-tog {
+  width: 30px; height: 28px; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--card-border); border-radius: 7px;
+  background: transparent; color: var(--fg); cursor: pointer;
+  font-family: inherit; font-size: .78rem; font-weight: 700; opacity: .7;
+  transition: opacity .15s ease, border-color .15s ease, color .15s ease;
+}
+.dn-pal-tog:hover { opacity: 1; border-color: var(--grad-a); }
+.dn-pal-tog.is-on { opacity: 1; color: var(--grad-a); border-color: var(--grad-a); background: color-mix(in srgb, var(--grad-a) 12%, transparent); }
 .dn-pal-status { padding: .9rem 1.1rem; color: var(--fg-soft); font-size: .9rem; }
 .dn-pal-list { max-height: min(56vh, 460px); overflow-y: auto; overscroll-behavior: contain; padding: .3rem; }
 .dn-pal-group {

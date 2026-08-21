@@ -18,7 +18,7 @@
     { k: 'angular',    n: 'Angular',    a: '#dd0031' },
     { k: 'git',        n: 'Git',        a: '#f05133' },
     { k: 'code',       n: 'Code',       a: '#059669' },
-    { k: 'glossario',  n: 'Glossario',  a: '#6366f1' }
+    { k: 'glossario',  n: 'Glossario',  a: '#78716c' }
   ];
   var META = {}, ORDER = {};
   VAULTS.forEach(function (v, i) { META[v.k] = v; ORDER[v.k] = i; });
@@ -33,6 +33,7 @@
   var rows = [];            // risultati selezionabili (in ordine di lista)
   var active = -1;
   var lastFocus = null, debTimer = null, uid = 0;
+  var state = { 'case': false, word: false, regex: false };   // toggle: Aa (maiuscole) · W (parola intera) · .* (regex)
 
   // ─────────────────────────── util ──────────────────────────────────────
   function esc(s) {
@@ -151,23 +152,38 @@
   }
 
   // ─────────────────────────── ricerca ───────────────────────────────────
-  function search(q) {
-    var toks = q.toLowerCase().split(/\s+/).filter(Boolean);
-    if (!toks.length || !index) return [];
+  // I toggle (Aa · W · .*) trasformano la query in una lista di matcher RegExp,
+  // stessa logica della ricerca dei vault: flag `i` salvo case-sensitive,
+  // lookbehind/lookahead per la parola intera, pattern grezzo in modalità regex.
+  function compile(q) {
+    var flags = 'g' + (state['case'] ? '' : 'i');
+    var L = '[A-Za-z0-9_À-ÿ]';
+    function wrap(src) { return state.word ? '(?<!' + L + ')(?:' + src + ')(?!' + L + ')' : src; }
+    if (state.regex) return [new RegExp(wrap(q), flags)];       // tutta la query come UN solo regex
+    return q.split(/\s+/).filter(Boolean).map(function (t) {    // altrimenti: un matcher per token
+      return new RegExp(wrap(escRe(t)), flags);
+    });
+  }
+  function reHits(re, text) { re.lastIndex = 0; return re.test(text); }
+
+  function search(reList) {
+    if (!reList.length || !index) return [];
     var hits = [];
     index.forEach(function (d) {
-      var titleLc = d.title.toLowerCase(), score = 0, ok = true;
-      for (var i = 0; i < toks.length; i++) {
-        var t = toks[i], s = 0;
-        if (titleLc.indexOf(t) >= 0) s = 8;
-        else if (d.h.some(function (x) { return x.t.toLowerCase().indexOf(t) >= 0; })) s = 4;
-        else if (d.body.toLowerCase().indexOf(t) >= 0) s = 2;
+      var score = 0, ok = true;
+      for (var i = 0; i < reList.length; i++) {
+        var re = reList[i], s = 0;
+        if (reHits(re, d.title)) s = 8;
+        else if (d.h.some(function (x) { return reHits(re, x.t); })) s = 4;
+        else if (reHits(re, d.body)) s = 2;
         if (!s) { ok = false; break; }
         score += s;
       }
       if (!ok) return;
-      if (titleLc.indexOf(q.toLowerCase()) === 0) score += 5;   // bonus prefisso titolo
-      hits.push({ d: d, score: score, toks: toks });
+      reList[0].lastIndex = 0;                                  // bonus: primo matcher a inizio titolo
+      var m0 = reList[0].exec(d.title);
+      if (m0 && m0.index === 0) score += 5;
+      hits.push({ d: d, score: score });
     });
     hits.sort(function (a, b) {
       return b.score - a.score || ORDER[a.d.k] - ORDER[b.d.k] || a.d.title.localeCompare(b.d.title);
@@ -175,37 +191,49 @@
     return hits;
   }
 
-  function bestAnchor(d, toks) {              // prima intestazione che contiene un token → deep-link
+  function bestAnchor(d, reList) {             // prima intestazione che matcha → deep-link
     for (var i = 0; i < d.h.length; i++) {
-      var lc = d.h[i].t.toLowerCase();
-      if (toks.some(function (t) { return lc.indexOf(t) >= 0; })) return d.h[i].id;
+      var t = d.h[i].t;
+      if (reList.some(function (re) { return reHits(re, t); })) return d.h[i].id;
     }
     return '';
   }
 
-  function snippet(d, toks) {
-    var body = d.body, lc = body.toLowerCase(), idx = -1;
-    for (var i = 0; i < toks.length; i++) {
-      var p = lc.indexOf(toks[i]);
-      if (p >= 0 && (idx < 0 || p < idx)) idx = p;
-    }
+  function snippet(d, reList) {
+    var body = d.body, idx = -1;
+    reList.forEach(function (re) { re.lastIndex = 0; var m = re.exec(body); if (m && (idx < 0 || m.index < idx)) idx = m.index; });
     if (idx < 0) {                            // match solo nel titolo/intestazioni
-      var h0 = d.h.find(function (x) { return toks.some(function (t) { return x.t.toLowerCase().indexOf(t) >= 0; }); });
+      var h0 = d.h.find(function (x) { return reList.some(function (re) { return reHits(re, x.t); }); });
       return { text: h0 ? h0.t : body.slice(0, 90), pre: false, post: !!body };
     }
     var start = Math.max(0, idx - 42), end = Math.min(body.length, idx + 90);
     return { text: body.slice(start, end), pre: start > 0, post: end < body.length };
   }
 
-  function highlight(text, toks) {
-    if (!toks.length) return esc(text);
-    var re = new RegExp('(' + toks.map(escRe).join('|') + ')', 'ig'), out = '', last = 0, m;
-    while ((m = re.exec(text))) {
-      out += esc(text.slice(last, m.index)) + '<mark>' + esc(m[0]) + '</mark>';
-      last = m.index + m[0].length;
-      if (re.lastIndex === m.index) re.lastIndex++;
+  function highlight(text, reList) {
+    if (!reList || !reList.length) return esc(text);
+    var ranges = [];
+    reList.forEach(function (re) {
+      re.lastIndex = 0; var m;
+      while ((m = re.exec(text))) {
+        if (m[0]) ranges.push([m.index, m.index + m[0].length]);
+        if (re.lastIndex === m.index) re.lastIndex++;           // evita il loop sui match a larghezza zero
+      }
+    });
+    if (!ranges.length) return esc(text);
+    ranges.sort(function (a, b) { return a[0] - b[0]; });
+    var merged = [ranges[0]];
+    for (var i = 1; i < ranges.length; i++) {
+      var last = merged[merged.length - 1];
+      if (ranges[i][0] <= last[1]) last[1] = Math.max(last[1], ranges[i][1]);
+      else merged.push(ranges[i]);
     }
-    return out + esc(text.slice(last));
+    var out = '', pos = 0;
+    merged.forEach(function (r) {
+      out += esc(text.slice(pos, r[0])) + '<mark>' + esc(text.slice(r[0], r[1])) + '</mark>';
+      pos = r[1];
+    });
+    return out + esc(text.slice(pos));
   }
 
   // ─────────────────────────── rendering ─────────────────────────────────
@@ -219,7 +247,10 @@
     rows = []; active = -1;
     if (!q) { listEl.innerHTML = ''; setStatus(building ? 'Indicizzo gli appunti…' : 'Scrivi per cercare in tutti i vault.'); syncActive(); return; }
     if (!index) { listEl.innerHTML = ''; setStatus('Indicizzo gli appunti…'); syncActive(); return; }
-    var hits = search(q);
+    var reList;
+    try { reList = compile(q); } catch (e) { listEl.innerHTML = ''; setStatus('Espressione regolare non valida.'); syncActive(); return; }
+    if (!reList.length) { listEl.innerHTML = ''; setStatus('Scrivi per cercare in tutti i vault.'); syncActive(); return; }
+    var hits = search(reList);
     if (!hits.length) { listEl.innerHTML = ''; setStatus('Nessun risultato per «' + esc(q) + '».'); syncActive(); return; }
     setStatus('');
 
@@ -236,12 +267,12 @@
       var v = META[k];
       html += '<div class="dn-pal-group"><span class="dn-pal-dot" style="background:' + v.a + '"></span>' + esc(v.n) + '</div>';
       groups[k].forEach(function (hit) {
-        var d = hit.d, anchor = bestAnchor(d, hit.toks), sn = snippet(d, hit.toks);
+        var d = hit.d, anchor = bestAnchor(d, reList), sn = snippet(d, reList);
         var url = d.route + (anchor ? '?id=' + anchor : '');
         var id = 'dn-opt-' + (uid++);
-        var snHtml = (sn.pre ? '…' : '') + highlight(sn.text, hit.toks) + (sn.post ? '…' : '');
+        var snHtml = (sn.pre ? '…' : '') + highlight(sn.text, reList) + (sn.post ? '…' : '');
         html += '<a class="dn-pal-opt" role="option" tabindex="-1" id="' + id + '" href="' + esc(url) + '" data-i="' + rows.length + '">'
-             +    '<span class="dn-pal-opt-title">' + highlight(d.title, hit.toks) + '</span>'
+             +    '<span class="dn-pal-opt-title">' + highlight(d.title, reList) + '</span>'
              +    '<span class="dn-pal-opt-snip">' + snHtml + '</span>'
              +  '</a>';
         rows.push({ url: url, id: id });
@@ -286,6 +317,11 @@
         '<div class="dn-pal-head">' +
           '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>' +
           '<input class="dn-pal-input" type="text" role="combobox" aria-expanded="true" aria-controls="dn-pal-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Cerca in tutti gli appunti…">' +
+          '<div class="dn-pal-toggles">' +
+            '<button class="dn-pal-tog" type="button" data-t="case" title="Maiuscole/minuscole (Aa)" aria-label="Maiuscole/minuscole" aria-pressed="false">Aa</button>' +
+            '<button class="dn-pal-tog" type="button" data-t="word" title="Parola intera (W)" aria-label="Parola intera" aria-pressed="false">W</button>' +
+            '<button class="dn-pal-tog" type="button" data-t="regex" title="Espressione regolare (.*)" aria-label="Espressione regolare" aria-pressed="false">.*</button>' +
+          '</div>' +
           '<kbd>esc</kbd>' +
         '</div>' +
         '<div class="dn-pal-status" hidden></div>' +
@@ -318,6 +354,12 @@
     listEl.addEventListener('click', function (e) {
       var opt = e.target.closest('.dn-pal-opt');
       if (opt) { e.preventDefault(); go(+opt.getAttribute('data-i')); }
+    });
+    overlay.querySelector('.dn-pal-toggles').addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('.dn-pal-tog'); if (!b) return;
+      var t = b.getAttribute('data-t'); state[t] = !state[t];
+      b.classList.toggle('is-on', state[t]); b.setAttribute('aria-pressed', state[t] ? 'true' : 'false');
+      render(input.value.trim()); input.focus();
     });
   }
 
