@@ -158,11 +158,14 @@ C'è però una condizione: un export inutilizzato si può togliere **solo se non
 
 ```js
 // analytics.js — ha un side-effect: gira già all'import
-window.__initAnalytics();          // ← effetto osservabile
-export const track = () => { /* … */ };
+window.__initAnalytics();                  // ← effetto osservabile: sempre tenuto
+export const track  = () => { /* … */ };   // se importato e usato → tenuto
+export const format = (n) => n.toFixed(2); // puro e mai importato → scartato
 ```
 
-Qui il bundler **non può** scartare `analytics.js` neppure se `track` non viene usato: toglierlo salterebbe quella riga e cambierebbe il comportamento del programma. Per distinguere i casi, un pacchetto dichiara nel proprio `package.json` se i suoi file hanno effetti collaterali:
+Qui il bundler **non può** scartare `analytics.js` neppure se nessuno dei suoi export viene usato: toglierlo salterebbe quella riga e cambierebbe il comportamento del programma. L'effetto però **non contagia gli altri export**: `format`, puro e mai importato, viene comunque scartato — il tree-shaking lavora *export per export*. Ciò che il side-effect impedisce non è tenere i singoli export puri, ma **saltare del tutto il modulo** (*module elision*) quando viene raggiunto, ed è proprio questo che `"sideEffects": false` riabilita.
+
+Per distinguere i casi, un pacchetto dichiara nel proprio `package.json` se i suoi file hanno effetti collaterali:
 
 ```json
 { "sideEffects": false }
