@@ -124,6 +124,77 @@ export { Card } from './card';
 import { Button, Card } from './feature';
 ```
 
-Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il tree-shaking** e il lazy-loading, perché importare un solo nome può trascinare nel bundle tutto ciò che il barrel ri-esporta.
+Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) e il [lazy loading](docs/tooling-javascript.md?id=lazy-loading)**. Il motivo è che rende *un intero gruppo di moduli raggiungibile da un solo import*: chiedere un nome soltanto (`import { Button } from './feature'`) costringe il bundler a considerare tutto il grafo ri-esportato dal barrel, e a scartarne i pezzi inutilizzati **solo se riesce a dimostrarli privi di side-effect**. Quando non ci riesce — moduli con effetti collaterali, `"sideEffects"` non dichiarato, o ESM degradato a CommonJS — nel bundle (o in un chunk caricato in lazy) finisce molto più del necessario.
 
 Il meccanismo di ri-esportazione è spiegato in <a href="../typescript/#/docs/31-moduli-namespaces?id=re-export" target="_blank" rel="noopener">TypeScript · Moduli (Re-export)</a>; i trade-off e l'alternativa *barrel-less* (convenzione `internal/` + Sheriff) sono approfonditi in <a href="../angular/#/capitoli/08-sustainable-architectures" target="_blank" rel="noopener">Angular · Sustainable architectures</a>.
+
+## Tree-shaking
+
+Il **tree-shaking** è l'eliminazione automatica, in fase di *build*, del codice che nessuno usa: il bundler parte dai punti d'ingresso dell'applicazione, segue gli `import` per costruire il grafo dei moduli e **tiene fuori dal bundle finale tutto ciò che non è agganciato** — l'immagine è quella di scuotere l'albero e far cadere ciò che non è appeso a un ramo. È nato con Rollup ed è oggi in ogni bundler (webpack, esbuild, Vite).
+
+### Come funziona, passo per passo
+
+Il tree-shaking è possibile **grazie alla struttura statica degli ES Module**: `import` ed `export` si risolvono a *compile-time* — i nomi importati sono noti prima ancora di eseguire il codice — quindi il bundler può dire con certezza quali export sono raggiungibili e quali no.
+
+```js
+// math.js — tre export nominali
+export const add = (a, b) => a + b;
+export const sub = (a, b) => a - b;
+export const mul = (a, b) => a * b;   // ← nessuno lo importa
+
+// app.js — se ne usa uno solo
+import { add } from './math.js';
+console.log(add(2, 3));
+```
+
+Nel bundle finale resta **solo `add`**: `sub` e `mul` sono rami morti e vengono tagliati. Con i CommonJS non sarebbe possibile, perché `require()` è una normale chiamata che può ricevere un percorso calcolato a runtime e `module.exports` un oggetto qualunque: il grafo non è analizzabile in anticipo e il bundler, per prudenza, tiene tutto.
+
+C'è però una condizione: un export inutilizzato si può togliere **solo se non ha side-effect**, cioè non fa nulla di osservabile al momento dell'import (scrivere su `window`, registrare un listener, importare un CSS…).
+
+```js
+// analytics.js — ha un side-effect: gira già all'import
+window.__initAnalytics();          // ← effetto osservabile
+export const track = () => { /* … */ };
+```
+
+Qui il bundler **non può** scartare `analytics.js` neppure se `track` non viene usato: toglierlo salterebbe quella riga e cambierebbe il comportamento del programma. Per distinguere i casi, un pacchetto dichiara nel proprio `package.json` se i suoi file hanno effetti collaterali:
+
+```json
+{ "sideEffects": false }
+```
+
+`false` significa «nessuno: puoi scartare liberamente ciò che non uso», ed è ciò che abilita il tree-shaking pieno; in alternativa si elencano i file che invece li hanno, per esempio `"sideEffects": ["*.css", "./src/polyfills.js"]`. Due conseguenze pratiche: gli **export nominali** si scuotono bene, mentre importare un intero oggetto (`export default { add, sub, mul }`) porta con sé tutto, perché lo si usa per intero; e un [barrel](docs/tooling-javascript.md?id=barrel-barrel-file) di un pacchetto senza `"sideEffects"` dichiarato allarga il grafo raggiungibile e finisce spesso nel bundle molto più del dovuto.
+
+> [!tip]
+> Riferimento: <a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noopener">webpack · Tree Shaking</a>. In Angular il tema torna nei **provider tree-shakable** e nei barrel, in <a href="../angular/#/capitoli/08-sustainable-architectures" target="_blank" rel="noopener">ch08 · Sustainable architectures</a>.
+
+## Lazy loading
+
+Il **lazy loading** («caricamento pigro») è la strategia di **caricare una risorsa solo quando serve davvero**, invece che tutta all'avvio, per alleggerire il primo caricamento. Nel frontend ha due facce. La più semplice riguarda **le risorse statiche** (immagini, `iframe`), rimandate con un attributo nativo dell'HTML, senza JavaScript: il browser scarica l'immagine solo quando sta per entrare nello schermo.
+
+```html
+<img src="foto.jpg" loading="lazy" alt="…">
+```
+
+### Come funziona il code-splitting
+
+La seconda faccia riguarda **il codice**, e si ottiene spezzando il bundle in più pezzi (*code-splitting*). Il meccanismo è l'`import()` **dinamico**: a differenza dell'`import` statico in cima al file — che lega il modulo allo stesso bundle, caricato subito — `import()` è una *funzione* che restituisce una `Promise` e segnala al bundler «qui c'è un confine». Il modulo richiesto, con le sue dipendenze, finisce in un **chunk separato**, scaricato via rete solo quando quella riga viene eseguita.
+
+```js
+// statico: Chart entra nel bundle iniziale, caricato all'avvio
+import { Chart } from './chart.js';
+
+// dinamico: './chart.js' diventa un chunk a parte,
+// scaricato solo al primo click sul pulsante
+button.addEventListener('click', async () => {
+  const { Chart } = await import('./chart.js'); // ← confine di split
+  new Chart(canvas).render();
+});
+```
+
+Visto l'`import()`, il bundler produce accanto al file principale (`main.js`) un chunk tipo `chart-a1b2c3.js`; a runtime una richiesta lo scarica al momento del bisogno, e tutto ciò che serve solo lì viaggia in quel chunk invece che nel caricamento iniziale. I framework impacchettano questo stesso meccanismo: in Angular una route si carica in lazy con `loadComponent: () => import('./report').then(m => m.Report)`, in React con `lazy(() => import('./Report'))` dentro `<Suspense>` — sotto è sempre lo stesso `import()` dinamico.
+
+Anche qui va tenuto d'occhio il [barrel](docs/tooling-javascript.md?id=barrel-barrel-file): se il modulo caricato in lazy importa *attraverso* un barrel che ri-esporta venti cose, quel singolo `import` può trascinare tutti e venti dentro il chunk lazy — o farli issare in un chunk condiviso caricato subito — gonfiando ciò che doveva restare leggero. Importare dal file specifico, non dal barrel, tiene netto il confine.
+
+> [!tip]
+> Riferimento: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import" target="_blank" rel="noopener">MDN · <code>import()</code></a>. In Angular il lazy loading delle route è il tema di <a href="../angular/#/capitoli/04-router-navigation-lazy-loading" target="_blank" rel="noopener">ch04 · Navigation &amp; Lazy Loading</a>, il code-splitting per rotta in <a href="../angular/#/cert/performance" target="_blank" rel="noopener">cert · Performance</a>.
