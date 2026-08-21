@@ -41,6 +41,9 @@ Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **EC
 ## Diagrammi
 Mermaid **solo dove rende davvero** (flussi, gerarchie, sequenze non banali), non ovunque. **Nessun colore custom** (`classDef`/`style` con `fill` fissi): i siti hanno tema chiaro/scuro, i colori hardcoded rompono il dark mode → distinguere con le **forme**, non con i colori.
 
+### Visual-first — l'SVG dove il concetto è visivo
+Dove un concetto ha una **dimensione visiva** — una struttura, un flusso, una gerarchia, una relazione spaziale (albero DOM, grafo dei moduli, bundle e chunk, macchina a stati, sequenza di passi) — l'SVG inline **non è un extra opzionale: ci va**. È la norma nei vault a taglio *visual-first* (html, css, glossario). L'unico limite è la pertinenza: se la voce è puramente testuale (una definizione di una riga) e non c'è nulla di spaziale da mostrare, si lascia stare — vale «laddove possibile», non «a forza ovunque». Quando l'SVG c'è: poche etichette essenziali dentro il disegno, il resto nella `figcaption`. Le regole di scrittura e la **verifica obbligatoria** sono qui sotto.
+
 ### SVG inline — verifica obbligatoria (XML + resa WebKit)
 Un SVG scritto a mano ha due classi di difetti invisibili nel codice: **(1) XML non valido** — una `&` o un `<` grezzi nel testo (es. `A & B`, `opacity < 1`) rompono il parsing e il browser smette di disegnare l'SVG; vanno scritti `&amp;`/`&lt;`. **(2) Layout** — testo tagliato dal viewBox, frecce/etichette sovrapposte: dipendono dai **font del motore di rendering**, quindi si vedono solo guardando l'immagine resa dallo **stesso motore del browser**. Prima di committare un SVG non banale, eseguire:
 
