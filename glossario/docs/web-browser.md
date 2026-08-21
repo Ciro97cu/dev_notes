@@ -14,7 +14,7 @@ Un sottodominio è una suddivisione di un dominio principale, usata per separare
 
 ## Cross-origin (CORS)
 
-Un'**origin** è la combinazione di tre cose: **schema + host + porta** (es. `https://app.example.com:443`). Due URL sono *same-origin* solo se coincidono tutte e tre; se ne cambia anche una sola — protocollo, dominio/sottodominio o porta — una richiesta dall'una all'altra è **cross-origin**.
+Un'**origin** è la combinazione di tre cose: **schema + host + porta** (es. `https://app.example.com:443`). Due URL sono *same-origin* solo se coincidono tutte e tre; se ne cambia anche una sola (protocollo, dominio/sottodominio o porta), una richiesta dall'una all'altra è **cross-origin**.
 
 Per sicurezza il browser applica la **same-origin policy**: uno script può leggere liberamente le risposte solo dalla **propria** origin. Una richiesta cross-origin (es. la SPA su `https://app.example.com` che chiama l'API su `https://api.example.com`) il browser la **invia**, ma **blocca la lettura della risposta** al JavaScript, a meno che il server non lo autorizzi esplicitamente via **CORS** (*Cross-Origin Resource Sharing*).
 

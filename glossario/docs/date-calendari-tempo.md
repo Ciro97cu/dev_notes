@@ -4,7 +4,7 @@ Misurare il tempo sembra una cosa universale, ma non lo è: **che giorno** è og
 
 ## Calendari diversi: cosa vuol dire "non gregoriano"
 
-Il **calendario gregoriano** — quello usato a livello internazionale, introdotto da papa Gregorio XIII nel 1582 — è solo *uno* dei modi di contare i giorni. È un calendario **solare**: l'anno segue il giro della Terra attorno al Sole (365 giorni e un quarto, come si vede più sotto) e ha dodici mesi di lunghezza fissa. Molte culture però ne usano altri, che partono da un'origine diversa (un *epoch*) e misurano il tempo in un altro modo:
+Il **calendario gregoriano** (quello usato a livello internazionale, introdotto da papa Gregorio XIII nel 1582) è solo *uno* dei modi di contare i giorni. È un calendario **solare**: l'anno segue il giro della Terra attorno al Sole (365 giorni e un quarto, come si vede più sotto) e ha dodici mesi di lunghezza fissa. Molte culture però ne usano altri, che partono da un'origine diversa (un *epoch*) e misurano il tempo in un altro modo:
 
 - **Islamico (*Hijri*)** — puramente **lunare**: dodici mesi che seguono le fasi della Luna, circa 354 giorni in tutto, undici in meno dell'anno solare. Per questo "scivola" indietro di circa 11 giorni l'anno rispetto alle stagioni (è il motivo per cui il Ramadan cade ogni anno un po' prima). Conta gli anni dall'*Egira* (622 d.C.): al 2026 corrisponde grossomodo l'anno **1447**.
 - **Ebraico** e **cinese** — **lunisolari**, una via di mezzo: i mesi seguono la Luna, ma ogni due-tre anni si aggiunge un *mese intercalare* per non perdere il passo con le stagioni. L'anno ebraico conta da un'origine molto remota (il 2026 è circa il **5786**); quello cinese usa un ciclo di 60 anni con i dodici segni animali (il 2026 è l'**anno del Cavallo**).
@@ -15,11 +15,11 @@ Il **calendario gregoriano** — quello usato a livello internazionale, introdot
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Lo stesso giorno, cinque calendari: cambia l'origine da cui si contano gli anni (l'<em>epoch</em>) e persino l'unità di misura — Sole, Luna o entrambi. I numeri d'anno sono approssimati perché ogni calendario inizia l'anno in un giorno diverso da capodanno gregoriano.</figcaption>
 </figure>
 
-Lo stesso identico giorno, insomma, ha un numero d'anno — e a volte un mese e una struttura — del tutto diversi a seconda del calendario. Ecco perché una libreria di date seria non può dare per scontato il solo gregoriano.
+Lo stesso identico giorno, insomma, ha un numero d'anno (e a volte un mese e una struttura) del tutto diversi a seconda del calendario. Ecco perché una libreria di date seria non può dare per scontato il solo gregoriano.
 
 ## 365 giorni e un quarto: perché esistono gli anni bisestili
 
-Il punto di partenza è un fatto astronomico scomodo: **la Terra non impiega un numero intero di giorni** per girare attorno al Sole. Un giro completo — il tempo che serve alle stagioni per ripetersi, detto **anno tropico** — dura circa **365,2422 giorni**, cioè 365 giorni più circa 5 ore e 49 minuti. Quel pezzetto in più, circa 0,2422 di giorno, è "**un quarto**" arrotondato.
+Il punto di partenza è un fatto astronomico scomodo: **la Terra non impiega un numero intero di giorni** per girare attorno al Sole. Un giro completo (il tempo che serve alle stagioni per ripetersi, detto **anno tropico**) dura circa **365,2422 giorni**, cioè 365 giorni più circa 5 ore e 49 minuti. Quel pezzetto in più, circa 0,2422 di giorno, è "**un quarto**" arrotondato.
 
 Il problema è che un calendario deve avere un numero **intero** di giorni per anno. Se si dicesse "l'anno è 365 giorni" e basta, ogni anno resterebbe indietro di circa ¼ di giorno rispetto al Sole: dopo 4 anni un giorno intero, dopo circa 120 anni un mese. Col tempo le stagioni "girerebbero" nel calendario, con il solstizio d'estate che a poco a poco slitta verso l'autunno.
 
@@ -38,4 +38,4 @@ Il calcolo è: 365 + 1/4 − 1/100 + 1/400 = **365,2425 giorni/anno**, quasi ide
 
 ## Perché conta per il software
 
-Messe insieme, queste due cose — calendari diversi *e* la regola dei bisestili, a cui si aggiungono i **fusi orari** e l'ora legale — spiegano perché gestire le date "a mano" è così insidioso, e perché sono nate librerie dedicate. In JavaScript è il compito di <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener"><code>Temporal</code></a>, che accetta un parametro `calendar` e conosce le regole di ciascun sistema.
+Messe insieme, queste due cose (calendari diversi *e* la regola dei bisestili, a cui si aggiungono i **fusi orari** e l'ora legale) spiegano perché gestire le date "a mano" è così insidioso, e perché sono nate librerie dedicate. In JavaScript è il compito di <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener"><code>Temporal</code></a>, che accetta un parametro `calendar` e conosce le regole di ciascun sistema.

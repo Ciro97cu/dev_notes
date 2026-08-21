@@ -22,7 +22,7 @@ In un progetto "normale" (es. con Webpack/Vite) la risoluzione avviene a **build
 > Le import map **non** sono più una proposta sperimentale: sono uno standard supportato dai browser moderni (Chrome/Edge 89+, Firefox 108+, Safari 16.4+). Vanno però dichiarate **prima** di qualsiasi `<script type="module">`.
 
 > [!tip]
-> Il vault Angular usa le import map in un contesto diverso — **Native Federation** — descritto in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">ch18 · Micro Frontends</a>.
+> Il vault Angular usa le import map in un contesto diverso (**Native Federation**), descritto in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">ch18 · Micro Frontends</a>.
 
 ### SystemJS
 
