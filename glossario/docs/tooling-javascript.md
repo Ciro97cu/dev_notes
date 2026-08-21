@@ -95,21 +95,55 @@ npm install ./util-auth-1.0.0.tgz
 > [!tip]
 > Cosa c'è **dentro** (`tar -tzf file.tgz` per sbirciare senza estrarre): l'**output di build** (JavaScript già transpilato, spesso *bundlato*, con i tipi `.d.ts`), **non** il sorgente originale del developer. E di norma **non** è minificato: la minificazione è compito del bundler dell'*applicazione* finale (vedi [Minificazione e ottimizzazione](docs/react.md?id=minificazione-e-ottimizzazione)), non della libreria. A volte un pacchetto include anche i *source map* per risalire al sorgente, a volte no.
 
-## module.exports
+## CommonJS
 
-`module.exports` è la proprietà con cui un modulo **CommonJS** (il sistema di moduli storico di Node.js) espone funzioni, oggetti o valori verso l'esterno. In Node ogni file è un modulo e il suo contenuto è privato per default: per condividerlo va assegnato a `module.exports` e importato altrove con `require()`.
+**CommonJS** (CJS) è il sistema di moduli **storico di Node.js** (dal 2009, prima che JavaScript ne avesse uno nativo). Ogni file è un modulo con contenuto privato per default: per esporre qualcosa lo si assegna a **`module.exports`**, e per usarlo altrove lo si carica con **`require()`**, che restituisce proprio quell'oggetto.
 
 ```js
 // myModule.js
 function saluta(nome) { return `Ciao ${nome}`; }
-module.exports = saluta;
+module.exports = saluta;              // esporta: rimpiazza l'oggetto exports
 
 // app.js
-const saluta = require('./myModule');
+const saluta = require('./myModule'); // importa: riceve module.exports
+saluta('Ada');
 ```
 
+`exports` è solo una **scorciatoia** che punta allo stesso oggetto di `module.exports`: `exports.foo = …` aggiunge una proprietà, ma **riassegnare** `module.exports = …` (come sopra) spezza quel legame — un inciampo classico.
+
+### Sincrono e dinamico: perché conta per i bundler
+
+Due proprietà di `require()` lo separano nettamente dagli `import` ESM. È **sincrono**: blocca l'esecuzione finché il modulo non è caricato, eseguito e restituito (poi resta in cache, così gira una volta sola). Ed è **dinamico**: `require` è una normale *funzione*, quindi il suo argomento può essere calcolato a runtime e la chiamata può comparire ovunque, anche dentro un `if` o a metà funzione.
+
+```js
+// il percorso si decide mentre il programma gira
+const plugin = require('./plugins/' + nomeScelto);
+
+// e la chiamata può essere condizionale
+if (serveI18n) { const t = require('./i18n'); /* … */ }
+```
+
+È questa la radice di ciò che le voci [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) e [lazy loading](docs/tooling-javascript.md?id=lazy-loading) davano per scontato: siccome il target di `require` e la forma di `module.exports` si conoscono **solo eseguendo il codice**, un bundler non può ricostruire il grafo dei moduli dal solo sorgente. Gli `import`/`export` dell'ESM sono invece **sintassi statica**, risolta prima di eseguire: il grafo è noto a build-time, e con esso diventano possibili tree-shaking e code-splitting.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 560 250" role="img" aria-label="Statico (ESM) vs dinamico (CommonJS): con l'ESM il grafo dei moduli è noto a build-time, con CommonJS il target di require si conosce solo a runtime" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="280" y="20" font-size="12.5" text-anchor="middle" font-weight="700">Quando si conosce il grafo dei moduli</text><path d="M280 40 L280 214" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity=".4"/><text x="145" y="46" font-size="11" text-anchor="middle" font-weight="700">ESM · a build-time</text><rect x="112" y="62" width="66" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="145" y="81" font-size="11" text-anchor="middle" font-weight="700">app</text><rect x="40" y="128" width="64" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="72" y="147" font-size="11" text-anchor="middle">a.js</text><rect x="186" y="128" width="64" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="218" y="147" font-size="11" text-anchor="middle">b.js</text><path d="M131 92 L83 124" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M78 127 L87 126 L84 118 Z" fill="currentColor"/><path d="M159 92 L207 124" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M212 127 L206 118 L203 126 Z" fill="currentColor"/><text x="145" y="188" font-size="9.5" text-anchor="middle" opacity=".75">import/export: grafo noto senza eseguire</text><text x="415" y="46" font-size="11" text-anchor="middle" font-weight="700">CommonJS · a runtime</text><rect x="382" y="62" width="66" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="415" y="81" font-size="11" text-anchor="middle" font-weight="700">app</text><rect x="382" y="128" width="66" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="415" y="150" font-size="16" text-anchor="middle" font-weight="700" opacity=".8">?</text><path d="M415 92 L415 122" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M415 128 L411 119 L419 119 Z" fill="currentColor"/><text x="462" y="112" font-size="9.5" text-anchor="start" font-weight="600">require(x)</text><text x="415" y="188" font-size="9.5" text-anchor="middle" opacity=".75">require(x): il target si sa solo eseguendo</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">A sinistra l'ESM: gli <code>import</code> sono statici, quindi il grafo dei moduli è noto già a build-time. A destra CommonJS: <code>require(x)</code> è una chiamata risolta a runtime, e il target (con quali export servono) si scopre solo eseguendo &mdash; ecco perché sui CommonJS il tree-shaking non è possibile.</figcaption>
+</figure>
+
+### CommonJS vs ES Modules
+
+| | CommonJS | ES Modules |
+|---|---|---|
+| Sintassi | `require()` / `module.exports` | `import` / `export` |
+| Risoluzione | **dinamica**, a runtime | **statica**, prima dell'esecuzione |
+| Caricamento | **sincrono** | **asincrono** |
+| Cosa ricevi | il valore al momento del `require` (no *live binding*) | **live binding**: riflette le riassegnazioni |
+| Analisi statica | no: niente tree-shaking | sì: tree-shaking e code-splitting |
+
+I due sistemi convivono e **interoperano**, con qualche attrito. Da un modulo ESM si può `import`are un CJS: Node ne espone il `module.exports` come **export di default**. Al contrario, un `require()` di un modulo ESM storicamente dava errore (`ERR_REQUIRE_ESM`) e imponeva l'`import()` dinamico; le versioni recenti di Node lo consentono per i moduli ESM **sincroni** (fallisce solo se c'è un *top-level await*). Quale sistema usa un file lo decide l'estensione (`.cjs` è CommonJS, `.mjs` è ESM), oppure, per i `.js`, il campo `"type"` del `package.json` più vicino (`"module"` per l'ESM).
+
 > [!tip]
-> È la controparte CommonJS di `export` / `import` degli **ES Modules** (lo standard moderno). Vedi <a href="../javascript/#/docs/libro6/03-organizzazione" target="_blank" rel="noopener">ES6 Modules</a> nel vault JavaScript.
+> La trattazione **storica** (dal *module pattern* con IIFE fino all'ESM) è nel vault JavaScript, in <a href="../javascript/#/docs/libro6/03-organizzazione" target="_blank" rel="noopener">Organizzazione del codice</a>. Dettagli su moduli e `require(esm)`: <a href="https://nodejs.org/api/modules.html" target="_blank" rel="noopener">Node.js · CommonJS modules</a>.
 
 ## Barrel (barrel file)
 
@@ -124,7 +158,7 @@ export { Card } from './card';
 import { Button, Card } from './feature';
 ```
 
-Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) e il [lazy loading](docs/tooling-javascript.md?id=lazy-loading)**. Il motivo è che rende *un intero gruppo di moduli raggiungibile da un solo import*: chiedere un nome soltanto (`import { Button } from './feature'`) costringe il bundler a considerare tutto il grafo ri-esportato dal barrel, e a scartarne i pezzi inutilizzati **solo se riesce a dimostrarli privi di side-effect**. Quando non ci riesce — moduli con effetti collaterali, `"sideEffects"` non dichiarato, o ESM degradato a CommonJS — nel bundle (o in un chunk caricato in lazy) finisce molto più del necessario.
+Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) e il [lazy loading](docs/tooling-javascript.md?id=lazy-loading)**. Il motivo è che rende *un intero gruppo di moduli raggiungibile da un solo import*: chiedere un nome soltanto (`import { Button } from './feature'`) costringe il bundler a considerare tutto il grafo ri-esportato dal barrel, e a scartarne i pezzi inutilizzati **solo se riesce a dimostrarli privi di side-effect**. Quando non ci riesce (moduli con effetti collaterali, `"sideEffects"` non dichiarato, o ESM degradato a [CommonJS](docs/tooling-javascript.md?id=commonjs)), nel bundle o in un chunk lazy finisce molto più del necessario.
 
 Il meccanismo di ri-esportazione è spiegato in <a href="../typescript/#/docs/31-moduli-namespaces?id=re-export" target="_blank" rel="noopener">TypeScript · Moduli (Re-export)</a>; i trade-off e l'alternativa *barrel-less* (convenzione `internal/` + Sheriff) sono approfonditi in <a href="../angular/#/capitoli/08-sustainable-architectures" target="_blank" rel="noopener">Angular · Sustainable architectures</a>.
 
@@ -152,7 +186,7 @@ console.log(add(2, 3));
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Importando il solo <code>add</code>, nel <code>bundle.js</code> entra quell'unico export; <code>sub</code> e <code>mul</code>, mai raggiunti, restano fuori — a patto che siano privi di side-effect.</figcaption>
 </figure>
 
-Nel bundle finale resta **solo `add`**: `sub` e `mul` sono rami morti e vengono tagliati. Con i CommonJS non sarebbe possibile, perché `require()` è una normale chiamata che può ricevere un percorso calcolato a runtime e `module.exports` un oggetto qualunque: il grafo non è analizzabile in anticipo e il bundler, per prudenza, tiene tutto.
+Nel bundle finale resta **solo `add`**: `sub` e `mul` sono rami morti e vengono tagliati. Con i [CommonJS](docs/tooling-javascript.md?id=commonjs) non sarebbe possibile, perché `require()` è una normale chiamata che può ricevere un percorso calcolato a runtime e `module.exports` un oggetto qualunque: il grafo non è analizzabile in anticipo e il bundler, per prudenza, tiene tutto.
 
 C'è però una condizione: un export inutilizzato si può togliere **solo se non ha side-effect**, cioè non fa nulla di osservabile al momento dell'import (scrivere su `window`, registrare un listener, importare un CSS…).
 
