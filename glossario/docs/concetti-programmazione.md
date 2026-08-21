@@ -15,16 +15,16 @@ L'interoperabilità è la capacità di sistemi, dispositivi o programmi diversi 
 
 ## API
 
-**API** (*Application Programming Interface*) — la parola che conta è **interface**: un'API è il **contratto** con cui si usa un pezzo di software senza sapere com'è fatto dentro. In concreto è l'insieme di "maniglie" — funzioni, oggetti, metodi, proprietà — che quel software **espone** perché altro codice lo possa usare, tenendo nascosta l'implementazione.
+**API** (*Application Programming Interface*) — la parola che conta è **interface**: un'API è il **contratto** con cui si usa un pezzo di software senza sapere com'è fatto dentro. In concreto è l'insieme di "maniglie" (funzioni, oggetti, metodi, proprietà) che quel software **espone** perché altro codice lo possa usare, tenendo nascosta l'implementazione.
 
 Chi arriva dal frontend tende a identificare "API" con il solo caso *web/HTTP*, l'intermediario tra frontend e backend. È però soltanto **una** delle sue forme: si usano decine di API ogni giorno senza chiamarle così — `document.querySelector()`, `[1, 2, 3].map()` e `localStorage.setItem()` sono API esattamente come `fetch()`.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 590 224" role="img" aria-label="API a scale diverse: in alto un'API locale (in-processo, come Temporal o Array) chiamata con un metodo; in basso un'API remota di rete (FE verso BE, come REST) chiamata con una richiesta HTTP" style="width:100%;max-width:600px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><text x="295" y="18" font-size="12.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">API: lo stesso contratto, a scale diverse</text><text x="104" y="44" font-size="10" text-anchor="middle" font-weight="700" opacity=".9" fill="currentColor">API locale (in-processo)</text><rect x="40.0" y="56.0" width="128" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="104" y="82" font-size="11.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">il tuo codice</text><rect x="360.0" y="56.0" width="196" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="458" y="76" font-size="11.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">linguaggio o libreria</text><text x="458" y="91" font-size="9" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">stessa macchina</text><path d="M168.0 78 L352.0 78" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M360.0 78 L352.0 73 L352.0 83 Z" fill="currentColor"/><text x="264.0" y="69" font-size="9.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">chiami un metodo</text><text x="458" y="116" font-size="9" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">es. Temporal · Array.map · JSON.parse</text><text x="104" y="132" font-size="10" text-anchor="middle" font-weight="700" opacity=".9" fill="currentColor">API remota (di rete) — es. FE ↔ BE</text><rect x="40.0" y="144.0" width="128" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="104" y="170" font-size="11.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">il tuo codice</text><rect x="360.0" y="144.0" width="196" height="44" rx="7" fill="var(--link,#78716c)" fill-opacity=".14" stroke="currentColor" stroke-width="1.6"/><text x="458" y="164" font-size="11.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">server</text><text x="458" y="179" font-size="9" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">altra macchina</text><path d="M168.0 166 L352.0 166" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M360.0 166 L352.0 161 L352.0 171 Z" fill="currentColor"/><text x="264.0" y="157" font-size="9.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">mandi una richiesta (HTTP)</text><text x="458" y="204" font-size="9" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">es. REST · GraphQL · gRPC</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La stessa idea — un <strong>contratto</strong> per usare qualcosa senza conoscerne l'interno — vale a scale diverse. Il modello "API = frontend ↔ backend" è la riga in basso; ma la riga in alto (una libreria o il linguaggio, come <code>Temporal</code>) è un'API <em>esattamente allo stesso titolo</em>.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La stessa idea, un <strong>contratto</strong> per usare qualcosa senza conoscerne l'interno, vale a scale diverse. Il modello "API = frontend ↔ backend" è la riga in basso; ma la riga in alto (una libreria o il linguaggio, come <code>Temporal</code>) è un'API <em>esattamente allo stesso titolo</em>.</figcaption>
 </figure>
 
-Il senso di fondo non cambia mai — un contratto per usare qualcosa nascondendone l'interno — ma cambiano la **scala** e il **mezzo**:
+Il senso di fondo resta sempre lo stesso, un contratto per usare qualcosa nascondendone l'interno; a cambiare sono la **scala** e il **mezzo**:
 
 | Tipo di API | Dove vive | Esempi |
 |---|---|---|
@@ -37,7 +37,7 @@ Le prime tre sono **in-processo** (una chiamata di funzione nella stessa macchin
 
 > [!tip]
 > **API e namespace** non sono in contraddizione: descrivono aspetti diversi. Il **namespace** è il *contenitore di nomi* (`Temporal.*` fa da "cartella" che raggruppa i nomi correlati); l'**API** è l'*insieme di operazioni usabili* (i metodi con il loro contratto). `Temporal` è quindi un namespace che **espone** un'API — come una REST API vive a un URL base (il contenitore) ed espone degli *endpoint* (le operazioni).
-> Questo tipo di *namespace* — un oggetto globale che fa da contenitore — è descritto in <a href="../javascript/#/docs/libro2/03-funzioni-blocchi" target="_blank" rel="noopener">Global namespaces</a> nel vault JS. Da non confondere con la keyword `namespace` di **TypeScript**, che è un costrutto (ormai legacy) del linguaggio, non un oggetto.
+> Questo tipo di *namespace* (un oggetto globale che fa da contenitore) è descritto in <a href="../javascript/#/docs/libro2/03-funzioni-blocchi" target="_blank" rel="noopener">Global namespaces</a> nel vault JS. Da non confondere con la keyword `namespace` di **TypeScript**, che è un costrutto (ormai legacy) del linguaggio, non un oggetto.
 
 L'API web (con same-origin e CORS) è approfondita in [Web, browser e rete](docs/web-browser.md); `Temporal` come API del linguaggio è in <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener">ES2026</a>. In TypeScript, inoltre, la keyword `interface` è la stessa idea di contratto, applicata però ai **tipi**.
 
@@ -74,7 +74,7 @@ Rende lo stato prevedibile e abilita confronti veloci per **riferimento** (*shal
 
 ## Big O notation
 
-La **Big O notation** è il modo standard per descrivere **come cresce** il costo di un algoritmo — il tempo di esecuzione o la memoria — al crescere della dimensione dell'input *n*. Non misura i secondi (che dipendono dalla macchina), ma l'**ordine di grandezza** con cui il lavoro aumenta: risponde alla domanda "**come scala** quando i dati diventano tanti?".
+La **Big O notation** è il modo standard per descrivere **come cresce** il costo di un algoritmo (il tempo di esecuzione o la memoria) al crescere della dimensione dell'input *n*. Non misura i secondi (che dipendono dalla macchina), ma l'**ordine di grandezza** con cui il lavoro aumenta: risponde alla domanda "**come scala** quando i dati diventano tanti?".
 
 Per farlo ignora i dettagli che non contano sui grandi numeri — le costanti moltiplicative e i termini di ordine inferiore. Un algoritmo che compie `3n + 10` passi è semplicemente **O(n)**: per *n* grande, il `3` e il `+ 10` non ne cambiano la sostanza. Di norma la notazione esprime il **caso peggiore**, cioè un limite superiore garantito.
 
@@ -164,7 +164,7 @@ fact(3); // 3 * fact(2) → 3 * 2 * fact(1) → 3 * 2 * 1 = 6
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Ogni chiamata resta in attesa sullo <strong>stack</strong> finché la sotto-chiamata non le restituisce un risultato: le chiamate <em>scendono</em> fino al caso base <code>fact(1)</code>, poi <em>risalgono</em> srotolandosi (1, poi 2, poi 6).</figcaption>
 </figure>
 
-La ricorsione è spesso il modo più naturale di descrivere problemi e strutture *auto-simili* — alberi, file system, algoritmi divide-et-impera — ma non è gratis: ogni chiamata occupa spazio sullo stack, e se una chiamata ne genera più d'una il costo può esplodere.
+La ricorsione è spesso il modo più naturale di descrivere problemi e strutture *auto-simili* (alberi, file system, algoritmi divide-et-impera). Non è però gratis: ogni chiamata occupa spazio sullo stack, e se una chiamata ne genera più d'una il costo può esplodere.
 
 > [!tip]
 > Quando ogni chiamata ne fa **più di una**, le chiamate formano un *albero* che si allarga: è il caso del Fibonacci ingenuo (`fib(n-1) + fib(n-2)`), la cui ricorsione ramificata costa **O(2ⁿ)** — vedi [Big O notation](docs/concetti-programmazione.md?id=big-o-notation). Molte ricorsioni si possono riscrivere in forma **iterativa** (con un ciclo) quando lo stack o le prestazioni diventano un problema.
@@ -202,7 +202,7 @@ const totaleFattura  = conIva(imponibile);
 
 ## KISS (Keep It Simple, Stupid)
 
-La soluzione più semplice che risolve il problema è quasi sempre la migliore: meno parti, meno astrazioni premature, meno "intelligenza" nascosta. Il codice semplice si legge, si corregge e si cambia con meno fatica. Complicare in previsione di scenari ipotetici è tra le cause più comuni di codice fragile: prima si fa funzionare la cosa semplice, poi — solo se serve — la si evolve.
+La soluzione più semplice che risolve il problema è quasi sempre la migliore: meno parti, meno astrazioni premature, meno "intelligenza" nascosta. Il codice semplice si legge, si corregge e si cambia con meno fatica. Complicare in previsione di scenari ipotetici è tra le cause più comuni di codice fragile: prima si fa funzionare la cosa semplice, poi la si evolve solo se serve.
 
 ## YAGNI (You Aren't Gonna Need It)
 
@@ -224,7 +224,7 @@ class AnatraCheNuotaEVola extends Animale { /* … */ }
 const anatra = { ...saNuotare(), ...saVolare() };
 ```
 
-È lo spirito di diversi design pattern (Strategy, Decorator) e il motivo per cui i framework moderni preferiscono comporre — hook, funzioni, servizi iniettati — invece di gerarchie di classi profonde.
+È lo spirito di diversi design pattern (Strategy, Decorator) e il motivo per cui i framework moderni preferiscono comporre (hook, funzioni, servizi iniettati) invece di gerarchie di classi profonde.
 
 ## Design pattern
 
@@ -273,7 +273,7 @@ Config.get().tema; // "scuro" — è sempre lo stesso identico oggetto
 
 ### Factory Method *(creazionale)*
 
-Sposta la **creazione** di un oggetto in un punto dedicato (una funzione o un metodo), così che il resto del codice — il **cliente**, cioè chi usa l'oggetto — lavori con un tipo astratto senza sapere quale classe concreta viene istanziata.
+Sposta la **creazione** di un oggetto in un punto dedicato (una funzione o un metodo), così che il resto del codice (il **cliente**, cioè chi usa l'oggetto) lavori con un tipo astratto senza sapere quale classe concreta viene istanziata.
 
 **Analogia**: si ordina "una pizza"; è la cucina a decidere come prepararla. Chi ordina non maneggia forni e impasti.
 
