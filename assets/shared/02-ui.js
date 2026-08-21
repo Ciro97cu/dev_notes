@@ -117,6 +117,7 @@
       '<dt><kbd>m</kbd></dt><dd>Mostra / nascondi il menu laterale</dd>' +
       '<dt><kbd>f</kbd></dt><dd>Preferiti</dd>' +
       '<dt><kbd>e</kbd></dt><dd>Evidenziatore</dd>' +
+      (document.getElementById('pg-toggle') ? '<dt><kbd>p</kbd></dt><dd>Playground</dd>' : '') +
       '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>' +
       '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>' +
       '</dl></div>';
@@ -131,6 +132,12 @@
   function lockScroll(on) {   // blocca lo scroll della pagina sotto (html è lo scroller)
     document.documentElement.style.overflow = on ? 'hidden' : '';
     document.body.style.overflow = on ? 'hidden' : '';
+  }
+  function openTools() {   // apre lo speed-dial "Strumenti" se chiuso: i tool sono invisibili finché lo è
+    if (!document.body.classList.contains('dn-tools-open')) {
+      var tb = document.getElementById('dn-tools-btn');
+      if (tb) tb.click();
+    }
   }
   document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {   // ⌘K / Ctrl+K: apre/chiude la ricerca (come nell'hub)
@@ -154,8 +161,9 @@
     else if (e.key === 't' || e.key === 'T') { var tt = document.getElementById('theme-toggle'); if (tt) { e.preventDefault(); tt.click(); } }
     else if (e.key === 'h' || e.key === 'H') { e.preventDefault(); location.href = '../'; }   // torna all'hub
     else if (e.key === 'm' || e.key === 'M') { var sbt = document.querySelector('.sidebar-toggle'); if (sbt) { e.preventDefault(); sbt.click(); } }
-    else if (e.key === 'f' || e.key === 'F') { var fb = document.getElementById('dn-fav-btn'); if (fb) { e.preventDefault(); fb.click(); } }
-    else if (e.key === 'e' || e.key === 'E') { var hb = document.getElementById('dn-hl-btn'); if (hb) { e.preventDefault(); hb.click(); } }
+    else if (e.key === 'f' || e.key === 'F') { var fb = document.getElementById('dn-fav-btn'); if (fb) { e.preventDefault(); openTools(); fb.click(); } }
+    else if (e.key === 'e' || e.key === 'E') { var hb = document.getElementById('dn-hl-btn'); if (hb) { e.preventDefault(); openTools(); hb.click(); } }
+    else if (e.key === 'p' || e.key === 'P') { var pg = document.getElementById('pg-toggle'); if (pg) { e.preventDefault(); openTools(); pg.click(); } }
   });
 })();
 
