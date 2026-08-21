@@ -72,7 +72,7 @@ nvm use 20        # attiva Node 20 nella shell corrente
 
 ## Tarball (`.tgz`)
 
-Un **tarball** è un file `.tar.gz` (spesso abbreviato **`.tgz`**): una **cartella impacchettata e compressa in un unico file**. Nasce da due strumenti Unix in fila — **`tar`**, che unisce tanti file in un solo archivio (senza comprimere), e **`gzip`**, che poi lo comprime. È l'equivalente Unix di uno `.zip`, e si incontra ovunque, non solo con npm.
+Un **tarball** è un file `.tar.gz` (spesso abbreviato **`.tgz`**): una **cartella impacchettata e compressa in un unico file**. Nasce da due strumenti della tradizione **Unix** — la famiglia di sistemi operativi da cui discendono Linux e macOS, dove nascono molti degli strumenti da riga di comando che si usano ancora oggi — messi in fila: **`tar`**, che unisce tanti file in un solo archivio (senza comprimere), e **`gzip`**, che poi lo comprime. È l'equivalente Unix di uno `.zip`, e si incontra ovunque, non solo con npm.
 
 Nell'ecosistema JavaScript conta perché **un pacchetto npm *è* un tarball**: il registry non è che un magazzino di `.tgz`. Lo stesso file passa per tre verbi:
 
@@ -93,7 +93,7 @@ npm install ./util-auth-1.0.0.tgz
 ```
 
 > [!tip]
-> Cosa c'è **dentro** (`tar -tzf file.tgz` per sbirciare senza estrarre): l'**output di build** — JavaScript già transpilato, spesso *bundlato*, con i tipi `.d.ts` — **non** il sorgente originale del developer. E di norma **non** è minificato: la minificazione è compito del bundler dell'*applicazione* finale (vedi [Minificazione e ottimizzazione](react.md?id=minificazione-e-ottimizzazione)), non della libreria. A volte un pacchetto include anche i *source map* per risalire al sorgente, a volte no.
+> Cosa c'è **dentro** (`tar -tzf file.tgz` per sbirciare senza estrarre): l'**output di build** — JavaScript già transpilato, spesso *bundlato*, con i tipi `.d.ts` — **non** il sorgente originale del developer. E di norma **non** è minificato: la minificazione è compito del bundler dell'*applicazione* finale (vedi [Minificazione e ottimizzazione](docs/react.md?id=minificazione-e-ottimizzazione)), non della libreria. A volte un pacchetto include anche i *source map* per risalire al sorgente, a volte no.
 
 ## module.exports
 
@@ -113,7 +113,7 @@ const saluta = require('./myModule');
 
 ## Barrel (barrel file)
 
-Un **barrel** è un file — tipicamente un `index.ts` (o `index.js`) — che **ri-esporta** i [costrutti](concetti-programmazione.md?id=costrutto) pubblici di una cartella da un unico punto d'ingresso, così chi lo usa importa da un solo percorso invece di raggiungere i singoli file:
+Un **barrel** è un file — tipicamente un `index.ts` (o `index.js`) — che **ri-esporta** i [costrutti](docs/concetti-programmazione.md?id=costrutto) pubblici di una cartella da un unico punto d'ingresso, così chi lo usa importa da un solo percorso invece di raggiungere i singoli file:
 
 ```ts
 // feature/index.ts  ← il barrel

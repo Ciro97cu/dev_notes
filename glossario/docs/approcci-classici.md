@@ -89,7 +89,7 @@ logNavigation$ = createEffect(
 
 ### Shallow comparison
 
-Redux (e quindi NgRx classico) tratta lo stato come un oggetto **immutabile** e rileva i cambiamenti confrontando i **riferimenti** (*shallow comparison*), non ispezionando in profondità ogni proprietà: se il riferimento è cambiato, lo stato è cambiato. È molto più veloce del confronto profondo, ma richiede che ogni aggiornamento produca un **nuovo** oggetto (vedi [Immutabilità](concetti-programmazione.md#immutabilità)).
+Redux (e quindi NgRx classico) tratta lo stato come un oggetto **immutabile** e rileva i cambiamenti confrontando i **riferimenti** (*shallow comparison*), non ispezionando in profondità ogni proprietà: se il riferimento è cambiato, lo stato è cambiato. È molto più veloce del confronto profondo, ma richiede che ogni aggiornamento produca un **nuovo** oggetto (vedi [Immutabilità](docs/concetti-programmazione.md?id=immutabilità)).
 
 > [!tip]
 > Con `selectSignal` (da NgRx 16) il problema dei ri-render inutili si attenua: invece di notificare l'intero store, aggiorna solo i valori che cambiano, per una reattività a grana fine.

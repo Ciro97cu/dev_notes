@@ -93,4 +93,4 @@ Le due coppie da non confondere: **401 vs 403** ("non so chi sei" contro "so chi
 > [!tip]
 > Il trucco per ricordarli in fretta è la **prima cifra**, non i singoli numeri: **1** aspetta, **2** ok, **3** altrove, **4** errore tuo, **5** errore loro. Da lì, i codici comuni (200, 301, 304, 401, 403, 404, 429, 500, 503) si agganciano da soli all'immagine del ristorante.
 
-Collegamenti: [Web, browser e rete](web-browser.md) (CORS, cache) · [Rendering: CSR, SSR, SSG](rendering-web.md)
+Collegamenti: [Web, browser e rete](docs/web-browser.md) (CORS, cache) · [Rendering: CSR, SSR, SSG](docs/rendering-web.md)

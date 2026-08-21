@@ -137,11 +137,11 @@ Qui il tema tocca chi scrive il codice, perché il consenso ha effetti tecnici c
 - gli script che installano cookie non necessari (Google Analytics, pixel di Meta, tag pubblicitari) **non vanno caricati subito**: si caricano **solo dopo** che l'utente ha acconsentito a quella categoria. Prima del consenso restano bloccati.
 - la scelta dell'utente va **memorizzata** (di solito in un cookie tecnico o in `localStorage`) così il banner non riappare a ogni pagina, e va offerto un modo per **revocarla**.
 - strumenti come **Google Consent Mode** fanno sì che i tag Google si adattino automaticamente allo stato del consenso; nel mondo pubblicitario lo standard di scambio del consenso è l'**IAB TCF** (*Transparency & Consent Framework*), che codifica le scelte in una stringa di consenso.
-- collegamento con la sicurezza: i cookie hanno attributi che li rendono più sicuri — `Secure` (solo su HTTPS), `HttpOnly` (non leggibili da JavaScript, contro l'XSS) e `SameSite` (contro il CSRF), quest'ultimo già incontrato nella nota su [CORS](web-browser.md).
+- collegamento con la sicurezza: i cookie hanno attributi che li rendono più sicuri — `Secure` (solo su HTTPS), `HttpOnly` (non leggibili da JavaScript, contro l'XSS) e `SameSite` (contro il CSRF), quest'ultimo già incontrato nella nota su [CORS](docs/web-browser.md).
 
 > [!tip]
 > Il filo da ricordare: **informare + consenso preventivo per ciò che non è necessario**. Il banner è la richiesta di consenso, la Privacy/Cookie Policy sono l'informativa; il consenso si può sempre **rifiutare** (facile come accettarlo) e **revocare**.
 
 Fonti: [Testo del GDPR](https://gdpr-info.eu/) · [Garante Privacy — linee guida cookie](https://www.garanteprivacy.it/cookie) · [MDN — HTTP cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies).
 
-Collegamenti: [Web, browser e rete](web-browser.md) (cookie `SameSite`, CORS) · [HTTP: codici di stato](http-status.md).
+Collegamenti: [Web, browser e rete](docs/web-browser.md) (cookie `SameSite`, CORS) · [HTTP: codici di stato](docs/http-status.md).

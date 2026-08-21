@@ -39,7 +39,7 @@ Le prime tre sono **in-processo** (una chiamata di funzione nella stessa macchin
 > **API e namespace** non sono in contraddizione: descrivono aspetti diversi. Il **namespace** è il *contenitore di nomi* (`Temporal.*` fa da "cartella" che raggruppa i nomi correlati); l'**API** è l'*insieme di operazioni usabili* (i metodi con il loro contratto). `Temporal` è quindi un namespace che **espone** un'API — come una REST API vive a un URL base (il contenitore) ed espone degli *endpoint* (le operazioni).
 > Questo tipo di *namespace* — un oggetto globale che fa da contenitore — è descritto in <a href="../javascript/#/docs/libro2/03-funzioni-blocchi" target="_blank" rel="noopener">Global namespaces</a> nel vault JS. Da non confondere con la keyword `namespace` di **TypeScript**, che è un costrutto (ormai legacy) del linguaggio, non un oggetto.
 
-L'API web (con same-origin e CORS) è approfondita in [Web, browser e rete](web-browser.md); `Temporal` come API del linguaggio è in <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener">ES2026</a>. In TypeScript, inoltre, la keyword `interface` è la stessa idea di contratto, applicata però ai **tipi**.
+L'API web (con same-origin e CORS) è approfondita in [Web, browser e rete](docs/web-browser.md); `Temporal` come API del linguaggio è in <a href="../javascript/#/docs/moderno/es2026" target="_blank" rel="noopener">ES2026</a>. In TypeScript, inoltre, la keyword `interface` è la stessa idea di contratto, applicata però ai **tipi**.
 
 ## Funzione pura
 
@@ -167,7 +167,7 @@ fact(3); // 3 * fact(2) → 3 * 2 * fact(1) → 3 * 2 * 1 = 6
 La ricorsione è spesso il modo più naturale di descrivere problemi e strutture *auto-simili* — alberi, file system, algoritmi divide-et-impera — ma non è gratis: ogni chiamata occupa spazio sullo stack, e se una chiamata ne genera più d'una il costo può esplodere.
 
 > [!tip]
-> Quando ogni chiamata ne fa **più di una**, le chiamate formano un *albero* che si allarga: è il caso del Fibonacci ingenuo (`fib(n-1) + fib(n-2)`), la cui ricorsione ramificata costa **O(2ⁿ)** — vedi [Big O notation](concetti-programmazione.md?id=big-o-notation). Molte ricorsioni si possono riscrivere in forma **iterativa** (con un ciclo) quando lo stack o le prestazioni diventano un problema.
+> Quando ogni chiamata ne fa **più di una**, le chiamate formano un *albero* che si allarga: è il caso del Fibonacci ingenuo (`fib(n-1) + fib(n-2)`), la cui ricorsione ramificata costa **O(2ⁿ)** — vedi [Big O notation](docs/concetti-programmazione.md?id=big-o-notation). Molte ricorsioni si possono riscrivere in forma **iterativa** (con un ciclo) quando lo stack o le prestazioni diventano un problema.
 
 ## SOLID
 
