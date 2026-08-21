@@ -20,8 +20,8 @@
   --border: #e4e8ec;
   --sidebar-bg: #fafbfc;
   --code-bg: #f3f5f7;
-  --code-inline-bg: #eef1f4;
-  --code-inline-text: #1f6feb;
+  --code-inline-bg: #efedea;
+  --code-inline-text: #57534e;
   --link: var(--gl-stone);
   --quote-bg: #f4f2ef;
   --quote-border: var(--gl-stone);
@@ -39,8 +39,8 @@ html.dark {
   --border: #21262d;
   --sidebar-bg: #0b0f14;
   --code-bg: #161b22;
-  --code-inline-bg: #1c2330;
-  --code-inline-text: #79c0ff;
+  --code-inline-bg: #2a2621;
+  --code-inline-text: #c9c1b7;
   --link: #a8a29e;
   --quote-bg: #1b1815;
   --quote-border: #78716c;
