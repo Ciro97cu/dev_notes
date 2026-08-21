@@ -6,7 +6,7 @@
   var isDark = function () { return document.documentElement.classList.contains('dark'); };
   var SUN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
   var MOON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
-  var paint = function () { btn.innerHTML = isDark() ? SUN : MOON; btn.title = isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro'; };
+  var paint = function () { btn.innerHTML = isDark() ? SUN : MOON; btn.title = (isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro') + ' (t)'; };
   paint();
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var animT;
@@ -20,6 +20,42 @@
     document.documentElement.classList.toggle('dark', d);
     try { localStorage.setItem(KEY, d ? 'dark' : 'light'); } catch (e) {}
     paint();
+  });
+
+  // Scorciatoie da tastiera dell'hub (in coppia con quelle dei vault). Ignora se
+  // stai scrivendo (es. nella ricerca) o se ci sono modificatori.
+  function hubHelp() {
+    var h = document.getElementById('hub-keyhelp');
+    if (h) { h.classList.toggle('open'); return; }
+    var st = document.createElement('style'); st.id = 'hub-keyhelp-styles';
+    st.textContent = '#hub-keyhelp{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5)}'
+      + '#hub-keyhelp.open{display:flex}'
+      + '#hub-keyhelp .box{background:var(--card);color:var(--fg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:1rem 1.2rem;min-width:260px;max-width:90vw}'
+      + '#hub-keyhelp h3{margin:0 0 .7rem;font-size:1rem}'
+      + '#hub-keyhelp dl{display:grid;grid-template-columns:auto 1fr;gap:.45rem .9rem;margin:0;font-size:.9rem;align-items:center}'
+      + '#hub-keyhelp dt{white-space:nowrap}#hub-keyhelp dd{margin:0;opacity:.85}'
+      + '#hub-keyhelp kbd{background:rgba(127,127,127,.16);border:1px solid var(--card-border);border-radius:6px;padding:.08em .5em;font-size:.85em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}';
+    document.head.appendChild(st);
+    h = document.createElement('div'); h.id = 'hub-keyhelp';
+    h.innerHTML = '<div class="box"><h3>Scorciatoie da tastiera</h3><dl>'
+      + '<dt><kbd>/</kbd> <kbd>⌘K</kbd></dt><dd>Cerca in tutti gli appunti</dd>'
+      + '<dt><kbd>t</kbd></dt><dd>Tema chiaro / scuro</dd>'
+      + '<dt><kbd>d</kbd></dt><dd>Trasferimento dati</dd>'
+      + '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>'
+      + '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>'
+      + '</dl></div>';
+    h.addEventListener('click', function (e) { if (e.target === h) h.classList.remove('open'); });
+    document.body.appendChild(h);
+    h.classList.add('open');
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { var hh = document.getElementById('hub-keyhelp'); if (hh && hh.classList.contains('open')) hh.classList.remove('open'); }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var a = document.activeElement;
+    if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT' || a.isContentEditable)) return;
+    if (e.key === '?') { e.preventDefault(); hubHelp(); }
+    else if (e.key === 't' || e.key === 'T') { e.preventDefault(); if (btn) btn.click(); }
+    else if (e.key === 'd' || e.key === 'D') { var db = document.getElementById('hub-data-btn'); if (db) { e.preventDefault(); db.click(); } }
   });
 })();
 
@@ -104,6 +140,7 @@
   var ICON_QR   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
 
   btn.innerHTML = ICON_DB;
+  btn.title = 'Trasferimento dati (d)';
 
   // ── CSS modal (usa le variabili dell'hub, non quelle dei vault) ───────────
   var mst = document.createElement('style');

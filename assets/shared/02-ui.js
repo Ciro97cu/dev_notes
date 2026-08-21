@@ -111,8 +111,12 @@
     h.id = 'dn-keyhelp';
     h.innerHTML = '<div class="box"><h3>Scorciatoie da tastiera</h3><dl>' +
       '<dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Capitolo precedente / successivo</dd>' +
-      '<dt><kbd>/</kbd></dt><dd>Cerca</dd>' +
+      '<dt><kbd>/</kbd></dt><dd>Cerca — anche <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd></dd>' +
       '<dt><kbd>t</kbd></dt><dd>Tema chiaro / scuro</dd>' +
+      '<dt><kbd>h</kbd></dt><dd>Torna all\'hub</dd>' +
+      '<dt><kbd>m</kbd></dt><dd>Mostra / nascondi il menu laterale</dd>' +
+      '<dt><kbd>f</kbd></dt><dd>Preferiti</dd>' +
+      '<dt><kbd>e</kbd></dt><dd>Evidenziatore</dd>' +
       '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>' +
       '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>' +
       '</dl></div>';
@@ -125,6 +129,12 @@
     var t = a.tagName; return t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || a.isContentEditable;
   }
   document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {   // ⌘K / Ctrl+K: apre/chiude la ricerca (come nell'hub)
+      e.preventDefault();
+      var sb = document.getElementById('dn-search');
+      if (sb && sb.classList.contains('open')) dnSearchClose(); else dnSearchOpen();
+      return;
+    }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === '?') { e.preventDefault(); help().classList.toggle('open'); return; }
     if (e.key === 'Escape') { var h = document.getElementById('dn-keyhelp'); if (h && h.classList.contains('open')) { h.classList.remove('open'); return; } }
@@ -138,6 +148,10 @@
     if (e.key === 'ArrowLeft') { var p = document.querySelector('.pagination-item--previous a'); if (p) { e.preventDefault(); p.click(); } }
     else if (e.key === 'ArrowRight') { var n = document.querySelector('.pagination-item--next a'); if (n) { e.preventDefault(); n.click(); } }
     else if (e.key === 't' || e.key === 'T') { var tt = document.getElementById('theme-toggle'); if (tt) { e.preventDefault(); tt.click(); } }
+    else if (e.key === 'h' || e.key === 'H') { e.preventDefault(); location.href = '../'; }   // torna all'hub
+    else if (e.key === 'm' || e.key === 'M') { var sbt = document.querySelector('.sidebar-toggle'); if (sbt) { e.preventDefault(); sbt.click(); } }
+    else if (e.key === 'f' || e.key === 'F') { var fb = document.getElementById('dn-fav-btn'); if (fb) { e.preventDefault(); fb.click(); } }
+    else if (e.key === 'e' || e.key === 'E') { var hb = document.getElementById('dn-hl-btn'); if (hb) { e.preventDefault(); hb.click(); } }
   });
 })();
 
