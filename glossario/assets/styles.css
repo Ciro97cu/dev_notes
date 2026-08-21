@@ -1,15 +1,15 @@
 /* ============================================================
    TypeScript Guide — tema personalizzato
-   Brand Glossario: indigo #6366f1. Tema chiaro + scuro.
+   Brand Glossario: grigio caldo (warm stone) #78716c. Tema chiaro + scuro.
    Override del tema "vue" di docsify.
    ============================================================ */
 
 :root {
-  --gl-indigo: #6366f1;
-  --gl-indigo-dark: #4f46e5;
-  --gl-indigo-light: #818cf8;
+  --gl-stone: #78716c;
+  --gl-stone-dark: #57534e;
+  --gl-stone-light: #a8a29e;
 
-  --theme-color: var(--gl-indigo);
+  --theme-color: var(--gl-stone);
   --on-accent: #fff;
 
   --bg: #ffffff;
@@ -22,9 +22,9 @@
   --code-bg: #f3f5f7;
   --code-inline-bg: #eef1f4;
   --code-inline-text: #1f6feb;
-  --link: var(--gl-indigo);
-  --quote-bg: #eef4fb;
-  --quote-border: var(--gl-indigo);
+  --link: var(--gl-stone);
+  --quote-bg: #f4f2ef;
+  --quote-border: var(--gl-stone);
   --details-bg: #f6f8fa;
   --details-border: #e4e8ec;
   --table-head-bg: #eef1f4;
@@ -41,13 +41,13 @@ html.dark {
   --code-bg: #161b22;
   --code-inline-bg: #1c2330;
   --code-inline-text: #79c0ff;
-  --link: #a5b4fc;
-  --quote-bg: #11203a;
-  --quote-border: #6366f1;
+  --link: #a8a29e;
+  --quote-bg: #1b1815;
+  --quote-border: #78716c;
   --details-bg: #11161d;
   --details-border: #21262d;
   --table-head-bg: #161b22;
-  --theme-color: #a5b4fc;
+  --theme-color: #a8a29e;
   --on-accent: #111;
 }
 
@@ -84,7 +84,7 @@ body {
 }
 
 .markdown-section h1 {
-  border-bottom: 3px solid var(--gl-indigo);
+  border-bottom: 3px solid var(--gl-stone);
   padding-bottom: 0.3em;
 }
 
@@ -115,7 +115,7 @@ body {
 }
 
 .sidebar ul li a:hover {
-  color: var(--gl-indigo);
+  color: var(--gl-stone);
 }
 
 .sidebar-nav > ul > p,
@@ -130,14 +130,14 @@ body {
 
 .sidebar-nav li.active > a {
   color: var(--link);
-  border-left: 4px solid var(--gl-indigo);
-  background: color-mix(in srgb, var(--gl-indigo) 14%, var(--bg));
+  border-left: 4px solid var(--gl-stone);
+  background: color-mix(in srgb, var(--gl-stone) 14%, var(--bg));
   padding-left: 0.5rem;
   font-weight: 700;
 }
 
 .app-name-link {
-  color: var(--gl-indigo) !important;
+  color: var(--gl-stone) !important;
   font-weight: 800;
   font-size: 22px;
 }
@@ -207,7 +207,7 @@ body {
 .markdown-section details {
   background: var(--details-bg);
   border: 1px solid var(--details-border);
-  border-left: 4px solid var(--gl-indigo);
+  border-left: 4px solid var(--gl-stone);
   border-radius: 6px;
   padding: 0.6em 1em;
   margin: 0.8em 0;
@@ -222,7 +222,7 @@ body {
 
 .markdown-section details[open] summary {
   margin-bottom: 0.6em;
-  color: var(--gl-indigo);
+  color: var(--gl-stone);
 }
 
 /* ---------- Ricerca ---------- */
@@ -238,7 +238,7 @@ body {
 
 .search h2,
 .search .matching-post h2 {
-  color: var(--gl-indigo);
+  color: var(--gl-stone);
 }
 
 .search p {
@@ -253,12 +253,12 @@ body {
 
 .pagination-item-label,
 .pagination-item-title {
-  color: var(--gl-indigo);
+  color: var(--gl-stone);
 }
 
 /* ---------- Copy code ---------- */
 .docsify-copy-code-button {
-  background: var(--gl-indigo) !important;
+  background: var(--gl-stone) !important;
   color: #fff !important;
 }
 
@@ -270,8 +270,8 @@ section.cover {
   overflow: hidden;
   background:
     radial-gradient(130% 100% at 12% 6%, rgba(255, 255, 255, .16), transparent 45%) center / cover no-repeat,
-    linear-gradient(135deg, #4338ca 0%, #6366f1 55%, #4f46e5 100%) center / cover no-repeat,
-    #6366f1 !important;
+    linear-gradient(135deg, #44403c 0%, #78716c 55%, #57534e 100%) center / cover no-repeat,
+    #78716c !important;
 }
 section.cover #cover-dots { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 section.cover .cover-main {
@@ -331,7 +331,7 @@ section.cover .cover-wrap h1 {
 .cover-actions .cover-btn.is-primary {
   background: #fff;
   border-color: #fff;
-  color: #4338ca !important;
+  color: #57534e !important;
   box-shadow: 0 10px 26px rgba(0, 0, 0, .25);
 }
 .cover-actions .cover-btn.is-resume { border-color: rgba(255, 255, 255, .72); }
