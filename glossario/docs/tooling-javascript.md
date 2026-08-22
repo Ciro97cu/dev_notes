@@ -212,7 +212,7 @@ Per distinguere i casi, un pacchetto dichiara nel proprio `package.json` se i su
 
 ## Lazy loading
 
-Il **lazy loading** («caricamento pigro») è la strategia di **caricare una risorsa solo quando serve davvero**, invece che tutta all'avvio, per alleggerire il primo caricamento. Nel frontend ha due facce. La più semplice riguarda **le risorse statiche** (immagini, `iframe`), rimandate con un attributo nativo dell'HTML, senza JavaScript: il browser scarica l'immagine solo quando sta per entrare nello schermo.
+Il **lazy loading** («caricamento pigro») è la strategia di **caricare una risorsa solo quando serve davvero**, invece che tutta all'avvio, per alleggerire il primo caricamento. Nel frontend ha due facce. La più semplice riguarda **le risorse statiche** (immagini, <a href="../html/#/docs/06-media-embedded" target="_blank" rel="noopener"><code>iframe</code></a>), rimandate con un attributo nativo dell'HTML, senza JavaScript: il browser scarica l'immagine solo quando sta per entrare nello schermo.
 
 ```html
 <img src="foto.jpg" loading="lazy" alt="…">
