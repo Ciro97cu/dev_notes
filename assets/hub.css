@@ -109,6 +109,16 @@ body::before {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.3rem;
 }
+/* intestazione di gruppo delle card (etichetta + filetto), a tutta larghezza */
+.group-h {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: .7rem;
+  margin: .5rem 0 -.55rem;                 /* avvicina l'etichetta al suo gruppo; il gap del grid la stacca dal precedente */
+  font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--fg-soft);
+}
+.group-h::after { content: ""; flex: 1 1 auto; height: 1px; background: var(--card-border); }
+.grid > .group-h:first-of-type { margin-top: 0; }
 @media (max-width: 640px) {
   /* minmax(0,…): la traccia si comprime, così la card non sborda mai fuori dallo schermo.
      Un `1fr` "nudo" vale minmax(auto,1fr): il suo minimo è il min-content della card, e su
