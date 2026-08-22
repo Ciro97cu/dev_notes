@@ -242,16 +242,35 @@
     statusEl.textContent = msg || '';
     statusEl.hidden = !msg;
   }
+  // Variante con HTML fidato (solo markup nostro + esc(q)) per gli stati con azione di recupero.
+  function setStatusHTML(html) {
+    if (!statusEl) return;
+    statusEl.innerHTML = html || '';
+    statusEl.hidden = !html;
+  }
+  function anyTog() { return !!(state['case'] || state.word || state.regex); }
 
   function render(q) {
     rows = []; active = -1;
     if (!q) { listEl.innerHTML = ''; setStatus(building ? 'Indicizzo gli appunti…' : 'Scrivi per cercare in tutti i vault.'); syncActive(); return; }
     if (!index) { listEl.innerHTML = ''; setStatus('Indicizzo gli appunti…'); syncActive(); return; }
+    var reBtn = overlay.querySelector('.dn-pal-tog[data-t="regex"]');
+    if (reBtn) reBtn.classList.remove('is-error');            // ripulisci l'evidenziazione errore a ogni giro
     var reList;
-    try { reList = compile(q); } catch (e) { listEl.innerHTML = ''; setStatus('Espressione regolare non valida.'); syncActive(); return; }
+    try { reList = compile(q); }
+    catch (e) {
+      listEl.innerHTML = '';
+      setStatusHTML('Espressione regolare non valida. <button type="button" class="dn-pal-fix" data-fix="offregex">Disattiva <code>.*</code></button>');
+      if (reBtn) reBtn.classList.add('is-error');
+      syncActive(); return;
+    }
     if (!reList.length) { listEl.innerHTML = ''; setStatus('Scrivi per cercare in tutti i vault.'); syncActive(); return; }
     var hits = search(reList);
-    if (!hits.length) { listEl.innerHTML = ''; setStatus('Nessun risultato per «' + esc(q) + '».'); syncActive(); return; }
+    if (!hits.length) {
+      listEl.innerHTML = '';
+      setStatusHTML('Nessun risultato per «' + esc(q) + '».' + (anyTog() ? ' <button type="button" class="dn-pal-fix" data-fix="clear">Rimuovi i filtri</button>' : ''));
+      syncActive(); return;
+    }
     setStatus('');
 
     var groups = {}, order = [];
@@ -344,6 +363,12 @@
       if (liveEl) { liveEl.textContent = ''; liveEl.textContent = TOG_NAMES[t] + ': ' + (state[t] ? 'attivo' : 'disattivato'); }
       render(input.value.trim());
     }
+    function syncTogButtons() {                   // riallinea i bottoni allo stato (dopo un reset via azione di recupero)
+      ['case', 'word', 'regex'].forEach(function (t) {
+        var b = overlay.querySelector('.dn-pal-tog[data-t="' + t + '"]');
+        if (b) { b.classList.toggle('is-on', !!state[t]); b.setAttribute('aria-pressed', state[t] ? 'true' : 'false'); }
+      });
+    }
 
     backdrop.addEventListener('click', close);
     input.addEventListener('input', function () {
@@ -372,6 +397,14 @@
     overlay.querySelector('.dn-pal-toggles').addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('.dn-pal-tog'); if (!b) return;
       toggleTog(b.getAttribute('data-t')); input.focus();
+    });
+    statusEl.addEventListener('click', function (e) {          // azioni di recupero negli stati vuoto/errore
+      var b = e.target.closest && e.target.closest('.dn-pal-fix'); if (!b) return;
+      var fix = b.getAttribute('data-fix');
+      if (fix === 'clear') { state['case'] = false; state.word = false; state.regex = false; }
+      else if (fix === 'offregex') { state.regex = false; }
+      syncTogButtons();
+      render(input.value.trim()); input.focus();
     });
   }
 

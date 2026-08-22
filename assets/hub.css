@@ -358,6 +358,10 @@ html.theme-anim .card-prog { transition: background-color .32s ease, border-colo
 .dn-pal-tog:focus-visible { outline: 2px solid var(--grad-a); outline-offset: 1px; opacity: 1; }
 .dn-pal-live { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 .dn-pal-status { padding: .9rem 1.1rem; color: var(--fg-soft); font-size: .9rem; }
+.dn-pal-fix { margin-left: .45rem; padding: .12em .5em; border: 1px solid var(--card-border); border-radius: 6px; background: transparent; color: var(--grad-a); font: inherit; font-size: .82rem; font-weight: 600; cursor: pointer; }
+.dn-pal-fix code { font-size: .95em; }
+.dn-pal-fix:hover, .dn-pal-fix:focus-visible { border-color: var(--grad-a); outline: none; }
+.dn-pal-tog.is-error { outline: 2px solid #d9534f; outline-offset: 1px; }
 .dn-pal-list { max-height: min(56vh, 460px); overflow-y: auto; overscroll-behavior: contain; padding: .3rem; }
 .dn-pal-group {
   display: flex; align-items: center; gap: .5rem; padding: .6rem .7rem .3rem;
