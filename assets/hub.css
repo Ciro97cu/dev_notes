@@ -158,8 +158,8 @@ body::before {
   min-width: 0;                 /* grid item: consente alla card di comprimersi senza sbordare */
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.25rem 1.3rem;
+  gap: .95rem;
+  padding: .95rem 1.15rem;
   text-decoration: none;
   color: inherit;
   background: var(--card);
@@ -196,12 +196,13 @@ body::before {
 /* Logo del vault senza box: solo il monogramma/icona nel colore del brand */
 .tile {
   flex: 0 0 auto;
-  width: 56px; height: 56px;
+  width: 64px; height: 64px;
   display: flex; align-items: center; justify-content: center;
   color: var(--accent);
-  font-weight: 800; font-size: 2.2rem; letter-spacing: -.02em; line-height: 1;
 }
-.tile svg { width: 48px; height: 48px; }
+.tile svg { width: 52px; height: 52px; }          /* glifi: Angular, Git, Code, Glossario */
+.tile-badge { width: 64px; height: 64px; }         /* stemmi (HTML/CSS a scudo, JS/TS quadrati): riempiono il tile */
+.tile-badge svg { width: 64px; height: 64px; display: block; }
 
 .body { flex: 1 1 auto; min-width: 0; }
 .title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
