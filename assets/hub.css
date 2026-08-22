@@ -349,6 +349,8 @@ html.theme-anim .card-prog { transition: background-color .32s ease, border-colo
 }
 .dn-pal-tog:hover { opacity: 1; border-color: var(--grad-a); }
 .dn-pal-tog.is-on { opacity: 1; color: var(--grad-a); border-color: var(--grad-a); background: color-mix(in srgb, var(--grad-a) 12%, transparent); }
+.dn-pal-tog:focus-visible { outline: 2px solid var(--grad-a); outline-offset: 1px; opacity: 1; }
+.dn-pal-live { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 .dn-pal-status { padding: .9rem 1.1rem; color: var(--fg-soft); font-size: .9rem; }
 .dn-pal-list { max-height: min(56vh, 460px); overflow-y: auto; overscroll-behavior: contain; padding: .3rem; }
 .dn-pal-group {

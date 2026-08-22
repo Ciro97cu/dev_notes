@@ -318,13 +318,14 @@
           '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>' +
           '<input class="dn-pal-input" type="text" role="combobox" aria-expanded="true" aria-controls="dn-pal-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Cerca in tutti gli appunti…">' +
           '<div class="dn-pal-toggles">' +
-            '<button class="dn-pal-tog" type="button" data-t="case" title="Maiuscole/minuscole (Aa)" aria-label="Maiuscole/minuscole" aria-pressed="false">Aa</button>' +
-            '<button class="dn-pal-tog" type="button" data-t="word" title="Parola intera (W)" aria-label="Parola intera" aria-pressed="false">W</button>' +
-            '<button class="dn-pal-tog" type="button" data-t="regex" title="Espressione regolare (.*)" aria-label="Espressione regolare" aria-pressed="false">.*</button>' +
+            '<button class="dn-pal-tog" type="button" data-t="case" title="Maiuscole/minuscole (Alt+C)" aria-label="Maiuscole/minuscole" aria-keyshortcuts="Alt+C" aria-pressed="false">Aa</button>' +
+            '<button class="dn-pal-tog" type="button" data-t="word" title="Parola intera (Alt+W)" aria-label="Parola intera" aria-keyshortcuts="Alt+W" aria-pressed="false">W</button>' +
+            '<button class="dn-pal-tog" type="button" data-t="regex" title="Espressione regolare (Alt+R)" aria-label="Espressione regolare" aria-keyshortcuts="Alt+R" aria-pressed="false">.*</button>' +
           '</div>' +
           '<kbd>esc</kbd>' +
         '</div>' +
         '<div class="dn-pal-status" hidden></div>' +
+        '<div class="dn-pal-live" aria-live="polite"></div>' +
         '<div class="dn-pal-list" id="dn-pal-list" role="listbox"></div>' +
         '<div class="dn-pal-foot"><span><kbd>↑</kbd><kbd>↓</kbd> naviga</span><span><kbd>↵</kbd> apri</span><span><kbd>esc</kbd> chiudi</span></div>' +
       '</div>';
@@ -333,6 +334,16 @@
     input = overlay.querySelector('.dn-pal-input');
     listEl = overlay.querySelector('.dn-pal-list');
     statusEl = overlay.querySelector('.dn-pal-status');
+    var liveEl = overlay.querySelector('.dn-pal-live');
+    var TOG_NAMES = { 'case': 'Maiuscole/minuscole', word: 'Parola intera', regex: 'Espressione regolare' };
+    function toggleTog(t) {                       // flip di un toggle: da click o da scorciatoia Alt+…
+      if (!TOG_NAMES[t]) return;
+      var b = overlay.querySelector('.dn-pal-tog[data-t="' + t + '"]');
+      state[t] = !state[t];
+      if (b) { b.classList.toggle('is-on', state[t]); b.setAttribute('aria-pressed', state[t] ? 'true' : 'false'); }
+      if (liveEl) { liveEl.textContent = ''; liveEl.textContent = TOG_NAMES[t] + ': ' + (state[t] ? 'attivo' : 'disattivato'); }
+      render(input.value.trim());
+    }
 
     backdrop.addEventListener('click', close);
     input.addEventListener('input', function () {
@@ -341,7 +352,10 @@
       debTimer = setTimeout(function () { render(q); }, DEBOUNCE);
     });
     input.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      if (e.altKey && e.code === 'KeyC') { e.preventDefault(); toggleTog('case'); }
+      else if (e.altKey && e.code === 'KeyW') { e.preventDefault(); toggleTog('word'); }
+      else if (e.altKey && e.code === 'KeyR') { e.preventDefault(); toggleTog('regex'); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
       else if (e.key === 'Tab') { e.preventDefault(); move(e.shiftKey ? -1 : 1); }   // trap: Tab non lascia l'input
       else if (e.key === 'Enter') { e.preventDefault(); go(active < 0 ? 0 : active); }
@@ -357,9 +371,7 @@
     });
     overlay.querySelector('.dn-pal-toggles').addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('.dn-pal-tog'); if (!b) return;
-      var t = b.getAttribute('data-t'); state[t] = !state[t];
-      b.classList.toggle('is-on', state[t]); b.setAttribute('aria-pressed', state[t] ? 'true' : 'false');
-      render(input.value.trim()); input.focus();
+      toggleTog(b.getAttribute('data-t')); input.focus();
     });
   }
 
