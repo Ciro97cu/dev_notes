@@ -130,6 +130,7 @@ body::before {
   grid-column: 1 / -1;
   display: flex; align-items: center; gap: .85rem;
   padding: .8rem 1.15rem; text-decoration: none; color: inherit;
+  --accent-ink: color-mix(in srgb, var(--accent) 65%, var(--fg));
   background: color-mix(in srgb, var(--accent) 8%, var(--card));
   border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--card-border));
   border-radius: 16px; box-shadow: var(--card-shadow);
@@ -137,11 +138,11 @@ body::before {
   transition: transform .18s ease, border-color .18s ease;
 }
 .resume-banner:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 55%, var(--card-border)); }
-.resume-banner .resume-ic { display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); flex:0 0 auto; }
+.resume-banner .resume-ic { display:flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent-ink); flex:0 0 auto; }
 .resume-banner .resume-txt { display:flex; flex-direction:column; line-height:1.25; min-width:0; }
 .resume-banner .resume-k { font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color: var(--fg-soft); }
 .resume-banner .resume-v { font-weight:650; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.resume-banner .resume-arrow { margin-left:auto; color: var(--accent); font-size:1.2rem; transition: transform .18s ease; }
+.resume-banner .resume-arrow { margin-left:auto; color: var(--accent-ink); font-size:1.2rem; transition: transform .18s ease; }
 .resume-banner:hover .resume-arrow { transform: translateX(4px); }
 .card {
   position: relative;
@@ -152,6 +153,11 @@ body::before {
   padding: 1.25rem 1.3rem;
   text-decoration: none;
   color: inherit;
+  /* accent per TESTO/glifi, mescolato verso --fg per il contrasto WCAG in tema
+     chiaro; l'accent grezzo resta per fill/bordi/pallini. ink = testo grande
+     (≥3:1), ink-strong = testo piccolo come la % (≥4.5:1). */
+  --accent-ink: color-mix(in srgb, var(--accent) 65%, var(--fg));
+  --accent-ink-strong: color-mix(in srgb, var(--accent) 52%, var(--fg));
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 18px;
@@ -188,7 +194,7 @@ body::before {
   flex: 0 0 auto;
   width: 56px; height: 56px;
   display: flex; align-items: center; justify-content: center;
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 800; font-size: 2.2rem; letter-spacing: -.02em; line-height: 1;
 }
 .tile svg { width: 48px; height: 48px; }
@@ -203,7 +209,7 @@ body::before {
   transition: transform .18s ease, color .18s ease;
   font-size: 1.3rem;
 }
-.card:hover .arrow { transform: translateX(4px); color: var(--accent); }
+.card:hover .arrow { transform: translateX(4px); color: var(--accent-ink); }
 
 /* Barra di progresso lettura: riempimento nel colore del vault con un riflesso
    scintillante che scorre. + % inline a destra. */
@@ -229,7 +235,7 @@ body::before {
   animation: dn-shine 1.7s linear infinite;
 }
 @keyframes dn-shine { from { background-position: -60% 0; } to { background-position: 170% 0; } }
-.card-pct { flex: 0 0 auto; font-size: .74rem; font-weight: 700; color: var(--accent); }
+.card-pct { flex: 0 0 auto; font-size: .74rem; font-weight: 700; color: var(--accent-ink-strong); }
 @media (prefers-reduced-motion: reduce) { .card-prog .fill::after { animation: none; } }
 
 /* Bottone backup dati hub (accanto al toggle tema) */
