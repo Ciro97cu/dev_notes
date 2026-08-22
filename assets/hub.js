@@ -30,7 +30,7 @@
   }
   function hubHelp() {
     var h = document.getElementById('hub-keyhelp');
-    if (h) { var willOpen = !h.classList.contains('open'); h.classList.toggle('open', willOpen); hubLock(willOpen); return; }
+    if (h) { var willOpen = !h.classList.contains('open'); h.classList.toggle('open', willOpen); hubLock(willOpen); if (willOpen) { var wb = h.querySelector('.box'); if (wb) wb.focus(); } return; }
     var st = document.createElement('style'); st.id = 'hub-keyhelp-styles';
     st.textContent = '#hub-keyhelp{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5)}'
       + '#hub-keyhelp.open{display:flex}'
@@ -41,8 +41,9 @@
       + '#hub-keyhelp kbd{background:rgba(127,127,127,.16);border:1px solid var(--card-border);border-radius:6px;padding:.08em .5em;font-size:.85em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}';
     document.head.appendChild(st);
     h = document.createElement('div'); h.id = 'hub-keyhelp';
-    h.innerHTML = '<div class="box"><h3>Scorciatoie da tastiera</h3><dl>'
+    h.innerHTML = '<div class="box" role="dialog" aria-modal="true" aria-label="Scorciatoie da tastiera" tabindex="-1"><h3>Scorciatoie da tastiera</h3><dl>'
       + '<dt><kbd>/</kbd> <kbd>⌘K</kbd></dt><dd>Cerca in tutti gli appunti</dd>'
+      + '<dt><kbd>Alt</kbd>+<kbd>C</kbd> <kbd>W</kbd> <kbd>R</kbd></dt><dd>Nella ricerca: maiuscole · parola intera · regex</dd>'
       + '<dt><kbd>t</kbd></dt><dd>Tema chiaro / scuro</dd>'
       + '<dt><kbd>d</kbd></dt><dd>Trasferimento dati</dd>'
       + '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>'
@@ -51,6 +52,7 @@
     h.addEventListener('click', function (e) { if (e.target === h) { h.classList.remove('open'); hubLock(false); } });
     document.body.appendChild(h);
     h.classList.add('open'); hubLock(true);
+    var fb = h.querySelector('.box'); if (fb) fb.focus();
   }
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { var hh = document.getElementById('hub-keyhelp'); if (hh && hh.classList.contains('open')) { hh.classList.remove('open'); hubLock(false); } }
@@ -61,6 +63,8 @@
     else if (e.key === 't' || e.key === 'T') { e.preventDefault(); if (btn) btn.click(); }
     else if (e.key === 'd' || e.key === 'D') { var db = document.getElementById('hub-data-btn'); if (db) { e.preventDefault(); db.click(); } }
   });
+  var helpBtn = document.getElementById('hub-help-btn');
+  if (helpBtn) helpBtn.addEventListener('click', hubHelp);
 })();
 
 

@@ -32,7 +32,7 @@ html.dark {
   color: var(--fg); font-size: 18px; line-height: 1; cursor: pointer;
   box-shadow: var(--card-shadow); transition: transform .15s ease;
 }
-#theme-toggle:hover { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); }
+#theme-toggle:hover, #theme-toggle:focus-visible { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); outline: none; }
 #theme-toggle svg { display: block; }
 
 * { box-sizing: border-box; }
@@ -248,8 +248,19 @@ body::before {
   color: var(--fg); cursor: pointer;
   box-shadow: var(--card-shadow); transition: transform .15s ease, color .2s ease, border-color .2s ease;
 }
-#hub-data-btn:hover { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); }
+#hub-data-btn:hover, #hub-data-btn:focus-visible { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); outline: none; }
 #hub-data-btn svg { display: block; }
+#hub-help-btn {
+  position: fixed; top: 16px; right: 116px; z-index: 5;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--card-border); background: var(--card);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  color: var(--fg); cursor: pointer;
+  box-shadow: var(--card-shadow); transition: transform .15s ease, color .2s ease, border-color .2s ease;
+}
+#hub-help-btn:hover, #hub-help-btn:focus-visible { transform: scale(1.08); color: var(--grad-a); border-color: var(--grad-a); outline: none; }
+#hub-help-btn svg { display: block; }
 #hub-data-pop {
   position: fixed; top: 66px; right: 66px; z-index: 6;
   min-width: 220px; background: var(--card);
