@@ -260,7 +260,7 @@
     try { reList = compile(q); }
     catch (e) {
       listEl.innerHTML = '';
-      setStatusHTML('Espressione regolare non valida. <button type="button" class="dn-pal-fix" data-fix="offregex">Disattiva <code>.*</code></button>');
+      setStatusHTML('Espressione regolare non valida. <button type="button" class="dn-pal-fix" data-fix="offregex" title="Disattiva la modalità regex (Alt+R)">Disattiva <code>.*</code></button>');
       if (reBtn) reBtn.classList.add('is-error');
       syncActive(); return;
     }
@@ -268,7 +268,7 @@
     var hits = search(reList);
     if (!hits.length) {
       listEl.innerHTML = '';
-      setStatusHTML('Nessun risultato per «' + esc(q) + '».' + (anyTog() ? ' <button type="button" class="dn-pal-fix" data-fix="clear">Rimuovi i filtri</button>' : ''));
+      setStatusHTML('Nessun risultato per «' + esc(q) + '».' + (anyTog() ? ' <button type="button" class="dn-pal-fix" data-fix="clear" title="Azzera i filtri (Alt+0)">Rimuovi i filtri</button>' : ''));
       syncActive(); return;
     }
     setStatus('');
@@ -369,6 +369,7 @@
         if (b) { b.classList.toggle('is-on', !!state[t]); b.setAttribute('aria-pressed', state[t] ? 'true' : 'false'); }
       });
     }
+    function clearTogs() { state['case'] = false; state.word = false; state.regex = false; syncTogButtons(); }
 
     backdrop.addEventListener('click', close);
     input.addEventListener('input', function () {
@@ -380,6 +381,7 @@
       if (e.altKey && e.code === 'KeyC') { e.preventDefault(); toggleTog('case'); }
       else if (e.altKey && e.code === 'KeyW') { e.preventDefault(); toggleTog('word'); }
       else if (e.altKey && e.code === 'KeyR') { e.preventDefault(); toggleTog('regex'); }
+      else if (e.altKey && e.code === 'Digit0') { e.preventDefault(); if (anyTog()) { clearTogs(); render(input.value.trim()); } }
       else if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
       else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
       else if (e.key === 'Tab') { e.preventDefault(); move(e.shiftKey ? -1 : 1); }   // trap: Tab non lascia l'input
@@ -401,9 +403,8 @@
     statusEl.addEventListener('click', function (e) {          // azioni di recupero negli stati vuoto/errore
       var b = e.target.closest && e.target.closest('.dn-pal-fix'); if (!b) return;
       var fix = b.getAttribute('data-fix');
-      if (fix === 'clear') { state['case'] = false; state.word = false; state.regex = false; }
-      else if (fix === 'offregex') { state.regex = false; }
-      syncTogButtons();
+      if (fix === 'clear') clearTogs();
+      else if (fix === 'offregex') { state.regex = false; syncTogButtons(); }
       render(input.value.trim()); input.focus();
     });
   }

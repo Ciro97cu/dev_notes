@@ -383,6 +383,19 @@ html.theme-anim .card-prog { transition: background-color .32s ease, border-colo
 .dn-pal-fix code { font-size: .95em; }
 .dn-pal-fix:hover, .dn-pal-fix:focus-visible { border-color: var(--grad-a); outline: none; }
 .dn-pal-tog.is-error { outline: 2px solid #d9534f; outline-offset: 1px; }
+
+/* Modale di scelta import (Unisci / Sostituisci tutto / Annulla): l'azione
+   distruttiva è un bottone dedicato, Annulla/Esc è sempre sicuro. */
+.dn-ask { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; background: rgba(8, 11, 18, .5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.dn-ask-box { background: var(--card); color: var(--fg); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: var(--card-shadow); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); padding: 1.1rem 1.2rem; max-width: min(92vw, 400px); }
+.dn-ask-msg { margin: 0 0 .3rem; font-weight: 700; overflow-wrap: anywhere; }
+.dn-ask-sub { margin: 0 0 1rem; color: var(--fg-soft); font-size: .9rem; }
+.dn-ask-row { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: flex-end; }
+.dn-ask-b { padding: .5rem .9rem; border: 1px solid var(--card-border); border-radius: 9px; background: transparent; color: var(--fg); font: inherit; font-size: .9rem; font-weight: 600; cursor: pointer; }
+.dn-ask-b:hover, .dn-ask-b:focus-visible { border-color: var(--grad-a); outline: none; }
+.dn-ask-b.is-primary { background: var(--grad-a); border-color: var(--grad-a); color: #fff; }
+.dn-ask-b.is-danger { color: #d9534f; border-color: color-mix(in srgb, #d9534f 45%, var(--card-border)); }
+.dn-ask-b.is-danger:hover, .dn-ask-b.is-danger:focus-visible { border-color: #d9534f; }
 .dn-pal-list { max-height: min(56vh, 460px); overflow-y: auto; overscroll-behavior: contain; padding: .3rem; }
 .dn-pal-group {
   display: flex; align-items: center; gap: .5rem; padding: .6rem .7rem .3rem;

@@ -6,7 +6,7 @@
   var isDark = function () { return document.documentElement.classList.contains('dark'); };
   var SUN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
   var MOON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
-  var paint = function () { btn.innerHTML = isDark() ? SUN : MOON; btn.title = (isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro') + ' (t)'; };
+  var paint = function () { btn.innerHTML = isDark() ? MOON : SUN; btn.title = (isDark() ? 'Passa al tema chiaro' : 'Passa al tema scuro') + ' (t)'; };
   paint();
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var animT;
@@ -34,14 +34,16 @@
     var st = document.createElement('style'); st.id = 'hub-keyhelp-styles';
     st.textContent = '#hub-keyhelp{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5)}'
       + '#hub-keyhelp.open{display:flex}'
-      + '#hub-keyhelp .box{background:var(--card);color:var(--fg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:1rem 1.2rem;min-width:260px;max-width:90vw}'
+      + '#hub-keyhelp .box{position:relative;background:var(--card);color:var(--fg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--card-shadow);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding:1rem 1.2rem;padding-right:2.6rem;min-width:260px;max-width:90vw}'
+      + '#hub-keyhelp .hub-keyhelp-x{position:absolute;top:.45rem;right:.5rem;width:28px;height:28px;border:0;background:transparent;color:var(--fg);opacity:.55;font-size:1.3rem;line-height:1;cursor:pointer;border-radius:7px}'
+      + '#hub-keyhelp .hub-keyhelp-x:hover,#hub-keyhelp .hub-keyhelp-x:focus-visible{opacity:1;background:rgba(127,127,127,.16);outline:none}'
       + '#hub-keyhelp h3{margin:0 0 .7rem;font-size:1rem}'
       + '#hub-keyhelp dl{display:grid;grid-template-columns:auto 1fr;gap:.45rem .9rem;margin:0;font-size:.9rem;align-items:center}'
       + '#hub-keyhelp dt{white-space:nowrap}#hub-keyhelp dd{margin:0;opacity:.85}'
       + '#hub-keyhelp kbd{background:rgba(127,127,127,.16);border:1px solid var(--card-border);border-radius:6px;padding:.08em .5em;font-size:.85em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}';
     document.head.appendChild(st);
     h = document.createElement('div'); h.id = 'hub-keyhelp';
-    h.innerHTML = '<div class="box" role="dialog" aria-modal="true" aria-label="Scorciatoie da tastiera" tabindex="-1"><h3>Scorciatoie da tastiera</h3><dl>'
+    h.innerHTML = '<div class="box" role="dialog" aria-modal="true" aria-label="Scorciatoie da tastiera" tabindex="-1"><button class="hub-keyhelp-x" type="button" aria-label="Chiudi">&times;</button><h3>Scorciatoie da tastiera</h3><dl>'
       + '<dt><kbd>/</kbd> <kbd>⌘K</kbd></dt><dd>Cerca in tutti gli appunti</dd>'
       + '<dt><kbd>Alt</kbd>+<kbd>C</kbd> <kbd>W</kbd> <kbd>R</kbd></dt><dd>Nella ricerca: maiuscole · parola intera · regex</dd>'
       + '<dt><kbd>t</kbd></dt><dd>Tema chiaro / scuro</dd>'
@@ -49,7 +51,16 @@
       + '<dt><kbd>?</kbd></dt><dd>Mostra questo aiuto</dd>'
       + '<dt><kbd>Esc</kbd></dt><dd>Chiudi</dd>'
       + '</dl></div>';
-    h.addEventListener('click', function (e) { if (e.target === h) { h.classList.remove('open'); hubLock(false); } });
+    function closeHelp() { h.classList.remove('open'); hubLock(false); }
+    h.addEventListener('click', function (e) { if (e.target === h || (e.target.closest && e.target.closest('.hub-keyhelp-x'))) closeHelp(); });
+    h.addEventListener('keydown', function (e) {            // focus-trap: il Tab non lascia la modale
+      if (e.key !== 'Tab') return;
+      var f = h.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+      if (!f.length) { e.preventDefault(); return; }
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
     document.body.appendChild(h);
     h.classList.add('open'); hubLock(true);
     var fb = h.querySelector('.box'); if (fb) fb.focus();
@@ -141,7 +152,7 @@
   var LIB = _src.replace(/hub\.js(\?.*)?$/, 'lib/');
 
   // ── Icone ────────────────────────────────────────────────────────────────
-  var ICON_DB   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>';
+  var ICON_DB   = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>';
   var ICON_DL   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>';
   var ICON_UP   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 9l5-5 5 5"/><path d="M12 4v12"/></svg>';
   var ICON_CAM  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
@@ -239,6 +250,39 @@
     });
   }
 
+  // Modale a 3 scelte per l'import: l'azione distruttiva ("Sostituisci tutto") è
+  // un bottone dedicato, così Annulla/Esc è SEMPRE l'uscita sicura (mai la
+  // cancellazione). cb riceve 'merge' | 'replace' | null.
+  function escg(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function askImportMode(summary, cb) {
+    var h = document.documentElement, b0 = document.body, ovH = h.style.overflow, ovB = b0.style.overflow;
+    var ov = document.createElement('div');
+    ov.className = 'dn-ask';
+    ov.innerHTML = '<div class="dn-ask-box" role="dialog" aria-modal="true" aria-label="Importa dati" tabindex="-1">'
+      + '<p class="dn-ask-msg">' + escg(summary) + '</p>'
+      + '<p class="dn-ask-sub">Come vuoi importare questi dati?</p>'
+      + '<div class="dn-ask-row">'
+      +   '<button type="button" class="dn-ask-b is-primary" data-m="merge">Unisci</button>'
+      +   '<button type="button" class="dn-ask-b is-danger" data-m="replace">Sostituisci tutto</button>'
+      +   '<button type="button" class="dn-ask-b" data-m="">Annulla</button>'
+      + '</div></div>';
+    function done(mode) {
+      document.removeEventListener('keydown', onKey, true);
+      ov.remove(); h.style.overflow = ovH; b0.style.overflow = ovB;
+      cb(mode || null);
+    }
+    function onKey(e) { if (e.key === 'Escape') { e.preventDefault(); done(null); } }
+    ov.addEventListener('click', function (e) {
+      if (e.target === ov) { done(null); return; }
+      var bt = e.target.closest && e.target.closest('.dn-ask-b');
+      if (bt) done(bt.getAttribute('data-m'));
+    });
+    document.addEventListener('keydown', onKey, true);
+    h.style.overflow = 'hidden'; b0.style.overflow = 'hidden';
+    document.body.appendChild(ov);
+    var box = ov.querySelector('.dn-ask-box'); if (box) box.focus();
+  }
+
   // ── Export su file ──────────────────────────────────────────────────────
   function exportAll() {
     var json = JSON.stringify({ app: 'dev-notes', version: 1, exportedAt: new Date().toISOString(), data: collectData() }, null, 2);
@@ -255,16 +299,19 @@
     var f = fileIn.files && fileIn.files[0];
     if (!f) return;
     if (f.size > 8 * 1024 * 1024) { alert('File troppo grande (max 8 MB).'); return; }
-    var merge = confirm('Importa "' + f.name + '".\n\nOK = unisci ai dati attuali\nAnnulla = sostituisci tutto');
     var r = new FileReader();
     r.onload = function (ev) {
+      var obj;
       try {
-        var obj = JSON.parse(ev.target.result);
+        obj = JSON.parse(ev.target.result);
         if (!obj || typeof obj !== 'object' || !obj.data || typeof obj.data !== 'object')
           throw new Error('formato non valido');
-        applyData(obj.data, !merge);
-        location.reload();
-      } catch (e) { alert('Import non riuscito: ' + e.message); }
+      } catch (e) { alert('Import non riuscito: ' + e.message); return; }
+      askImportMode('Importa «' + f.name + '».', function (mode) {
+        if (!mode) return;
+        try { applyData(obj.data, mode === 'replace'); location.reload(); }
+        catch (e) { alert('Import non riuscito: ' + e.message); }
+      });
     };
     r.readAsText(f);
   });
@@ -407,9 +454,11 @@
         try { data = bytesToData(dec.result()); }
         catch (e) { lbl.textContent = 'Errore di lettura: ' + e.message; return; }
         modal.remove();
-        var merge = confirm('Ricevuti i dati (' + Object.keys(data).length + ' voci).\n\nOK = unisci ai dati attuali\nAnnulla = sostituisci tutto');
-        applyData(data, !merge);
-        location.reload();
+        askImportMode('Ricevuti i dati (' + Object.keys(data).length + ' voci).', function (mode) {
+          if (!mode) return;
+          try { applyData(data, mode === 'replace'); location.reload(); }
+          catch (e) { alert('Import non riuscito: ' + e.message); }
+        });
       }
 
       navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } })
