@@ -202,6 +202,9 @@ body::before {
 /* Icone normalizzate: ogni SVG ha un viewBox stretto sul contenuto, così a
    parità di dimensione l'ingombro effettivo è uguale per loghi e glifi. */
 .tile svg { width: 52px; height: 52px; display: block; }
+/* Icone file-type (HTML/CSS): il documento è verticale e non riempie la tile
+   come i loghi quadrati → ingrandito per pareggiarne l'ingombro ottico. */
+.tile-file svg { width: 60px; height: 60px; }
 
 /* Terminale: accent "ink" tema-adattivo (nero su chiaro, quasi-bianco su scuro).
    Niente --accent inline sulla card, così l'override per il dark vince. */
