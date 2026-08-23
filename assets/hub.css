@@ -128,7 +128,6 @@ body::before {
   .hero { margin-bottom: 1.8rem; }
   .logo { width: 68px; height: 68px; margin-bottom: .85rem; }
   .card { padding: 1.05rem 1.15rem; gap: .85rem; }
-  .card .arrow { display: none; }              /* su mobile la card è già toccabile: la freccia toglie solo spazio */
   .tile { width: 48px; height: 48px; font-size: 1.9rem; }
   .tile svg { width: 42px; height: 42px; }
 }
@@ -207,14 +206,6 @@ body::before {
 .body { flex: 1 1 auto; min-width: 0; }
 .title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
 .desc  { display: block; margin-top: .2rem; color: var(--fg-soft); font-size: .92rem; line-height: 1.45; overflow-wrap: anywhere; }
-
-.arrow {
-  flex: 0 0 auto;
-  color: var(--fg-soft);
-  transition: transform .18s ease, color .18s ease;
-  font-size: 1.3rem;
-}
-.card:hover .arrow { transform: translateX(4px); color: var(--accent); }
 
 /* Barra di progresso lettura: riempimento nel colore del vault con un riflesso
    scintillante che scorre. + % inline a destra. */
