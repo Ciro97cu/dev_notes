@@ -2,7 +2,7 @@
 
 Hub unico degli appunti di sviluppo: un **sito statico** pubblicato con GitHub Pages, **senza build** — nessun bundler, nessun passo di compilazione, i file si servono così come sono.
 
-L'hub (`index.html` nella root) raggiunge otto raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
+L'hub (`index.html` nella root) raggiunge nove raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
 
 | Sezione | Cartella | Contenuto |
 |---|---|---|
@@ -12,6 +12,7 @@ L'hub (`index.html` nella root) raggiunge otto raccolte, ognuna un sito [docsify
 | TypeScript | [`typescript/`](typescript/) | Guida completa (validata su TypeScript 7.0) |
 | Angular | [`angular/`](angular/) | Modern Angular 3ª ed. (Angular 22) — signals e oltre |
 | Git | [`git/`](git/) | Controllo di versione, da zero ad avanzato |
+| Terminale | [`terminale/`](terminale/) | La riga di comando: shell (bash/zsh), filesystem, PATH e pacchetti globali |
 | Code | [`code/`](code/) | Come funziona un computer, dal bit alla CPU (Petzold, «Code» 2ª ed.) |
 | Glossario | [`glossario/`](glossario/) | Termini trasversali: web, tooling, React, concetti |
 

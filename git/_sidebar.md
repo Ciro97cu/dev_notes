@@ -17,8 +17,7 @@
   - [12 · Interni di Git](12-interni-git.md)
   - [13 · Alias](13-alias.md)
   - [14 · GitHub](14-github.md)
-  - [15 · Terminale](15-terminale.md)
-  - [16 · SemVer](16-semver.md)
+  - [15 · SemVer](15-semver.md)
 
 - **Supporto**
   - [Glossario](glossario.md)

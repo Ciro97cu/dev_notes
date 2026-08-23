@@ -17,6 +17,7 @@
     { k: 'typescript', n: 'TypeScript', a: '#3178c6' },
     { k: 'angular',    n: 'Angular',    a: '#dd0031' },
     { k: 'git',        n: 'Git',        a: '#f05133' },
+    { k: 'terminale',  n: 'Terminale',  a: '#64748b' },
     { k: 'code',       n: 'Code',       a: '#059669' },
     { k: 'glossario',  n: 'Glossario',  a: '#78716c' }
   ];

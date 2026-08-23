@@ -203,6 +203,11 @@ body::before {
    parità di dimensione l'ingombro effettivo è uguale per loghi e glifi. */
 .tile svg { width: 52px; height: 52px; display: block; }
 
+/* Terminale: accent "ink" tema-adattivo (nero su chiaro, quasi-bianco su scuro).
+   Niente --accent inline sulla card, così l'override per il dark vince. */
+.card--term { --accent: #0d0d0d; }
+html.dark .card--term { --accent: #e6e6e6; }
+
 .body { flex: 1 1 auto; min-width: 0; }
 .title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
 .desc  { display: block; margin-top: .2rem; color: var(--fg-soft); font-size: .92rem; line-height: 1.45; overflow-wrap: anywhere; }

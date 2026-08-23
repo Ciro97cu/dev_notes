@@ -2,7 +2,7 @@
 
 Appunti Git, da zero ad avanzato. Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche del vault.
 
-Struttura: file topic numerati **flat nella root** (`01-*.md` … `16-*.md`) + file di supporto (`glossario.md`, `playbook.md`, `errori.md`) + `_sidebar.md`, `README.md`.
+Struttura: file topic numerati **flat nella root** (`01-*.md` … `15-*.md`) + file di supporto (`glossario.md`, `playbook.md`, `errori.md`) + `_sidebar.md`, `README.md`.
 
 ## Le 10 regole di qualità
 Ogni file di appunti deve rispettarle: sono il filtro usato in validazione e correzione.

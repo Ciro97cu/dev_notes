@@ -17,12 +17,12 @@
   <div class="cover-about">
     <div class="about-col">
       <button class="about-head" type="button" aria-expanded="false">Com'è organizzato</button>
-      <div class="about-body"><div class="about-inner">16 topic numerati, da leggere in ordine o come reference:
+      <div class="about-body"><div class="about-inner">15 topic numerati, da leggere in ordine o come reference:
         <ul>
           <li><strong>Fondamenti</strong>: introduzione, repository, commit, log &amp; diff, <code>.gitignore</code>.</li>
           <li><strong>Branching</strong>: branch, merge, annullare, stash, rebase.</li>
           <li><strong>Tag &amp; SemVer</strong>, interni di Git, alias.</li>
-          <li><strong>Collaborazione</strong>: GitHub e comandi di terminale.</li>
+          <li><strong>Collaborazione</strong>: GitHub, remote e pull request.</li>
         </ul>
         Più i file di supporto: <strong>Playbook</strong>, <strong>Glossario</strong>, <strong>Errori comuni</strong>.
       </div></div>

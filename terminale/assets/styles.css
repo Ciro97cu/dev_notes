@@ -1,0 +1,708 @@
+/* ============================================================
+   Appunti Terminale — brand "ink" monocromatico tema-adattivo:
+   quasi-nero (#0d0d0d) sul chiaro, quasi-bianco (#e6e6e6) sullo scuro.
+   La coverpage è una "finestra di terminale" scura su entrambi i temi.
+   Override del tema "vue" di docsify + design token.
+   Callout impeccable-compliant (box pieni tintati, NO side-stripe).
+   ============================================================ */
+
+:root {
+  /* Brand */
+  --term-ink: #111111;
+  --term-ink-2: #0d0d0d;
+  --term-accent: #0d0d0d;
+  --theme-color: var(--term-ink);
+  --on-accent: #fff;
+
+  /* Tipografia */
+  --font-sans: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Superfici e testo (light) */
+  --bg: #ffffff;
+  --bg-soft: #f6f8fa;
+  --text: #1f2328;
+  --text-soft: #59636e;
+  --strong: #14181c;   /* grassetti: un filo più forti del testo */
+  --border: #e4e8ec;
+  --sidebar-bg: #fbfcfd;
+  --code-bg: #f4f6f8;
+  --code-inline-bg: #ededf0;
+  --code-inline-text: #1a1d21;
+  --link: var(--term-ink-2);
+  --table-head-bg: #f0f0f2;
+
+  /* Citazione page-ref */
+  --ref-bg: #f6f8fa;
+  --ref-text: #59636e;
+
+  /* Callout semantici (full-tint, niente barra laterale) */
+  --cl-warn-bg: #fdf3e2;  --cl-warn-bd: #efd6a4;  --cl-warn-tx: #7a5600;
+  --cl-tip-bg:  #e8f6f0;  --cl-tip-bd:  #bfe6d4;  --cl-tip-tx:  #0a6e49;
+  --cl-note-bg: #eaf2fd;  --cl-note-bd: #cfe0fa;  --cl-note-tx: #0a5bb5;
+  --cl-ans-bg:  #ebf6ec;  --cl-ans-bd:  #c7e7cf;  --cl-ans-tx:  #14702e;
+
+  /* z-index scale (semantica, niente 9999) */
+  --z-toggle: 30;
+  --z-sidebar-toggle: 40;
+
+  --shadow-sm: 0 1px 2px rgba(27, 31, 36, .06), 0 2px 6px rgba(27, 31, 36, .08);
+}
+
+html.dark {
+  --term-ink: #e6e6e6;
+  --term-ink-2: #e6e6e6;
+  --term-accent: #e6e6e6;
+  --theme-color: #e6e6e6;
+  --on-accent: #111;
+
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --text: #d3dae3;
+  --text-soft: #9aa5b1;
+  --strong: #ffffff;   /* in dark i grassetti spiccano sul testo */
+  --border: #232b35;
+  --sidebar-bg: #0b0f14;
+  --code-bg: #12181f;
+  --code-inline-bg: #20242b;
+  --code-inline-text: #e2e2e4;
+  --link: #e6e6e6;
+  --table-head-bg: #161b22;
+
+  --ref-bg: #12181f;
+  --ref-text: #9aa5b1;
+
+  --cl-warn-bg: #241d0e; --cl-warn-bd: #4a3d18; --cl-warn-tx: #e3b341;
+  --cl-tip-bg:  #0f241c; --cl-tip-bd:  #1f4838; --cl-tip-tx:  #56d4a0;
+  --cl-note-bg: #0f1d2e; --cl-note-bd: #1f3a5a; --cl-note-tx: #6cb6ff;
+  --cl-ans-bg:  #0f2417; --cl-ans-bd:  #1f4a2f; --cl-ans-tx:  #57c785;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .4), 0 2px 6px rgba(0, 0, 0, .5);
+}
+
+/* ---------- Base ---------- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  transition: background .25s ease, color .25s ease;
+}
+.markdown-section {
+  max-width: 760px;
+  font-size: 16.5px;
+}
+.markdown-section p,
+.markdown-section li {
+  line-height: 1.72;
+  color: var(--text);
+  text-wrap: pretty;
+}
+.content, .markdown-section { color: var(--text); }
+/* Grassetti: seguono il tema. Il tema vue.css li hardcoda a uno slate scuro,
+   che in dark mode resta scuro sul fondo scuro e "si perde". */
+.markdown-section strong,
+.markdown-section b { color: var(--strong); }
+/* Nei callout il bold resta del colore del callout (solo più marcato). */
+.markdown-section .alert strong,
+.markdown-section .alert b { color: inherit; }
+
+/* ---------- Titoli ---------- */
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.markdown-section h1 {
+  font-size: clamp(1.9rem, 1.4rem + 1.8vw, 2.5rem);
+  border-bottom: 3px solid var(--term-ink);
+  padding-bottom: .28em;
+  margin-bottom: .8em;
+}
+.markdown-section h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: .25em;
+  margin-top: 2.4rem;
+}
+.markdown-section h3 { font-size: 1.2rem; margin-top: 1.8rem; }
+.markdown-section a { color: var(--link); font-weight: 600; text-decoration: none; }
+.markdown-section a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---------- Sidebar ---------- */
+.sidebar { background: var(--sidebar-bg); border-right: 1px solid var(--border); }
+.sidebar-nav { line-height: 1.9; }
+.sidebar ul li a { color: var(--text-soft); font-size: 14px; transition: color .15s ease; }
+.sidebar ul li a:hover { color: var(--term-ink); }
+.sidebar-nav > ul > p,
+.sidebar-nav strong {
+  color: var(--text); font-size: 12px; text-transform: uppercase;
+  letter-spacing: .06em; margin-top: 1.1rem; display: block; font-weight: 700;
+}
+/* attivo: tinta + testo rosso bold, NO barra laterale */
+.sidebar-nav li.active > a {
+  color: var(--term-ink);
+  font-weight: 700;
+  border-left: 4px solid var(--term-ink);
+  background: color-mix(in oklab, var(--term-ink) 12%, var(--bg));
+  padding-left: 0.5rem;
+}
+.app-name-link { color: var(--term-ink) !important; font-weight: 800; font-size: 21px; }
+.sidebar .app-name { margin-top: 1.1rem; }
+
+/* ---------- Codice ---------- */
+.markdown-section code {
+  background: var(--code-inline-bg);
+  color: var(--code-inline-text);
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: .84em;
+}
+.markdown-section pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.markdown-section pre > code {
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: .85em;
+  line-height: 1.6;
+}
+
+/* ---------- Page-ref (blockquote semplice: > 📖 pp.x-y) ---------- */
+.markdown-section blockquote:not(.alert) {
+  background: var(--ref-bg);
+  border: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--ref-text);
+  font-size: .9em;
+  padding: .5em .9em;
+}
+.markdown-section blockquote:not(.alert) p { color: var(--ref-text); }
+
+/* ---------- Callout (flexible-alerts) — override side-stripe -> box pieno ---------- */
+.markdown-section .alert.callout {
+  border: 1px solid var(--border);
+  border-left: 1px solid var(--border) !important; /* annulla la barra 4px del plugin */
+  border-radius: 10px;
+  background: var(--bg-soft);
+  padding: .85em 1.1em;
+  margin: 1.1em 0;
+  box-shadow: none;
+}
+.markdown-section hr { border: 0; border-top: 1px solid var(--border); }
+.markdown-section .alert.callout > p { color: var(--text); }
+.markdown-section .alert.callout .title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: .5em;
+  margin: 0 0 .4em;
+}
+.markdown-section .alert.callout .title .icon { opacity: .95; }
+
+/* tipi semantici */
+.markdown-section .alert.callout.warning {
+  background: var(--cl-warn-bg); border-color: var(--cl-warn-bd) !important;
+}
+.markdown-section .alert.callout.warning .title { color: var(--cl-warn-tx); }
+.markdown-section .alert.callout.tip {
+  background: var(--cl-tip-bg); border-color: var(--cl-tip-bd) !important;
+}
+.markdown-section .alert.callout.tip .title { color: var(--cl-tip-tx); }
+.markdown-section .alert.callout.note {
+  background: var(--cl-note-bg); border-color: var(--cl-note-bd) !important;
+}
+.markdown-section .alert.callout.note .title { color: var(--cl-note-tx); }
+.markdown-section .alert.callout.callout-answer {
+  background: var(--cl-ans-bg); border-color: var(--cl-ans-bd) !important;
+}
+.markdown-section .alert.callout.callout-answer .title { color: var(--cl-ans-tx); }
+
+/* ---------- Risposte Ripasso collassabili ---------- */
+.markdown-section .callout-answer.is-collapsible .title.answer-toggle {
+  cursor: pointer;
+  user-select: none;
+  margin: 0;
+  border-radius: 6px;
+  transition: background .15s ease;
+}
+.markdown-section .callout-answer.is-collapsible .title.answer-toggle:hover {
+  background: color-mix(in oklab, var(--cl-ans-tx) 10%, transparent);
+}
+.markdown-section .callout-answer.is-collapsible .title.answer-toggle::after {
+  content: "▸";
+  margin-left: auto;
+  font-size: .85em;
+  transition: transform .2s ease;
+}
+.markdown-section .callout-answer.is-collapsible.open .title.answer-toggle::after {
+  transform: rotate(90deg);
+}
+.markdown-section .callout-answer.is-collapsible .answer-body { display: none; }
+.markdown-section .callout-answer.is-collapsible.open .answer-body { display: block; }
+.markdown-section .callout-answer.is-collapsible.open .answer-body > :first-child { margin-top: .3em; }
+.markdown-section .callout-answer.is-collapsible.open .answer-body > :last-child { margin-bottom: 0; }
+
+/* ---------- Tabelle ---------- */
+.markdown-section table { display: table; width: 100%; border-collapse: collapse; }
+.markdown-section tr { background: var(--bg); border-top: 1px solid var(--border); }
+.markdown-section th { background: var(--table-head-bg); color: var(--text); font-weight: 700; }
+.markdown-section td, .markdown-section th { border: 1px solid var(--border); }
+
+/* ---------- Ricerca ---------- */
+.sidebar .search input { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+.sidebar .search .results-panel { background: var(--bg); }
+.sidebar .search h2, .sidebar .search .matching-post h2 { color: var(--term-ink); }
+.sidebar .search p { color: var(--text-soft); }
+.sidebar .search .clear-button { color: var(--text-soft); }
+
+/* ---------- Paginazione Prev/Next ---------- */
+.docsify-pagination-container { border-top: 1px solid var(--border); color: var(--text-soft); margin-top: 2.5rem; }
+.pagination-item-label { color: var(--text-soft); }
+.pagination-item-title { color: var(--term-ink); font-weight: 700; }
+.pagination-item a:hover .pagination-item-title { color: var(--term-ink-2); }
+
+/* ---------- Copy code ---------- */
+.docsify-copy-code-button {
+  background: var(--term-ink) !important;
+  color: var(--on-accent) !important;
+  border-radius: 0 10px 0 6px !important;
+  font-family: var(--font-sans) !important;
+}
+.docsify-copy-code-button:hover { background: var(--term-ink-2) !important; }
+
+/* ---------- Coverpage (hero centrato · puntini interattivi su fondo brand) ---------- */
+/* I puntini sono su un <canvas> (coverDotsPlugin, ../assets/shared.js): al passaggio
+   del cursore vengono respinti. Qui solo il fondo brand + il layout dell'hero. */
+section.cover {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 100% at 12% 6%, rgba(255, 255, 255, .10), transparent 45%) center / cover no-repeat,
+    linear-gradient(135deg, #23262b 0%, #121316 55%, #000000 100%) center / cover no-repeat,
+    #0d0d0d !important;
+}
+section.cover #cover-dots { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+section.cover .cover-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 clamp(1.4rem, 5vw, 4rem);
+  text-align: center;
+}
+.cover-wrap { display: flex; flex-direction: column; align-items: center; }
+.cover-logo {
+  width: 92px;
+  height: 92px;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.5));
+}
+section.cover .cover-wrap h1 {
+  margin: .2rem 0 .1rem;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .22);
+}
+.cover-wrap .cover-sub { margin: 0 0 1rem; font-size: clamp(1.05rem, 1.8vw, 1.3rem); font-weight: 600; color: #fff; opacity: .95; }
+.cover-wrap .cover-desc { max-width: 60ch; margin: 0 auto; font-size: clamp(1rem, 1.4vw, 1.12rem); line-height: 1.6; color: #fff; opacity: .92; }
+
+/* azioni: pill icona+testo, a capo su mobile */
+.cover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .8rem;
+  margin: 1.9rem 0 1.5rem;
+}
+.cover-actions .cover-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .72rem 1.35rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff !important;
+  text-decoration: none !important;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .38);
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.cover-actions .cover-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, .22);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
+}
+.cover-actions .cover-btn.is-primary {
+  background: #fff;
+  border-color: #fff;
+  color: #0d0d0d !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .25);
+}
+.cover-actions .cover-btn.is-resume { border-color: rgba(255, 255, 255, .72); }
+
+.cover-wrap .cover-disclaimer {
+  max-width: 60ch;
+  margin: .4rem auto 0;
+  font-size: .74rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .8);
+}
+
+@media (max-width: 720px) {
+  .cover-actions .cover-btn { font-size: .92rem; padding: .62rem 1.1rem; }
+}
+
+section.cover.show ~ .sidebar,
+section.cover.show ~ .content { display: none; }
+
+/* ---------- Titoli — banda tinta soft, colore brand (uniforme tra le sezioni) ---------- */
+.markdown-section h1 {
+  color: var(--link);
+  border-bottom: 3px solid var(--theme-color);
+  padding-bottom: .3em;
+  border-left: 0;
+  padding-left: 0;
+  font-weight: 900;
+  letter-spacing: -.02em;
+}
+.markdown-section h2 {
+  color: var(--link);
+  background: color-mix(in srgb, var(--theme-color) 12%, var(--bg));
+  border-left: 4px solid var(--theme-color);
+  border-bottom: 0;
+  border-radius: 0 8px 8px 0;
+  padding: .42em .7em;
+  margin-top: 2.2rem;
+}
+.markdown-section h3 {
+  color: var(--link);
+  font-weight: 700;
+}
+.markdown-section h4 {
+  color: var(--link);
+  font-weight: 600;
+}
+.markdown-section h5,
+.markdown-section h6 {
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: .95rem;
+}
+/* prefisso hash "###" — segnala livello e gerarchia (brand attenuato, mono) */
+.markdown-section h3::before,
+.markdown-section h4::before,
+.markdown-section h5::before,
+.markdown-section h6::before {
+  font-family: var(--font-mono, "SFMono-Regular", Menlo, Consolas, monospace);
+  color: var(--theme-color);
+  opacity: .5;
+  font-weight: 700;
+  margin-right: .5em;
+}
+.markdown-section h3::before { content: "###"; }
+.markdown-section h4::before { content: "####"; }
+.markdown-section h5::before { content: "#####"; opacity: .4; }
+.markdown-section h6::before { content: "######"; opacity: .4; }
+/* i titoli non ereditano lo stile link: niente doppio underline, niente 600 su <a>/<span> */
+.markdown-section h1 a, .markdown-section h1 a:hover, .markdown-section h1 a span,
+.markdown-section h2 a, .markdown-section h2 a:hover, .markdown-section h2 a span,
+.markdown-section h3 a, .markdown-section h3 a:hover, .markdown-section h3 a span,
+.markdown-section h4 a, .markdown-section h4 a:hover, .markdown-section h4 a span,
+.markdown-section h5 a, .markdown-section h5 a:hover, .markdown-section h5 a span,
+.markdown-section h6 a, .markdown-section h6 a:hover, .markdown-section h6 a span {
+  color: inherit;
+  font-weight: inherit;
+  border-bottom: 0;
+  text-decoration: none;
+}
+
+/* ---------- Toggle tema ---------- */
+#theme-toggle {
+  position: fixed; top: 14px; right: 16px; z-index: var(--z-toggle);
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--bg-soft); color: var(--text);
+  font-size: 18px; line-height: 1; cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+#theme-toggle:hover { transform: scale(1.08); color: var(--link); border-color: var(--link); }
+#theme-toggle:focus-visible { outline: 2px solid var(--term-ink); outline-offset: 2px; }
+
+/* ---------- Mermaid ---------- */
+.markdown-section .mermaid { text-align: center; background: transparent; margin: 1.2em 0; }
+.markdown-section .mermaid code { background: transparent; color: inherit; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .markdown-section { font-size: 16px; }
+  #theme-toggle { top: 10px; right: 12px; width: 36px; height: 36px; font-size: 16px; }
+}
+
+/* ---------- Motion ridotto ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+
+/* ---------- Bottoni flottanti: menu (sidebar-toggle) + hover uniforme ---------- */
+/* Il button menu ha la stessa forma del button home (cerchio bianco, bordo, ombra),
+   in basso a destra sopra il button home. La geometria usa !important per battere le
+   regole di stato di docsify (es. body.close .sidebar-toggle { width: auto }). */
+.sidebar-toggle {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  right: 16px !important;
+  bottom: 70px !important;      /* sopra il button home (bottom: 16px) */
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  z-index: 2147483000;          /* come il button home: sopra sidebar e overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* le tre barre dell'hamburger, centrate e scure come l'icona home */
+.sidebar-toggle .sidebar-toggle-button { position: static; padding: 0; }
+.sidebar-toggle span {
+  position: static;
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 2px 0;
+  border-radius: 1px;
+  background-color: #24292e;
+  transition: background-color 0.2s ease;
+}
+/* docsify sbiadisce le barre in hover: lo annullo, il contrasto lo dà --on-accent */
+.sidebar-toggle:hover .sidebar-toggle-button { opacity: 1; }
+
+/* transizione per l'hover del button home (lo stile base resta inline nell'HTML) */
+a[aria-label="Torna a Dev Notes"] {
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* ---------- Hover uniforme e identitario per tutti e 3 i bottoni ---------- */
+/* Riempimento col colore del doc (--theme-color, già adattato a chiaro/scuro) e
+   icona/testo con contrasto garantito in entrambi i temi (--on-accent). */
+a[aria-label="Torna a Dev Notes"]:hover,
+.sidebar-toggle:hover,
+#theme-toggle:hover {
+  transform: scale(1.08);
+  border-color: var(--link) !important;
+  color: var(--link) !important;
+}
+.sidebar-toggle:hover span { background-color: var(--link) !important; }
+
+/* ============================================================================
+   Playground CSS — bottone flottante + modale con editor Monaco e preview live
+   ============================================================================ */
+#pg-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 124px;              /* sopra il button menu (70) e home (16) */
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50%;
+  background: #fff;
+  color: #24292e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  z-index: 2147483000;
+  transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+}
+#pg-toggle:hover {
+  transform: scale(1.08);
+  border-color: var(--link);
+  color: var(--link);
+}
+
+#pg-dialog {
+  width: min(1100px, 92vw);
+  height: min(88vh, 780px);
+  min-width: 360px;
+  min-height: 280px;
+  max-width: 96vw;
+  max-height: 94vh;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  resize: both;              /* ridimensionabile dall'angolo in basso a destra */
+}
+#pg-dialog[open] { display: flex; flex-direction: column; } /* flex solo da aperto */
+#pg-dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
+#pg-dialog.pg-dragging::backdrop { backdrop-filter: none; }  /* niente sfocatura durante il drag */
+
+#pg-dialog .pg-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+  cursor: move;              /* trascinabile dall'header */
+  user-select: none;
+  touch-action: none;        /* niente scroll/gesture durante il drag su touch */
+}
+#pg-dialog .pg-title { font-weight: 700; }
+#pg-dialog .pg-hint { margin-left: auto; font-size: 0.78rem; color: var(--text-soft, #888); }
+#pg-dialog .pg-close {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.05rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+}
+#pg-dialog .pg-close:hover { color: var(--theme-color); }
+
+#pg-dialog .pg-body { flex: 1; min-height: 0; display: flex; }
+#pg-dialog .pg-pane { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+#pg-dialog .pg-pane + .pg-pane { border-left: 1px solid var(--border); }
+#pg-dialog .pg-pane-label {
+  padding: 0.35rem 1rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-soft, #888);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Tab HTML / CSS sopra l'editor */
+#pg-dialog .pg-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+#pg-dialog .pg-tab {
+  border: 0;
+  background: transparent;
+  color: var(--text-soft, #888);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#pg-dialog .pg-tab.is-active { background: var(--theme-color); color: var(--on-accent); font-weight: 600; }
+
+/* Barra azioni in basso (come nel vault JS), con il bottone Formatta */
+#pg-dialog .pg-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+#pg-dialog .pg-fmt {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background: var(--bg);
+  color: var(--text);
+}
+#pg-dialog .pg-fmt:hover { filter: brightness(1.05); border-color: var(--theme-color); }
+
+#pg-dialog .pg-monaco {
+  flex: 1;
+  min-height: 0;             /* contenitore dell'editor Monaco (si dimensiona da solo) */
+  background: var(--bg);
+}
+#pg-dialog .pg-loading {     /* placeholder "Caricamento…"/errore prima che Monaco monti */
+  padding: 1rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  color: var(--text-soft, #888);
+}
+
+#pg-dialog .pg-preview {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;          /* canvas bianco costante, come i playground CSS */
+}
+
+/* Bottone «▶ Prova nel playground» iniettato sotto ai blocchi di codice CSS della doc */
+.pg-try {
+  display: inline-flex;
+  align-items: center;
+  margin: -0.4rem 0 1.1rem;      /* si aggancia al blocco di codice sopra */
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--theme-color);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.pg-try:hover {
+  background: var(--theme-color);
+  color: var(--on-accent);
+  border-color: var(--theme-color);
+}
+
+@media (max-width: 640px) {
+  #pg-dialog { width: 100vw; height: 100dvh; max-width: 100vw; max-height: 100dvh; min-width: 0; min-height: 0; border-radius: 0; resize: none; }
+  #pg-dialog .pg-body { flex-direction: column; }
+  #pg-dialog .pg-pane + .pg-pane { border-left: 0; border-top: 1px solid var(--border); }
+  html.pg-open, html.pg-open body { overflow: hidden; overscroll-behavior: contain; }  /* niente scroll della pagina dietro la modale full-screen */
+}
+
+/* ---------- Quiz collassabili (<details>) — stile Q&A unico del monorepo ---------- */
+.markdown-section details {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--link);
+  border-radius: 6px;
+  padding: .6em 1em;
+  margin: .8em 0;
+}
+.markdown-section details summary { cursor: pointer; font-weight: 600; color: var(--text); outline: none; }
+.markdown-section details[open] summary { margin-bottom: .6em; color: var(--link); }
+
+/* Zebra tabelle theme-aware: vue.css hardcoda #f8f8f8 sulle righe pari (invisibile in dark). */
+.markdown-section table tr:nth-child(2n) { background: var(--bg-soft); }
+
+/* Tabelle larghe su mobile: scorrono in orizzontale invece di sforare la viewport. */
+@media (max-width: 640px) {
+  .markdown-section table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
