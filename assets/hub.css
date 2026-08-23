@@ -158,8 +158,8 @@ body::before {
   min-width: 0;                 /* grid item: consente alla card di comprimersi senza sbordare */
   display: flex;
   align-items: center;
-  gap: .95rem;
-  padding: .95rem 1.15rem;
+  gap: 1rem;
+  padding: 1.25rem 1.3rem;
   text-decoration: none;
   color: inherit;
   background: var(--card);
@@ -196,13 +196,13 @@ body::before {
 /* Logo del vault senza box: solo il monogramma/icona nel colore del brand */
 .tile {
   flex: 0 0 auto;
-  width: 64px; height: 64px;
+  width: 56px; height: 56px;
   display: flex; align-items: center; justify-content: center;
   color: var(--accent);
 }
-.tile svg { width: 52px; height: 52px; }          /* glifi: Angular, Git, Code, Glossario */
-.tile-badge { width: 64px; height: 64px; }         /* stemmi (HTML/CSS a scudo, JS/TS quadrati): riempiono il tile */
-.tile-badge svg { width: 64px; height: 64px; display: block; }
+/* Icone normalizzate: ogni SVG ha un viewBox stretto sul contenuto, così a
+   parità di dimensione l'ingombro effettivo è uguale per loghi e glifi. */
+.tile svg { width: 52px; height: 52px; display: block; }
 
 .body { flex: 1 1 auto; min-width: 0; }
 .title { display: block; font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
