@@ -14,5 +14,5 @@ Appunti di studio sul **terminale** e la **shell**: come muoversi nella riga di 
 | 04 | [File e cartelle](docs/04-file-e-cartelle.md) | `touch` · `mkdir` · `cp` · `mv` · `rm`, wildcard, `cat` · `open` |
 | 05 | [Variabili d'ambiente e PATH](docs/05-variabili-ambiente-path.md) | env var, `export`, come la shell trova un comando lungo il PATH |
 | 06 | [File di configurazione della shell](docs/06-file-configurazione-shell.md) | `.zshrc`/`.bashrc`, login vs interactive, `source`, alias |
-| 07 | [Installare pacchetti globali](docs/07-pacchetti-globali.md) | `npm -g` e Homebrew: dove finiscono, il PATH, perché evitare `sudo` |
+| 07 | [Node, npm e il frontend](docs/07-node-npm-frontend.md) | dipendenze, script (`npm run`), `npx`, locale vs globale + PATH, nvm, dev server |
 | 08 | [Comandi di tutti i giorni](docs/08-comandi-di-tutti-i-giorni.md) | pipe e redirezione, `grep` · `find`, permessi, scorciatoie da tastiera |

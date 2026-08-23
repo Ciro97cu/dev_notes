@@ -9,7 +9,7 @@
     <a class="cover-btn" href="#/README"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg><span>Indice completo</span></a>
     <a class="cover-btn" href="#/docs/02-shell-sh-bash-zsh"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><span>bash vs zsh</span></a>
     <a class="cover-btn" href="#/docs/05-variabili-ambiente-path"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg><span>PATH</span></a>
-    <a class="cover-btn" href="#/docs/07-pacchetti-globali"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8V16a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Pacchetti globali</span></a>
+    <a class="cover-btn" href="#/docs/07-node-npm-frontend"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8V16a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Node &amp; npm</span></a>
   </div>
   <div class="cover-about">
     <div class="about-col">
@@ -19,7 +19,7 @@
           <li><strong>Basi</strong>: cos'è il terminale, le shell (sh/bash/zsh).</li>
           <li><strong>Filesystem</strong>: navigare, gestire file e cartelle.</li>
           <li><strong>Ambiente</strong>: variabili e PATH, file di configurazione.</li>
-          <li><strong>Pratica</strong>: pacchetti globali, comandi di tutti i giorni.</li>
+          <li><strong>Pratica</strong>: Node e npm nel frontend, comandi di tutti i giorni.</li>
         </ul>
       </div></div>
     </div>
