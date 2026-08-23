@@ -305,11 +305,10 @@ section.cover .cover-main {
   align-items: center;
 }
 .cover-logo {
-  box-sizing: border-box; background: #fff; border-radius: 20px; padding: 14px;
   width: 92px;
   height: 92px;
   margin-bottom: 1rem;
-  filter: drop-shadow(0 8px 22px rgba(0, 0, 0, .28));   /* stacco senza cornice */
+  filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(1.1px 1.1px 0 #fff) drop-shadow(-1.1px -1.1px 0 #fff) drop-shadow(1.1px -1.1px 0 #fff) drop-shadow(-1.1px 1.1px 0 #fff) drop-shadow(0 4px 8px rgba(0,0,0,.35));   /* stacco senza cornice */
 }
 section.cover .cover-wrap h1 {
   margin: .2rem 0 .1rem;
