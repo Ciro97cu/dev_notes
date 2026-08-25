@@ -305,7 +305,7 @@ afterEveryRender(()  => { /* dopo OGNI ciclo, indipendente dai signal */ });
 `afterRenderEffect` per misurare dimensioni, scrollare a una posizione, integrare librerie di charting; `afterNextRender`/`afterEveryRender` per logica DOM dopo i cicli di rendering a prescindere dai cambi di signal.
 
 > [!tip]
-> "Rendering" qui è in senso largo: l'ultimo miglio verso il *data sink* (il punto finale dove i dati "escono" dall'app e vengono mostrati o salvati), di solito la UI ma anche la console (logging) o il localStorage.
+> «Rendering», qui, va inteso in senso ampio: non solo «disegnare sullo schermo», ma il **passo finale** in cui un valore calcolato **esce** dalla logica dell'app e va dove diventa osservabile o viene conservato. Di norma è la **UI** (lo si mostra), ma può essere anche la **console** (`console.log`) o il **`localStorage`** (lo si salva) — in ogni caso un <a href="../glossario/#/docs/concetti-programmazione?id=side-effect" target="_blank" rel="noopener">side effect</a>, il momento in cui il dato lascia l'app.
 
 Collegamenti: [[effect]] · [[injection-context]]
 
