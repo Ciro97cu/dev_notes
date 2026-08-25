@@ -45,7 +45,7 @@ L'API web (con same-origin e CORS) è approfondita in [Web, browser e rete](docs
 
 Una funzione pura rispetta due condizioni:
 1. **Stesso input, stesso output**: dato lo stesso argomento restituisce sempre lo stesso risultato.
-2. **Nessun side effect**: non modifica stato esterno e non dipende da stato esterno mutabile.
+2. **Nessun [side effect](docs/concetti-programmazione.md?id=side-effect)**: non modifica stato esterno e non dipende da stato esterno mutabile.
 
 ```js
 // pura: dipende solo dagli argomenti, non tocca nulla fuori
@@ -57,6 +57,61 @@ const aggiungi = (x) => { totale += x; };
 ```
 
 La purezza rende il codice **prevedibile** e facile da testare (nessun contesto da simulare). È un pilastro della programmazione funzionale ed è alla base, ad esempio, dei *reducer* di Redux/NgRx.
+
+## Side effect
+
+Un **side effect** (*effetto collaterale*) è tutto ciò che una funzione fa **oltre** a calcolare e restituire un valore a partire dai suoi argomenti: una qualsiasi interazione **osservabile col mondo fuori** dalla funzione. È il complemento esatto della [funzione pura](docs/concetti-programmazione.md?id=funzione-pura): la funzione pura è una **scatola sigillata** — argomenti dentro, valore fuori, nient'altro — mentre un side effect è un «filo» che esce da quella scatola e tocca qualcosa all'esterno (lo schermo, la console, un file, la rete, un'altra variabile).
+
+Il modo più utile per fissare il concetto è tenere separati i due movimenti. Una funzione ha un side effect se **scrive** verso l'esterno (cambia qualcosa fuori da sé: stampa, disegna, salva, invia, muta una variabile condivisa); ed è comunque impura se **legge** da uno stato esterno che può cambiare (l'ora, un numero casuale, una variabile globale), perché allora con gli stessi argomenti può dare risultati diversi. In sintesi: *toccare* o *dipendere da* qualcosa che sta fuori dalla coppia «argomenti → valore».
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 600 280" role="img" aria-label="Una funzione pura trasforma solo argomenti in valore (frecce orizzontali); ogni collegamento verticale col mondo esterno — console, DOM, canvas, rete, storage, librerie — è un side effect" style="width:100%;max-width:600px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><rect x="240" y="120" width="120" height="48" rx="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.8"/><text x="300" y="149" font-size="13" text-anchor="middle" font-weight="700">funzione</text><path d="M40 144 L232 144" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M240 144 L230 139 L230 149 Z" fill="currentColor"/><text x="120" y="136" font-size="10" text-anchor="middle" opacity=".8">argomenti</text><path d="M360 144 L552 144" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M560 144 L550 139 L550 149 Z" fill="currentColor"/><text x="468" y="136" font-size="10" text-anchor="middle" opacity=".8">valore restituito</text><g stroke="var(--link,#78716c)" stroke-width="1.4" stroke-dasharray="4 3" fill="none"><path d="M262 120 L150 60"/><path d="M300 120 L300 60"/><path d="M338 120 L450 60"/><path d="M262 168 L150 220"/><path d="M300 168 L300 220"/><path d="M338 168 L450 220"/></g><g font-size="10.5" text-anchor="middle"><rect x="106" y="34" width="88" height="26" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="150" y="51">console</text><rect x="272" y="34" width="56" height="26" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="300" y="51">DOM</text><rect x="406" y="34" width="88" height="26" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="450" y="51">canvas</text><rect x="104" y="220" width="92" height="26" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="150" y="237">rete</text><rect x="248" y="220" width="104" height="26" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="300" y="237">localStorage</text><rect x="402" y="220" width="96" height="26" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="450" y="237">libreria</text></g><text x="300" y="264" font-size="9.5" text-anchor="middle" opacity=".6">i collegamenti tratteggiati verso l'esterno = side effect</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Una funzione <strong>pura</strong> vive sulle sole frecce orizzontali: <em>argomenti → valore</em>. Ogni collegamento <strong>verticale</strong> col mondo esterno — scrivere in <code>console</code>, toccare il <code>DOM</code>, disegnare su <code>canvas</code>, la rete, lo storage, una libreria — è un <strong>side effect</strong>.</figcaption>
+</figure>
+
+### I tipi di side effect
+
+Sotto, i side effect che si incontrano più spesso, ciascuno con un esempio. Sono tutti «fili verso l'esterno»: cambia solo *cosa* toccano.
+
+- **Logging / console** — scrivere messaggi diagnostici. `console.log(x)` non cambia il risultato, ma produce output osservabile.
+- **DOM** — leggere o modificare la pagina: `el.textContent = "ciao"`, `document.title = "…"`, `element.addEventListener(...)`. Il caso più comune nel frontend.
+- **Canvas / disegno** — dipingere su una superficie grafica: `ctx.fillRect(0, 0, 100, 100)`.
+- **Rete / I/O** — parlare con l'esterno: `fetch("/api/dati")`, una richiesta HTTP, la lettura di un file.
+- **Storage / persistenza** — salvare fuori dalla memoria volatile: `localStorage.setItem("tema", "scuro")`, un cookie, la scrittura su disco.
+- **Librerie di terze parti** — chiamare codice che a sua volta fa effetti: `toast.success("Salvato")`, `analytics.track("click")`, una mappa o un SDK di pagamento.
+- **Timer / scheduling** — programmare lavoro futuro: `setTimeout(fn, 1000)`, `setInterval(...)`.
+- **Mutare stato esterno o condiviso** — cambiare qualcosa che vive **fuori** dalla funzione: una variabile del modulo, oppure — insidia classica — **mutare l'oggetto ricevuto come argomento** (che è condiviso col chiamante, per via del [riferimento](docs/concetti-programmazione.md?id=referenza-e-puntatore)).
+- **Tempo e casualità** — `Date.now()`, `Math.random()`: qui l'effetto è in *lettura*. La funzione non cambia nulla fuori, ma **dipende** da una sorgente esterna che varia, quindi con gli stessi argomenti restituisce valori diversi (non è più pura).
+
+I due casi più subdoli meritano il codice affiancato, perché sembrano innocui:
+
+```js
+// Mutare l'argomento: sembra "solo calcolare il totale", ma tocca l'oggetto del chiamante
+function aggiungiIva(ordine) {
+  ordine.totale *= 1.22;      // ⚠️ side effect: muta l'oggetto ricevuto (condiviso)
+  return ordine.totale;
+}
+// puro: non tocca l'input, restituisce un valore nuovo
+const conIva = (totale) => totale * 1.22;
+
+// Dipendere dal tempo/random: stesso input, output diverso → impura
+const scontoImpuro = (p) => p * (Math.random() < .5 ? 0.9 : 1);   // imprevedibile
+const sconto = (p, applica) => applica ? p * 0.9 : p;             // il "caso" entra come argomento
+```
+
+### Non eliminarli: isolarli ai bordi
+
+Qui sta il punto che rovescia l'intuizione: **un programma senza side effect non fa nulla di osservabile** — non potrebbe mostrare niente sullo schermo, salvare, o rispondere in rete. Gli effetti non sono il male da estirpare, sono *lo scopo*. La strategia buona non è evitarli ma **isolarli ai bordi**: tenere al centro un **nucleo puro** (la logica, i calcoli — prevedibile e facile da testare) e confinare gli effetti in un **guscio** sottile che parla col mondo.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 540 210" role="img" aria-label="Funzione core / imperative shell: un nucleo puro al centro fa solo calcoli, un guscio esterno esegue i side effect; i dati entrano, gli effetti escono" style="width:100%;max-width:540px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><rect x="92" y="46" width="356" height="120" rx="14" fill="var(--link,#78716c)" fill-opacity=".07" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><text x="270" y="66" font-size="10.5" text-anchor="middle" opacity=".8">guscio: i side effect (DOM · rete · storage · console)</text><rect x="196" y="82" width="148" height="66" rx="10" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.8"/><text x="270" y="112" font-size="12.5" text-anchor="middle" font-weight="700">nucleo puro</text><text x="270" y="130" font-size="9.5" text-anchor="middle" opacity=".7">solo calcoli · testabile</text><path d="M20 106 L84 106" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M92 106 L82 101 L82 111 Z" fill="currentColor"/><text x="52" y="98" font-size="9.5" text-anchor="middle" opacity=".8">dati</text><path d="M456 106 L516 106" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M524 106 L514 101 L514 111 Z" fill="currentColor"/><text x="490" y="98" font-size="9.5" text-anchor="middle" opacity=".8">effetti</text><path d="M150 116 L192 116" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M196 116 L188 112 L188 120 Z" fill="currentColor"/><path d="M348 116 L390 116" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M394 116 L386 112 L386 120 Z" fill="currentColor"/><text x="270" y="180" font-size="9.5" text-anchor="middle" opacity=".6">i dati grezzi entrano · il nucleo calcola · il guscio esegue gli effetti</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il pattern «<em>functional core, imperative shell</em>»: la logica pura al centro, gli effetti spinti sul bordo. È l'idea dietro l'«ultimo miglio» (il punto dove i dati escono verso la UI, la console o lo storage), gli <strong>Effects</strong> di NgRx e l'<code>effect()</code> di Angular, tutti pensati per <em>tenere gli effetti separati</em> dalla logica.</figcaption>
+</figure>
+
+> [!tip]
+> Per riconoscere un side effect, due domande. **In scrittura**: «se cancello questa riga, cambia qualcosa di *osservabile* oltre al valore restituito — uno schermo, un file, la console, un'altra variabile?». **In lettura**: «l'output dipende da qualcosa che può cambiare *fuori* dagli argomenti — l'ora, un random, una variabile globale?». Un «sì» a una delle due significa che c'è un effetto.
+
+Questo tema ritorna in tutto il monorepo: gli [Effects di NgRx](docs/approcci-classici.md) isolano gli effetti async dai reducer puri, l'`effect()` di <a href="../angular/#/concetti/effect" target="_blank" rel="noopener">Angular</a> serve solo per i side effect in reazione ai signal, e il [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) può scartare un modulo inutilizzato **solo se** è privo di side effect all'import.
 
 ## Immutabilità
 

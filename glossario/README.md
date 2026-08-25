@@ -29,7 +29,7 @@ Babel · SWC · NPM · NPX · Yarn · NVM · Tarball (.tgz) · CommonJS · Barre
 Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
 
 **[Concetti di programmazione](docs/concetti-programmazione.md)**
-Costrutto · Interoperabilità · API · Funzione pura · Immutabilità · Big O notation · Ricorsione · Memoria (stack/heap) · Referenza e puntatore · Garbage collection · SOLID · DRY · KISS · YAGNI · Separation of Concerns · Composition over Inheritance · Design pattern (GoF)
+Costrutto · Interoperabilità · API · Funzione pura · Side effect · Immutabilità · Big O notation · Ricorsione · Memoria (stack/heap) · Referenza e puntatore · Garbage collection · SOLID · DRY · KISS · YAGNI · Separation of Concerns · Composition over Inheritance · Design pattern (GoF)
 
 **[Approcci classici e alternativi](docs/approcci-classici.md)**
 Micro frontend con single-spa (Import Map · SystemJS) · NgRx classico (Store, Effects, `dispatch: false`, shallow comparison)

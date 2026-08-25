@@ -254,7 +254,7 @@ Collegamenti: [[resource]] · [[linked-signal]] · [[02-signal-based-components]
 ### Effects
 > pp.72-74
 
-Come un computed, un [[effect]] ri-esegue quando cambia un signal che legge; ma **non ritorna un valore**: esegue un side effect (logging, DOM, canvas, librerie terze).
+Come un computed, un [[effect]] ri-esegue quando cambia un signal che legge; ma **non ritorna un valore**: esegue un <a href="../glossario/#/docs/concetti-programmazione?id=side-effect" target="_blank" rel="noopener">side effect</a> (logging, DOM, canvas, librerie terze).
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-search/flight-search.ts
