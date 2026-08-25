@@ -167,3 +167,29 @@
   });
 })();
 
+// ── Fix scroll "stessa pagina" ──────────────────────────────────────────────
+// Cliccando nella sidebar il link del capitolo GIÀ aperto, l'hash non cambia e
+// il router di docsify resta inerte → non riporta in cima (auto2top scatta solo
+// al cambio pagina). Lo forziamo noi, dopo il giro di docsify. Delega su
+// document (vale anche per i link creati a runtime); esclude la spunta "letto".
+(function () {
+  function pathOf(h) { return String(h || '').replace(/^#/, '').split('?')[0].replace(/\.md$/, '').replace(/\/+$/, ''); }
+  function idOf(h) { var m = String(h || '').match(/[?&]id=([^&]+)/); return m ? m[1] : ''; }
+  document.addEventListener('click', function (e) {
+    var t = e.target;
+    if (!t || !t.closest || t.closest('.dn-check')) return;   // la spunta "letto" non naviga
+    var a = t.closest('.sidebar a[href^="#"]');
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (pathOf(href) !== pathOf(location.hash)) return;        // pagina diversa → ci pensa docsify (auto2top)
+    var tId = idOf(href);
+    if (tId && tId !== idOf(location.hash)) return;            // sotto-sezione diversa → la gestisce docsify
+    var smooth = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    setTimeout(function () {                                   // dopo il giro di docsify
+      var el = tId && document.getElementById(decodeURIComponent(tId));
+      if (el) el.scrollIntoView(smooth ? { behavior: 'smooth', block: 'start' } : true);
+      else window.scrollTo(smooth ? { top: 0, behavior: 'smooth' } : { top: 0 });
+    }, 0);
+  }, false);
+})();
+
