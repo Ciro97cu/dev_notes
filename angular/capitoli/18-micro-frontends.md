@@ -7,7 +7,7 @@ tags: [tipo/capitolo, micro-frontends, architecture, angular-22]
 # 18 · Micro Frontends: Scaling Across Multiple Teams
 > cap.18 · pp.423-443 — *Modern Angular* v3.0.0
 
-I sistemi enterprise sono spesso sviluppati da più team cross-funzionali. Per farli procedere in autonomia, riducendo al minimo il bisogno di coordinarsi, conviene **modularizzare verticalmente** il sistema (tagliarlo per [[glossario#vertical-slicing|aree funzionali]] — es. "prenotazioni", "fatturazione" — invece che per livelli tecnici) in aree a basso accoppiamento che ogni team può gestire da sé. Finora nel libro i verticali erano semplici cartelle (vedi [[08-sustainable-architectures]]); i [[glossario#micro-frontend|**Micro Frontends**]] fanno un passo in più: a ogni verticale dedicano una **applicazione separata**, deployabile in modo indipendente (rilasciabile da sola, senza ridistribuire il resto del sistema).
+I sistemi enterprise sono spesso sviluppati da più team cross-funzionali. Per farli procedere in autonomia, riducendo al minimo il bisogno di coordinarsi, conviene **modularizzare verticalmente** il sistema (tagliarlo per [[glossario#vertical-slicing|aree funzionali]], es. "prenotazioni", "fatturazione", invece che per livelli tecnici) in aree a basso accoppiamento che ogni team può gestire da sé. Finora nel libro i verticali erano semplici cartelle (vedi [[08-sustainable-architectures]]); i [[glossario#micro-frontend|**Micro Frontends**]] fanno un passo in più: a ogni verticale dedicano una **applicazione separata**, deployabile in modo indipendente (rilasciabile da sola, senza ridistribuire il resto del sistema).
 
 Il capitolo spiega cosa sono i Micro Frontends e le loro conseguenze, come implementarli con Angular e [[glossario#native-federation-module-federation|**Native Federation**]], e come affrontare gli scenari **multi-version / multi-framework** (più micro frontend che girano insieme pur usando versioni diverse di Angular, o framework diversi tra loro) tipici degli ambienti corporate.
 
@@ -19,7 +19,7 @@ Il capitolo spiega cosa sono i Micro Frontends e le loro conseguenze, come imple
 
 Come i Microservices, offrono vantaggi sia tecnici sia organizzativi: app più piccole rendono più facili test, performance tuning e isolamento dei guasti in una singola parte del sistema. Ma nei casi reali seguiti dall'autore come consulente, il motivo principale è stato la **team autonomy**: i team non si bloccano a vicenda e possono **deployare indipendentemente** in qualsiasi momento. In progetti multi-team in ambienti corporate, con catene di comunicazione e processi decisionali lunghi, questo aspetto diventa rapidamente vitale per il successo del progetto.
 
-Al di là dell'autonomia, ogni team può prendere le decisioni — di **architettura e di stack** — più adatte ai propri obiettivi. Mischiare più framework client-side nella stessa applicazione è un **anti-pattern** da evitare, ma può abilitare un **percorso di migrazione** verso un nuovo stack: nelle aziende le soluzioni software sopravvivono allo stack tecnologico medio. Le build separate, inoltre, hanno un ottimo potenziale per gli **incremental builds** (si ri-builda solo ciò che è cambiato; es. il build system **Nx**); curiosamente questa ottimizzazione si può sfruttare anche **senza** allineare i team a singole app o adottare deploy separati — e c'è dibattito se ciò porti già "automaticamente" a un'architettura micro frontend. Infine, un sistema fatto di tante app più piccole porta anche vantaggi organizzativi: è più facile fare l'onboarding di nuovi membri e scalare aggiungendo micro frontend, e la team autonomy porta a cicli di rilascio più rapidi.
+Al di là dell'autonomia, ogni team può prendere le decisioni (di **architettura e di stack**) più adatte ai propri obiettivi. Mischiare più framework client-side nella stessa applicazione è un **anti-pattern** da evitare, ma può abilitare un **percorso di migrazione** verso un nuovo stack: nelle aziende le soluzioni software sopravvivono allo stack tecnologico medio. Le build separate, inoltre, hanno un ottimo potenziale per gli **incremental builds** (si ri-builda solo ciò che è cambiato; es. il build system **Nx**); curiosamente questa ottimizzazione si può sfruttare anche **senza** allineare i team a singole app o adottare deploy separati — e c'è dibattito se ciò porti già "automaticamente" a un'architettura micro frontend. Infine, un sistema fatto di tante app più piccole porta anche vantaggi organizzativi: è più facile fare l'onboarding di nuovi membri e scalare aggiungendo micro frontend, e la team autonomy porta a cicli di rilascio più rapidi.
 
 ### Challenges to Keep in Mind
 > pp.424-425
@@ -177,7 +177,7 @@ export const routes: Routes = [
 ### Exposing a Router Config
 > pp.433-435
 
-Esporre un singolo componente è un po' troppo a grana fine. Spesso si vuole esporre un'**intera feature** fatta di più componenti. Si può esporre qualsiasi costrutto TypeScript/ECMAScript: per feature grossolane, un `NgModule` con subroute oppure — con gli Standalone Components — direttamente una **routing config**. Nel demo, `miles` usa quest'ultimo approccio:
+Esporre un singolo componente è un po' troppo a grana fine. Spesso si vuole esporre un'**intera feature** fatta di più componenti. Si può esporre qualsiasi costrutto TypeScript/ECMAScript: per feature grossolane, un `NgModule` con subroute oppure (con gli Standalone Components) direttamente una **routing config**. Nel demo, `miles` usa quest'ultimo approccio:
 
 ```ts
 // projects/miles/src/app/app.routes.ts
@@ -247,7 +247,7 @@ Si può abilitare via **librerie condivise**, ma **con cautela**: i micro fronte
 
 Serve prima una shared library: un npm package sviluppato a parte oppure una libreria interna al progetto Angular (generabile con `ng g lib util-auth` — vedi [[14-monorepos-libraries]]). Nel demo, `util-auth` espone un service stateful — cioè un servizio che conserva uno stato, qui lo username corrente. Internamente usa un RxJS `BehaviorSubject` (un contenitore osservabile che tiene l'ultimo valore e lo "trasmette" a chi è in ascolto) per un meccanismo publish/subscribe: uno pubblica i cambi, gli altri si iscrivono e vengono notificati. Così le parti interessate restano aggiornate sui cambi di valore:
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Il decoratore @Service()
 > `@Service()` (senza argomenti) è il nuovo equivalente del vecchio `@Injectable({ providedIn: 'root' })`: dichiara un service iniettabile e registrato nello scope root. Qui la fonte usa proprio `@Service()`. Dettagli in [[service]].
 
 ```ts

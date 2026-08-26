@@ -24,7 +24,7 @@ I cookie sembrano antiquati a prima vista, ma grazie ai **security attribute** i
 
 - **`HttpOnly`** — il cookie **non è leggibile da JavaScript**: codice malevolo non può rubarlo direttamente.
 - **`Secure`** — il cookie viaggia **solo su HTTPS**.
-- **`SameSite`** — limita l'invio del cookie nelle richieste **cross-origin** (cioè verso un'origin — schema+host+porta — diversa da quella della pagina; approfondimento nel glossario): se un sito compromesso carica la tua pagina in un iframe o le invia un form, il browser non allega i cookie al server.
+- **`SameSite`** — limita l'invio del cookie nelle richieste **cross-origin** (cioè verso un'origin, ossia schema+host+porta, diversa da quella della pagina; approfondimento nel glossario): se un sito compromesso carica la tua pagina in un iframe o le invia un form, il browser non allega i cookie al server.
 
 Dal punto di vista del client il flusso è semplice:
 
@@ -108,7 +108,7 @@ Spesso bisogna integrare identity solution esistenti (sistemi di gestione delle 
 
 La prima versione di OAuth nasce nel 2006 (Twitter e Ma.gnolia) con l'obiettivo di permettere a un utente di **delegare parte dei propri diritti a un client senza condividere la password**: così, per esempio, un'app può ottenere il diritto di chiamare servizi per conto dell'utente. OAuth e il suo successore **OAuth 2** sono oggi usati da Google, Facebook, Flickr, Microsoft, Salesforce.com e Yahoo!, sempre più non solo per la delega di diritti (**authorization**) ma anche per il single sign-on (**authentication**) — per esempio loggarsi su altri servizi con il proprio account Google.
 
-Vista d'insieme: il client **reindirizza** l'utente a un **Authorization Server** per il login. Quest'ultimo ha accesso agli account utente centrali; una volta autenticato l'utente, il client riceve un **access token** che gli dà accesso ai servizi del backend — i **Resource Server** — per conto dell'utente. L'access token comunica al resource server, fra le altre cose, l'utente e i diritti esercitabili in suo nome; di solito porta anche metadati come issuer, data di emissione e periodo di validità.
+Vista d'insieme: il client **reindirizza** l'utente a un **Authorization Server** per il login. Quest'ultimo ha accesso agli account utente centrali; una volta autenticato l'utente, il client riceve un **access token** che gli dà accesso ai servizi del backend (i **Resource Server**) per conto dell'utente. L'access token comunica al resource server, fra le altre cose, l'utente e i diritti esercitabili in suo nome; di solito porta anche metadati come issuer, data di emissione e periodo di validità.
 
 Vantaggi:
 
@@ -175,7 +175,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9 . eyJuYmYiOjEz[...]BlbmlkIn0 . Nt5pBRqGvDFn
 
 > pp.406-407
 
-I **flow** sono le sequenze di messaggi da scambiare perché il client ottenga l'access o l'ID token. Per le SPA era stato originariamente definito l'**Implicit Flow** — corrisponde alla vista d'insieme descritta sopra — ma oggi si raccomanda l'**Authorization Code Flow** combinato con **[[glossario#pkce|PKCE]]** (_Proof Key for Code Exchange_); l'Implicit Flow è addirittura **deprecato** (sconsigliato e destinato a sparire) con OAuth 2.1.
+I **flow** sono le sequenze di messaggi da scambiare perché il client ottenga l'access o l'ID token. Per le SPA era stato originariamente definito l'**Implicit Flow** (corrisponde alla vista d'insieme descritta sopra), ma oggi si raccomanda l'**Authorization Code Flow** combinato con **[[glossario#pkce|PKCE]]** (_Proof Key for Code Exchange_); l'Implicit Flow è addirittura **deprecato** (sconsigliato e destinato a sparire) con OAuth 2.1.
 
 ```mermaid
 sequenceDiagram

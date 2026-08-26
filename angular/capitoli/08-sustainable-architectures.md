@@ -240,7 +240,7 @@ export const config: SheriffConfig = {
 };
 ```
 
-I **tag** si riferiscono ai **nomi di cartella** (`<domain>`/`<name>` sono placeholder): una cartella sotto `src/app/domains/booking` che inizia per `feature-` riceve i tag `domain:booking` e `type:feature`. La regola `domain:*` consente di dipendere da `sameTag` (lo stesso dominio) e da `domain:shared`, mentre le altre impongono che ogni layer veda solo i layer sottostanti. Infine `root: '*'` fa sì che le cartelle non categorizzate nella root — es. la **shell** dell'app, cioè l'involucro che monta e collega i moduli — accedano a tutto, con una regola analoga per `testing`.
+I **tag** si riferiscono ai **nomi di cartella** (`<domain>`/`<name>` sono placeholder): una cartella sotto `src/app/domains/booking` che inizia per `feature-` riceve i tag `domain:booking` e `type:feature`. La regola `domain:*` consente di dipendere da `sameTag` (lo stesso dominio) e da `domain:shared`, mentre le altre impongono che ogni layer veda solo i layer sottostanti. Infine `root: '*'` fa sì che le cartelle non categorizzate nella root (es. la **shell** dell'app, cioè l'involucro che monta e collega i moduli) accedano a tutto, con una regola analoga per `testing`.
 
 > [!warning]
 > Se la cartella di un modulo contiene un `index.ts`, Sheriff lo considera la **public API** e bypassarlo è un errore di lint. Con `enableBarrelLess: true` i barrel **non** sono richiesti: senza `index.ts`, i file in `internal` sono privati e tutto il resto è accessibile dall'esterno.
@@ -313,7 +313,7 @@ graph LR
 - I [[signal]] fanno **scendere** il nuovo stato ai consumer (component/template), dove può essere proiettato in **View Model** specifici per la feature (es. flights with passengers vs passengers with flights).
 
 > [!tip]
-> La proiezione può stare **nello store** (proiezioni generali usate da più feature) o **nel component** (proiezioni molto specifiche, es. colore di sfondo di un flight in base allo stato). Il punto chiave: per ogni evento esiste un percorso ben definito — **su, a destra, giù** — quindi è facile ragionare sull'impatto delle modifiche.
+> La proiezione può stare **nello store** (proiezioni generali usate da più feature) o **nel component** (proiezioni molto specifiche, es. colore di sfondo di un flight in base allo stato). Il punto chiave: per ogni evento esiste un percorso ben definito (**su, a destra, giù**), quindi è facile ragionare sull'impatto delle modifiche.
 
 ### Where to Put a Lightweight Store?
 > pp.238-239
@@ -342,7 +342,7 @@ Questo lo rende disponibile anche ai figli e garantisce **un'istanza per istanza
 > [!tip]
 > Se l'isolamento non serve, si fornisce lo store a **root** con `{ providedIn: 'root' }`: il team Angular lo raccomanda per la grande maggioranza dei service.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · @Injectable letto come @Service()
 > Nel resto del vault `@Injectable({ providedIn: 'root' })` si legge come [[service|@Service()]]: da Angular 22 il decoratore `@Service()` (auto-provided a root di default) è la forma idiomatica per i service. Il libro qui usa ancora `{ providedIn: 'root' }`; il comportamento è lo stesso.
 
 ### Granularity of a Store
@@ -423,7 +423,7 @@ Il **barrel** (`index.ts`) ri-esporta la public API, ma è noioso da mantenere e
 <details>
 <summary>Cos'è il flusso dati unidirezionale e perché rende il sistema più facile da ragionare?</summary>
 
-I dati scorrono in **una sola direzione**: un evento manda una **intention** allo store (chiamando un metodo), lo store **processa** e **aggiorna lo stato**, i signal fanno **scendere** il nuovo stato ai component (eventualmente proiettato in view model). Per ogni evento c'è un percorso ben definito — **su, a destra, giù** — che evita le cascate di cambiamenti reattivi e rende prevedibile l'impatto delle modifiche.
+I dati scorrono in **una sola direzione**: un evento manda una **intention** allo store (chiamando un metodo), lo store **processa** e **aggiorna lo stato**, i signal fanno **scendere** il nuovo stato ai component (eventualmente proiettato in view model). Per ogni evento c'è un percorso ben definito (**su, a destra, giù**) che evita le cascate di cambiamenti reattivi e rende prevedibile l'impatto delle modifiche.
 
 </details>
 

@@ -241,7 +241,7 @@ export class BrowserLanguageService implements LanguageService {
 }
 ```
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · @Service({ autoProvided: false })
 > `@Service({ autoProvided: false })` rende la classe iniettabile **ma non la registra nel root injector**: la fornisci tu via [[providers]]. È l'equivalente del vecchio `@Injectable()` (senza `providedIn`): la classe era eleggibile per l'injection ma andava provvista a mano. Perfetto per le implementazioni scambiabili dietro un base type.
 
 > [!warning]
@@ -350,7 +350,7 @@ export const appConfig: ApplicationConfig = {
 
 ➕ *(Fuori dal libro Modern Angular — DI standard di Angular, aggiunta qui perché completa il caso `useValue`/`API_URL` visto sopra.)*
 
-Un token può essere una classe (come `LanguageService`), ma per i **valori non-classe** — stringhe, numeri, oggetti di configurazione, funzioni — non esiste una classe da usare come identificatore. Serve un `InjectionToken<T>`, un token tipizzato creato a mano:
+Un token può essere una classe (come `LanguageService`), ma per i **valori non-classe** (stringhe, numeri, oggetti di configurazione, funzioni) non esiste una classe da usare come identificatore. Serve un `InjectionToken<T>`, un token tipizzato creato a mano:
 
 ```ts
 // src/app/domains/shared/util-common/tokens.ts
@@ -381,7 +381,7 @@ export const API_URL = new InjectionToken<string>('API_URL', {
 ```
 
 > [!tip]
-> **Tree-shaking.** Un service con `@Service()` — o un token con `providedIn` + `factory` — si registra **da sé**: se nessuno lo inietta, il bundler può eliminarlo dal bundle finale. Un provider elencato a mano in un array `providers` **non** è tree-shakable, perché il bundler non può sapere se è davvero usato. Per questo la registrazione self-service è la forma preferita.
+> **Tree-shaking.** Un service con `@Service()` (o un token con `providedIn` + `factory`) si registra **da sé**: se nessuno lo inietta, il bundler può eliminarlo dal bundle finale. Un provider elencato a mano in un array `providers` **non** è tree-shakable, perché il bundler non può sapere se è davvero usato. Per questo la registrazione self-service è la forma preferita.
 
 Collegamenti: [[providers]] · [[inject]].
 
@@ -491,7 +491,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Auto Cleanup degli Environment Provider
 > L'**Auto Cleanup** per gli Environment Provider è disponibile da Angular 21.1, attivabile con `withExperimentalAutoCleanupInjectors()`.
 
 > [!warning]
@@ -598,7 +598,7 @@ Collegamenti: [[inject]] · [[service]].
 
 Le web app classiche erano **stateless**: ogni richiesta al server era indipendente dalle precedenti. Le SPA moderne no — mantengono stato lato client (voli selezionati, criteri di filtro, dati già caricati dal backend) per offrire una UX migliore. Ma navigando via da una rotta Angular **distrugge il componente** corrispondente (idem quando un `@if` diventa `false`): lo stato tenuto nel componente **va perso** e al ritorno se ne crea uno nuovo.
 
-Per farlo **sopravvivere** lo si mette in un service nello scope **root**, che non viene distrutto per tutta la vita dell'app. I service che gestiscono stato — root o altro scope — si chiamano **store**: garantiscono che lo stato cambi solo in modo **controllato** e alleggeriscono i componenti da questa responsabilità, rendendoli più mantenibili.
+Per farlo **sopravvivere** lo si mette in un service nello scope **root**, che non viene distrutto per tutta la vita dell'app. I service che gestiscono stato (root o altro scope) si chiamano **store**: garantiscono che lo stato cambi solo in modo **controllato** e alleggeriscono i componenti da questa responsabilità, rendendoli più mantenibili.
 
 Collegamenti: [[lightweight-store]] · [[08-sustainable-architectures]].
 
@@ -828,7 +828,7 @@ Collegamenti: [[linked-signal]] · [[06-signal-forms]].
 ### Lifetime & Scopes
 > pp.143-144
 
-Il **lifetime** dello store dipende dallo scope in cui lo si registra. Nello scope **root** (`@Service()` / `providedIn: 'root'`) lo stato vive quanto l'app: tornando su una rotta si riprende da dove si era, ma c'è il rischio di stato **obsoleto** che resta più del dovuto, quindi serve un cleanup manuale (es. un metodo `reset`). A livello **component-level** ogni istanza del componente ha il suo store — utile per componenti riusabili complessi, come un calendario con viste daily/weekly/monthly che condividono le date — e, distrutto il componente, lo stato si pulisce **automaticamente**. Con lo scope **route-local** (Environment Provider) lo store è condiviso da componente di rotta e child route, cioè copre lo stato di una feature multi-route, e con l'**Auto Cleanup** viene distrutto navigando via, senza stato residuo.
+Il **lifetime** dello store dipende dallo scope in cui lo si registra. Nello scope **root** (`@Service()` / `providedIn: 'root'`) lo stato vive quanto l'app: tornando su una rotta si riprende da dove si era, ma c'è il rischio di stato **obsoleto** che resta più del dovuto, quindi serve un cleanup manuale (es. un metodo `reset`). A livello **component-level** ogni istanza del componente ha il suo store (utile per componenti riusabili complessi, come un calendario con viste daily/weekly/monthly che condividono le date) e, distrutto il componente, lo stato si pulisce **automaticamente**. Con lo scope **route-local** (Environment Provider) lo store è condiviso da componente di rotta e child route, cioè copre lo stato di una feature multi-route, e con l'**Auto Cleanup** viene distrutto navigando via, senza stato residuo.
 
 Collegamenti: [[lightweight-store]] · [[providers]].
 

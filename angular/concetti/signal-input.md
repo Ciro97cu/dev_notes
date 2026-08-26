@@ -5,7 +5,7 @@ aliases: [input, InputSignal, signal input]
 ---
 # input() — InputSignal
 
-Con **`input()`** si dichiara un **input di componente** — cioè un dato che arriva dal componente padre — sotto forma di **signal di sola lettura**. Prende il posto del vecchio decoratore `@Input()`: il valore si legge come un signal (`this.flight()`), è reattivo e si può quindi usare dentro [[computed]], [[effect]] e nel template.
+Con **`input()`** si dichiara un **input di componente** (cioè un dato che arriva dal componente padre) sotto forma di **signal di sola lettura**. Prende il posto del vecchio decoratore `@Input()`: il valore si legge come un signal (`this.flight()`), è reattivo e si può quindi usare dentro [[computed]], [[effect]] e nel template.
 
 ```ts
 flight = input<Flight>();                 // InputSignal<Flight | undefined>

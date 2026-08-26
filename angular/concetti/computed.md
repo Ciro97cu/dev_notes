@@ -14,7 +14,7 @@ const total = computed(() => price() * qty()); // 200, ricalcolato on-demand
 ```
 
 > [!tip]
-> Le dipendenze sono **auto-tracciate** ([[reactive-context]]): Angular registra solo i signal effettivamente letti durante l'esecuzione. Un ramo non percorso — per esempio dentro un `if` che risulta falso — non crea alcuna dipendenza.
+> Le dipendenze sono **auto-tracciate** ([[reactive-context]]): Angular registra solo i signal effettivamente letti durante l'esecuzione. Un ramo non percorso (per esempio dentro un `if` che risulta falso) non crea alcuna dipendenza.
 
 > [!warning]
 > La funzione di un `computed` deve essere **pura**: nessun side-effect e nessun `.set()` su altri signal. Quando serve produrre un effetto collaterale si usa invece un [[effect]].

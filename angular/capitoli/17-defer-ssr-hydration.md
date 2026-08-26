@@ -209,7 +209,7 @@ export class ClientLanguageDetector implements LanguageDetector {
 
 Entrambe le implementazioni sono decorate con `@Service({ autoProvided: false })`: sono **iniettabili ma non registrate** globalmente (Angular sa costruirle, ma non le rende disponibili ovunque da solo: le fornisci tu dove servono). È la configurazione applicativa platform-specific (diversa a seconda dell'ambiente, server o browser) a decidere quale usare. L'implementazione server si registra in `app.config.server.ts` (eseguito solo lato server); quella client in `app.config.ts`.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · @Service({ autoProvided: false })
 > `@Service({ autoProvided: false })` dichiara un service iniettabile ma **non** auto-registrato nello scope root: lo fornisci tu dove serve. Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
 
 ```ts

@@ -6,7 +6,7 @@ livello: [mid, senior]
 # RxJS
 > Cert Angular · trattato solo di sfuggita nel *Modern Angular* (il vault ragiona in signals)
 
-**RxJS** (Reactive Extensions for JavaScript) è la libreria di programmazione reattiva su cui Angular ha storicamente fondato l'asincronia: `HttpClient`, `Router`, `EventEmitter`, `valueChanges` delle reactive forms ([[forms-reactive]]) espongono tutti `Observable`. L'esame la considera core knowledge Senior: l'`Observable` come stream, i `Subject` per il multicasting, gli operator pipeable e — soprattutto — i pattern corretti di **unsubscribe**.
+**RxJS** (Reactive Extensions for JavaScript) è la libreria di programmazione reattiva su cui Angular ha storicamente fondato l'asincronia: `HttpClient`, `Router`, `EventEmitter`, `valueChanges` delle reactive forms ([[forms-reactive]]) espongono tutti `Observable`. L'esame la considera core knowledge Senior: l'`Observable` come stream, i `Subject` per il multicasting, gli operator pipeable e, soprattutto, i pattern corretti di **unsubscribe**.
 
 ## `Observable`, `Observer`, `Subscription`
 Un **`Observable`** è uno stream **pigro (lazy)** e **freddo (cold)**: il codice produttore non parte finché qualcuno non si iscrive, e ogni sottoscrizione avvia un'esecuzione **indipendente**. Un `Observer` è l'insieme dei tre callback di consumo; `subscribe` ritorna una `Subscription` che serve a fermare lo stream.
@@ -32,7 +32,7 @@ sub.unsubscribe(); // ferma lo stream ed esegue il teardown
 Un `Observable` emette zero o più valori con `next`, e termina con **`complete`** (successo) **o** `error` — mai entrambi; dopo la terminazione non emette più nulla. `next`/`error`/`complete` sono i tre metodi dell'`Observer`.
 
 ## Creazione
-Nella pratica un `Observable` si costruisce di rado a mano con `new`: la libreria offre una serie di **funzioni factory** che coprono i casi ricorrenti — partire da valori noti, da un array o una Promise, da eventi del DOM, oppure dal tempo — restituendo lo stream già pronto all'uso.
+Nella pratica un `Observable` si costruisce di rado a mano con `new`: la libreria offre una serie di **funzioni factory** che coprono i casi ricorrenti (partire da valori noti, da un array o una Promise, da eventi del DOM, oppure dal tempo) restituendo lo stream già pronto all'uso.
 
 ```ts
 import { of, from, fromEvent, interval, timer } from 'rxjs';

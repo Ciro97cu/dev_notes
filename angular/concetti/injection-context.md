@@ -18,6 +18,6 @@ ngOnInit() {
 ```
 
 > [!warning]
-> Chiamare `inject()` fuori contesto — per esempio in un callback asincrono o in un metodo di lifecycle — lancia un errore. Se l'`Injector` serve più tardi, lo si cattura prima con `inject(Injector)` e lo si riusa quando occorre.
+> Chiamare `inject()` fuori contesto (per esempio in un callback asincrono o in un metodo di lifecycle) lancia un errore. Se l'`Injector` serve più tardi, lo si cattura prima con `inject(Injector)` e lo si riusa quando occorre.
 
 **Usato in:** [[05-state-management-services-signals]]

@@ -111,7 +111,7 @@ bootstrapApplication(AppComponent, {
 Il `middleware` opzionale qui logga ogni richiesta al server nella console del browser: utile per capire come funziona il sistema e per il troubleshooting.
 
 > [!tip]
-> La API key sta **solo nel backend**. Il frontend parla con un proxy che fa da intermediario verso l'LLM e che applica guardrail server-side (paletti di sicurezza imposti dal server — scelta del modello, system instruction — che il client non può aggirare): è lì che si controllano costi e ambito.
+> La API key sta **solo nel backend**. Il frontend parla con un proxy che fa da intermediario verso l'LLM e che applica guardrail server-side (paletti di sicurezza imposti dal server, ad es. scelta del modello e system instruction, che il client non può aggirare): è lì che si controllano costi e ambito.
 
 ### Using the chatResource
 > pp.349-350

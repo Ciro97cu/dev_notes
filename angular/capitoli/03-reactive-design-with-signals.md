@@ -9,7 +9,7 @@ tags: [tipo/capitolo, signals, reactivity, http, angular-22]
 
 Finora i [[signal]] servivano solo a dire ad Angular *quando* aggiornare i binding del template. Qui si fa il salto: si usano i signal per un design **reattivo e dichiarativo**. Invece di descrivere *come* aggiornare i valori dipendenti, si descrive *da cosa* sono derivati; il framework tiene tutto in sync. Ne risulta un codice più mantenibile e meno soggetto a errori. L'analogia è il foglio di calcolo: si definiscono formule che derivano valori da altre celle, e quando cambia la sorgente le celle dipendenti si aggiornano da sole.
 
-I mattoni sono tre — **computed signals**, **resources**, **effects** — più la semantica sottostante (auto-tracking, untracking, [[glossario#glitch-free|glitch-free]]). Si chiude assemblando il tutto in un **reactive flow** (flusso reattivo: i valori si propagano da soli lungo le dipendenze) sulla `flight-search` del [[02-signal-based-components|cap.2]].
+I mattoni sono tre (**computed signals**, **resources**, **effects**), più la semantica sottostante (auto-tracking, untracking, [[glossario#glitch-free|glitch-free]]). Si chiude assemblando il tutto in un **reactive flow** (flusso reattivo: i valori si propagano da soli lungo le dipendenze) sulla `flight-search` del [[02-signal-based-components|cap.2]].
 
 ## Building Blocks of Reactive Design
 > pp.61-74
@@ -43,7 +43,7 @@ export class FlightSearch {
 
 Quando l'utente cambia i criteri di ricerca via form, `filter` cambia, `flightRoute` si ricalcola e Angular aggiorna la rotta mostrata.
 
-I computed sono **lazy**: ricalcolano solo quando qualcuno li legge — dal template o tramite il getter nel codice, cioè quando il valore serve davvero — non a ogni cambio della dipendenza. Quando un mattone osserva un signal per i suoi cambiamenti, si dice che lo **traccia** (track). A volte, però, conviene leggere un signal dentro un `computed` *senza* tracciarlo: per questo Angular offre [[untracked]].
+I computed sono **lazy**: ricalcolano solo quando qualcuno li legge (dal template o tramite il getter nel codice, cioè quando il valore serve davvero), non a ogni cambio della dipendenza. Quando un mattone osserva un signal per i suoi cambiamenti, si dice che lo **traccia** (track). A volte, però, conviene leggere un signal dentro un `computed` *senza* tracciarlo: per questo Angular offre [[untracked]].
 
 ```ts
 protected readonly from = computed(() => this.filter().from);
@@ -69,7 +69,7 @@ Collegamenti: [[computed]] · [[untracked]] · [[signal]]
 
 I computed derivano valori **sincroni** (disponibili subito); per i dati **asincroni** (che arrivano più tardi, es. fetch dal backend) servono le [[resource]]. Tutte usano signal sia per la richiesta sia per il risultato: in pratica prendono signal in ingresso (i criteri di ricerca) e, in modo asincrono, ne producono altri in uscita (i dati caricati). Angular ne offre tre implementazioni: `httpResource`, `rxResource` e `resource` (Promise-based).
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · resource: API stabile
 > Tutte e tre le resource hanno **lasciato lo stato experimental con Angular 22** e fanno ora parte della Signal API stabile.
 
 #### httpResource
@@ -179,7 +179,7 @@ Quando l'`AbortSignal` emette l'evento `abort`, `takeUntil(aborted)` completa l'
 > In un'app reale `findPromise` non lo si scriverebbe: si terrebbe l'Observable che già si ha e si userebbe `rxResource`. Esiste solo a scopo dimostrativo.
 
 #### Composing Resources via Snapshots
-> [!info] Angular 21.2+
+> [!info] Angular 21.2+ · snapshot() e resourceFromSnapshots
 > Coi computed derivare un valore è facile: si leggono altri signal dentro un `computed` e si ottiene un nuovo signal. Con le **resource**, invece, prima non era possibile: si potevano proiettare solo singole proprietà (`value`/`error`/`isLoading`), non lo stato intero. Da **Angular 21.2** ogni resource espone il signal **`snapshot()`**, che racchiude `status` + `value` in un singolo oggetto signal-aware. Lo si legge con un [[linked-signal]], lo si trasforma e se ne ottiene uno snapshot derivato; **`resourceFromSnapshots`** lo ri-converte in resource. La resource di partenza mantiene la sua logica di load; quella derivata ci applica sopra solo una trasformazione.
 
 ```ts
@@ -213,7 +213,7 @@ export function withMinWeight(
 
 Se cambia la resource sorgente o il signal `minWeight`, la `computation` si ri-esegue e la resource derivata resta coerente con i suoi input.
 
-Caso d'uso tipico (`withPreviousValue`, helper di esempio del team Angular): **tenere visibile l'ultimo valore caricato durante un reload**, invece di mostrare `undefined` in mezzo. Si legge il `previous` nella `computation` — l'ultimo snapshot prodotto dalla resource derivata — e, quando la sorgente passa in `loading`, si ricopia il valore già `resolved`. Il ramo `error` fa lo stesso: invece di propagare l'errore, riscrive lo snapshot a `resolved` mantenendo l'ultimo valore buono (in un'app reale l'errore verrebbe segnalato a un service che mostra una notifica).
+Caso d'uso tipico (`withPreviousValue`, helper di esempio del team Angular): **tenere visibile l'ultimo valore caricato durante un reload**, invece di mostrare `undefined` in mezzo. Si legge il `previous` nella `computation` (l'ultimo snapshot prodotto dalla resource derivata) e, quando la sorgente passa in `loading`, si ricopia il valore già `resolved`. Il ramo `error` fa lo stesso: invece di propagare l'errore, riscrive lo snapshot a `resolved` mantenendo l'ultimo valore buono (in un'app reale l'errore verrebbe segnalato a un service che mostra una notifica).
 
 ```ts
 // src/app/domains/shared/util-common/with-previous-value.ts
@@ -246,7 +246,7 @@ export function withPreviousValue<T>(input: Resource<T>): Resource<T> {
 }
 ```
 
-> [!info] Angular 21.2+
+> [!info] Angular 21.2+ · Comporre resource con gli snapshot
 > Prima di Angular 21.2 questo tipo di composizione richiedeva codice di raccordo scritto a mano (plumbing custom: l'idraulica che collega i pezzi) in ogni componente, oppure spostare la logica in un costrutto di livello più alto come la NgRx SignalStore ([[09-ngrx-signal-store]]). Con le API snapshot, le trasformazioni si impacchettano in piccoli helper riutilizzabili.
 
 Collegamenti: [[resource]] · [[linked-signal]] · [[02-signal-based-components]] (intro a `httpResource`)
@@ -333,8 +333,8 @@ export class FlightCard {
 Leggere un input direttamente nel costruttore darebbe errore: il costruttore gira all'istanziazione del componente, e solo dopo Angular fa il primo data binding.
 
 ### Debouncing Signals via `debounced`
-> [!info] Angular 22+
-> A differenza degli Observable, i signal non hanno nozione di tempo (niente `debounceTime`/`throttle`). Le resource sì, e **Angular 22** introduce un helper che fa da ponte: **`debounced(sig, 300)`** prende un signal e ritorna una **resource** il cui valore insegue il signal con un ritardo configurabile; `status()` è `'loading'` mentre un nuovo valore è ancora in attesa nella finestra di [[glossario#debounce-debouncing|debounce]] (la pausa che si aspetta prima di reagire: se arrivano nuovi cambiamenti, il timer riparte; utile per un indicatore discreto).
+> [!info] Angular 22+ · Debounce dei signal
+> **`debounced(sig, ms)`** dà ai signal una nozione di **tempo** che di per sé non hanno: a differenza degli Observable, non offrono operatori come `debounceTime`/`throttle`. L'helper (**Angular 22**) prende un signal e ritorna un `Resource<T>` il cui valore insegue quello del signal con un ritardo configurabile; `status()` è `'loading'` mentre un nuovo valore è ancora in attesa nella finestra di [[glossario#debounce-debouncing|debounce]] (la pausa che si aspetta prima di reagire: se arrivano nuovi cambiamenti, il timer riparte, comodo per un indicatore discreto).
 > ```ts
 > import { debounced, effect, signal } from '@angular/core';
 >
@@ -342,7 +342,7 @@ Leggere un input direttamente nel costruttore darebbe errore: il costruttore gir
 > const debouncedFilter = debounced(filter, 300); // 300ms
 > effect(() => console.log(debouncedFilter.value()));
 > ```
-> Mentre `filter` si aggiorna a ogni cambiamento, `debouncedFilter.value()` lo raggiunge solo dopo che l'input è rimasto stabile per 300 ms. Per il caso più comune — debounce dell'input di un form prima di una search/validazione — Signal Forms offre l'helper dedicato `debounce()` (da `@angular/forms/signals`, per-campo, sullo schema): lo si incontra in [[05-state-management-services-signals|cap.5]] (Linked Signals with a Setter) e in dettaglio in [[06-signal-forms|cap.6]].
+> Mentre `filter` si aggiorna a ogni cambiamento, `debouncedFilter.value()` lo raggiunge solo dopo che l'input è rimasto stabile per 300 ms. Per il caso più comune (debounce dell'input di un form prima di una search/validazione) Signal Forms offre l'helper dedicato `debounce()` (da `@angular/forms/signals`, per-campo, sullo schema): lo si incontra in [[05-state-management-services-signals|cap.5]] (Linked Signals with a Setter) e in dettaglio in [[06-signal-forms|cap.6]].
 
 Collegamenti: [[debounced]].
 
@@ -464,7 +464,7 @@ L'istanza risultante è nuova, quindi Angular rileva il cambio e aggiorna signal
 > [!warning]
 > Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento → `===` dà `true` → Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.
 
-Si può passare una **equality function** custom (secondo parametro di `signal`), ma serve raramente — soprattutto in application code — e di solito confonde più che aiutare.
+Si può passare una **equality function** custom (secondo parametro di `signal`), ma serve raramente (soprattutto in application code) e di solito confonde più che aiutare.
 
 Collegamenti: [[reactive-context]] · [[untracked]] · [[equality-immutability]] · [[linked-signal]] (per stato che dipende da una sorgente ma resta scrivibile)
 

@@ -162,8 +162,8 @@ disabled(path.delay, {
 });
 ```
 
-> [!info] Angular 22+
-> Fino ad Angular 21 la condizione era il **secondo argomento posizionale** — `disabled(path.delay, (ctx) => ...)`. Da Angular 22 si usa la **proprietà `when`** in un oggetto opzioni: forma più coerente fra `disabled`, `readonly` e `hidden`, e — per `disabled` — rende più scopribile la variante stringa-come-reason.
+> [!info] Angular 22+ · La proprietà when (disabled/readonly/hidden)
+> Fino ad Angular 21 la condizione era il **secondo argomento posizionale** — `disabled(path.delay, (ctx) => ...)`. Da Angular 22 si usa la **proprietà `when`** in un oggetto opzioni: forma più coerente fra `disabled`, `readonly` e `hidden`, e (per `disabled`) rende più scopribile la variante stringa-come-reason.
 
 Le "reason" raccolte dalle lambda finiscono nel signal `disabledReasons()` del campo:
 
@@ -265,7 +265,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-La costante `NG_STATUS_CLASSES` (dal namespace `@angular/forms/signals/compat`) porta lo stesso set di classi delle form classiche — `ng-valid`, `ng-invalid`, `ng-dirty`, `ng-pristine`, `ng-pending` — così i fogli di stile esistenti continuano a funzionare. In alternativa la mappa si scrive a mano: ogni classe è un predicato su `field.state()`.
+La costante `NG_STATUS_CLASSES` (dal namespace `@angular/forms/signals/compat`) porta lo stesso set di classi delle form classiche (`ng-valid`, `ng-invalid`, `ng-dirty`, `ng-pristine`, `ng-pending`), così i fogli di stile esistenti continuano a funzionare. In alternativa la mappa si scrive a mano: ogni classe è un predicato su `field.state()`.
 
 ```ts
 provideSignalFormsConfig({

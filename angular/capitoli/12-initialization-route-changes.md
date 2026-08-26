@@ -43,7 +43,7 @@ export const appConfig: ApplicationConfig = {
 
 L'initializer gira in un [[injection-context]], quindi può usare [[inject]] direttamente invece della constructor injection. La logica asincrona vera vive nel servizio, che espone i valori caricati:
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Il decoratore @Service()
 > Da Angular 22 un service si annota con `@Service()` (in Listing 12-2 importato da `@angular/core`), che corrisponde al vecchio `@Injectable({ providedIn: 'root' })`. Dettagli in [[service]].
 
 ```ts
@@ -114,7 +114,7 @@ Collegamenti: [[inject]] · [[providers]] · [[injection-context]] · [[service]
 ## Guards
 > pp.333-338
 
-I guard informano l'app sui cambi di rotta: sono **funzioni** che il router chiama in certi momenti, e il cui **valore di ritorno** decide se la navigazione può procedere. La decisione può essere **immediata** — un `boolean`, oppure un `UrlTree` per i redirect — o **differita** quando serve consultare una web API o chiedere all'utente, nel qual caso il guard ritorna un `Observable<boolean>` o una `Promise<boolean>`.
+I guard informano l'app sui cambi di rotta: sono **funzioni** che il router chiama in certi momenti, e il cui **valore di ritorno** decide se la navigazione può procedere. La decisione può essere **immediata** (un `boolean`, oppure un `UrlTree` per i redirect) o **differita** quando serve consultare una web API o chiedere all'utente, nel qual caso il guard ritorna un `Observable<boolean>` o una `Promise<boolean>`.
 
 Funzioni guard tipizzate (nomi funzionali moderni):
 
@@ -364,7 +364,7 @@ export class App {
 
 ➕ *(Fuori dal libro Modern Angular — feature standard di Angular, aggiunta qui perché utile per il debug del routing.)*
 
-In fase di sviluppo è possibile loggare **tutti** gli eventi del router in console — inclusi quelli intermedi che `router.events` non espone esplicitamente, come `GuardsCheckStart`, `ResolveStart`, `ActivationEnd` — con una sola riga nella configurazione:
+In fase di sviluppo è possibile loggare **tutti** gli eventi del router in console (inclusi quelli intermedi che `router.events` non espone esplicitamente, come `GuardsCheckStart`, `ResolveStart`, `ActivationEnd`) con una sola riga nella configurazione:
 
 ```ts
 // src/app/app.config.ts
@@ -522,7 +522,7 @@ export const second: HttpInterceptorFn = (req, next) => {
 };
 ```
 
-Registrati in quest'ordine — `provideHttpClient(withInterceptors([first, second]))` — una singola chiamata HTTP stampa:
+Registrati in quest'ordine (`provideHttpClient(withInterceptors([first, second]))`), una singola chiamata HTTP stampa:
 
 ```
 first  → richiesta      // uscita: ordine dell'array
@@ -562,7 +562,7 @@ Per consentire ritorna `true`, per bloccare `false`; per **redirigere** ritorna 
 <details>
 <summary>Quale parametro speciale riceve un <code>CanDeactivateFn</code> che un <code>CanActivateFn</code> non ha, e a cosa serve?</summary>
 
-Riceve come **primo parametro l'istanza del componente** che si sta per lasciare (`CanDeactivateFn<FormComponent>` → `component: FormComponent`). Serve a interrogarne lo stato — qui `component.isDirty()` — per decidere se chiedere conferma all'utente prima di abbandonare la rotta (es. form modificato e non salvato).
+Riceve come **primo parametro l'istanza del componente** che si sta per lasciare (`CanDeactivateFn<FormComponent>` → `component: FormComponent`). Serve a interrogarne lo stato (qui `component.isDirty()`) per decidere se chiedere conferma all'utente prima di abbandonare la rotta (es. form modificato e non salvato).
 
 </details>
 

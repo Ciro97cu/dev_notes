@@ -120,7 +120,7 @@ this.host.nativeElement.style.color = 'red';    // manipolazione diretta
 this.host.nativeElement.getBoundingClientRect() // posizione/dimensioni
 ```
 
-Il parametro di tipo (`<HTMLElement>`, `<HTMLCanvasElement>`, ecc.) è solo un'annotazione TypeScript — dice al compilatore che tipo di elemento aspettarsi — non cambia il comportamento a runtime.
+Il parametro di tipo (`<HTMLElement>`, `<HTMLCanvasElement>`, ecc.) è solo un'annotazione TypeScript (dice al compilatore che tipo di elemento aspettarsi), non cambia il comportamento a runtime.
 
 > [!warning]
 > Manipolare `nativeElement` direttamente rompe in SSR (Node.js non ha DOM). Per modificare stili e attributi in modo cross-platform usa `Renderer2`; riserva `nativeElement` ai casi in cui una libreria esterna (Chart.js, canvas API, ResizeObserver…) richiede l'elemento grezzo.
@@ -634,7 +634,7 @@ export const DIALOG_DATA = new InjectionToken<unknown>('DIALOG_DATA');
 
 Il servizio pubblica gli eventi su un `Subject` RxJS (uno stream a cui l'outlet si sottoscrive): `show` accoda un `DialogEvent`, `hide` ne accoda uno con `component`/`data` a `null`.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Il decoratore @Service()
 > Il sorgente usa il decorator `@Service()` (Angular 22), che dichiara un service iniettabile e registrato di default nello scope root. Equivale al vecchio `@Injectable({ providedIn: 'root' })`. Dettagli in [[service]].
 
 ```ts

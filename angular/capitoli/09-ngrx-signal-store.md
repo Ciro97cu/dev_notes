@@ -11,7 +11,7 @@ Una SPA mantiene lo stato mentre l'utente cambia rotta: dati caricati via HTTP, 
 
 In tutto il capitolo lo store è un **service** che incapsula lo stato di una feature, composto da una pila di **features** (`withState`, `withComputed`, ...) passate a `signalStore()`. Alcune features arrivano dalla community via NgRx Toolkit (`@angular-architects/ngrx-toolkit`): `withResource`, `withDevtools`, `withMutations`.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Note Angular 22 del capitolo
 > Le note Angular 22 di questo capitolo: i service usano il decoratore `@Service()` al posto di `@Injectable()` (vedi `FlightClient` nel listing della Mutation API e [[service]]), e la lettura del flight ID dal router sfrutta `withComponentInputBinding` con `input.required<number>()` (sezione *Reactive Methods*).
 
 ## A First SignalStore
@@ -348,7 +348,7 @@ connectFlightId: signalMethod<number>((id) => {
 }),
 ```
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · id dal router come input.required
 > Nel `FlightEdit`, l'`id` arriva dal router come `input.required<number>()` perché la rotta è configurata con `withComponentInputBinding`. È quindi un `InputSignal<number>`: nel costruttore basta `this.store.connectFlightId(this.id)` e lo store reagisce a ogni cambio di `id` (es. navigazione a un altro volo), senza sottoscrivere `ActivatedRoute.paramMap`.
 
 > [!warning]
@@ -391,7 +391,7 @@ Internamente `withEntities` non tiene un array ma un **dizionario** `entityMap` 
 
 ### Identifying Entities with IDs
 
-Di default gli updater assumono una proprietà `id`. Se l'identificatore ha altro nome, si specifica `selectId` direttamente nell'updater, oppure — meglio — in una `entityConfig` riusabile:
+Di default gli updater assumono una proprietà `id`. Se l'identificatore ha altro nome, si specifica `selectId` direttamente nell'updater, oppure, meglio, in una `entityConfig` riusabile:
 
 ```ts
 import { entityConfig, setAllEntities, withEntities } from '@ngrx/signals/entities';

@@ -5,7 +5,7 @@ aliases: [debounced, debounce signal]
 ---
 # debounced()
 
-L'helper **`debounced()`** (**Angular 22**) dà ai [[signal]] una nozione di **tempo** che di per sé non hanno: a differenza degli Observable, i signal non offrono operatori come `debounceTime` o `throttle`. `debounced(sig, ms)` prende un signal e restituisce una **[[resource]]** il cui valore **insegue** quello del signal con un ritardo configurabile, aggiornandosi solo dopo che il signal è rimasto stabile per `ms` millisecondi.
+L'helper **`debounced()`** (**Angular 22**) dà ai [[signal]] una nozione di **tempo** che di per sé non hanno: a differenza degli Observable, i signal non offrono operatori come `debounceTime` o `throttle`. `debounced(sig, ms)` prende un signal e restituisce una **[[resource]]**: nel dettaglio un `Resource<T>`, lo stesso tipo prodotto da `httpResource`/`rxResource`/`resource`, ma che non carica dati asincroni. Fa solo **inseguire** il valore del signal con un ritardo configurabile, aggiornandosi dopo che il signal è rimasto stabile per `ms` millisecondi.
 
 ```ts
 import { debounced, effect, signal } from '@angular/core';

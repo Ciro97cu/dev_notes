@@ -43,7 +43,7 @@ domain    → tipi che rappresentano gli oggetti ricevuti + servizi che parlano 
 util      → funzioni ausiliarie (authentication, logging, ...)
 ```
 
-Questi layer si allineano alle idee del team **Nx** e si sono dimostrati validi nei progetti degli autori, soprattutto perché bilanciano bene beneficio e overhead (il costo aggiuntivo in complessità e lavoro che la struttura ti impone). Sono anche adattabili al singolo progetto: alcuni clienti splittano il layer `data` in due (un layer fa data access — cioè legge/scrive i dati dal backend —, l'altro fornisce i tipi associati), così i dumb component vedono solo i tipi, dato che non devono parlare autonomamente col backend.
+Questi layer si allineano alle idee del team **Nx** e si sono dimostrati validi nei progetti degli autori, soprattutto perché bilanciano bene beneficio e overhead (il costo aggiuntivo in complessità e lavoro che la struttura ti impone). Sono anche adattabili al singolo progetto: alcuni clienti splittano il layer `data` in due (un layer fa data access (cioè legge/scrive i dati dal backend), l'altro fornisce i tipi associati), così i dumb component vedono solo i tipi, dato che non devono parlare autonomamente col backend.
 
 La funzionalità che `feature-my-tickets` vuole condividere con `feature-next-flights` può essere gestita in vari modi: spostando dumb component e servizi nei layer `ui` e `data`; oppure **ammorbidendo un po' il layering**, lasciando che i feature component dei domini accedano ai feature component in `shared` — dato che la comunicazione va in una sola direzione, non si creano cicli; o ancora introducendo un ulteriore layer, es. `sub-feature`, fra `feature` e `ui`.
 

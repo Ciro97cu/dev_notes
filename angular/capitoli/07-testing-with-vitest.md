@@ -15,7 +15,7 @@ Con sempre più logica spostata nel frontend, il test manuale non basta a manten
 ### Structure of a Vitest Test
 > pp.192-194
 
-Vitest fornisce due funzioni base: `describe` definisce una test **suite** (raggruppa casi correlati) e `it` definisce un test **case** (verifica una porzione di funzionalità). `describe`, `it`, `beforeEach`, `expect` e le altre sono **globali**: Vitest le rende disponibili durante l'esecuzione, quindi non vanno importate. I file di test hanno estensione **`.spec.ts`** — che li qualifica anche come *specifiche* del comportamento desiderato — e si tengono accanto al codice testato, così restano sempre aggiornati.
+Vitest fornisce due funzioni base: `describe` definisce una test **suite** (raggruppa casi correlati) e `it` definisce un test **case** (verifica una porzione di funzionalità). `describe`, `it`, `beforeEach`, `expect` e le altre sono **globali**: Vitest le rende disponibili durante l'esecuzione, quindi non vanno importate. I file di test hanno estensione **`.spec.ts`** (che li qualifica anche come *specifiche* del comportamento desiderato) e si tengono accanto al codice testato, così restano sempre aggiornati.
 
 ```ts
 // src/app/demo.spec.ts
@@ -158,7 +158,7 @@ Collegamenti: [[inject]] · [[providers]] · [[04-router-navigation-lazy-loading
 ### A First Component Test & Locators
 > pp.198-200
 
-Il primo test tratta il componente — più o meno — come una **black box** (scatola nera: non si guarda dentro al codice, si interagisce solo da fuori): interagisce via DOM, come farebbe l'utente. In browser mode Vitest fornisce l'oggetto **`page`**; usando **`expect.element`** (invece del semplice `expect`) si ottengono assert "browser-aware" (es. `toBeDisabled`).
+Il primo test tratta il componente (più o meno) come una **black box** (scatola nera: non si guarda dentro al codice, si interagisce solo da fuori): interagisce via DOM, come farebbe l'utente. In browser mode Vitest fornisce l'oggetto **`page`**; usando **`expect.element`** (invece del semplice `expect`) si ottengono assert "browser-aware" (es. `toBeDisabled`).
 
 ```ts
 import { page } from 'vitest/browser';
@@ -543,7 +543,7 @@ export const appSettings: AppSettings = {
 };
 ```
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Signal Forms nel test
 > Le **Signal Forms** (`form()`, `debounce()`) sono la nuova API form basata sui signal, introdotta in Angular 21+. Qui `ReactiveFlightSearch` le usa per fare il debounce dell'input prima di lanciare la ricerca. Vedi [[06-signal-forms]].
 
 ```ts

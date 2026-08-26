@@ -62,7 +62,7 @@ Come le app, le librerie sono file TypeScript (componenti, servizi, ...) e vivon
 ng g service logger --project util-logger
 ```
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Il decoratore @Service()
 > Il servizio usa il decoratore `@Service()` introdotto in Angular 22. `@Service()` senza opzioni equivale al vecchio `@Injectable({ providedIn: 'root' })`: il servizio è iniettabile e registrato automaticamente nello scope root. Dettagli in [[service]].
 
 ```ts
@@ -277,7 +277,7 @@ Il comando `nx graph` mostra il **grafo delle dipendenze** tra app e librerie (F
 ### Module Boundaries
 > pp.383-384
 
-Come Sheriff (vedi [[08-sustainable-architectures]]), anche Nx permette di definire regole su **chi può dipendere da cosa** — i cosiddetti **module boundaries** — ma in Nx sono sempre definiti **a livello di libreria e applicazione** (non per cartella). Si configura la regola ESLint `@nx/enforce-module-boundaries` in `eslint.config.js`, dichiarando i `depConstraints` per `sourceTag` (Listing 14-13):
+Come Sheriff (vedi [[08-sustainable-architectures]]), anche Nx permette di definire regole su **chi può dipendere da cosa** (i cosiddetti **module boundaries**), ma in Nx sono sempre definiti **a livello di libreria e applicazione** (non per cartella). Si configura la regola ESLint `@nx/enforce-module-boundaries` in `eslint.config.js`, dichiarando i `depConstraints` per `sourceTag` (Listing 14-13):
 
 ```js
 // eslint.config.js

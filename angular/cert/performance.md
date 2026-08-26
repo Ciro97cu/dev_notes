@@ -6,7 +6,7 @@ livello: [senior]
 # Performance
 > Cert Angular · tecniche di ottimizzazione dell'Angular *classico* (module-based, CD con Zone.js) — il vault moderno le tratta con signals e `@defer`
 
-Le performance di un'app Angular si giocano su due assi: **quanto codice si scarica** (bundle, lazy loading) e **quanto lavoro fa la change detection** (CD) a ogni ciclo. La cert Senior chiede le leve *classiche* — `trackBy`, `OnPush` con dati immutabili, pure pipe, `PreloadingStrategy`, bundle budget — perché sono ciò che si trova (e si deve saper ottimizzare) in una codebase Zone.js pre-signal.
+Le performance di un'app Angular si giocano su due assi: **quanto codice si scarica** (bundle, lazy loading) e **quanto lavoro fa la change detection** (CD) a ogni ciclo. La cert Senior chiede le leve *classiche* (`trackBy`, `OnPush` con dati immutabili, pure pipe, `PreloadingStrategy`, bundle budget) perché sono ciò che si trova (e si deve saper ottimizzare) in una codebase Zone.js pre-signal.
 
 ## `trackBy` in `*ngFor`
 Senza `trackBy`, `*ngFor` identifica gli elementi della lista per **riferimento all'oggetto**: se la collezione viene rimpiazzata (es. dopo un fetch), Angular considera *tutti* gli item nuovi, distrugge e ricrea l'intero DOM. Una funzione `trackBy` fornisce una **chiave stabile** (di solito un `id`), così Angular riusa i nodi esistenti e tocca solo ciò che è cambiato.

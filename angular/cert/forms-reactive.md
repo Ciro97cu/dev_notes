@@ -139,7 +139,7 @@ form.patchValue({ to: 'Vienna' });                                     // solo '
 ```
 
 ## `valueChanges` / `statusChanges`
-Oltre allo stato leggibile in modo sincrono, ogni `AbstractControl` — un singolo controllo o un intero gruppo — espone il proprio andamento nel tempo come due `Observable`, il punto di aggancio naturale per la programmazione reattiva sui form.
+Oltre allo stato leggibile in modo sincrono, ogni `AbstractControl` (un singolo controllo o un intero gruppo) espone il proprio andamento nel tempo come due `Observable`, il punto di aggancio naturale per la programmazione reattiva sui form.
 
 - **`valueChanges`** — emette il nuovo valore a ogni cambiamento (rispettando `updateOn`).
 - **`statusChanges`** — emette lo stato di validità (`'VALID' | 'INVALID' | 'PENDING' | 'DISABLED'`).

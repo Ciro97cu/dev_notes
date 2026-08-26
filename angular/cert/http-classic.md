@@ -24,7 +24,7 @@ export class AppModule {}
 L'equivalente moderno è la provider function `provideHttpClient()` nei provider di bootstrap (vedi *Stato attuale*).
 
 ## Verbi e risposte tipizzate
-`HttpClient` espone un metodo per verbo HTTP — `get`, `post`, `put`, `patch`, `delete`, `head`, `options` — più il generico `request`. Ogni metodo è **generico**: il tipo passato tipizza il corpo della risposta.
+`HttpClient` espone un metodo per verbo HTTP (`get`, `post`, `put`, `patch`, `delete`, `head`, `options`), più il generico `request`. Ogni metodo è **generico**: il tipo passato tipizza il corpo della risposta.
 
 ```ts
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';

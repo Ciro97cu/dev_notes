@@ -51,7 +51,7 @@ export class ItemComponent {
 `OnPush` di fatto impone di lavorare con input **immutabili**: cambiare un dato significa creare un nuovo riferimento invece di mutare l'oggetto esistente. Il vincolo ripaga, perché Angular esegue molti meno controlli e il flusso dei dati diventa più prevedibile, oltre che più veloce.
 
 ## `ChangeDetectorRef`
-Quando la change detection automatica non basta — tipicamente con `OnPush`, dopo un aggiornamento che Angular non ha modo di intercettare da solo — si interviene a mano tramite `ChangeDetectorRef`, il servizio che dà a ogni componente il controllo esplicito sul proprio ciclo di detection. Lo si inietta nel costruttore e da lì si può marcare il componente come "da controllare", forzare subito un controllo, oppure staccarlo del tutto dall'albero.
+Quando la change detection automatica non basta (tipicamente con `OnPush`, dopo un aggiornamento che Angular non ha modo di intercettare da solo) si interviene a mano tramite `ChangeDetectorRef`, il servizio che dà a ogni componente il controllo esplicito sul proprio ciclo di detection. Lo si inietta nel costruttore e da lì si può marcare il componente come "da controllare", forzare subito un controllo, oppure staccarlo del tutto dall'albero.
 
 ```ts
 import { ChangeDetectorRef } from '@angular/core';
@@ -88,7 +88,7 @@ startPolling() {
 - **`run(fn)`** — **rientra** nella zone e riattiva la CD, per aggiornare la view da codice partito fuori-zone.
 
 ## `ExpressionChangedAfterItHasBeenCheckedError`
-In modalità **dev** Angular esegue un secondo giro di CD subito dopo il primo per verificare la stabilità delle espressioni. Se un valore letto nel template cambia fra i due giri — tipicamente perché un hook come `ngAfterViewInit` modifica una proprietà già controllata — lancia `ExpressionChangedAfterItHasBeenCheckedError` (**NG0100**). Compare solo in dev; in produzione il secondo giro non viene eseguito.
+In modalità **dev** Angular esegue un secondo giro di CD subito dopo il primo per verificare la stabilità delle espressioni. Se un valore letto nel template cambia fra i due giri (tipicamente perché un hook come `ngAfterViewInit` modifica una proprietà già controllata) lancia `ExpressionChangedAfterItHasBeenCheckedError` (**NG0100**). Compare solo in dev; in produzione il secondo giro non viene eseguito.
 
 Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forzare un nuovo ciclo con `cdr.detectChanges()`, oppure differire con `Promise.resolve().then(() => …)`.
 

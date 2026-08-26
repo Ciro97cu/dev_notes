@@ -363,7 +363,7 @@ Con `#pane` il padre può invocare `pane.activate(1)`, ad esempio in un click ha
 
 Qui un `TabRegistry` tiene l'indice corrente e la lista dei tab. **Non** è registrato in root: è fornito a livello del `TabbedPane`, così ogni pane ha la propria istanza.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · @Service({ autoProvided: false })
 > `@Service({ autoProvided: false })` dichiara un service **iniettabile ma non registrato automaticamente** nello scope root: lo fornisci tu dove serve (qui nei `providers` del `TabbedPane`). Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
 
 ```ts
@@ -512,7 +512,7 @@ Perché sostituisce il **data binding dichiarativo** (feature centrale di Angula
 <details>
 <summary>Confronta comunicazione via **template variable** e via **service**: pro e contro di ciascuna in termini di esplicitezza e accoppiamento.</summary>
 
-**Template variable** (`#pane` → `pane.activate(1)`): comunicazione **esplicita**, si vede a colpo d'occhio chi parla con chi; ma è un riferimento diretto, limitato al template in cui è dichiarata. **Service** (es. `TabRegistry` nei `providers`): **accoppiamento lasco** — pane e tab dipendono solo dal contratto condiviso, non l'uno dall'altro — e attraversa più livelli di gerarchia; ma la comunicazione è **implicita**, a prima vista non si capisce chi comunica con chi.
+**Template variable** (`#pane` → `pane.activate(1)`): comunicazione **esplicita**, si vede a colpo d'occhio chi parla con chi; ma è un riferimento diretto, limitato al template in cui è dichiarata. **Service** (es. `TabRegistry` nei `providers`): **accoppiamento lasco** (pane e tab dipendono solo dal contratto condiviso, non l'uno dall'altro) e attraversa più livelli di gerarchia; ma la comunicazione è **implicita**, a prima vista non si capisce chi comunica con chi.
 
 </details>
 

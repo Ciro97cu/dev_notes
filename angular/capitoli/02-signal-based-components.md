@@ -23,7 +23,7 @@ ng g c domains/ticketing/feature-booking/flight-search
 Per via della config del [[01-getting-started|cap.1]] (in `angular.json`) la CLI genera solo `flight-search.ts` (la classe del componente) + `flight-search.html` (il template): niente stylesheet né file di test, così l'esempio resta pulito.
 
 > [!tip]
-> Lo Style Guide aggiornato **non usa più i suffissi** `Component`/`.component.ts`: la classe è `FlightSearch`, il file `flight-search.ts` (non più `FlightSearchComponent` / `flight-search.component.ts`). Restano ammessi suffissi semantici propri, più informativi di "Component" — es. `search` o `edit` — per comunicare lo scopo del componente.
+> Lo Style Guide aggiornato **non usa più i suffissi** `Component`/`.component.ts`: la classe è `FlightSearch`, il file `flight-search.ts` (non più `FlightSearchComponent` / `flight-search.component.ts`). Restano ammessi suffissi semantici propri, più informativi di "Component" (es. `search` o `edit`) per comunicare lo scopo del componente.
 
 ## Data Model
 > pp.22-23
@@ -223,14 +223,14 @@ import { FormField, form } from '@angular/forms/signals';
 
 ### Event Bindings
 
-Un **event binding** lega un evento — del DOM o di un sotto-componente — a un'espressione, con le parentesi **tonde**: `(click)="search()"`. Idem `(change)`, `(keydown)`, `(mouseover)`, ecc.
+Un **event binding** lega un evento (del DOM o di un sotto-componente) a un'espressione, con le parentesi **tonde**: `(click)="search()"`. Idem `(change)`, `(keydown)`, `(mouseover)`, ecc.
 
 ### Property Bindings
 
-Un **property binding** imposta una proprietà — del DOM o di un sotto-componente — con le parentesi **quadre**: `[disabled]="!filter().from || !filter().to"`. Idem `[value]`, `[checked]`, `[src]`.
+Un **property binding** imposta una proprietà (del DOM o di un sotto-componente) con le parentesi **quadre**: `[disabled]="!filter().from || !filter().to"`. Idem `[value]`, `[checked]`, `[src]`.
 
 > [!warning]
-> **Evitare di legare metodi o getter nei binding.** Un'espressione come `[value]="calcolaTotale()"` o `{{ getNome() }}` viene rivalutata a **ogni ciclo di change detection**, non solo quando i dati cambiano: con molte espressioni, o con metodi costosi, degrada le performance. In un componente signal-based la soluzione idiomatica è esporre un `computed()` — rivalutato solo quando cambiano i signal da cui dipende — e legare quello: `[value]="totale()"`.
+> **Evitare di legare metodi o getter nei binding.** Un'espressione come `[value]="calcolaTotale()"` o `{{ getNome() }}` viene rivalutata a **ogni ciclo di change detection**, non solo quando i dati cambiano: con molte espressioni, o con metodi costosi, degrada le performance. In un componente signal-based la soluzione idiomatica è esporre un `computed()` (rivalutato solo quando cambiano i signal da cui dipende) e legare quello: `[value]="totale()"`.
 >
 > ➕ *(Fuori dal libro Modern Angular — buona pratica standard di Angular.)*
 
@@ -262,7 +262,7 @@ Il control flow è **built-in** nel template (`@if`, `@for`, `@switch`, prefisso
 }
 ```
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · @case multi-value
 > Da **Angular 21.1** un singolo blocco può seguire più `@case` consecutivi (multi-value), così più valori condividono lo stesso markup:
 > ```html
 > @switch (passenger().passengerStatus) {
@@ -285,7 +285,7 @@ Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto a
 
 Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito, quindi si restringe `passengerStatus` da `string` a una **literal union** `'A' | 'B' | 'C'` (un tipo che ammette solo questi tre valori esatti, non una stringa qualsiasi). Quando l'espressione dello `@switch` **è** proprio la union, basta la forma breve `@default never;`. Il meccanismo: gestendo i `@case` uno dopo l'altro, TypeScript "consuma" i valori ancora possibili finché non ne resta nessuno, cioè finché il tipo di `passengerStatus` non si riduce a `never` (l'insieme vuoto, nessun valore possibile).
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · @default never (exhaustive check)
 > ```html
 > @switch (passenger().passengerStatus) {  <!-- 'A' | 'B' | 'C' -->
 >   @case ('A') { <p>Senator</p> }
@@ -298,7 +298,7 @@ Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito,
 
 C'è però un caso più frequente in cui la forma breve non basta: quando lo switch è su una **proprietà** di una *discriminated union* (una union di oggetti distinti dal valore di un campo comune — il *discriminatore*, qui `kind`), e non sull'intera union. TypeScript sa restringere quella singola proprietà, ma non sa dedurre se l'intera union è stata coperta. Serve allora la forma `never(<expression>)` (**Angular 22**), che indica esplicitamente al compilatore quale espressione controllare per la copertura completa.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · never(expression) su discriminated union
 > ```ts
 > type Loyalty =
 >   | { kind: 'senator';  loungeAccess: true }
@@ -507,7 +507,7 @@ protected readonly flightsResource = httpResource<Flight[]>(
 
 Di default esegue una **GET**; è possibile specificare un altro metodo e persino un `body`, ma è pensata per il **fetch (read)**: per save/delete si usa `HttpClient`. Il secondo argomento `{ defaultValue: [] }` dà un valore iniziale prima che la richiesta completi, evitando `undefined` nel template. Lo stato è esposto via signal: `value` (i dati), `error` (info sull'errore), `isLoading` (richiesta in corso).
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · Il value della resource è scrivibile
 > Il `value` di una resource è **scrivibile**: si possono modificare i dati caricati localmente (utile per editarli con un form in two-way binding sul `value`). Resta però una **copia di lavoro locale** — per persistere sul server serve comunque `HttpClient`.
 
 ```html
@@ -548,7 +548,7 @@ Crescendo l'app conviene spezzare i componenti complessi in pezzi piccoli e riut
 ng g c domains/ticketing/ui/flight-card
 ```
 
-Prima di estrarlo si sostituisce `selectedFlight` con un `basket` (il carrello): un `Record` — il tipo TypeScript per un oggetto-dizionario chiave→valore — che mappa l'id di ogni volo a un booleano. I voli 3 e 5 sono già nel carrello all'avvio, a scopo dimostrativo. L'aggiornamento avviene in modo **immutabile**: si costruisce un oggetto nuovo invece di mutare quello esistente, così il cambio di riferimento fa scattare in modo affidabile la change detection di Angular.
+Prima di estrarlo si sostituisce `selectedFlight` con un `basket` (il carrello): un `Record` (il tipo TypeScript per un oggetto-dizionario chiave-valore) che mappa l'id di ogni volo a un booleano. I voli 3 e 5 sono già nel carrello all'avvio, a scopo dimostrativo. L'aggiornamento avviene in modo **immutabile**: si costruisce un oggetto nuovo invece di mutare quello esistente, così il cambio di riferimento fa scattare in modo affidabile la change detection di Angular.
 
 ```ts
 protected readonly basket = signal<Record<number, boolean>>({
@@ -607,7 +607,7 @@ export class FlightCard {
 }
 ```
 
-Gli input sono **signal di sola lettura** (`InputSignal<T>`, o `InputSignal<T | undefined>` se opzionale): `input.required<Flight>()` non ha default e, se il padre lo dimentica, Angular lancia un **errore a compile-time** (gli input obbligatori non possono avere default). Essendo read-only, per notificare il padre si emette un evento — `output<boolean>()` crea un `OutputEmitterRef<boolean>` su cui si chiama `.emit(value)` — e nel template padre il valore emesso arriva nella variabile speciale **`$event`**.
+Gli input sono **signal di sola lettura** (`InputSignal<T>`, o `InputSignal<T | undefined>` se opzionale): `input.required<Flight>()` non ha default e, se il padre lo dimentica, Angular lancia un **errore a compile-time** (gli input obbligatori non possono avere default). Essendo read-only, per notificare il padre si emette un evento (`output<boolean>()` crea un `OutputEmitterRef<boolean>` su cui si chiama `.emit(value)`) e nel template padre il valore emesso arriva nella variabile speciale **`$event`**.
 
 Nel template del figlio gli input si leggono come signal chiamandone il getter; `@let itemValue = item();` ne cattura il valore in una variabile locale più leggibile, e i due bottoni scatenano `select()`/`deselect()`:
 

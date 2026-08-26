@@ -143,7 +143,7 @@ A distinguere il modulo che **registra i provider globali** (`forRoot()`, una vo
 </details>
 
 **In sintesi:**
-- Un `@NgModule` raggruppa dichiarabili (`declarations`) e le espone (`exports`), importa altri moduli (`imports`), offre service (`providers`) e — nel root — indica il componente radice (`bootstrap`).
+- Un `@NgModule` raggruppa dichiarabili (`declarations`) e le espone (`exports`), importa altri moduli (`imports`), offre service (`providers`) e, nel root, indica il componente radice (`bootstrap`).
 - `BrowserModule` solo nel root; `CommonModule` nei feature module; shared module per ri-esportare le dichiarabili comuni.
 - Lazy loading via `loadChildren`; attenzione all'**injector figlio** che duplica i provider del modulo lazy.
 - Equivalente moderno = standalone + `bootstrapApplication` + `provideRouter`, in [[01-getting-started]]; NgModule non deprecati ma non più default.

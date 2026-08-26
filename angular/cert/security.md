@@ -6,7 +6,7 @@ livello: [senior]
 # Security
 > Cert Angular · le difese *built-in* del framework (sanitizzazione, XSRF, CSP) — invariate tra Angular classico e moderno
 
-Angular tratta **ogni valore come non fidato** finché non lo dimostra sicuro per il contesto del DOM in cui finisce. La cert Senior chiede di conoscere queste difese — **sanitizzazione contestuale**, escaping dell'interpolation, `DomSanitizer`, protezione **XSRF** di `HttpClient`, **CSP** e Trusted Types — perché sono il modello di sicurezza che regge sia l'app module-based che quella standalone. La minaccia principale è l'**XSS** (*Cross-Site Scripting*: iniezione di codice eseguibile nella pagina attraverso dati non fidati).
+Angular tratta **ogni valore come non fidato** finché non lo dimostra sicuro per il contesto del DOM in cui finisce. La cert Senior chiede di conoscere queste difese (**sanitizzazione contestuale**, escaping dell'interpolation, `DomSanitizer`, protezione **XSRF** di `HttpClient`, **CSP** e Trusted Types) perché sono il modello di sicurezza che regge sia l'app module-based che quella standalone. La minaccia principale è l'**XSS** (*Cross-Site Scripting*: iniezione di codice eseguibile nella pagina attraverso dati non fidati).
 
 ## Sanitizzazione contestuale automatica
 Quando un valore entra nel DOM da un template, Angular lo **sanitizza** in base al **contesto di sicurezza** (`SecurityContext`): ciò che è innocuo in CSS può essere pericoloso in un URL, quindi la difesa dipende da *dove* il valore viene inserito. I contesti sanitizzabili:
@@ -139,7 +139,7 @@ No di per sé: Angular sanitizza il valore nel contesto HTML, mantenendo il mark
 <details>
 <summary>Quando si usa <code>DomSanitizer.bypassSecurityTrust…</code> e quale è la regola d'oro?</summary>
 
-Solo quando serve iniettare un valore che la sanitizzazione bloccherebbe (tipicamente un resource URL costante). La regola d'oro: **mai** su input dell'utente — significa disattivare la difesa anti-XSS — e chiamarlo il più vicino possibile alla sorgente del valore fidato.
+Solo quando serve iniettare un valore che la sanitizzazione bloccherebbe (tipicamente un resource URL costante). La regola d'oro: **mai** su input dell'utente (significa disattivare la difesa anti-XSS) e chiamarlo il più vicino possibile alla sorgente del valore fidato.
 
 </details>
 

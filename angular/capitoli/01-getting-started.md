@@ -116,7 +116,7 @@ export class App {
 }
 ```
 
-`title` è un [[signal]]: un contenitore per un valore che, ogni volta che cambia, **avvisa** le parti del sistema interessate — ed è proprio questa notifica che Angular sfrutta per aggiornare la UI e mostrare sempre lo stato più recente. Lo si **legge chiamandolo come una funzione** — `this.title()` — e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, che Angular deduce dal valore di default, quindi non serve dichiararlo a mano.
+`title` è un [[signal]]: un contenitore per un valore che, ogni volta che cambia, **avvisa** le parti del sistema interessate — ed è proprio questa notifica che Angular sfrutta per aggiornare la UI e mostrare sempre lo stato più recente. Lo si **legge chiamandolo come una funzione** (`this.title()`) e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, che Angular deduce dal valore di default, quindi non serve dichiararlo a mano.
 
 Secondo la Angular style guide le proprietà usate **solo nel template** si dichiarano `protected`, per evitare modifiche accidentali dall'esterno della classe, e i signal si marcano `readonly`: non si **rimpiazzano**, si aggiornano.
 
@@ -215,7 +215,7 @@ Gli **schematics** (le "ricette" che la CLI usa quando genera file con `ng gener
 
 `skipTests: true` evita di generare i file di test per componenti, direttive, pipe e service — non perché lo scaffolding sia sbagliato (lo *scaffolding* è la generazione automatica dei file di partenza da parte della CLI), ma perché in [[07-testing-with-vitest]] questi file si scrivono a mano per mostrarne i concetti.
 
-> [!info] Angular 22+
+> [!info] Angular 22+ · OnPush di default
 > **OnPush** è la strategia di [[glossario#change-detection|change detection]] raccomandata (la change detection è il meccanismo con cui Angular controlla cos'è cambiato e ridisegna la UI di conseguenza): Angular aggiorna un componente **solo quando i suoi dati cambiano** (es. quando un signal fornisce un nuovo valore) invece di ricontrollare tutta l'app. I signal la rendono naturale. **Da Angular 22 è il default.**
 
 > [!tip]
