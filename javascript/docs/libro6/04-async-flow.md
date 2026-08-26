@@ -123,7 +123,7 @@ function *main() {
 }
 ```
 
-Il corpo del generator legge come codice sincrono sequenziale — assegnazioni, `try/catch`, espressioni normali — anche se ogni `yield` maschera un'operazione asincrona.
+Il corpo del generator legge come codice sincrono sequenziale (assegnazioni, `try/catch`, espressioni normali) anche se ogni `yield` maschera un'operazione asincrona.
 
 ### Il runner
 
@@ -266,6 +266,6 @@ Il runner esegue il generator chiamando `it.next()` in un ciclo. Ogni volta che 
 <details>
 <summary>Perché il codice con generator + Promise è considerato più leggibile di una catena di <code>.then()</code>?</summary>
 
-Una catena di `.then()` costringe a strutturare il codice in frammenti separati (un callback per step), rendendo difficile seguire il flusso logico, condividere variabili tra step, e gestire errori in modo uniforme. Con i generator, il codice asincrono si scrive come sequenza lineare di statement — assegnazioni, condizioni, `try/catch` — esattamente come il codice sincrono. Il `yield` è un dettaglio di implementazione quasi invisibile: non cambia la forma del ragionamento. La gestione degli errori con `try/catch` funziona trasparentemente su confini asincroni (una `yield`-ed Promise rigettata lancia nel generator come se fosse un `throw` normale). Per flussi con più di due step in sequenza, o con logica di errore condizionale, il pattern generator è significativamente più manutenibile.
+Una catena di `.then()` costringe a strutturare il codice in frammenti separati (un callback per step), rendendo difficile seguire il flusso logico, condividere variabili tra step, e gestire errori in modo uniforme. Con i generator, il codice asincrono si scrive come sequenza lineare di statement (assegnazioni, condizioni, `try/catch`) esattamente come il codice sincrono. Il `yield` è un dettaglio di implementazione quasi invisibile: non cambia la forma del ragionamento. La gestione degli errori con `try/catch` funziona trasparentemente su confini asincroni (una `yield`-ed Promise rigettata lancia nel generator come se fosse un `throw` normale). Per flussi con più di due step in sequenza, o con logica di errore condizionale, il pattern generator è significativamente più manutenibile.
 
 </details>

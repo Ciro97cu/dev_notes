@@ -6,7 +6,7 @@ tags: [tipo/modulo, semantica, testo]
 # 04 · Testo e link
 > modulo 4 — *HTML* · rif. MDN
 
-Gran parte del contenuto di una pagina è **testo**, e anche qui la scelta dell'elemento porta significato. La distinzione di fondo è tra elementi che dicono *cosa* è un pezzo di testo — l'importanza, una citazione, un termine tecnico — e quelli che ne cambiano solo l'aspetto. Preferire i primi è ciò che rende il testo comprensibile anche a chi non lo *vede*, ma lo ascolta da uno screen reader.
+Gran parte del contenuto di una pagina è **testo**, e anche qui la scelta dell'elemento porta significato. La distinzione di fondo è tra elementi che dicono *cosa* è un pezzo di testo (l'importanza, una citazione, un termine tecnico) e quelli che ne cambiano solo l'aspetto. Preferire i primi è ciò che rende il testo comprensibile anche a chi non lo *vede*, ma lo ascolta da uno screen reader.
 
 ## Enfasi e significato: `<strong>`/`<em>` contro `<b>`/`<i>`
 

@@ -289,7 +289,7 @@ for (var v of obj) { console.log(v); } // 2, 3
 <details>
 <summary>Perché "tutto in JavaScript è un oggetto" è un'affermazione falsa?</summary>
 
-Perché JavaScript ha sei tipi primitivi — `string`, `number`, `boolean`, `null`, `undefined` e `object` — e solo l'ultimo è un oggetto. I primitivi `string`, `number`, `boolean` hanno wrapper oggetto (`String`, `Number`, `Boolean`) e vengono automaticamente convertiti (autoboxing) quando si tenta di accedere a metodi o proprietà su di essi, ma i valori primitivi stessi non sono oggetti. `null` restituisce `"object"` da `typeof` a causa di un bug storico del linguaggio, ma è un primitivo a sé stante.
+Perché JavaScript ha sei tipi primitivi (`string`, `number`, `boolean`, `null`, `undefined` e `object`) e solo l'ultimo è un oggetto. I primitivi `string`, `number`, `boolean` hanno wrapper oggetto (`String`, `Number`, `Boolean`) e vengono automaticamente convertiti (autoboxing) quando si tenta di accedere a metodi o proprietà su di essi, ma i valori primitivi stessi non sono oggetti. `null` restituisce `"object"` da `typeof` a causa di un bug storico del linguaggio, ma è un primitivo a sé stante.
 
 </details>
 
@@ -317,6 +317,6 @@ Perché JavaScript ha sei tipi primitivi — `string`, `number`, `boolean`, `nul
 <details>
 <summary>Perché accedere a una proprietà inesistente restituisce `undefined` invece di lanciare un errore?</summary>
 
-Perché l'operazione `[[Get]]` — invocata internamente a ogni accesso di proprietà — percorre l'oggetto e la sua prototype chain cercando il nome richiesto. Se non lo trova da nessuna parte, restituisce `undefined` come valore di default, senza lanciare eccezioni. Questo comportamento differisce da quello delle variabili non dichiarate, per cui l'engine lancia un `ReferenceError`. La conseguenza pratica è che `obj.propInesistente` e `obj.propEsplicitamenteUndefined` producono lo stesso valore `undefined` — per distinguerli si deve usare `"prop" in obj` oppure `obj.hasOwnProperty("prop")`.
+Perché l'operazione `[[Get]]` (invocata internamente a ogni accesso di proprietà) percorre l'oggetto e la sua prototype chain cercando il nome richiesto. Se non lo trova da nessuna parte, restituisce `undefined` come valore di default, senza lanciare eccezioni. Questo comportamento differisce da quello delle variabili non dichiarate, per cui l'engine lancia un `ReferenceError`. La conseguenza pratica è che `obj.propInesistente` e `obj.propEsplicitamenteUndefined` producono lo stesso valore `undefined` — per distinguerli si deve usare `"prop" in obj` oppure `obj.hasOwnProperty("prop")`.
 
 </details>

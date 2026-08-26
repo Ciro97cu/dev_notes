@@ -1,6 +1,6 @@
 # Callbacks
 
-I callback sono l'unità fondamentale dell'asincronia in JavaScript. Ogni funzione che viene eseguita "dopo" — in risposta a un evento, a una risposta Ajax, allo scadere di un timer — è un callback. Per quanto a lungo abbiano servito da workhorse del codice async, soffrono di due gravi limitazioni strutturali che le astrazioni successive (Promise, generator, async/await) cercano di risolvere.
+I callback sono l'unità fondamentale dell'asincronia in JavaScript. Ogni funzione che viene eseguita "dopo" (in risposta a un evento, a una risposta Ajax, allo scadere di un timer) è un callback. Per quanto a lungo abbiano servito da workhorse del codice async, soffrono di due gravi limitazioni strutturali che le astrazioni successive (Promise, generator, async/await) cercano di risolvere.
 
 ---
 
@@ -296,7 +296,7 @@ Il problema non è l'indentazione o il nesting: anche spostando i callback in fu
 <details>
 <summary>Cos'è l'inversion of control e perché è pericolosa nei callback?</summary>
 
-L'inversion of control si verifica quando si passa un callback a una funzione esterna (specialmente di terze parti), cedendole il controllo su quando e come eseguire la continuation del programma. Si crea un contratto implicito non garantito: si assume che il callback venga chiamato esattamente una volta, al momento giusto, con i parametri corretti. Se la parte esterna non rispetta questo contratto — callback chiamato troppe volte, mai, troppo presto, con parametri sbagliati, con eccezioni silenziose — il programma si comporta in modo imprevedibile. E non esiste nessuna primitiva built-in nel sistema dei callback per difendersi da questi scenari.
+L'inversion of control si verifica quando si passa un callback a una funzione esterna (specialmente di terze parti), cedendole il controllo su quando e come eseguire la continuation del programma. Si crea un contratto implicito non garantito: si assume che il callback venga chiamato esattamente una volta, al momento giusto, con i parametri corretti. Se la parte esterna non rispetta questo contratto (callback chiamato troppe volte, mai, troppo presto, con parametri sbagliati, con eccezioni silenziose) il programma si comporta in modo imprevedibile. E non esiste nessuna primitiva built-in nel sistema dei callback per difendersi da questi scenari.
 
 </details>
 

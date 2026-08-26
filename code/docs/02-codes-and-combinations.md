@@ -1,11 +1,11 @@
 # 02 · Codici e combinazioni
 > cap. 2 di «Code» (Petzold, 2ª ed.) — orig. *Codes and Combinations*
 
-Il codice Morse fu inventato attorno al **1837** da Samuel Finley Breese Morse (1791–1872) — che il libro incontrerà più avanti, insieme al telegrafo — e perfezionato da altri, in particolare Alfred Vail (1807–1859); la versione usata qui è quella nota come *International Morse code*. Il capitolo precedente ha mostrato *che cos'è* il Morse; questo capitolo guarda alla sua **struttura**: perché i codici sono fatti così, e quale semplice matematica — le **potenze di due** — li governa. È il ponte che porta dal Morse all'idea generale di codice binario.
+Il codice Morse fu inventato attorno al **1837** da Samuel Finley Breese Morse (1791–1872), che il libro incontrerà più avanti, insieme al telegrafo, e perfezionato da altri, in particolare Alfred Vail (1807–1859); la versione usata qui è quella nota come *International Morse code*. Il capitolo precedente ha mostrato *che cos'è* il Morse; questo capitolo guarda alla sua **struttura**: perché i codici sono fatti così, e quale semplice matematica (le **potenze di due**) li governa. È il ponte che porta dal Morse all'idea generale di codice binario.
 
 ## Trasmettere è facile, ricevere no
 
-Quasi tutti trovano il Morse più facile da *mandare* che da *ricevere*. Trasmettere è comodo: si ha la tabella lettera → punti-e-linee e si procede. Ricevere è il problema inverso e più faticoso, perché bisogna lavorare **a ritroso**: arriva, poniamo, `—•——` e occorre risalire alla lettera (è la Y). La tabella che abbiamo va in una sola direzione — da **lettera** a **punti e linee** — ma quella opposta, da **punti e linee** a **lettera**, non esiste. E non è chiaro come costruirla: nei punti e nelle linee non c'è nulla da mettere in "ordine alfabetico". Conviene allora abbandonare l'alfabeto e organizzare i codici in un altro modo — per **quantità** di punti e linee.
+Quasi tutti trovano il Morse più facile da *mandare* che da *ricevere*. Trasmettere è comodo: si ha la tabella lettera → punti-e-linee e si procede. Ricevere è il problema inverso e più faticoso, perché bisogna lavorare **a ritroso**: arriva, poniamo, `—•——` e occorre risalire alla lettera (è la Y). La tabella che abbiamo va in una sola direzione (da **lettera** a **punti e linee**) ma quella opposta, da **punti e linee** a **lettera**, non esiste. E non è chiaro come costruirla: nei punti e nelle linee non c'è nulla da mettere in "ordine alfabetico". Conviene allora abbandonare l'alfabeto e organizzare i codici in un altro modo — per **quantità** di punti e linee.
 
 ## Organizzare per numero di simboli
 
@@ -120,7 +120,7 @@ Volendo, l'albero si estende. Con **cinque** simboli si aggiungono 32 codici (2�
 Il Morse si dice **binario** (letteralmente "due per due") perché è fatto di due sole cose: un punto e una linea. È la stessa struttura di una moneta, che può cadere solo su testa o croce. E come dieci lanci di moneta producono 2¹⁰ = 1024 sequenze diverse di teste e croci, così ogni combinazione di oggetti o codici binari si conta con le **potenze di due**.
 
 > [!tip]
-> Il numero chiave del libro è **due**. Ogni volta che qualcosa ha due soli stati — punto/linea, testa/croce, acceso/spento — il numero di combinazioni con `n` di questi elementi è `2ⁿ`. Da qui in avanti questa formula tornerà a ogni gradino.
+> Il numero chiave del libro è **due**. Ogni volta che qualcosa ha due soli stati (punto/linea, testa/croce, acceso/spento) il numero di combinazioni con `n` di questi elementi è `2ⁿ`. Da qui in avanti questa formula tornerà a ogni gradino.
 
 > [!warning]
 > Raddoppio, non incremento. Passando da `n` a `n+1` simboli i codici **raddoppiano** (da 2ⁿ a 2ⁿ⁺¹), non aumentano di una quantità fissa. È la differenza tra crescita esponenziale e lineare, ed è il motivo per cui pochi bit bastano a rappresentare tantissime cose.

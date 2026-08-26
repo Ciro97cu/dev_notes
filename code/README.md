@@ -1,6 +1,6 @@
 # Code — Il linguaggio nascosto di hardware e software
 
-Appunti di studio sul libro **«Code»** di **Charles Petzold** (2ª edizione, 2023). Il libro ha un'ambizione rara: partire da come due bambini si scambiano messaggi con una torcia e, un gradino alla volta — codici, binario, elettricità, interruttori, relè, porte logiche — arrivare a **costruire e capire una CPU** completa, fino al software e al web. Nessun prerequisito: solo curiosità.
+Appunti di studio sul libro **«Code»** di **Charles Petzold** (2ª edizione, 2023). Il libro ha un'ambizione rara: partire da come due bambini si scambiano messaggi con una torcia e, un gradino alla volta (codici, binario, elettricità, interruttori, relè, porte logiche) arrivare a **costruire e capire una CPU** completa, fino al software e al web. Nessun prerequisito: solo curiosità.
 
 Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italiana distesa e con **molti diagrammi** (gli schemi del libro ricostruiti, più qualche aggiunta) per fissare i concetti visivamente.
 

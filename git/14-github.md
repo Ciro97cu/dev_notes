@@ -6,7 +6,7 @@ GitHub è una piattaforma online che ospita repository Git remoti e vi costruisc
 Un repository su GitHub può essere pubblico o privato. Un repository **pubblico** è visibile a chiunque: tutti possono vederne il codice, scaricarlo e proporre modifiche. Un repository **privato**, al contrario, è accessibile solo al proprietario e ai collaboratori esplicitamente autorizzati.
 
 ## README
-Il README è un file di testo, di solito chiamato `README.md`, collocato nella cartella principale del progetto. Serve a descriverlo — lo scopo, come si installa e si usa, qualche esempio, le indicazioni per contribuire e la licenza — ed è la prima cosa che chi arriva sul repo si trova davanti, perché GitHub lo mostra in automatico appena si apre il repository.
+Il README è un file di testo, di solito chiamato `README.md`, collocato nella cartella principale del progetto. Serve a descriverlo (lo scopo, come si installa e si usa, qualche esempio, le indicazioni per contribuire e la licenza) ed è la prima cosa che chi arriva sul repo si trova davanti, perché GitHub lo mostra in automatico appena si apre il repository.
 
 ## Comandi
 | Comando | Cosa fa |
@@ -73,7 +73,7 @@ La configurazione si fa una volta sola: **generare** la coppia con `ssh-keygen`,
 I Gist di GitHub sono frammenti di codice o note che si possono condividere al volo. Ogni gist è a tutti gli effetti un piccolo repository Git, quindi è clonabile e versionato come qualsiasi altro, e può essere pubblico, visibile a tutti, oppure segreto, raggiungibile solo da chi ne ha il link.
 
 ## Pull Request (PR)
-Una pull request è la richiesta formale di unire un branch — tipicamente un feature branch — dentro un altro, di solito `main` o `develop`. Il suo valore è aprire uno spazio per la review del codice prima che l'integrazione avvenga davvero, e questo aiuta a mantenere la qualità e la stabilità del progetto.
+Una pull request è la richiesta formale di unire un branch (tipicamente un feature branch) dentro un altro, di solito `main` o `develop`. Il suo valore è aprire uno spazio per la review del codice prima che l'integrazione avvenga davvero, e questo aiuta a mantenere la qualità e la stabilità del progetto.
 
 ## Forking
 Il fork crea una copia indipendente di un repository remoto sul proprio account, sulla quale si può lavorare liberamente senza toccare in alcun modo l'originale. È il meccanismo con cui si contribuisce ai progetti altrui: si lavora sul proprio fork e poi si propongono le modifiche al progetto di partenza tramite una pull request.

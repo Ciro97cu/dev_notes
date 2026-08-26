@@ -127,7 +127,7 @@ Si legge come un operatore ternario applicato ai tipi: se `T` è assegnabile a `
 <details>
 <summary>Cos'è la distributività e come si disattiva?</summary>
 
-Un conditional type è distributivo quando il tipo sottoposto alla condizione è un parametro generico usato direttamente (un parametro "nudo"): in tal caso, se viene istanziato con un union, la condizione si applica separatamente a ciascun membro e i risultati vengono ricombinati in un nuovo union. Per esempio `InArray<string | number>` con `T extends unknown ? T[] : never` produce `string[] | number[]`. Per disattivare la distributività si racchiudono entrambi i lati della condizione fra parentesi quadre — `[T] extends [unknown]` — così l'union viene trattato come un tutto unico, ottenendo `(string | number)[]`.
+Un conditional type è distributivo quando il tipo sottoposto alla condizione è un parametro generico usato direttamente (un parametro "nudo"): in tal caso, se viene istanziato con un union, la condizione si applica separatamente a ciascun membro e i risultati vengono ricombinati in un nuovo union. Per esempio `InArray<string | number>` con `T extends unknown ? T[] : never` produce `string[] | number[]`. Per disattivare la distributività si racchiudono entrambi i lati della condizione fra parentesi quadre (`[T] extends [unknown]`), così l'union viene trattato come un tutto unico, ottenendo `(string | number)[]`.
 
 </details>
 

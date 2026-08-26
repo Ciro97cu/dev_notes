@@ -11,7 +11,7 @@ Si può costruire una torcia essenziale con sole batterie, lampadina e alcuni sp
 
 ## Il circuito è un cerchio
 
-La prima cosa da notare è che un **circuito è un cerchio**. La lampadina si accende solo se il percorso — dalle batterie al filo, alla lampadina, all'interruttore e di nuovo alle batterie — è **continuo**. Qualsiasi interruzione spegne tutto, e l'interruttore serve proprio a decidere se il cerchio è chiuso o aperto.
+La prima cosa da notare è che un **circuito è un cerchio**. La lampadina si accende solo se il percorso (dalle batterie al filo, alla lampadina, all'interruttore e di nuovo alle batterie) è **continuo**. Qualsiasi interruzione spegne tutto, e l'interruttore serve proprio a decidere se il cerchio è chiuso o aperto.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 560 205" role="img" aria-label="Lo stesso circuito con interruttore aperto (spento) e chiuso (acceso)" style="width:100%;max-width:520px;height:auto;color:inherit">
@@ -161,7 +161,7 @@ In **serie** (+ con −) le tensioni si **sommano**: due pile da 1,5 V danno 3 V
 <details>
 <summary>Perché l'interruttore lega la torcia al tema del binario?</summary>
 
-Perché ha **due soli stati** — aperto o chiuso — e quindi la torcia è o spenta o accesa, senza vie di mezzo: lo stesso binario di Morse e Braille. È il ponte verso le porte logiche e, da lì, verso il computer.
+Perché ha **due soli stati** (aperto o chiuso) e quindi la torcia è o spenta o accesa, senza vie di mezzo: lo stesso binario di Morse e Braille. È il ponte verso le porte logiche e, da lì, verso il computer.
 
 </details>
 

@@ -7,7 +7,7 @@ tags: [tipo/modulo, flexbox, layout]
 
 > modulo 12 — *CSS* · rif. MDN
 
-**Flexbox** (*Flexible Box Layout*) è un modello di layout **monodimensionale**: dispone gli elementi lungo **un asse** per volta — una riga *oppure* una colonna — e sa distribuire lo spazio libero e allineare gli elementi in modo naturale. È lo strumento giusto per barre di navigazione, gruppi di pulsanti, card affiancate, centrature: ovunque conti come si comportano gli elementi lungo una singola direzione. Per griglie a righe **e** colonne insieme (layout bidimensionale) si usa invece [[13-grid]].
+**Flexbox** (*Flexible Box Layout*) è un modello di layout **monodimensionale**: dispone gli elementi lungo **un asse** per volta (una riga *oppure* una colonna) e sa distribuire lo spazio libero e allineare gli elementi in modo naturale. È lo strumento giusto per barre di navigazione, gruppi di pulsanti, card affiancate, centrature: ovunque conti come si comportano gli elementi lungo una singola direzione. Per griglie a righe **e** colonne insieme (layout bidimensionale) si usa invece [[13-grid]].
 
 ## Container e item
 

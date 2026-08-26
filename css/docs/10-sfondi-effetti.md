@@ -218,7 +218,7 @@ Ombre multiple: **lista separata da virgola**, la prima disegnata sopra.
 > Un `blur` (e `spread`) molto ampio è **costoso** da ridipingere, soprattutto se **animato**: il browser ricalcola la sfocatura a ogni frame. Per transizioni fluide conviene mettere l'ombra su uno pseudo-elemento sovrapposto e animarne l'`opacity` (che gira sulla GPU), invece di animare `box-shadow` direttamente.
 
 > [!tip]
-> `box-shadow` segue il **box rettangolare** (col raggio dei bordi). Per proiettare un'ombra che segua la **sagoma reale** — ad esempio una PNG con trasparenza o un elemento con `clip-path` — serve `filter: drop-shadow()` (vedi sotto).
+> `box-shadow` segue il **box rettangolare** (col raggio dei bordi). Per proiettare un'ombra che segua la **sagoma reale** (ad esempio una PNG con trasparenza o un elemento con `clip-path`) serve `filter: drop-shadow()` (vedi sotto).
 
 ## `filter`
 

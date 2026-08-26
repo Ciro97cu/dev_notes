@@ -7,7 +7,7 @@ Il rebase prende i commit di un branch e li riapplica uno dopo l'altro sopra un'
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><strong>Rebase</strong>: i commit di <code>feature</code> vengono ricollocati (con <strong>hash nuovi</strong>) sopra la punta di <code>main</code>, ottenendo una storia lineare.</figcaption>
 </figure>
 
-Lo si usa principalmente in due situazioni. La prima è aggiornare un feature branch con le ultime modifiche di `main` senza introdurre un merge commit, mantenendo così una cronologia pulita. La seconda è riordinare la propria storia — accorpando, riscrivendo o riordinando i commit — prima di aprire una pull request.
+Lo si usa principalmente in due situazioni. La prima è aggiornare un feature branch con le ultime modifiche di `main` senza introdurre un merge commit, mantenendo così una cronologia pulita. La seconda è riordinare la propria storia (accorpando, riscrivendo o riordinando i commit) prima di aprire una pull request.
 
 ## Comandi
 | Comando | Cosa fa |

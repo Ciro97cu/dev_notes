@@ -1,6 +1,6 @@
 # Introduzione alla programmazione
 
-Un programma — detto anche source code o semplicemente codice — è un insieme di istruzioni che dicono al computer quali operazioni eseguire. In JavaScript è possibile scrivere codice direttamente nella console di sviluppo del browser, senza bisogno di file separati.
+Un programma (detto anche source code o semplicemente codice) è un insieme di istruzioni che dicono al computer quali operazioni eseguire. In JavaScript è possibile scrivere codice direttamente nella console di sviluppo del browser, senza bisogno di file separati.
 
 Le regole che definiscono il formato valido delle istruzioni si chiamano **sintassi** del linguaggio, esattamente come la grammatica definisce la struttura corretta di una frase in italiano.
 
@@ -38,7 +38,7 @@ console.log(b); // 21
 
 `console` è un oggetto messo a disposizione dall'ambiente di esecuzione; `log` è una funzione (detta **metodo**) di quell'oggetto.
 
-Per raccogliere input in modo rapido — utile in fase di apprendimento — esiste `prompt()`:
+Per raccogliere input in modo rapido (utile in fase di apprendimento) esiste `prompt()`:
 
 ```js
 var eta = prompt("Quanti anni hai?");
@@ -245,7 +245,7 @@ function esterna() {
 esterna();
 ```
 
-Questa caratteristica — detta **lexical scope** — è il meccanismo alla base delle closure, trattate nel Libro II.
+Questa caratteristica, detta **lexical scope**, è il meccanismo alla base delle closure, trattate nel Libro II.
 
 ---
 

@@ -88,7 +88,7 @@ typeof a; // "undefined"
 typeof b; // "undefined" — b non è mai stata dichiarata, ma nessun errore!
 ```
 
-Questo comportamento — non lanciare errore su una variabile non dichiarata — è però una **safety guard** utile in certi contesti.
+Questo comportamento (non lanciare errore su una variabile non dichiarata) è però una **safety guard** utile in certi contesti.
 
 ---
 

@@ -6,7 +6,7 @@ tags: [tipo/modulo, layout, posizionamento]
 # 09 · Display & posizionamento
 > modulo 9 — *CSS* · rif. MDN
 
-Prima di impilare gli elementi con Flexbox o Grid serve capire due leve fondamentali del layout: `display` — **che tipo di scatola** genera un elemento — e `position` — **come e rispetto a cosa** quella scatola viene collocata. Da qui discendono lo *stacking* (`z-index`), la gestione del contenuto che trabocca (`overflow`) e la tecnica storica del `float`. Il *box model* di ogni scatola è il prerequisito: vedi [[05-box-model]].
+Prima di impilare gli elementi con Flexbox o Grid serve capire due leve fondamentali del layout: `display` (**che tipo di scatola** genera un elemento) e `position` — **come e rispetto a cosa** quella scatola viene collocata. Da qui discendono lo *stacking* (`z-index`), la gestione del contenuto che trabocca (`overflow`) e la tecnica storica del `float`. Il *box model* di ogni scatola è il prerequisito: vedi [[05-box-model]].
 
 ## `display`: il tipo di scatola
 
@@ -63,7 +63,7 @@ Tre modi per "far sparire" qualcosa, con conseguenze molto diverse su spazio occ
 
 ## `position`: collocare la scatola
 
-`position` decide rispetto a **cosa** un elemento viene posizionato e se resta nel normale flusso ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position)). Gli offset si esprimono con `top`/`right`/`bottom`/`left` oppure — forma moderna e più compatta — con lo shorthand `inset`.
+`position` decide rispetto a **cosa** un elemento viene posizionato e se resta nel normale flusso ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position)). Gli offset si esprimono con `top`/`right`/`bottom`/`left` oppure (forma moderna e più compatta) con lo shorthand `inset`.
 
 - **`static`** (default) — l'elemento sta nel flusso normale; gli offset e `z-index` **non hanno effetto**.
 - **`relative`** — resta nel flusso (lo spazio originale è conservato), ma può essere spostato con gli offset **rispetto a sé stesso**. Usato spesso solo per fare da riferimento a un figlio `absolute`.
@@ -226,7 +226,7 @@ img.wrap {
 
 ## Anchor positioning (emergente)
 
-Ancorare un elemento a un altro — un *tooltip* sotto un bottone, un menu accanto al suo trigger — ha sempre richiesto JavaScript per calcolare le coordinate. L'**anchor positioning** lo rende dichiarativo in CSS: si nomina un'ancora con `anchor-name`, la si collega con `position-anchor` e si posiziona l'elemento con la funzione `anchor()` (o con `position-area`); `position-try-fallbacks` sposta l'elemento se sta per uscire dallo schermo ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning/Using)).
+Ancorare un elemento a un altro (un *tooltip* sotto un bottone, un menu accanto al suo trigger) ha sempre richiesto JavaScript per calcolare le coordinate. L'**anchor positioning** lo rende dichiarativo in CSS: si nomina un'ancora con `anchor-name`, la si collega con `position-anchor` e si posiziona l'elemento con la funzione `anchor()` (o con `position-area`); `position-try-fallbacks` sposta l'elemento se sta per uscire dallo schermo ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_anchor_positioning/Using)).
 
 ```css
 .btn     { anchor-name: --trigger; }

@@ -101,7 +101,7 @@ m[y] = "bar";
 m[x]; // "bar" — entrambi stringificano a "[object Object]"
 ```
 
-`Map` risolve il problema: qualsiasi valore — inclusi oggetti — può essere chiave, con identità per riferimento.
+`Map` risolve il problema: qualsiasi valore (inclusi oggetti) può essere chiave, con identità per riferimento.
 
 ```js
 var m = new Map();
@@ -313,6 +313,6 @@ Un `Set` considera due valori identici se e solo se sono uguali secondo un algor
 <details>
 <summary>Cosa distingue <code>WeakMap</code> da <code>WeakSet</code> e quali sono i rispettivi casi d'uso?</summary>
 
-`WeakMap` associa a ogni chiave-oggetto un valore arbitrario — è una mappa chiave→valore dove le chiavi sono tenute debolmente. `WeakSet` è invece una collezione di oggetti unici senza alcun valore associato — serve solo a rispondere alla domanda "questo oggetto è presente nel set?". Il caso d'uso tipico di `WeakMap` è associare dati privati o metadata a oggetti esterni (DOM elements, oggetti di librerie terze) senza modificarli, con cleanup automatico quando l'oggetto viene rimosso. Il caso d'uso tipico di `WeakSet` è tenere traccia degli oggetti già processati — ad esempio in un algoritmo di visita di grafi — senza impedire il loro GC quando non servono più. Entrambi accettano solo oggetti come chiavi/valori, e nessuno dei due è iterabile o ha `size`.
+`WeakMap` associa a ogni chiave-oggetto un valore arbitrario — è una mappa chiave→valore dove le chiavi sono tenute debolmente. `WeakSet` è invece una collezione di oggetti unici senza alcun valore associato — serve solo a rispondere alla domanda "questo oggetto è presente nel set?". Il caso d'uso tipico di `WeakMap` è associare dati privati o metadata a oggetti esterni (DOM elements, oggetti di librerie terze) senza modificarli, con cleanup automatico quando l'oggetto viene rimosso. Il caso d'uso tipico di `WeakSet` è tenere traccia degli oggetti già processati (ad esempio in un algoritmo di visita di grafi) senza impedire il loro GC quando non servono più. Entrambi accettano solo oggetti come chiavi/valori, e nessuno dei due è iterabile o ha `size`.
 
 </details>

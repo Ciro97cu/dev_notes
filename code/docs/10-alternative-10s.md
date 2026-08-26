@@ -62,7 +62,7 @@ Un `1` seguito da soli zeri è sempre una **potenza di due**, e l'esponente è p
 
 ## Il bit
 
-Una cifra binaria — un `0` o un `1` — è l'unità d'informazione più piccola possibile: due soli stati. Attorno al **1947** il matematico americano **John Wilder Tukey** (1915-2000) coniò una parola più corta al posto di *binary digit*: **bit**. Un bit è esattamente questo: una scelta tra due possibilità, la stessa dualità che abbiamo visto in punto/linea, rilievo/piatto, acceso/spento, vero/falso.
+Una cifra binaria (un `0` o un `1`) è l'unità d'informazione più piccola possibile: due soli stati. Attorno al **1947** il matematico americano **John Wilder Tukey** (1915-2000) coniò una parola più corta al posto di *binary digit*: **bit**. Un bit è esattamente questo: una scelta tra due possibilità, la stessa dualità che abbiamo visto in punto/linea, rilievo/piatto, acceso/spento, vero/falso.
 
 ## Dal binario ai circuiti
 
@@ -107,7 +107,7 @@ Sommando ogni cifra **moltiplicata per la potenza di due** della sua posizione. 
 <details>
 <summary>Cos'è un bit e chi ne coniò il nome?</summary>
 
-Un **bit** è una cifra binaria (0 o 1), l'unità d'informazione più piccola: due soli stati. Il termine — contrazione di *binary digit* — fu coniato dal matematico **John W. Tukey** intorno al **1947**.
+Un **bit** è una cifra binaria (0 o 1), l'unità d'informazione più piccola: due soli stati. Il termine (contrazione di *binary digit*) fu coniato dal matematico **John W. Tukey** intorno al **1947**.
 
 </details>
 

@@ -205,7 +205,7 @@ I metodi hanno nomi distinti (`init`/`setup`, `insert`/`build`) — non c'è mai
 
 Il pattern a classi per un sistema login/auth richiede tre entità: `Controller` (base), `LoginController` e `AuthController` (figli), con override di `success()` e `failure()` in entrambi i figli, e composizione aggiuntiva perché `AuthController` ha bisogno di un'istanza di `LoginController`.
 
-Con OLOO, bastano **due oggetti** — `LoginController` e `AuthController` — dove il secondo delega al primo:
+Con OLOO, bastano **due oggetti** (`LoginController` e `AuthController`), dove il secondo delega al primo:
 
 ```js
 var LoginController = {
@@ -246,7 +246,7 @@ AuthController.rejected = function(err) { this.failure("Auth fallita: " + err); 
 AuthController.checkAuth();
 ```
 
-Nessuna classe base condivisa, nessuna composizione artificiale, nessun override di metodi con lo stesso nome. I metodi su `AuthController` si chiamano `accepted`/`rejected` — nomi descrittivi del compito specifico — invece di `success`/`failure` come sul livello superiore.
+Nessuna classe base condivisa, nessuna composizione artificiale, nessun override di metodi con lo stesso nome. I metodi su `AuthController` si chiamano `accepted`/`rejected` (nomi descrittivi del compito specifico) invece di `success`/`failure` come sul livello superiore.
 
 ---
 
@@ -351,7 +351,7 @@ OLOO significa "Objects Linked to Other Objects" — oggetti collegati ad altri 
 <details>
 <summary>Perché in OLOO si usano nomi di metodo diversi ai diversi livelli della chain?</summary>
 
-Nel design a classi, i nomi uguali a livelli diversi sono intenzionali: permettono il polimorfismo (override). In OLOO il shadowing — avere lo stesso nome a livelli diversi — è problematico perché crea ambiguità e richiede explicit pseudopolymorphism (`SuperObj.method.call(this)`) per disambiguare. Usare nomi descrittivi e distinti (`setup` invece di `init` su Button, `insert` invece di `render` su Widget) rende l'API autoesplicativa, elimina la necessità di disambiguazione, e rende il codice più facile da capire e mantenere.
+Nel design a classi, i nomi uguali a livelli diversi sono intenzionali: permettono il polimorfismo (override). In OLOO il shadowing (avere lo stesso nome a livelli diversi) è problematico perché crea ambiguità e richiede explicit pseudopolymorphism (`SuperObj.method.call(this)`) per disambiguare. Usare nomi descrittivi e distinti (`setup` invece di `init` su Button, `insert` invece di `render` su Widget) rende l'API autoesplicativa, elimina la necessità di disambiguazione, e rende il codice più facile da capire e mantenere.
 
 </details>
 

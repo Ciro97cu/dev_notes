@@ -69,7 +69,7 @@ Anche se ora il disegno non sembra più un cerchio, **lo è ancora**: sostituend
 
 ## Un passo avanti (e un limite)
 
-Il bilancio è notevole: prima si comunicava solo **in linea di vista** e per la portata di una torcia; ora, con i fili, si comunica **dietro l'angolo**, oltre la linea di vista, e in teoria a grandi distanze allungando i fili. In teoria, appunto. Il rame è un buon conduttore ma non perfetto: **più il filo è lungo, più resistenza ha; più resistenza, meno corrente; meno corrente, luce più fioca.** È proprio questo limite a spingere verso l'invenzione successiva — il telegrafo con i suoi relè — nei prossimi capitoli.
+Il bilancio è notevole: prima si comunicava solo **in linea di vista** e per la portata di una torcia; ora, con i fili, si comunica **dietro l'angolo**, oltre la linea di vista, e in teoria a grandi distanze allungando i fili. In teoria, appunto. Il rame è un buon conduttore ma non perfetto: **più il filo è lungo, più resistenza ha; più resistenza, meno corrente; meno corrente, luce più fioca.** È proprio questo limite a spingere verso l'invenzione successiva (il telegrafo con i suoi relè) nei prossimi capitoli.
 
 > [!tip]
 > Due idee da portare via: il **comune** (un tratto condiviso tra circuiti, che fa risparmiare fili) e la **massa** (la Terra come conduttore di ritorno *e* come mare di elettroni). Il simbolo **V + massa** è solo un modo compatto per disegnare "batteria col negativo a terra".
@@ -118,5 +118,5 @@ Più il filo è lungo, **più resistenza** ha → **meno corrente** → **luce p
 
 - Sostituendo la torcia con **batteria + interruttore + fili**, si comunica **dietro l'angolo** e oltre la linea di vista: è il principio del **telegrafo**.
 - Il **comune** (filo condiviso che unisce i negativi) riduce i fili tra le case da 4 a 3.
-- La **Terra** può fare da conduttore di ritorno — è un **oceano di elettroni**, sorgente e serbatoio — se la tensione è alta; il simbolo **V + massa** riassume "batteria col negativo a terra".
+- La **Terra** può fare da conduttore di ritorno (è un **oceano di elettroni**, sorgente e serbatoio) se la tensione è alta; il simbolo **V + massa** riassume "batteria col negativo a terra".
 - Il limite del rame (**più lungo = più resistenza = più fioco**) apre la strada al telegrafo e ai **relè**.

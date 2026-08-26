@@ -16,7 +16,7 @@ Il fraintendimento più radicato e persistente su JavaScript riguarda il keyword
 
 `this` viene determinato dinamicamente in base a **come** la funzione viene chiamata, non a dove è definita. Esistono quattro regole precise che permettono di determinarlo sempre, in qualsiasi situazione.
 
-Strettamente legato a `this` c'è il meccanismo del **prototype** — una catena di ricerca per le proprietà degli oggetti, analoga al lexical scope per le variabili. Il principale equivoco legato al prototype è il tentativo di usarlo per emulare classi ed ereditarietà di altri linguaggi. La sintassi sembra suggerire che esistano classi in JavaScript, ma il meccanismo del prototype è fondamentalmente diverso — e opposto per comportamento — all'ereditarietà classica.
+Strettamente legato a `this` c'è il meccanismo del **prototype** — una catena di ricerca per le proprietà degli oggetti, analoga al lexical scope per le variabili. Il principale equivoco legato al prototype è il tentativo di usarlo per emulare classi ed ereditarietà di altri linguaggi. La sintassi sembra suggerire che esistano classi in JavaScript, ma il meccanismo del prototype è fondamentalmente diverso, e opposto per comportamento, all'ereditarietà classica.
 
 L'alternativa proposta dalla serie non è solo una preferenza sintattica: il **behavior delegation** è un pattern di design radicalmente diverso, più potente, che non richiede di simulare classi o ereditarietà. Questa posizione va controcorrente rispetto a quasi tutta la letteratura JavaScript esistente, ma parte da una comprensione del linguaggio così com'è, non come vorremmo che fosse.
 
@@ -24,7 +24,7 @@ L'alternativa proposta dalla serie non è solo una preferenza sintattica: il **b
 
 Il terzo titolo della serie affronta un argomento che genera più frustrazione di quasi tutti gli altri: la coercizione di tipo. L'opinione dominante è che la coercizione implicita sia una caratteristica difettosa del linguaggio da evitare sempre. Esistono persino strumenti il cui unico scopo è segnalare qualsiasi uso della coercizione nel codice.
 
-La tesi del libro è l'opposta: la coercizione non è un difetto e non è imprevedibile — è un meccanismo con regole precise che, una volta apprese, risulta non solo comprensibile ma utile. Dopo aver compreso come funzionano davvero i tipi e i valori, emerge che la coercizione implicita — usata correttamente — può rendere il codice più leggibile, non meno.
+La tesi del libro è l'opposta: la coercizione non è un difetto e non è imprevedibile — è un meccanismo con regole precise che, una volta apprese, risulta non solo comprensibile ma utile. Dopo aver compreso come funzionano davvero i tipi e i valori, emerge che la coercizione implicita, usata correttamente, può rendere il codice più leggibile, non meno.
 
 L'obiettivo non è convincere a usare ciecamente la coercizione ovunque, ma a non escluderla per abitudine o per conformarsi a convenzioni non ragionate.
 

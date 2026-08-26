@@ -5,7 +5,7 @@ Il libro si chiude dove l'informatica, in un certo senso, si dissolve nel mondo:
 
 ## Un sogno più vecchio di internet
 
-L'idea di raccogliere e collegare tutta la conoscenza umana precede di decenni il computer. Nel 1938 lo scrittore **H. G. Wells** — lo stesso di *La macchina del tempo* e *La guerra dei mondi* — pubblicò *World Brain*, proponendo un'enciclopedia mondiale, continuamente aggiornata, che fungesse da "cervello del mondo". Nel 1945 l'ingegnere **Vannevar Bush** immaginò il **Memex**, una scrivania capace di collegare documenti tra loro con percorsi di associazioni. E nel 1965 il visionario **Ted Nelson** coniò la parola **hypertext** (ipertesto) per un corpo di materiale scritto interconnesso in modo così complesso da non poter esistere sulla carta. Tre visioni della stessa cosa — informazioni legate da rimandi — molto prima che ci fosse un modo per realizzarle.
+L'idea di raccogliere e collegare tutta la conoscenza umana precede di decenni il computer. Nel 1938 lo scrittore **H. G. Wells** (lo stesso di *La macchina del tempo* e *La guerra dei mondi*) pubblicò *World Brain*, proponendo un'enciclopedia mondiale, continuamente aggiornata, che fungesse da "cervello del mondo". Nel 1945 l'ingegnere **Vannevar Bush** immaginò il **Memex**, una scrivania capace di collegare documenti tra loro con percorsi di associazioni. E nel 1965 il visionario **Ted Nelson** coniò la parola **hypertext** (ipertesto) per un corpo di materiale scritto interconnesso in modo così complesso da non poter esistere sulla carta. Tre visioni della stessa cosa (informazioni legate da rimandi) molto prima che ci fosse un modo per realizzarle.
 
 ## Come i computer si parlano: internet
 
@@ -15,7 +15,7 @@ Internet stesso nacque da una ricerca del Dipartimento della Difesa statunitense
 
 ## Il World Wide Web
 
-La maggior parte delle persone, però, non usa "internet" in astratto: usa il **World Wide Web**, inventato nel 1989 dallo scienziato inglese **Tim Berners-Lee**, che riprese proprio la parola *hypertext* di Nelson. Il documento base del web è la **pagina**, scritta in **HTML** (*Hypertext Markup Language*): un testo con **tag** che ne marcano le parti — `<p>` per un paragrafo, `<h1>` per un titolo, `<img>` per un'immagine. Il tag più importante è `<a>` (da *anchor*, àncora), che racchiude un **hyperlink**: un testo che, cliccato, carica un'altra pagina. È il collegamento tra le pagine — l'ipertesto di Nelson finalmente realizzato — a fare del web una ragnatela.
+La maggior parte delle persone, però, non usa "internet" in astratto: usa il **World Wide Web**, inventato nel 1989 dallo scienziato inglese **Tim Berners-Lee**, che riprese proprio la parola *hypertext* di Nelson. Il documento base del web è la **pagina**, scritta in **HTML** (*Hypertext Markup Language*): un testo con **tag** che ne marcano le parti — `<p>` per un paragrafo, `<h1>` per un titolo, `<img>` per un'immagine. Il tag più importante è `<a>` (da *anchor*, àncora), che racchiude un **hyperlink**: un testo che, cliccato, carica un'altra pagina. È il collegamento tra le pagine (l'ipertesto di Nelson finalmente realizzato) a fare del web una ragnatela.
 
 Ogni pagina è identificata da una **URL** (*Uniform Resource Locator*), che ne descrive con precisione la posizione:
 
@@ -24,11 +24,11 @@ Ogni pagina è identificata da una **URL** (*Uniform Resource Locator*), che ne 
 <figcaption><em>Le parti di una URL: il <strong>protocollo</strong> (come recuperare la risorsa), il <strong>dominio</strong> (quale server), il <strong>percorso</strong> (quale cartella) e il <strong>file</strong>. Il protocollo <code>http</code> (*Hypertext Transfer Protocol*) descrive come un browser ottiene le pagine; <code>https</code> è la sua variante cifrata e sicura.</em></figcaption>
 </figure>
 
-Digitando una URL, il browser invia una **richiesta HTTP** al server indicato dal dominio; il server risponde con la pagina HTML, che il browser interpreta e disegna, scaricando via via i file collegati (fogli di stile, immagini, script). Le pagine possono essere **statiche** (file già pronti) oppure **dinamiche** (costruite dal server al momento). Il codice **JavaScript** — un tempo interpretato, oggi compilato *just-in-time* dai motori dei browser — gira sul computer dell'utente (*client-side*) e può dialogare con i programmi che girano sul server (*server-side*). Man mano che elaborazione e dati si spostano sui server, questi diventano collettivamente il **cloud**, e l'esperienza d'uso diventa **centrata sull'utente** più che sul singolo dispositivo.
+Digitando una URL, il browser invia una **richiesta HTTP** al server indicato dal dominio; il server risponde con la pagina HTML, che il browser interpreta e disegna, scaricando via via i file collegati (fogli di stile, immagini, script). Le pagine possono essere **statiche** (file già pronti) oppure **dinamiche** (costruite dal server al momento). Il codice **JavaScript**, un tempo interpretato, oggi compilato *just-in-time* dai motori dei browser, gira sul computer dell'utente (*client-side*) e può dialogare con i programmi che girano sul server (*server-side*). Man mano che elaborazione e dati si spostano sui server, questi diventano collettivamente il **cloud**, e l'esperienza d'uso diventa **centrata sull'utente** più che sul singolo dispositivo.
 
 ## Il cervello del mondo, oggi
 
-E così il cerchio si chiude. Il sito che più si avvicina alla *World Encyclopedia* di Wells è, con tutta evidenza, **Wikipedia**: un'enciclopedia modificabile dai suoi stessi lettori che, invece di degenerare nel caos, è diventata — sotto la guida di Jimmy Wales — uno dei luoghi più preziosi della rete. È il "cervello del mondo" immaginato quasi un secolo fa, realizzato con i bit, le porte logiche, le CPU e i protocolli costruiti pagina dopo pagina in questo libro.
+E così il cerchio si chiude. Il sito che più si avvicina alla *World Encyclopedia* di Wells è, con tutta evidenza, **Wikipedia**: un'enciclopedia modificabile dai suoi stessi lettori che, invece di degenerare nel caos, è diventata, sotto la guida di Jimmy Wales, uno dei luoghi più preziosi della rete. È il "cervello del mondo" immaginato quasi un secolo fa, realizzato con i bit, le porte logiche, le CPU e i protocolli costruiti pagina dopo pagina in questo libro.
 
 ```mermaid
 flowchart TB
@@ -89,8 +89,8 @@ Che **la complessità nasce combinando cose semplici**: un interruttore diventa 
 </details>
 
 **In sintesi:**
-- L'idea di una rete globale di conoscenza — il "cervello del mondo" — fu immaginata da **Wells** (World Brain), **Bush** (Memex) e **Nelson** (hypertext) prima che fosse realizzabile.
+- L'idea di una rete globale di conoscenza, il "cervello del mondo", fu immaginata da **Wells** (World Brain), **Bush** (Memex) e **Nelson** (hypertext) prima che fosse realizzabile.
 - **Internet** collega i computer con **modem**, **packet switching** (ARPANET, 1971), **router** e schede di rete con **MAC address**.
 - Il **World Wide Web** (**Berners-Lee**, 1989) è fatto di pagine **HTML** collegate da **hyperlink** e identificate da **URL**; il browser le ottiene via **HTTP/HTTPS**.
 - Il web moderno distingue contenuto **statico**/dinamico, codice **client-side** (JavaScript) e **server-side**, fino al **cloud**.
-- **Wikipedia** realizza la visione di Wells; e il libro si chiude sul suo messaggio — la complessità nasce dal combinare cose semplici — con l'invito: *«ognuno di noi deve fare ciò che può»*.
+- **Wikipedia** realizza la visione di Wells; e il libro si chiude sul suo messaggio (la complessità nasce dal combinare cose semplici) con l'invito: *«ognuno di noi deve fare ciò che può»*.

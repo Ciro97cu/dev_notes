@@ -64,7 +64,7 @@ arr.push(4);    // OK — il contenuto è mutabile
 arr = [];       // TypeError! — il binding è immutabile
 ```
 
-`const` vincola il **binding** (la variabile), non il **valore**. Un oggetto o array dichiarato `const` rimane liberamente modificabile al suo interno. Usare `const` come segnale di intento — "questo non cambierà" — non come protezione tecnica.
+`const` vincola il **binding** (la variabile), non il **valore**. Un oggetto o array dichiarato `const` rimane liberamente modificabile al suo interno. Usare `const` come segnale di intento, "questo non cambierà", non come protezione tecnica.
 
 ### Funzioni block-scoped
 

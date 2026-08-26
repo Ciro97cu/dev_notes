@@ -1,7 +1,7 @@
 # 13 · Da ASCII a Unicode
 > cap. 13 di «Code» (Petzold, 2ª ed.) — orig. *From ASCII to Unicode*
 
-Ogni volta che si tocca uno schermo o si digita su una tastiera si maneggia **testo**, e niente di tutto ciò sarebbe possibile senza un modo **standardizzato** di rappresentare i caratteri con bit e byte. La codifica dei caratteri è forse lo standard più vitale dell'informatica: è ciò che permette a sistemi, programmi e produttori diversi — e a nazioni diverse — di scambiarsi testo. Eppure a volte fallisce, in modi bizzarri. Nel 2021 l'autore ricevette un'email il cui oggetto diceva *«Weâ€™ve received your payment, thanks.»*: al posto dell'apostrofo di *We've*, tre caratteri assurdi. Alla fine del capitolo si capirà **esattamente** perché succede.
+Ogni volta che si tocca uno schermo o si digita su una tastiera si maneggia **testo**, e niente di tutto ciò sarebbe possibile senza un modo **standardizzato** di rappresentare i caratteri con bit e byte. La codifica dei caratteri è forse lo standard più vitale dell'informatica: è ciò che permette a sistemi, programmi e produttori diversi, e a nazioni diverse, di scambiarsi testo. Eppure a volte fallisce, in modi bizzarri. Nel 2021 l'autore ricevette un'email il cui oggetto diceva *«Weâ€™ve received your payment, thanks.»*: al posto dell'apostrofo di *We've*, tre caratteri assurdi. Alla fine del capitolo si capirà **esattamente** perché succede.
 
 ## Codici a lunghezza fissa e variabile: da Morse e Braille a Baudot
 
@@ -76,7 +76,7 @@ Per uscire da questo caos, nel **1988** diverse grandi aziende informatiche comi
 
 Passare da 8 a 16 bit introduce però un problema nuovo: **l'ordine dei byte**. I due byte `20h ACh` valgono `20ACh` (il simbolo dell'Euro) su una macchina **big-endian**, che mette per primo il byte più significativo, ma `AC20h` (un carattere Hangul coreano) su una **little-endian**. Per disambiguare, Unicode definisce un **byte order mark** (BOM), il code point `U+FEFF` posto in testa al file: se i primi byte sono `FEh FFh` il file è big-endian, se `FFh FEh` è little-endian. *(I nomi vengono da* I viaggi di Gulliver*, dove si litiga su quale estremità dell'uovo alla coque rompere.)*
 
-Verso la metà degli anni '90 fu chiaro che 16 bit non bastavano: servivano scritture antiche, simboli nuovi e — perché no — le **emoji**. Unicode fu quindi esteso a un codice a **21 bit**, con valori da `U+0000` fino a **`U+10FFFF`**: oltre **un milione** di caratteri possibili (per esempio `U+1F639`, la faccina di gatto qui sopra).
+Verso la metà degli anni '90 fu chiaro che 16 bit non bastavano: servivano scritture antiche, simboli nuovi e, perché no, le **emoji**. Unicode fu quindi esteso a un codice a **21 bit**, con valori da `U+0000` fino a **`U+10FFFF`**: oltre **un milione** di caratteri possibili (per esempio `U+1F639`, la faccina di gatto qui sopra).
 
 ## UTF-8, UTF-16, UTF-32: come si mettono i code point nei byte
 
@@ -146,7 +146,7 @@ Unicode ha reso l'informatica un'esperienza davvero universale e multiculturale,
 <details>
 <summary>Perché gli shift code del Baudot sono fragili?</summary>
 
-Perché il significato di un codice dipende da uno **stato** (modalità lettere o figure) impostato da un carattere precedente. Se quello stato non è quello atteso — per esempio all'inizio di una riga, dopo un Figure Shift rimasto attivo — gli stessi bit vengono interpretati come numeri anziché lettere, e il testo esce sbagliato. Proprio per evitarlo l'ASCII assegna **posti separati** a maiuscole, minuscole e cifre, senza modalità.
+Perché il significato di un codice dipende da uno **stato** (modalità lettere o figure) impostato da un carattere precedente. Se quello stato non è quello atteso (per esempio all'inizio di una riga, dopo un Figure Shift rimasto attivo) gli stessi bit vengono interpretati come numeri anziché lettere, e il testo esce sbagliato. Proprio per evitarlo l'ASCII assegna **posti separati** a maiuscole, minuscole e cifre, senza modalità.
 
 </details>
 
@@ -174,7 +174,7 @@ Un **code point** è il numero assegnato a un carattere, scritto come `U+` segui
 <details>
 <summary>Che differenza c'è tra un code point e UTF-8, e perché UTF-8 è così diffuso?</summary>
 
-Il **code point** è il *numero* del carattere; **UTF-8** è una **codifica**, cioè un modo di scriverlo in byte (da 1 a 4). UTF-8 è diffusissimo (~97% del web) perché è **retrocompatibile con l'ASCII** — un testo ASCII è già UTF-8 valido — e perché i bit di prefisso (`0…`, `110…`, `1110…`, `11110…`) rendono la decodifica non ambigua. Gli altri formati sono UTF-16 (2 o 4 byte) e UTF-32 (4 byte fissi, ma sprecone).
+Il **code point** è il *numero* del carattere; **UTF-8** è una **codifica**, cioè un modo di scriverlo in byte (da 1 a 4). UTF-8 è diffusissimo (~97% del web) perché è **retrocompatibile con l'ASCII** (un testo ASCII è già UTF-8 valido) e perché i bit di prefisso (`0…`, `110…`, `1110…`, `11110…`) rendono la decodifica non ambigua. Gli altri formati sono UTF-16 (2 o 4 byte) e UTF-32 (4 byte fissi, ma sprecone).
 
 </details>
 

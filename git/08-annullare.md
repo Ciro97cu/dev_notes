@@ -1,6 +1,6 @@
 # Annullare modifiche
 
-Annullare in Git non è un'operazione sola: esistono tre comandi principali — `restore`, `reset` e `revert` — ciascuno con uno scopo diverso. Quale sia quello giusto dipende soprattutto da due domande: se le modifiche sono già state salvate in un commit oppure no, e se quel commit è già stato condiviso (pushato) oppure è ancora solo locale.
+Annullare in Git non è un'operazione sola: esistono tre comandi principali (`restore`, `reset` e `revert`), ciascuno con uno scopo diverso. Quale sia quello giusto dipende soprattutto da due domande: se le modifiche sono già state salvate in un commit oppure no, e se quel commit è già stato condiviso (pushato) oppure è ancora solo locale.
 
 ## Detached HEAD
 Ci si ritrova in stato di "detached HEAD" (HEAD staccato) spostandosi direttamente su un commit specifico anziché su un branch: in quella condizione `HEAD` punta a un singolo commit invece che a un ramo.

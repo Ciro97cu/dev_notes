@@ -24,7 +24,7 @@ for (var k in myObject) { console.log(k); } // "a"
 
 ### `Object.prototype`
 
-La chain ha una fine: `Object.prototype`, l'oggetto in cima a ogni normale prototype chain. Lì risiedono le utility comuni — `toString()`, `valueOf()`, `hasOwnProperty()`, `isPrototypeOf()` — ecco perché sono disponibili su qualsiasi oggetto senza doverle definire.
+La chain ha una fine: `Object.prototype`, l'oggetto in cima a ogni normale prototype chain. Lì risiedono le utility comuni (`toString()`, `valueOf()`, `hasOwnProperty()`, `isPrototypeOf()`), ecco perché sono disponibili su qualsiasi oggetto senza doverle definire.
 
 ![Prototype chain e shadowing](../../assets/images/prototype-chain.svg)
 
@@ -212,7 +212,7 @@ Il polyfill crea una funzione temporanea `F`, ne imposta `.prototype`, e restitu
 
 ### Link come fallback?
 
-Usare la chain come meccanismo di fallback invisibile — "se `myObject` non ha il metodo, lo cerca su `anotherObject`" — introduce "magia" nell'API: chi legge il codice vede `myObject.cool()` ma non trova `cool` su `myObject`.
+Usare la chain come meccanismo di fallback invisibile ("se `myObject` non ha il metodo, lo cerca su `anotherObject`") introduce "magia" nell'API: chi legge il codice vede `myObject.cool()` ma non trova `cool` su `myObject`.
 
 Il pattern preferibile è la delegazione esplicita interna:
 

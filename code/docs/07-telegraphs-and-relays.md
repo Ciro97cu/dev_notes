@@ -34,13 +34,13 @@ Nel 1820 il fisico danese Hans Christian Ørsted mostrò che una corrente elettr
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Chiudendo l'interruttore, la corrente scorre nelle spire e la barra di ferro diventa una calamita che attira il pezzo di ferro a destra. Aprendolo, il magnetismo svanisce.</figcaption>
 </figure>
 
-Sembra un corto circuito, ma il filo è così sottile da avere resistenza a sufficienza. Questo componente — un interruttore a un capo che "fa succedere qualcosa" all'altro capo — è il fondamento del telegrafo.
+Sembra un corto circuito, ma il filo è così sottile da avere resistenza a sufficienza. Questo componente (un interruttore a un capo che "fa succedere qualcosa" all'altro capo) è il fondamento del telegrafo.
 
 ## Tasto, sounder e "What hath God wrought"
 
 Per **trasmettere** si usa il **tasto** (*key*), in sostanza un interruttore fatto per essere azionato in fretta: un tocco breve è un punto, uno più lungo una linea. Al **ricevitore**, un elettromagnete tira un braccio metallico: in origine il braccio muoveva un pennino che tracciava punti e linee su un rotolo di carta, ma gli operatori impararono presto a *ascoltare* il rimbalzo, e il pennino fu sostituito dal **sounder**, che fa "click" quando la corrente arriva e "clack" quando cessa (click-clack veloce = punto, lento = linea).
 
-Notificato l'ufficio brevetti nel 1836 e ottenuto il finanziamento del Congresso, il **24 maggio 1844** una linea tra Washington e Baltimora trasmise il celebre messaggio *"What hath God wrought!"*. Tasto, sounder, batteria e fili si collegano come la torcia del capitolo 5: con l'alta tensione basta **un filo** (la Terra fa da ritorno) e si usa la **V** al posto della batteria a massa. È l'inizio della comunicazione moderna — la prima più veloce di un cavallo — e, cosa notevole, si basa su un **codice binario**.
+Notificato l'ufficio brevetti nel 1836 e ottenuto il finanziamento del Congresso, il **24 maggio 1844** una linea tra Washington e Baltimora trasmise il celebre messaggio *"What hath God wrought!"*. Tasto, sounder, batteria e fili si collegano come la torcia del capitolo 5: con l'alta tensione basta **un filo** (la Terra fa da ritorno) e si usa la **V** al posto della batteria a massa. È l'inizio della comunicazione moderna (la prima più veloce di un cavallo) e, cosa notevole, si basa su un **codice binario**.
 
 ## Il problema della distanza → il relè
 
@@ -79,10 +79,10 @@ I nomi *In* e *Out* descrivono i fili che entrano ed escono dalla capanna, ma va
 
 ## Un interruttore comandato dall'elettricità
 
-Ed ecco il punto che apre tutto il resto del libro. Il relè è un **interruttore**, sì, ma un interruttore acceso e spento **non da una mano, bensì da una corrente elettrica**. Nel capitolo 6 gli interruttori in serie e in parallelo facevano logica, ma andavano azionati a mano; il relè fa esattamente quel lavoro **in automatico**, e l'uscita di un relè può azionare l'ingresso di un altro. Con dispositivi del genere — come suggerisce Petzold — "si potrebbe davvero assemblare gran parte di un computer". È proprio ciò che faremo nel prossimo capitolo, collegando i relè per costruire le **porte logiche**.
+Ed ecco il punto che apre tutto il resto del libro. Il relè è un **interruttore**, sì, ma un interruttore acceso e spento **non da una mano, bensì da una corrente elettrica**. Nel capitolo 6 gli interruttori in serie e in parallelo facevano logica, ma andavano azionati a mano; il relè fa esattamente quel lavoro **in automatico**, e l'uscita di un relè può azionare l'ingresso di un altro. Con dispositivi del genere, come suggerisce Petzold, "si potrebbe davvero assemblare gran parte di un computer". È proprio ciò che faremo nel prossimo capitolo, collegando i relè per costruire le **porte logiche**.
 
 > [!tip]
-> Il relè in una frase: **un interruttore azionato da un elettromagnete** invece che dalla mano. Questa singola idea — *In* comanda *Out* per via elettrica — è il mattone da cui, combinandolo, nascono le porte logiche e quindi il processore.
+> Il relè in una frase: **un interruttore azionato da un elettromagnete** invece che dalla mano. Questa singola idea (*In* comanda *Out* per via elettrica) è il mattone da cui, combinandolo, nascono le porte logiche e quindi il processore.
 
 > [!warning]
 > Non confondere i due ruoli del relè: da telegrafo è un **ripetitore** (rinfresca un segnale debole su lunghe distanze); da mattone logico è un **interruttore comandato elettricamente**. È lo stesso dispositivo, letto in due modi.

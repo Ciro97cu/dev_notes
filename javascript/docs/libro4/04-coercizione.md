@@ -66,7 +66,7 @@ Il funzionamento di `ToBoolean` è semplice: **esiste una lista fissa di valori 
 - `+0`, `-0`, `NaN`
 - `""` (stringa vuota)
 
-Qualsiasi altro valore — inclusi `"0"`, `"false"`, `[]`, `{}`, funzioni — è **truthy**.
+Qualsiasi altro valore (inclusi `"0"`, `"false"`, `[]`, `{}`, funzioni) è **truthy**.
 
 ```js
 Boolean("0");       // true — stringa non vuota
@@ -163,7 +163,7 @@ parseInt("08");     // 8 in ES5+ (base-10); prima di ES5 lo "0" iniziale poteva 
 parseInt("08", 10); // 8 — conviene comunque indicare sempre la base (radix)
 ```
 
-`parseInt()` opera su stringhe: se il primo argomento non è una stringa, viene prima convertito a stringa — quindi passargli un numero è un errore concettuale. Ne nascono curiosità: `parseInt(0.000008)` diventa `parseInt("0.000008")` → `0` (parsa lo `0` iniziale e si ferma al punto), mentre `parseInt(0.0000008)` — un solo zero in più — diventa `parseInt("8e-7")` → `8`, perché sotto `1e-6` JavaScript passa alla notazione esponenziale e `parseInt` parsa la cifra `8`.
+`parseInt()` opera su stringhe: se il primo argomento non è una stringa, viene prima convertito a stringa — quindi passargli un numero è un errore concettuale. Ne nascono curiosità: `parseInt(0.000008)` diventa `parseInt("0.000008")` → `0` (parsa lo `0` iniziale e si ferma al punto), mentre `parseInt(0.0000008)`, un solo zero in più, diventa `parseInt("8e-7")` → `8`, perché sotto `1e-6` JavaScript passa alla notazione esponenziale e `parseInt` parsa la cifra `8`.
 
 ### Da valore a booleano
 
@@ -244,7 +244,7 @@ function foo(a, b) {
 }
 ```
 
-Il gotcha: se `a` è `0`, `""` o `false` — valori falsy ma intenzionali — verranno rimpiazzati dal default. In ES6, i parametri di default (`function foo(a = "default_a")`) risolvono questo problema.
+Il gotcha: se `a` è `0`, `""` o `false` (valori falsy ma intenzionali) verranno rimpiazzati dal default. In ES6, i parametri di default (`function foo(a = "default_a")`) risolvono questo problema.
 
 `&&` è spesso usato per il **guard pattern**: eseguire qualcosa solo se il primo operando è truthy.
 
@@ -360,7 +360,7 @@ if (a == false) { /* comportamento sorprendente */ }
 if (a == true)  { /* idem */ }
 ```
 
-La scelta tra `==` e `===` si riduce a: la coercion è utile e prevedibile in questo contesto? Se sì, usare `==`. Se no — o se ci sono dubbi — usare `===`.
+La scelta tra `==` e `===` si riduce a: la coercion è utile e prevedibile in questo contesto? Se sì, usare `==`. Se no, o se ci sono dubbi, usare `===`.
 
 ---
 

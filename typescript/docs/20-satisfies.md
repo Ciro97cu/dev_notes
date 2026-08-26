@@ -22,7 +22,7 @@ palette.verde.toUpperCase();
 // Errore: Property 'toUpperCase' does not exist on type 'string | number[]'.
 ```
 
-L'annotazione ha un pregio importante — verifica che tutte le chiavi di `Colore` siano presenti e che ogni valore sia del tipo giusto — ma appiattisce ogni proprietà sull'union `string | number[]`, rendendo impossibile usare i metodi propri di `string` o di `number[]` senza un ulteriore narrowing.
+L'annotazione ha un pregio importante (verifica che tutte le chiavi di `Colore` siano presenti e che ogni valore sia del tipo giusto), ma appiattisce ogni proprietà sull'union `string | number[]`, rendendo impossibile usare i metodi propri di `string` o di `number[]` senza un ulteriore narrowing.
 
 ## La soluzione: verificare senza allargare
 
@@ -117,7 +117,7 @@ Entrambi verificano che il valore sia assegnabile al tipo indicato, controllando
 <details>
 <summary>Perché `satisfies` è più sicuro di una type assertion con `as`?</summary>
 
-Perché `as` si limita ad affermare un tipo senza eseguire un controllo di assegnabilità completo: non segnala, ad esempio, le proprietà obbligatorie mancanti, e può quindi mascherare errori che emergeranno solo a runtime. `satisfies` esegue invece una verifica piena e bidirezionale — tutte le proprietà richieste devono essere presenti e ogni valore deve essere conforme — senza mai alterare o forzare il tipo. In pratica `satisfies` non introduce mai un rischio, mentre `as` sposta la responsabilità della correttezza sullo sviluppatore.
+Perché `as` si limita ad affermare un tipo senza eseguire un controllo di assegnabilità completo: non segnala, ad esempio, le proprietà obbligatorie mancanti, e può quindi mascherare errori che emergeranno solo a runtime. `satisfies` esegue invece una verifica piena e bidirezionale (tutte le proprietà richieste devono essere presenti e ogni valore deve essere conforme) senza mai alterare o forzare il tipo. In pratica `satisfies` non introduce mai un rischio, mentre `as` sposta la responsabilità della correttezza sullo sviluppatore.
 
 </details>
 

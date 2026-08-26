@@ -173,7 +173,7 @@ console.log(a);  // RHS su `a`
 <details>
 <summary>Perché JavaScript viene definito un linguaggio compilato se viene eseguito nel browser senza una fase di build esplicita?</summary>
 
-Perché compilazione non significa necessariamente "in anticipo" o "con un file binario separato". La compilazione è il processo di trasformazione del codice sorgente in istruzioni macchina, e il JavaScript engine la esegue ogni volta che incontra del codice da eseguire — spesso pochi microsecondi prima dell'esecuzione stessa (JIT compilation). Le tre fasi — tokenizing, parsing e code-generation — avvengono comunque. Capire questo è fondamentale per comprendere hoisting e scope.
+Perché compilazione non significa necessariamente "in anticipo" o "con un file binario separato". La compilazione è il processo di trasformazione del codice sorgente in istruzioni macchina, e il JavaScript engine la esegue ogni volta che incontra del codice da eseguire — spesso pochi microsecondi prima dell'esecuzione stessa (JIT compilation). Le tre fasi (tokenizing, parsing e code-generation) avvengono comunque. Capire questo è fondamentale per comprendere hoisting e scope.
 
 </details>
 
@@ -187,20 +187,20 @@ Un LHS lookup cerca il **contenitore** della variabile — il posto in cui scriv
 <details>
 <summary>Cosa succede quando un LHS lookup fallisce in non-strict mode?</summary>
 
-Il global scope crea automaticamente una nuova variabile con quel nome e la restituisce all'Engine, come se fosse sempre esistita. Questo comportamento silenzioso — detto "auto-global creation" — è una fonte di bug difficili da individuare, perché non produce alcun errore visibile. In strict mode invece il comportamento è identico a quello dell'RHS: viene lanciato un `ReferenceError`.
+Il global scope crea automaticamente una nuova variabile con quel nome e la restituisce all'Engine, come se fosse sempre esistita. Questo comportamento silenzioso, detto "auto-global creation", è una fonte di bug difficili da individuare, perché non produce alcun errore visibile. In strict mode invece il comportamento è identico a quello dell'RHS: viene lanciato un `ReferenceError`.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra ReferenceError e TypeError?</summary>
 
-Un `ReferenceError` segnala che il lookup nello scope è fallito — la variabile cercata non esiste in nessuno scope raggiungibile. Un `TypeError` invece indica che il lookup è riuscito — la variabile è stata trovata — ma l'operazione tentata sul valore recuperato è illegale o impossibile (es. chiamare come funzione un numero, accedere a una proprietà di `null`). Il `ReferenceError` è un problema di scope; il `TypeError` è un problema di tipo.
+Un `ReferenceError` segnala che il lookup nello scope è fallito — la variabile cercata non esiste in nessuno scope raggiungibile. Un `TypeError` invece indica che il lookup è riuscito, la variabile è stata trovata, ma l'operazione tentata sul valore recuperato è illegale o impossibile (es. chiamare come funzione un numero, accedere a una proprietà di `null`). Il `ReferenceError` è un problema di scope; il `TypeError` è un problema di tipo.
 
 </details>
 
 <details>
 <summary>Come viene processata la dichiarazione `var a = 2;` dal compiler e dall'engine?</summary>
 
-La dichiarazione viene divisa in due operazioni distinte. Durante la compilazione, il Compiler vede `var a` e chiede allo Scope di dichiarare la variabile `a` in quello scope (se non esiste già). Durante l'esecuzione, l'Engine incontra `a = 2`, esegue un LHS lookup per trovare il contenitore `a` nello scope, e vi assegna il valore `2`. Questa separazione — dichiarazione in fase di compilazione, assegnamento in fase di esecuzione — è precisamente il meccanismo che produce l'hoisting.
+La dichiarazione viene divisa in due operazioni distinte. Durante la compilazione, il Compiler vede `var a` e chiede allo Scope di dichiarare la variabile `a` in quello scope (se non esiste già). Durante l'esecuzione, l'Engine incontra `a = 2`, esegue un LHS lookup per trovare il contenitore `a` nello scope, e vi assegna il valore `2`. Questa separazione (dichiarazione in fase di compilazione, assegnamento in fase di esecuzione) è precisamente il meccanismo che produce l'hoisting.
 
 </details>

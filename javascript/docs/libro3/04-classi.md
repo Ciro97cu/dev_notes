@@ -1,6 +1,6 @@
 # Classi e mixin
 
-JavaScript ha una sintassi che assomiglia a quella delle classi — `new`, `instanceof`, e in ES6 la keyword `class` — ma il meccanismo sottostante funziona in modo radicalmente diverso dai linguaggi class-oriented. Capire questa differenza è fondamentale per non farsi ingannare dalle apparenze.
+JavaScript ha una sintassi che assomiglia a quella delle classi (`new`, `instanceof`, e in ES6 la keyword `class`), ma il meccanismo sottostante funziona in modo radicalmente diverso dai linguaggi class-oriented. Capire questa differenza è fondamentale per non farsi ingannare dalle apparenze.
 
 ## Teoria delle classi
 

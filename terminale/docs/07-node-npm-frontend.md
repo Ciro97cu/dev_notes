@@ -1,6 +1,6 @@
 # 07 · Node, npm e il frontend
 
-Per chi lavora nel frontend, il terminale è soprattutto **questo**: **Node** e **npm**. La stragrande maggioranza dei comandi che si digitano ogni giorno — installare le dipendenze, avviare il server di sviluppo, fare la build — passa da qui. Questo capitolo raccoglie quel flusso di lavoro: cosa succede quando si installa un pacchetto, come si lanciano gli script del progetto, e come si tengono in ordine le versioni di Node. Per la definizione dei singoli termini (npm, npx, nvm, yarn…) il riferimento resta il [glossario](../glossario/#/docs/tooling-javascript); qui interessa il loro **uso da terminale**.
+Per chi lavora nel frontend, il terminale è soprattutto **questo**: **Node** e **npm**. La stragrande maggioranza dei comandi che si digitano ogni giorno (installare le dipendenze, avviare il server di sviluppo, fare la build) passa da qui. Questo capitolo raccoglie quel flusso di lavoro: cosa succede quando si installa un pacchetto, come si lanciano gli script del progetto, e come si tengono in ordine le versioni di Node. Per la definizione dei singoli termini (npm, npx, nvm, yarn…) il riferimento resta il [glossario](../glossario/#/docs/tooling-javascript); qui interessa il loro **uso da terminale**.
 
 Un chiarimento di base: **Node** è l'ambiente che esegue JavaScript fuori dal browser (è ciò che fa girare gli strumenti di sviluppo), e **npm** (*Node Package Manager*) è il suo gestore di pacchetti, quello che scarica le librerie e lancia gli script. Installando Node si ottiene automaticamente anche npm.
 
@@ -38,7 +38,7 @@ npm run build     # genera la cartella di build (es. dist/)
 
 ## Eseguire senza installare: `npx`
 
-A volte serve uno strumento **una volta sola** — creare un nuovo progetto, lanciare un generatore — e installarlo stabilmente sarebbe uno spreco. **`npx`** esegue il binario di un pacchetto scaricandolo al volo, senza lasciarlo installato. È il modo standard di fare *scaffolding*, cioè generare l'ossatura di un progetto nuovo:
+A volte serve uno strumento **una volta sola** (creare un nuovo progetto, lanciare un generatore) e installarlo stabilmente sarebbe uno spreco. **`npx`** esegue il binario di un pacchetto scaricandolo al volo, senza lasciarlo installato. È il modo standard di fare *scaffolding*, cioè generare l'ossatura di un progetto nuovo:
 
 ```bash
 npm create vite@latest      # crea un nuovo progetto Vite (usa npx dietro le quinte)
@@ -56,7 +56,7 @@ L'installazione globale deposita **due cose in due posti**: i **file** del pacch
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">L'install globale mette i <strong>file</strong> in <code>&lt;prefix&gt;/lib/node_modules</code> e l'<strong>eseguibile</strong> in <code>&lt;prefix&gt;/bin</code>. Quel comando diventa lanciabile da qualsiasi cartella per una sola ragione: <code>&lt;prefix&gt;/bin</code> è nel <strong>PATH</strong> (vedi <a href="05-variabili-ambiente-path.md">capitolo 5</a>).</figcaption>
 </figure>
 
-Il punto chiave è l'ultimo: `tsc` si esegue da qualsiasi cartella **non per magia, ma perché** `<prefix>/bin` è nel PATH — esattamente il meccanismo del [capitolo 5](05-variabili-ambiente-path.md). Fuori dall'ecosistema npm, su macOS lo stesso ruolo lo ha **Homebrew**, che installa i programmi di sistema (`wget`, `ffmpeg`, una `bash` moderna) sotto il suo prefix — `/opt/homebrew` su Apple Silicon, `/usr/local` su Intel — collegandone gli eseguibili in `<prefix>/bin`, di nuovo sul PATH.
+Il punto chiave è l'ultimo: `tsc` si esegue da qualsiasi cartella **non per magia, ma perché** `<prefix>/bin` è nel PATH — esattamente il meccanismo del [capitolo 5](05-variabili-ambiente-path.md). Fuori dall'ecosistema npm, su macOS lo stesso ruolo lo ha **Homebrew**, che installa i programmi di sistema (`wget`, `ffmpeg`, una `bash` moderna) sotto il suo prefix (`/opt/homebrew` su Apple Silicon, `/usr/local` su Intel) collegandone gli eseguibili in `<prefix>/bin`, di nuovo sul PATH.
 
 > [!warning]
 > Evitare `sudo npm install -g`. Il `sudo` serve solo se il prefix è una cartella **di sistema** di proprietà di `root`: installare lì crea file che l'utente non può gestire, problemi di permessi e codice di terzi eseguito da amministratore. Usando un *version manager* come **nvm** (sotto), il prefix sta nella home ed è tuo, così `npm install -g` funziona **senza** `sudo`.

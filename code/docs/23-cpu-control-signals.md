@@ -1,7 +1,7 @@
 # 23 · I segnali di controllo della CPU
 > cap. 23 di «Code» (Petzold, 2ª ed.) — orig. *CPU Control Signals*
 
-Al termine del capitolo 22 tutti i grandi pezzi del processore erano al loro posto — register array, ALU, Program Counter, memoria — appesi ai due bus. Ma erano ancora una collezione di componenti inerti, come un'orchestra di strumenti senza direttore. Ciò che li trasforma in una **CPU** che esegue davvero un programma è l'insieme dei **segnali di controllo**: gli impulsi di Clock, Enable, Select e Write che, al momento giusto e nell'ordine giusto, dicono a ciascun componente cosa fare. Questo capitolo costruisce quel direttore d'orchestra e, con esso, completa la CPU.
+Al termine del capitolo 22 tutti i grandi pezzi del processore erano al loro posto (register array, ALU, Program Counter, memoria) appesi ai due bus. Ma erano ancora una collezione di componenti inerti, come un'orchestra di strumenti senza direttore. Ciò che li trasforma in una **CPU** che esegue davvero un programma è l'insieme dei **segnali di controllo**: gli impulsi di Clock, Enable, Select e Write che, al momento giusto e nell'ordine giusto, dicono a ciascun componente cosa fare. Questo capitolo costruisce quel direttore d'orchestra e, con esso, completa la CPU.
 
 ## Il ciclo fetch-execute
 
@@ -19,7 +19,7 @@ flowchart TB
   E --> F
 ```
 
-Il **fetch** (prelievo) usa il Program Counter per indirizzare la memoria e portare il byte dell'istruzione in un *instruction latch*; subito dopo il PC viene **incrementato**, così la volta successiva punterà al byte seguente. È questo incremento — realizzato da un circuito chiamato **Incrementer-Decrementer** collegato all'address bus — che fa avanzare la CPU da un'istruzione alla successiva. Se l'istruzione è lunga più di un byte (come `MVI A,27h`, che ne occupa due), il prelievo si ripete finché tutti i byte sono in casa. Poi vengono il **decode** (decodifica) e l'**execute** (esecuzione).
+Il **fetch** (prelievo) usa il Program Counter per indirizzare la memoria e portare il byte dell'istruzione in un *instruction latch*; subito dopo il PC viene **incrementato**, così la volta successiva punterà al byte seguente. È questo incremento (realizzato da un circuito chiamato **Incrementer-Decrementer** collegato all'address bus) che fa avanzare la CPU da un'istruzione alla successiva. Se l'istruzione è lunga più di un byte (come `MVI A,27h`, che ne occupa due), il prelievo si ripete finché tutti i byte sono in casa. Poi vengono il **decode** (decodifica) e l'**execute** (esecuzione).
 
 ## Decodificare l'istruzione
 
@@ -27,7 +27,7 @@ Perché la CPU sappia *cosa* significa un opcode, i suoi otto bit vanno interpre
 
 ## Generare i segnali di controllo
 
-Sapere *quale* istruzione si sta eseguendo non basta: bisogna produrre, per ogni componente, i segnali giusti **nell'istante giusto**. Un'operazione come `ADD M` richiede più passi — prima portare l'operando dalla memoria all'ALU, poi far scattare l'ALU, poi salvarne il risultato — e ciascun passo dura un **ciclo macchina** (*machine cycle*). Per ogni combinazione di *istruzione decodificata* e *ciclo macchina corrente*, la CPU deve attivare un preciso sottoinsieme di Enable, Clock, Select e Write.
+Sapere *quale* istruzione si sta eseguendo non basta: bisogna produrre, per ogni componente, i segnali giusti **nell'istante giusto**. Un'operazione come `ADD M` richiede più passi (prima portare l'operando dalla memoria all'ALU, poi far scattare l'ALU, poi salvarne il risultato) e ciascun passo dura un **ciclo macchina** (*machine cycle*). Per ogni combinazione di *istruzione decodificata* e *ciclo macchina corrente*, la CPU deve attivare un preciso sottoinsieme di Enable, Clock, Select e Write.
 
 Il modo elegante con cui Petzold genera questi segnali è una vecchia conoscenza: una **matrice di diodi**, cioè una **ROM** come quella del capitolo 18. Gli ingressi della ROM sono i segnali del decoder e del ciclo macchina; le sue uscite sono i segnali di controllo cablati nella disposizione dei diodi. In pratica, la ROM contiene una piccola "tabella" che dice: *per questa istruzione, in questo ciclo, accendi questi segnali*.
 

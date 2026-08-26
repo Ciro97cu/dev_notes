@@ -1,6 +1,6 @@
 # Gestione delle risorse: using e await using
 
-Molte risorse — file aperti, connessioni di rete, lock, sottoscrizioni — vanno rilasciate in modo deterministico quando non servono più, indipendentemente dal fatto che il codice termini normalmente o per un'eccezione. La tecnica tradizionale ricorre a `try...finally`, corretta ma verbosa e facile da dimenticare. Le dichiarazioni `using` e `await using` offrono un meccanismo dichiarativo per lo stesso scopo: legano una risorsa a uno scope e ne invocano automaticamente la logica di rilascio nel momento in cui quello scope termina.
+Molte risorse (file aperti, connessioni di rete, lock, sottoscrizioni) vanno rilasciate in modo deterministico quando non servono più, indipendentemente dal fatto che il codice termini normalmente o per un'eccezione. La tecnica tradizionale ricorre a `try...finally`, corretta ma verbosa e facile da dimenticare. Le dichiarazioni `using` e `await using` offrono un meccanismo dichiarativo per lo stesso scopo: legano una risorsa a uno scope e ne invocano automaticamente la logica di rilascio nel momento in cui quello scope termina.
 
 ## La dichiarazione using
 

@@ -5,7 +5,7 @@ Costruite le porte logiche, il libro si ferma un momento sui **numeri** — perc
 
 > **1 2 3 4 5 6 7 8 9 10**
 
-L'obiettivo del capitolo è persuaderci che "questa quantità" di mele — 🍎🍎🍎 — non deve per forza scriversi `3`: potrebbe scriversi `11`. Una volta accettato questo, saremo pronti a rappresentare i numeri con i circuiti.
+L'obiettivo del capitolo è persuaderci che "questa quantità" di mele (🍎🍎🍎) non deve per forza scriversi `3`: potrebbe scriversi `11`. Una volta accettato questo, saremo pronti a rappresentare i numeri con i circuiti.
 
 ## Dieci dita, base arbitraria
 
@@ -28,7 +28,7 @@ I numeri nacquero per **contare** cose. Le tacche (una per oggetto) diventano pr
 
 ## Il sistema indo-arabo: posizione e zero
 
-Il sistema che usiamo oggi è quello **indo-arabo**: di origine indiana, portato in Europa dai matematici arabi. Attorno all'820 d.C. il persiano **al-Khwārizmī** scrisse un libro sul calcolo con queste cifre — dal suo nome deriva la parola *algoritmo* — e una traduzione latina del 1145 ne accelerò l'adozione. Rispetto ai sistemi precedenti ha **tre differenze**:
+Il sistema che usiamo oggi è quello **indo-arabo**: di origine indiana, portato in Europa dai matematici arabi. Attorno all'820 d.C. il persiano **al-Khwārizmī** scrisse un libro sul calcolo con queste cifre (dal suo nome deriva la parola *algoritmo*) e una traduzione latina del 1145 ne accelerò l'adozione. Rispetto ai sistemi precedenti ha **tre differenze**:
 
 1. È **posizionale**: il valore di una cifra dipende da **dove** si trova. Sia `100` sia `1 000 000` contengono un solo `1`, eppure un milione è molto più grande di cento.
 2. **Non** ha un simbolo speciale per il **dieci**: il dieci si ottiene mettendo `1` in una posizione diversa.

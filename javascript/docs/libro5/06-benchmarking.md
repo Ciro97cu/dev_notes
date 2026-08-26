@@ -1,6 +1,6 @@
 # Benchmarking & Tuning
 
-Questo capitolo affronta le prestazioni a livello micro — singole espressioni o statement — e soprattutto la capacità di misurarle correttamente. Il problema principale non è "X è più veloce di Y?" ma "come si sa davvero se è più veloce, e conta davvero?"
+Questo capitolo affronta le prestazioni a livello micro (singole espressioni o statement) e soprattutto la capacità di misurarle correttamente. Il problema principale non è "X è più veloce di Y?" ma "come si sa davvero se è più veloce, e conta davvero?"
 
 ---
 
@@ -80,7 +80,7 @@ Un benchmark che mostra "X è il 20% più veloce di Y" può essere statisticamen
 
 Si considerino X a 10.000.000 op/s e Y a 8.000.000 op/s: X impiega 100ns per operazione, Y 125ns — una differenza di 25ns. Il cervello umano non percepisce intervalli sotto i 100ms, che è un milione di volte più lento di quei 100ns. Per percepire la differenza cumulativa tra X e Y si dovrebbe eseguire l'operazione 4-5 milioni di volte in sequenza continua — un caso raro nella pratica.
 
-La conclusione: **la maggior parte dei micro-benchmark su operazioni rapide è irrilevante** per decisioni architetturali reali. I miti più persistenti — `++x` vs `x++`, `i < len` vs `i < x.length` — rientrano tutti in questa categoria.
+La conclusione: **la maggior parte dei micro-benchmark su operazioni rapide è irrilevante** per decisioni architetturali reali. I miti più persistenti (`++x` vs `x++`, `i < len` vs `i < x.length`) rientrano tutti in questa categoria.
 
 ---
 
@@ -191,7 +191,7 @@ Ossessionarsi per microperformance su percorsi non critici è sbagliato. Ma Knut
 
 > *"Programmers waste enormous amounts of time thinking about the speed of noncritical parts of their programs [...] We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil. **Yet we should not pass up our opportunities in that critical 3%.**"*
 
-La regola pratica: se il codice è su un **percorso critico** — animazioni, loop hot, UI reattiva — si deve ottimizzare senza riserve. Se non lo è, la leggibilità ha la precedenza.
+La regola pratica: se il codice è su un **percorso critico** (animazioni, loop hot, UI reattiva) si deve ottimizzare senza riserve. Se non lo è, la leggibilità ha la precedenza.
 
 Per un percorso critico che deve convertire una stringa in numero:
 
@@ -255,7 +255,7 @@ La differenza: nella versione TCO-friendly il risultato parziale viene accumulat
 ES6 richiede TCO nei motori (non lo lascia opzionale) precisamente perché senza di essa certi algoritmi ricorsivi non sono praticamente implementabili — non è solo un'ottimizzazione di velocità, ma un'abilitazione di pattern altrimenti impossibili.
 
 > [!info] Oggi
-> Il libro presenta la TCO come una garanzia della specifica: la si può quindi dare per acquisita. Nella specifica lo è tuttora — le *proper tail calls* sono normate da ES2015 — ma **in pratica quasi nessun motore la implementa**. A oggi solo **JavaScriptCore** (il motore di Safari) offre le proper tail calls; **V8** (Chrome e Node.js) le ha avute solo dietro un flag sperimentale poi abbandonato, e **SpiderMonkey** (Firefox) non le ha mai spedite. La conseguenza pratica: non si può contare sulla TCO per la ricorsione profonda su Node.js o Chrome — lo stack esplode ugualmente. Per garantire spazio di stack costante conviene riscrivere l'algoritmo in forma iterativa (un loop con accumulatore esplicito) invece di affidarsi al riuso automatico del frame.
+> Il libro presenta la TCO come una garanzia della specifica: la si può quindi dare per acquisita. Nella specifica lo è tuttora (le *proper tail calls* sono normate da ES2015), ma **in pratica quasi nessun motore la implementa**. A oggi solo **JavaScriptCore** (il motore di Safari) offre le proper tail calls; **V8** (Chrome e Node.js) le ha avute solo dietro un flag sperimentale poi abbandonato, e **SpiderMonkey** (Firefox) non le ha mai spedite. La conseguenza pratica: non si può contare sulla TCO per la ricorsione profonda su Node.js o Chrome — lo stack esplode ugualmente. Per garantire spazio di stack costante conviene riscrivere l'algoritmo in forma iterativa (un loop con accumulatore esplicito) invece di affidarsi al riuso automatico del frame.
 
 ---
 

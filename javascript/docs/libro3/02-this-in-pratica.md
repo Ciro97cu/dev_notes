@@ -54,7 +54,7 @@ La distinzione strict/non-strict si basa sul contenuto della funzione invocata, 
 
 ### Regola 2 — Implicit binding
 
-Se il call-site ha un **oggetto contesto** — cioè la funzione è chiamata come metodo di un oggetto — `this` è quell'oggetto.
+Se il call-site ha un **oggetto contesto** (cioè la funzione è chiamata come metodo di un oggetto) `this` è quell'oggetto.
 
 ```js
 function foo() {
@@ -298,14 +298,14 @@ Avviene quando una funzione originariamente associata a un oggetto viene estratt
 <details>
 <summary>Qual è la differenza tra `call`/`apply` e `bind`?</summary>
 
-`call` e `apply` invocano immediatamente la funzione con il `this` specificato come primo argomento. La differenza tra loro riguarda i parametri successivi: `call` li riceve come argomenti separati, `apply` come array. `bind` invece non invoca la funzione: restituisce una nuova funzione con il `this` permanentemente fissato (hard binding). Qualsiasi successiva invocazione della funzione restituita da `bind` — anche tramite `call`, `apply`, o come metodo di un oggetto — mantiene il binding fisso. Solo `new` può sovrascrivere un hard binding (nel `bind` nativo ES5, non in implementazioni manuali).
+`call` e `apply` invocano immediatamente la funzione con il `this` specificato come primo argomento. La differenza tra loro riguarda i parametri successivi: `call` li riceve come argomenti separati, `apply` come array. `bind` invece non invoca la funzione: restituisce una nuova funzione con il `this` permanentemente fissato (hard binding). Qualsiasi successiva invocazione della funzione restituita da `bind` (anche tramite `call`, `apply`, o come metodo di un oggetto) mantiene il binding fisso. Solo `new` può sovrascrivere un hard binding (nel `bind` nativo ES5, non in implementazioni manuali).
 
 </details>
 
 <details>
 <summary>Perché passare `null` a `call`/`apply`/`bind` può essere pericoloso?</summary>
 
-Perché `null` e `undefined` come `this` vengono trattati come se non ci fosse nessun binding: si applica il default binding, che in non-strict mode punta al global object. Se la funzione a cui si passa `null` usa internamente `this` — anche una funzione di terze parti su cui non si ha controllo — rischia di accedere o modificare il global object accidentalmente, creando bug difficili da rintracciare. La pratica più sicura è usare come placeholder un oggetto completamente vuoto (`var ø = Object.create(null)`), che non ha prototype e non può causare effetti collaterali sul global scope.
+Perché `null` e `undefined` come `this` vengono trattati come se non ci fosse nessun binding: si applica il default binding, che in non-strict mode punta al global object. Se la funzione a cui si passa `null` usa internamente `this` (anche una funzione di terze parti su cui non si ha controllo) rischia di accedere o modificare il global object accidentalmente, creando bug difficili da rintracciare. La pratica più sicura è usare come placeholder un oggetto completamente vuoto (`var ø = Object.create(null)`), che non ha prototype e non può causare effetti collaterali sul global scope.
 
 </details>
 

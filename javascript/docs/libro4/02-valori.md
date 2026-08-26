@@ -82,7 +82,7 @@ var c = a.split("").reverse().join(""); // "oof"
 
 ## Numeri
 
-JavaScript ha un solo tipo numerico — `number` — che comprende sia interi che decimali in virgola mobile. L'implementazione segue lo standard **IEEE 754** a doppia precisione (64-bit), lo stesso usato dalla maggior parte dei linguaggi moderni.
+JavaScript ha un solo tipo numerico, `number`, che comprende sia interi che decimali in virgola mobile. L'implementazione segue lo standard **IEEE 754** a doppia precisione (64-bit), lo stesso usato dalla maggior parte dei linguaggi moderni.
 
 ### Sintassi letterale
 

@@ -9,7 +9,7 @@ tags: [tipo/modulo, selettori]
 I selettori visti finora individuano elementi **così come stanno nel markup** (modulo [[02-selettori-combinatori]]). Due famiglie li estendono oltre il DOM statico:
 
 - una **pseudo-classe** (colon singolo, `:`) colpisce un elemento in un certo **stato** o **posizione** — al passaggio del mouse, se è il primo figlio, se un form è valido. L'elemento esiste già; si aggiunge una condizione.
-- uno **pseudo-elemento** (doppio colon, `::`) stilizza — o **crea** — una **sotto-parte** dell'elemento che non ha un nodo proprio nel markup: la prima riga di un paragrafo, il bullet di una lista, un box decorativo generato dal nulla.
+- uno **pseudo-elemento** (doppio colon, `::`) stilizza, o **crea**, una **sotto-parte** dell'elemento che non ha un nodo proprio nel markup: la prima riga di un paragrafo, il bullet di una lista, un box decorativo generato dal nulla.
 
 ## Pseudo-classi di stato (interazione)
 
@@ -324,7 +324,7 @@ Il colon singolo (`:`) introduce una **pseudo-classe** (stato o posizione di un 
 <details>
 <summary>Perché preferire <code>:focus-visible</code> a <code>:focus</code>?</summary>
 
-`:focus` mostra il focus ring sempre, anche al click del mouse (spesso considerato invadente e rimosso a scapito dell'accessibilità). `:focus-visible` lo mostra solo quando serve davvero — tipicamente da tastiera — grazie a un'euristica del browser. È il modo moderno di stilizzare il focus senza rinunciare all'accessibilità.
+`:focus` mostra il focus ring sempre, anche al click del mouse (spesso considerato invadente e rimosso a scapito dell'accessibilità). `:focus-visible` lo mostra solo quando serve davvero (tipicamente da tastiera) grazie a un'euristica del browser. È il modo moderno di stilizzare il focus senza rinunciare all'accessibilità.
 
 </details>
 

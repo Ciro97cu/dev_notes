@@ -1,6 +1,6 @@
 # Indice completo
 
-Appunti di **HTML moderno**, orientati alle **decisioni** che contano — quale elemento usare, come costruire form accessibili, come funziona l'accessibilità — non al catalogo dei tag. Ogni modulo chiude con un Ripasso lampo e una sintesi.
+Appunti di **HTML moderno**, orientati alle **decisioni** che contano (quale elemento usare, come costruire form accessibili, come funziona l'accessibilità) e non al catalogo dei tag. Ogni modulo chiude con un Ripasso lampo e una sintesi.
 
 > Appunti personali di studio, verificati su [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML) e sulle specifiche [WHATWG HTML](https://html.spec.whatwg.org/).
 

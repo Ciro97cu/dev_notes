@@ -60,7 +60,7 @@ Il modo metaforico di descrivere questo comportamento è che le dichiarazioni ve
 
 ## Hoisting delle funzioni
 
-Le **function declaration** vengono hoistate integralmente — nome e corpo — il che permette di chiamarle prima della riga in cui sono scritte:
+Le **function declaration** vengono hoistate integralmente (nome e corpo), il che permette di chiamarle prima della riga in cui sono scritte:
 
 ```js
 foo();
@@ -92,7 +92,7 @@ var foo = function bar() {
 };
 ```
 
-La variabile `foo` viene sollevata (ed è `undefined`), ma il valore — la funzione — viene assegnato solo all'esecuzione. Tentare di invocare `undefined` produce un `TypeError`, non un `ReferenceError`. Il nome `bar` della function expression non è nemmeno raggiungibile dallo scope esterno:
+La variabile `foo` viene sollevata (ed è `undefined`), ma il valore, la funzione, viene assegnato solo all'esecuzione. Tentare di invocare `undefined` produce un `TypeError`, non un `ReferenceError`. Il nome `bar` della function expression non è nemmeno raggiungibile dallo scope esterno:
 
 ```js
 foo(); // TypeError
@@ -194,7 +194,7 @@ Perché l'engine divide `var a = 2;` in due operazioni separate. Durante la comp
 <details>
 <summary>Qual è la differenza di hoisting tra una function declaration e una function expression?</summary>
 
-Una function declaration viene hoistata integralmente: sia il nome che il corpo della funzione sono disponibili dall'inizio dell'esecuzione dello scope. È quindi possibile chiamarla prima della riga in cui è scritta. Una function expression, invece, viene trattata come un assegnamento: solo il nome della variabile viene hoistato (come `undefined`), mentre il valore — la funzione stessa — viene assegnato solo quando quella riga viene eseguita. Invocare la variabile prima dell'assegnamento produce un `TypeError` (si sta tentando di chiamare `undefined` come funzione).
+Una function declaration viene hoistata integralmente: sia il nome che il corpo della funzione sono disponibili dall'inizio dell'esecuzione dello scope. È quindi possibile chiamarla prima della riga in cui è scritta. Una function expression, invece, viene trattata come un assegnamento: solo il nome della variabile viene hoistato (come `undefined`), mentre il valore, la funzione stessa, viene assegnato solo quando quella riga viene eseguita. Invocare la variabile prima dell'assegnamento produce un `TypeError` (si sta tentando di chiamare `undefined` come funzione).
 
 </details>
 

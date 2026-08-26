@@ -33,11 +33,11 @@ I processi dei due vicini sono approfonditi in <a href="../javascript/#/docs/mod
 
 ## Cosa significa "nessuna versione", in pratica
 
-Che non si punta a "HTML versione X". Si controlla invece il **supporto della singola feature** — su **[Baseline](https://web.dev/baseline)**, Can I Use e MDN — esattamente come si fa per il CSS. Il `<!doctype html>` in cima al documento ([[01-documento-dom]]) non è un numero di versione: significa solo "HTML moderno". Il lavoro avviene **in pubblico su GitHub** (il repo `whatwg/html`): le proposte passano per issue e pull request, i browser le implementano, e le feature arrivano di continuo invece che in un rilascio annuale.
+Che non si punta a "HTML versione X". Si controlla invece il **supporto della singola feature** (su **[Baseline](https://web.dev/baseline)**, Can I Use e MDN) esattamente come si fa per il CSS. Il `<!doctype html>` in cima al documento ([[01-documento-dom]]) non è un numero di versione: significa solo "HTML moderno". Il lavoro avviene **in pubblico su GitHub** (il repo `whatwg/html`): le proposte passano per issue e pull request, i browser le implementano, e le feature arrivano di continuo invece che in un rilascio annuale.
 
 ## Compatibilità e legacy
 
-Un principio guida tutto questo: **"don't break the web"**. L'HTML è ferocemente **retrocompatibile** — le pagine di vent'anni fa continuano a funzionare — ed è il motivo per cui il doctype non cambia e gli elementi vecchi non "spariscono": semplicemente non si usano più.
+Un principio guida tutto questo: **"don't break the web"**. L'HTML è ferocemente **retrocompatibile** (le pagine di vent'anni fa continuano a funzionare) ed è il motivo per cui il doctype non cambia e gli elementi vecchi non "spariscono": semplicemente non si usano più.
 
 > [!info] Legacy
 > Elementi da non usare, retaggio dell'epoca in cui l'HTML si occupava anche di presentazione: `<center>`, `<font>`, `<big>`, `<marquee>`, i frameset. Tutto ciò che è aspetto oggi è **CSS**. Restano validi solo come reperti in pagine vecchie.
@@ -46,9 +46,9 @@ Per controllare che il proprio markup sia corretto resta utile il **[validatore 
 
 ## Restare a prova di futuro
 
-La strategia è la stessa vista per il CSS: **progressive enhancement**. Si parte da una base in **HTML semantico** che funziona ovunque — anche senza CSS e senza JavaScript — e la si arricchisce dove il browser regge. Un markup solido, semantico e accessibile invecchia bene quasi per definizione, perché poggia sulle fondamenta più stabili della piattaforma.
+La strategia è la stessa vista per il CSS: **progressive enhancement**. Si parte da una base in **HTML semantico** che funziona ovunque (anche senza CSS e senza JavaScript) e la si arricchisce dove il browser regge. Un markup solido, semantico e accessibile invecchia bene quasi per definizione, perché poggia sulle fondamenta più stabili della piattaforma.
 
-*➕ Fuori dal filo di questo modulo, ma utile saperlo: i **Web Components** (in particolare i Custom Elements) permettono di definire propri elementi — `<mio-widget>` — estendendo il vocabolario dell'HTML. È un tema a sé, approfondito nel modulo [[09-web-components]].*
+*➕ Fuori dal filo di questo modulo, ma utile saperlo: i **Web Components** (in particolare i Custom Elements) permettono di definire propri elementi, `<mio-widget>`, estendendo il vocabolario dell'HTML. È un tema a sé, approfondito nel modulo [[09-web-components]].*
 
 ## Ripasso lampo
 

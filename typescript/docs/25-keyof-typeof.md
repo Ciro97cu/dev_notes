@@ -47,7 +47,7 @@ type Configurazione = typeof configurazione;
 // { host: string; porta: number }
 ```
 
-Questo strumento è prezioso quando la fonte di verità è un valore concreto — un oggetto di configurazione, un insieme di costanti — e si vuole derivarne il tipo senza riscriverlo a mano, mantenendo automaticamente l'allineamento fra valore e tipo.
+Questo strumento è prezioso quando la fonte di verità è un valore concreto (un oggetto di configurazione, un insieme di costanti) e si vuole derivarne il tipo senza riscriverlo a mano, mantenendo automaticamente l'allineamento fra valore e tipo.
 
 ## keyof typeof
 
@@ -126,7 +126,7 @@ Sono due usi distinti della stessa keyword. In un'espressione, `typeof valore` �
 <details>
 <summary>A cosa serve la combinazione `keyof typeof oggetto`?</summary>
 
-Serve a ottenere l'union delle chiavi di un oggetto esistente senza doverne dichiarare esplicitamente il tipo. `typeof oggetto` ricava il tipo dell'oggetto a partire dal valore, e `keyof` ne estrae le chiavi. È particolarmente utile quando la fonte di verità è un valore concreto — ad esempio un dizionario di costanti — e si vuole derivarne l'insieme delle chiavi in modo automatico, così che aggiungendo o rimuovendo una proprietà dell'oggetto l'union dei tipi resti sempre allineata.
+Serve a ottenere l'union delle chiavi di un oggetto esistente senza doverne dichiarare esplicitamente il tipo. `typeof oggetto` ricava il tipo dell'oggetto a partire dal valore, e `keyof` ne estrae le chiavi. È particolarmente utile quando la fonte di verità è un valore concreto (ad esempio un dizionario di costanti) e si vuole derivarne l'insieme delle chiavi in modo automatico, così che aggiungendo o rimuovendo una proprietà dell'oggetto l'union dei tipi resti sempre allineata.
 
 </details>
 

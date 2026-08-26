@@ -35,7 +35,7 @@ La macchina somma prima i due byte **bassi** (88h e C4h) e ne salva il risultato
 
 ## Non solo aritmetica: la logica
 
-La "L" di ALU sta per **logica**, e non è un dettaglio: molte manipolazioni utili non sono somme ma **operazioni booleane** bit per bit. L'esempio classico è la conversione tra maiuscole e minuscole in ASCII. Confrontando i codici di una lettera maiuscola e della sua minuscola si scopre che differiscono per **un solo bit**, il terzo da sinistra (quello di valore 20h): la minuscola ha quel bit a 1. Per trasformare una maiuscola in minuscola non serve una somma — che rovinerebbe le lettere già minuscole — ma un'operazione **OR** con 20h, che *forza* quel bit a 1 e lascia intatto tutto il resto:
+La "L" di ALU sta per **logica**, e non è un dettaglio: molte manipolazioni utili non sono somme ma **operazioni booleane** bit per bit. L'esempio classico è la conversione tra maiuscole e minuscole in ASCII. Confrontando i codici di una lettera maiuscola e della sua minuscola si scopre che differiscono per **un solo bit**, il terzo da sinistra (quello di valore 20h): la minuscola ha quel bit a 1. Per trasformare una maiuscola in minuscola non serve una somma (che rovinerebbe le lettere già minuscole) ma un'operazione **OR** con 20h, che *forza* quel bit a 1 e lascia intatto tutto il resto:
 
 ```
   01010100   (T, maiuscola)
@@ -44,7 +44,7 @@ OR 00100000  (20h)
   01110100   (t, minuscola)
 ```
 
-Fare l'OR con 20h su una lettera già minuscola la lascia invariata (il bit è già 1). Simmetricamente, un **AND** con DFh (il complemento di 20h) *azzera* quel bit e converte in maiuscolo. Sono proprio queste — **AND**, **OR** e **XOR** — le operazioni logiche che la ALU deve saper eseguire accanto a somma e sottrazione.
+Fare l'OR con 20h su una lettera già minuscola la lascia invariata (il bit è già 1). Simmetricamente, un **AND** con DFh (il complemento di 20h) *azzera* quel bit e converte in maiuscolo. Sono proprio queste (**AND**, **OR** e **XOR**) le operazioni logiche che la ALU deve saper eseguire accanto a somma e sottrazione.
 
 ## Dentro la ALU
 
@@ -63,7 +63,7 @@ flowchart TB
   SEL --> FL["Flags: Carry, Zero, Sign"]
 ```
 
-Il bit F₂ fa da grande interruttore: quando vale 0 è abilitato il modulo aritmetico (somma o sottrazione, distinte dagli altri due bit), quando seleziona una delle combinazioni logiche è abilitato il modulo Logic. È lo stesso identico principio del capitolo 20 — usare i bit di un codice come segnali di controllo — applicato qui per scegliere l'operazione.
+Il bit F₂ fa da grande interruttore: quando vale 0 è abilitato il modulo aritmetico (somma o sottrazione, distinte dagli altri due bit), quando seleziona una delle combinazioni logiche è abilitato il modulo Logic. È lo stesso identico principio del capitolo 20 (usare i bit di un codice come segnali di controllo) applicato qui per scegliere l'operazione.
 
 ## I flag di stato
 

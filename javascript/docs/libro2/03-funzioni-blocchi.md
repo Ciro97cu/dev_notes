@@ -4,7 +4,7 @@ Nel capitolo precedente si è visto che ogni scope forma una "bolla" di contenim
 
 ## Scope dalle funzioni
 
-La risposta più comune — e sostanzialmente corretta — è che JavaScript ha **function-based scope**: ogni funzione dichiarata crea la propria bolla di scope, e ogni identificatore dichiarato al suo interno appartiene a quella bolla, indipendentemente da dove nella funzione si trova la dichiarazione.
+La risposta più comune, e sostanzialmente corretta, è che JavaScript ha **function-based scope**: ogni funzione dichiarata crea la propria bolla di scope, e ogni identificatore dichiarato al suo interno appartiene a quella bolla, indipendentemente da dove nella funzione si trova la dichiarazione.
 
 ```js
 function foo(a) {

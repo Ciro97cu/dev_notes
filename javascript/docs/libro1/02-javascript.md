@@ -1,6 +1,6 @@
 # Introduzione a JavaScript
 
-Questo capitolo è una panoramica dei concetti fondamentali di JavaScript — tipi, variabili, scope, closure, `this`, prototype — ognuno trattato in superficie qui e approfondito nei libri successivi della serie.
+Questo capitolo è una panoramica dei concetti fondamentali di JavaScript (tipi, variabili, scope, closure, `this`, prototype), ognuno trattato in superficie qui e approfondito nei libri successivi della serie.
 
 ## Valori e tipi
 
@@ -254,7 +254,7 @@ var b = (a > 41) ? "hello" : "world";
 
 ## Strict mode
 
-La direttiva `"use strict"` — introdotta con ES5 — attiva un sottoinsieme più restrittivo del linguaggio che impedisce alcuni comportamenti problematici e rende il codice più ottimizzabile dall'engine. Si applica a un'intera funzione o a un intero file:
+La direttiva `"use strict"` (introdotta con ES5) attiva un sottoinsieme più restrittivo del linguaggio che impedisce alcuni comportamenti problematici e rende il codice più ottimizzabile dall'engine. Si applica a un'intera funzione o a un intero file:
 
 ```js
 "use strict"; // attiva strict mode per tutto il file
@@ -309,7 +309,7 @@ x; // 42
 
 ## Closure
 
-La closure è uno dei concetti più importanti — e meno compresi — di JavaScript. Una closure si forma quando una funzione interna mantiene l'accesso alle variabili del proprio scope anche dopo che la funzione esterna ha terminato l'esecuzione.
+La closure è uno dei concetti più importanti, e meno compresi, di JavaScript. Una closure si forma quando una funzione interna mantiene l'accesso alle variabili del proprio scope anche dopo che la funzione esterna ha terminato l'esecuzione.
 
 ```js
 function makeAdder(x) {
@@ -402,7 +402,7 @@ bar.b; // "hello world" — trovato direttamente su bar
 bar.a; // 42            — non esiste su bar, trovato su foo tramite prototype
 ```
 
-L'uso più comune — e spesso frainteso — del prototype è tentare di emulare le classi e l'ereditarietà di altri linguaggi. Il Libro III mostra perché questo approccio è problematico e propone in alternativa il **behavior delegation**, un pattern che sfrutta il prototype nel modo per cui è stato progettato.
+L'uso più comune, e spesso frainteso, del prototype è tentare di emulare le classi e l'ereditarietà di altri linguaggi. Il Libro III mostra perché questo approccio è problematico e propone in alternativa il **behavior delegation**, un pattern che sfrutta il prototype nel modo per cui è stato progettato.
 
 ---
 

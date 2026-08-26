@@ -6,7 +6,7 @@ tags: [tipo/modulo, fondamenti]
 # 01 · Il documento e il DOM
 > modulo 1 — *HTML* · rif. MDN
 
-HTML (*HyperText Markup Language*) è il linguaggio che dà **struttura e significato** al contenuto di una pagina web: non descrive come le cose *appaiono* — quello è compito del CSS — né cosa *fanno* — quello è JavaScript — ma **cos'è** ciascun pezzo di contenuto (un titolo, un paragrafo, un elenco, un'immagine). È il fondamento su cui gli altri due si appoggiano: senza una struttura chiara, stile e comportamento non hanno appigli solidi.
+HTML (*HyperText Markup Language*) è il linguaggio che dà **struttura e significato** al contenuto di una pagina web: non descrive come le cose *appaiono* (quello è compito del CSS) né cosa *fanno* (quello è JavaScript) ma **cos'è** ciascun pezzo di contenuto (un titolo, un paragrafo, un elenco, un'immagine). È il fondamento su cui gli altri due si appoggiano: senza una struttura chiara, stile e comportamento non hanno appigli solidi.
 
 La divisione dei ruoli è netta e conviene tenerla a mente da subito: **HTML** dà la struttura, **CSS** la presentazione ([vedi il vault CSS](../css/)), **JavaScript** il comportamento. Tenere separate le tre cose è ciò che rende una pagina manutenibile.
 
@@ -48,7 +48,7 @@ Qui `<p>` apre, `</p>` chiude, e in mezzo sta il contenuto. `class="intro"` è u
 Alcuni elementi non hanno contenuto né tag di chiusura: si chiamano **void element** e rappresentano qualcosa di autoconsistente, come `<img src="foto.jpg" alt="…">`, `<br>`, `<input>`, `<meta>`. Non si "chiudono" perché non c'è nulla da racchiudere.
 
 > [!tip]
-> Gli elementi vanno **annidati correttamente**, come scatole dentro scatole: quella aperta per ultima si chiude per prima. `<p><strong>testo</strong></p>` è corretto; `<p><strong>testo</p></strong>` no. Un annidamento sbagliato non sempre rompe la pagina — il browser prova a correggerlo — ma produce un albero diverso da quello che si intendeva.
+> Gli elementi vanno **annidati correttamente**, come scatole dentro scatole: quella aperta per ultima si chiude per prima. `<p><strong>testo</strong></p>` è corretto; `<p><strong>testo</p></strong>` no. Un annidamento sbagliato non sempre rompe la pagina (il browser prova a correggerlo) ma produce un albero diverso da quello che si intendeva.
 
 ## Dal markup all'albero: il DOM
 

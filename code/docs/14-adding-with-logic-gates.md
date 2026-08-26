@@ -1,7 +1,7 @@
 # 14 · Sommare con le porte logiche
 > cap. 14 di «Code» (Petzold, 2ª ed.) — orig. *Adding with Logic Gates*
 
-L'addizione è l'operazione aritmetica più elementare, e per costruire un computer bisogna prima saper costruire qualcosa che **sommi due numeri**. Non è un dettaglio: a ben vedere, sommare è quasi l'*unica* cosa che un computer sa fare — sottrarre, moltiplicare, dividere, guidare una sonda su Marte, tutto poggia in fondo sull'addizione. In questo capitolo si mette insieme una **macchina addizionatrice** usando i mattoni dei capitoli precedenti — interruttori, lampadine, relè — già cablati nelle **porte logiche** del [capitolo 8](08-relays-and-gates.md). Sarà una macchina di carta e di mente: lavora in **binario**, riceve i due numeri da una fila di **interruttori** e mostra il risultato con una fila di **lampadine**.
+L'addizione è l'operazione aritmetica più elementare, e per costruire un computer bisogna prima saper costruire qualcosa che **sommi due numeri**. Non è un dettaglio: a ben vedere, sommare è quasi l'*unica* cosa che un computer sa fare — sottrarre, moltiplicare, dividere, guidare una sonda su Marte, tutto poggia in fondo sull'addizione. In questo capitolo si mette insieme una **macchina addizionatrice** usando i mattoni dei capitoli precedenti (interruttori, lampadine, relè) già cablati nelle **porte logiche** del [capitolo 8](08-relays-and-gates.md). Sarà una macchina di carta e di mente: lavora in **binario**, riceve i due numeri da una fila di **interruttori** e mostra il risultato con una fila di **lampadine**.
 
 ## L'addizione binaria: somma e riporto
 
@@ -61,7 +61,7 @@ Perché *half* (metà)? Perché il half adder somma sì due bit, ma **non sa ten
 
 ## Il full adder
 
-Per sommare **tre** bit — `A`, `B` e un **Carry In** — si mettono insieme **due half adder e una porta OR**. Il primo half adder somma `A` e `B`; il secondo somma quel risultato con il Carry In, producendo la somma definitiva; i due riporti prodotti dai due half adder entrano infine in una OR, che dà il riporto in uscita (i due riporti non valgono mai 1 contemporaneamente, perciò la OR basta). Il tutto si incapsula in un blocco chiamato **full adder**:
+Per sommare **tre** bit (`A`, `B` e un **Carry In**) si mettono insieme **due half adder e una porta OR**. Il primo half adder somma `A` e `B`; il secondo somma quel risultato con il Carry In, producendo la somma definitiva; i due riporti prodotti dai due half adder entrano infine in una OR, che dà il riporto in uscita (i due riporti non valgono mai 1 contemporaneamente, perciò la OR basta). Il tutto si incapsula in un blocco chiamato **full adder**:
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 520 210" role="img" aria-label="Full adder costruito con due half adder e una porta OR" style="width:100%;max-width:500px;height:auto;color:inherit">
@@ -104,7 +104,7 @@ Il full adder ha quindi **tre** ingressi (`A`, `B`, `Carry In`) e **due** uscite
 | 1 | 1 | 1 | 1 | 1 |
 
 > [!tip]
-> La logica è ricorsiva e pulita: due porte fanno un **half adder**, due half adder più una OR fanno un **full adder**, e — come si vedrà tra poco — più full adder in fila fanno un sommatore di qualunque ampiezza. Ogni livello è una **scatola** costruita con le scatole del livello sotto.
+> La logica è ricorsiva e pulita: due porte fanno un **half adder**, due half adder più una OR fanno un **full adder**, e, come si vedrà tra poco, più full adder in fila fanno un sommatore di qualunque ampiezza. Ogni livello è una **scatola** costruita con le scatole del livello sotto.
 
 ## Quanti relè servono (i famosi 144)
 

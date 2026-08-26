@@ -20,7 +20,7 @@ In questa algebra `+` e `×` cambiano significato:
 - **`+` = unione** (in parole: **OR**): `B + W` è la classe dei gatti neri *o* bianchi.
 - **`×` = intersezione** (in parole: **AND**): `F × T` è la classe dei gatti *sia* femmine *sia* fulvi.
 
-Compaiono poi tre simboli speciali. **`1` è l'universo** (tutto ciò di cui parliamo): `M + F = 1` (maschi o femmine = tutti i gatti). **`0` è la classe vuota** (niente): `F × M = 0` (nessun gatto è sia maschio sia femmina). E **`1 − `** significa **NOT**: `1 − M = F` (tutti i gatti tranne i maschi = le femmine). Alcune uguaglianze sembrano strane rispetto all'algebra dei numeri — `F × F = F`, `F + F = F`, `1 + F = 1` — ma hanno perfettamente senso parlando di classi. E la *legge di contraddizione* diventa `F × (1 − F) = 0`: niente può essere insieme sé stesso e il proprio opposto.
+Compaiono poi tre simboli speciali. **`1` è l'universo** (tutto ciò di cui parliamo): `M + F = 1` (maschi o femmine = tutti i gatti). **`0` è la classe vuota** (niente): `F × M = 0` (nessun gatto è sia maschio sia femmina). E **`1 − `** significa **NOT**: `1 − M = F` (tutti i gatti tranne i maschi = le femmine). Alcune uguaglianze sembrano strane rispetto all'algebra dei numeri (`F × F = F`, `F + F = F`, `1 + F = 1`) ma hanno perfettamente senso parlando di classi. E la *legge di contraddizione* diventa `F × (1 − F) = 0`: niente può essere insieme sé stesso e il proprio opposto.
 
 Con questi strumenti persino il sillogismo di Socrate si risolve come un conticino: da `P × M = P` (tutte le persone sono mortali) e `S × P = S` (Socrate è una persona), sostituendo si arriva a `S × M = S` — Socrate è mortale.
 
@@ -45,7 +45,7 @@ L'`AND` dà `1` solo se **entrambi** gli operandi sono `1`; l'`OR` dà `1` se **
 
 E qui avviene il salto. Invece di calcolare a mano, si possono **cablare degli interruttori**. Basta collegarne due (invece di uno solo) tra batteria e lampadina, e ci sono due modi di farlo.
 
-Collegati **uno dopo l'altro** — *in serie* — la lampadina si accende **solo se entrambi** sono chiusi. È un `AND`.
+Collegati **uno dopo l'altro** (*in serie*) la lampadina si accende **solo se entrambi** sono chiusi. È un `AND`.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 340 165" role="img" aria-label="Due interruttori in serie: la lampadina si accende solo se entrambi sono chiusi (AND)" style="width:100%;max-width:360px;height:auto;color:inherit">
@@ -63,7 +63,7 @@ Collegati **uno dopo l'altro** — *in serie* — la lampadina si accende **solo
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Interruttori <strong>in serie</strong> = <strong>AND</strong>: serve che A <em>e</em> B siano chiusi perché la corrente passi.</figcaption>
 </figure>
 
-Collegati **fianco a fianco** — *in parallelo* — basta che **almeno uno** sia chiuso. È un `OR`.
+Collegati **fianco a fianco** (*in parallelo*) basta che **almeno uno** sia chiuso. È un `OR`.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 360 165" role="img" aria-label="Due interruttori in parallelo: basta che uno sia chiuso perché la lampadina si accenda (OR)" style="width:100%;max-width:380px;height:auto;color:inherit">
@@ -114,7 +114,7 @@ La corrispondenza si riassume così:
 
 ## Boole incontra i circuiti (e un limite)
 
-George Boole non cablò mai un circuito del genere: la lampadina a incandescenza fu inventata quindici anni dopo la sua morte. Eppure unire la sua algebra ai circuiti elettrici è ciò che rende possibili i **computer digitali**. C'è però un limite in questi interruttori: vanno azionati **a mano**. Il telegrafo — inventato circa dieci anni *prima* di *The Laws of Thought* — conteneva un dispositivo capace di eseguire operazioni di logica con molta più agilità di un semplice interruttore: il **relè**, protagonista del prossimo capitolo.
+George Boole non cablò mai un circuito del genere: la lampadina a incandescenza fu inventata quindici anni dopo la sua morte. Eppure unire la sua algebra ai circuiti elettrici è ciò che rende possibili i **computer digitali**. C'è però un limite in questi interruttori: vanno azionati **a mano**. Il telegrafo (inventato circa dieci anni *prima* di *The Laws of Thought*) conteneva un dispositivo capace di eseguire operazioni di logica con molta più agilità di un semplice interruttore: il **relè**, protagonista del prossimo capitolo.
 
 > [!tip]
 > La regola d'oro da ricordare: **serie = AND**, **parallelo = OR**. Da qui in poi tutta la logica del computer si costruisce combinando questi due schemi (più il NOT), esattamente come si combinano `×`, `+` e `1 −` in un'espressione booleana.
@@ -155,7 +155,7 @@ Ogni `×` diventa un tratto di interruttori **in serie**, ogni `+` una biforcazi
 <details>
 <summary>Perché il capitolo si chiude puntando al relè?</summary>
 
-Perché gli interruttori vanno azionati **a mano**: per costruire un computer serve un dispositivo che faccia logica **da solo**. Il telegrafo ne aveva già uno — il **relè** — capace di aprire e chiudere circuiti automaticamente. È il passo successivo verso le porte logiche e la macchina.
+Perché gli interruttori vanno azionati **a mano**: per costruire un computer serve un dispositivo che faccia logica **da solo**. Il telegrafo ne aveva già uno (il **relè**) capace di aprire e chiudere circuiti automaticamente. È il passo successivo verso le porte logiche e la macchina.
 
 </details>
 

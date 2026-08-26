@@ -8,7 +8,7 @@ Questo capitolo introduce il contesto in cui si colloca ES6 (ECMAScript 2015): p
 
 Lo standard JavaScript si chiama ufficialmente **ECMAScript** (abbreviato ES). La versione ES3 è stata il primo baseline diffuso (IE6–8, Android 2.x). ES4 non è mai arrivato per ragioni politiche. ES5 (2009) è stato la base del JS moderno per anni.
 
-ES6 — tecnicamente ES2015 — è un'evoluzione radicale, non un insieme incrementale di piccole aggiunte come ES5. Introduce nuove forme sintattiche, nuovi pattern organizzativi, nuove API per i tipi di dati esistenti.
+ES6, tecnicamente ES2015, è un'evoluzione radicale, non un insieme incrementale di piccole aggiunte come ES5. Introduce nuove forme sintattiche, nuovi pattern organizzativi, nuove API per i tipi di dati esistenti.
 
 A partire da ES6 il comitato TC39 ha adottato un modello di versioning annuale (ES2016, ES2017, …). Più importante ancora, il ritmo di evoluzione è diventato così rapido che i browser implementano le funzionalità man mano che si stabilizzano, prima ancora che la specifica sia formalmente approvata. Il risultato pratico è che **JS si avvicina sempre più a uno standard "evergreen"**: invece di aspettare che una versione sia completa, vale la pena ragionare funzionalità per funzionalità. L'etichetta di versione conta sempre meno; conta se una specifica feature è supportata nell'ambiente target.
 
@@ -40,7 +40,7 @@ Il transpiling copre **nuova sintassi** (arrow function, destructuring, template
 
 ## Shims e polyfill
 
-Non tutto ciò che è nuovo richiede un transpiler. Le **nuove API** — funzioni, metodi, classi — spesso possono essere **polyfillate** (o "shimmate"): si definisce in ES5 un comportamento equivalente a quello che un engine ES6 offre nativamente.
+Non tutto ciò che è nuovo richiede un transpiler. Le **nuove API** (funzioni, metodi, classi) spesso possono essere **polyfillate** (o "shimmate"): si definisce in ES5 un comportamento equivalente a quello che un engine ES6 offre nativamente.
 
 Esempio — `Object.is()`, una utility che controlla l'uguaglianza stretta senza le eccezioni di `===` per `NaN` e `-0`:
 

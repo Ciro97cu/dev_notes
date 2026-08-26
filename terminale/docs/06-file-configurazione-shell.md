@@ -1,6 +1,6 @@
 # 06 · File di configurazione della shell
 
-Le personalizzazioni fatte a mano — una cartella aggiunta al PATH, una variabile esportata, un alias comodo — valgono solo per la shell in cui le si digita e svaniscono chiudendo la finestra, come si è visto nel [capitolo 5](05-variabili-ambiente-path.md). Perché diventino **permanenti** vanno scritte in un **file di configurazione** che la shell legge automaticamente a ogni avvio. Capire *quali* file legge, e *quando*, evita il classico «l'ho messo lì ma non funziona».
+Le personalizzazioni fatte a mano (una cartella aggiunta al PATH, una variabile esportata, un alias comodo) valgono solo per la shell in cui le si digita e svaniscono chiudendo la finestra, come si è visto nel [capitolo 5](05-variabili-ambiente-path.md). Perché diventino **permanenti** vanno scritte in un **file di configurazione** che la shell legge automaticamente a ogni avvio. Capire *quali* file legge, e *quando*, evita il classico «l'ho messo lì ma non funziona».
 
 ## Shell di login e shell interattive
 

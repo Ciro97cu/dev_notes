@@ -57,7 +57,7 @@ Ogni `CALL` **impila** (push) l'indirizzo di ritorno sulla cima dello stack e sp
 > [!warning]
 > Lo stack vive in memoria e cresce a ogni chiamata annidata: se le chiamate si annidano all'infinito senza mai tornare (per esempio una subroutine che chiama sé stessa senza condizione d'uscita), lo stack continua a crescere finché non invade altra memoria. È lo *stack overflow*, un guasto ben noto a chi programma.
 
-Con salti, salti condizionati, cicli e subroutine, quell'"assemblaggio di porte logiche che risponde a codici in memoria" — come lo chiama Petzold — combina davvero operazioni semplicissime in compiti complessi: moltiplicazioni, conversioni, elaborazioni di ogni tipo. Nella pratica, però, quasi nessuno scrive più in codice macchina o assembly: si usano i **linguaggi ad alto livello** (capitolo 27), dove qualcun altro ha già fatto il lavoro difficile. E prima ancora, perché un computer sia davvero utile, deve poter comunicare con il mondo esterno: è il tema del capitolo 25, le **periferiche**.
+Con salti, salti condizionati, cicli e subroutine, quell'"assemblaggio di porte logiche che risponde a codici in memoria", come lo chiama Petzold, combina davvero operazioni semplicissime in compiti complessi: moltiplicazioni, conversioni, elaborazioni di ogni tipo. Nella pratica, però, quasi nessuno scrive più in codice macchina o assembly: si usano i **linguaggi ad alto livello** (capitolo 27), dove qualcun altro ha già fatto il lavoro difficile. E prima ancora, perché un computer sia davvero utile, deve poter comunicare con il mondo esterno: è il tema del capitolo 25, le **periferiche**.
 
 ## Ripasso lampo
 

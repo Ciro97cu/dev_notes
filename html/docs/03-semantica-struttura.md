@@ -6,7 +6,7 @@ tags: [tipo/modulo, semantica, accessibilita]
 # 03 · Semantica e struttura
 > modulo 3 — *HTML* · rif. MDN
 
-Fare HTML **semantico** significa scegliere gli elementi per il loro **significato**, non per come appaiono. `<div>` non dice nulla: è una scatola neutra. `<nav>`, `<article>`, `<header>` invece dichiarano *cos'è* quella porzione di pagina — e questa informazione la leggono in tre: il browser, i motori di ricerca e, soprattutto, le tecnologie assistive. Scegliere l'elemento giusto è la decisione più importante che si prende scrivendo HTML, perché tutto il resto — accessibilità, SEO, manutenibilità — ne discende.
+Fare HTML **semantico** significa scegliere gli elementi per il loro **significato**, non per come appaiono. `<div>` non dice nulla: è una scatola neutra. `<nav>`, `<article>`, `<header>` invece dichiarano *cos'è* quella porzione di pagina — e questa informazione la leggono in tre: il browser, i motori di ricerca e, soprattutto, le tecnologie assistive. Scegliere l'elemento giusto è la decisione più importante che si prende scrivendo HTML, perché tutto il resto (accessibilità, SEO, manutenibilità) ne discende.
 
 ## I landmark: l'ossatura della pagina
 
@@ -55,7 +55,7 @@ Oltre ai landmark, alcuni elementi danno significato a contenuti specifici ed ev
 `<div>` e `<span>` restano legittimi, ma sono l'**ultima scelta**: si usano quando **nessun** elemento semantico calza e serve solo un contenitore per stilare o agganciare JavaScript. `<div>` raggruppa a blocco, `<span>` in linea (una porzione di testo). Non hanno significato — ed è esattamente il punto: non aggiungerne dove non ce n'è.
 
 > [!warning]
-> L'antipattern più comune è la **"divite"**: costruire tutto con `<div>` e ricreare a mano, con ARIA e CSS, ciò che un elemento nativo darebbe gratis. Un `<button>` è preferibile a un `<div onclick>`, un `<nav>` a un `<div class="nav">`. Vale la regola d'oro dell'accessibilità — *use the right element* — approfondita in [[07-accessibilita-aria]].
+> L'antipattern più comune è la **"divite"**: costruire tutto con `<div>` e ricreare a mano, con ARIA e CSS, ciò che un elemento nativo darebbe gratis. Un `<button>` è preferibile a un `<div onclick>`, un `<nav>` a un `<div class="nav">`. Vale la regola d'oro dell'accessibilità, *use the right element*, approfondita in [[07-accessibilita-aria]].
 
 ## Ripasso lampo
 

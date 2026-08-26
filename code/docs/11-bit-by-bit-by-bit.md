@@ -1,7 +1,7 @@
 # 11 · Bit dopo bit dopo bit
 > cap. 11 di «Code» (Petzold, 2ª ed.) — orig. *Bit by Bit by Bit*
 
-Il capitolo 10 ha presentato il **bit** come cifra del binario, uno `0` o un `1`. Questo capitolo lo guarda da un'altra angolazione — non come cifra di un numero, ma come **unità di informazione** — e mostra che gran parte dei codici che ci circondano, dal Braille al codice a barre della zuppa in scatola, sono in fondo mucchietti di bit. Il titolo triplicato è un piccolo scherzo: si costruisce tutto *bit dopo bit dopo bit*.
+Il capitolo 10 ha presentato il **bit** come cifra del binario, uno `0` o un `1`. Questo capitolo lo guarda da un'altra angolazione (non come cifra di un numero, ma come **unità di informazione**) e mostra che gran parte dei codici che ci circondano, dal Braille al codice a barre della zuppa in scatola, sono in fondo mucchietti di bit. Il titolo triplicato è un piccolo scherzo: si costruisce tutto *bit dopo bit dopo bit*.
 
 ## Un bit è la più piccola quantità d'informazione
 
@@ -92,7 +92,7 @@ Un UPC completo è fatto di **95 bit**, letti sempre come una sequenza fissa di 
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">3 + 42 + 5 + 42 + 3 = <strong>95 bit</strong>. Le guardie (`101` ai lati, `01010` al centro) non portano cifre: orientano il lettore e verificano la lettura.</figcaption>
 </figure>
 
-Le **guardie** — `101` all'inizio e alla fine, `01010` in mezzo — non codificano cifre. Servono a due cose: dicono allo scanner **quant'è larga** una singola barra (così il codice può essere stampato in qualunque dimensione e letto lo stesso), e fanno da controllo, perché se al posto delle guardie lo scanner non trova quel motivo fisso, sa di aver letto male o storto. In mezzo stanno **dodici cifre**, sei a sinistra e sei a destra, ciascuna codificata da **7 bit**.
+Le **guardie** (`101` all'inizio e alla fine, `01010` in mezzo) non codificano cifre. Servono a due cose: dicono allo scanner **quant'è larga** una singola barra (così il codice può essere stampato in qualunque dimensione e letto lo stesso), e fanno da controllo, perché se al posto delle guardie lo scanner non trova quel motivo fisso, sa di aver letto male o storto. In mezzo stanno **dodici cifre**, sei a sinistra e sei a destra, ciascuna codificata da **7 bit**.
 
 ### I codici delle cifre: la parità come rete di sicurezza
 
@@ -110,7 +110,7 @@ Le cifre a **destra** usano i codici **complementari** (ogni `0` diventa `1` e v
 
 ### Cosa dicono le dodici cifre (e cosa *non* dicono)
 
-Le dodici cifre stampate sotto le barre — `0 51000 01251 7` — non sono lì per bellezza: se lo scanner fallisce, il cassiere le digita a mano. Ognuna ha un ruolo:
+Le dodici cifre stampate sotto le barre (`0 51000 01251 7`) non sono lì per bellezza: se lo scanner fallisce, il cassiere le digita a mano. Ognuna ha un ruolo:
 
 - La **prima cifra** (`0`) è il *number system character*, che dice di che tipo di prodotto si tratta: `0` è un UPC ordinario da supermercato, altri valori sono riservati (per esempio ai prodotti a peso variabile come la carne, o ai coupon).
 - Le cinque cifre successive (`51000`) sono il **codice del produttore**, assegnato in modo univoco: qui la Campbell Soup Company.

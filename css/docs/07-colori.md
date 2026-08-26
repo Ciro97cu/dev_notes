@@ -6,13 +6,13 @@ tags: [tipo/modulo, colori]
 # 07 · Colori
 > modulo 7 — *CSS* · rif. MDN
 
-Un colore in CSS è un **valore** come un altro: si assegna a proprietà quali `color` (il testo), `background-color`, `border-color`, `box-shadow` e decine di altre. Esistono però tanti **modi di scriverlo** — parole chiave, esadecimale, `rgb()`, `hsl()`, e le notazioni moderne `oklch()`/`oklab()` — e ognuno appartiene a uno **spazio colore** diverso. Questo modulo copre come esprimere un colore oggi, quando conviene ciascuna notazione, e le funzioni che permettono di **derivare** e **mescolare** colori senza preprocessori.
+Un colore in CSS è un **valore** come un altro: si assegna a proprietà quali `color` (il testo), `background-color`, `border-color`, `box-shadow` e decine di altre. Esistono però tanti **modi di scriverlo** (parole chiave, esadecimale, `rgb()`, `hsl()`, e le notazioni moderne `oklch()`/`oklab()`) e ognuno appartiene a uno **spazio colore** diverso. Questo modulo copre come esprimere un colore oggi, quando conviene ciascuna notazione, e le funzioni che permettono di **derivare** e **mescolare** colori senza preprocessori.
 
 I colori sono un `<color>`, un tipo di valore riutilizzabile ovunque una proprietà lo accetti (vedi il concetto di tipi di valore in [[06-unita-valori-funzioni]]).
 
 ## Named colors e keyword speciali
 
-CSS definisce ~150 **named colors** — parole chiave come `red`, `crimson`, `rebeccapurple`, `tomato` — comode per prototipare ma poco adatte a una palette curata (i valori sono fissi e disomogenei). Riferimento: [named-color su MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color).
+CSS definisce ~150 **named colors** (parole chiave come `red`, `crimson`, `rebeccapurple`, `tomato`) comode per prototipare ma poco adatte a una palette curata (i valori sono fissi e disomogenei). Riferimento: [named-color su MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color).
 
 Due keyword meritano attenzione perché non sono colori "fissi":
 
@@ -194,7 +194,7 @@ Regola pratica: per rendere trasparente **un singolo colore**, usare l'alpha; `o
 
 ## `color-scheme` e `light-dark()` — temi chiaro/scuro
 
-`color-scheme` dichiara quali schemi un elemento (di solito `:root`) sa rendere. Impostandolo, gli **elementi disegnati dallo user agent** — sfondo di base, scrollbar, controlli di form, colori di sistema — si adeguano automaticamente al tema del sistema operativo.
+`color-scheme` dichiara quali schemi un elemento (di solito `:root`) sa rendere. Impostandolo, gli **elementi disegnati dallo user agent** (sfondo di base, scrollbar, controlli di form, colori di sistema) si adeguano automaticamente al tema del sistema operativo.
 
 ```css
 :root {
@@ -217,7 +217,7 @@ body {
 
 ## `contrast-color()` — il colore di massimo contrasto
 
-Scegliere il colore del testo sopra uno sfondo variabile — un badge tinto col colore di brand, una chip generata a runtime — è un problema ricorrente: su sfondi chiari serve testo scuro, su sfondi scuri testo chiaro. `contrast-color()` lo risolve in CSS puro: dato un colore, **restituisce automaticamente il bianco o il nero**, quello dei due che garantisce il contrasto migliore rispetto a quel colore.
+Scegliere il colore del testo sopra uno sfondo variabile (un badge tinto col colore di brand, una chip generata a runtime) è un problema ricorrente: su sfondi chiari serve testo scuro, su sfondi scuri testo chiaro. `contrast-color()` lo risolve in CSS puro: dato un colore, **restituisce automaticamente il bianco o il nero**, quello dei due che garantisce il contrasto migliore rispetto a quel colore.
 
 ```css
 .badge {
@@ -299,7 +299,7 @@ Dichiara che la pagina supporta entrambi i temi: gli elementi resi dallo user ag
 <details>
 <summary>A cosa serve <code>color: contrast-color(var(--brand))</code>?</summary>
 
-Restituisce automaticamente il **bianco o il nero** — quello di contrasto maggiore rispetto a `--brand` — così il testo resta leggibile su uno sfondo che cambia (temi, colori generati a runtime) senza calcoli manuali. È Baseline newly available dal 2026: da proteggere con `@supports` sui target più datati.
+Restituisce automaticamente il **bianco o il nero** (quello di contrasto maggiore rispetto a `--brand`) così il testo resta leggibile su uno sfondo che cambia (temi, colori generati a runtime) senza calcoli manuali. È Baseline newly available dal 2026: da proteggere con `@supports` sui target più datati.
 
 </details>
 

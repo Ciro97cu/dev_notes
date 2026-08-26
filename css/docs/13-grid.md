@@ -282,7 +282,7 @@ Così le tre righe interne di ogni card sono ancorate alle stesse righe del geni
 
 ## Emergente: masonry
 
-Il layout **masonry** (a "mattoni", stile Pinterest) tiene un asse a griglia regolare — di solito le colonne — mentre sull'altro asse gli item **risalgono a riempire i buchi** lasciati da quelli più corti, senza righe rigide. In CSS Grid è la funzionalità di **Grid Level 3**.
+Il layout **masonry** (a "mattoni", stile Pinterest) tiene un asse a griglia regolare, di solito le colonne, mentre sull'altro asse gli item **risalgono a riempire i buchi** lasciati da quelli più corti, senza righe rigide. In CSS Grid è la funzionalità di **Grid Level 3**.
 
 ```css
 .masonry {

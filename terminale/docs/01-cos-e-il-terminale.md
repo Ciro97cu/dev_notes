@@ -6,11 +6,11 @@ Dietro la parola «terminale», usata di solito come sinonimo di tutto, si nasco
 
 ## Emulatore di terminale, shell e prompt
 
-L'**emulatore di terminale** è l'**applicazione con la finestra**: quella che mostra il testo su schermo e raccoglie ciò che si digita sulla tastiera. Su macOS è *Terminal.app* (preinstallata) o *iTerm2*; dentro l'editor c'è il terminale integrato di *VS Code*. Il nome «emulatore» ha una ragione storica: queste app *imitano* i vecchi terminali hardware degli anni '70 — schermo più tastiera collegati a un computer centrale — di cui oggi restano solo il comportamento e alcune sigle (come `TERM=xterm`).
+L'**emulatore di terminale** è l'**applicazione con la finestra**: quella che mostra il testo su schermo e raccoglie ciò che si digita sulla tastiera. Su macOS è *Terminal.app* (preinstallata) o *iTerm2*; dentro l'editor c'è il terminale integrato di *VS Code*. Il nome «emulatore» ha una ragione storica: queste app *imitano* i vecchi terminali hardware degli anni '70 (schermo più tastiera collegati a un computer centrale) di cui oggi restano solo il comportamento e alcune sigle (come `TERM=xterm`).
 
 La **shell** è il **programma che gira dentro** quella finestra: legge il comando digitato, lo interpreta, avvia il programma giusto e ne restituisce l'output. È l'interprete della riga di comando, il vero interlocutore. Su macOS la shell predefinita è **zsh**; su molte distribuzioni Linux è **bash**. Emulatore e shell sono indipendenti: lo stesso emulatore può ospitare shell diverse, e la stessa shell può girare in emulatori diversi. Le shell sono il tema del [capitolo 2](02-shell-sh-bash-zsh.md).
 
-Il **prompt** è la **scritta che la shell stampa quando è pronta** a ricevere un comando: segnala «tocca a te». Tipicamente riporta qualche informazione utile — utente, nome della macchina, cartella corrente — e termina con un simbolo che, per convenzione, dice anche *chi* sei:
+Il **prompt** è la **scritta che la shell stampa quando è pronta** a ricevere un comando: segnala «tocca a te». Tipicamente riporta qualche informazione utile (utente, nome della macchina, cartella corrente) e termina con un simbolo che, per convenzione, dice anche *chi* sei:
 
 | Simbolo | Significato |
 |---------|-------------|
@@ -29,7 +29,7 @@ Una riga di comando ha quasi sempre la stessa grammatica: un **comando**, seguit
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La stessa grammatica vale per quasi tutti i comandi: il <strong>comando</strong> dice <em>quale</em> programma eseguire, le <strong>opzioni</strong> (o flag) ne regolano il comportamento, gli <strong>argomenti</strong> dicono su <em>cosa</em> operare. Il <strong>prompt</strong> (qui <code>~ %</code>) non fa parte del comando: lo stampa la shell.</figcaption>
 </figure>
 
-Il **comando** è il nome del programma da eseguire (`ls`, `git`, `npm`). Le **opzioni** — dette anche **flag** — ne modificano il comportamento e per convenzione iniziano con un trattino. Ne esistono due forme: quella **breve**, una sola lettera preceduta da un trattino (`-l`, `-a`), e quella **lunga**, una parola preceduta da due trattini (`--all`, `--help`), più leggibile. Le opzioni brevi si possono spesso **accorpare**: `-la` è la scorciatoia di `-l -a`. Gli **argomenti**, infine, sono i dati su cui il comando lavora, tipicamente un file o una cartella (`/Users`).
+Il **comando** è il nome del programma da eseguire (`ls`, `git`, `npm`). Le **opzioni** (dette anche **flag**) ne modificano il comportamento e per convenzione iniziano con un trattino. Ne esistono due forme: quella **breve**, una sola lettera preceduta da un trattino (`-l`, `-a`), e quella **lunga**, una parola preceduta da due trattini (`--all`, `--help`), più leggibile. Le opzioni brevi si possono spesso **accorpare**: `-la` è la scorciatoia di `-l -a`. Gli **argomenti**, infine, sono i dati su cui il comando lavora, tipicamente un file o una cartella (`/Users`).
 
 ```bash
 ls -la /Users     # comando: ls · opzioni: -l e -a accorpate · argomento: /Users

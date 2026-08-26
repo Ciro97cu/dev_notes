@@ -2,7 +2,7 @@
   <img class="cover-logo" src="assets/html-logo.svg" alt="HTML" />
   <h1>Appunti HTML</h1>
   <p class="cover-sub">HTML moderno (2026) — semantica, form e accessibilità</p>
-  <p class="cover-desc">Appunti di studio in italiano su HTML, orientati alle <strong>scelte che contano</strong>: quale elemento usare e perché, come si costruiscono form accessibili, come funziona davvero l'accessibilità. Non un catalogo di tag — quello è MDN — ma il ragionamento dietro il markup.</p>
+  <p class="cover-desc">Appunti di studio in italiano su HTML, orientati alle <strong>scelte che contano</strong>: quale elemento usare e perché, come si costruiscono form accessibili, come funziona davvero l'accessibilità. Non un catalogo di tag (quello è MDN) ma il ragionamento dietro il markup.</p>
   <div class="cover-actions">
     <a class="cover-btn is-resume" id="nav-resume" href="#/" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span>Riprendi</span></a>
     <a class="cover-btn is-primary" href="#/docs/01-documento-dom"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><span>Inizia dai fondamenti</span></a>

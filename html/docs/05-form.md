@@ -6,7 +6,7 @@ tags: [tipo/modulo, form, accessibilita]
 # 05 · Form
 > modulo 5 — *HTML* · rif. MDN
 
-I form sono il modo in cui l'utente **inserisce dati** e li invia: campi, caselle, menu a tendina e un pulsante di invio. È l'area di HTML dove si sbaglia di più in usabilità e accessibilità, perché è fatta di tante piccole decisioni — quale tipo di campo, come etichettarlo, come validarlo — ognuna con conseguenze concrete su chi compila. La buona notizia è che HTML, se lo si asseconda, offre gratis moltissimo: tastiere giuste, validazione, supporto ai password manager. L'accessibilità dei form si intreccia con quella generale, ripresa in [[07-accessibilita-aria]].
+I form sono il modo in cui l'utente **inserisce dati** e li invia: campi, caselle, menu a tendina e un pulsante di invio. È l'area di HTML dove si sbaglia di più in usabilità e accessibilità, perché è fatta di tante piccole decisioni (quale tipo di campo, come etichettarlo, come validarlo) ognuna con conseguenze concrete su chi compila. La buona notizia è che HTML, se lo si asseconda, offre gratis moltissimo: tastiere giuste, validazione, supporto ai password manager. L'accessibilità dei form si intreccia con quella generale, ripresa in [[07-accessibilita-aria]].
 
 ## L'ossatura: `<form>` e i controlli
 
@@ -46,7 +46,7 @@ Perché è irrinunciabile: uno screen reader annuncia il **nome** del campo graz
 
 ## Raggruppare: `<fieldset>` e `<legend>`
 
-Quando più controlli formano un gruppo — tipicamente un insieme di `radio` — si racchiudono in un `<fieldset>` con un `<legend>` che lo intitola. Lo screen reader annuncia la `legend` insieme a ogni opzione, così "Spedizione: standard / espressa" si capisce; senza, si sentirebbero opzioni sciolte senza sapere a quale domanda rispondono.
+Quando più controlli formano un gruppo (tipicamente un insieme di `radio`) si racchiudono in un `<fieldset>` con un `<legend>` che lo intitola. Lo screen reader annuncia la `legend` insieme a ogni opzione, così "Spedizione: standard / espressa" si capisce; senza, si sentirebbero opzioni sciolte senza sapere a quale domanda rispondono.
 
 ## Menu, aree di testo e pulsanti
 
@@ -66,7 +66,7 @@ Aggiungendo dei **vincoli** agli input, il browser li controlla da solo al momen
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Con i vincoli sugli input (<code>required</code>, <code>type</code>, <code>pattern</code>…) il browser valida da solo prima dell'invio: se tutto è a posto il form parte, altrimenti l'invio è bloccato con messaggio e focus sul primo campo non valido.</figcaption>
 </figure>
 
-Lo stato dei campi è anche stilabile in CSS con `:valid`, `:invalid` e `:user-invalid` (vedi <a href="../css/#/docs/03-pseudo-classi-elementi" target="_blank" rel="noopener">CSS · Pseudo-classi</a>). Quando serve un controllo **su misura** — un messaggio personalizzato, una regola che HTML non esprime — si usa la **Constraint Validation API** in JavaScript: `checkValidity()`, `setCustomValidity()` e l'oggetto `validity` del campo.
+Lo stato dei campi è anche stilabile in CSS con `:valid`, `:invalid` e `:user-invalid` (vedi <a href="../css/#/docs/03-pseudo-classi-elementi" target="_blank" rel="noopener">CSS · Pseudo-classi</a>). Quando serve un controllo **su misura** (un messaggio personalizzato, una regola che HTML non esprime) si usa la **Constraint Validation API** in JavaScript: `checkValidity()`, `setCustomValidity()` e l'oggetto `validity` del campo.
 
 ## `name` e `autocomplete`
 

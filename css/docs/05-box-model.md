@@ -6,7 +6,7 @@ tags: [tipo/modulo, box-model]
 # 05 · Box model
 > modulo 5 — *CSS* · rif. MDN
 
-Ogni elemento HTML è, per il layout, una **scatola rettangolare**. Il *box model* descrive come questa scatola è costruita — da un nucleo di contenuto verso l'esterno — e come le sue misure si combinano per occupare lo spazio in pagina. Capirlo bene è il prerequisito di ogni tecnica di layout: senza, i valori di `width`, `padding` e `margin` sembrano "non tornare mai".
+Ogni elemento HTML è, per il layout, una **scatola rettangolare**. Il *box model* descrive come questa scatola è costruita (da un nucleo di contenuto verso l'esterno) e come le sue misure si combinano per occupare lo spazio in pagina. Capirlo bene è il prerequisito di ogni tecnica di layout: senza, i valori di `width`, `padding` e `margin` sembrano "non tornare mai".
 
 ## Le quattro aree
 
@@ -129,7 +129,7 @@ Avviene **solo** tra scatole di tipo *block* nel normale flusso, e **solo** sull
 **Come evitarlo.** Basta interrompere il contatto diretto o cambiare contesto di formattazione:
 
 - inserire `padding` o `border` tra i due margini (caso genitore-figlio);
-- dare al contenitore un `overflow` diverso da `visible` (es. `overflow: hidden` o `auto`) — crea un *block formatting context* — oppure `display: flow-root`;
+- dare al contenitore un `overflow` diverso da `visible` (es. `overflow: hidden` o `auto`), crea un *block formatting context*, oppure `display: flow-root`;
 - usare un contenitore **flex o grid**: al loro interno i margini **non collassano mai**.
 
 Quest'ultimo punto è la vera ragione per cui il problema oggi si incontra di rado: nei layout moderni la spaziatura tra elementi si gestisce con `gap` in flex/grid (vedi sotto), non impilando margini.

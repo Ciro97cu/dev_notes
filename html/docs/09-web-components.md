@@ -6,7 +6,7 @@ tags: [tipo/modulo, componenti, moderno]
 # 09 · Web Components
 > modulo 9 — *HTML* · rif. MDN · WHATWG/W3C
 
-I **Web Components** sono un insieme di standard del browser per creare **elementi HTML propri** — riutilizzabili, con markup, stile e comportamento incapsulati — che funzionano **ovunque**: con qualsiasi framework o con nessuno, perché sono nativi della piattaforma. Invece di comporre l'ennesimo `<div class="card">`, si definisce un vero `<user-card></user-card>` che il browser conosce e tratta come un elemento a tutti gli effetti.
+I **Web Components** sono un insieme di standard del browser per creare **elementi HTML propri** (riutilizzabili, con markup, stile e comportamento incapsulati) che funzionano **ovunque**: con qualsiasi framework o con nessuno, perché sono nativi della piattaforma. Invece di comporre l'ennesimo `<div class="card">`, si definisce un vero `<user-card></user-card>` che il browser conosce e tratta come un elemento a tutti gli effetti.
 
 ## I tre pilastri
 
@@ -63,7 +63,7 @@ Il punto di forza è essere **framework-agnostic**: un Web Component è utile pe
 
 ## E i framework? (l'aggancio con Angular)
 
-Web Components e framework non sono in competizione: i Web Components sono il **livello basso** (la piattaforma), i framework — React, Vue, Angular — aggiungono reattività, routing e strumenti. E si parlano: **Angular Elements** (`@angular/elements`, con `createCustomElement`) impacchetta un componente Angular **come** custom element, così un widget scritto in Angular si può usare in una pagina non-Angular o dentro un altro framework. È il motivo per cui li si incontra nelle **librerie Angular** e nei micro-frontend (approfondito in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">Angular · Micro-frontend</a>).
+Web Components e framework non sono in competizione: i Web Components sono il **livello basso** (la piattaforma), i framework (React, Vue, Angular) aggiungono reattività, routing e strumenti. E si parlano: **Angular Elements** (`@angular/elements`, con `createCustomElement`) impacchetta un componente Angular **come** custom element, così un widget scritto in Angular si può usare in una pagina non-Angular o dentro un altro framework. È il motivo per cui li si incontra nelle **librerie Angular** e nei micro-frontend (approfondito in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">Angular · Micro-frontend</a>).
 
 > [!warning]
 > Un **componente di framework non è un Web Component**. `<mat-button>` (Angular) e `<Button>` (React) sono componenti *del framework*, che il suo runtime fa vivere — **non** custom element registrati con `customElements.define`. Il tag a forma di HTML di Angular inganna: è solo sintassi del template. I Web Components veri sono **portabili** tra framework (o senza); un componente di framework funziona solo nel suo. `@angular/elements` serve proprio a *convertire* un componente Angular in un vero Web Component quando serve quella portabilità.

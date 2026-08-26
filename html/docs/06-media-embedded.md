@@ -6,7 +6,7 @@ tags: [tipo/modulo, media, accessibilita]
 # 06 · Media e contenuti embedded
 > modulo 6 — *HTML* · rif. MDN
 
-Oltre al testo, una pagina ospita immagini, video, audio e contenuti presi da altri siti. Le decisioni qui ruotano attorno a due assi: l'**accessibilità** — che per le immagini vuol dire soprattutto il testo alternativo, e che ha il suo modulo dedicato in [[07-accessibilita-aria]] — e le **prestazioni** — immagini della misura giusta, caricate al momento giusto, senza far saltare il layout.
+Oltre al testo, una pagina ospita immagini, video, audio e contenuti presi da altri siti. Le decisioni qui ruotano attorno a due assi: l'**accessibilità** (che per le immagini vuol dire soprattutto il testo alternativo, e che ha il suo modulo dedicato in [[07-accessibilita-aria]]) e le **prestazioni** — immagini della misura giusta, caricate al momento giusto, senza far saltare il layout.
 
 ## Immagini: `<img>` e il testo alternativo
 

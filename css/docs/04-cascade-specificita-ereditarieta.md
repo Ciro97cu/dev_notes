@@ -46,7 +46,7 @@ Il dettaglio controintuitivo: con `!important` l'ordine delle origini **si inver
 
 ## Specificità
 
-Quando origine e importanza pari, vince il selettore più **specifico**. La specificità è un valore a tre "colonne" — si scrive **`a-b-c`** — che [MDN indica](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity) come **ID · CLASS · TYPE**:
+Quando origine e importanza pari, vince il selettore più **specifico**. La specificità è un valore a tre "colonne" (si scrive **`a-b-c`**) che [MDN indica](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity) come **ID · CLASS · TYPE**:
 
 | Colonna | Cosa la incrementa | Peso |
 |---|---|---|
@@ -85,7 +85,7 @@ Il confronto è **colonna per colonna, da sinistra a destra**: prima gli ID, poi
 - **`!important`** su una dichiarazione la sposta in una fascia di priorità superiore (vedi la tabella origine/importanza): scavalca la specificità di qualunque dichiarazione normale della stessa origine. Fra due `!important` della stessa origine/layer, vince poi quello a specificità maggiore.
 
 > [!warning]
-> `!important` va usato con **parsimonia**: spezza il ragionamento della cascade e l'unico modo per sovrascriverlo è un altro `!important` più specifico → spirale di escalation. Prima di ricorrervi, valutare un selettore più mirato o — meglio — i **cascade layer** (`@layer`).
+> `!important` va usato con **parsimonia**: spezza il ragionamento della cascade e l'unico modo per sovrascriverlo è un altro `!important` più specifico → spirale di escalation. Prima di ricorrervi, valutare un selettore più mirato o, meglio, i **cascade layer** (`@layer`).
 
 ### `:where()`, `:is()`, `:has()`, `:not()`
 

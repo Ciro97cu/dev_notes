@@ -39,7 +39,7 @@ Il comando per cancellare è `rm`. Qui serve attenzione, perché nel terminale *
 | `rm -rf <cartella>` | ⚠️ rimuove tutto, ricorsivamente, **senza chiedere nulla** |
 
 > [!warning]
-> `rm -rf` è irreversibile: niente Cestino, nessuna conferma. Un percorso sbagliato — in particolare uno **assoluto** che parte da `/`, o un glob troppo largo — può cancellare molto più del previsto. Prima di premere Invio conviene rileggere il percorso, e nel dubbio eseguire prima un `ls` sullo stesso bersaglio per vedere *cosa* si sta per colpire.
+> `rm -rf` è irreversibile: niente Cestino, nessuna conferma. Un percorso sbagliato (in particolare uno **assoluto** che parte da `/`, o un glob troppo largo) può cancellare molto più del previsto. Prima di premere Invio conviene rileggere il percorso, e nel dubbio eseguire prima un `ls` sullo stesso bersaglio per vedere *cosa* si sta per colpire.
 
 ## Guardare e aprire
 
@@ -84,7 +84,7 @@ Perché per Unix rinominare è solo un caso particolare di **spostamento**: si u
 <details>
 <summary>Cosa rende <code>rm -rf</code> pericoloso?</summary>
 
-Cancella in modo **ricorsivo** (`-r`, cartelle e contenuto) e **forzato** (`-f`, senza chiedere conferma), e nel terminale non c'è il Cestino: ciò che elimina è perso. Un percorso sbagliato — specie assoluto da `/` o un glob troppo ampio — può distruggere molto più del previsto. Conviene rileggere il percorso e, nel dubbio, fare prima `ls` sullo stesso bersaglio.
+Cancella in modo **ricorsivo** (`-r`, cartelle e contenuto) e **forzato** (`-f`, senza chiedere conferma), e nel terminale non c'è il Cestino: ciò che elimina è perso. Un percorso sbagliato (specie assoluto da `/` o un glob troppo ampio) può distruggere molto più del previsto. Conviene rileggere il percorso e, nel dubbio, fare prima `ls` sullo stesso bersaglio.
 
 </details>
 

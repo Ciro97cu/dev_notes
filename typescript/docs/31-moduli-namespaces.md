@@ -160,7 +160,7 @@ La clausola `with` sostituisce la precedente sintassi basata su `assert`, che no
 
 ## Namespaces
 
-Prima che i moduli ES diventassero parte dello standard, i namespaces erano il meccanismo principale per raggruppare codice correlato — classi, interfacce, funzioni e variabili — all'interno di un unico blocco logico, così da prevenire i conflitti di nomi nello scope globale. Un namespace si dichiara con la keyword `namespace` e i suoi membri restano privati a meno che non vengano esposti con `export`. L'accesso dall'esterno avviene tramite la notazione `Nome.Elemento`. La vecchia sintassi equivalente basata sulla keyword `module` (nella forma `module Nome { ... }`) non è più ammessa e produce un errore: l'unica forma valida è oggi `namespace`, mentre `declare module "nome"` resta riservato alla dichiarazione di moduli esterni.
+Prima che i moduli ES diventassero parte dello standard, i namespaces erano il meccanismo principale per raggruppare codice correlato (classi, interfacce, funzioni e variabili) all'interno di un unico blocco logico, così da prevenire i conflitti di nomi nello scope globale. Un namespace si dichiara con la keyword `namespace` e i suoi membri restano privati a meno che non vengano esposti con `export`. L'accesso dall'esterno avviene tramite la notazione `Nome.Elemento`. La vecchia sintassi equivalente basata sulla keyword `module` (nella forma `module Nome { ... }`) non è più ammessa e produce un errore: l'unica forma valida è oggi `namespace`, mentre `declare module "nome"` resta riservato alla dichiarazione di moduli esterni.
 
 ```ts
 namespace Validazione {

@@ -1,6 +1,6 @@
 # 05 · Variabili d'ambiente e PATH
 
-Una **variabile d'ambiente** è un valore con un nome che la shell tiene da parte e che i programmi possono leggere: una specie di «impostazione condivisa» dell'ambiente in cui si lavora. Servono a dire ai programmi dove trovare le cose e come comportarsi, senza doverglielo ripetere ogni volta. Tra tutte ne esiste una che merita un capitolo a sé — il **PATH** — perché è quella che spiega il piccolo mistero di come faccia la shell a trovare i comandi che si digitano.
+Una **variabile d'ambiente** è un valore con un nome che la shell tiene da parte e che i programmi possono leggere: una specie di «impostazione condivisa» dell'ambiente in cui si lavora. Servono a dire ai programmi dove trovare le cose e come comportarsi, senza doverglielo ripetere ogni volta. Tra tutte ne esiste una che merita un capitolo a sé (il **PATH**) perché è quella che spiega il piccolo mistero di come faccia la shell a trovare i comandi che si digitano.
 
 ## Leggere e impostare una variabile
 

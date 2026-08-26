@@ -7,7 +7,7 @@ tags: [tipo/modulo, animazioni]
 
 > modulo 15 — *CSS* · rif. MDN
 
-Il movimento in CSS ha due strumenti complementari. Una **transizione** interpola un valore tra due stati — quello di partenza e quello nuovo — quando qualcosa scatena il cambiamento (un `:hover`, l'aggiunta di una classe, un focus). Un'**animazione** con `@keyframes` è invece autonoma: definisce una sequenza di tappe, parte da sola e può ripetersi all'infinito, senza bisogno di un trigger. Questo modulo copre entrambe, il modo giusto di sceglierle per non appesantire il rendering (privilegiando `transform` e `opacity`, vedi [[14-transforms]]), l'accessibilità con `prefers-reduced-motion` e le novità che permettono di animare anche l'entrata di un elemento e le transizioni tra viste.
+Il movimento in CSS ha due strumenti complementari. Una **transizione** interpola un valore tra due stati (quello di partenza e quello nuovo) quando qualcosa scatena il cambiamento (un `:hover`, l'aggiunta di una classe, un focus). Un'**animazione** con `@keyframes` è invece autonoma: definisce una sequenza di tappe, parte da sola e può ripetersi all'infinito, senza bisogno di un trigger. Questo modulo copre entrambe, il modo giusto di sceglierle per non appesantire il rendering (privilegiando `transform` e `opacity`, vedi [[14-transforms]]), l'accessibilità con `prefers-reduced-motion` e le novità che permettono di animare anche l'entrata di un elemento e le transizioni tra viste.
 
 ## Transizioni: interpolare tra due stati
 
@@ -70,7 +70,7 @@ Non tutte le proprietà sono animabili, e tra quelle che lo sono non tutte costa
 - **Interpolabili**: hanno valori intermedi calcolabili (`opacity`, `color`, `transform`, `width`, `margin`…). Sono quelle che transitano in modo fluido.
 - **Discrete**: passano da un valore all'altro senza stati intermedi (`display`, `visibility`, `overlay`). Di norma **non** transitano — servono accorgimenti specifici, visti nella sezione su `@starting-style`.
 
-Tra le interpolabili, la scelta ha un impatto enorme sulle prestazioni. Animare proprietà che cambiano la geometria — `width`, `height`, `top`, `left`, `margin` — costringe il browser a **ricalcolare il layout** (reflow) e a ridipingere, a ogni fotogramma: è la causa più comune di animazioni a scatti. Animare invece **`transform` e `opacity`** viene gestito dal **compositor**, spesso con accelerazione GPU, senza toccare layout né paint.
+Tra le interpolabili, la scelta ha un impatto enorme sulle prestazioni. Animare proprietà che cambiano la geometria (`width`, `height`, `top`, `left`, `margin`) costringe il browser a **ricalcolare il layout** (reflow) e a ridipingere, a ogni fotogramma: è la causa più comune di animazioni a scatti. Animare invece **`transform` e `opacity`** viene gestito dal **compositor**, spesso con accelerazione GPU, senza toccare layout né paint.
 
 > [!tip]
 > Regola d'oro: per muovere, scalare o ruotare qualcosa si usa `transform`; per farlo comparire/scomparire si usa `opacity`. Sono le due proprietà più economiche da animare. Per spostare un box si preferisce `transform: translate()` a `top`/`left` (dettagli in [[14-transforms]]).
@@ -116,7 +116,7 @@ Le posizioni del salto sono `jump-start`, `jump-end` (default), `jump-none`, `ju
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 340 140" role="img" aria-label="cubic-bezier con overshoot (supera il valore 1 e rientra) e steps(5) a gradini" style="width:100%;max-width:360px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><path d="M24 26 L24 110 L134 110" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M24 110.0 L134 26.0" fill="none" stroke="currentColor" stroke-width="1" opacity=".28" stroke-dasharray="3 3"/><path d="M24 47.8 L134 47.8" fill="none" stroke="currentColor" stroke-width="1" opacity=".4" stroke-dasharray="4 3"/><text x="136" y="50.77777777777778" font-size="8" text-anchor="start" font-weight="400" opacity=".6" fill="currentColor">1</text><path d="M24.0 110.0 C 61.4 12.9 94.4 47.8 134.0 47.8" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round"/><text x="79.0" y="126" font-size="9" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">cubic-bezier — overshoot</text><path d="M200 26 L200 110 L310 110" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M200.0 110.0 L200.0 110.0 L222.0 110.0 L222.0 93.2 L244.0 93.2 L244.0 76.4 L266.0 76.4 L266.0 59.6 L288.0 59.6 L288.0 42.8 L310.0 42.8 L310.0 26.0" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text x="255.0" y="126" font-size="9" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">steps(5, jump-end)</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Due curve particolari: <code>cubic-bezier(0.34, 1.56, 0.64, 1)</code> con <strong>overshoot</strong> (la y supera 1 — il tratteggio — e poi rientra), e <code>steps(5, jump-end)</code> che avanza a <strong>5 gradini</strong> netti invece che con continuità.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Due curve particolari: <code>cubic-bezier(0.34, 1.56, 0.64, 1)</code> con <strong>overshoot</strong> (la y supera 1, il tratteggio, e poi rientra), e <code>steps(5, jump-end)</code> che avanza a <strong>5 gradini</strong> netti invece che con continuità.</figcaption>
 </figure>
 
 > [!tip]
@@ -266,7 +266,7 @@ Si ragiona quindi su **tre stati**: quello di partenza (`@starting-style`), quel
 
 ## Moderno: view transitions (cenno)
 
-Le **View Transitions API** animano il passaggio tra due stati dell'interfaccia — o tra due pagine — facendo un "prima/dopo" automatico degli elementi, senza orchestrare a mano le singole transizioni. Il browser cattura lo stato vecchio e nuovo e li anima tramite gli pseudo-elementi `::view-transition-old()` / `::view-transition-new()`, abbinando gli elementi con la proprietà `view-transition-name`.
+Le **View Transitions API** animano il passaggio tra due stati dell'interfaccia (o tra due pagine) facendo un "prima/dopo" automatico degli elementi, senza orchestrare a mano le singole transizioni. Il browser cattura lo stato vecchio e nuovo e li anima tramite gli pseudo-elementi `::view-transition-old()` / `::view-transition-new()`, abbinando gli elementi con la proprietà `view-transition-name`.
 
 Ci sono due scenari:
 

@@ -24,7 +24,7 @@ Appunti di studio su **Git**, da zero ad avanzato: un percorso ordinato in 15 to
 | 14 | [GitHub](14-github.md) | clone, remote, push, fetch, pull, PR, fork |
 | 15 | [SemVer](15-semver.md) | versionamento semantico `MAJOR.MINOR.PATCH` |
 
-> Le basi della **shell** (bash/zsh, navigazione tra le cartelle, PATH, pacchetti globali) — un tempo il capitolo «Terminale» — vivono ora nel vault dedicato <a href="../terminale/" target="_blank" rel="noopener">Terminale</a>.
+> Le basi della **shell** (bash/zsh, navigazione tra le cartelle, PATH, pacchetti globali), un tempo il capitolo «Terminale», vivono ora nel vault dedicato <a href="../terminale/" target="_blank" rel="noopener">Terminale</a>.
 
 ## File di supporto
 

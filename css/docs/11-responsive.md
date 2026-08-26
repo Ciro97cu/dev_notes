@@ -7,7 +7,7 @@ tags: [tipo/modulo, responsive]
 
 > modulo 11 — *CSS* · rif. MDN
 
-Il **responsive design** è la pratica di far adattare un'unica pagina a schermi di ogni dimensione — dal telefono al desktop — senza versioni separate. Gli strumenti sono tre, in ordine di potenza crescente: le **media query** (`@media`), che reagiscono al **viewport**; le **container query** (`@container`), che reagiscono al **contenitore** di un componente; e le funzioni **fluide** (`clamp()`, unità relative) che scalano di continuo senza soglie. La regola guida di tutto: i **breakpoint** nascono dal *contenuto*, non dal catalogo dei dispositivi.
+Il **responsive design** è la pratica di far adattare un'unica pagina a schermi di ogni dimensione (dal telefono al desktop) senza versioni separate. Gli strumenti sono tre, in ordine di potenza crescente: le **media query** (`@media`), che reagiscono al **viewport**; le **container query** (`@container`), che reagiscono al **contenitore** di un componente; e le funzioni **fluide** (`clamp()`, unità relative) che scalano di continuo senza soglie. La regola guida di tutto: i **breakpoint** nascono dal *contenuto*, non dal catalogo dei dispositivi.
 
 ## Il meta tag viewport — indispensabile
 
@@ -29,7 +29,7 @@ Esistono anche `minimum-scale`, `maximum-scale` e `user-scalable`, ma toccarli �
 
 ## Strategia mobile-first
 
-**Mobile-first** significa scrivere gli stili **base** per lo schermo piccolo — fuori da ogni media query — e poi *aggiungere* complessità salendo di larghezza con `min-width` (o la range syntax `width >= …`).
+**Mobile-first** significa scrivere gli stili **base** per lo schermo piccolo (fuori da ogni media query) e poi *aggiungere* complessità salendo di larghezza con `min-width` (o la range syntax `width >= …`).
 
 ```css
 /* Base: mobile. Nessuna media query, vale ovunque */
@@ -158,7 +158,7 @@ Il pattern `width: 100%` + `max-width` è il più diffuso: un contenitore centra
 
 ## Container query `@container` — reattività al contenitore
 
-Le media query hanno un limite di fondo: guardano **solo il viewport**. Ma un componente riutilizzabile — una card, un box prodotto — non sa *dove* verrà messo: la stessa card può stare in una `main` larga o in una `sidebar` stretta, e alla stessa larghezza di viewport dovrebbe apparire diversa nei due posti. Le **container query** risolvono esattamente questo: un elemento reagisce alla dimensione del **proprio contenitore**, non della finestra.
+Le media query hanno un limite di fondo: guardano **solo il viewport**. Ma un componente riutilizzabile (una card, un box prodotto) non sa *dove* verrà messo: la stessa card può stare in una `main` larga o in una `sidebar` stretta, e alla stessa larghezza di viewport dovrebbe apparire diversa nei due posti. Le **container query** risolvono esattamente questo: un elemento reagisce alla dimensione del **proprio contenitore**, non della finestra.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 470 240" role="img" aria-label="Container query: la stessa card impilata in una sidebar stretta e in riga in un main largo, a parità di viewport" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><text x="235" y="20" font-size="12" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">stesso viewport, due contenitori</text><rect x="18" y="40" width="434" height="180" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" opacity="1"/><text x="30" y="54" font-size="9" text-anchor="start" font-weight="600" opacity=".6" fill="currentColor">viewport</text><rect x="34" y="66" width="120" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="1" stroke-dasharray="4 3"/><text x="94" y="80" font-size="9" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">sidebar (stretta)</text><text x="94" y="94" font-size="8" text-anchor="middle" font-weight="400" opacity=".6" fill="currentColor">&lt; 400px</text><rect x="46" y="104" width="96" height="44" rx="4" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.5" opacity="1"/><text x="94" y="130" font-size="8.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">immagine</text><path d="M46 160 L142 160" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M46 172 L142 172" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M46 184 L142 184" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><rect x="170" y="66" width="266" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="1" stroke-dasharray="4 3"/><text x="303" y="80" font-size="9" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">main (larga)</text><text x="303" y="94" font-size="8" text-anchor="middle" font-weight="400" opacity=".6" fill="currentColor">≥ 400px</text><rect x="184" y="104" width="84" height="84" rx="4" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.5" opacity="1"/><text x="226" y="150" font-size="8.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">immagine</text><path d="M282 112 L422 112" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 126 L422 126" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 140 L422 140" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 154 L422 154" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 168 L422 168" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/></g></svg>
@@ -329,7 +329,7 @@ Dice al browser mobile di usare la larghezza **reale** del dispositivo come view
 <details>
 <summary>Perché si preferisce l'approccio mobile-first con <code>min-width</code>?</summary>
 
-Lo stile base (mobile) è il più semplice e le media query *aggiungono* complessità salendo di larghezza, invece di disfarla. Si evita di sovrascrivere, il CSS resta più corto e il caso mobile — il più comune e fragile — parte già ottimizzato.
+Lo stile base (mobile) è il più semplice e le media query *aggiungono* complessità salendo di larghezza, invece di disfarla. Si evita di sovrascrivere, il CSS resta più corto e il caso mobile (il più comune e fragile) parte già ottimizzato.
 
 </details>
 

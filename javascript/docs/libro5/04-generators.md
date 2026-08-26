@@ -92,7 +92,7 @@ it1.next(val2 / 2);                     // y=300 → "20 300 3"
 it2.next(val1 / 4);                     // y=10  → "200 10 3"
 ```
 
-Questo interleaving manuale mostra che i generator possono riprodurre — in modo controllato e cooperativo — scenari di concorrenza che con le normali funzioni non sarebbero possibili.
+Questo interleaving manuale mostra che i generator possono riprodurre (in modo controllato e cooperativo) scenari di concorrenza che con le normali funzioni non sarebbero possibili.
 
 ---
 
@@ -282,7 +282,7 @@ run(main);
 
 ### ES2017: async/await
 
-Questo pattern — generator che yielda Promise, runner che le gestisce — è talmente utile che ES2017 lo ha integrato nella sintassi:
+Questo pattern (generator che yielda Promise, runner che le gestisce) è talmente utile che ES2017 lo ha integrato nella sintassi:
 
 ```js
 async function main() {
@@ -403,7 +403,7 @@ function *bar() {
 run(bar);
 ```
 
-`yield *` delega il controllo dell'iteration — non solo la composizione — rendendo il codice più leggibile e la struttura più simmetrica alle normali chiamate di funzione.
+`yield *` delega il controllo dell'iteration (non solo la composizione), rendendo il codice più leggibile e la struttura più simmetrica alle normali chiamate di funzione.
 
 ---
 
@@ -435,7 +435,7 @@ fooThunk(function(sum) { console.log(sum); });  // 7 (dopo 1s)
 
 La simmetria con le Promise è notevole: una *thunkory* produce thunk esattamente come una *promisory* (`Promise.wrap()`) produce Promise. Entrambi rappresentano una domanda su un valore futuro.
 
-Un generator può yieldar thunk invece di Promise — e un `run()` esteso può gestire entrambi — ma i thunk non offrono nessuna delle garanzie di trustability delle Promise. La raccomandazione è: preferire `yield pr` (Promise) a `yield th` (thunk), anche se un runner può supportare entrambi.
+Un generator può yieldar thunk invece di Promise (e un `run()` esteso può gestire entrambi), ma i thunk non offrono nessuna delle garanzie di trustability delle Promise. La raccomandazione è: preferire `yield pr` (Promise) a `yield th` (thunk), anche se un runner può supportare entrambi.
 
 ---
 
@@ -554,14 +554,14 @@ main();
 <details>
 <summary>Perché <code>foo()</code> non esegue il generator? Cosa restituisce invece?</summary>
 
-Chiamare `foo()` su un generator non avvia l'esecuzione: restituisce un **iterator** — un oggetto con i metodi `next()`, `throw()`, e `return()` — che rappresenta un "controllo remoto" per il generator. L'esecuzione vera inizia solo alla prima chiamata `it.next()`. Questo design permette di passare l'iterator in giro, avviarlo in un secondo momento, o non avviarlo affatto. Ogni chiamata a `foo()` crea un'istanza indipendente con il proprio stato interno, quindi due iterator dello stesso generator non condividono scope locale.
+Chiamare `foo()` su un generator non avvia l'esecuzione: restituisce un **iterator** (un oggetto con i metodi `next()`, `throw()`, e `return()`) che rappresenta un "controllo remoto" per il generator. L'esecuzione vera inizia solo alla prima chiamata `it.next()`. Questo design permette di passare l'iterator in giro, avviarlo in un secondo momento, o non avviarlo affatto. Ogni chiamata a `foo()` crea un'istanza indipendente con il proprio stato interno, quindi due iterator dello stesso generator non condividono scope locale.
 
 </details>
 
 <details>
 <summary>Perché il canale <code>yield</code>/<code>next()</code> è "sfasato" di uno, e cosa risponde all'ultimo <code>next()</code>?</summary>
 
-Il primo `next()` avvia il generator e lo porta fino al primo `yield` — a quel punto non c'è ancora nessun `yield` in pausa a cui passare un valore, quindi qualsiasi argomento viene ignorato. Il secondo `next(val)` fornisce il valore che diventa il risultato dell'espressione `yield` correntemente in pausa, e avanza fino al prossimo `yield`. Quindi con N yield servono N+1 chiamate a `next()`. L'ultimo `next()` — quello senza un `yield` corrispondente — riceve risposta dall'istruzione `return` del generator (o da `return undefined` implicito).
+Il primo `next()` avvia il generator e lo porta fino al primo `yield` — a quel punto non c'è ancora nessun `yield` in pausa a cui passare un valore, quindi qualsiasi argomento viene ignorato. Il secondo `next(val)` fornisce il valore che diventa il risultato dell'espressione `yield` correntemente in pausa, e avanza fino al prossimo `yield`. Quindi con N yield servono N+1 chiamate a `next()`. L'ultimo `next()` (quello senza un `yield` corrispondente) riceve risposta dall'istruzione `return` del generator (o da `return undefined` implicito).
 
 </details>
 

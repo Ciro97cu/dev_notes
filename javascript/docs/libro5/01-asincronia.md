@@ -239,7 +239,7 @@ console.log(42); /* se a e b non vengono più usati dopo */
 
 Il riordinamento è sicuro solo quando non ci sono side effect osservabili (chiamate a funzione, getter, I/O). Con side effect, l'engine è costretto a rispettare l'ordine dichiarato.
 
-Questo concetto — operazioni atomicamente sicure che però possono essere riordinate internamente — è una metafora utile per pensare alla concorrenza e al nondeterminismo nell'async JS.
+Questo concetto (operazioni atomicamente sicure che però possono essere riordinate internamente) è una metafora utile per pensare alla concorrenza e al nondeterminismo nell'async JS.
 
 ---
 

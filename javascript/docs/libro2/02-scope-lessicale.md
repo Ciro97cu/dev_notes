@@ -1,12 +1,12 @@
 # Lexical Scope
 
-Esistono due modelli principali per definire come funziona lo scope. Il primo, usato dalla grande maggioranza dei linguaggi di programmazione — JavaScript incluso — si chiama **lexical scope**. Il secondo, usato da linguaggi come Bash o alcune modalità di Perl, è il **dynamic scope**. Capire la differenza tra i due è utile per capire perché JavaScript si comporta come si comporta.
+Esistono due modelli principali per definire come funziona lo scope. Il primo, usato dalla grande maggioranza dei linguaggi di programmazione, JavaScript incluso, si chiama **lexical scope**. Il secondo, usato da linguaggi come Bash o alcune modalità di Perl, è il **dynamic scope**. Capire la differenza tra i due è utile per capire perché JavaScript si comporta come si comporta.
 
 ## Scope definito al momento della scrittura
 
 Il lexical scope è scope definito al momento del **lexing** — la prima fase del processo di compilazione in cui il codice sorgente viene analizzato e scomposto in token. In termini pratici, il lexical scope è determinato da **dove le funzioni vengono dichiarate nel codice**, non da dove vengono chiamate.
 
-Questa distinzione è fondamentale: nel momento in cui si scrive il codice — non quando viene eseguito — lo scope di ogni variabile è già fissato.
+Questa distinzione è fondamentale: nel momento in cui si scrive il codice (non quando viene eseguito) lo scope di ogni variabile è già fissato.
 
 ```js
 function foo(a) {

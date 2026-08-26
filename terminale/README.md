@@ -1,6 +1,6 @@
 # Indice completo
 
-Appunti di studio sul **terminale** e la **shell**: come muoversi nella riga di comando, capire la differenza tra bash e zsh, il filesystem, le variabili d'ambiente e il **PATH**, e — soprattutto — dove finiscono i pacchetti installati **globalmente** e perché diventano eseguibili. Otto capitoli, ognuno con un Ripasso lampo.
+Appunti di studio sul **terminale** e la **shell**: come muoversi nella riga di comando, capire la differenza tra bash e zsh, il filesystem, le variabili d'ambiente e il **PATH**, e, soprattutto, dove finiscono i pacchetti installati **globalmente** e perché diventano eseguibili. Otto capitoli, ognuno con un Ripasso lampo.
 
 > Appunti personali di studio. Ambiente di riferimento: **macOS con zsh**; le differenze rilevanti con Linux e con bash sono segnalate lungo il testo. Comandi verificati sulle *man page* e sulla documentazione ufficiale.
 

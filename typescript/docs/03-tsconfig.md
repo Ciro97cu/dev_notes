@@ -231,7 +231,7 @@ Con questa configurazione, un file `src/servizi/auth.ts` viene compilato in `dis
 
 ## downlevelIteration
 
-`downlevelIteration` faceva emettere al compilatore del codice aggiuntivo per far funzionare correttamente le iterazioni — come `for...of` su `Map`, `Set` o generatori — quando si compilava verso target ECMAScript molto vecchi privi di iteratori nativi. Era un'opzione legata a `target` ormai datati: con i target moderni gli iteratori sono supportati nativamente e l'opzione non serve. Poiché su TypeScript 7.0 il target minimo è `es2015`, l'opzione ha perso ogni scopo ed è stata rimossa: non è più un valore valido nel `tsconfig.json`.
+`downlevelIteration` faceva emettere al compilatore del codice aggiuntivo per far funzionare correttamente le iterazioni (come `for...of` su `Map`, `Set` o generatori) quando si compilava verso target ECMAScript molto vecchi privi di iteratori nativi. Era un'opzione legata a `target` ormai datati: con i target moderni gli iteratori sono supportati nativamente e l'opzione non serve. Poiché su TypeScript 7.0 il target minimo è `es2015`, l'opzione ha perso ogni scopo ed è stata rimossa: non è più un valore valido nel `tsconfig.json`.
 
 ## noEmitOnError
 

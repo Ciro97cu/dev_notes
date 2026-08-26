@@ -6,7 +6,7 @@ Una shell ha due vite. Da **interattiva** è quella con cui si dialoga a turni, 
 
 ## Una famiglia con un antenato comune
 
-Tutte discendono dalla **Bourne shell** (`sh`), scritta da Stephen Bourne nel 1979: è la capostipite. Da lì è nato lo standard **POSIX**, che fissa un *insieme comune* di comportamenti — `cd`, le pipe, le variabili, i cicli — che ogni shell della famiglia rispetta. È questa base condivisa il motivo per cui `cd`, `ls` o `command | altro` funzionano identici ovunque: sono terreno comune.
+Tutte discendono dalla **Bourne shell** (`sh`), scritta da Stephen Bourne nel 1979: è la capostipite. Da lì è nato lo standard **POSIX**, che fissa un *insieme comune* di comportamenti (`cd`, le pipe, le variabili, i cicli) che ogni shell della famiglia rispetta. È questa base condivisa il motivo per cui `cd`, `ls` o `command | altro` funzionano identici ovunque: sono terreno comune.
 
 Le shell moderne aggiungono comodità *sopra* quella base. **bash** (*Bourne Again SHell*, progetto GNU, 1989) ha esteso `sh` restando compatibile, ed è per decenni stata la shell di riferimento di Linux. **zsh** (1990) è andata oltre, con completamento più intelligente, correzione degli errori di battitura e un glob più potente. Per l'uso quotidiano bash e zsh si assomigliano molto; le differenze emergono nei dettagli e negli script.
 

@@ -102,7 +102,7 @@ for (var i = 1; i <= 5; i++) {
 
 L'intenzione è stampare `1`, `2`, `3`, `4`, `5` a intervalli di un secondo. L'output effettivo è `6`, cinque volte.
 
-Il motivo: tutte e cinque le callback di `setTimeout` hanno un closure sulla **stessa** variabile `i`, che appartiene allo scope della funzione (o al global scope). Quando le callback vengono eseguite — dopo che il loop è già terminato — `i` vale già `6`. Non esiste nessuna copia separata di `i` per ogni iterazione.
+Il motivo: tutte e cinque le callback di `setTimeout` hanno un closure sulla **stessa** variabile `i`, che appartiene allo scope della funzione (o al global scope). Quando le callback vengono eseguite (dopo che il loop è già terminato) `i` vale già `6`. Non esiste nessuna copia separata di `i` per ogni iterazione.
 
 ### Soluzione con IIFE
 
@@ -270,7 +270,7 @@ console.log(hello("rhino")); // "Salve: rhino"
 awesome();                   // "SALVE: HIPPO"
 ```
 
-A differenza dei module pattern function-based — le cui API sono dinamiche e modificabili a runtime — le ES6 module API sono **statiche**: la struttura delle esportazioni è fissa al momento della compilazione. L'engine può quindi rilevare riferimenti inesistenti come errori precoci (compile-time) invece di scoprirli solo a runtime.
+A differenza dei module pattern function-based (le cui API sono dinamiche e modificabili a runtime), le ES6 module API sono **statiche**: la struttura delle esportazioni è fissa al momento della compilazione. L'engine può quindi rilevare riferimenti inesistenti come errori precoci (compile-time) invece di scoprirli solo a runtime.
 
 Il contenuto di ogni file modulo è trattato come se fosse racchiuso in un closure, esattamente come i function-based module.
 
@@ -324,7 +324,7 @@ Il closure si forma quando una funzione interna viene definita all'interno di un
 <details>
 <summary>Perché il classico loop con `var` e `setTimeout` stampa sempre l'ultimo valore?</summary>
 
-Perché `var` non crea un nuovo scope per ogni iterazione del loop: dichiara una singola variabile `i` nello scope della funzione circostante (o nel global scope). Tutte le callback di `setTimeout` hanno un closure sulla stessa `i`. Quando vengono eseguite — dopo che il loop è già terminato — `i` ha già raggiunto il valore finale (6 in un loop 1-5). Non esiste nessuna copia separata del valore per ogni iterazione. La soluzione è creare uno scope separato per ogni iterazione: con un IIFE che cattura il valore corrente come parametro, o con `let` che garantisce una nuova variabile per ogni iterazione del loop.
+Perché `var` non crea un nuovo scope per ogni iterazione del loop: dichiara una singola variabile `i` nello scope della funzione circostante (o nel global scope). Tutte le callback di `setTimeout` hanno un closure sulla stessa `i`. Quando vengono eseguite (dopo che il loop è già terminato) `i` ha già raggiunto il valore finale (6 in un loop 1-5). Non esiste nessuna copia separata del valore per ogni iterazione. La soluzione è creare uno scope separato per ogni iterazione: con un IIFE che cattura il valore corrente come parametro, o con `let` che garantisce una nuova variabile per ogni iterazione del loop.
 
 </details>
 

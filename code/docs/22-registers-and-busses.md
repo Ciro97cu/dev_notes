@@ -5,7 +5,7 @@ Molte delle operazioni quotidiane di un computer non sono calcoli spettacolari m
 
 ## I registri
 
-Mentre i byte vengono elaborati, la CPU li tiene in una piccola scorta di latch chiamati **registri**. Il concetto è già familiare dai latch dell'accumulatore a tre byte (capitolo 20), ma la CPU che si sta costruendo — modellata sull'**Intel 8080** — ne ha di più. In particolare ci sono **sette registri a 8 bit** direttamente comandabili dalle istruzioni, il cui scopo primario è custodire i byte che l'ALU deve elaborare:
+Mentre i byte vengono elaborati, la CPU li tiene in una piccola scorta di latch chiamati **registri**. Il concetto è già familiare dai latch dell'accumulatore a tre byte (capitolo 20), ma la CPU che si sta costruendo (modellata sull'**Intel 8080**) ne ha di più. In particolare ci sono **sette registri a 8 bit** direttamente comandabili dalle istruzioni, il cui scopo primario è custodire i byte che l'ALU deve elaborare:
 
 | Registro | Ruolo |
 |:---:|---|
@@ -13,7 +13,7 @@ Mentre i byte vengono elaborati, la CPU li tiene in una piccola scorta di latch 
 | **B, C, D, E** | registri di uso generale |
 | **H, L** | registri di uso generale che, **insieme**, formano un indirizzo a 16 bit |
 
-I registri **H** e **L** hanno una dote speciale: accoppiati, i loro 16 bit formano un **indirizzo di memoria**, indicato con la notazione **[HL]**. Accedere alla memoria attraverso l'indirizzo contenuto in HL si chiama **indirizzamento indiretto** (*indirect addressing*), e — come si vedrà — è utilissimo: la coppia HL diventa una specie di "dito" che punta a una cella di memoria. Nelle istruzioni, quel byte di memoria si tratta quasi come un ottavo registro, chiamato **M** (da *memory*).
+I registri **H** e **L** hanno una dote speciale: accoppiati, i loro 16 bit formano un **indirizzo di memoria**, indicato con la notazione **[HL]**. Accedere alla memoria attraverso l'indirizzo contenuto in HL si chiama **indirizzamento indiretto** (*indirect addressing*), e, come si vedrà, è utilissimo: la coppia HL diventa una specie di "dito" che punta a una cella di memoria. Nelle istruzioni, quel byte di memoria si tratta quasi come un ottavo registro, chiamato **M** (da *memory*).
 
 ## Istruzioni, opcode e linguaggio assembly
 
@@ -26,7 +26,7 @@ Le istruzioni dell'8080 seguono schemi regolari nei bit. Per esempio, tutte le i
 | `MVI D,dato` | `16h` | | `MVI A,dato` | `3Eh` |
 | `MVI E,dato` | `1Eh` | | `MVI H,dato` | `26h` |
 
-Scritture come `MVI A,dato` o `ADD E` non sono i byte veri che stanno in memoria (quelli sono gli **opcode** esadecimali), ma la loro forma leggibile: parole brevi — dette **mnemonici** — che stanno per operazioni più lunghe. `ADD` sta per *add*, `SUB` per *subtract*, `MVI` per *move immediate*, e così via. Questo modo di scrivere i programmi con mnemonici e operandi, in corrispondenza uno-a-uno con gli opcode, è il **linguaggio assembly**: molto più maneggevole degli esadecimali, ma pur sempre a diretto contatto con la macchina.
+Scritture come `MVI A,dato` o `ADD E` non sono i byte veri che stanno in memoria (quelli sono gli **opcode** esadecimali), ma la loro forma leggibile: parole brevi (dette **mnemonici**) che stanno per operazioni più lunghe. `ADD` sta per *add*, `SUB` per *subtract*, `MVI` per *move immediate*, e così via. Questo modo di scrivere i programmi con mnemonici e operandi, in corrispondenza uno-a-uno con gli opcode, è il **linguaggio assembly**: molto più maneggevole degli esadecimali, ma pur sempre a diretto contatto con la macchina.
 
 Oltre un quarto di tutti gli opcode dell'8080 sta in un'unica tabella: le otto operazioni aritmetiche e logiche del capitolo 21, combinate con ciascuna delle otto sorgenti (i sette registri più M = [HL]).
 
@@ -73,7 +73,7 @@ Perché la CPU esegua un programma, qualcosa deve tenere il conto di **dove** si
 <figcaption><em>Il Program Counter tiene l'indirizzo a 16 bit della prossima istruzione. <strong>Enable</strong> lo mette sull'address bus (per leggere quella cella), <strong>Clock</strong> vi carica un nuovo valore (per un salto), e <strong>Reset</strong> lo azzera a <code>0000h</code>, così all'accensione la CPU parte dalla prima cella di memoria.</em></figcaption>
 </figure>
 
-All'accensione, il segnale **Reset** azzera il PC a `0000h`: la CPU comincia dunque a leggere le istruzioni dall'inizio della memoria. Insieme al PC, altri tre latch a 8 bit servono a conservare fino a 3 byte dell'istruzione in corso di lettura. A questo punto tutti i grandi pezzi del processore — register array, ALU, Program Counter — sono al loro posto, appesi ai due bus. Manca solo il direttore d'orchestra: il fitto insieme di **segnali di controllo** (Clock, Enable, Select, Write) che, al momento giusto, dice a ciascun componente cosa fare. Costruirli e coordinarli è il compito del capitolo 23.
+All'accensione, il segnale **Reset** azzera il PC a `0000h`: la CPU comincia dunque a leggere le istruzioni dall'inizio della memoria. Insieme al PC, altri tre latch a 8 bit servono a conservare fino a 3 byte dell'istruzione in corso di lettura. A questo punto tutti i grandi pezzi del processore (register array, ALU, Program Counter) sono al loro posto, appesi ai due bus. Manca solo il direttore d'orchestra: il fitto insieme di **segnali di controllo** (Clock, Enable, Select, Write) che, al momento giusto, dice a ciascun componente cosa fare. Costruirli e coordinarli è il compito del capitolo 23.
 
 ## Ripasso lampo
 

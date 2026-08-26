@@ -1,6 +1,6 @@
 # Program Performance
 
-I pattern asincroni trattati nei capitoli precedenti — callback, Promise, generator — migliorano le prestazioni permettendo di sovrapporre operazioni che altrimenti si bloccherebbero a vicenda. Ma l'asincronia rimane vincolata a un singolo thread. Questo capitolo copre tre meccanismi di livello superiore che portano il parallelismo reale in JavaScript.
+I pattern asincroni trattati nei capitoli precedenti (callback, Promise, generator) migliorano le prestazioni permettendo di sovrapporre operazioni che altrimenti si bloccherebbero a vicenda. Ma l'asincronia rimane vincolata a un singolo thread. Questo capitolo copre tre meccanismi di livello superiore che portano il parallelismo reale in JavaScript.
 
 ---
 
@@ -232,7 +232,7 @@ var result = (a + b) | 0;
 <details>
 <summary>Perché i Web Worker non possono condividere variabili con il thread principale?</summary>
 
-La condivisione di stato tra thread è il problema fondamentale della programmazione multithread: richiede meccanismi di sincronizzazione come mutex e lock per evitare race condition, che aggiungono complessità elevata e sono fonte di bug difficilissimi da riprodurre. La scelta di isolare completamente i Worker — nessuna variabile globale condivisa, nessun DOM, nessun accesso allo scope esterno — elimina alla radice questa classe di problemi. Il canale di comunicazione a messaggi (`postMessage`/`addEventListener("message")`) è l'unica interfaccia ammessa, e garantisce che ogni scambio di dati sia esplicito e controllato.
+La condivisione di stato tra thread è il problema fondamentale della programmazione multithread: richiede meccanismi di sincronizzazione come mutex e lock per evitare race condition, che aggiungono complessità elevata e sono fonte di bug difficilissimi da riprodurre. La scelta di isolare completamente i Worker (nessuna variabile globale condivisa, nessun DOM, nessun accesso allo scope esterno) elimina alla radice questa classe di problemi. Il canale di comunicazione a messaggi (`postMessage`/`addEventListener("message")`) è l'unica interfaccia ammessa, e garantisce che ogni scambio di dati sia esplicito e controllato.
 
 </details>
 
@@ -253,7 +253,7 @@ I Web Workers implementano **task parallelism**: pezzi distinti di logica del pr
 <details>
 <summary>Perché <code>| 0</code> è una type hint valida per asm.js e cosa cambia a runtime?</summary>
 
-L'operatore `|` (OR bitwise) con `0` come secondo operando non ha effetto sul valore numerico intero (ogni bit OR 0 resta invariato), ma ha l'effetto collaterale di convertire il risultato a un intero a 32 bit. In JS standard, ogni operazione bitwise forza la conversione dell'operando a `Int32` e produce un risultato `Int32`. Un engine asm.js-aware interpreta la presenza di `| 0` come una dichiarazione implicita: "questa variabile/espressione è sempre un intero a 32 bit". L'engine può quindi ottimizzare aggressivamente, saltando il tracking dinamico del tipo e la gestione della coercione. Lo stesso codice gira correttamente in qualsiasi JS engine standard — `| 0` produce sempre il risultato corretto — ma solo i motori asm.js-aware ne traggono beneficio in termini di prestazioni.
+L'operatore `|` (OR bitwise) con `0` come secondo operando non ha effetto sul valore numerico intero (ogni bit OR 0 resta invariato), ma ha l'effetto collaterale di convertire il risultato a un intero a 32 bit. In JS standard, ogni operazione bitwise forza la conversione dell'operando a `Int32` e produce un risultato `Int32`. Un engine asm.js-aware interpreta la presenza di `| 0` come una dichiarazione implicita: "questa variabile/espressione è sempre un intero a 32 bit". L'engine può quindi ottimizzare aggressivamente, saltando il tracking dinamico del tipo e la gestione della coercione. Lo stesso codice gira correttamente in qualsiasi JS engine standard, `| 0` produce sempre il risultato corretto, ma solo i motori asm.js-aware ne traggono beneficio in termini di prestazioni.
 
 </details>
 

@@ -5,7 +5,7 @@ Il capitolo precedente ha messo in tavola due pezzi che, da soli, non facevano a
 
 ## Rappresentare l'ora: il BCD
 
-Un orologio che mostra ore, minuti e secondi ha bisogno di **sei cifre decimali**: due per ciascun gruppo. Un'ora come le dodici e mezza (e quarantasette secondi) si scrive `12:30:47`. Come rappresentarla con dei bit? La strada più ovvia — convertire in binario i tre numeri interi 12, 30 e 47 — è scomoda: verrebbero `1100 : 11110 : 101111`, tre gruppi di lunghezza diversa e faticosi da leggere al volo (nel tempo di convertirli a mente, l'ora sarebbe già cambiata).
+Un orologio che mostra ore, minuti e secondi ha bisogno di **sei cifre decimali**: due per ciascun gruppo. Un'ora come le dodici e mezza (e quarantasette secondi) si scrive `12:30:47`. Come rappresentarla con dei bit? La strada più ovvia (convertire in binario i tre numeri interi 12, 30 e 47) è scomoda: verrebbero `1100 : 11110 : 101111`, tre gruppi di lunghezza diversa e faticosi da leggere al volo (nel tempo di convertirli a mente, l'ora sarebbe già cambiata).
 
 La strada intelligente è un'altra: codificare **separatamente ogni singola cifra decimale** con quattro bit. Così `12:30:47` diventa una sfilza di sei gruppi da quattro bit, uno per cifra:
 
@@ -29,7 +29,7 @@ Questa rappresentazione ha un nome: **BCD**, *binary-coded decimal* (decimale co
 
 ## Contare i secondi: il contatore a decade
 
-Il cuore dell'orologio è un contatore che, pilotato da un impulso al secondo, faccia avanzare la cifra bassa dei secondi. Il contatore del capitolo 17 — quattro flip-flop edge-triggered in cascata, ciascuno che dimezza la frequenza del precedente — conta però da `0000` a `1111`, cioè da 0 a 15, e riparte ogni **16** secondi. A noi serve invece che conti da 0 a **9** e poi torni a zero ogni **10** secondi.
+Il cuore dell'orologio è un contatore che, pilotato da un impulso al secondo, faccia avanzare la cifra bassa dei secondi. Il contatore del capitolo 17 (quattro flip-flop edge-triggered in cascata, ciascuno che dimezza la frequenza del precedente) conta però da `0000` a `1111`, cioè da 0 a 15, e riparte ogni **16** secondi. A noi serve invece che conti da 0 a **9** e poi torni a zero ogni **10** secondi.
 
 Qui entra in gioco l'ingresso **Clear** dei flip-flop (visto a fine capitolo 17): portandolo a 1 si azzera l'uscita Q qualunque cosa facciano gli altri ingressi, e azzerando tutti i Clear insieme il numero mostrato torna a `0000`. Basta allora accorgersi del momento in cui il conteggio raggiunge `1010` (il 10, il primo valore *non valido* per una cifra decimale) e in quell'istante attivare i Clear. Riconoscere `1010` è facile: è l'unico valore, nel percorso 0→10, in cui valgono 1 contemporaneamente il bit del 8 e quello del 2, quindi basta una **porta AND** collegata a quei due bit. Il risultato è un **contatore a decade** (o contatore modulo 10): conta 0, 1, 2, …, 9 e poi riparte.
 
@@ -46,20 +46,20 @@ flowchart LR
 
 Contare da 0 a 9 una cifra sola non basta: quando la cifra bassa dei secondi passa da 9 a 0, quella alta deve avanzare di uno. Serve dunque un segnale che scatti **una volta ogni dieci secondi**, e lo si ottiene con una **porta NAND** che riconosce il valore `1001` (il 9): la sua uscita, normalmente 1, va a 0 quando la cifra è 9 e risale a 1 subito dopo. Quel fronte di salita, che si presenta puntuale ogni 10 secondi, è il **riporto** che pilota il clock del contatore successivo — esattamente come un flip-flop pilotava il prossimo nel contatore del capitolo 17.
 
-La cifra alta dei secondi (e dei minuti) non conta però fino a 9, ma solo fino a **5**: dopo il 5 deve tornare a 0, così i secondi vanno da 00 a 59. È un contatore **modulo 6**: identico a quello a decade, ma con l'AND che riconosce `110` (il 6) per attivare i Clear. Incatenando le cifre — decina di secondi che riporta sui minuti, decina di minuti che riporta sulle ore — l'intero orologio è una collana di contatori BCD, ognuno con il proprio modulo.
+La cifra alta dei secondi (e dei minuti) non conta però fino a 9, ma solo fino a **5**: dopo il 5 deve tornare a 0, così i secondi vanno da 00 a 59. È un contatore **modulo 6**: identico a quello a decade, ma con l'AND che riconosce `110` (il 6) per attivare i Clear. Incatenando le cifre (decina di secondi che riporta sui minuti, decina di minuti che riporta sulle ore) l'intero orologio è una collana di contatori BCD, ognuno con il proprio modulo.
 
 > [!warning]
 > Il "modulo" di ciascun contatore si sceglie decidendo **quale valore far riconoscere** all'AND che comanda i Clear: `1010` (10) per una cifra 0-9, `110` (6) per una cifra 0-5. È l'AND, non il numero di flip-flop, a fissare quando il contatore torna a zero. Un errore nella combinazione riconosciuta e il contatore conta fino al valore sbagliato.
 
 ## Le ore: il caso speciale
 
-Con secondi e minuti il gioco fila liscio, ma le ore introducono un paio di grattacapi. Un orologio a **24 ore** conta le ore da 0 a 23; i paesi anglosassoni però usano il formato a **12 ore**, dove — per convenzione — mezzogiorno e mezzanotte sono le "12" e l'ora successiva è "1", non "0". Le cifre bassa e alta dell'ora, inoltre, non si azzerano più in modo indipendente come per secondi e minuti: vanno considerate **insieme**. La cifra bassa va azzerata quando raggiunge `1010` (il passaggio da 9 a 10), ma **entrambe** le cifre vanno azzerate quando l'ora è 11 e sta per diventare 12, cioè nel salto da `11:59:59` a mezzanotte/mezzogiorno.
+Con secondi e minuti il gioco fila liscio, ma le ore introducono un paio di grattacapi. Un orologio a **24 ore** conta le ore da 0 a 23; i paesi anglosassoni però usano il formato a **12 ore**, dove, per convenzione, mezzogiorno e mezzanotte sono le "12" e l'ora successiva è "1", non "0". Le cifre bassa e alta dell'ora, inoltre, non si azzerano più in modo indipendente come per secondi e minuti: vanno considerate **insieme**. La cifra bassa va azzerata quando raggiunge `1010` (il passaggio da 9 a 10), ma **entrambe** le cifre vanno azzerate quando l'ora è 11 e sta per diventare 12, cioè nel salto da `11:59:59` a mezzanotte/mezzogiorno.
 
-Petzold risolve il tutto con cinque flip-flop e un po' di logica combinatoria: una **porta NOR** riconosce il valore `0 0000` e, tramite due OR, fa mostrare al display `1 0010` — cioè **12** — così che mezzogiorno e mezzanotte non appaiano mai come "00"; una **porta NAND** riconosce l'ora `1 0001` (l'11) e comanda un ulteriore flip-flop che fa da **indicatore AM/PM**, ribaltandosi a ogni passaggio delle 12.
+Petzold risolve il tutto con cinque flip-flop e un po' di logica combinatoria: una **porta NOR** riconosce il valore `0 0000` e, tramite due OR, fa mostrare al display `1 0010`, cioè **12**, così che mezzogiorno e mezzanotte non appaiano mai come "00"; una **porta NAND** riconosce l'ora `1 0001` (l'11) e comanda un ulteriore flip-flop che fa da **indicatore AM/PM**, ribaltandosi a ogni passaggio delle 12.
 
 ## Mettere tutto insieme
 
-Visto da lontano, l'orologio è la cascata di tre stadi — secondi, minuti, ore — ciascuno che passa il proprio riporto al successivo:
+Visto da lontano, l'orologio è la cascata di tre stadi (secondi, minuti, ore) ciascuno che passa il proprio riporto al successivo:
 
 <figure>
 <svg viewBox="0 0 542 104" role="img" aria-label="Schema a blocchi dell'orologio: il clock da 1 secondo pilota i Secondi, che riportano ai Minuti ogni 60 secondi, che riportano alle Ore ogni 60 minuti" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="24" y="34" width="98" height="46" rx="7" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="73.0" y="62.0" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Ore</text><rect x="214" y="34" width="98" height="46" rx="7" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="263.0" y="62.0" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Minuti</text><rect x="404" y="34" width="98" height="46" rx="7" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="453.0" y="62.0" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Secondi</text><path d="M404 57.0 L320 57.0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M312 57.0 L321 52.0 L321 62.0 Z" fill="currentColor"/><text x="358.0" y="46.0" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">1 min</text><path d="M214 57.0 L130 57.0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M122 57.0 L131 52.0 L131 62.0 Z" fill="currentColor"/><text x="168.0" y="46.0" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">1 h</text><path d="M532 57.0 L510 57.0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M502 57.0 L511 52.0 L511 62.0 Z" fill="currentColor"/><text x="518" y="46.0" font-size="11" text-anchor="start" font-weight="700" opacity="1" fill="currentColor">1 s</text></g></svg>
@@ -68,7 +68,7 @@ Visto da lontano, l'orologio è la cascata di tre stadi — secondi, minuti, ore
 
 C'è una curiosità dell'accensione: poiché ogni cifra usa una NAND che dà 1 finché i suoi ingressi non sono entrambi 0, all'avvio tutte quelle NAND partono a 1 e fanno scattare i primi flip-flop, così l'orologio si accende segnando `1:11:10`. Simpatico, ma raramente è l'ora giusta.
 
-Serve dunque un modo per **impostare l'ora**. Alcuni orologi la ricevono da Internet, dai satelliti GPS o da appositi segnali radio; qui si sceglie la via più semplice: **due pulsanti**, uno per far avanzare i minuti e uno per le ore. Non è il metodo più efficiente — per passare da 2:55 a 1:50 si preme il pulsante dei minuti 55 volte e quello delle ore 11 — ma non richiede istruzioni. Realizzarli è sorprendentemente elegante grazie alla porta **XOR**, la stessa incontrata nel capitolo 14 per la somma: quando uno dei suoi ingressi vale 1, la XOR **inverte** l'altro (è l'inverter controllato già usato per il complemento a uno nel capitolo 16). Basta allora far passare i segnali di riporto "1 minuto" e "1 ora" attraverso una XOR comandata dal pulsante: premendo, il segnale viene ribaltato e si inietta un impulso in più, che fa avanzare la cifra. L'orologio binario completo, con tutti i pezzi montati, è disponibile sul sito di accompagnamento del libro, **CodeHiddenLanguage.com**.
+Serve dunque un modo per **impostare l'ora**. Alcuni orologi la ricevono da Internet, dai satelliti GPS o da appositi segnali radio; qui si sceglie la via più semplice: **due pulsanti**, uno per far avanzare i minuti e uno per le ore. Non è il metodo più efficiente (per passare da 2:55 a 1:50 si preme il pulsante dei minuti 55 volte e quello delle ore 11) ma non richiede istruzioni. Realizzarli è sorprendentemente elegante grazie alla porta **XOR**, la stessa incontrata nel capitolo 14 per la somma: quando uno dei suoi ingressi vale 1, la XOR **inverte** l'altro (è l'inverter controllato già usato per il complemento a uno nel capitolo 16). Basta allora far passare i segnali di riporto "1 minuto" e "1 ora" attraverso una XOR comandata dal pulsante: premendo, il segnale viene ribaltato e si inietta un impulso in più, che fa avanzare la cifra. L'orologio binario completo, con tutti i pezzi montati, è disponibile sul sito di accompagnamento del libro, **CodeHiddenLanguage.com**.
 
 ## Mostrare le cifre: dal BCD al display
 
@@ -87,12 +87,12 @@ Per display più grandi o versatili si usa la **matrice di punti** (*dot matrix*
 
 ## Una memoria fatta di diodi: la ROM
 
-Resta un'ultima domanda: come si *ricorda* quali punti accendere per disegnare un 3, un 7 o qualsiasi altra cifra sulla matrice? La risposta di Petzold è tanto semplice quanto illuminante: con una **matrice di diodi**. Si mettono dei diodi solo negli incroci riga-colonna che corrispondono ai punti da accendere; la disposizione dei diodi *è* la forma della cifra. Quel groviglio di diodi non fa che una cosa: conserva un'informazione — lo schema dei punti — cablata nella sua stessa struttura.
+Resta un'ultima domanda: come si *ricorda* quali punti accendere per disegnare un 3, un 7 o qualsiasi altra cifra sulla matrice? La risposta di Petzold è tanto semplice quanto illuminante: con una **matrice di diodi**. Si mettono dei diodi solo negli incroci riga-colonna che corrispondono ai punti da accendere; la disposizione dei diodi *è* la forma della cifra. Quel groviglio di diodi non fa che una cosa: conserva un'informazione (lo schema dei punti) cablata nella sua stessa struttura.
 
 Un circuito che conserva un'informazione è una **memoria**. E poiché il contenuto di una matrice di diodi non si può cambiare se non risaldando fisicamente i diodi, si tratta più precisamente di una **memoria a sola lettura**, in inglese *read-only memory* o **ROM**. È la prima volta, in tutto il libro, che dei bit vengono *immagazzinati* in modo permanente e riletti selezionando riga e colonna: un'anticipazione in miniatura di ciò che il prossimo capitolo generalizzerà, costruendo una memoria vera e propria in cui i bit non solo si leggono, ma si possono anche **scrivere**.
 
 > [!info]
-> Il salto importante di questo capitolo è duplice. Da un lato, oscillatore più contatori più poche porte bastano già a **misurare il tempo**; dall'altro, per *mostrare* quel tempo si incontra — quasi di straforo, in una matrice di diodi — il primo esempio di **memoria** (una ROM). È il filo che porta dritti al capitolo 19.
+> Il salto importante di questo capitolo è duplice. Da un lato, oscillatore più contatori più poche porte bastano già a **misurare il tempo**; dall'altro, per *mostrare* quel tempo si incontra, quasi di straforo, in una matrice di diodi, il primo esempio di **memoria** (una ROM). È il filo che porta dritti al capitolo 19.
 
 ## Ripasso lampo
 
@@ -148,7 +148,7 @@ Il decoder BCD traduce i quattro bit di una cifra nelle dieci linee "0"…"9" (u
 <details>
 <summary>Perché una matrice di diodi è considerata una <code>ROM</code>?</summary>
 
-Perché conserva un'informazione — lo schema dei punti da accendere per una cifra — cablata nella posizione dei diodi: è quindi una **memoria**. E dato che il suo contenuto non si può modificare senza risaldare fisicamente i diodi, è una **memoria a sola lettura** (*read-only memory*, ROM).
+Perché conserva un'informazione (lo schema dei punti da accendere per una cifra) cablata nella posizione dei diodi: è quindi una **memoria**. E dato che il suo contenuto non si può modificare senza risaldare fisicamente i diodi, è una **memoria a sola lettura** (*read-only memory*, ROM).
 
 </details>
 

@@ -230,7 +230,7 @@ it.next(10);    // 10, { value: undefined, done: true }
 
 ## Module
 
-Il pattern module — basato su funzioni esterne con closure che espongono una public API — è il pattern di organizzazione più importante in JS. ES6 lo eleva a costrutto di prima classe con `import`/`export`.
+Il pattern module (basato su funzioni esterne con closure che espongono una public API) è il pattern di organizzazione più importante in JS. ES6 lo eleva a costrutto di prima classe con `import`/`export`.
 
 ### Prima di ES6: IIFE e CommonJS
 
@@ -340,7 +340,7 @@ Restituisce una Promise. Da evitare nei moduli normali perché impedisce l'ottim
 
 ## Class
 
-ES6 introduce `class` come syntactic sugar sul sistema a prototype. Non cambia il modello sotto — prototype chain, `instanceof`, constructor function — ma offre una sintassi più leggibile per esprimere gerarchie.
+ES6 introduce `class` come syntactic sugar sul sistema a prototype. Non cambia il modello sotto (prototype chain, `instanceof`, constructor function), ma offre una sintassi più leggibile per esprimere gerarchie.
 
 ### Sintassi base
 
