@@ -11,8 +11,8 @@ Un singolo progetto Angular basta finché il codice è piccolo: appena cresce, i
 
 Il capitolo parte dalla **Angular CLI** (monorepo manuale, build e publish) e poi passa a **Nx**, più potente: build incrementali, module boundaries, cache distribuita e parallelizzazione.
 
-> [!info] Monorepo ≠ solo pubblicazione
-> I monorepo non servono solo a creare librerie da pubblicare. Nei progetti molto grandi suddividono la soluzione complessiva in app e librerie più piccole, più facili da governare e mantenere. In questo scenario le librerie **non vanno pubblicate su npm**: sono consumate localmente dalle app del monorepo stesso. Termine alternativo a monorepo: **workspace**.
+> [!info]
+> **Monorepo ≠ solo pubblicazione** • I monorepo non servono solo a creare librerie da pubblicare. Nei progetti molto grandi suddividono la soluzione complessiva in app e librerie più piccole, più facili da governare e mantenere. In questo scenario le librerie **non vanno pubblicate su npm**: sono consumate localmente dalle app del monorepo stesso. Termine alternativo a monorepo: **workspace**.
 
 ## Angular CLI-based Repos
 > pp.372-380
