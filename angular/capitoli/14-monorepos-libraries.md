@@ -245,8 +245,8 @@ npm i -g nx
 npx create-nx-workspace@latest my-project
 ```
 
-> [!info] Migrare o ricreare?
-> Esistono script per **migrare** workspace CLI a Nx, ma potrebbero non attivare tutte le feature di Nx. L'autore consiglia di **creare un nuovo workspace Nx** e, se serve, copiarci dentro il sorgente esistente.
+> [!info]
+> **Migrare o ricreare?** • Esistono script per **migrare** workspace CLI a Nx, ma potrebbero non attivare tutte le feature di Nx. L'autore consiglia di **creare un nuovo workspace Nx** e, se serve, copiarci dentro il sorgente esistente.
 
 Convenzione Nx: app in `apps/`, lib in `libs/`. Al prompt del generator scegli `@nx/angular:application` per le app e `@nx/angular:library` per le lib:
 
