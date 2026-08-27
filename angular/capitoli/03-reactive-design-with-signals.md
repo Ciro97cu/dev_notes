@@ -412,6 +412,17 @@ effect(() => {
 
 Vale identico per `computed` e per i signal usati nei template.
 
+> [!info] Memory leak in Angular
+> Un memory leak è, in concreto, memoria che il programma continua a occupare **anche se non gli serve più**, perché un riferimento la tiene ancora agganciata e la <a href="../glossario/#/docs/concetti-programmazione?id=garbage-collection" target="_blank" rel="noopener">garbage collection</a> non può recuperarla. Il caso da manuale in Angular è una **subscription RxJS mai chiusa**:
+> ```ts
+> constructor() {
+>   // ogni secondo aggiorna qualcosa; nessuno chiude la subscription
+>   interval(1000).subscribe(() => this.refresh());
+> }
+> ```
+> Navigando via, il componente viene distrutto **ma la subscription resta viva**: `interval` continua a tenere il callback, e il callback (via closure) tiene vivo l'intero componente — istanza, template, dati. Tornando sulla rotta cinquanta volte, in memoria restano cinquanta componenti-zombie: un riferimento involontario li rende ancora *raggiungibili*, così l'occupazione cresce e basta.
+> I **signal** sono meno esposti, ed è il senso di *Untracking* qui sopra: è il framework a possedere il grafo delle dipendenze, e quando il componente muore quegli archi cadono da soli, senza nessun oggetto-subscription da ricordarsi di chiudere. Per il codice RxJS che resta, la chiusura automatica alla distruzione si ottiene con `takeUntilDestroyed()` o `DestroyRef.onDestroy()`, nel [[11-directives-templates-containers|cap.11]].
+
 ### Glitch-Free Property
 I signal sono **glitch-free**: un consumer reattivo (template/effect) non vede mai stati intermedi incoerenti. Se si cambiano più signal di fila, il contesto gira **una sola volta** con i valori finali.
 
