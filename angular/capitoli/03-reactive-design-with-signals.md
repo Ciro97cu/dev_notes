@@ -469,8 +469,8 @@ flight.update((flight) => ({
 
 L'istanza risultante è nuova, quindi Angular rileva il cambio e aggiorna signal dipendenti e UI. Questa è l'[[equality-immutability|immutabilità]]: non si modifica il contenuto, si creano nuove versioni quando serve.
 
-> [!info] Immutability e OnPush
-> Il [[glossario#change-detection|change detection]] (il meccanismo con cui Angular capisce cosa è cambiato e ridisegna la UI) ottimizzato **OnPush** si appoggia anch'esso all'immutabilità. Nel `@for ... track flight.id`, Angular fa un `===` tra il vecchio e il nuovo oggetto `flight` per capire quale `FlightCard` aggiornare: se il riferimento non cambia, non tocca nulla. Morale: creare **sempre** nuove istanze quando si aggiornano oggetti/array bound.
+> [!info]
+> **Immutability e OnPush** • La stessa logica vale per la strategia **OnPush** del [[glossario#change-detection|change detection]]: nel `@for ... track flight.id`, Angular confronta con `===` il vecchio e il nuovo oggetto `flight` per decidere quale `FlightCard` ridisegnare. Se il riferimento non cambia, la card non viene toccata.
 
 > [!warning]
 > Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento → `===` dà `true` → Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.
