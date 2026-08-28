@@ -151,7 +151,7 @@ if (a) {
 
 Dichiarare funzioni all'interno di blocchi è una pratica da evitare. Per questo scopo si usano le function expression.
 
-> [!info] Oggi
+> [!info|label:Oggi]
 > Il libro (era ES5) considera il comportamento delle function declaration nei blocchi "non definito dalla specifica". Da **ES6** invece è definito: in **strict mode** una function declaration dentro un blocco è **block-scoped** (esiste solo dentro il blocco); in non-strict mode si applica una semantica legacy di compatibilità (la cosiddetta *Annex B*), più permissiva. Resta comunque una pratica da evitare: meglio una function expression assegnata a `let`/`const`.
 
 ---

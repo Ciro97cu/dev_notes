@@ -157,7 +157,7 @@ I colori ruotano **attorno** a un centro (come le lancette di un orologio), inve
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `conic-gradient()` è **Baseline: widely available** (supportato ovunque da novembre 2020). ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient))
 
 ### Gradienti ripetuti
@@ -246,7 +246,7 @@ Ombre multiple: **lista separata da virgola**, la prima disegnata sopra.
 .logo { filter: drop-shadow(2px 4px 6px rgb(0 0 0 / 40%)); }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `filter` è supportato ovunque dal 2016. **Attenzione all'ordine**: `hue-rotate` dopo un `drop-shadow` ne altera anche il colore. `filter` (come `opacity < 1` e `mask`) crea un contesto che può **interrompere** un `backdrop-filter` sovrastante. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/filter))
 
 ## `backdrop-filter` — l'effetto vetro
@@ -262,7 +262,7 @@ Come `filter`, ma applicato a **ciò che sta dietro** l'elemento, non all'elemen
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `backdrop-filter` è **Baseline** dal settembre 2024 (senza prefisso su tutti i browser moderni; Safari lo supportava già con `-webkit-`). Essendo relativamente recente, per contesti sensibili conviene un fallback tramite `@supports (backdrop-filter: blur(1px))`. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter))
 
 ## `object-fit` e `object-position`
@@ -286,7 +286,7 @@ Su elementi **rimpiazzati** (`<img>`, `<video>`) con dimensioni fissate, `object
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `object-fit`/`object-position` sono **Baseline: widely available** (dal gennaio 2020). Risolvono in modo pulito il vecchio problema delle immagini stirate dentro contenitori di dimensioni fisse. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit))
 
 ## Ritagliare la forma: `clip-path` e cenno a `mask`
@@ -308,7 +308,7 @@ Funzioni disponibili: `circle()`, `ellipse()`, `polygon()`, `inset()`, `rect()`,
 .fade { mask: linear-gradient(black 70%, transparent); }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `mask` è **Baseline** dal dicembre 2023; alcune varianti richiedono ancora il prefisso `-webkit-mask-*` per browser più vecchi. Regola pratica: **`clip-path`** per tagli geometrici netti (più economico), **`mask`** per transizioni graduali e maschere basate su immagine. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/mask))
 
 ## SVG negli sfondi e nel markup

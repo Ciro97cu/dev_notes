@@ -98,7 +98,7 @@ Le equivalenze con la sintassi storica:
 
 Il vantaggio più netto è l'**intervallo chiuso** in una parentesi sola: niente più due condizioni in `and`. Un altro è la coerenza dei confini — con `min-`/`max-` a soglie adiacenti (`max-width: 600px` e `min-width: 600px`) si rischia la sovrapposizione a esattamente `600px`; con `<` e `>=` il confine è netto.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > La **range syntax** è **Baseline: Widely available** (Chrome/Edge 104, Firefox 102, Safari 16.4; ampiamente disponibile da settembre 2025). La sintassi `min-`/`max-` resta valida e più prudente per browser molto vecchi. [MDN — Using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries) · [Can I Use](https://caniuse.com/mdn-css_at-rules_media_range_syntax)
 
 ### Media query sulle preferenze utente
@@ -132,7 +132,7 @@ Alcune feature non descrivono lo schermo ma le **preferenze di sistema** dell'ut
 - **`prefers-reduced-motion: reduce`** segnala che l'utente ha ridotto le animazioni a livello di sistema: si smorzano transizioni ed effetti (dettagli in [[15-transizioni-animazioni]]).
 - **`prefers-contrast`** ha quattro valori (`no-preference`, `more`, `less`, `custom`); `more` è quello di uso più comune, per irrobustire bordi e separatori.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `prefers-color-scheme`, `prefers-reduced-motion` e `prefers-contrast` sono **Baseline: Widely available** (`prefers-contrast` da maggio 2022, gli altri due da prima). [MDN — prefers-contrast](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast)
 
 ## Vincoli di dimensione sugli elementi
@@ -223,7 +223,7 @@ Dentro un `@container` (e non solo) si possono usare unità **relative al conten
 > [!tip]
 > Non si può interrogare un elemento su sé stesso: `@container` guarda l'**antenato contenitore più vicino** e stila i discendenti. Per questo la card sta dentro un `.card-wrapper` che fa da contenitore — il wrapper si misura, la card si adatta. È il motivo per cui le container query superano le media query per i **componenti**: rendono un pezzo di UI davvero riutilizzabile, reattivo al posto in cui vive.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > Le container query **di dimensione** (con le unità `cq*`) sono **Baseline: Widely available** (Chrome 105/106, Safari 16, Firefox 110; ampiamente disponibili da agosto 2025). [MDN — Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries)
 
 Quella di dimensione è però solo la **prima di tre varianti** di `@container`: oltre alla dimensione, si può interrogare lo **stile** del contenitore e il suo **stato di scroll**.
@@ -240,7 +240,7 @@ Una **style query** applica stili in base al **valore di una custom property** d
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > Le **style query** su custom property sono **Baseline: newly available** (dal *Baseline digest di maggio 2026*): presenti su tutti i browser core, ma essendo recenti conviene ancora il progressive enhancement sui target datati. [MDN — size & style queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries) *(verificato: 2026-08-18)*
 
 ### Scroll-state query — reagire allo scroll (emergente)
@@ -289,7 +289,7 @@ La proprietà `aspect-ratio` fissa il **rapporto larghezza/altezza** di un box: 
 
 Perché abbia effetto, **almeno una** delle due dimensioni deve restare automatica: se sia `width` sia `height` sono fisse, il rapporto viene ignorato.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Prima di `aspect-ratio` si usava l'hack del **padding percentuale**: un contenitore con `padding-top: 56.25%` (cioè 9/16) e il contenuto in `position: absolute`. Funziona ancora, ma `aspect-ratio` lo rende superfluo. `aspect-ratio` è **Baseline: Widely available** da settembre 2021. [MDN — aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
 
 ## Tipografia fluida con `clamp()`

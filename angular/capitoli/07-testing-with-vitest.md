@@ -543,7 +543,7 @@ export const appSettings: AppSettings = {
 };
 ```
 
-> [!info] Angular 22+ · Signal Forms nel test
+> [!info|label:Angular 22+ · Signal Forms nel test]
 > Le **Signal Forms** (`form()`, `debounce()`) sono la nuova API form basata sui signal, introdotta in Angular 21+. Qui `ReactiveFlightSearch` le usa per fare il debounce dell'input prima di lanciare la ricerca. Vedi [[06-signal-forms]].
 
 ```ts

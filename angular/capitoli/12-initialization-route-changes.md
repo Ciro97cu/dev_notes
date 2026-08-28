@@ -43,7 +43,7 @@ export const appConfig: ApplicationConfig = {
 
 L'initializer gira in un [[injection-context]], quindi può usare [[inject]] direttamente invece della constructor injection. La logica asincrona vera vive nel servizio, che espone i valori caricati:
 
-> [!info] Angular 22+ · Il decoratore @Service()
+> [!info|label:Angular 22+ · Il decoratore @Service()]
 > Da Angular 22 un service si annota con `@Service()` (in Listing 12-2 importato da `@angular/core`), che corrisponde al vecchio `@Injectable({ providedIn: 'root' })`. Dettagli in [[service]].
 
 ```ts

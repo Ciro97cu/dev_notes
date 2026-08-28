@@ -166,7 +166,7 @@ Per questo `:where()` è ideale per **stili di default** in un design system o i
 :is(:valid, :unsupported) { border-color: green; }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `:is()` e `:where()` sono **Baseline: Widely available** (supportati su tutti i browser principali da gennaio 2021). [MDN — :is()](https://developer.mozilla.org/en-US/docs/Web/CSS/:is) · [MDN — :where()](https://developer.mozilla.org/en-US/docs/Web/CSS/:where)
 
 > [!warning]
@@ -221,7 +221,7 @@ Si possono annidare anche le at-rule come `@media` e `@container`:
 > [!warning]
 > Il nesting nativo **non concatena stringhe** come faceva Sass: `&__title` (stile BEM) **non** è valido. Il `&` è un riferimento al genitore, non un frammento di testo. Per costruire nomi BEM si scrivono i selettori per intero. Inoltre la specificità del `&` è quella di `:is()` sull'insieme dei selettori genitori (rilevante quando la regola genitore ha più selettori separati da virgola).
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > Il **nesting nativo** è **Baseline** (Chrome/Edge 120, Firefox 117, Safari 17.2 — dal dicembre 2023). Ampiamente utilizzabile a metà 2026 senza preprocessore. [MDN — Using CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting)
 
 ## Cenno a `:scope`
@@ -235,7 +235,7 @@ La pseudo-classe **`:scope`** rappresenta il *punto di riferimento* rispetto al 
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `:scope` è Baseline (dal 2020). La at-rule `@scope`, invece, è più recente: verificarne il supporto su [Can I Use](https://caniuse.com/css-cascade-scope) prima di usarla in produzione, o adottarla come progressive enhancement. *(verificato: 2026-08-13)*
 
 Collegamenti: [[01-fondamenti]] · [[03-pseudo-classi-elementi]] · [[04-cascade-specificita-ereditarieta]]

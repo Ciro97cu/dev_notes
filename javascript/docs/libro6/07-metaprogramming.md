@@ -341,7 +341,7 @@ function bar(x) {
 
 ES6 richiede che tutte le Proper Tail Call (PTC) vengano ottimizzate in strict mode. Il risultato: ricorsione illimitata senza crescita dello stack.
 
-> [!info] Oggi
+> [!info|label:Oggi]
 > La specifica lo impone tuttora, ma **in pratica quasi nessun motore implementa le PTC**: a oggi solo **JavaScriptCore** (Safari) le offre; **V8** (Chrome/Node.js) e **SpiderMonkey** (Firefox) no. Gli "ambienti senza TCO" della sezione seguente non sono quindi un caso di nicchia — sono la norma: su Node e Chrome la ricorsione profonda esaurisce comunque lo stack, e il **trampolining** (o una riscrittura iterativa) è la strada da seguire di default, non un ripiego. Vedi la stessa nota in [Async & Performance — Benchmarking](/docs/libro5/06-benchmarking.md).
 
 ### Riscrivere per TCO — pattern accumulatore

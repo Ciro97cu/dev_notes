@@ -36,7 +36,7 @@ export class FlightClient {}
 > [!tip]
 > `@Service()` registra la classe nel root injector: Angular crea **una sola istanza** (singleton) per tutta l'app, accessibile da chiunque conosca il tipo `FlightClient`. È il default adatto alla maggior parte dei casi.
 
-> [!info] Angular 22+ · `@Service` vs `@Injectable`
+> [!info|label:Angular 22+ · `@Service` vs `@Injectable`]
 > Il decoratore **`@Service()`** è stato introdotto con Angular 22 ed è la forma usata in tutto il libro dalla 3ª edizione. Equivale a `@Injectable({ providedIn: 'root' })`: **stessa semantica**, solo più conciso (cambia lo stile di scrittura, non il comportamento). Più avanti compare `@Service({ autoProvided: false })` per i servizi scambiabili (= il vecchio `@Injectable()` *senza* `providedIn`). Dettagli in [[service]].
 > Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, va letto come `@Service()`.
 
@@ -241,7 +241,7 @@ export class BrowserLanguageService implements LanguageService {
 }
 ```
 
-> [!info] Angular 22+ · @Service({ autoProvided: false })
+> [!info|label:Angular 22+ · @Service({ autoProvided: false })]
 > `@Service({ autoProvided: false })` rende la classe iniettabile **ma non la registra nel root injector**: la fornisci tu via [[providers]]. È l'equivalente del vecchio `@Injectable()` (senza `providedIn`): la classe era eleggibile per l'injection ma andava provvista a mano. Perfetto per le implementazioni scambiabili dietro un base type.
 
 > [!warning]
@@ -491,7 +491,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-> [!info] Angular 22+ · Auto Cleanup degli Environment Provider
+> [!info|label:Angular 22+ · Auto Cleanup degli Environment Provider]
 > L'**Auto Cleanup** per gli Environment Provider è disponibile da Angular 21.1, attivabile con `withExperimentalAutoCleanupInjectors()`.
 
 > [!warning]
@@ -547,7 +547,7 @@ Collegamenti: [[injection-context]] · [[providers]].
 ### Lazy Service Injection with `injectAsync`
 > pp.134-136
 
-> [!info] Angular 22+ · `injectAsync`
+> [!info|label:Angular 22+ · `injectAsync`]
 > Alcuni servizi portano con sé bundle troppo pesanti per essere caricati eagerly (subito, all'avvio dell'app), o servono solo a una piccola parte di utenti: caricarne il codice **solo quando serve** è un'ottimizzazione utile. **`injectAsync`** (Angular 22) riceve una lambda che ritorna una `Promise` del servizio e restituisce una funzione: la **prima** chiamata fa l'import dinamico e crea l'istanza; le successive riusano la stessa, senza roundtrip di rete (senza dover riscaricare di nuovo il codice dal server).
 
 Esempio reale: la `CheckinPage` integra un `UpgradeService` solo quando l'utente richiede davvero un upgrade.
@@ -820,7 +820,7 @@ protected readonly filterForm = form(this.filter, (path) => {
 > [!tip]
 > Alternative al setter: rilassare l'incapsulamento esponendo signal scrivibili dallo store, oppure un handler sull'evento `input` che chiama il metodo di update dello store a ogni modifica. Gli schema della Signal Form sono approfonditi nel [[06-signal-forms|cap.6]].
 
-> [!info] Storico
+> [!info|label:Storico]
 > Prima di Angular 22.1 lo stesso pattern richiedeva un **helper custom** (`delegatedSignal`), incluso nell'example project del libro. Oggi non serve più: vedi [[delegated-signal]] per la memoria storica.
 
 Collegamenti: [[linked-signal]] · [[06-signal-forms]].

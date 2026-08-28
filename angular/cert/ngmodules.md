@@ -106,10 +106,10 @@ const routes: Routes = [
 > [!warning]
 > Un `providers` dichiarato in un **modulo lazy** crea un **injector figlio**: il service è una **nuova istanza**, non il singleton del root. È una domanda-trabocchetto classica. Per un vero singleton usare `providedIn: 'root'` (vedi [[di-classic]]).
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > L'equivalente moderno non usa moduli: componenti **standalone** (`imports` direttamente sul `@Component`), `bootstrapApplication(App, { providers: [...] })`, `provideRouter(routes)` con `loadComponent`/`loadChildren`, e `providedIn: 'root'` per i singleton. Tutto questo è già nel vault, in [[01-getting-started]] e [[04-router-navigation-lazy-loading]] (qui non ripetuto).
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > Da Angular v17 il CLI genera app **standalone** e da v19 `standalone: true` è implicito. Gli NgModule **non sono deprecati**: restano pienamente supportati e interoperano con lo standalone (un modulo può importare componenti standalone, e un componente standalone può importare un NgModule). Per il codice nuovo si preferisce lo standalone.
 
 ## Ripasso lampo

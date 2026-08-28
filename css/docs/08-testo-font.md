@@ -37,7 +37,7 @@ Tra le generic family ne esiste una di nicchia, **`math`**, pensata per il rende
 math { font-family: math; }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > La generic family `math` è **Baseline: newly available (2026)**: Chrome/Edge (dal 2023) e Firefox la supportavano da tempo, Safari 26.2 ha completato il supporto di recente. [MDN — font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/font-family) · [Can I Use](https://caniuse.com/mdn-css_properties_font-family_math). *(verificato: 2026-08-13)*
 
 ## Dimensione, peso, stile
@@ -105,7 +105,7 @@ p {
 - Si può indicare `local("Nome")` come prima sorgente per usare la copia già installata sul sistema ed evitare il download.
 - I descrittori `font-weight`/`font-style` **dichiarano cosa contiene il file**, non lo applicano: servono al browser per abbinare il font giusto alle regole `font-weight: bold` ecc.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Il supporto a IE richiedeva `format("embedded-opentype")` (`.eot`) e liste `src` prolisse con più formati. Fuori scope nel 2026: WOFF2 basta, con al più un fallback WOFF.
 
 ### `font-display` — governare il caricamento
@@ -199,7 +199,7 @@ p {
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `text-wrap: balance`/`pretty` è **Baseline dal 2024**: ampiamente supportato. È additivo — dove non è disponibile il testo va semplicemente a capo in modo normale, senza rotture. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap))
 
 Per le **parole troppo lunghe** che sfondano il contenitore (URL, token) ci sono tre leve distinte:
@@ -267,7 +267,7 @@ a {
 }
 ```
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Il valore `blink` (testo lampeggiante) esiste nella storia di `text-decoration-line` ma è **deprecato** e i browser non lo rendono più: da non usare.
 
 ## Scrittura e direzione (logical)

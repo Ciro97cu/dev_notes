@@ -11,8 +11,8 @@ Un singolo progetto Angular basta finché il codice è piccolo: appena cresce, i
 
 Il capitolo parte dalla **Angular CLI** (monorepo manuale, build e publish) e poi passa a **Nx**, più potente: build incrementali, module boundaries, cache distribuita e parallelizzazione.
 
-> [!info]
-> **Monorepo ≠ solo pubblicazione** • I monorepo non servono solo a creare librerie da pubblicare. Nei progetti molto grandi suddividono la soluzione complessiva in app e librerie più piccole, più facili da governare e mantenere. In questo scenario le librerie **non vanno pubblicate su npm**: sono consumate localmente dalle app del monorepo stesso. Termine alternativo a monorepo: **workspace**.
+> [!info|label:Monorepo ≠ solo pubblicazione]
+> I monorepo non servono solo a creare librerie da pubblicare. Nei progetti molto grandi suddividono la soluzione complessiva in app e librerie più piccole, più facili da governare e mantenere. In questo scenario le librerie **non vanno pubblicate su npm**: sono consumate localmente dalle app del monorepo stesso. Termine alternativo a monorepo: **workspace**.
 
 ## Angular CLI-based Repos
 > pp.372-380
@@ -62,7 +62,7 @@ Come le app, le librerie sono file TypeScript (componenti, servizi, ...) e vivon
 ng g service logger --project util-logger
 ```
 
-> [!info] Angular 22+ · Il decoratore @Service()
+> [!info|label:Angular 22+ · Il decoratore @Service()]
 > Il servizio usa il decoratore `@Service()` introdotto in Angular 22. `@Service()` senza opzioni equivale al vecchio `@Injectable({ providedIn: 'root' })`: il servizio è iniettabile e registrato automaticamente nello scope root. Dettagli in [[service]].
 
 ```ts
@@ -225,7 +225,7 @@ npm install @my/util-logger --registry http://localhost:4873
 # Se ha già configurato il default registry, --registry si può omettere
 ```
 
-> [!info] Fallback al registry pubblico
+> [!info|label:Fallback al registry pubblico]
 > Se si richiede un pacchetto che Verdaccio non conosce, di default delega al **registry npm pubblico** e lo recupera da lì.
 
 ## Faster Builds and More Convenience with Nx
@@ -245,8 +245,8 @@ npm i -g nx
 npx create-nx-workspace@latest my-project
 ```
 
-> [!info]
-> **Migrare o ricreare?** • Esistono script per **migrare** workspace CLI a Nx, ma potrebbero non attivare tutte le feature di Nx. L'autore consiglia di **creare un nuovo workspace Nx** e, se serve, copiarci dentro il sorgente esistente.
+> [!info|label:Migrare o ricreare?]
+> Esistono script per **migrare** workspace CLI a Nx, ma potrebbero non attivare tutte le feature di Nx. L'autore consiglia di **creare un nuovo workspace Nx** e, se serve, copiarci dentro il sorgente esistente.
 
 Convenzione Nx: app in `apps/`, lib in `libs/`. Al prompt del generator scegli `@nx/angular:application` per le app e `@nx/angular:library` per le lib:
 

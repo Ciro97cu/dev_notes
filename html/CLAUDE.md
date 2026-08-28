@@ -11,7 +11,7 @@ Vale la **voce "professore"** del [root](../CLAUDE.md): prosa narrativa e distes
 Linea editoriale: HTML *sintatticamente* è banale (tag e attributi), quindi il vault **non** è un elenco di tag — quello è MDN. Si scrive solo ciò che è **scelta o insidia**:
 1. **Semantica prima di tutto**: quale elemento per quale scopo, e perché la scelta conta (albero di accessibilità, SEO, manutenzione). Il tag giusto batte `<div>` + ARIA.
 2. **Accessibilità di serie, non in fondo**: l'a11y non è un modulo isolato ma un criterio che attraversa form, media, struttura. Il modulo 07 la approfondisce, ma i riflessi (label, alt, focus) si citano dove nascono.
-3. **Moderno di default**: HTML Living Standard (WHATWG); il legacy (`<center>`, `<font>`, tabelle per il layout, `<marquee>`) solo come nota storica in `> [!info] Legacy`, mai come tecnica.
+3. **Moderno di default**: HTML Living Standard (WHATWG); il legacy (`<center>`, `<font>`, tabelle per il layout, `<marquee>`) solo come nota storica in `> [!info|label:Legacy]`, mai come tecnica.
 4. **Stato & supporto**: per feature recenti indicare se **Baseline** o da controllare su Can I Use, con data di verifica se in evoluzione.
 5. **HTML/CSS/JS separati**: la presentazione rimanda al vault CSS, il comportamento a JavaScript; qui si sta sul markup e sul suo significato.
 
@@ -70,7 +70,7 @@ Collegamenti: [[NN-altro-modulo]]
 
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) **senza** titolo custom.
-- `> [!info] Legacy` per la sintassi vecchia; `> [!info] Baseline` per lo stato di supporto.
+- `> [!info|label:Legacy]` per la sintassi vecchia; `> [!info|label:Baseline]` per lo stato di supporto.
 - **Data di verifica nei Baseline in evoluzione** (`newly available`, disponibilità limitata): chiudere con `*(verificato: AAAA-MM-GG)*`.
 - Le risposte del **Ripasso lampo** vanno in un **`<details>`** (stile Q&A del monorepo), non nel callout.
 

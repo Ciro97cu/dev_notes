@@ -342,7 +342,7 @@ Questo lo rende disponibile anche ai figli e garantisce **un'istanza per istanza
 > [!tip]
 > Se l'isolamento non serve, si fornisce lo store a **root** con `{ providedIn: 'root' }`: il team Angular lo raccomanda per la grande maggioranza dei service.
 
-> [!info] Angular 22+ · @Injectable letto come @Service()
+> [!info|label:Angular 22+ · @Injectable letto come @Service()]
 > Nel resto del vault `@Injectable({ providedIn: 'root' })` si legge come [[service|@Service()]]: da Angular 22 il decoratore `@Service()` (auto-provided a root di default) è la forma idiomatica per i service. Il libro qui usa ancora `{ providedIn: 'root' }`; il comportamento è lo stesso.
 
 ### Granularity of a Store

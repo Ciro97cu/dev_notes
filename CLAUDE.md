@@ -39,18 +39,17 @@ Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **EC
 - **Una fonte di verità**: un concetto è spiegato in un solo punto; gli altri file rimandano con un link, non riscrivono.
 - Terminologia coerente in tutto il vault.
 
-## Callout — stacco titolo/corpo
-Nei callout (`[!info]`, `[!tip]`, `[!warning]`, …) il titolo può essere di due tipi:
-
-- **Etichetta/intestazione** (Baseline, Legacy, Angular 22+, vs Modern, Oggi…): rimane nel `[!tipo] Titolo` standard.
-- **Titolo-frase** (una frase o domanda che scorre nel corpo come apertura del testo): va in **opzione 2** — `[!tipo]` senza titolo nel tag, e il titolo in **grassetto inline** all'inizio del corpo, separato dal testo da ` • `:
+## Callout — sintassi del titolo (sintassi a pipe obbligatoria)
+Un callout con titolo custom **deve** usare la sintassi nativa a **pipe** del plugin [flexible-alerts](https://github.com/zanfab/docsify-flexible-alerts): `> [!tipo|label:Titolo]`, con il titolo dopo `label:`. **Non** usare `> [!tipo] Titolo` (titolo separato da uno spazio): con quella forma il plugin **non** riconosce il titolo, mostra l'etichetta generica del tipo (Info/Suggerimento/Attenzione…) e **incolla il titolo all'inizio del corpo senza stacco** — è un bug silenzioso che si vede solo nel reso, non nel Markdown.
 
 ```
-> [!info]
-> **Titolo della spiegazione** • Corpo che continua da qui…
+> [!info|label:Angular 22+ · Debounce dei signal]
+> Corpo del callout…
 ```
 
-Il discrimine: se rimuovendo il titolo dal tag e leggendo solo il corpo il callout perde il suo incipit, è un titolo-frase e va convertito. Se il titolo è una label che etichetta il tipo di contenuto (stato, versione, sezione), rimane dov'è.
+Così il titolo diventa una vera **intestazione** del box (colorata secondo il tipo) e il corpo parte pulito sotto. Vale per ogni titolo, sia le etichette-badge (Baseline, Legacy, vs Modern, Angular 22+…) sia i titoli-frase (Memory leak in Angular…). Il titolo può contenere qualsiasi carattere tranne `]` e `|` (inclusi `+ ? ( ) @ { } · ≠` e `` `code` ``): il plugin vendored è stato patchato per accettarli (vedi *Architettura* nel [README.md](README.md)).
+
+Un callout **senza** titolo custom resta `> [!warning]` / `> [!tip]` nudo (il plugin mostra l'etichetta di default): non aggiungere `|label:` se non serve un titolo.
 
 ## Diagrammi
 Mermaid **solo dove rende davvero** (flussi, gerarchie, sequenze non banali), non ovunque. **Nessun colore custom** (`classDef`/`style` con `fill` fissi): i siti hanno tema chiaro/scuro, i colori hardcoded rompono il dark mode → distinguere con le **forme**, non con i colori.

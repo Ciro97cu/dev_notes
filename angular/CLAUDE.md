@@ -4,8 +4,8 @@
 
 Fonte: `modern-angular_v3_0_0.pdf` (in locale, `.gitignore`d). I numeri di pagina dei riferimenti sono i **numeri stampati sul libro** (il page-label che il viewer mostra aprendo il PDF), **non** l'indice sequenziale del reader. Il PDF ha 12 pagine di front matter, quindi: **stampato = reader − 12**. L'outline in [`_meta/book-outline.txt`](_meta/book-outline.txt) è invece in numeri **reader** (1–467): per leggere col Read tool / `r.pages[N-1]` una pagina stampata `P`, usare `reader = P + 12`.
 
-> [!info] Versioning del vault
-> Gli appunti seguono la **v3.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info] Angular 22+` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
+> [!info|label:Versioning del vault]
+> Gli appunti seguono la **v3.0.0** (Angular 22). Le feature introdotte con Angular 21.1/21.2/22 sono marcate con un callout `> [!info|label:Angular 22+]` e il tag `angular-22` nel frontmatter → filtrabili in search/graph. Dove un vecchio snippet mostra ancora `@Injectable({ providedIn: 'root' })`, leggilo come [[service|@Service()]].
 
 ## Tono e chiarezza
 Vale la **voce "professore"** del [root](../CLAUDE.md) (prosa narrativa e distesa, impersonale, ogni tecnicismo spiegato senza tagliare la profondità tecnica). Copre i **capitoli** e le note **`cert/`** — queste spiegano temi *non trattati nel libro*, quindi vanno in **prosa distesa**, non in righe telegrafiche. Eccezione del vault: le note atomiche **`concetti/`** restano volutamente **concise** (definizione essenziale + snippet), lì la brevità è la feature. Esempio di riferimento del tono: [`concetti/signal.md`](concetti/signal.md). Fonte di verità del contenuto: sempre il PDF (v3.0.0).
@@ -127,14 +127,15 @@ aliases: [<sinonimi/varianti>]
 
 ## Sezione `cert/` — prep certificazione (Angular classico)
 Appunti per la **cert Angular** di certificates.dev (target Senior). Coprono **solo** l'Angular *classico/legacy* che l'esame richiede e che **non** è nel libro *Modern Angular* (NgModules, template-driven & reactive forms, RxJS, DI e routing class-based, change detection con Zone.js, NgRx Redux, testing Jasmine/Karma, perf, security).
-- **Anti-duplicazione (regola dura)**: se un tema è già spiegato nei capitoli moderni, **non si riscrive** → si rimanda con `> [!info] vs Modern`. Fonte: [certificates.dev](https://certificates.dev/angular) + angular.dev / rxjs.dev / ngrx.io.
+- **Anti-duplicazione (regola dura)**: se un tema è già spiegato nei capitoli moderni, **non si riscrive** → si rimanda con `> [!info|label:vs Modern]`. Fonte: [certificates.dev](https://certificates.dev/angular) + angular.dev / rxjs.dev / ngrx.io.
 - **Naming**: `cert/<topic-kebab>.md` (inglese), più `cert/00-index.md` (MOC + checklist spuntabile + link ai capitoli per i temi). NON usano il template capitolo (niente `pp.`).
-- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> Cert Angular · ...`; **concetto in prosa narrativa e distesa** (il cert spiega temi non coperti altrove, quindi si spiega per esteso, non in 2-4 righe telegrafiche); sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info] vs Modern` (link al capitolo moderno); `> [!info] Stato attuale` (deprecazione/default odierno + link); chiusura con **Ripasso lampo** e **In sintesi:**.
+- **Template nota cert**: frontmatter `titolo`/`tags: [tipo/cert, <tematici>, legacy]`/`livello`; `> Cert Angular · ...`; **concetto in prosa narrativa e distesa** (il cert spiega temi non coperti altrove, quindi si spiega per esteso, non in 2-4 righe telegrafiche); sezioni con esempio classico re-indentato; `> [!warning]` insidie d'esame; `> [!info|label:vs Modern]` (link al capitolo moderno); `> [!info|label:Stato attuale]` (deprecazione/default odierno + link); chiusura con **Ripasso lampo** e **In sintesi:**.
 - **Manutenzione**: aggiungendo una nota `cert/`, aggiornare `cert/00-index.md` e la sezione `Cert` di `_sidebar.md`.
 
 ## Callout
-- `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) vanno **senza titolo custom** — niente "Gotcha"/"Take-away": Obsidian mostra l'etichetta di default.
-- `> [!info]` mantiene il titolo quando è informativo (es. `[!info] Angular 22+`, `[!info] Versioning del vault`).
+- **Titolo custom solo con la sintassi a pipe** `> [!tipo|label:Titolo]` (mai `> [!tipo] Titolo` con lo spazio: il plugin non lo riconosce — vedi *Callout* nel [root](../CLAUDE.md)).
+- `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) vanno **senza titolo custom** — niente "Gotcha"/"Take-away": il plugin mostra l'etichetta di default.
+- `> [!info|label:…]` porta il titolo quando è informativo (es. `[!info|label:Angular 22+ · <argomento>]`, `[!info|label:Versioning del vault]`).
 - Le risposte del **Ripasso lampo** vanno in un **`<details>`** (`<summary>` = domanda), stile Q&A unico del monorepo — non nel callout.
 - La sezione di chiusura del capitolo si chiama **In sintesi:** (non "Take-away").
 

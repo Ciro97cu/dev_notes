@@ -247,7 +247,7 @@ Si può abilitare via **librerie condivise**, ma **con cautela**: i micro fronte
 
 Serve prima una shared library: un npm package sviluppato a parte oppure una libreria interna al progetto Angular (generabile con `ng g lib util-auth` — vedi [[14-monorepos-libraries]]). Nel demo, `util-auth` espone un service stateful — cioè un servizio che conserva uno stato, qui lo username corrente. Internamente usa un RxJS `BehaviorSubject` (un contenitore osservabile che tiene l'ultimo valore e lo "trasmette" a chi è in ascolto) per un meccanismo publish/subscribe: uno pubblica i cambi, gli altri si iscrivono e vengono notificati. Così le parti interessate restano aggiornate sui cambi di valore:
 
-> [!info] Angular 22+ · Il decoratore @Service()
+> [!info|label:Angular 22+ · Il decoratore @Service()]
 > `@Service()` (senza argomenti) è il nuovo equivalente del vecchio `@Injectable({ providedIn: 'root' })`: dichiara un service iniettabile e registrato nello scope root. Qui la fonte usa proprio `@Service()`. Dettagli in [[service]].
 
 ```ts

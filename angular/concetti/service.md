@@ -17,7 +17,7 @@ export class FlightClient {}
 export class BrowserLanguageService implements LanguageService {}
 ```
 
-> [!info] Angular 22+
+> [!info|label:Angular 22+]
 > `@Service()` sostituisce `@Injectable({ providedIn: 'root' })`. La **semantica è identica**, solo più concisa. Mappa rispetto a prima della 22:
 > - `@Service()` ≡ `@Injectable({ providedIn: 'root' })`
 > - `@Service({ autoProvided: false })` ≡ `@Injectable()` (senza `providedIn`, da fornire a mano)

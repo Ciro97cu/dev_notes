@@ -153,10 +153,10 @@ find(): Observable<Flight[]> {
 > - `observe: 'response'` cambia il **tipo emesso** da `T` a `HttpResponse<T>`: il body va letto da `resp.body`.
 > - `throwError(() => new Error(...))` va nella forma con **factory** (la vecchia `throwError(error)` è deprecata).
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Nel moderno `HttpClient` si registra con `provideHttpClient(...)` (feature: `withInterceptors`, `withFetch`, `withInterceptorsFromDi` per ri-usare gli interceptor class-based) invece di importare `HttpClientModule`. Gli interceptor preferiti sono **funzionali** (`HttpInterceptorFn` con [[inject]], `next(req)` invece di `next.handle(req)`), trattati in [[12-initialization-route-changes]]. Per il fetch di dati **reattivo** il vault usa `httpResource()` / `resource()`, che avvolgono `HttpClient` esponendo stato/valore/errore come **signal**, come spiegato in [[02-signal-based-components]]. Verbi, opzioni (`HttpParams`/`HttpHeaders`/`observe`/`responseType`), risposte tipizzate ed error handling RxJS restano **identici**. Qui non ripetuti.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > `HttpClientModule` (con `HttpClientJsonpModule` e `HttpClientTestingModule`) è **deprecato dalla v18** in favore di `provideHttpClient()` / `provideHttpClientTesting()`: non offre nulla in più ed è meno tree-shakable. `HttpClient`, i suoi verbi, `HttpParams`/`HttpHeaders`, l'interfaccia `HttpInterceptor` e `HttpErrorResponse` **non** sono deprecati; gli interceptor class-based restano usabili col moderno via `withInterceptorsFromDi()`. Fonte: [angular.dev/guide/http](https://angular.dev/guide/http).
 
 ## Ripasso lampo

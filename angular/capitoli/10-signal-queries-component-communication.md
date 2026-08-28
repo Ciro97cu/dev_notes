@@ -363,7 +363,7 @@ Con `#pane` il padre può invocare `pane.activate(1)`, ad esempio in un click ha
 
 Qui un `TabRegistry` tiene l'indice corrente e la lista dei tab. **Non** è registrato in root: è fornito a livello del `TabbedPane`, così ogni pane ha la propria istanza.
 
-> [!info] Angular 22+ · @Service({ autoProvided: false })
+> [!info|label:Angular 22+ · @Service({ autoProvided: false })]
 > `@Service({ autoProvided: false })` dichiara un service **iniettabile ma non registrato automaticamente** nello scope root: lo fornisci tu dove serve (qui nei `providers` del `TabbedPane`). Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
 
 ```ts

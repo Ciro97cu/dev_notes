@@ -66,7 +66,7 @@ Lo stile si scrive direttamente sull'elemento:
 
 Mescola presentazione e contenuto, non è riutilizzabile e ha una **specificità** altissima (difficile da sovrascrivere, vedi [[04-cascade-specificita-ereditarieta]]). Si riserva a casi limitati (es. stili calcolati via JavaScript, email HTML).
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Esiste anche `@import url("altro.css");` dentro un file CSS per includerne un altro. Si evita per il **CSS di produzione**: gli `@import` si scaricano in **serie** (uno dopo l'altro, non in parallelo), rallentando il rendering. Meglio più `<link>`, oppure un bundler. Un uso ancora valido è `@import` con *media query* o *layer* (`@import "x.css" layer(base);`).
 
 ## Il modello mentale: HTML struttura, CSS veste

@@ -122,7 +122,7 @@ export class Sidebar {}
 </li>
 ```
 
-> [!info] Angular 22+ · isActive() ritorna un Signal
+> [!info|label:Angular 22+ · isActive() ritorna un Signal]
 > Per il solo **highlighting dichiarativo** `routerLinkActive` resta la scelta naturale (ed è quella che il libro usa ovunque). A volte però serve lo stato di attivazione **come valore**, per alimentare un `computed`, un `effect` o altra logica reattiva oltre il semplice toggle di una classe. Da **Angular 21.1** la funzione `isActive(path, router)` restituisce un `Signal<boolean>`, ri-valutato a ogni cambio di route.
 > ```ts
 > // src/app/shell/sidebar/sidebar.ts

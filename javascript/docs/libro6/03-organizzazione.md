@@ -327,7 +327,7 @@ Reflect.Loader.import("foo")
 
 Restituisce una Promise. Da evitare nei moduli normali perché impedisce l'ottimizzazione statica.
 
-> [!info] Oggi
+> [!info|label:Oggi]
 > L'API `Reflect.Loader.import()` mostrata qui era **speculativa** al tempo di YDKJS — il *Module Loader* era ancora in bozza e non è mai stato standardizzato in quella forma. Il caricamento dinamico è arrivato nella specifica solo con **ES2020**, sotto forma dell'operatore `import()` (dynamic import), che si scrive come una chiamata di funzione e restituisce una Promise:
 > ```js
 > import("./foo.js").then(foo => foo.bar());

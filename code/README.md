@@ -7,7 +7,7 @@ Questi appunti seguono i **28 capitoli** nell'ordine originale, in prosa italian
 > [!tip]
 > Nuovo qui? Parti dal [capitolo 1](docs/01-best-friends.md). I capitoli si leggono **in sequenza**: ognuno poggia sul precedente.
 
-> [!info] Percorso completo
+> [!info|label:Percorso completo]
 > Tutti i **28 capitoli** sono disponibili, in prosa italiana distesa e verificati sul libro. Il raggruppamento in "parti" è editoriale (il libro è un unico percorso lineare), serve solo a orientarsi.
 
 ## Parte 1 — I codici

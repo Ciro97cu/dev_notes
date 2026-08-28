@@ -114,10 +114,10 @@ I **Trusted Types** (feature della piattaforma web che vincola le *sink* pericol
 ## Template injection
 Il modello di sicurezza vale per i **dati**, non per i **template**: costruire un template concatenando input dell'utente e compilarlo a runtime apre a *template injection*. La compilazione **AOT** (*Ahead-of-Time*, a build time) è la difesa strutturale — non spedisce il compilatore al browser, quindi un template ostile non può essere compilato lato client. La regola resta: **mai** generare template da dati dell'utente.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il modello di sicurezza (sanitizzazione contestuale, `DomSanitizer`, XSRF, CSP, Trusted Types) è **identico** nell'Angular moderno: cambia solo la configurazione dell'HTTP, da `HttpClientXsrfModule` a `provideHttpClient(withXsrfConfiguration(...))`. I temi di **autenticazione/autorizzazione** (login, token, guard) sono trattati nel vault, in [[16-authentication-authorization]]; qui non si ripetono.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > Sanitizzazione, `DomSanitizer`, XSRF, `CSP_NONCE`/`ngCspNonce` e il supporto Trusted Types sono **validi e non deprecati** su Angular 22. Nelle app standalone `HttpClientModule`/`HttpClientXsrfModule` sono sostituiti da `provideHttpClient(...)` con le funzioni `with…`, ma nome cookie/header di default e comportamento dell'interceptor restano invariati. L'AOT è il default di build da molte versioni: il rischio *template injection* riguarda quasi solo chi usa ancora la compilazione JIT.
 
 ## Ripasso lampo

@@ -39,7 +39,7 @@ Che non si punta a "HTML versione X". Si controlla invece il **supporto della si
 
 Un principio guida tutto questo: **"don't break the web"**. L'HTML è ferocemente **retrocompatibile** (le pagine di vent'anni fa continuano a funzionare) ed è il motivo per cui il doctype non cambia e gli elementi vecchi non "spariscono": semplicemente non si usano più.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Elementi da non usare, retaggio dell'epoca in cui l'HTML si occupava anche di presentazione: `<center>`, `<font>`, `<big>`, `<marquee>`, i frameset. Tutto ciò che è aspetto oggi è **CSS**. Restano validi solo come reperti in pagine vecchie.
 
 Per controllare che il proprio markup sia corretto resta utile il **[validatore del W3C](https://validator.w3.org/)**, che segnala tag mal annidati, attributi inventati e strutture non valide.

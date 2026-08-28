@@ -162,7 +162,7 @@ disabled(path.delay, {
 });
 ```
 
-> [!info] Angular 22+ · La proprietà when (disabled/readonly/hidden)
+> [!info|label:Angular 22+ · La proprietà when (disabled/readonly/hidden)]
 > Fino ad Angular 21 la condizione era il **secondo argomento posizionale** — `disabled(path.delay, (ctx) => ...)`. Da Angular 22 si usa la **proprietà `when`** in un oggetto opzioni: forma più coerente fra `disabled`, `readonly` e `hidden`, e (per `disabled`) rende più scopribile la variante stringa-come-reason.
 
 Le "reason" raccolte dalle lambda finiscono nel signal `disabledReasons()` del campo:
@@ -232,7 +232,7 @@ export const flightSchema = schema<Flight>((path) => {
 });
 ```
 
-> [!info] Angular 21.1+ · Schema dinamico (lambda)
+> [!info|label:Angular 21.1+ · Schema dinamico (lambda)]
 > Da **Angular 21.1** il 2° argomento di `validateStandardSchema` può essere una **lambda che ritorna uno schema**. Angular la avvolge in un `computed`, quindi lo schema attivo può dipendere da altri signal: utile per validazioni contestuali (es. alternare un set di regole morbido e uno severo).
 > ```ts
 > export function validateWithSchema(

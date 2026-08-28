@@ -215,7 +215,7 @@ Gli **schematics** (le "ricette" che la CLI usa quando genera file con `ng gener
 
 `skipTests: true` evita di generare i file di test per componenti, direttive, pipe e service — non perché lo scaffolding sia sbagliato (lo *scaffolding* è la generazione automatica dei file di partenza da parte della CLI), ma perché in [[07-testing-with-vitest]] questi file si scrivono a mano per mostrarne i concetti.
 
-> [!info] Angular 22+ · OnPush di default
+> [!info|label:Angular 22+ · OnPush di default]
 > **OnPush** è la strategia di [[glossario#change-detection|change detection]] raccomandata (la change detection è il meccanismo con cui Angular controlla cos'è cambiato e ridisegna la UI di conseguenza): Angular aggiorna un componente **solo quando i suoi dati cambiano** (es. quando un signal fornisce un nuovo valore) invece di ricontrollare tutta l'app. I signal la rendono naturale. **Da Angular 22 è il default.**
 
 > [!tip]

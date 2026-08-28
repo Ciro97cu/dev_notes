@@ -138,10 +138,10 @@ input.ng-invalid.ng-touched {
 > [!warning]
 > Mostrare gli errori subito (`invalid`) è sgradevole: l'utente li vede prima ancora di digitare. Si combina sempre con `touched` (o `dirty`) — es. `ctrl.invalid && ctrl.touched` — per rivelarli solo dopo l'interazione.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il vault non usa `ngModel`: adotta i **Signal Forms** (`@angular/forms/signals`), dove `form()` genera un albero di field reattivi e i validatori si dichiarano in uno schema (`required`, `minLength`, custom). Two-way binding, stato (`dirty`/`invalid`/`touched`) e submit diventano signal. Tutto in [[06-signal-forms]] (qui non ripetuto).
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > `FormsModule` e le template-driven forms **non sono deprecate**: restano pienamente supportate e convivono con `@angular/forms/signals`. I **Signal Forms** sono l'approccio moderno raccomandato per il codice nuovo, ma in Angular 22 sono **ancora sperimentali** (package `@angular/forms/signals`, l'API può cambiare); l'API classica resta lo standard **stabile** delle codebase esistenti ([angular.dev/guide/forms/template-driven-forms](https://angular.dev/guide/forms/template-driven-forms) · [panoramica forms](https://angular.dev/guide/forms)).
 
 ## Ripasso lampo

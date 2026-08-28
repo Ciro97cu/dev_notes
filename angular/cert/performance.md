@@ -179,10 +179,10 @@ export class TickerComponent implements OnInit, OnDestroy {
 > [!warning]
 > Un componente `detach`ato **non** si aggiorna più da solo: dimenticare `detectChanges()` (o `reattach()`) lascia la view congelata. È lo strumento giusto solo per casi ad alta frequenza misurati, non un'ottimizzazione da applicare a tappeto.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Con i **signal** la CD diventa granulare e i signal-based component si aggiornano solo quando cambia un signal letto nel template, rendendo di fatto obsoleti `markForCheck`/`detach` manuali, come spiegato in [[03-reactive-design-with-signals]]. Nel control flow moderno `@for` **richiede** l'espressione `track` (equivalente di `trackBy`, ma obbligatoria) e il caricamento differito passa da `@defer` con SSR/hydration incrementale, in [[17-defer-ssr-hydration]]. Qui non si ripetono.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > `trackBy`, `OnPush`, pure pipe, `PreloadingStrategy`, bundle budget e `detach` **non sono deprecati** e restano validi su Angular 22. Con lo standalone la preloading strategy si configura via `provideRouter(routes, withPreloading(PreloadAllModules))` invece di `RouterModule.forRoot`; i budget in `angular.json` sono invariati. `OnPush` resta utile finché convivono componenti Zone.js: nelle app *zoneless* + signals la sua rilevanza cala.
 
 ## Ripasso lampo

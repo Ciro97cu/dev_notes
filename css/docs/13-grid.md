@@ -73,10 +73,10 @@ Le dimensioni delle tracce accettano lunghezze (`px`, `rem`…), percentuali, la
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `gap` (e `row-gap`/`column-gap`) è **Baseline: widely available** — supportato in modo diffuso [dal 2017 circa](https://developer.mozilla.org/en-US/docs/Web/CSS/gap). È lo standard: rende superflui i margini sugli item per spaziarli.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Le prime versioni della specifica chiamavano queste proprietà `grid-gap`, `grid-row-gap`, `grid-column-gap`. I browser le accettano ancora come **alias** di `gap`/`row-gap`/`column-gap` per compatibilità, ma nel codice nuovo si usano i nomi senza prefisso (validi anche in Flexbox). [Fonte MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/gap).
 
 ## Nomi di linea
@@ -277,7 +277,7 @@ Caso tipico: allineare header, corpo e footer di più *card* affiancate anche se
 
 Così le tre righe interne di ogni card sono ancorate alle stesse righe del genitore: tutti gli header sono allineati tra loro, e così corpi e footer.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `subgrid` è **Baseline**: disponibile in tutti i motori principali [da settembre 2023](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout/Subgrid), ed entrato nella soglia *widely available* verso metà 2026. Utilizzabile in produzione; per contesti molto vecchi resta prudente un fallback con [[11-responsive|media/container query]] o layout non annidato.
 
 ## Emergente: masonry

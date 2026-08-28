@@ -17,7 +17,7 @@ export class FlightService {
 > [!tip]
 > È più componibile dei parametri del costruttore, perché abilita funzioni helper riusabili (guardie, resolver, le cosiddette "injectable functions"). Cosa sia effettivamente disponibile dipende dalla gerarchia dei [[providers]]; i servizi si dichiarano con [[service|@Service()]].
 
-> [!info] Angular 22+ · injectAsync
+> [!info|label:Angular 22+ · injectAsync]
 > **`injectAsync(() => import(...).then(m => m.Svc))`** inietta un servizio in modo **lazy**: il bundle viene caricato solo alla prima chiamata della funzione restituita (che dà una `Promise`). L'opzione `prefetch` (es. `onIdle()`) permette di pre-caricarlo quando il browser è a riposo. Il servizio di destinazione dev'essere auto-provided ([[service|@Service()]]).
 > ```ts
 > private readonly upgradeService = injectAsync(

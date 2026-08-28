@@ -118,7 +118,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-> [!info] Angular 22+ · FetchBackend di default
+> [!info|label:Angular 22+ · FetchBackend di default]
 > Da **Angular 22** `HttpClient` usa il **`FetchBackend`** di default: il vecchio opt-in `withFetch()` non serve più ed è deprecato — basta `provideHttpClient()`. La fetch API è ora disponibile in tutti i browser e runtime rilevanti, offre un'API Promise-based più moderna e funziona ugualmente bene nel browser e durante l'SSR.
 > L'unica feature che la fetch **non** offre è l'**upload progress**: se dipendi da `reportUploadProgress`, torna a XHR con `provideHttpClient(withXhr())`. Preferisci comunque le opzioni dedicate `reportDownloadProgress` e `reportUploadProgress` al vecchio `reportProgress`, ora deprecato.
 > **Prima della 22** (fino ad Angular 21) il default era `XhrBackend` e il comportamento fetch si attivava con `provideHttpClient(withFetch())` (importante in SSR e hydration). Al bump, `ng update` inserisce automaticamente `withXhr()` dove serviva il vecchio comportamento.
@@ -133,7 +133,7 @@ Collegamenti: [[providers]] · le provider function (`provide*`/`with*`).
 
 L'[[glossario#incremental-hydration|hydration incrementale]] vuol dire che l'hydration **non deve avvenire tutta in una volta**. I bundle si richiedono solo quando servono — il più tardi possibile, idealmente mai per le regioni che l'utente non tocca. Le parti più importanti diventano interattive prima; le meno importanti dopo. Si abbina naturalmente a `@defer`: le regioni da idratare on-demand (su richiesta, solo al bisogno) si marcano con `@defer` e la clausola **`hydrate`** dice *quando* idratare.
 
-> [!info] Angular 22+ · Hydration incrementale di default
+> [!info|label:Angular 22+ · Hydration incrementale di default]
 > Da **Angular 22** `provideClientHydration()` attiva l'hydration incrementale da sola: la feature esplicita `withIncrementalHydration()` non serve più ed è tenuta solo per gli scenari di opt-out. Per disattivarla usa la nuova feature **`withNoIncrementalHydration()`**.
 > **Prima della 22** (Angular 19–21) era opt-in, da attivare con `provideClientHydration(withIncrementalHydration())`. Al bump, `ng update` aggiunge `withNoIncrementalHydration()` dove la feature non era richiesta, così il comportamento non cambia.
 
@@ -209,7 +209,7 @@ export class ClientLanguageDetector implements LanguageDetector {
 
 Entrambe le implementazioni sono decorate con `@Service({ autoProvided: false })`: sono **iniettabili ma non registrate** globalmente (Angular sa costruirle, ma non le rende disponibili ovunque da solo: le fornisci tu dove servono). È la configurazione applicativa platform-specific (diversa a seconda dell'ambiente, server o browser) a decidere quale usare. L'implementazione server si registra in `app.config.server.ts` (eseguito solo lato server); quella client in `app.config.ts`.
 
-> [!info] Angular 22+ · @Service({ autoProvided: false })
+> [!info|label:Angular 22+ · @Service({ autoProvided: false })]
 > `@Service({ autoProvided: false })` dichiara un service iniettabile ma **non** auto-registrato nello scope root: lo fornisci tu dove serve. Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
 
 ```ts

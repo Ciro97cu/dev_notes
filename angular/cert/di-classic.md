@@ -150,10 +150,10 @@ export class FlightCard {
 > - **`@Self()` su una dipendenza non provista localmente**: `NullInjectorError`, perché `@Self` non risale la gerarchia. Conviene combinarlo con `@Optional()` se la dipendenza può mancare.
 > - `providers` a livello **componente** crea un'istanza **per ogni istanza di componente** (nell'`ElementInjector`), non un singleton: attenzione a metterci per errore uno store condiviso.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il moderno inietta con la funzione [[inject]]`(Token)` invece dei parametri del costruttore, chiamata in un [[injection-context]]; i resolution modifier diventano **opzioni**: `inject(Token, { optional: true, self: true, skipSelf: true, host: true })`. I [[providers]] si dichiarano con le **provider function** (`bootstrapApplication(App, { providers: [...] })`, `provideX()`) e i singleton con `providedIn: 'root'` / [[service|@Service()]]. Tutto questo è già nel vault, in [[05-state-management-services-signals]] (qui non ripetuto). Le **recipe** (`useClass`/`useValue`/`useFactory`/`useExisting`) e `multi: true` restano invece **identiche** nei due mondi: cambia *come* si legge la dipendenza, non *come* si configura il provider.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > `@Injectable` e la constructor injection **non sono deprecati** e restano pienamente supportati (Angular 22+). Per il codice nuovo la guida ufficiale preferisce [[inject]]: è più componibile, tree-shakable e senza i limiti dei decoratori di parametro. `providedIn: 'root'` è tuttora la via consigliata per i singleton (nel vault, da Angular 22, l'annotazione equivalente è [[service|@Service()]]). Fonte: [angular.dev/guide/di](https://angular.dev/guide/di) e [angular.dev/guide/di/hierarchical-dependency-injection](https://angular.dev/guide/di/hierarchical-dependency-injection).
 
 ## Ripasso lampo

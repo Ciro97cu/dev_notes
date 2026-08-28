@@ -20,7 +20,7 @@ const flight = httpResource<Flight>(() => `/api/flight/${id()}`);
 > [!warning]
 > La richiesta riparte a ogni cambio delle dipendenze lette nella funzione sorgente. `httpResource` è pensata per le **GET/read**; per le mutazioni (create/update/delete) si usa `HttpClient` o le mutations dello store.
 
-> [!info] Angular 21.2+ · Snapshots
+> [!info|label:Angular 21.2+ · Snapshots]
 > Ogni resource espone un signal **`snapshot()`** che impacchetta `status` e `value` in un unico oggetto. Lo si può trasformare con un [[linked-signal]] e ri-convertire in resource con **`resourceFromSnapshots`**, ottenendo resource **derivate** da altre resource (prima era possibile solo per una singola proprietà).
 > ```ts
 > // mantiene l'ultimo valore valido durante un reload
@@ -34,7 +34,7 @@ const flight = httpResource<Flight>(() => `/api/flight/${id()}`);
 > return resourceFromSnapshots(derived);
 > ```
 
-> [!info] Angular 22+ · debounced
+> [!info|label:Angular 22+ · debounced]
 > I signal non hanno una nozione di tempo. **`debounced(sig, ms)`** prende un signal e restituisce una *resource* che insegue il signal con un ritardo configurabile (`status()` vale `'loading'` mentre il valore si assesta). Per i form c'è l'helper dedicato `debounce()` di `@angular/forms/signals` (vedi [[06-signal-forms]]).
 > ```ts
 > const debouncedFilter = debounced(filter, 300); // 300ms

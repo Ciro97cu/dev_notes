@@ -20,7 +20,7 @@ providers: [
 > [!tip]
 > Un provider a livello **componente o route** crea un'istanza locale (utile per lo stato di una singola feature, vedi [[lightweight-store]]); a livello **root** crea un singleton condiviso da tutta l'app. Esistono poi le **provider function** (`provideHttpClient()`, `provideRouter()`), l'API idiomatica per configurare interi sottosistemi.
 
-> [!info] Angular 22+
+> [!info|label:Angular 22+]
 > Lo short-hand `providers: [FlightClient]` (dove il token coincide con l'implementazione) equivale a mettere [[service|@Service()]] sulla classe — pre-22 era `@Injectable({ providedIn: 'root' })`. Per i servizi **scambiabili** dietro un base type si usa invece `@Service({ autoProvided: false })` insieme a un provider esplicito.
 
 **Usato in:** [[05-state-management-services-signals]], [[12-initialization-route-changes]]

@@ -191,10 +191,10 @@ La pipe `async` collega direttamente uno stream al template: si sottoscrive a un
 > - `[ngSwitch]` è un property binding, i suoi case sono strutturali (`*ngSwitchCase`): mischiare le sintassi è un errore comune.
 > - `<ng-template>` da solo **non** renderizza nulla finché non viene istanziato (da una structural directive o da un `ViewContainerRef`); `<ng-container>` invece renderizza subito il suo contenuto.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il control flow strutturale è ora **nativo** nel template: `@if`/`@else`, `@for` (con `track` **obbligatorio**, l'equivalente di `trackBy`) e `@switch` sostituiscono `*ngIf`/`*ngFor`/`*ngSwitch`, come spiegato in [[02-signal-based-components]]. Le structural directive **custom** (con `TemplateRef` e `ViewContainerRef`) restano invece attuali e sono trattate nel vault, in [[11-directives-templates-containers]] (qui non ripetute). Directive attributo e pipe non cambiano.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > Da Angular v17 il control flow a blocchi (`@if`/`@for`/`@switch`) è la forma raccomandata; `NgIf`/`NgFor`/`NgSwitch` restano supportati ma sconsigliati per il codice nuovo, con migration automatica (`ng generate @angular/core:control-flow`). `NgClass`/`NgStyle`, le directive attributo custom e le pipe **non sono deprecate** (vedi [angular.dev/guide/templates/control-flow](https://angular.dev/guide/templates/control-flow)).
 
 ## Ripasso lampo

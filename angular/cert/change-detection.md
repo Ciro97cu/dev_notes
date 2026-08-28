@@ -98,10 +98,10 @@ Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forza
 > - `detectChanges()` vs `markForCheck()`: il primo esegue la CD **subito** sul sottoalbero corrente; il secondo **marca** (risalendo agli antenati) e aspetta il **prossimo** ciclo. Confonderli è un classico.
 > - `runOutsideAngular` non "spegne" la reattività dei signal: in zoneless la CD è comunque notificata dai signal letti nel template.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il moderno combina **signal + `OnPush` + zoneless**: i signal notificano puntualmente i soli componenti che li leggono, quindi la CD diventa granulare e non serve più né Zone.js né, spesso, il `markForCheck()` manuale. Il modello reattivo signal-based è già spiegato nel vault, in [[03-reactive-design-with-signals]] e [[02-signal-based-components]] (qui non ripetuto).
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > Da Angular **v20.2** l'API zoneless è **stabile** (`provideZonelessChangeDetection()`) e da **v21** le nuove app sono **zoneless di default** (Zone.js non più incluso). Senza Zone.js la CD è guidata dalle notifiche dei signal, da `markForCheck()`, dagli eventi del template e dalla `async` pipe — di fatto le stesse condizioni di `OnPush`. Il modello Zone.js resta pienamente supportato per le app esistenti (vedi [angular.dev/guide/zoneless](https://angular.dev/guide/zoneless)).
 
 ## Ripasso lampo

@@ -265,10 +265,10 @@ export const { selectAll, selectEntities, selectIds, selectTotal } =
 
 È l'equivalente classico di `withEntities` del Signal Store: stessa idea (entity map + ids + updater), API a funzioni invece che a feature.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il vault moderno **non** usa il pattern Redux con `@ngrx/store`: usa il **NgRx Signal Store** (`@ngrx/signals`), dove lo stato è fatto di **signal** e lo store si compone di *features* (`withState`, `withComputed`, `withMethods`…). I concetti si mappano così: reducer e selector diventano `patchState` con `withComputed`; gli Effects diventano `rxMethod`/`withMutations`; `@ngrx/entity` diventa `withEntities`; e c'è persino un'**Event API** (Flux/Redux) opzionale. Tutto questo è già spiegato in [[09-ngrx-signal-store]] (qui non ripetuto).
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > NgRx Store (Redux) **non è deprecato**: è mantenuto e resta la scelta per chi vuole il pattern Redux "puro" con time-travel debugging. La versione attuale offre API **funzionali/standalone** che affiancano i moduli classici: `provideStore(reducers)`, `provideState(feature)`, `provideEffects([...])` al posto di `StoreModule`/`EffectsModule`; `createActionGroup` per dichiarare gruppi di action con meno codice; `createFeature` che accorpa reducer + selector auto-generati; **effect funzionali** (`createEffect` con `inject` invece della classe); e `store.selectSignal(selector)` (da NgRx v16) che ritorna un `Signal` invece di un `Observable`, per integrarsi con la reactivity a signal ([ngrx.io](https://ngrx.io/guide/store)).
 
 ## Ripasso lampo

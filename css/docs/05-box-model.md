@@ -164,7 +164,7 @@ L'idioma classico per centrare orizzontalmente un blocco di larghezza definita �
 }
 ```
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > La stessa cosa in sintassi fisica è `margin: 0 auto;` (o `margin-left: auto; margin-right: auto;`). Funziona ancora ovunque; `margin-inline: auto` è la forma preferita perché scala anche in contesti RTL o verticali.
 
 ## `gap` al posto dei margini

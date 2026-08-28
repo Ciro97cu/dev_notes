@@ -59,7 +59,7 @@ color: rgb(30% 20% 50%);      /* canali in percentuale */
 
 L'alpha si esprime come numero `0`–`1` (`/ 0.5`) o percentuale (`/ 50%`). Sintassi e ranges verificati su [rgb() — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/rgb).
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > La vecchia forma separa i valori con **virgole** e usa la funzione dedicata `rgba()` per l'alpha:
 > ```css
 > color: rgb(255, 0, 0);
@@ -78,7 +78,7 @@ color: hsl(200 100% 50% / .5);   /* stesso colore, alpha 0.5 */
 
 Ruotare `H` a parità di `S`/`L` genera una gamma di tinte "coordinate" — comodo per temi. Il limite di `hsl()` è la **non uniformità percettiva**: a `L` costante alcune tinte (il giallo) appaiono molto più chiare di altre (il blu), quindi una palette costruita solo variando `H` risulta squilibrata. Il problema lo risolve `oklch()` (più sotto). Dettagli su [hsl() — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl).
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Come per `rgb`, esiste la forma con virgole e l'alias `hsla()`:
 > ```css
 > color: hsl(200, 100%, 50%);
@@ -167,7 +167,7 @@ La *relative color syntax* costruisce un colore **a partire da un altro**: dopo 
 
 I canali risolvono a `<number>` (le percentuali diventano numeri, la tinta un valore `0`–`360`): quindi nei `calc()` si sommano numeri puri, non si mescolano numero e percentuale. La sorgente e la funzione d'uscita possono differire (`rgb(from <colore-oklch> …)` converte automaticamente). Guida: [Using relative colors — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors).
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > La *relative color syntax* è **Baseline: newly available** (dal 2024, con Firefox 128 a completare il supporto): usabile ma non ancora "widely available". Nei progetti che devono coprire browser più vecchi, proteggerla con `@supports`:
 > ```css
 > @supports (color: oklch(from white l c h)) {
@@ -228,10 +228,10 @@ Scegliere il colore del testo sopra uno sfondo variabile (un badge tinto col col
 
 Il colore passato è di norma lo stesso usato come sfondo: così, se `--brand` cambia (tema, override locale), anche il testo si riadatta da sé, senza calcoli manuali né JavaScript. È lo strumento ideale per componenti "tematizzabili", dove il colore di sfondo non è noto in anticipo.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `contrast-color()` è **Baseline: newly available** (dal 10 aprile 2026): Chrome/Edge 147, Firefox 146, Safari 26. Usabile ma non ancora "widely available" (prevista per il 2028), quindi nei progetti che devono coprire browser più datati conviene proteggerla con `@supports (color: contrast-color(red))` o affiancarle un fallback esplicito. Riferimenti: [contrast-color() — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/contrast-color) · [Can I Use](https://caniuse.com/?search=contrast-color). *(verificato: 2026-08-13)*
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Una proposta precedente si chiamava `color-contrast()` e aveva sintassi diversa: accettava un colore di base **più una lista di candidati** tra cui scegliere il più contrastante. Non è mai stata standardizzata in quella forma; nel codice nuovo si usa `contrast-color()`, che sceglie semplicemente tra bianco e nero.
 
 ## `accent-color` — tinta dei controlli di form

@@ -69,7 +69,7 @@ Collegamenti: [[computed]] · [[untracked]] · [[signal]]
 
 I computed derivano valori **sincroni** (disponibili subito); per i dati **asincroni** (che arrivano più tardi, es. fetch dal backend) servono le [[resource]]. Tutte usano signal sia per la richiesta sia per il risultato: in pratica prendono signal in ingresso (i criteri di ricerca) e, in modo asincrono, ne producono altri in uscita (i dati caricati). Angular ne offre tre implementazioni: `httpResource`, `rxResource` e `resource` (Promise-based).
 
-> [!info] Angular 22+ · resource: API stabile
+> [!info|label:Angular 22+ · resource: API stabile]
 > Tutte e tre le resource hanno **lasciato lo stato experimental con Angular 22** e fanno ora parte della Signal API stabile.
 
 #### httpResource
@@ -179,7 +179,7 @@ Quando l'`AbortSignal` emette l'evento `abort`, `takeUntil(aborted)` completa l'
 > In un'app reale `findPromise` non lo si scriverebbe: si terrebbe l'Observable che già si ha e si userebbe `rxResource`. Esiste solo a scopo dimostrativo.
 
 #### Composing Resources via Snapshots
-> [!info] Angular 21.2+ · snapshot() e resourceFromSnapshots
+> [!info|label:Angular 21.2+ · snapshot() e resourceFromSnapshots]
 > Coi computed derivare un valore è facile: si leggono altri signal dentro un `computed` e si ottiene un nuovo signal. Con le **resource**, invece, prima non era possibile: si potevano proiettare solo singole proprietà (`value`/`error`/`isLoading`), non lo stato intero. Da **Angular 21.2** ogni resource espone il signal **`snapshot()`**, che racchiude `status` + `value` in un singolo oggetto signal-aware. Lo si legge con un [[linked-signal]], lo si trasforma e se ne ottiene uno snapshot derivato; **`resourceFromSnapshots`** lo ri-converte in resource. La resource di partenza mantiene la sua logica di load; quella derivata ci applica sopra solo una trasformazione.
 
 ```ts
@@ -246,7 +246,7 @@ export function withPreviousValue<T>(input: Resource<T>): Resource<T> {
 }
 ```
 
-> [!info] Angular 21.2+ · Comporre resource con gli snapshot
+> [!info|label:Angular 21.2+ · Comporre resource con gli snapshot]
 > Prima di Angular 21.2 questo tipo di composizione richiedeva codice di raccordo scritto a mano (plumbing custom: l'idraulica che collega i pezzi) in ogni componente, oppure spostare la logica in un costrutto di livello più alto come la NgRx SignalStore ([[09-ngrx-signal-store]]). Con le API snapshot, le trasformazioni si impacchettano in piccoli helper riutilizzabili.
 
 Collegamenti: [[resource]] · [[linked-signal]] · [[02-signal-based-components]] (intro a `httpResource`)
@@ -333,7 +333,7 @@ export class FlightCard {
 Leggere un input direttamente nel costruttore darebbe errore: il costruttore gira all'istanziazione del componente, e solo dopo Angular fa il primo data binding.
 
 ### Debouncing Signals via `debounced`
-> [!info] Angular 22+ · Debounce dei signal
+> [!info|label:Angular 22+ · Debounce dei signal]
 > **`debounced(sig, ms)`** dà ai signal una nozione di **tempo** che di per sé non hanno: a differenza degli Observable, non offrono operatori come `debounceTime`/`throttle`. L'helper (**Angular 22**) prende un signal e ritorna un `Resource<T>` il cui valore insegue quello del signal con un ritardo configurabile; `status()` è `'loading'` mentre un nuovo valore è ancora in attesa nella finestra di [[glossario#debounce-debouncing|debounce]] (la pausa che si aspetta prima di reagire: se arrivano nuovi cambiamenti, il timer riparte, comodo per un indicatore discreto).
 > ```ts
 > import { debounced, effect, signal } from '@angular/core';
@@ -412,8 +412,8 @@ effect(() => {
 
 Vale identico per `computed` e per i signal usati nei template.
 
-> [!info]
-> **Memory leak in Angular** • È, in concreto, memoria che il programma continua a occupare **anche se non gli serve più**, perché un riferimento la tiene ancora agganciata e la <a href="../glossario/#/docs/concetti-programmazione?id=garbage-collection" target="_blank" rel="noopener">garbage collection</a> non può recuperarla. Il caso da manuale in Angular è una **subscription RxJS mai chiusa**:
+> [!info|label:Memory leak in Angular]
+> È, in concreto, memoria che il programma continua a occupare **anche se non gli serve più**, perché un riferimento la tiene ancora agganciata e la <a href="../glossario/#/docs/concetti-programmazione?id=garbage-collection" target="_blank" rel="noopener">garbage collection</a> non può recuperarla. Il caso da manuale in Angular è una **subscription RxJS mai chiusa**:
 > ```ts
 > constructor() {
 >   // ogni secondo aggiorna qualcosa; nessuno chiude la subscription
@@ -469,8 +469,8 @@ flight.update((flight) => ({
 
 L'istanza risultante è nuova, quindi Angular rileva il cambio e aggiorna signal dipendenti e UI. Questa è l'[[equality-immutability|immutabilità]]: non si modifica il contenuto, si creano nuove versioni quando serve.
 
-> [!info]
-> **Immutability e OnPush** • La stessa logica vale per la strategia **OnPush** del [[glossario#change-detection|change detection]]: nel `@for ... track flight.id`, Angular confronta con `===` il vecchio e il nuovo oggetto `flight` per decidere quale `FlightCard` ridisegnare. Se il riferimento non cambia, la card non viene toccata.
+> [!info|label:Immutability e OnPush]
+> La stessa logica vale per la strategia **OnPush** del [[glossario#change-detection|change detection]]: nel `@for ... track flight.id`, Angular confronta con `===` il vecchio e il nuovo oggetto `flight` per decidere quale `FlightCard` ridisegnare. Se il riferimento non cambia, la card non viene toccata.
 
 > [!warning]
 > Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento → `===` dà `true` → Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.

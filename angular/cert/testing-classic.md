@@ -217,7 +217,7 @@ describe('FlightService', () => {
 - `req.flush(body, opts)` — invia la risposta fake; per gli errori si passa uno `status` >= 400 o si usa `req.error(new ProgressEvent('error'))`.
 - `verify()` — lancia se restano richieste **senza risposta** (tipicamente in `afterEach`).
 
-> [!info] Modo classico
+> [!info|label:Modo classico]
 > Prima delle API funzionali si importava il modulo **`HttpClientTestingModule`** in `imports`. È **deprecato** da Angular v18 a favore di `provideHttpClient()` + `provideHttpClientTesting()` ([angular.dev](https://angular.dev/guide/http/testing)). Il resto dell'API (`HttpTestingController`, `expectOne`/`flush`/`verify`) è invariato.
 
 ## Mock di service e di componenti figli
@@ -248,10 +248,10 @@ await TestBed.configureTestingModule({
 ## Karma: il test runner
 **Karma** è il runner storico: legge `karma.conf.js`, avvia un browser reale (Chrome, oppure `ChromeHeadless` in CI), vi serve il bundle di test, esegue le spec (via `karma-jasmine`) e raccoglie i risultati. È il motore dietro `ng test` nelle versioni classiche della CLI.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il vault moderno testa con **Vitest** (il runner di default della CLI): stessa filosofia AAA e stesso `TestBed`/`HttpTestingController`, ma componenti **standalone** in `imports` (niente `declarations`), globali di Vitest (`describe`/`it`/`vi`), spie `vi.spyOn`, mock HTTP con `provideHttpClientTesting`, fake timer `vi.useFakeTimers()` al posto di `fakeAsync`/`tick`, e locator ARIA (`page.getByRole`) al posto di `By.css`. Tutto in [[07-testing-with-vitest]] (qui non ripetuto).
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > **Karma è deprecato** (pubblicato su npm come *deprecated* dall'aprile 2023: non riceve più feature né bugfix generali) e Angular ha **rimosso il builder Karma** in v20; da **Angular 21 Vitest è il test runner di default** dei nuovi progetti ([angular.dev](https://angular.dev/guide/testing/migrating-to-vitest)). **Jasmine** come framework di asserzioni non è deprecato ma non è più il default. Nelle codebase esistenti Karma+Jasmine restano finché non si migra a Vitest (big-bang o progressiva).
 
 ## Ripasso lampo

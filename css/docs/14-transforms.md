@@ -113,7 +113,7 @@ Le `translate`/`rotate`/`scale` standalone risolvono i due limiti storici di `tr
 
 Quando sono presenti tutte, l'ordine di applicazione è fisso: **`translate` → `rotate` → `scale`**, e l'eventuale `transform` si applica **dopo** ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/translate)). Per `skew`, le matrici o le combinazioni 3D complesse resta comunque `transform` la strada.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > Le proprietà individuali `translate`, `rotate`, `scale` sono [Baseline "widely available"](https://developer.mozilla.org/en-US/docs/Web/CSS/scale) dall'agosto 2022. La proprietà `transform` è supportata universalmente da molto prima.
 
 ## Le transform non toccano il layout
@@ -214,7 +214,7 @@ Per disegnare un frame il browser attraversa una pipeline: **style → layout �
 > [!warning]
 > `will-change` non è un acceleratore generico: si mette **solo** su un problema di fluidità reale e misurato. Può anche creare uno stacking context inatteso.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Anni fa `transform` richiedeva il prefisso `-webkit-` e il trucco `translate3d(0,0,0)` (o `translateZ(0)`) si usava per forzare l'accelerazione GPU. Oggi `transform` è supportato senza prefissi e per la promozione a layer esiste `will-change`: entrambi gli hack sono superflui.
 
 Collegamenti: [[15-transizioni-animazioni]] · [[09-display-posizionamento]]

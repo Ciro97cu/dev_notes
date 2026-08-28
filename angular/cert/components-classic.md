@@ -149,10 +149,10 @@ Ordine al primo render (poi i `…Checked` si ripetono a ogni ciclo di CD):
 > - `{ static: true }` su un target dietro `*ngIf`/`*ngFor`: il riferimento resta `undefined`.
 > - Dimenticare l'`unsubscribe` in `ngOnDestroy` per gli `Observable` non gestiti dalla `async` pipe è un classico memory leak.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il moderno sostituisce i decoratori con funzioni signal-based: `input()` / `input.required()`, `output()` e `model()` per il two-way binding, tutti spiegati in [[02-signal-based-components]]. Le query diventano `viewChild()` / `viewChildren()` / `contentChild()` / `contentChildren()`, che ritornano signal e non hanno più l'opzione `{ static }`, trattate in [[10-signal-queries-component-communication]]. Qui non ripetuti.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > `@Input()` / `@Output()` e i decoratori query **non sono deprecati** e restano pienamente supportati; convivono con le API signal-based nello stesso componente. Per il codice nuovo la documentazione raccomanda `input()` / `output()` / `viewChild()`. I lifecycle hook sono validi in entrambi i mondi (vedi [angular.dev/guide/components/lifecycle](https://angular.dev/guide/components/lifecycle)).
 
 ## Ripasso lampo

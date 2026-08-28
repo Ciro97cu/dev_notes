@@ -96,7 +96,7 @@ p:first-of-type   { margin-top: 0; }   /* primo <p>, anche se preceduto da altro
 img:nth-of-type(2n) { float: right; }  /* ogni seconda immagine */
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > La sintassi moderna `:nth-child(An+B of S)` filtra **prima** con un selettore, poi applica la formula: `tr:nth-child(even of :not([hidden]))` colora a zebra solo le righe visibili, cosa impossibile col conteggio classico. Recente (browser dal 2023 circa) ma già Baseline — utile verificarne il supporto sui target più datati ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-child)).
 
 ## Negazione: `:not()`
@@ -173,14 +173,14 @@ form:has(:invalid) button[type="submit"] {
 
 Logica combinabile: `:has(a, b)` è un **OR** (contiene a *oppure* b), mentre concatenando `:has(a):has(b)` si ottiene un **AND**.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `:has()` è Baseline **ampiamente disponibile dal dicembre 2023** ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)). Come `:not()`, prende la specificità dell'argomento più specifico. Limiti: non è annidabile (`:has()` dentro `:has()`) e non accetta pseudo-elementi come argomento. A differenza di `:is()`/`:where()`, di per sé **non** è forgiving: un argomento non valido non viene silenziosamente scartato.
 
 ## Pseudo-elementi: `::` non `:`
 
 Il doppio colon (`::`) distingue i pseudo-**elementi** dalle pseudo-**classi** (colon singolo). Non è un vezzo: rende esplicito che si sta stilizzando o generando una **porzione** dell'elemento, non l'elemento in un certo stato.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > I quattro pseudo-elementi storici (`::before`, `::after`, `::first-letter`, `::first-line`) sono ancora accettati col colon singolo (`:before`…) per retrocompatibilità. Nel codice nuovo si usa **sempre** `::`; il colon singolo su un pseudo-elemento è solo un residuo da riconoscere nel codice esistente.
 
 ## `::before` e `::after` — contenuto generato
@@ -264,7 +264,7 @@ I descrittori principali:
 - **`range`** — l'intervallo di valori per cui lo stile è valido; fuori da lì interviene il `fallback`.
 - **`fallback`** — lo stile a cui delegare quando questo non sa rappresentare un valore (default `decimal`).
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `@counter-style` è **Baseline: widely available** (dal settembre 2023, con Safari 17 a completare il supporto; Chrome/Edge e Firefox da molto prima). [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style) · [Can I Use](https://caniuse.com/css-at-counter-style). *(verificato: 2026-08-13)*
 
 ## `::selection`, `::placeholder` e cenno a `::backdrop`

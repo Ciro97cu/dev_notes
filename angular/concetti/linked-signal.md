@@ -30,7 +30,7 @@ protected readonly filter = linkedSignal(
 );
 ```
 
-> [!info] Angular 22+
+> [!info|label:Angular 22+]
 > L'opzione `set` è disponibile da **Angular 22.1**. Prima si otteneva lo stesso effetto con un helper custom (`delegatedSignal`): vedi [[delegated-signal]] per il contesto storico.
 
 **Usato in:** [[03-reactive-design-with-signals]] · [[05-state-management-services-signals]]

@@ -215,10 +215,10 @@ export class Legacy implements OnInit, OnDestroy {
 > [!warning]
 > `takeUntil` va messo **ultimo** nella `pipe` (o comunque dopo gli operator che creano nuove sottoscrizioni), altrimenti un inner observable a valle può restare attivo dopo il destroy. Regola pratica: `takeUntil`/`takeUntilDestroyed` per ultimo.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il vault ragiona in **signals**: stato reattivo sincrono senza sottoscrizioni da chiudere. Per interoperare con codice RxJS esistente ci sono `toSignal` (da Observable a signal, con unsubscribe automatico) e `toObservable` (da signal a Observable). Reactive design, resource e interop sono in [[03-reactive-design-with-signals]] (qui non ripetuto). RxJS resta rilevante per HTTP, eventi e stream veri.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > RxJS **non è deprecato** né rimosso: `HttpClient`, `Router` ed `EventEmitter` restano Observable-based e i Signal Forms convivono con gli stream. Angular 22 gira su RxJS 7.x; l'interop `toSignal`/`toObservable` è stabile e `takeUntilDestroyed` è stabile dalla v19. Per il codice nuovo si preferiscono i signal per lo **stato**, riservando RxJS agli **eventi/stream** ([rxjs.dev/guide/observable](https://rxjs.dev/guide/observable) · [rxjs.dev/guide/subject](https://rxjs.dev/guide/subject) · [takeUntilDestroyed](https://angular.dev/api/core/rxjs-interop/takeUntilDestroyed)).
 
 ## Ripasso lampo

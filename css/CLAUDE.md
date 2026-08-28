@@ -11,7 +11,7 @@ Vale la **voce "professore"** del [root](../CLAUDE.md): prosa narrativa e distes
 Linea editoriale: la sintassi CSS **attuale (2026)** è il default; il legacy resta solo dove ha ancora valore (contesto storico, fallback). I moduli sono già scritti così — questa policy vale per ogni aggiunta o revisione.
 1. **Sintassi moderna in primo piano**: se una tecnica recente **sostituisce** quella vecchia, si spiega la moderna come default (es. `gap` nei flex/grid invece dei margini; `inset` invece di top/right/bottom/left; nesting nativo; range syntax nelle media query).
 2. **Novità additive integrate dove pertinenti**: `oklch()`/`color-mix()`/relative colors (→ Colori), container queries (→ Responsive), `:has()`/`:is()`/`:where()`/nesting (→ Selettori), `@layer` (→ Cascade), subgrid (→ Grid), `clamp()`/`min()`/`max()`/`dvh` (→ Unità), logical properties (→ Box model), `text-wrap: balance/pretty` (→ Testo), scroll-driven animations & view transitions (→ Animazioni).
-3. **Legacy in secondo piano**: si cita solo se ha ancora valore (contesto storico, codice esistente, fallback). Va in un callout `> [!info] Legacy` o in una frase marcata, **mai** come tecnica principale. Tecniche superate (es. clearfix per il float, hack `-prefix-`) → menzione breve, non tutorial.
+3. **Legacy in secondo piano**: si cita solo se ha ancora valore (contesto storico, codice esistente, fallback). Va in un callout `> [!info|label:Legacy]` o in una frase marcata, **mai** come tecnica principale. Tecniche superate (es. clearfix per il float, hack `-prefix-`) → menzione breve, non tutorial.
 4. **Stato & supporto**: per feature recenti indicare se sono **Baseline** (ampiamente supportate) o ancora da controllare su Can I Use; niente allarmismi da browser morti (IE è fuori scope, citabile solo come nota storica).
 
 ## Struttura
@@ -55,7 +55,7 @@ tags: [tipo/modulo, <tematici>]
 > [!warning]
 > <insidia tipica>
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > <vecchia sintassi, solo se vale la pena>
 
 Collegamenti: [[NN-altro-modulo]]
@@ -76,8 +76,8 @@ Collegamenti: [[NN-altro-modulo]]
 
 ## Callout
 - `> [!warning]` (insidie) e `> [!tip]` (cose da ricordare) **senza** titolo custom.
-- `> [!info]` mantiene il titolo quando è informativo: usare `> [!info] Legacy` per la sintassi vecchia, `> [!info] Baseline` per lo stato di supporto di una feature moderna.
-- **Data di verifica nei callout Baseline**: quando un `> [!info] Baseline` riporta uno stato **ancora in evoluzione** (`newly available`, disponibilità limitata, "in diffusione"), chiudere la nota con la data di verifica in corsivo — `*(verificato: AAAA-MM-GG)*`. Così, se il modulo non viene toccato per un po', il lettore capisce quanto è fresca l'informazione e sa di doverla ricontrollare su MDN / Can I Use. Per feature ormai `widely available` (stabili) la data è facoltativa.
+- `> [!info]` mantiene il titolo quando è informativo: usare `> [!info|label:Legacy]` per la sintassi vecchia, `> [!info|label:Baseline]` per lo stato di supporto di una feature moderna.
+- **Data di verifica nei callout Baseline**: quando un `> [!info|label:Baseline]` riporta uno stato **ancora in evoluzione** (`newly available`, disponibilità limitata, "in diffusione"), chiudere la nota con la data di verifica in corsivo — `*(verificato: AAAA-MM-GG)*`. Così, se il modulo non viene toccato per un po', il lettore capisce quanto è fresca l'informazione e sa di doverla ricontrollare su MDN / Can I Use. Per feature ormai `widely available` (stabili) la data è facoltativa.
 - Le risposte del **Ripasso lampo** vanno in un **`<details>`** (`<summary>` = domanda), stile Q&A unico del monorepo — non nel callout.
 
 ## Aggiunte e modernizzazioni

@@ -85,7 +85,7 @@ Oltre al test `property: value`, esistono forme funzionali:
 
 Un **vendor prefix** (`-webkit-`, `-moz-`, `-ms-`, `-o-`) è un prefisso specifico di motore che, storicamente, marcava una proprietà **sperimentale** prima della standardizzazione ([MDN](https://developer.mozilla.org/en-US/docs/Glossary/Vendor_Prefix)). L'idea si è rivelata problematica: siti interi finivano per dipendere da `-webkit-`, costringendo gli altri browser a implementarlo per compatibilità. Oggi i motori usano piuttosto **flag sperimentali** dietro configurazione, non prefissi in produzione.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Blocchi come questo, tipici del CSS pre-2017, oggi sono superflui: tutti i browser supportano `transition` senza prefisso. Se si trovano in una codebase, si tiene **solo l'ultima riga** ([MDN](https://developer.mozilla.org/en-US/docs/Glossary/Vendor_Prefix)).
 > ```css
 > -webkit-transition: all 4s ease;
@@ -97,7 +97,7 @@ Un **vendor prefix** (`-webkit-`, `-moz-`, `-ms-`, `-o-`) è un prefisso specifi
 
 Nel 2026 i prefissi **non si scrivono a mano**. Quando servono ancora (poche proprietà di nicchia), il compito è delegato ad **[Autoprefixer](https://github.com/postcss/autoprefixer)**, un plugin di **PostCSS**: legge il codice standard e aggiunge i prefissi necessari in base a una lista di browser-target (config **Browserslist**), togliendoli man mano che diventano inutili. La decisione su cosa prefissare la prende Baseline/Can I Use, non l'intuito.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > **[shouldiprefix.com](http://shouldiprefix.com/)** è il riferimento storico che elencava, proprietà per proprietà, quali prefissi servissero. Va consultato come reperto: gran parte delle sue voci oggi sono risolte.
 
 ## Polyfill
@@ -218,7 +218,7 @@ $radius: 0.5rem;
 
 L'approccio dominante oggi è **utility-first**: classi atomiche a singola responsabilità composte direttamente nel markup, come in **[Tailwind CSS](https://tailwindcss.com/)**. Sposta lo stile vicino al componente e riduce il CSS "morto".
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > **Bootstrap** — il framework a componenti pronti (griglia, bottoni, card) che ha dominato gli anni 2010 — resta utile su progetti che già lo usano, ma per un progetto **nuovo** è una scelta datata: le sue griglie e i suoi mixin risolvono problemi che oggi Grid, Flexbox e le custom properties native coprono senza dipendenze.
 
 Collegamenti: [[04-cascade-specificita-ereditarieta]] · [[06-unita-valori-funzioni]] · [[07-colori]]

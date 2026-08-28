@@ -105,7 +105,7 @@ article { max-width: 70ch; }   /* righe leggibili senza dipendere dai px */
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `lh`/`rlh` sono **Baseline: widely available**: Chrome/Edge 109 (gennaio 2023), Safari 16.4 (marzo 2023), Firefox 120 (novembre 2023). Ormai utilizzabili senza fallback ([Can I Use](https://caniuse.com/mdn-css_types_length_lh)). *(verificato: 2026-08-13)*
 
 ## Unità viewport dinamiche (`dvh`/`svh`/`lvh`)
@@ -126,7 +126,7 @@ Su mobile `100vh` ha un difetto storico: **non tiene conto della barra degli ind
 }
 ```
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > Le unità viewport dinamiche (`svh`/`lvh`/`dvh` e famiglia) sono **Baseline "widely available"**: Chrome/Edge 108+, Firefox 101+, Safari 15.4+ ([Can I Use](https://caniuse.com/viewport-unit-variants)). Utilizzabili senza fallback nella baseline di metà 2026.
 
 > [!warning]
@@ -262,7 +262,7 @@ el.style.setProperty('--brand', '#e11');
 > [!tip]
 > Se un `var()` risolve a un valore non valido per quella proprietà, scatta il *guaranteed-invalid value*: si usa il fallback di `var()` se presente, altrimenti la proprietà torna al suo valore iniziale/ereditato. Utile per degradare con eleganza.
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Prima delle custom properties, l'unico modo per avere "variabili" era un **preprocessore** (Sass/Less). Quelle però sono risolte *a build-time*: producono valori fissi, non cambiabili a runtime né da JS. Le custom properties CSS sono *vive* nel browser — un vantaggio che i preprocessori non hanno (cfr. [[16-future-proof]]).
 
 ## `@property` — custom properties tipizzate
@@ -294,7 +294,7 @@ Descrittori:
 
 Senza `@property`, animare `--angle` da `0deg` a `360deg` produrrebbe uno **scatto** (interpolazione *discrete*); registrandola, il browser sa che è un `<angle>` e la interpola con continuità. Lo stesso vale per animare un `<color>` o una `<length>` dentro una variabile — utile per gradienti animati (cfr. [[10-sfondi-effetti]]).
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `@property` è **Baseline "widely available" (2024)** ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@property)). L'equivalente JavaScript è `CSS.registerProperty({ name, syntax, inherits, initialValue })`.
 
 ## Funzioni che compaiono altrove

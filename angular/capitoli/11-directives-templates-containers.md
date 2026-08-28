@@ -634,7 +634,7 @@ export const DIALOG_DATA = new InjectionToken<unknown>('DIALOG_DATA');
 
 Il servizio pubblica gli eventi su un `Subject` RxJS (uno stream a cui l'outlet si sottoscrive): `show` accoda un `DialogEvent`, `hide` ne accoda uno con `component`/`data` a `null`.
 
-> [!info] Angular 22+ · Il decoratore @Service()
+> [!info|label:Angular 22+ · Il decoratore @Service()]
 > Il sorgente usa il decorator `@Service()` (Angular 22), che dichiara un service iniettabile e registrato di default nello scope root. Equivale al vecchio `@Injectable({ providedIn: 'root' })`. Dettagli in [[service]].
 
 ```ts

@@ -42,10 +42,10 @@ Un commit atomico contiene **una sola modifica logica**, completa e indipendente
 
 ## Messaggi di commit
 La convenzione più diffusa, adottata da Git e dai progetti open source, è scrivere il messaggio in **present tense / imperative mood**: il messaggio descrive cosa fa il commit, come se fosse un comando impartito al codice.
-> [!tip] Usare l'imperativo presente
+> [!tip|label:Usare l'imperativo presente]
 > `Aggiunge la funzione di login`, `Corregge bug nella validazione`
 
-> [!warning] Evitare il passato
+> [!warning|label:Evitare il passato]
 > `Aggiunta la funzione di login`
 
 ### Messaggio su più linee

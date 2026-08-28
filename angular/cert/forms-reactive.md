@@ -184,10 +184,10 @@ Una volta costruito l'albero nella classe, lo si collega al markup con un insiem
 > [!warning]
 > `setValue` con un oggetto **incompleto** lancia *"Must supply a value for form control with name: ..."*. Per aggiornamenti parziali usare `patchValue`.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Il vault non usa `FormGroup`/`FormControl`: adotta i **Signal Forms** (`@angular/forms/signals`), dove `form(model, schema)` deriva l'albero da un signal, i validatori stanno nello schema (con supporto a custom e async) e `valueChanges`/`statusChanges` sono sostituiti dai signal di stato del field. Tutto in [[06-signal-forms]] (qui non ripetuto).
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > `ReactiveFormsModule` e le reactive forms **non sono deprecate**: restano pienamente supportate e convivono con `@angular/forms/signals`. I **Signal Forms** sono l'approccio moderno raccomandato per il codice nuovo, ma in Angular 22 sono **ancora sperimentali** (package `@angular/forms/signals`, l'API può cambiare); l'API classica resta lo standard **stabile** delle codebase esistenti ([angular.dev/guide/forms/reactive-forms](https://angular.dev/guide/forms/reactive-forms) · [Validators](https://angular.dev/api/forms/Validators)).
 
 ## Ripasso lampo

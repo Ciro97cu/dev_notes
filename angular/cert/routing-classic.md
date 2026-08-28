@@ -224,10 +224,10 @@ Tra gli eventi principali, nell'ordine: `NavigationStart`, `RoutesRecognized`, `
 > [!warning]
 > Altre insidie: `forRoot` va chiamato **una sola volta** (root); ripeterlo in un feature module duplica il `Router`. E un guard che redirige dovrebbe restituire un **`UrlTree`** (via `createUrlTree`), non fare `this.router.navigate(...)` seguito da `return false`: il ritorno di `UrlTree` è la forma canonica, atomica e senza race.
 
-> [!info] vs Modern
+> [!info|label:vs Modern]
 > Nel moderno il Router si registra con `provideRouter(routes, ...features)` invece di `RouterModule.forRoot`, e le **feature** (`withComponentInputBinding`, `withPreloading`, `withHashLocation`, `withDebugTracing`) sostituiscono gli `ExtraOptions`; il lazy loading usa `loadComponent`/`loadChildren` di **route** (non di NgModule). Guard e resolver diventano **funzioni** (`CanActivateFn`, `CanMatchFn`, `ResolveFn`) con [[inject]] al posto delle classi `@Injectable`. Outlet, `routerLink`, parametri e child routes sono **identici** e già spiegati nel vault, in [[04-router-navigation-lazy-loading]] (setup, `withComponentInputBinding`, lazy) e [[12-initialization-route-changes]] (guard/resolver funzionali, router events). Qui non ripetuti.
 
-> [!info] Stato attuale
+> [!info|label:Stato attuale]
 > Le **interfacce** dei guard/resolver class-based (`CanActivate`, `CanActivateChild`, `CanDeactivate`, `CanMatch`, `Resolve`) sono **deprecate dalla v15.2** in favore dei guard/resolver **funzionali**; `CanLoad` è deprecato ancora prima in favore di `CanMatch`. Una classe `@Injectable` resta comunque riusabile da un guard funzionale in migrazione (`canActivate: [() => inject(AuthGuard).canActivate(route, state)]`) o con gli helper `mapToCanActivate` & co. `RouterModule.forRoot`/`forChild` **non** sono deprecati e valgono per le app module-based. Fonte: [angular.dev/guide/routing](https://angular.dev/guide/routing) e l'issue di deprecazione [angular#50234](https://github.com/angular/angular/issues/50234).
 
 ## Ripasso lampo

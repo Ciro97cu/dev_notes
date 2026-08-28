@@ -262,7 +262,7 @@ Il control flow è **built-in** nel template (`@if`, `@for`, `@switch`, prefisso
 }
 ```
 
-> [!info] Angular 22+ · @case multi-value
+> [!info|label:Angular 22+ · @case multi-value]
 > Da **Angular 21.1** un singolo blocco può seguire più `@case` consecutivi (multi-value), così più valori condividono lo stesso markup:
 > ```html
 > @switch (passenger().passengerStatus) {
@@ -285,7 +285,7 @@ Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto a
 
 Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito, quindi si restringe `passengerStatus` da `string` a una **literal union** `'A' | 'B' | 'C'` (un tipo che ammette solo questi tre valori esatti, non una stringa qualsiasi). Quando l'espressione dello `@switch` **è** proprio la union, basta la forma breve `@default never;`. Il meccanismo: gestendo i `@case` uno dopo l'altro, TypeScript "consuma" i valori ancora possibili finché non ne resta nessuno, cioè finché il tipo di `passengerStatus` non si riduce a `never` (l'insieme vuoto, nessun valore possibile).
 
-> [!info] Angular 22+ · @default never (exhaustive check)
+> [!info|label:Angular 22+ · @default never (exhaustive check)]
 > ```html
 > @switch (passenger().passengerStatus) {  <!-- 'A' | 'B' | 'C' -->
 >   @case ('A') { <p>Senator</p> }
@@ -298,7 +298,7 @@ Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito,
 
 C'è però un caso più frequente in cui la forma breve non basta: quando lo switch è su una **proprietà** di una *discriminated union* (una union di oggetti distinti dal valore di un campo comune — il *discriminatore*, qui `kind`), e non sull'intera union. TypeScript sa restringere quella singola proprietà, ma non sa dedurre se l'intera union è stata coperta. Serve allora la forma `never(<expression>)` (**Angular 22**), che indica esplicitamente al compilatore quale espressione controllare per la copertura completa.
 
-> [!info] Angular 22+ · never(expression) su discriminated union
+> [!info|label:Angular 22+ · never(expression) su discriminated union]
 > ```ts
 > type Loyalty =
 >   | { kind: 'senator';  loungeAccess: true }
@@ -507,7 +507,7 @@ protected readonly flightsResource = httpResource<Flight[]>(
 
 Di default esegue una **GET**; è possibile specificare un altro metodo e persino un `body`, ma è pensata per il **fetch (read)**: per save/delete si usa `HttpClient`. Il secondo argomento `{ defaultValue: [] }` dà un valore iniziale prima che la richiesta completi, evitando `undefined` nel template. Lo stato è esposto via signal: `value` (i dati), `error` (info sull'errore), `isLoading` (richiesta in corso).
 
-> [!info] Angular 22+ · Il value della resource è scrivibile
+> [!info|label:Angular 22+ · Il value della resource è scrivibile]
 > Il `value` di una resource è **scrivibile**: si possono modificare i dati caricati localmente (utile per editarli con un form in two-way binding sul `value`). Resta però una **copia di lavoro locale** — per persistere sul server serve comunque `HttpClient`.
 
 ```html

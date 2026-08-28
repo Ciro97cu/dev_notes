@@ -68,7 +68,7 @@ Web Components e framework non sono in competizione: i Web Components sono il **
 > [!warning]
 > Un **componente di framework non è un Web Component**. `<mat-button>` (Angular) e `<Button>` (React) sono componenti *del framework*, che il suo runtime fa vivere — **non** custom element registrati con `customElements.define`. Il tag a forma di HTML di Angular inganna: è solo sintassi del template. I Web Components veri sono **portabili** tra framework (o senza); un componente di framework funziona solo nel suo. `@angular/elements` serve proprio a *convertire* un componente Angular in un vero Web Component quando serve quella portabilità.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > **Custom Elements**, **Shadow DOM** e `<template>` sono **Baseline: widely available** — supportati da tutti i browser core da anni. [MDN — Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
 
 ## Ripasso lampo

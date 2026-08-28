@@ -64,7 +64,7 @@ Il comando `git revert` annulla uno o più commit **creando un nuovo commit** ch
 git revert HEAD            # annulla l'ultimo commit
 git revert a1b2c3d         # annulla un commit specifico
 ```
-> [!tip] Sicuro sui repository condivisi
+> [!tip|label:Sicuro sui repository condivisi]
 > `git revert` non riscrive la storia: è l'opzione sicura per i commit già pushati.
 
 ## reset vs revert (quale usare?)

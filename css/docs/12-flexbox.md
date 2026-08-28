@@ -171,10 +171,10 @@ Quando gli item vanno a capo (`flex-wrap: wrap`) e occupano **più righe**, `ali
 
 Rispetto ai margini sui singoli item, `gap` non aggiunge spazio spurio ai margini esterni, non richiede di azzerare il margine sul primo/ultimo elemento e non soffre di *margin collapsing* (vedi [[05-box-model]]). Le sotto-proprietà `row-gap` e `column-gap` permettono di regolare le due direzioni separatamente.
 
-> [!info] Baseline
+> [!info|label:Baseline]
 > `gap` nei flex container è **Baseline widely available**: supportato da tutti i browser correnti dopo l'arrivo in Safari 14.1 (aprile 2021). Oggi è la scelta di default per spaziare in flex. ([MDN — `gap`](https://developer.mozilla.org/en-US/docs/Web/CSS/gap), [Can I Use — flexbox-gap](https://caniuse.com/flexbox-gap))
 
-> [!info] Legacy
+> [!info|label:Legacy]
 > Prima di `gap` si spaziava con i **margini** sugli item (es. `margin-right` su ciascuno tranne l'ultimo, o `margin: 0 0.5rem` sul container per compensare). Tecnica ancora leggibile in codice datato o dove serve supporto a Safari &lt; 14.1, ma superata: preferire `gap`.
 
 ### `place-content` e `place-items` — gli shorthand
