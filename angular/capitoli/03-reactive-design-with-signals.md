@@ -475,7 +475,21 @@ L'istanza risultante è nuova, quindi Angular rileva il cambio e aggiorna signal
 > [!warning]
 > Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento → `===` dà `true` → Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.
 
-Si può passare una **equality function** custom (secondo parametro di `signal`), ma serve raramente (soprattutto in application code) e di solito confonde più che aiutare.
+Si può passare una **equality function** custom: il secondo parametro di `signal` è un oggetto di opzioni con la chiave `equal`, una funzione `(a, b) => boolean` che riceve valore precedente e nuovo e ritorna `true` quando li considera **uguali** — nel qual caso il signal **non** notifica i dipendenti.
+
+```ts
+// uguaglianza per contenuto invece che per riferimento:
+// riassegnare un punto con le stesse coordinate non fa scattare gli aggiornamenti
+const position = signal(
+  { x: 0, y: 0 },
+  { equal: (a, b) => a.x === b.x && a.y === b.y },
+);
+
+position.set({ x: 0, y: 0 });   // equal() → true: nessun update
+position.set({ x: 1, y: 0 });   // equal() → false: notifica
+```
+
+Serve raramente (soprattutto in application code) e di solito confonde più che aiutare.
 
 Collegamenti: [[reactive-context]] · [[untracked]] · [[equality-immutability]] · [[linked-signal]] (per stato che dipende da una sorgente ma resta scrivibile)
 
