@@ -63,9 +63,9 @@ Yarn è un gestore di pacchetti JavaScript, alternativa a NPM, che consuma anch'
 
 ## NVM
 
-**nvm** (*Node Version Manager*) è uno strumento per installare e gestire **più versioni di Node.js** sulla stessa macchina, passando dall'una all'altra secondo il progetto. Il problema che risolve è concreto: Node evolve con major version che portano breaking change — Node 18, 20, 22 hanno API diverse — e un progetto avviato anni fa può essere incompatibile con le versioni più recenti, mentre i progetti nuovi vogliono le ultime funzionalità. Con nvm si installa ciascuna versione in modo isolato e si sceglie quale è attiva, senza che le versioni si calpestino tra loro.
+**nvm** (*Node Version Manager*) è uno strumento per installare e gestire **più versioni di Node.js** sulla stessa macchina, passando dall'una all'altra secondo il progetto. Il problema che risolve è concreto: Node evolve con major version che portano breaking change (Node 18, 20, 22 hanno API diverse) e un progetto avviato anni fa può essere incompatibile con le versioni più recenti, mentre i progetti nuovi vogliono le ultime funzionalità. Con nvm si installa ciascuna versione in modo isolato e si sceglie quale è attiva, senza che le versioni si calpestino tra loro.
 
-A differenza di un programma normale, nvm **non è un eseguibile**: è una **funzione di shell** caricata nel profilo (`.zshrc` o `.bashrc`) che, quando invocata, modifica `$PATH` nella shell corrente per puntare alla cartella `~/.nvm/versions/node/<versione>/bin` della versione scelta. Questo ha una conseguenza pratica: `nvm use` vale **solo per la shell in cui lo si invoca**; aprire un nuovo terminale riporta alla versione di *default*. Inoltre, siccome Node è installato nella home dell'utente e non in una cartella di sistema, `npm install -g` funziona **senza `sudo`** — è una delle ragioni per cui nvm è raccomandato come setup di base.
+A differenza di un programma normale, nvm **non è un eseguibile**: è una **funzione di shell** caricata nel profilo (`.zshrc` o `.bashrc`) che, quando invocata, modifica `$PATH` nella shell corrente per puntare alla cartella `~/.nvm/versions/node/<versione>/bin` della versione scelta. Questo ha una conseguenza pratica: `nvm use` vale **solo per la shell in cui lo si invoca**; aprire un nuovo terminale riporta alla versione di *default*. Inoltre, siccome Node è installato nella home dell'utente e non in una cartella di sistema, `npm install -g` funziona **senza `sudo`**, ed è una delle ragioni per cui nvm è raccomandato come setup di base.
 
 | Comando | Cosa fa |
 |---------|---------|
@@ -83,10 +83,10 @@ Per fissare la versione di Node di un singolo progetto si aggiunge un file **`.n
 22
 ```
 
-A quel punto `nvm use` senza argomenti, eseguito nella cartella del progetto, legge `.nvmrc` e attiva quella versione automaticamente. Aggiungendo al profilo di shell un hook apposito (documentato nel repo di nvm), l'attivazione avviene da sola ogni volta che si entra in una cartella che contiene un `.nvmrc` — senza doverlo invocare a mano.
+A quel punto `nvm use` senza argomenti, eseguito nella cartella del progetto, legge `.nvmrc` e attiva quella versione automaticamente. Aggiungendo al profilo di shell un hook apposito (documentato nel repo di nvm), l'attivazione avviene da sola ogni volta che si entra in una cartella che contiene un `.nvmrc`, senza doverlo invocare a mano.
 
 > [!warning]
-> I pacchetti installati globalmente con `npm install -g` sono **legati alla versione di Node attiva al momento dell'installazione**. Dopo un `nvm use 20`, il `$PATH` punta al `bin` di Node 20, dove quei pacchetti non sono stati installati: sembrano sparire. Non sono persi — vivono ancora sotto `~/.nvm/versions/node/<versione>/bin` — ma per usarli sulla nuova versione vanno reinstallati lì. Il motivo (PATH e npm prefix globale) è spiegato nel vault Terminale, [cap. 07 · Node, npm e il frontend](../terminale/#/docs/07-node-npm-frontend?id=le-versioni-di-node-nvm).
+> I pacchetti installati globalmente con `npm install -g` sono **legati alla versione di Node attiva al momento dell'installazione**. Dopo un `nvm use 20`, il `$PATH` punta al `bin` di Node 20, dove quei pacchetti non sono stati installati: sembrano sparire. Non sono persi (vivono ancora sotto `~/.nvm/versions/node/<versione>/bin`), ma per usarli sulla nuova versione vanno reinstallati lì. Il motivo (PATH e npm prefix globale) è spiegato nel vault Terminale, [cap. 07 · Node, npm e il frontend](../terminale/#/docs/07-node-npm-frontend?id=le-versioni-di-node-nvm).
 
 **Alternative:** **fnm** (*Fast Node Manager*, scritto in Rust) offre le stesse funzionalità di nvm con tempi di avvio sensibilmente più rapidi e supporto nativo a Windows, macOS e Linux. È considerato oggi una valida alternativa moderna; la scelta tra i due è spesso una questione di ecosistema e preferenza personale.
 
