@@ -135,7 +135,20 @@ function dnSearchBuild() {
     dnSearchRun(); inp.focus();
   });
   box.querySelector('.dn-s-results').addEventListener('click', function (e) {
-    if (e.target.closest && e.target.closest('.dn-s-item')) setTimeout(dnSearchClose, 0);
+    var item = e.target.closest && e.target.closest('.dn-s-item');
+    if (!item) return;
+    var href = item.getAttribute('href') || '';
+    // Se l'hash di destinazione è identico a quello corrente, il browser non lancia
+    // hashchange → docsify non scrolla. Preveniamo il default e scrolliamo a mano.
+    if (href && location.hash === href) {
+      e.preventDefault();
+      var idMatch = href.match(/[?&]id=([^&]+)/);
+      if (idMatch) {
+        var el = document.getElementById(decodeURIComponent(idMatch[1]));
+        if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+      }
+    }
+    setTimeout(dnSearchClose, 0);
   });
   box.addEventListener('click', function (e) { if (e.target === box) dnSearchClose(); });
   return box;
