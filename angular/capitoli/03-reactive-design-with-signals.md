@@ -420,7 +420,7 @@ Vale identico per `computed` e per i signal usati nei template.
 >   interval(1000).subscribe(() => this.refresh());
 > }
 > ```
-> Navigando via, il componente viene distrutto **ma la subscription resta viva**: `interval` continua a tenere il callback, e il callback (via closure) tiene vivo l'intero componente — istanza, template, dati. Tornando sulla rotta cinquanta volte, in memoria restano cinquanta componenti-zombie: un riferimento involontario li rende ancora *raggiungibili*, così l'occupazione cresce e basta.
+> Navigando via, il componente viene distrutto **ma la subscription resta viva**: `interval` continua a tenere il callback, e il callback (via closure) tiene vivo l'intero componente (istanza, template, dati). Tornando sulla rotta cinquanta volte, in memoria restano cinquanta componenti-zombie: un riferimento involontario li rende ancora *raggiungibili*, così l'occupazione cresce e basta.
 > I **signal** sono meno esposti, ed è il senso di *Untracking* qui sopra: è il framework a possedere il grafo delle dipendenze, e quando il componente muore quegli archi cadono da soli, senza nessun oggetto-subscription da ricordarsi di chiudere. Per il codice RxJS che resta, la chiusura automatica alla distruzione si ottiene con `takeUntilDestroyed()` o `DestroyRef.onDestroy()`, nel [[11-directives-templates-containers|cap.11]].
 
 ### Glitch-Free Property
@@ -475,7 +475,7 @@ L'istanza risultante è nuova, quindi Angular rileva il cambio e aggiorna signal
 > [!warning]
 > Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento → `===` dà `true` → Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.
 
-Si può passare una **equality function** custom: il secondo parametro di `signal` è un oggetto di opzioni con la chiave `equal`, una funzione `(a, b) => boolean` che riceve valore precedente e nuovo e ritorna `true` quando li considera **uguali** — nel qual caso il signal **non** notifica i dipendenti.
+Si può passare una **equality function** custom: il secondo parametro di `signal` è un oggetto di opzioni con la chiave `equal`, una funzione `(a, b) => boolean` che riceve valore precedente e nuovo e ritorna `true` quando li considera **uguali**, nel qual caso il signal **non** notifica i dipendenti.
 
 ```ts
 // uguaglianza per contenuto invece che per riferimento:

@@ -98,7 +98,7 @@ L'esadecimale è un normale sistema **posizionale** ([cap. 9](09-our-ten-digits.
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">9A48Ch = 9×16⁴ + A×16³ + 4×16² + 8×16¹ + C×16⁰ = 589.824 + 40.960 + 1.024 + 128 + 12 = <strong>631.948</strong> (ricordando A = 10 e C = 12). Stesso meccanismo del decimale, con potenze di sedici.</figcaption>
 </figure>
 
-Il verso opposto — da decimale a esadecimale — si fa con le **divisioni**. Se il numero sta in un byte (fino a 255) basta dividerlo per 16: quoziente e resto sono le due cifre. Per esempio `182 ÷ 16 = 11` con resto `6`, cioè `B6h`. Per numeri fino a 65.535 si procede allo stesso modo dividendo via via per le potenze di sedici (4096, 256, 16): così `31.148` diventa `79ACh`, e il grazioso `51.966` diventa **`CAFE`** — un numero che sembra una parola.
+Il verso opposto (da decimale a esadecimale) si fa con le **divisioni**. Se il numero sta in un byte (fino a 255) basta dividerlo per 16: quoziente e resto sono le due cifre. Per esempio `182 ÷ 16 = 11` con resto `6`, cioè `B6h`. Per numeri fino a 65.535 si procede allo stesso modo dividendo via via per le potenze di sedici (4096, 256, 16): così `31.148` diventa `79ACh`, e il grazioso `51.966` diventa **`CAFE`** — un numero che sembra una parola.
 
 ## Esadecimale nel mondo reale: i colori RGB
 

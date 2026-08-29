@@ -7,7 +7,7 @@ tags: [tipo/indice, moc, cert]
 Appunti di preparazione alla **certificazione Angular** di [certificates.dev](https://certificates.dev/angular) (target **Senior**), limitati a ciò che l'esame richiede e che **non** è coperto dal vault *Modern Angular*: NgModules, forms classiche, RxJS, DI e routing classici, change detection con Zone.js, NgRx Redux, testing Jasmine/Karma, ecc.
 
 > [!info|label:Perché una sezione a parte]
-> Il vault principale segue *Modern Angular* (standalone, signals, Signal Forms). La cert però testa anche l'**Angular classico**. Qui si copre **solo il gap**: dove un tema è già spiegato nel moderno, non si riscrive — si rimanda con un callout `> [!info|label:vs Modern]`.
+> Il vault principale segue *Modern Angular* (standalone, signals, Signal Forms). La cert però testa anche l'**Angular classico**. Qui si copre **solo il gap**: dove un tema è già spiegato nel moderno, non si riscrive ma si rimanda con un callout `> [!info|label:vs Modern]`.
 
 ## Note (Angular classico)
 - [[ngmodules]] — `@NgModule`, feature/shared module, `forRoot`/`forChild`, `CommonModule`/`BrowserModule`
