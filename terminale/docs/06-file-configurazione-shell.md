@@ -4,12 +4,29 @@ Le personalizzazioni fatte a mano (una cartella aggiunta al PATH, una variabile 
 
 ## Shell di login e shell interattive
 
-La shell distingue alcuni «tipi» di sessione, e in base al tipo legge file diversi. Le due categorie che contano sono:
+La shell distingue alcuni «tipi» di sessione e, in base al tipo, legge file d'avvio diversi. Le due categorie che contano si definiscono così:
 
-- una shell è **interattiva** quando dialoga con una persona (si digita e si legge l'output) — il caso normale del terminale;
-- una shell è **di login** quando avvia una nuova sessione «da capo», come al primo accesso alla macchina.
+- una shell è **interattiva** quando dialoga con una persona: mostra il prompt, si digita e si legge l'output. È il caso normale del terminale. Non lo è quando esegue uno **script**, cioè una serie di comandi in fila senza nessuno che risponda.
+- una shell è **di login** quando è la **prima** shell di una sessione, quella che parte nel momento in cui si «entra» in una macchina identificandosi. È il caso di un accesso da zero: un collegamento **SSH** a un server, un login da console testuale e, su macOS, ogni nuova finestra di Terminal.
 
-Le due cose sono indipendenti e si combinano. Il punto pratico per macOS è questo: **ogni nuova finestra o scheda di Terminal.app apre una shell che è insieme di login *e* interattiva**, quindi vengono letti tutti i file d'avvio. È una particolarità di macOS (su Linux, di solito, la prima shell grafica è di login e quelle nei terminali successivi sono solo interattive).
+Il punto che confonde è capire *quando* una shell è «di login», perché dipende da **come** è stata avviata, non da cosa ci si fa dentro. Qualche caso concreto:
+
+| Come è partita la shell | Di login? | Interattiva? |
+|---|---|---|
+| Nuova finestra o scheda di **Terminal.app** (macOS) | Sì | Sì |
+| **`ssh utente@server`** (ci si collega e si ottiene un prompt) | Sì | Sì |
+| Digitare **`zsh`** (o `bash`) dentro una shell già aperta | No | Sì |
+| Eseguire uno **script** (`./deploy.sh`) | No | No |
+| Nuova scheda in un terminale **Linux** (di solito) | No | Sì |
+
+Per togliersi il dubbio su una shell in corso basta `echo $0`: una shell **di login** mostra il nome preceduto da un **trattino** (`-zsh`), una non-login mostra il nome nudo (`zsh`). È una convenzione storica con cui il sistema segnala «questa è la shell iniziale del login».
+
+```bash
+echo $0        # -zsh   → shell di login (es. nuova finestra su macOS, oppure via ssh)
+echo $0        # zsh    → non di login (es. avviata a mano dentro un'altra shell)
+```
+
+Login e interattività sono **indipendenti** e si combinano. La particolarità di macOS è che **ogni nuova finestra o scheda di Terminal.app è insieme di login *e* interattiva**, quindi vengono letti tutti i file d'avvio e la distinzione, in locale, non si nota quasi mai. Si fa sentire **altrove**: collegandosi via SSH a un server, la shell è di login e legge `~/.zprofile` (o `~/.bash_profile`), **non** ciò che si è messo solo in `~/.zshrc`. Da qui la regola pratica per gestirla: le comodità interattive (prompt, alias, completamento) vanno in **`~/.zshrc`**; ciò che deve valere anche per una shell di login (una variabile d'ambiente che serve pure via SSH) va in **`~/.zprofile`** o `~/.zshenv`.
 
 ## I file di avvio di zsh
 
@@ -107,6 +124,13 @@ Tra i **plugin**, i tre che si incontrano ovunque:
 <summary>Perché una modifica al PATH digitata nel terminale «si dimentica», e come si rende permanente?</summary>
 
 Perché vale solo per la **shell corrente** e sparisce chiudendo la finestra. Per renderla permanente va scritta in un **file di avvio** che la shell legge a ogni sessione: su zsh, tipicamente `~/.zshrc`. Da quel momento la riga viene eseguita all'apertura di ogni nuova shell.
+
+</details>
+
+<details>
+<summary>Come capisco se la shell che sto usando è «di login», e quando lo è?</summary>
+
+Con `echo $0`: se il nome ha un **trattino** davanti (`-zsh`) è una shell di login, altrimenti no (`zsh`). Lo è quando è la **prima** shell di una sessione: una nuova finestra di Terminal.app su macOS, un collegamento `ssh` a un server, un login da console. Non lo è quando si avvia una shell dentro un'altra (digitando `zsh`) o si esegue uno script. Conta perché le shell di login leggono `~/.zprofile`, quelle interattive `~/.zshrc`; su macOS ogni finestra è entrambe, così la differenza si nota solo altrove (tipicamente via SSH).
 
 </details>
 
