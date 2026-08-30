@@ -72,6 +72,35 @@ source ~/.zshrc     # rilegge il file nella shell corrente
 > [!warning]
 > Un errore di sintassi in `~/.zshrc` può rompere l'avvio di **ogni nuova** shell (per esempio un PATH riscritto male che «perde» le cartelle di sistema). Dopo una modifica non banale conviene testarla con `source ~/.zshrc` nella finestra corrente prima di fidarsi: se qualcosa va storto, quella finestra è ancora viva per rimediare.
 
+## Oh My Zsh: personalizzare senza fatica
+
+Scrivere a mano alias e prompt in `~/.zshrc` funziona, ma quasi nessuno parte da zero: attorno a zsh è cresciuto un ecosistema di **framework di configurazione** che portano temi, scorciatoie e comodità già pronte. Il più diffuso è **Oh My Zsh**, un progetto open source che si installa con un comando e poi si governa da poche righe del `~/.zshrc`:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+L'installazione aggiunge al `~/.zshrc` un blocco in cui due impostazioni fanno quasi tutto: `ZSH_THEME` sceglie il **tema del prompt** (colori, icone, il ramo Git corrente) e `plugins=(...)` attiva i **plugin**, pacchetti di alias e funzioni pronti all'uso.
+
+```bash
+# ~/.zshrc — blocco di Oh My Zsh
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"                    # tema del prompt (quello di default)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+source "$ZSH/oh-my-zsh.sh"
+```
+
+Tra i **temi** più popolari: `robbyrussell` (il default, minimale), `agnoster` (lo stile «powerline» a frecce, che richiede un *Nerd Font* per mostrare le icone) e soprattutto **Powerlevel10k** (`powerlevel10k`, un tema a parte, velocissimo, con una procedura guidata `p10k configure` che compone il prompt rispondendo a qualche domanda).
+
+Tra i **plugin**, i tre che si incontrano ovunque:
+
+- **`git`** (già incluso) aggiunge decine di alias brevi: `gst` per `git status`, `gco` per `git checkout`, `gp` per `git push`.
+- **`zsh-autosuggestions`** propone in grigio, mentre si digita, il comando più probabile pescato dalla cronologia; si accetta con la freccia destra. Va installato a parte, clonandolo tra i plugin *custom*.
+- **`zsh-syntax-highlighting`** colora il comando durante la digitazione: verde se esiste, rosso se è scritto male, così gli errori si vedono prima ancora di premere Invio. Anch'esso da clonare a parte.
+
+> [!tip]
+> Comodità e leggerezza sono in tensione: più temi e plugin si caricano, più lento diventa l'avvio di **ogni** shell. Se il prompt inizia a «pesare», conviene un tema veloce come Powerlevel10k, meno plugin, oppure un prompt minimale e cross-shell come **Starship**. Oh My Zsh è ottimo per iniziare, ma non è l'unica strada. Riferimento: <a href="https://ohmyz.sh/" target="_blank" rel="noopener">ohmyz.sh</a>.
+
 ## Ripasso lampo
 
 <details>
@@ -99,5 +128,12 @@ Perché Terminal.app apre shell **di login**, che in bash leggono `~/.bash_profi
 <summary>Ho modificato <code>~/.zshrc</code>: come applico le modifiche senza riaprire il terminale?</summary>
 
 Rileggendo il file nella shell corrente con `source ~/.zshrc` (o la forma breve `. ~/.zshrc`). Le finestre già aperte non recepiscono da sole le modifiche, perché la configurazione si legge solo all'avvio.
+
+</details>
+
+<details>
+<summary>Cos'è <code>Oh My Zsh</code> e quali sono le due manopole principali?</summary>
+
+È il framework di configurazione più diffuso per zsh: porta temi e plugin già pronti e si governa dal `~/.zshrc`. Le due impostazioni che fanno quasi tutto sono `ZSH_THEME` (il tema del prompt, es. `robbyrussell` o `powerlevel10k`) e `plugins=(...)` (i plugin attivi, es. `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting`). Attenzione al rovescio: più roba si carica, più l'avvio della shell rallenta.
 
 </details>

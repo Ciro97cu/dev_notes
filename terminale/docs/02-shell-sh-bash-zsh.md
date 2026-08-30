@@ -44,7 +44,7 @@ Per l'uso interattivo di tutti i giorni bash e zsh sono intercambiabili; convien
 - **Il completamento con Tab**: zsh lo fa in modo più ricco (completa opzioni, percorsi, nomi di branch Git) e con un menu navigabile; bash è più essenziale.
 - **Il glob**: zsh supporta di serie il glob **ricorsivo** `**/` (per esempio `ls **/*.js` trova i `.js` in tutte le sottocartelle), che in bash va abilitato a parte.
 - **Gli array partono da indici diversi**: in zsh il primo elemento di un array è `[1]`, in bash è `[0]`. È una trappola classica quando si adatta uno script da una shell all'altra.
-- **La personalizzazione**: attorno a zsh esiste un ecosistema di temi e plugin (il più noto è *Oh My Zsh*) che rende il prompt informativo con poco sforzo.
+- **La personalizzazione**: attorno a zsh esiste un ecosistema di temi e plugin (il più noto è *Oh My Zsh*, [approfondito nel capitolo 6](06-file-configurazione-shell.md)) che rende il prompt informativo con poco sforzo.
 
 Le prime due, quelle che pesano davvero **negli script**, si vedono meglio con un esempio: a parità di codice danno un risultato diverso. Gli **array**, prima di tutto:
 
