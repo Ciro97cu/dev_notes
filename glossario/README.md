@@ -31,6 +31,9 @@ NPM · NPX · Yarn · NVM · Tarball (.tgz)
 **[Moduli e bundling](docs/moduli-e-bundling.md)**
 CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitting
 
+**[Licenze software (MIT, GPL…)](docs/licenze.md)**
+Permissive vs copyleft · MIT · ISC · BSD · Apache 2.0 · GPLv2/GPLv3 · LGPL · AGPL · nessuna licenza (tutti i diritti riservati) · public domain (CC0) · doppia licenza · campo `license` e SPDX
+
 **[React](docs/react.md)**
 Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
 

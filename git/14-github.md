@@ -6,7 +6,7 @@ GitHub è una piattaforma online che ospita repository Git remoti e vi costruisc
 Un repository su GitHub può essere pubblico o privato. Un repository **pubblico** è visibile a chiunque: tutti possono vederne il codice, scaricarlo e proporre modifiche. Un repository **privato**, al contrario, è accessibile solo al proprietario e ai collaboratori esplicitamente autorizzati.
 
 ## README
-Il README è un file di testo, di solito chiamato `README.md`, collocato nella cartella principale del progetto. Serve a descriverlo (lo scopo, come si installa e si usa, qualche esempio, le indicazioni per contribuire e la licenza) ed è la prima cosa che chi arriva sul repo si trova davanti, perché GitHub lo mostra in automatico appena si apre il repository.
+Il README è un file di testo, di solito chiamato `README.md`, collocato nella cartella principale del progetto. Serve a descriverlo (lo scopo, come si installa e si usa, qualche esempio, le indicazioni per contribuire e la <a href="../glossario/#/docs/licenze" target="_blank" rel="noopener">licenza</a>) ed è la prima cosa che chi arriva sul repo si trova davanti, perché GitHub lo mostra in automatico appena si apre il repository.
 
 ## Comandi
 | Comando | Cosa fa |

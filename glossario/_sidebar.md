@@ -15,6 +15,9 @@
   - [Package manager e pacchetti](docs/package-manager.md)
   - [Moduli e bundling](docs/moduli-e-bundling.md)
 
+- **Open source e licenze**
+  - [Licenze software (MIT, GPL…)](docs/licenze.md)
+
 - **React**
   - [Termini React](docs/react.md)
 

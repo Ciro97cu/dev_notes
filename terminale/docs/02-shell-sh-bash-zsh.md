@@ -17,7 +17,7 @@ Le shell moderne aggiungono comodità *sopra* quella base. **bash** (*Bourne Aga
 
 ## Perché macOS usa zsh (e bash è «vecchia»)
 
-Fino a macOS Mojave (2018) la shell predefinita era **bash**; da **Catalina (10.15, 2019)** è diventata **zsh**. Il motivo è più di licenze che tecnico. La versione di bash inclusa in macOS è ferma alla **3.2.57**, del 2007: è l'ultima rilasciata con licenza **GPLv2**. Dalla 4.0 in poi bash è passata alla **GPLv3**, che Apple ha scelto di non distribuire con il sistema; così bash è rimasta congelata a una versione di quindici anni fa, mentre **zsh**, con una licenza più permissiva (stile MIT), è diventata la nuova predefinita. In pratica: la bash di sistema su macOS è antica, e per usarne una moderna la si installa a parte (con Homebrew, vedi [capitolo 7](07-node-npm-frontend.md)).
+Fino a macOS Mojave (2018) la shell predefinita era **bash**; da **Catalina (10.15, 2019)** è diventata **zsh**. Il motivo è più di <a href="../glossario/#/docs/licenze" target="_blank" rel="noopener">licenze</a> che tecnico. La versione di bash inclusa in macOS è ferma alla **3.2.57**, del 2007: è l'ultima rilasciata con licenza **GPLv2** (un tipo di licenza *copyleft*, che obbliga a mantenere aperto il codice derivato). Dalla 4.0 in poi bash è passata alla **GPLv3**, una versione più stringente che Apple ha scelto di non distribuire con il sistema; così bash è rimasta congelata a una versione di quindici anni fa, mentre **zsh**, con una licenza più permissiva (stile MIT, che invece non impone quell'obbligo), è diventata la nuova predefinita. In pratica: la bash di sistema su macOS è antica, e per usarne una moderna la si installa a parte (con Homebrew, vedi [capitolo 7](07-node-npm-frontend.md)).
 
 ## Quale shell sto usando?
 
