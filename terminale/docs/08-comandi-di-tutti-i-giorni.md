@@ -11,6 +11,12 @@ La forza del terminale sta nella capacità di **combinare** programmi semplici. 
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>ls | grep .js</code>: lo <strong>stdout</strong> di <code>ls</code> (l'elenco dei file) diventa lo <strong>stdin</strong> di <code>grep</code>, che tiene solo le righe con <code>.js</code>. Gli errori viaggiano su un canale a parte (<strong>stderr</strong>) e non entrano nella pipe.</figcaption>
 </figure>
 
+Questa è la **filosofia Unix** vista nel [capitolo 1](01-cos-e-il-terminale.md) messa in pratica: invece di un unico programma che prova a fare tutto, tanti comandi che fanno bene **una cosa sola** e si combinano. Il collante è il **testo**: siccome quasi ogni comando legge e scrive righe di testo semplice, l'uscita di uno è sempre buon materiale per l'ingresso di un altro, e li si incatena a piacere. Da pochi mattoni (`ls`, `grep`, `sort`, `wc`, `head`…) e dall'operatore `|` nascono così combinazioni che risolvono un problema specifico senza scrivere un programma dedicato:
+
+```bash
+ls | grep '\.ts$' | wc -l   # quanti file .ts nella cartella: elenca · filtra · conta
+```
+
 ## Salvare l'output su file: la redirezione
 
 Se la pipe manda l'output a un altro *comando*, la **redirezione** lo manda a un *file* (o lo legge da un file). L'operatore `>` scrive lo stdout in un file, ma **sovrascrivendolo** da zero; `>>` invece **aggiunge** in coda senza cancellare. Con `<` si dà a un comando un file come stdin, e con `2>` si dirotta lo stderr (per esempio per salvare gli errori a parte).

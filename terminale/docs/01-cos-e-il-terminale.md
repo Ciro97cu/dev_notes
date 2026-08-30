@@ -2,6 +2,14 @@
 
 Il terminale è lo strumento con cui si comanda il computer **scrivendo** invece che cliccando: si digita un comando, si preme Invio e il sistema lo esegue, rispondendo con del testo. È il modo più diretto e potente di dare istruzioni alla macchina, ed è il terreno naturale di strumenti come Git, npm e i server di sviluppo, che nascono proprio lì. Prima di usarli conviene sapersi muovere in questo ambiente.
 
+## Il mondo Unix
+
+Quasi tutto ciò che riguarda il terminale (i comandi, la shell, il modo in cui i file sono organizzati) nasce da **Unix**, un sistema operativo creato ai **Bell Labs** all'inizio degli anni '70 da Ken Thompson e Dennis Ritchie. La sua influenza è stata enorme: dai suoi principi e dal suo codice discendono, per via diretta o per imitazione, i sistemi che oggi si usano per sviluppare. **macOS** è letteralmente un Unix certificato (il suo cuore, Darwin, deriva da BSD, una delle discendenze dirette di Unix); **Linux** non ne condivide il codice ma ne ricalca fedelmente il comportamento. Per questo si dice che sono sistemi **«Unix-like»**: parlano la stessa lingua di comandi, shell e filesystem. È anche il motivo per cui gli stessi comandi di base funzionano quasi identici su macOS e su Linux, mentre **Windows**, che Unix-like non è, ha storicamente shell e percorsi propri.
+
+A tenere insieme questa famiglia c'è uno standard, **POSIX** (*Portable Operating System Interface*): codifica l'interfaccia comune (comandi, shell, API di sistema) così che un sistema «Unix-like» si comporti in modo prevedibile e il codice resti portabile dall'uno all'altro.
+
+Sotto la superficie c'è anche una **filosofia** precisa, che tornerà utile capitolo dopo capitolo: costruire **tanti strumenti piccoli, ognuno bravo a fare una cosa sola**, e comporli fra loro passandosi il testo come materiale comune. È l'idea che si vedrà all'opera con le **pipe** nel [capitolo 8](08-comandi-di-tutti-i-giorni.md), e spiega perché nel terminale si ottiene molto **combinando** comandi semplici invece di affidarsi a un unico programma che fa tutto.
+
 Dietro la parola «terminale», usata di solito come sinonimo di tutto, si nascondono in realtà **tre cose diverse** che vale la pena distinguere subito, perché confonderle è la prima fonte di equivoci.
 
 ## Emulatore di terminale, shell e prompt
@@ -73,5 +81,12 @@ L'opzione **breve** è una singola lettera preceduta da un trattino (`-a`) e pi�
 <summary>Cosa indica il simbolo finale del prompt (<code>%</code> contro <code>#</code>)?</summary>
 
 Segnala *chi* sei: `%` è il prompt di zsh per un utente normale (`$` per bash/sh), mentre `#` indica che stai operando come **root**, l'amministratore. Vedere `#` è un invito alla prudenza: come root si può modificare o cancellare qualsiasi cosa nel sistema.
+
+</details>
+
+<details>
+<summary>Cosa vuol dire che macOS e Linux sono sistemi <code>Unix-like</code>?</summary>
+
+Che discendono da **Unix** (per codice, come macOS attraverso BSD, o per imitazione, come Linux) e ne condividono comandi, shell e organizzazione dei file. È il motivo per cui gli stessi comandi di base funzionano quasi identici sui due sistemi; lo standard **POSIX** codifica quell'interfaccia comune. Windows, che Unix-like non è, ha storicamente shell e percorsi propri.
 
 </details>

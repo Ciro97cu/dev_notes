@@ -8,7 +8,7 @@ Appunti di studio sul **terminale** e la **shell**: come muoversi nella riga di 
 
 | # | Capitolo | Contenuto |
 |---|----------|-----------|
-| 01 | [Cos'è il terminale](docs/01-cos-e-il-terminale.md) | Terminal emulator, shell e prompt; anatomia di una riga di comando |
+| 01 | [Cos'è il terminale](docs/01-cos-e-il-terminale.md) | Il mondo Unix (Unix-like, POSIX); terminal emulator, shell e prompt; anatomia di una riga di comando |
 | 02 | [Le shell: sh, bash, zsh](docs/02-shell-sh-bash-zsh.md) | Cos'è una shell, la famiglia POSIX, perché macOS usa zsh, differenze pratiche |
 | 03 | [Navigare nel filesystem](docs/03-navigare-filesystem.md) | L'albero, `/` e `~`, path assoluti/relativi, `pwd` · `ls` · `cd` |
 | 04 | [File e cartelle](docs/04-file-e-cartelle.md) | `touch` · `mkdir` · `cp` · `mv` · `rm`, wildcard, `cat` · `open` |
