@@ -46,6 +46,25 @@ Per l'uso interattivo di tutti i giorni bash e zsh sono intercambiabili; convien
 - **Gli array partono da indici diversi**: in zsh il primo elemento di un array è `[1]`, in bash è `[0]`. È una trappola classica quando si adatta uno script da una shell all'altra.
 - **La personalizzazione**: attorno a zsh esiste un ecosistema di temi e plugin (il più noto è *Oh My Zsh*) che rende il prompt informativo con poco sforzo.
 
+Le prime due, quelle che pesano davvero **negli script**, si vedono meglio con un esempio: a parità di codice danno un risultato diverso. Gli **array**, prima di tutto:
+
+```bash
+frutta=(mela banana pera)
+echo ${frutta[1]}
+#  zsh  → mela      (il primo elemento ha indice [1])
+#  bash → banana    (in bash il primo è [0], quindi [1] è già il secondo)
+```
+
+E il **glob ricorsivo** `**/`, che scende in tutte le sottocartelle:
+
+```bash
+ls **/*.js          # tutti i file .js, comprese le sottocartelle
+#  zsh  → funziona subito
+#  bash → prima va abilitato:  shopt -s globstar
+```
+
+Sono proprio i casi dietro l'avvertenza qui sotto: lo stesso script può comportarsi diversamente, o rompersi, passando da una shell all'altra.
+
 > [!tip]
 > Non serve imparare tutte e tre. Per l'uso interattivo va benissimo la predefinita del sistema (zsh su macOS). Per gli **script** invece conta la portabilità: se un file inizia con `#!/bin/sh` gira ovunque con la sintassi POSIX di base, mentre `#!/bin/bash` richiede bash. La prima riga `#!/...` si chiama *shebang* e indica quale interprete usare per quel file.
 
