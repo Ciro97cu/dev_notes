@@ -23,10 +23,17 @@ function dnSearchReadIndex() {
   var chosen = null;
   // 1) chiave namespacizzata col vault corrente (deterministico)
   if (vault) candidates.forEach(function (c) { if (c.k.indexOf('dev-notes-' + vault) >= 0) chosen = c.o; });
-  // 2) altrimenti l'indice che contiene la pagina attuale
-  if (!chosen) candidates.forEach(function (c) { if (c.o[curPath]) chosen = c.o; });
-  // 3) fallback
-  if (!chosen) chosen = candidates[candidates.length - 1].o;
+  // Se il vault è noto (window.__VAULT) ma il suo indice non è (ancora) in
+  // localStorage, NON si ripiega sull'indice di un altro vault: meglio "indice non
+  // pronto" che risultati presi da un vault diverso. È il bug che si vedeva su
+  // mobile, dove la quota più stretta di localStorage può non aver salvato l'indice
+  // di questo vault mentre restano quelli dei vault visitati prima → il fallback
+  // pescava da lì. Le euristiche 2-3 valgono solo quando __VAULT non è impostato.
+  if (!chosen && !vault) {
+    candidates.forEach(function (c) { if (c.o[curPath]) chosen = c.o; });   // 2) indice con la pagina attuale
+    if (!chosen) chosen = candidates[candidates.length - 1].o;              // 3) fallback all'ultimo
+  }
+  if (!chosen) return [];   // vault noto ma indice non ancora salvato → nessun risultato (mostra "indice non pronto")
   var out = [];
   Object.keys(chosen).forEach(function (path) {
     var secs = chosen[path]; if (!secs || typeof secs !== 'object') return;
@@ -186,5 +193,25 @@ function dnSearchBuild() {
     if (t && t.matches && t.matches('.search input')) { t.blur(); dnSearchOpen(); }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dnSearchClose(); });
+
+  // Pulizia quota localStorage (fix mobile): la ricerca usa solo l'indice del vault
+  // CORRENTE (namespace dev-notes-<vault>), ma docsify lascia in localStorage anche
+  // gli indici degli altri vault visitati prima. Su Safari mobile la quota è stretta
+  // (~5 MB): riempiendola, il salvataggio dell'indice di QUESTO vault può fallire →
+  // la ricerca ripiegava sull'indice di un altro vault (risultati sbagliati). Ogni
+  // vault ricostruisce il proprio indice al load, quindi rimuovere gli indici estranei
+  // (e i legacy senza namespace) è sicuro e libera spazio per il vault corrente.
+  // Deferito con setTimeout(0): gira dopo che app.js ha impostato window.__VAULT e
+  // prima che docsify-search finisca di costruire l'indice (build asincrona via fetch).
+  setTimeout(function () {
+    var vault = window.__VAULT;
+    if (!vault) return;   // solo l'hub non lo imposta: lì non si tocca nulla
+    var keep = 'dev-notes-' + vault, drop = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf('docsify.search.') === 0 && k.indexOf(keep) < 0) drop.push(k);
+    }
+    drop.forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+  }, 0);
 })();
 
