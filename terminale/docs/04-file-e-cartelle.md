@@ -28,6 +28,33 @@ Per creare un file vuoto si usa `touch`; per creare una cartella `mkdir`. L'opzi
 | `mv <sorg> <dest>` | sposta un file in un'altra cartella |
 | `mv vecchio.txt nuovo.txt` | rinomina (è uno spostamento «sullo stesso posto») |
 
+Il modo più semplice per **fissare la differenza** è guardare cosa resta sul disco dopo il comando: `cp` lascia **due** file (l'originale e la copia), `mv` ne lascia sempre **uno** (il nome di partenza sparisce). Un `ls` prima e dopo lo rende evidente:
+
+```bash
+# partenza: un solo file nella cartella
+ls                       # report.txt
+
+# cp → l'originale RESTA, in più compare la copia: due file
+cp report.txt report.bak
+ls                       # report.bak  report.txt
+
+# mv verso una cartella → SPOSTA: sparisce da qui, ricompare là
+mv report.txt archivio/
+ls                       # report.bak            (report.txt non è più qui)
+ls archivio/             # report.txt            (è finito in archivio/)
+
+# mv nella stessa cartella → RINOMINA: il vecchio nome sparisce
+mv report.bak note.txt
+ls                       # note.txt              (report.bak non c'è più)
+```
+
+Una differenza pratica riguarda le **cartelle**: `cp` pretende `-r` per copiarne una con tutto il contenuto (senza, si rifiuta con un errore), mentre `mv` sposta una cartella così com'è, senza bisogno di `-r`.
+
+```bash
+cp -r progetto/ progetto.bak/   # copia la cartella e tutto ciò che contiene
+mv progetto/ ~/archivio/        # la sposta (mv non richiede -r)
+```
+
 ## Cancellare — con prudenza
 
 Il comando per cancellare è `rm`. Qui serve attenzione, perché nel terminale **non c'è il Cestino**: ciò che si rimuove con `rm` è perso, senza una richiesta di conferma e senza possibilità di recupero facile. Per cancellare una cartella con il suo contenuto serve `-r`; l'aggiunta di `-f` (*force*) elimina anche l'ultima rete di sicurezza, i messaggi di conferma.
@@ -78,6 +105,13 @@ mkdir -p src/{css,js}    # crea src/css e src/js in un colpo solo
 <summary>Perché non esiste un comando <code>rename</code>, e come si rinomina un file?</summary>
 
 Perché per Unix rinominare è solo un caso particolare di **spostamento**: si usa `mv vecchio.txt nuovo.txt`. Se la destinazione è un nome nella stessa cartella, `mv` rinomina; se è un'altra cartella, sposta. Lo stesso comando copre entrambi i casi.
+
+</details>
+
+<details>
+<summary>Dopo <code>cp a.txt b.txt</code> e dopo <code>mv a.txt b.txt</code>, quanti file restano?</summary>
+
+Dopo `cp` restano **due** file: `a.txt` (l'originale, intatto) e `b.txt` (la copia). Dopo `mv` ne resta **uno solo**, `b.txt`, perché `a.txt` è stato spostato/rinominato e il nome di partenza sparisce. È il gancio per ricordarli: `cp` **duplica** (due file), `mv` **no** (un file). Per copiare una *cartella* `cp` richiede in più `-r`; `mv` no.
 
 </details>
 
