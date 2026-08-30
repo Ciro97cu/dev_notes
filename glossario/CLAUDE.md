@@ -2,7 +2,7 @@
 
 Vault **catch-all**: raccoglie termini di sviluppo trasversali che non appartengono a un vault tematico (git/javascript/typescript/angular). Regole comuni: vedi [../CLAUDE.md](../CLAUDE.md). Qui solo le specifiche.
 
-Struttura: contenuti in `docs/` raggruppati per **area tematica** (`web-browser.md`, `formati-e-fondamenti.md`, `tooling-javascript.md`, `react.md`, `concetti-programmazione.md`), più `_sidebar.md`, `_coverpage.md`, `README.md` (indice).
+Struttura: contenuti in `docs/` raggruppati per **area tematica**, un file per tema coeso (Web e browser, Dati e fondamenti, Ecosistema JavaScript, React, Concetti trasversali, Approcci classici), più `_sidebar.md`, `_coverpage.md`, `README.md` (indice). I file più corposi sono stati **scorporati** per tema, così ogni file resta focalizzato: i concetti in `concetti-programmazione.md` (base + purezza), `complessita-algoritmi.md`, `memoria.md`, `principi-design.md`, `design-pattern.md`; l'ecosistema JS in `transpiler.md`, `package-manager.md`, `moduli-e-bundling.md`; gli approcci classici in `micro-frontend-singlespa.md`, `ngrx-classico.md`. **Regola:** un file = un tema coeso; non accorpare temi eterogenei nello stesso file (evitando però file di una sola voce).
 
 ## Specifiche di contenuto
 - Ogni voce è un titolo `### <Termine>` spiegato nella **voce "professore"** del [root](../CLAUDE.md): prosa **discorsiva**, non una definizione telegrafica da dizionario. Eccezione del vault: resta **contenuta** — è un glossario, non un capitolo — quindi spiegazione breve ma fluida, e quando il termine è già approfondito in un altro vault si dà il minimo e si rimanda lì. I termini/API restano in inglese (backtick per i costrutti di codice).

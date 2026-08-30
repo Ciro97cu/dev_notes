@@ -413,7 +413,7 @@ effect(() => {
 Vale identico per `computed` e per i signal usati nei template.
 
 > [!info|label:Memory leak in Angular]
-> È, in concreto, memoria che il programma continua a occupare **anche se non gli serve più**, perché un riferimento la tiene ancora agganciata e la <a href="../glossario/#/docs/concetti-programmazione?id=garbage-collection" target="_blank" rel="noopener">garbage collection</a> non può recuperarla. Il caso da manuale in Angular è una **subscription RxJS mai chiusa**:
+> È, in concreto, memoria che il programma continua a occupare **anche se non gli serve più**, perché un riferimento la tiene ancora agganciata e la <a href="../glossario/#/docs/memoria?id=garbage-collection" target="_blank" rel="noopener">garbage collection</a> non può recuperarla. Il caso da manuale in Angular è una **subscription RxJS mai chiusa**:
 > ```ts
 > constructor() {
 >   // ogni secondo aggiorna qualcosa; nessuno chiude la subscription

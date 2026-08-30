@@ -1,6 +1,6 @@
 # 07 · Node, npm e il frontend
 
-Per chi lavora nel frontend, il terminale è soprattutto **questo**: **Node** e **npm**. La stragrande maggioranza dei comandi che si digitano ogni giorno (installare le dipendenze, avviare il server di sviluppo, fare la build) passa da qui. Questo capitolo raccoglie quel flusso di lavoro: cosa succede quando si installa un pacchetto, come si lanciano gli script del progetto, e come si tengono in ordine le versioni di Node. Per la definizione dei singoli termini (npm, npx, nvm, yarn…) il riferimento resta il [glossario](../glossario/#/docs/tooling-javascript); qui interessa il loro **uso da terminale**.
+Per chi lavora nel frontend, il terminale è soprattutto **questo**: **Node** e **npm**. La stragrande maggioranza dei comandi che si digitano ogni giorno (installare le dipendenze, avviare il server di sviluppo, fare la build) passa da qui. Questo capitolo raccoglie quel flusso di lavoro: cosa succede quando si installa un pacchetto, come si lanciano gli script del progetto, e come si tengono in ordine le versioni di Node. Per la definizione dei singoli termini (npm, npx, nvm, yarn…) il riferimento resta il [glossario](../glossario/#/docs/package-manager); qui interessa il loro **uso da terminale**.
 
 Un chiarimento di base: **Node** è l'ambiente che esegue JavaScript fuori dal browser (è ciò che fa girare gli strumenti di sviluppo), e **npm** (*Node Package Manager*) è il suo gestore di pacchetti, quello che scarica le librerie e lancia gli script. Installando Node si ottiene automaticamente anche npm.
 

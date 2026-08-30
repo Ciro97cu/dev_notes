@@ -22,14 +22,35 @@ CSV · XML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOF
 **[Date, calendari e tempo](docs/date-calendari-tempo.md)**
 Calendario gregoriano e non (solare · lunare · lunisolare · ere imperiali) · anni bisestili (regola 4/100/400) · anno tropico · perché serve alle librerie di date
 
-**[Tooling (ecosistema JavaScript)](docs/tooling-javascript.md)**
-Babel · SWC · NPM · NPX · Yarn · NVM · Tarball (.tgz) · CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading
+**[Transpiler (Babel, SWC)](docs/transpiler.md)**
+Babel · SWC · transpilazione vs compilazione · plugin e preset
+
+**[Package manager e pacchetti](docs/package-manager.md)**
+NPM · NPX · Yarn · NVM · Tarball (.tgz)
+
+**[Moduli e bundling](docs/moduli-e-bundling.md)**
+CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitting
 
 **[React](docs/react.md)**
 Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
 
-**[Concetti di programmazione](docs/concetti-programmazione.md)**
-Costrutto · Interoperabilità · API · Funzione pura · Side effect · Immutabilità · Big O notation · Ricorsione · Memoria (stack/heap) · Referenza e puntatore · Garbage collection · SOLID · DRY · KISS · YAGNI · Separation of Concerns · Composition over Inheritance · Design pattern (GoF)
+**[Programmazione](docs/concetti-programmazione.md)**
+Costrutto · Interoperabilità · API · Funzione pura · Side effect · Immutabilità
 
-**[Approcci classici e alternativi](docs/approcci-classici.md)**
-Micro frontend con single-spa (Import Map · SystemJS) · NgRx classico (Store, Effects, `dispatch: false`, shallow comparison)
+**[Complessità e algoritmi](docs/complessita-algoritmi.md)**
+Big O notation (O, Ω, Θ) · Ricorsione (caso base e caso ricorsivo)
+
+**[Memoria](docs/memoria.md)**
+Stack e heap · Referenza e puntatore (aliasing) · Garbage collection (raggiungibilità)
+
+**[Principi di design](docs/principi-design.md)**
+SOLID · DRY · KISS · YAGNI · Separation of Concerns · Composition over Inheritance
+
+**[Design pattern](docs/design-pattern.md)**
+Gang of Four (GoF) · Singleton · Factory Method · Builder · Adapter · Decorator · Facade · Observer · Strategy · e gli altri pattern
+
+**[Micro frontend (single-spa)](docs/micro-frontend-singlespa.md)**
+single-spa · Import Map · SystemJS
+
+**[NgRx classico (Store + Effects)](docs/ngrx-classico.md)**
+Store · Actions · Reducers · Selectors · Effects · `dispatch: false` · shallow comparison

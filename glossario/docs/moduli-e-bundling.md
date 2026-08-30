@@ -1,119 +1,6 @@
-# Tooling (ecosistema JavaScript)
+# Moduli e bundling
 
-Strumenti da riga di comando e di build che accompagnano lo sviluppo in JavaScript/Node.js.
-
-## Babel
-
-Babel è un **transpiler** JavaScript: converte codice scritto con sintassi moderne (ES2015+) in una versione precedente (es. ES5) compatibile con i browser più datati. Permette quindi di usare le funzionalità recenti del linguaggio senza rinunciare alla compatibilità.
-
-```js
-// input: sintassi moderna (arrow function + const)
-const somma = (a, b) => a + b;
-
-// output Babel (ES5): funzione classica + var, equivalente
-var somma = function (a, b) { return a + b; };
-```
-
-Concetti chiave:
-- **Transpilazione** — traduce da un linguaggio di alto livello a un altro (qui: da JS moderno a JS più vecchio ma equivalente). Diverso dalla **compilazione**, che traduce verso il linguaggio macchina.
-- **Plugin e preset** — un *plugin* trasforma una singola funzionalità (es. le arrow function); un *preset* è un insieme di plugin (es. `preset-env` per lo standard più recente).
-- **Configurabilità** — si sceglie con precisione cosa trasformare, ottimizzando l'output per il progetto.
-
-## SWC
-
-SWC (*Speedy Web Compiler*) è un transpiler/compilatore per JavaScript e TypeScript, nato come alternativa **più veloce** a Babel. La differenza chiave: è scritto in **Rust** (non in JavaScript), il che gli permette di sfruttare più core della CPU ed essere molto più performante.
-
-Funzioni: transpilazione da JS moderno a ES5, rimozione dei tipi da TypeScript, minificazione e bundling.
-
-**SWC vs Babel:**
-- **SWC** quando la priorità è la **velocità** di build (progetti grandi). Adottato come compilatore predefinito da Next.js, Parcel, Deno.
-- **Babel** quando serve il suo **ecosistema** di plugin, più maturo e ampio, per trasformazioni molto specifiche o sperimentali.
-
-## NPM
-
-NPM (*Node Package Manager*) è lo strumento per gestire i **pacchetti** in Node.js. Installa pacchetti da un registro online (npm registry), li aggiunge come dipendenze del progetto e li mantiene aggiornati. Viene installato insieme a Node.js.
-
-```bash
-npm install lodash            # aggiunge lodash a "dependencies" e lo scarica in node_modules
-npm install --save-dev vitest # dipendenza di solo sviluppo → "devDependencies"
-npm run build                 # esegue lo script "build" dichiarato in package.json
-```
-
-Dipendenze e script vivono in `package.json`; le versioni **esatte** installate sono bloccate in `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze.
-
-## NPX
-
-NPX è uno strumento fornito con NPM (dalla versione 5.2.0) per **eseguire** pacchetti. La differenza rispetto a NPM: può eseguire un pacchetto **senza installarlo prima**, utile per strumenti usati una tantum.
-
-```bash
-npx create-react-app my-app   # scarica ed esegue create-react-app senza installarlo globalmente
-```
-
-Può anche eseguire binari di pacchetti locali del progetto (quelli in `node_modules/.bin`).
-
-## Yarn
-
-Yarn è un gestore di pacchetti JavaScript, alternativa a NPM, che consuma anch'esso il registro npm. Nato in Facebook (con Google, Exponent, Tilde) per risolvere problemi storici di NPM su velocità e determinismo:
-- **Cache locale** dei pacchetti già scaricati, per installazioni più rapide.
-- **Lockfile** (`yarn.lock`): tutti gli sviluppatori installano le **stesse** versioni.
-- **Compatibilità** con il registro npm.
-
-> [!note]
-> Le versioni moderne di NPM hanno colmato gran parte del divario (cache, `package-lock.json`), quindi oggi la scelta è spesso questione di preferenza o di ecosistema del progetto.
-
-## NVM
-
-**nvm** (*Node Version Manager*) è uno strumento per installare e gestire **più versioni di Node.js** sulla stessa macchina, passando dall'una all'altra secondo il progetto. Il problema che risolve è concreto: Node evolve con major version che portano breaking change (Node 18, 20, 22 hanno API diverse) e un progetto avviato anni fa può essere incompatibile con le versioni più recenti, mentre i progetti nuovi vogliono le ultime funzionalità. Con nvm si installa ciascuna versione in modo isolato e si sceglie quale è attiva, senza che le versioni si calpestino tra loro.
-
-A differenza di un programma normale, nvm **non è un eseguibile**: è una **funzione di shell** caricata nel profilo (`.zshrc` o `.bashrc`) che, quando invocata, modifica `$PATH` nella shell corrente per puntare alla cartella `~/.nvm/versions/node/<versione>/bin` della versione scelta. Questo ha una conseguenza pratica: `nvm use` vale **solo per la shell in cui lo si invoca**; aprire un nuovo terminale riporta alla versione di *default*. Inoltre, siccome Node è installato nella home dell'utente e non in una cartella di sistema, `npm install -g` funziona **senza `sudo`**, ed è una delle ragioni per cui nvm è raccomandato come setup di base.
-
-| Comando | Cosa fa |
-|---------|---------|
-| `nvm install 22` | scarica e installa Node 22 |
-| `nvm install --lts` | installa l'ultimo rilascio LTS disponibile |
-| `nvm use 22` | attiva Node 22 nella shell corrente |
-| `nvm alias default 22` | imposta Node 22 come versione di default per ogni nuova shell |
-| `nvm ls` | elenca le versioni installate localmente |
-| `nvm ls-remote` | elenca tutte le versioni scaricabili |
-| `nvm current` | mostra la versione di Node attiva |
-
-Per fissare la versione di Node di un singolo progetto si aggiunge un file **`.nvmrc`** alla radice del repo, contenente solo il numero di versione:
-
-```
-22
-```
-
-A quel punto `nvm use` senza argomenti, eseguito nella cartella del progetto, legge `.nvmrc` e attiva quella versione automaticamente. Aggiungendo al profilo di shell un hook apposito (documentato nel repo di nvm), l'attivazione avviene da sola ogni volta che si entra in una cartella che contiene un `.nvmrc`, senza doverlo invocare a mano.
-
-> [!warning]
-> I pacchetti installati globalmente con `npm install -g` sono **legati alla versione di Node attiva al momento dell'installazione**. Dopo un `nvm use 20`, il `$PATH` punta al `bin` di Node 20, dove quei pacchetti non sono stati installati: sembrano sparire. Non sono persi (vivono ancora sotto `~/.nvm/versions/node/<versione>/bin`), ma per usarli sulla nuova versione vanno reinstallati lì. Il motivo (PATH e npm prefix globale) è spiegato nel vault Terminale, [cap. 07 · Node, npm e il frontend](../terminale/#/docs/07-node-npm-frontend?id=le-versioni-di-node-nvm).
-
-**Alternative:** **fnm** (*Fast Node Manager*, scritto in Rust) offre le stesse funzionalità di nvm con tempi di avvio sensibilmente più rapidi e supporto nativo a Windows, macOS e Linux. È considerato oggi una valida alternativa moderna; la scelta tra i due è spesso una questione di ecosistema e preferenza personale.
-
-## Tarball (`.tgz`)
-
-Un **tarball** è un file `.tar.gz` (spesso abbreviato **`.tgz`**): una **cartella impacchettata e compressa in un unico file**. Nasce da due strumenti della tradizione **Unix** (la famiglia di sistemi operativi da cui discendono Linux e macOS, dove nascono molti degli strumenti da riga di comando che si usano ancora oggi) messi in fila: **`tar`**, che unisce tanti file in un solo archivio (senza comprimere), e **`gzip`**, che poi lo comprime. È l'equivalente Unix di uno `.zip`, e si incontra ovunque, non solo con npm.
-
-Nell'ecosistema JavaScript conta perché **un pacchetto npm *è* un tarball**: il registry non è che un magazzino di `.tgz`. Lo stesso file passa per tre verbi:
-
-<figure style="margin:1rem 0;text-align:center">
-<svg viewBox="0 0 720 158" role="img" aria-label="Flusso di un pacchetto npm: i tuoi file con npm pack diventano un .tgz, che raggiunge node_modules o direttamente (install del file) o via registry (publish poi install per nome)" style="width:100%;max-width:700px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><rect x="18" y="96" width="104" height="48" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="70" y="124" font-size="11" text-anchor="middle">i tuoi file</text><rect x="176" y="96" width="92" height="48" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.7"/><text x="222" y="117" font-size="12.5" text-anchor="middle" font-weight="700">.tgz</text><text x="222" y="132" font-size="8.5" text-anchor="middle" opacity=".65">pacchetto</text><rect x="344" y="22" width="120" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="404" y="49" font-size="11" text-anchor="middle">registry npm</text><rect x="566" y="96" width="134" height="48" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="633" y="124" font-size="11" text-anchor="middle">node_modules</text><path d="M122 120 L170 120" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M176 120 L168 115 L168 125 Z" fill="currentColor"/><text x="148" y="112" font-size="9.5" text-anchor="middle">npm pack</text><path d="M255 96 L352 68" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M358 66 L349 64 L352 73 Z" fill="currentColor"/><text x="292" y="76" font-size="9.5" text-anchor="middle">publish</text><path d="M462 68 L560 97" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M566 99 L557 98 L560 89 Z" fill="currentColor"/><text x="524" y="72" font-size="9.5" text-anchor="middle">install &lt;nome&gt;</text><path d="M268 126 L560 126" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M566 126 L558 121 L558 131 Z" fill="currentColor"/><text x="416" y="143" font-size="9.5" text-anchor="middle">install ./file.tgz  (a mano)</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Lo stesso <code>.tgz</code> raggiunge <code>node_modules</code> in due modi: <strong>a mano</strong> (installando il file) o <strong>via registry</strong> (<code>publish</code> e poi <code>install &lt;nome&gt;</code>). Il registry è solo un magazzino di questi file.</figcaption>
-</figure>
-
-- **`npm pack`** crea il `.tgz` in locale (eseguendo prima l'eventuale build);
-- **`npm publish`** carica quello stesso `.tgz` sul registry;
-- **`npm install`** scarica un `.tgz`, dal registry (`install <nome>`) o da un file locale, e lo scompatta in `node_modules`.
-
-Per questo, quando **non si può pubblicare sul registry** (libreria interna o ad-hoc, ambiente isolato), si distribuisce il pacchetto **a mano** come `.tgz` e lo si installa direttamente:
-
-```bash
-npm install ./util-auth-1.0.0.tgz
-# oppure in package.json:  "util-auth": "file:./libs/util-auth-1.0.0.tgz"
-```
-
-> [!tip]
-> Cosa c'è **dentro** (`tar -tzf file.tgz` per sbirciare senza estrarre): l'**output di build** (JavaScript già transpilato, spesso *bundlato*, con i tipi `.d.ts`), **non** il sorgente originale del developer. E di norma **non** è minificato: la minificazione è compito del bundler dell'*applicazione* finale (vedi [Minificazione e ottimizzazione](docs/react.md?id=minificazione-e-ottimizzazione)), non della libreria. A volte un pacchetto include anche i *source map* per risalire al sorgente, a volte no.
+Come JavaScript organizza il codice in moduli e come i bundler ne sfruttano la struttura per ridurre e spezzare il codice spedito al browser.
 
 ## CommonJS
 
@@ -143,7 +30,7 @@ const plugin = require('./plugins/' + nomeScelto);
 if (serveI18n) { const t = require('./i18n'); /* … */ }
 ```
 
-È questa la radice di ciò che le voci [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) e [lazy loading](docs/tooling-javascript.md?id=lazy-loading) davano per scontato: siccome il target di `require` e la forma di `module.exports` si conoscono **solo eseguendo il codice**, un bundler non può ricostruire il grafo dei moduli dal solo sorgente. Gli `import`/`export` dell'ESM sono invece **sintassi statica**, risolta prima di eseguire: il grafo è noto a build-time, e con esso diventano possibili tree-shaking e code-splitting.
+È questa la radice di ciò che le voci [tree-shaking](docs/moduli-e-bundling.md?id=tree-shaking) e [lazy loading](docs/moduli-e-bundling.md?id=lazy-loading) davano per scontato: siccome il target di `require` e la forma di `module.exports` si conoscono **solo eseguendo il codice**, un bundler non può ricostruire il grafo dei moduli dal solo sorgente. Gli `import`/`export` dell'ESM sono invece **sintassi statica**, risolta prima di eseguire: il grafo è noto a build-time, e con esso diventano possibili tree-shaking e code-splitting.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 560 250" role="img" aria-label="Statico (ESM) vs dinamico (CommonJS): con l'ESM il grafo dei moduli è noto a build-time, con CommonJS il target di require si conosce solo a runtime" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="280" y="20" font-size="12.5" text-anchor="middle" font-weight="700">Quando si conosce il grafo dei moduli</text><path d="M280 40 L280 214" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity=".4"/><text x="145" y="46" font-size="11" text-anchor="middle" font-weight="700">ESM · a build-time</text><rect x="112" y="62" width="66" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="145" y="81" font-size="11" text-anchor="middle" font-weight="700">app</text><rect x="40" y="128" width="64" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="72" y="147" font-size="11" text-anchor="middle">a.js</text><rect x="186" y="128" width="64" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="218" y="147" font-size="11" text-anchor="middle">b.js</text><path d="M131 92 L83 124" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M78 127 L87 126 L84 118 Z" fill="currentColor"/><path d="M159 92 L207 124" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M212 127 L206 118 L203 126 Z" fill="currentColor"/><text x="145" y="188" font-size="9.5" text-anchor="middle" opacity=".75">import/export: grafo noto senza eseguire</text><text x="415" y="46" font-size="11" text-anchor="middle" font-weight="700">CommonJS · a runtime</text><rect x="382" y="62" width="66" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="415" y="81" font-size="11" text-anchor="middle" font-weight="700">app</text><rect x="382" y="128" width="66" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="415" y="150" font-size="16" text-anchor="middle" font-weight="700" opacity=".8">?</text><path d="M415 92 L415 122" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M415 128 L411 119 L419 119 Z" fill="currentColor"/><text x="462" y="112" font-size="9.5" text-anchor="start" font-weight="600">require(x)</text><text x="415" y="188" font-size="9.5" text-anchor="middle" opacity=".75">require(x): il target si sa solo eseguendo</text></g></svg>
@@ -178,7 +65,7 @@ export { Card } from './card';
 import { Button, Card } from './feature';
 ```
 
-Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il [tree-shaking](docs/tooling-javascript.md?id=tree-shaking) e il [lazy loading](docs/tooling-javascript.md?id=lazy-loading)**. Il motivo è che rende *un intero gruppo di moduli raggiungibile da un solo import*: chiedere un nome soltanto (`import { Button } from './feature'`) costringe il bundler a considerare tutto il grafo ri-esportato dal barrel, e a scartarne i pezzi inutilizzati **solo se riesce a dimostrarli privi di side-effect**. Quando non ci riesce (moduli con effetti collaterali, `"sideEffects"` non dichiarato, o ESM degradato a [CommonJS](docs/tooling-javascript.md?id=commonjs)), nel bundle o in un chunk lazy finisce molto più del necessario.
+Serve a dare a un modulo una **public API** pulita, nascondendone la struttura interna. Ha però un costo noto: se usato senza attenzione **ostacola il [tree-shaking](docs/moduli-e-bundling.md?id=tree-shaking) e il [lazy loading](docs/moduli-e-bundling.md?id=lazy-loading)**. Il motivo è che rende *un intero gruppo di moduli raggiungibile da un solo import*: chiedere un nome soltanto (`import { Button } from './feature'`) costringe il bundler a considerare tutto il grafo ri-esportato dal barrel, e a scartarne i pezzi inutilizzati **solo se riesce a dimostrarli privi di side-effect**. Quando non ci riesce (moduli con effetti collaterali, `"sideEffects"` non dichiarato, o ESM degradato a [CommonJS](docs/moduli-e-bundling.md?id=commonjs)), nel bundle o in un chunk lazy finisce molto più del necessario.
 
 Il meccanismo di ri-esportazione è spiegato in <a href="../typescript/#/docs/31-moduli-namespaces?id=re-export" target="_blank" rel="noopener">TypeScript · Moduli (Re-export)</a>; i trade-off e l'alternativa *barrel-less* (convenzione `internal/` + Sheriff) sono approfonditi in <a href="../angular/#/capitoli/08-sustainable-architectures" target="_blank" rel="noopener">Angular · Sustainable architectures</a>.
 
@@ -206,7 +93,7 @@ console.log(add(2, 3));
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Importando il solo <code>add</code>, nel <code>bundle.js</code> entra quell'unico export; <code>sub</code> e <code>mul</code>, mai raggiunti, restano fuori — a patto che siano privi di side-effect.</figcaption>
 </figure>
 
-Nel bundle finale resta **solo `add`**: `sub` e `mul` sono rami morti e vengono tagliati. Con i [CommonJS](docs/tooling-javascript.md?id=commonjs) non sarebbe possibile, perché `require()` è una normale chiamata che può ricevere un percorso calcolato a runtime e `module.exports` un oggetto qualunque: il grafo non è analizzabile in anticipo e il bundler, per prudenza, tiene tutto.
+Nel bundle finale resta **solo `add`**: `sub` e `mul` sono rami morti e vengono tagliati. Con i [CommonJS](docs/moduli-e-bundling.md?id=commonjs) non sarebbe possibile, perché `require()` è una normale chiamata che può ricevere un percorso calcolato a runtime e `module.exports` un oggetto qualunque: il grafo non è analizzabile in anticipo e il bundler, per prudenza, tiene tutto.
 
 C'è però una condizione: un export inutilizzato si può togliere **solo se non ha side-effect**, cioè non fa nulla di osservabile al momento dell'import (scrivere su `window`, registrare un listener, importare un CSS…).
 
@@ -225,7 +112,7 @@ Per distinguere i casi, un pacchetto dichiara nel proprio `package.json` se i su
 { "sideEffects": false }
 ```
 
-`false` significa «nessuno: puoi scartare liberamente ciò che non uso», ed è ciò che abilita il tree-shaking pieno; in alternativa si elencano i file che invece li hanno, per esempio `"sideEffects": ["*.css", "./src/polyfills.js"]`. Due conseguenze pratiche: gli **export nominali** si scuotono bene, mentre importare un intero oggetto (`export default { add, sub, mul }`) porta con sé tutto, perché lo si usa per intero; e un [barrel](docs/tooling-javascript.md?id=barrel-barrel-file) di un pacchetto senza `"sideEffects"` dichiarato allarga il grafo raggiungibile e finisce spesso nel bundle molto più del dovuto.
+`false` significa «nessuno: puoi scartare liberamente ciò che non uso», ed è ciò che abilita il tree-shaking pieno; in alternativa si elencano i file che invece li hanno, per esempio `"sideEffects": ["*.css", "./src/polyfills.js"]`. Due conseguenze pratiche: gli **export nominali** si scuotono bene, mentre importare un intero oggetto (`export default { add, sub, mul }`) porta con sé tutto, perché lo si usa per intero; e un [barrel](docs/moduli-e-bundling.md?id=barrel-barrel-file) di un pacchetto senza `"sideEffects"` dichiarato allarga il grafo raggiungibile e finisce spesso nel bundle molto più del dovuto.
 
 > [!tip]
 > Riferimento: <a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noopener">webpack · Tree Shaking</a>. In Angular il tema torna nei **provider tree-shakable** e nei barrel, in <a href="../angular/#/capitoli/08-sustainable-architectures" target="_blank" rel="noopener">ch08 · Sustainable architectures</a>.
@@ -261,7 +148,7 @@ button.addEventListener('click', async () => {
 
 Visto l'`import()`, il bundler produce accanto al file principale (`main.js`) un chunk tipo `chart-a1b2c3.js`; a runtime una richiesta lo scarica al momento del bisogno, e tutto ciò che serve solo lì viaggia in quel chunk invece che nel caricamento iniziale. I framework impacchettano questo stesso meccanismo: in Angular una route si carica in lazy con `loadComponent: () => import('./report').then(m => m.Report)`, in React con `lazy(() => import('./Report'))` dentro `<Suspense>` — sotto è sempre lo stesso `import()` dinamico.
 
-Anche qui va tenuto d'occhio il [barrel](docs/tooling-javascript.md?id=barrel-barrel-file): se il modulo caricato in lazy importa *attraverso* un barrel che ri-esporta venti cose, quel singolo `import` può trascinare tutti e venti dentro il chunk lazy — o farli issare in un chunk condiviso caricato subito — gonfiando ciò che doveva restare leggero. Importare dal file specifico, non dal barrel, tiene netto il confine.
+Anche qui va tenuto d'occhio il [barrel](docs/moduli-e-bundling.md?id=barrel-barrel-file): se il modulo caricato in lazy importa *attraverso* un barrel che ri-esporta venti cose, quel singolo `import` può trascinare tutti e venti dentro il chunk lazy — o farli issare in un chunk condiviso caricato subito — gonfiando ciò che doveva restare leggero. Importare dal file specifico, non dal barrel, tiene netto il confine.
 
 > [!tip]
 > Riferimento: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import" target="_blank" rel="noopener">MDN · <code>import()</code></a>. In Angular il lazy loading delle route è il tema di <a href="../angular/#/capitoli/04-router-navigation-lazy-loading" target="_blank" rel="noopener">ch04 · Navigation &amp; Lazy Loading</a>, il code-splitting per rotta in <a href="../angular/#/cert/performance" target="_blank" rel="noopener">cert · Performance</a>.
