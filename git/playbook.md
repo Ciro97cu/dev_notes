@@ -182,6 +182,17 @@ git remote set-url origin git@github.com:utente/repo.git
 - Nota: **safe**.
 - Approfondimento: [GitHub](14-github.md).
 
+### Usare un'email diversa in un repo (e togliere l'override sbagliato)
+
+```bash
+git config user.email "personale@example.com"   # vale SOLO in questo repo (vince sulla globale)
+git config user.email                            # controlla l'email effettiva qui
+git config --local --unset user.email            # rimuove l'override, si torna alla globale
+```
+
+- Nota: **safe**. Riguarda l'attribuzione dei commit (chi appare come autore), non i permessi di push. Vale dai commit successivi; quelli già fatti tengono l'email con cui sono stati creati.
+- Approfondimento: [Introduzione](01-introduzione.md) — Configurare nome ed email.
+
 ### Chi ha cambiato questa riga
 
 ```bash
