@@ -33,6 +33,9 @@ ssh-keygen -t ed25519 -C "una-etichetta"    # crea la coppia in ~/.ssh
 cat ~/.ssh/id_ed25519.pub                    # stampa la PUBBLICA, quella da caricare
 ```
 
+> [!tip|label:La «randomart image» di ssh-keygen]
+> Creando la chiave, `ssh-keygen` stampa un quadretto di caratteri («*the key's randomart image is:*»). È la versione **visiva** dell'**impronta** (*fingerprint*) della chiave, cioè del codice breve che la identifica in modo univoco (lo stesso che GitHub mostra accanto alla chiave). Serve a confrontare le impronte **a colpo d'occhio** (l'occhio nota una figura diversa più in fretta di una stringa diversa), utile soprattutto per le chiavi dei **server**, per accorgersi se cambiano. Per la propria chiave su GitHub si può tranquillamente ignorare. L'algoritmo che la disegna si chiama, scherzosamente, *drunken bishop*.
+
 Da lì il flusso è semplice: si **incolla la chiave pubblica** su GitHub (nelle impostazioni, sezione *SSH keys*), la privata resta sul Mac, e si verifica che il collegamento funzioni.
 
 ```bash
