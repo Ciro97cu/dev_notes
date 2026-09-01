@@ -14,7 +14,7 @@
  * Unica cosa da toccare: la costante DN_VERSION qui sotto (e, a ogni bump, il
  * tag git corrispondente: `git tag -a vX.Y.Z -m "…"`).
  */
-window.DN_VERSION = "1.53.4";
+window.DN_VERSION = "1.54.0";
 window.DN_REPO = "https://github.com/Ciro97cu/dev_notes";
 
 (function () {

@@ -34,6 +34,9 @@ CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitti
 **[Licenze software (MIT, GPL…)](docs/licenze.md)**
 Permissive vs copyleft · MIT · ISC · BSD · Apache 2.0 · GPLv2/GPLv3 · LGPL · AGPL · nessuna licenza (tutti i diritti riservati) · public domain (CC0) · doppia licenza · campo `license` e SPDX
 
+**[SSH e chiavi pubblica/privata](docs/ssh.md)**
+Cos'è SSH (secure shell) · password vs chiavi · crittografia asimmetrica (chiave pubblica/privata) · autenticazione a sfida e risposta · `ssh-keygen`, `.pub`, `~/.ssh/config` · HTTPS vs SSH per Git
+
 **[React](docs/react.md)**
 Codice dichiarativo · Hooks · Errori in console · Minificazione e ottimizzazione · Million.js
 

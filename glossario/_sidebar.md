@@ -18,6 +18,9 @@
 - **Open source e licenze**
   - [Licenze software (MIT, GPL…)](docs/licenze.md)
 
+- **Sicurezza e accesso**
+  - [SSH e chiavi pubblica/privata](docs/ssh.md)
+
 - **React**
   - [Termini React](docs/react.md)
 
