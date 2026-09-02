@@ -53,6 +53,8 @@ Con bash i file sono altri e nascondono l'inghippo che fa impazzire di più. Una
 [ -f ~/.bashrc ] && source ~/.bashrc
 ```
 
+Non è detto che questi file esistano: sono **facoltativi**, e se bash non è mai stato personalizzato non ci sono affatto, così bash parte coi suoi default. È il caso tipico su macOS, dove la shell predefinita è zsh e bash si usa solo lanciandolo a mano. La trappola si presenta soltanto quando si iniziano a mettere personalizzazioni in `~/.bashrc` aspettandosi che valgano anche in una shell di login: fino a quel momento non c'è nulla da sistemare.
+
 ## Cosa si mette in `~/.zshrc`
 
 Il file di configurazione è un normale script di shell: ogni riga è un comando eseguito all'avvio. Ci finiscono le variabili d'ambiente, le aggiunte al PATH, l'inizializzazione dei tool (Homebrew, nvm) e gli **alias**, cioè scorciatoie per comandi lunghi. Ecco un `~/.zshrc` realistico, vicino a una configurazione tipica su macOS con Homebrew e nvm:
