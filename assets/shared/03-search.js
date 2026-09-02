@@ -145,20 +145,42 @@ function dnSearchBuild() {
     var item = e.target.closest && e.target.closest('.dn-s-item');
     if (!item) return;
     var href = item.getAttribute('href') || '';
+    var idMatch = href.match(/[?&]id=([^&]+)/);
+    var id = idMatch ? decodeURIComponent(idMatch[1]) : '';
     // Se l'hash di destinazione è identico a quello corrente, il browser non lancia
     // hashchange → docsify non scrolla. Preveniamo il default e scrolliamo a mano.
     if (href && location.hash === href) {
       e.preventDefault();
-      var idMatch = href.match(/[?&]id=([^&]+)/);
-      if (idMatch) {
-        var el = document.getElementById(decodeURIComponent(idMatch[1]));
+      if (id) {
+        var el = document.getElementById(id);
         if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
       }
     }
+    if (id) dnFlashTarget(id);   // lampeggio sul punto trovato, per individuarlo a colpo d'occhio
     setTimeout(dnSearchClose, 0);
   });
   box.addEventListener('click', function (e) { if (e.target === box) dnSearchClose(); });
   return box;
+}
+// Evidenzia per un istante l'elemento di destinazione (l'heading con quell'id): dopo
+// il click su un risultato la pagina ci naviga, ma il punto esatto può sfuggire, così
+// un breve lampeggio lo fa saltare all'occhio. Attende che l'elemento esista, perché
+// la navigazione/rendering di docsify è asincrona.
+function dnFlashTarget(id) {
+  if (!id) return;
+  var tries = 0;
+  (function look() {
+    var el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('dn-flash');
+      void el.offsetWidth;                // forza il restart dell'animazione se ri-cliccato
+      el.classList.add('dn-flash');
+      clearTimeout(el.__dnFlashT);
+      el.__dnFlashT = setTimeout(function () { el.classList.remove('dn-flash'); }, 2000);
+      return;
+    }
+    if (tries++ < 40) setTimeout(look, 60);   // ~2.4s di attesa max
+  })();
 }
 // init: CSS + intercetta la casella di docsify (apre l'overlay) + nasconde il dropdown fuzzy
 (function () {
@@ -168,6 +190,9 @@ function dnSearchBuild() {
     '#dn-search .dn-s-box{margin-top:8vh;width:min(680px,92vw);max-height:80vh;display:flex;flex-direction:column;background:var(--bg-soft);color:var(--text);border:1px solid var(--border);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.45);overflow:hidden;transform:translateY(-10px) scale(.98);transition:transform .2s cubic-bezier(.34,1.5,.64,1)}',
     '#dn-search.open .dn-s-box{transform:none}',
     '@media (prefers-reduced-motion: reduce){#dn-search{transition:none}#dn-search .dn-s-box{transition:none;transform:none}}',
+    '@keyframes dn-flash{from{background-color:color-mix(in srgb,var(--link) 34%,transparent)}to{background-color:transparent}}',
+    '.dn-flash{animation:dn-flash .6s ease-out 3;border-radius:6px}',
+    '@media (prefers-reduced-motion: reduce){.dn-flash{animation:none;background-color:color-mix(in srgb,var(--link) 22%,transparent);transition:background-color .5s ease .9s}}',
     '#dn-search .dn-s-top{display:flex;align-items:center;gap:.5rem;padding:.6rem .7rem;border-bottom:1px solid var(--border)}',
     '#dn-search .dn-s-input{flex:1;min-width:0;border:0;background:transparent;color:var(--text);font:inherit;font-size:1rem;outline:none}',
     '#dn-search .dn-s-toggles{display:flex;gap:.25rem;flex:0 0 auto}',
