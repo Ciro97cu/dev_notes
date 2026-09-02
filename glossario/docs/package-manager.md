@@ -58,6 +58,9 @@ Per fissare la versione di Node di un singolo progetto si aggiunge un file **`.n
 
 A quel punto `nvm use` senza argomenti, eseguito nella cartella del progetto, legge `.nvmrc` e attiva quella versione automaticamente. Aggiungendo al profilo di shell un hook apposito (documentato nel repo di nvm), l'attivazione avviene da sola ogni volta che si entra in una cartella che contiene un `.nvmrc`, senza doverlo invocare a mano.
 
+> [!tip|label:.nvmrc non è «eseguito», è letto]
+> Capita di sentir dire che `.nvmrc` «funziona solo su sistemi Unix-like». Il file però non è uno script: è un semplice testo con dentro un numero di versione, e a **leggerlo** è il version manager. È una convenzione di **nvm**, che è una funzione di shell e gira su sistemi **Unix-like** (macOS, Linux, e WSL su Windows), non sul Windows nativo. Là si usa di solito **nvm-windows**, un progetto diverso con lo stesso nome che **non** legge `.nvmrc`, così il file resta ignorato. Non è quindi il file a essere «Unix-only»: dipende dal manager. Quelli cross-platform come **fnm** (qui sotto) leggono `.nvmrc` anche su Windows.
+
 > [!warning]
 > I pacchetti installati globalmente con `npm install -g` sono **legati alla versione di Node attiva al momento dell'installazione**. Dopo un `nvm use 20`, il `$PATH` punta al `bin` di Node 20, dove quei pacchetti non sono stati installati: sembrano sparire. Non sono persi (vivono ancora sotto `~/.nvm/versions/node/<versione>/bin`), ma per usarli sulla nuova versione vanno reinstallati lì. Il motivo (PATH e npm prefix globale) è spiegato nel vault Terminale, [cap. 07 · Node, npm e il frontend](../terminale/#/docs/07-node-npm-frontend?id=le-versioni-di-node-nvm).
 
