@@ -91,7 +91,7 @@ source ~/.zshrc     # rilegge il file nella shell corrente
 
 ## Hook: far girare codice in automatico
 
-Un **hook** (letteralmente «gancio») è una funzione che la shell chiama **da sola** in un certo momento, senza doverla invocare a mano: la si «aggancia» a un **evento**. zsh ne offre diversi; il più utile nella pratica è **`chpwd`**, che scatta **dopo ogni cambio di cartella** (`cd`). Registrandovi una propria funzione, si fa accadere qualcosa in automatico ogni volta che si entra in una cartella. Non c'è nessuna magia nella shell: c'è solo una funzione messa nel `~/.zshrc` e legata a un evento.
+Un **hook** (letteralmente «gancio») è una funzione che la shell chiama **da sola** in un certo momento, senza doverla invocare a mano: la si «aggancia» a un **evento**. zsh ne offre diversi; il più utile nella pratica è **`chpwd`**, che scatta **dopo ogni cambio di cartella** (`cd`). Registrandovi una propria funzione, si fa accadere qualcosa in automatico ogni volta che si entra in una cartella. Il meccanismo è tutto qui: una funzione scritta nel `~/.zshrc` e legata a un evento della shell.
 
 L'esempio classico è cambiare **versione di Node** a seconda del progetto: se una cartella contiene un file `.nvmrc` (che dichiara la versione di Node voluta, vedi <a href="../glossario/#/docs/package-manager?id=nvm" target="_blank" rel="noopener">nvm nel glossario</a>), un hook su `chpwd` può eseguire `nvm use` da sé appena ci si entra, senza digitarlo ogni volta.
 
@@ -105,7 +105,7 @@ add-zsh-hook chpwd load-nvmrc          # «dopo ogni cd, esegui load-nvmrc»
 load-nvmrc                             # eseguilo anche subito, per la cartella di partenza
 ```
 
-Da quel momento, entrando in un progetto con `.nvmrc` la versione giusta di Node si attiva da sola. È lo stesso principio dietro molte «automazioni» del terminale: qualcosa di apparentemente magico è quasi sempre una funzione agganciata a un evento nel file di configurazione.
+Da quel momento, entrando in un progetto con `.nvmrc` la versione giusta di Node si attiva da sola. È lo stesso principio dietro molte automazioni del terminale: una funzione nel file di configurazione, agganciata a un evento della shell.
 
 > [!tip]
 > Gli hook di zsh più comuni: **`chpwd`** (dopo un `cd`), **`precmd`** (prima di stampare ogni prompt), **`preexec`** (subito prima di eseguire un comando). In **bash** non esiste `chpwd`: lo stesso effetto si ottiene con la variabile `PROMPT_COMMAND` o ridefinendo la funzione `cd`.
