@@ -89,6 +89,27 @@ source ~/.zshrc     # rilegge il file nella shell corrente
 > [!warning]
 > Un errore di sintassi in `~/.zshrc` può rompere l'avvio di **ogni nuova** shell (per esempio un PATH riscritto male che «perde» le cartelle di sistema). Dopo una modifica non banale conviene testarla con `source ~/.zshrc` nella finestra corrente prima di fidarsi: se qualcosa va storto, quella finestra è ancora viva per rimediare.
 
+## Hook: far girare codice in automatico
+
+Un **hook** (letteralmente «gancio») è una funzione che la shell chiama **da sola** in un certo momento, senza doverla invocare a mano: la si «aggancia» a un **evento**. zsh ne offre diversi; il più utile nella pratica è **`chpwd`**, che scatta **dopo ogni cambio di cartella** (`cd`). Registrandovi una propria funzione, si fa accadere qualcosa in automatico ogni volta che si entra in una cartella. Non c'è nessuna magia nella shell: c'è solo una funzione messa nel `~/.zshrc` e legata a un evento.
+
+L'esempio classico è cambiare **versione di Node** a seconda del progetto: se una cartella contiene un file `.nvmrc` (che dichiara la versione di Node voluta, vedi <a href="../glossario/#/docs/package-manager?id=nvm" target="_blank" rel="noopener">nvm nel glossario</a>), un hook su `chpwd` può eseguire `nvm use` da sé appena ci si entra, senza digitarlo ogni volta.
+
+```bash
+# ~/.zshrc — attiva la versione di Node del progetto entrando nella cartella
+autoload -U add-zsh-hook               # abilita il meccanismo degli hook di zsh
+load-nvmrc() {
+  [ -f .nvmrc ] && nvm use             # se la cartella ha un .nvmrc, attiva quella versione
+}
+add-zsh-hook chpwd load-nvmrc          # «dopo ogni cd, esegui load-nvmrc»
+load-nvmrc                             # eseguilo anche subito, per la cartella di partenza
+```
+
+Da quel momento, entrando in un progetto con `.nvmrc` la versione giusta di Node si attiva da sola. È lo stesso principio dietro molte «automazioni» del terminale: qualcosa di apparentemente magico è quasi sempre una funzione agganciata a un evento nel file di configurazione.
+
+> [!tip]
+> Gli hook di zsh più comuni: **`chpwd`** (dopo un `cd`), **`precmd`** (prima di stampare ogni prompt), **`preexec`** (subito prima di eseguire un comando). In **bash** non esiste `chpwd`: lo stesso effetto si ottiene con la variabile `PROMPT_COMMAND` o ridefinendo la funzione `cd`.
+
 ## Oh My Zsh: personalizzare senza fatica
 
 Scrivere a mano alias e prompt in `~/.zshrc` funziona, ma quasi nessuno parte da zero: attorno a zsh è cresciuto un ecosistema di **framework di configurazione** che portano temi, scorciatoie e comodità già pronte. Il più diffuso è **Oh My Zsh**, un progetto open source che si installa con un comando e poi si governa da poche righe del `~/.zshrc`:
@@ -159,5 +180,12 @@ Rileggendo il file nella shell corrente con `source ~/.zshrc` (o la forma breve 
 <summary>Cos'è <code>Oh My Zsh</code> e quali sono le due manopole principali?</summary>
 
 È il framework di configurazione più diffuso per zsh: porta temi e plugin già pronti e si governa dal `~/.zshrc`. Le due impostazioni che fanno quasi tutto sono `ZSH_THEME` (il tema del prompt, es. `robbyrussell` o `powerlevel10k`) e `plugins=(...)` (i plugin attivi, es. `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting`). Attenzione al rovescio: più roba si carica, più l'avvio della shell rallenta.
+
+</details>
+
+<details>
+<summary>Cos'è un <code>hook</code> della shell e a cosa serve <code>chpwd</code>?</summary>
+
+Un hook è una funzione che la shell esegue **da sola** al verificarsi di un evento, senza invocarla a mano. In zsh **`chpwd`** scatta **dopo ogni cambio di cartella** (`cd`): agganciandovi una funzione (con `add-zsh-hook chpwd <funzione>` nel `~/.zshrc`) si fa accadere qualcosa in automatico entrando in una cartella. L'uso tipico è attivare la versione di Node dichiarata in un `.nvmrc` appena si entra nel progetto, senza digitare `nvm use` ogni volta.
 
 </details>

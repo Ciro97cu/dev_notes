@@ -13,6 +13,6 @@ Appunti di studio sul **terminale** e la **shell**: come muoversi nella riga di 
 | 03 | [Navigare nel filesystem](docs/03-navigare-filesystem.md) | L'albero, `/` e `~`, path assoluti/relativi, `pwd` · `ls` · `cd` |
 | 04 | [File e cartelle](docs/04-file-e-cartelle.md) | `touch` · `mkdir` · `cp` · `mv` · `rm`, wildcard, `cat` · `open` |
 | 05 | [Variabili d'ambiente e PATH](docs/05-variabili-ambiente-path.md) | env var, `export`, come la shell trova un comando lungo il PATH |
-| 06 | [File di configurazione della shell](docs/06-file-configurazione-shell.md) | `.zshrc`/`.bashrc`, login vs interactive, `source`, alias, Oh My Zsh |
+| 06 | [File di configurazione della shell](docs/06-file-configurazione-shell.md) | `.zshrc`/`.bashrc`, login vs interactive, `source`, alias, hook (`chpwd`), Oh My Zsh |
 | 07 | [Node, npm e il frontend](docs/07-node-npm-frontend.md) | dipendenze, script (`npm run`), `npx`, locale vs globale + PATH, nvm, dev server |
 | 08 | [Comandi di tutti i giorni](docs/08-comandi-di-tutti-i-giorni.md) | pipe e redirezione, `grep` · `find`, permessi, scorciatoie da tastiera |
