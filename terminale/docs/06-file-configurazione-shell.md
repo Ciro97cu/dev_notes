@@ -9,7 +9,7 @@ La shell distingue alcuni «tipi» di sessione e, in base al tipo, legge file d'
 - una shell è **interattiva** quando dialoga con una persona: mostra il prompt, si digita e si legge l'output. È il caso normale del terminale. Non lo è quando esegue uno **script**, cioè una serie di comandi in fila senza nessuno che risponda.
 - una shell è **di login** quando è la **prima** shell di una sessione, quella che parte nel momento in cui si «entra» in una macchina identificandosi. È il caso di un accesso da zero: un collegamento **SSH** a un server, un login da console testuale e, su macOS, ogni nuova finestra di Terminal.
 
-Il punto che confonde è capire *quando* una shell è «di login», perché dipende da **come** è stata avviata, non da cosa ci si fa dentro. Qualche caso concreto:
+Che una shell sia «di login» dipende da **come** è stata avviata, non da cosa ci si fa dentro. Qualche caso concreto:
 
 | Come è partita la shell | Di login? | Interattiva? |
 |---|---|---|
@@ -28,9 +28,9 @@ echo $0        # zsh    → non di login (es. avviata a mano dentro un'altra she
 
 Login e interattività sono **indipendenti** e si combinano. La particolarità di macOS è che **ogni nuova finestra o scheda di Terminal.app è insieme di login *e* interattiva**, quindi vengono letti tutti i file d'avvio e la distinzione, in locale, non si nota quasi mai. Si fa sentire **altrove**: collegandosi via SSH a un server, la shell è di login e legge `~/.zprofile` (o `~/.bash_profile`), **non** ciò che si è messo solo in `~/.zshrc`. Da qui la regola pratica per gestirla: le comodità interattive (prompt, alias, completamento) vanno in **`~/.zshrc`**; ciò che deve valere anche per una shell di login (una variabile d'ambiente che serve pure via SSH) va in **`~/.zprofile`** o `~/.zshenv`.
 
-Due dettagli chiudono il quadro. Avviando una shell a mano dentro un'altra (`zsh`), quella nuova è **non di login** semplicemente perché non è stata lanciata come tale (servirebbe `zsh -l`): lo stato login/non-login dipende da **come** parte, non si eredita. Non deve però rifare il setup di login, perché l'**ambiente** (PATH e variabili esportate) lo eredita già dalla shell da cui è partita; rilegge invece `~/.zshrc`, dato che alias e prompt non sono variabili d'ambiente e non si ereditano.
+Avviando una shell a mano dentro un'altra (`zsh`), quella nuova è **non di login** semplicemente perché non è stata lanciata come tale (servirebbe `zsh -l`): lo stato login/non-login dipende da **come** parte, non si eredita. Non deve però rifare il setup di login, perché l'**ambiente** (PATH e variabili esportate) lo eredita già dalla shell da cui è partita; rilegge invece `~/.zshrc`, dato che alias e prompt non sono variabili d'ambiente e non si ereditano.
 
-Resta il caso raro, **login ma non interattiva**, quello che a mano non si crea quasi mai. Di proposito lo si ottiene con `zsh -l -c 'comando'` (`-l` forza il login, `-c` esegue senza prompt); da solo nasce in contesti di sistema: un **cron job** o una pipeline di **CI** impostati con `-l` per ereditare l'ambiente di login, oppure, su Linux, il **login grafico** che prepara l'ambiente della sessione senza aprire un terminale. Nell'uso quotidiano su macOS si incontrano solo gli altri tre casi.
+C'è infine il caso raro, **login ma non interattiva**: a mano non si crea quasi mai. Di proposito lo si ottiene con `zsh -l -c 'comando'` (`-l` forza il login, `-c` esegue senza prompt); da solo nasce in contesti di sistema: un **cron job** o una pipeline di **CI** impostati con `-l` per ereditare l'ambiente di login, oppure, su Linux, il **login grafico** che prepara l'ambiente della sessione senza aprire un terminale. Nell'uso quotidiano su macOS si incontrano solo gli altri tre casi.
 
 ## I file di avvio di zsh
 
@@ -64,7 +64,7 @@ Con bash i file sono altri e nascondono l'inghippo che fa impazzire di più. Una
 [ -f ~/.bashrc ] && source ~/.bashrc
 ```
 
-Non è detto che questi file esistano: sono **facoltativi**, e se bash non è mai stato personalizzato non ci sono affatto, così bash parte coi suoi default. È il caso tipico su macOS, dove la shell predefinita è zsh e bash si usa solo lanciandolo a mano. La trappola si presenta soltanto quando si iniziano a mettere personalizzazioni in `~/.bashrc` aspettandosi che valgano anche in una shell di login: fino a quel momento non c'è nulla da sistemare.
+Questi file sono **facoltativi**: esistono solo se qualcuno li crea. Se bash non è mai stato personalizzato non ci sono affatto, così bash parte coi suoi default. È il caso tipico su macOS, dove la shell predefinita è zsh e bash si usa solo lanciandolo a mano. La trappola si presenta soltanto quando si iniziano a mettere personalizzazioni in `~/.bashrc` aspettandosi che valgano anche in una shell di login: fino a quel momento non c'è nulla da sistemare.
 
 ## Cosa si mette in `~/.zshrc`
 
