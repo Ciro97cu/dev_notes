@@ -66,6 +66,13 @@ export PATH="$HOME/.local/bin:$PATH"   # la mia cartella vince sulle altre (in t
 export PATH="$PATH:$HOME/.local/bin"   # oppure come ultima spiaggia (in coda)
 ```
 
+Quando le righe che antepongono sono **più d'una** (com'è tipico in un `~/.zshrc`), l'effetto si ribalta: ognuna mette la sua cartella *davanti* a quelle già presenti, quindi **l'ultima riga scritta finisce prima nel PATH** ed è quella con la precedenza più alta. Per far vincere una cartella specifica, dunque, la si scrive **in fondo** al file, non in cima.
+
+```bash
+export PATH="/opt/A/bin:$PATH"   # A va davanti
+export PATH="/opt/B/bin:$PATH"   # B va davanti ad A → ordine finale: B, poi A, poi il resto
+```
+
 C'è però un dettaglio cruciale: questa riga vale **solo per la shell corrente** e si perde chiudendo la finestra. Perché una modifica al PATH (o un `export`, o un alias) sia **permanente**, va scritta in un file di configurazione che la shell legge a ogni avvio — l'argomento del [capitolo 6](06-file-configurazione-shell.md).
 
 > [!tip]
@@ -91,6 +98,13 @@ C'è però un dettaglio cruciale: questa riga vale **solo per la shell corrente*
 <summary>Perché l'ordine delle cartelle nel PATH è importante?</summary>
 
 Perché vince la **prima** cartella che contiene il comando: le successive non vengono nemmeno guardate. È così che, avendo più versioni dello stesso programma, quella la cui cartella compare *prima* nel PATH «copre» le altre. Per esempio il `node` di nvm precede l'eventuale `node` di sistema perché la sua cartella è più a sinistra. `which node` rivela quale sta effettivamente vincendo.
+
+</details>
+
+<details>
+<summary>Nel <code>~/.zshrc</code> ho più righe che aggiungono al PATH: quale cartella vince?</summary>
+
+Quella dell'**ultima** riga che antepone (`export PATH="X:$PATH"`): ogni riga mette la sua cartella *davanti* alle precedenti, quindi l'ultima scritta finisce prima nel PATH e ha la precedenza più alta. Per far vincere di proposito una cartella specifica, la si mette **in fondo** al file.
 
 </details>
 
