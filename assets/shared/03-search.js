@@ -156,7 +156,10 @@ function dnSearchBuild() {
         if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
       }
     }
-    if (id) dnFlashTarget(id);   // lampeggio sul punto trovato, per individuarlo a colpo d'occhio
+    if (id) {                    // lampeggio sul testo trovato (fallback: l'intestazione)
+      var qEl = box.querySelector('.dn-s-input');
+      dnFlashMatch(id, qEl ? qEl.value.trim() : '');
+    }
     setTimeout(dnSearchClose, 0);
   });
   box.addEventListener('click', function (e) { if (e.target === box) dnSearchClose(); });
@@ -182,6 +185,52 @@ function dnFlashTarget(id) {
     if (tries++ < 40) setTimeout(look, 60);   // ~2.4s di attesa max
   })();
 }
+// Come sopra, ma mira al TESTO che ha fatto match (non solo alla sezione): trova la
+// prima occorrenza della query dentro la sezione, ci scrolla sopra e la fa lampeggiare.
+// Se non c'è un match evidenziabile (o l'API non è supportata), ripiega sull'intestazione.
+function dnFlashMatch(id, query) {
+  var tries = 0;
+  (function look() {
+    var heading = document.getElementById(id);
+    if (!heading) { if (tries++ < 40) setTimeout(look, 60); return; }
+    var done = false;
+    if (query && window.Highlight && window.CSS && CSS.highlights) {
+      try { done = dnHighlightMatch(heading, query); } catch (e) { done = false; }
+    }
+    if (!done) dnFlashTarget(id);   // niente match evidenziabile: lampeggia la sezione
+  })();
+}
+// Evidenzia+lampeggia la prima occorrenza della query nella sezione, via CSS Custom
+// Highlight API (nessuna mutazione del DOM, così non interferisce con l'evidenziatore).
+function dnHighlightMatch(heading, query) {
+  var re; try { re = dnSearchRe(query); } catch (e) { return false; }
+  var nodes = [heading], sib = heading.nextElementSibling;   // sezione = heading + fratelli fino al prossimo heading
+  while (sib && !/^H[1-6]$/.test(sib.tagName)) { nodes.push(sib); sib = sib.nextElementSibling; }
+  var range = null;
+  for (var i = 0; i < nodes.length && !range; i++) {
+    var w = document.createTreeWalker(nodes[i], NodeFilter.SHOW_TEXT, null), tn;
+    while ((tn = w.nextNode())) {
+      re.lastIndex = 0; var m = re.exec(tn.nodeValue);
+      if (m && m[0].length) {
+        range = document.createRange();
+        range.setStart(tn, m.index); range.setEnd(tn, m.index + m[0].length);
+        break;
+      }
+    }
+  }
+  if (!range) return false;
+  var host = range.startContainer.parentElement || heading;
+  setTimeout(function () { host.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+  var hl = new Highlight(range);
+  CSS.highlights.set('dn-search-flash', hl);
+  var n = 0; clearInterval(dnHighlightMatch._iv);
+  dnHighlightMatch._iv = setInterval(function () {
+    if (CSS.highlights.has('dn-search-flash')) CSS.highlights.delete('dn-search-flash');
+    else CSS.highlights.set('dn-search-flash', hl);
+    if (++n >= 6) { clearInterval(dnHighlightMatch._iv); CSS.highlights.delete('dn-search-flash'); }
+  }, 300);
+  return true;
+}
 // init: CSS + intercetta la casella di docsify (apre l'overlay) + nasconde il dropdown fuzzy
 (function () {
   var css = [
@@ -193,6 +242,7 @@ function dnFlashTarget(id) {
     '@keyframes dn-flash{from{background-color:color-mix(in srgb,var(--link) 34%,transparent)}to{background-color:transparent}}',
     '.dn-flash{animation:dn-flash .6s ease-out 3;border-radius:6px}',
     '@media (prefers-reduced-motion: reduce){.dn-flash{animation:none;background-color:color-mix(in srgb,var(--link) 22%,transparent);transition:background-color .5s ease .9s}}',
+    '::highlight(dn-search-flash){background-color:color-mix(in srgb,var(--link) 42%,transparent);color:inherit}',
     '#dn-search .dn-s-top{display:flex;align-items:center;gap:.5rem;padding:.6rem .7rem;border-bottom:1px solid var(--border)}',
     '#dn-search .dn-s-input{flex:1;min-width:0;border:0;background:transparent;color:var(--text);font:inherit;font-size:1rem;outline:none}',
     '#dn-search .dn-s-toggles{display:flex;gap:.25rem;flex:0 0 auto}',
