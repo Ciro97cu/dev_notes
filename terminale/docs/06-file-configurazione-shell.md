@@ -44,6 +44,13 @@ zsh legge una sequenza precisa di file, ognuno con un ruolo. Nella pratica quoti
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Nella pratica basta ricordare <code>~/.zshrc</code>: è il file delle shell interattive, dove vanno PATH, alias, prompt e l'inizializzazione dei tool. Gli altri servono a casi specifici.</figcaption>
 </figure>
 
+Un esempio concreto di cosa finisce, di solito, in ciascuno dei quattro file:
+
+- **`~/.zshenv`**: una variabile che deve valere **ovunque**, anche negli script non interattivi (es. `export LANG="it_IT.UTF-8"`).
+- **`~/.zprofile`**: qualcosa da eseguire **una volta** a inizio sessione; per esempio l'init di Homebrew, che la sua guida consiglia proprio qui: `eval "$(/opt/homebrew/bin/brew shellenv)"`.
+- **`~/.zshrc`**: il grosso, cioè alias, `export`, aggiunte al PATH, prompt e inizializzazione dei tool (l'esempio completo è qui sotto).
+- **`~/.zlogin`**: raro, un comando di fine avvio (es. un saluto: `echo "Pronto, $USER"`).
+
 ## E in bash? (la trappola classica)
 
 Con bash i file sono altri e nascondono l'inghippo che fa impazzire di più. Una shell di login legge `~/.bash_profile`; una shell interattiva *non* di login legge invece `~/.bashrc`. Siccome su macOS Terminal apre shell **di login**, viene letto `~/.bash_profile` e **non** `~/.bashrc` — così le personalizzazioni scritte in `~/.bashrc` sembrano ignorate. La soluzione usuale è far leggere l'uno dall'altro, aggiungendo in cima a `~/.bash_profile` una riga che «tira dentro» `~/.bashrc`:
