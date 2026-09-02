@@ -28,6 +28,10 @@ echo $0        # zsh    → non di login (es. avviata a mano dentro un'altra she
 
 Login e interattività sono **indipendenti** e si combinano. La particolarità di macOS è che **ogni nuova finestra o scheda di Terminal.app è insieme di login *e* interattiva**, quindi vengono letti tutti i file d'avvio e la distinzione, in locale, non si nota quasi mai. Si fa sentire **altrove**: collegandosi via SSH a un server, la shell è di login e legge `~/.zprofile` (o `~/.bash_profile`), **non** ciò che si è messo solo in `~/.zshrc`. Da qui la regola pratica per gestirla: le comodità interattive (prompt, alias, completamento) vanno in **`~/.zshrc`**; ciò che deve valere anche per una shell di login (una variabile d'ambiente che serve pure via SSH) va in **`~/.zprofile`** o `~/.zshenv`.
 
+Due dettagli chiudono il quadro. Avviando una shell a mano dentro un'altra (`zsh`), quella nuova è **non di login** semplicemente perché non è stata lanciata come tale (servirebbe `zsh -l`): lo stato login/non-login dipende da **come** parte, non si eredita. Non deve però rifare il setup di login, perché l'**ambiente** (PATH e variabili esportate) lo eredita già dalla shell da cui è partita; rilegge invece `~/.zshrc`, dato che alias e prompt non sono variabili d'ambiente e non si ereditano.
+
+Resta il caso raro, **login ma non interattiva**, quello che a mano non si crea quasi mai. Di proposito lo si ottiene con `zsh -l -c 'comando'` (`-l` forza il login, `-c` esegue senza prompt); da solo nasce in contesti di sistema: un **cron job** o una pipeline di **CI** impostati con `-l` per ereditare l'ambiente di login, oppure, su Linux, il **login grafico** che prepara l'ambiente della sessione senza aprire un terminale. Nell'uso quotidiano su macOS si incontrano solo gli altri tre casi.
+
 ## I file di avvio di zsh
 
 zsh legge una sequenza precisa di file, ognuno con un ruolo. Nella pratica quotidiana ne serve **uno solo**, `~/.zshrc`, dove finisce quasi tutta la configurazione personale; gli altri esistono per casi più specifici.
@@ -161,6 +165,13 @@ Perché vale solo per la **shell corrente** e sparisce chiudendo la finestra. Pe
 <summary>Come capisco se la shell che sto usando è «di login», e quando lo è?</summary>
 
 Con `echo $0`: se il nome ha un **trattino** davanti (`-zsh`) è una shell di login, altrimenti no (`zsh`). Lo è quando è la **prima** shell di una sessione: una nuova finestra di Terminal.app su macOS, un collegamento `ssh` a un server, un login da console. Non lo è quando si avvia una shell dentro un'altra (digitando `zsh`) o si esegue uno script. Conta perché le shell di login leggono `~/.zprofile`, quelle interattive `~/.zshrc`; su macOS ogni finestra è entrambe, così la differenza si nota solo altrove (tipicamente via SSH).
+
+</details>
+
+<details>
+<summary>Perché <code>zsh</code> dentro una shell non è di login? E quando parte una shell di <strong>login ma non interattiva</strong>?</summary>
+
+Login e interattiva sono assi **indipendenti**. Digitando `zsh` la nuova shell è **non di login** perché non è stata avviata come tale (servirebbe `zsh -l`): lo stato dipende da come parte, non si eredita. L'**ambiente** (PATH, variabili) invece lo eredita dalla shell padre, quindi non rifà il setup di login; rilegge però `~/.zshrc` (alias e prompt non si ereditano). Il caso **login + non interattiva** è raro: di proposito lo si crea con `zsh -l -c 'comando'`, da solo capita coi task automatici (cron/CI lanciati con `-l`) o col login grafico su Linux. Nell'uso quotidiano su macOS non lo si incontra.
 
 </details>
 
