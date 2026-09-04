@@ -438,42 +438,42 @@ section.cover.show ~ .content { display: none; }
 .cover-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: .65rem;
+  gap: .8rem;
   justify-content: center;
-  margin: 1.45rem auto 0;
+  margin: 1.9rem auto 1.5rem;
 }
 
 .cover-actions .cover-btn {
   align-items: center;
-  background: rgba(255, 255, 255, .07);
+  background: rgba(255, 255, 255, .12);
   border: 1px solid rgba(255, 255, 255, .38);
-  border-radius: 8px;
+  border-radius: 999px;
   color: #fff;
   display: inline-flex;
-  font-size: .9rem;
-  font-weight: 700;
-  gap: .48rem;
-  padding: .67rem .95rem;
+  font-size: 1rem;
+  font-weight: 600;
+  gap: .5rem;
+  padding: .72rem 1.35rem;
   text-decoration: none;
-  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+  transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
 }
 
 .cover-actions .cover-btn:hover,
 .cover-actions .cover-btn:focus-visible {
-  background: rgba(255, 255, 255, .14);
-  border-color: #fff;
+  background: rgba(255, 255, 255, .22);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .25);
   outline: none;
   transform: translateY(-2px);
 }
 
 .cover-actions .cover-btn.is-primary {
-  background: var(--aws-orange);
-  border-color: var(--aws-orange);
+  background: #fff;
+  border-color: #fff;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .25);
   color: var(--aws-navy);
 }
 
-.cover-actions .cover-btn.is-primary:hover,
-.cover-actions .cover-btn.is-primary:focus-visible { background: #ffad2f; }
+.cover-actions .cover-btn.is-resume { border-color: rgba(255, 255, 255, .72); }
 
 .cover-wrap .cover-disclaimer {
   color: rgba(255, 255, 255, .58);
