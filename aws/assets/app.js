@@ -60,6 +60,7 @@ window.$docsify = {
     studyProgressPlugin,
     bookmarksPlugin,
     highlighterPlugin,
-    coverDotsPlugin
+    coverDotsPlugin,
+    simulatorePlugin
   ]
 };

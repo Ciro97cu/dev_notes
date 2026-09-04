@@ -14,7 +14,7 @@ L'esame dura **130 minuti** e contiene **65 domande**. Cinquanta contribuiscono 
 
 Una risposta omessa è errata, mentre una risposta sbagliata non comporta penalità aggiuntive: conviene quindi rispondere a ogni domanda. Il risultato usa una scala da **100 a 1.000** e la soglia di superamento è **720**. Il modello è compensatorio, perciò conta il risultato complessivo e non è necessario superare separatamente ogni Domain.
 
-Questi numeri descrivono la prova, ma non consentono di trasformare una percentuale grezza di quiz nel punteggio AWS: lo *scaled score* normalizza forme d'esame con difficoltà leggermente diversa. Anche il futuro simulatore del vault produrrà quindi soltanto un punteggio didattico.
+Questi numeri descrivono la prova, ma non consentono di trasformare una percentuale grezza di quiz nel punteggio AWS: lo *scaled score* normalizza forme d'esame con difficoltà leggermente diversa. Anche il [simulatore](../exam/simulatore.md) del vault produce quindi soltanto un punteggio didattico.
 
 AWS descrive il candidato di riferimento come una persona con almeno **un anno di esperienza pratica** nella progettazione di soluzioni cloud che usano servizi AWS. Il dato non si sostituisce con la sola lettura: per chi parte da zero, i laboratori e il progetto progressivo servono a costruire nel tempo una parte di quell'esperienza, senza promettere una scorciatoia artificiale.
 
