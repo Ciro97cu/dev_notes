@@ -24,6 +24,9 @@
 - **Database**
   - [06 · RDS, Aurora, DynamoDB, ElastiCache](/docs/06-database-caching.md)
 
+- **Integrazione e serverless**
+  - [07 · SQS, SNS, EventBridge, Lambda, container](/docs/07-integration-serverless-container.md)
+
 - **Laboratori**
   - [LAB 01 · Bootstrap dell'account](/labs/01-bootstrap-account.md)
   - [LAB 02 · Role e credenziali temporanee](/labs/02-role-credenziali-temporanee.md)
@@ -31,3 +34,4 @@
   - [LAB 04 · Launch template e Auto Scaling](/labs/04-launch-template-auto-scaling.md)
   - [LAB 05 · Bucket S3 sicuro e versionato](/labs/05-bucket-s3-sicuro.md)
   - [LAB 06 · Tabella DynamoDB on-demand](/labs/06-tabella-dynamodb.md)
+  - [LAB 07 · Coda SQS con dead-letter queue](/labs/07-coda-sqs-dlq.md)
