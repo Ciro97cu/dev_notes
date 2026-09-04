@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AWS architecture notes">
+  <rect width="64" height="64" rx="14" fill="#182939"/>
+  <g fill="none" stroke="#ff9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="13" y="14" width="38" height="36" rx="7"/>
+    <rect x="20" y="23" width="8" height="8" rx="1"/>
+    <rect x="36" y="23" width="8" height="8" rx="1"/>
+    <rect x="28" y="37" width="8" height="8" rx="1"/>
+    <path d="M28 27h8M24 31v4l8 2 8-2v-4"/>
+  </g>
+</svg>

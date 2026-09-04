@@ -16,6 +16,7 @@
     { k: 'javascript', n: 'JavaScript', a: '#e6c200' },
     { k: 'typescript', n: 'TypeScript', a: '#3178c6' },
     { k: 'angular',    n: 'Angular',    a: '#dd0031' },
+    { k: 'aws',        n: 'AWS',        a: '#ff9900' },
     { k: 'git',        n: 'Git',        a: '#f05133' },
     { k: 'terminale',  n: 'Terminale',  a: '#64748b' },
     { k: 'code',       n: 'Code',       a: '#059669' },
