@@ -36,6 +36,9 @@
 - **Dati e analytics**
   - [10 · Data ingestion e analytics](/docs/10-data-ingestion-analytics.md)
 
+- **Governance e operazioni**
+  - [11 · Observability, governance e IaC](/docs/11-observability-governance-iac.md)
+
 - **Laboratori**
   - [LAB 01 · Bootstrap dell'account](/labs/01-bootstrap-account.md)
   - [LAB 02 · Role e credenziali temporanee](/labs/02-role-credenziali-temporanee.md)
@@ -47,3 +50,4 @@
   - [LAB 08 · Piano di backup con AWS Backup](/labs/08-aws-backup-plan.md)
   - [LAB 09 · Gateway endpoint privato a S3](/labs/09-vpc-gateway-endpoint.md)
   - [LAB 10 · Interrogare S3 con Athena](/labs/10-athena-su-s3.md)
+  - [LAB 11 · Drift detection con CloudFormation](/labs/11-cloudformation-drift.md)
