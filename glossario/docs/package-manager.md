@@ -14,7 +14,7 @@ npm run build                 # esegue lo script "build" dichiarato in package.j
 
 Dipendenze e script vivono in `package.json`, mentre le versioni **esatte** installate sono bloccate nel lockfile `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze; il rapporto tra i due file è approfondito in [Anatomia di un progetto](anatomia-progetto.md).
 
-Molti pacchetti hanno un nome **con scope**: un prefisso `@qualcosa/` che li raggruppa sotto un'organizzazione, come `@angular/core` o `@types/node`. Lo scope evita le collisioni di nomi — chiunque può pubblicare un pacchetto chiamato `core`, ma `@angular/core` appartiene solo ad Angular — e torna utile con i registry privati, dove un'azienda pubblica i propri pacchetti sotto uno scope suo (`@azienda/…`).
+Molti pacchetti hanno un nome **con scope**: un prefisso `@qualcosa/` che li raggruppa sotto un'organizzazione, come `@angular/core` o `@types/node`. Lo scope evita le collisioni di nomi (chiunque può pubblicare un pacchetto chiamato `core`, ma `@angular/core` appartiene solo ad Angular) e torna utile con i registry privati, dove un'azienda pubblica i propri pacchetti sotto uno scope suo (`@azienda/…`).
 
 ## NPX
 
@@ -71,7 +71,7 @@ C'è una seconda differenza, sulla **struttura** di `node_modules`. NPM la costr
 
 ### Monorepo: workspaces e catalogs
 
-Un **monorepo** è un unico repository che ospita più pacchetti insieme — più applicazioni e librerie che condividono codice. pnpm lo gestisce nativamente con i **workspace**: un file `pnpm-workspace.yaml` alla radice elenca dove stanno i pacchetti.
+Un **monorepo** è un unico repository che ospita più pacchetti insieme: più applicazioni e librerie che condividono codice. pnpm lo gestisce nativamente con i **workspace**: un file `pnpm-workspace.yaml` alla radice elenca dove stanno i pacchetti.
 
 ```yaml
 packages:
@@ -139,7 +139,7 @@ Un'azienda ospita di norma un **registry interno** per due bisogni distinti: ten
 
 Qui la scelta è **mirata per scope**: solo i pacchetti `@azienda/*` vanno al registry privato, tutto il resto continua a scaricare da `npmjs.org` come prima. Scrivere invece una riga secca `registry=https://…` cambierebbe la destinazione di **default per ogni** pacchetto, mandando l'intero traffico al privato (che a quel punto fa da unico varco verso l'esterno). Poiché il privato richiede identità, si aggiunge un **token di autenticazione**, anch'esso in `.npmrc` e di solito letto da una variabile d'ambiente per non finire committato in chiaro.
 
-Strumenti come **Nexus** (per esteso *Sonatype Nexus*), **Artifactory** (JFrog) e **Azure Artifacts** appartengono a una stessa categoria, il **repository manager**: un server che fa da hub centrale dei pacchetti dell'organizzazione. Ne assolve tre compiti insieme: **ospita** i pacchetti interni che non devono uscire; fa da **proxy con cache** verso il registry pubblico (alla prima richiesta di una libreria la scarica da `npmjs.org` e ne conserva una copia, così le richieste successive partono dalla rete interna — più veloci, e ancora disponibili se il pubblico è irraggiungibile o un pacchetto viene ritirato); e copre **più ecosistemi** con lo stesso strumento (non solo npm, ma anche Maven per Java, immagini Docker, pacchetti Python…).
+Strumenti come **Nexus** (per esteso *Sonatype Nexus*), **Artifactory** (JFrog) e **Azure Artifacts** appartengono a una stessa categoria, il **repository manager**: un server che fa da hub centrale dei pacchetti dell'organizzazione. Ne assolve tre compiti insieme: **ospita** i pacchetti interni che non devono uscire; fa da **proxy con cache** verso il registry pubblico (alla prima richiesta di una libreria la scarica da `npmjs.org` e ne conserva una copia, così le richieste successive partono dalla rete interna, più veloci e ancora disponibili se il pubblico è irraggiungibile o un pacchetto viene ritirato); e copre **più ecosistemi** con lo stesso strumento (non solo npm, ma anche Maven per Java, immagini Docker, pacchetti Python…).
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 700 250" role="img" aria-label="Un registry privato (Nexus) sta tra chi installa e il registry pubblico: riceve le richieste indirizzate dal file .npmrc, serve i pacchetti interni dell'azienda che ospita direttamente, e per tutti gli altri fa da proxy con cache verso il registry npm pubblico." style="width:100%;max-width:680px;height:auto;color:inherit">
@@ -162,12 +162,12 @@ Strumenti come **Nexus** (per esteso *Sonatype Nexus*), **Artifactory** (JFrog) 
 <text x="430" y="166" font-size="9" text-anchor="middle" fill-opacity="0.7">proxy · cache</text>
 </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il registry privato sta in mezzo: <strong>ospita</strong> i pacchetti interni (<code>@azienda/*</code>) e, per tutto il resto, fa da <strong>specchio</strong> del registry pubblico — scaricandolo la prima volta e tenendone copia.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il registry privato sta in mezzo: <strong>ospita</strong> i pacchetti interni (<code>@azienda/*</code>) e, per tutto il resto, fa da <strong>specchio</strong> del registry pubblico, scaricandolo la prima volta e tenendone copia.</figcaption>
 </figure>
 
 ### Alternative: JSR
 
-Il registry pubblico non è immune da problemi (pacchetti compromessi, versioni ripubblicate a sorpresa). Da qui la nascita di **JSR** (*JavaScript Registry*), un registry più recente costruito con scelte orientate alla sicurezza: le versioni pubblicate sono **immutabili** — una volta uscita, la `1.0.0` non si può più sostituire — e **non esistono script eseguiti all'installazione**, così l'atto di installare non può far girare codice. JSR non rimpiazza npm, che resta di gran lunga il più fornito e con l'inerzia di un intero ecosistema, ma gli si affianca; i gestori moderni (pnpm, Yarn) vi accedono in modo trasparente per i pacchetti nello spazio dei nomi `@jsr`.
+Il registry pubblico non è immune da problemi (pacchetti compromessi, versioni ripubblicate a sorpresa). Da qui la nascita di **JSR** (*JavaScript Registry*), un registry più recente costruito con scelte orientate alla sicurezza: le versioni pubblicate sono **immutabili** (una volta uscita, la `1.0.0` non si può più sostituire) e **non esistono script eseguiti all'installazione**, così l'atto di installare non può far girare codice. JSR non rimpiazza npm, che resta di gran lunga il più fornito e con l'inerzia di un intero ecosistema, ma gli si affianca; i gestori moderni (pnpm, Yarn) vi accedono in modo trasparente per i pacchetti nello spazio dei nomi `@jsr`.
 
 ## NVM
 

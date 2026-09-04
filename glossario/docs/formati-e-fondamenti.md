@@ -30,7 +30,7 @@ A differenza del CSV, gestisce dati annidati e complessi (un `<libro>` può cont
 
 ## YAML (YAML Ain't Markup Language)
 
-YAML è un formato testuale per rappresentare dati strutturati, pensato per essere **leggibile da una persona** prima ancora che da una macchina. Nasce per un compito preciso, la **configurazione**: descrivere le impostazioni di uno strumento in un file che si scrive e si rilegge a occhio, senza il rumore di parentesi e virgolette. Rappresenta le stesse cose di JSON — mappe (coppie chiave-valore), liste, stringhe, numeri, booleani — ma con una sintassi ridotta all'osso.
+YAML è un formato testuale per rappresentare dati strutturati, pensato per essere **leggibile da una persona** prima ancora che da una macchina. Nasce per un compito preciso, la **configurazione**: descrivere le impostazioni di uno strumento in un file che si scrive e si rilegge a occhio, senza il rumore di parentesi e virgolette. Rappresenta le stesse cose di JSON, ossia mappe (coppie chiave-valore), liste, stringhe, numeri e booleani, ma con una sintassi ridotta all'osso.
 
 L'idea che lo distingue è che la **struttura si esprime con l'indentazione**, cioè con gli spazi a inizio riga, invece che con le parentesi. Ogni livello di annidamento è uno scalino di spazi più a destra; una coppia si scrive `chiave: valore`; gli elementi di una lista si aprono con un trattino `-`. Confrontato con lo stesso dato in JSON, il risparmio di segni si vede subito:
 
