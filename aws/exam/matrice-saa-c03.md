@@ -66,6 +66,7 @@ L'Exam Guide specifica che gli elenchi non sono esaustivi: un servizio *in scope
 | Edge e hybrid network | CloudFront, Global Accelerator, VPN, Direct Connect, PrivateLink, Transit Gateway, VPC peering | D3T4, D4T4 |
 | Data pipeline | Kinesis, Glue, Athena, Lake Formation, EMR e strumenti di visualization | D3T5 |
 | Cost management | Cost Explorer, AWS Budgets, Cost and Usage Report, pricing models e data transfer | D4T1-D4T4 |
+| Observability e governance | CloudWatch, CloudTrail, AWS Config, Trusted Advisor, CloudFormation | trasversale (M11) |
 
 > [!warning]
 > Questa tabella non sostituisce gli elenchi ufficiali *in scope* e *out of scope*. AWS dichiara espressamente che tecnologie e servizi possono cambiare e che il blueprint non è una lista esaustiva di ogni possibile contenuto.
