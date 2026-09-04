@@ -12,7 +12,9 @@ npm install --save-dev vitest # dipendenza di solo sviluppo → "devDependencies
 npm run build                 # esegue lo script "build" dichiarato in package.json
 ```
 
-Dipendenze e script vivono in `package.json`; le versioni **esatte** installate sono bloccate in `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze.
+Dipendenze e script vivono in `package.json`, mentre le versioni **esatte** installate sono bloccate nel lockfile `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze; il rapporto tra i due file è approfondito in [Anatomia di un progetto](anatomia-progetto.md).
+
+Molti pacchetti hanno un nome **con scope**: un prefisso `@qualcosa/` che li raggruppa sotto un'organizzazione, come `@angular/core` o `@types/node`. Lo scope evita le collisioni di nomi — chiunque può pubblicare un pacchetto chiamato `core`, ma `@angular/core` appartiene solo ad Angular — e torna utile con i registry privati, dove un'azienda pubblica i propri pacchetti sotto uno scope suo (`@azienda/…`).
 
 ## NPX
 
@@ -123,10 +125,49 @@ Nella stessa `pnpm-workspace.yaml` compaiono spesso altre due voci:
 
 Il **registry** è il magazzino online da cui i gestori scaricano i pacchetti e su cui li pubblicano: un archivio di tarball (`.tgz`, vedi sotto) interrogabile per nome e versione. Dietro `npm install react` c'è proprio questo: il gestore chiede al registry il pacchetto `react`, riceve il `.tgz` della versione risolta e lo scompatta in `node_modules`.
 
-Il punto che spesso sfugge è che **il registry è un servizio a sé, separato dal gestore**. Quello pubblico e predefinito è il **registry npm** (`registry.npmjs.org`), che però non «appartiene» al comando npm: è l'infrastruttura condivisa da cui attingono **tutti** i gestori dell'ecosistema. NPM, Yarn e pnpm sono tre programmi diversi che, di default, scaricano dallo **stesso** magazzino; cambiare gestore non cambia la fonte dei pacchetti. Da qui due risvolti pratici:
+Il punto che spesso sfugge è che **il registry è un servizio a sé, separato dal gestore**. Quello pubblico e predefinito è il **registry npm** (`registry.npmjs.org`), che però non «appartiene» al comando npm: è l'infrastruttura condivisa da cui attingono **tutti** i gestori dell'ecosistema. NPM, Yarn e pnpm sono tre programmi diversi che, di default, scaricano dallo **stesso** magazzino; cambiare gestore non cambia la fonte dei pacchetti. Da qui due strade che nella pratica si incontrano spesso: i registry privati e le alternative al registry pubblico.
 
-- **Registry privati.** Un'azienda può ospitare un proprio registry interno — con strumenti come **Artifactory**, **Nexus**, **Azure Artifacts** — per le librerie che non devono uscire e per fare da specchio (cache) di quello pubblico. Si indirizza il gestore lì con il file `.npmrc` (`registry=https://…`), a livello di progetto o di utente. È il motivo per cui, in un contesto di lavoro, `npm install` può attingere a un indirizzo aziendale anziché a `npmjs.org`.
-- **Alternative al registry npm.** Il registry pubblico non è immune da problemi (pacchetti compromessi, versioni ripubblicate a sorpresa). Da qui la nascita di **JSR** (*JavaScript Registry*), un registry più recente costruito con scelte orientate alla sicurezza: le versioni pubblicate sono **immutabili** — una volta uscita, la `1.0.0` non si può più sostituire — e **non esistono script eseguiti all'installazione**, così l'atto di installare non può far girare codice. JSR non rimpiazza npm, che resta di gran lunga il più fornito e con l'inerzia di un intero ecosistema, ma gli si affianca; i gestori moderni (pnpm, Yarn) vi accedono in modo trasparente per i pacchetti nello spazio dei nomi `@jsr`.
+### Registry privati e repository manager
+
+Un'azienda ospita di norma un **registry interno** per due bisogni distinti: tenere in casa i pacchetti che non devono circolare all'esterno (pubblicati sotto uno scope proprio, `@azienda/*`) e non dipendere in tutto e per tutto dal registry pubblico. A indirizzare il gestore verso quel registry è il file **`.npmrc`**, e il meccanismo è **automatico**: npm rilegge `.npmrc` a ogni esecuzione (prima quello del progetto, poi quello dell'utente nella home, poi quello globale) e instrada le richieste di conseguenza, senza comandi in più.
+
+```ini
+# .npmrc — nella root del progetto (o nella home dell'utente)
+@azienda:registry=https://nexus.azienda.it/repository/npm-privato/   # i pacchetti @azienda/* → registry privato
+//nexus.azienda.it/repository/npm-privato/:_authToken=${NPM_TOKEN}   # token di accesso al privato
+```
+
+Qui la scelta è **mirata per scope**: solo i pacchetti `@azienda/*` vanno al registry privato, tutto il resto continua a scaricare da `npmjs.org` come prima. Scrivere invece una riga secca `registry=https://…` cambierebbe la destinazione di **default per ogni** pacchetto, mandando l'intero traffico al privato (che a quel punto fa da unico varco verso l'esterno). Poiché il privato richiede identità, si aggiunge un **token di autenticazione**, anch'esso in `.npmrc` e di solito letto da una variabile d'ambiente per non finire committato in chiaro.
+
+Strumenti come **Nexus** (per esteso *Sonatype Nexus*), **Artifactory** (JFrog) e **Azure Artifacts** appartengono a una stessa categoria, il **repository manager**: un server che fa da hub centrale dei pacchetti dell'organizzazione. Ne assolve tre compiti insieme: **ospita** i pacchetti interni che non devono uscire; fa da **proxy con cache** verso il registry pubblico (alla prima richiesta di una libreria la scarica da `npmjs.org` e ne conserva una copia, così le richieste successive partono dalla rete interna — più veloci, e ancora disponibili se il pubblico è irraggiungibile o un pacchetto viene ritirato); e copre **più ecosistemi** con lo stesso strumento (non solo npm, ma anche Maven per Java, immagini Docker, pacchetti Python…).
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 700 250" role="img" aria-label="Un registry privato (Nexus) sta tra chi installa e il registry pubblico: riceve le richieste indirizzate dal file .npmrc, serve i pacchetti interni dell'azienda che ospita direttamente, e per tutti gli altri fa da proxy con cache verso il registry npm pubblico." style="width:100%;max-width:680px;height:auto;color:inherit">
+<g font-family="system-ui,Arial,sans-serif" fill="currentColor">
+<rect x="16" y="100" width="104" height="48" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/>
+<text x="68" y="129" font-size="11" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace">npm install</text>
+<rect x="224" y="88" width="160" height="74" rx="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.7"/>
+<text x="304" y="120" font-size="13" text-anchor="middle" font-weight="700">Nexus</text>
+<text x="304" y="140" font-size="9.5" text-anchor="middle" fill-opacity="0.6">registry privato</text>
+<rect x="480" y="44" width="200" height="52" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/>
+<text x="580" y="66" font-size="10.5" text-anchor="middle">pacchetti interni</text>
+<text x="580" y="84" font-size="10" text-anchor="middle" fill-opacity="0.75" font-family="ui-monospace,Menlo,Consolas,monospace">@azienda/*</text>
+<rect x="480" y="150" width="200" height="52" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4" stroke-dasharray="6 4"/>
+<text x="580" y="181" font-size="10.5" text-anchor="middle">registry npm pubblico</text>
+<path d="M120 124 L224 124" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M224 124 L216 120 L216 128 Z" fill="currentColor"/>
+<text x="171" y="116" font-size="9" text-anchor="middle" fill-opacity="0.7">legge .npmrc</text>
+<path d="M384 116 L478 72" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M480 71 L472 70 L475 78 Z" fill="currentColor"/>
+<text x="432" y="84" font-size="9" text-anchor="middle" fill-opacity="0.7">ospita</text>
+<path d="M384 138 L478 172" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M480 173 L472 168 L474 176 Z" fill="currentColor"/>
+<text x="430" y="166" font-size="9" text-anchor="middle" fill-opacity="0.7">proxy · cache</text>
+</g>
+</svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il registry privato sta in mezzo: <strong>ospita</strong> i pacchetti interni (<code>@azienda/*</code>) e, per tutto il resto, fa da <strong>specchio</strong> del registry pubblico — scaricandolo la prima volta e tenendone copia.</figcaption>
+</figure>
+
+### Alternative: JSR
+
+Il registry pubblico non è immune da problemi (pacchetti compromessi, versioni ripubblicate a sorpresa). Da qui la nascita di **JSR** (*JavaScript Registry*), un registry più recente costruito con scelte orientate alla sicurezza: le versioni pubblicate sono **immutabili** — una volta uscita, la `1.0.0` non si può più sostituire — e **non esistono script eseguiti all'installazione**, così l'atto di installare non può far girare codice. JSR non rimpiazza npm, che resta di gran lunga il più fornito e con l'inerzia di un intero ecosistema, ma gli si affianca; i gestori moderni (pnpm, Yarn) vi accedono in modo trasparente per i pacchetti nello spazio dei nomi `@jsr`.
 
 ## NVM
 
