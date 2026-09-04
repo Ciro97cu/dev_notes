@@ -15,6 +15,10 @@
   - [Package manager e pacchetti](docs/package-manager.md)
   - [Moduli e bundling](docs/moduli-e-bundling.md)
 
+- **Progetto e rilascio**
+  - [Anatomia di un progetto](docs/anatomia-progetto.md)
+  - [CI/CD e pipeline](docs/ci-cd-pipeline.md)
+
 - **Open source e licenze**
   - [Licenze software (MIT, GPL…)](docs/licenze.md)
 

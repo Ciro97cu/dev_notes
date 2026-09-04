@@ -17,7 +17,7 @@ Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e c
 GDPR · ePrivacy (cookie law) · cookie banner · consenso granulare · Privacy/Cookie Policy · CMP · lato sviluppatore (con mockup)
 
 **[Formati dati e fondamenti](docs/formati-e-fondamenti.md)**
-CSV · XML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOFF2)
+CSV · XML · YAML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/WOFF/WOFF2)
 
 **[Date, calendari e tempo](docs/date-calendari-tempo.md)**
 Calendario gregoriano e non (solare · lunare · lunisolare · ere imperiali) · anni bisestili (regola 4/100/400) · anno tropico · perché serve alle librerie di date
@@ -26,10 +26,16 @@ Calendario gregoriano e non (solare · lunare · lunisolare · ere imperiali) ·
 Babel · SWC · transpilazione vs compilazione · plugin e preset
 
 **[Package manager e pacchetti](docs/package-manager.md)**
-NPM · NPX · Yarn · NVM · Tarball (.tgz)
+NPM · NPX · Yarn · pnpm (store, workspaces, catalogs, overrides, allowBuilds) · Registry (npm, privati, JSR) · NVM · Tarball (.tgz)
 
 **[Moduli e bundling](docs/moduli-e-bundling.md)**
 CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitting
+
+**[Anatomia di un progetto](docs/anatomia-progetto.md)**
+package.json · dependencies vs devDependencies · scripts · engines · range semver (^ ~) · lockfile · file dot (.gitignore, .husky, .vscode, .github, .env, .npmrc)
+
+**[CI/CD e pipeline](docs/ci-cd-pipeline.md)**
+integrazione continua · consegna continua · pipeline (stage/job/step) · runner/agent · YAML · esempio Azure (NodeTool, versione di Node)
 
 **[Licenze software (MIT, GPL…)](docs/licenze.md)**
 Permissive vs copyleft · MIT · ISC · BSD · Apache 2.0 · GPLv2/GPLv3 · LGPL · AGPL · nessuna licenza (tutti i diritti riservati) · public domain (CC0) · doppia licenza · campo `license` e SPDX

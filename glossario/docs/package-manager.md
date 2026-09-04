@@ -34,6 +34,100 @@ Yarn è un gestore di pacchetti JavaScript, alternativa a NPM, che consuma anch'
 > [!note]
 > Le versioni moderne di NPM hanno colmato gran parte del divario (cache, `package-lock.json`), quindi oggi la scelta è spesso questione di preferenza o di ecosistema del progetto.
 
+## pnpm
+
+pnpm (*performant npm*) è un terzo gestore di pacchetti, alternativo a NPM e Yarn, che pesca dallo stesso registry npm ma cambia in modo radicale **come** i pacchetti finiscono sul disco. Il problema che affronta è lo spreco del modello classico: con NPM ogni progetto ha la sua `node_modules` piena di copie, così la stessa versione di una libreria vive duplicata in decine di cartelle, occupando spazio e allungando le installazioni.
+
+La soluzione di pnpm è un **archivio unico** (*content-addressable store*): una sola cartella sul disco, di norma sotto la home dell'utente, dove ogni versione di ogni pacchetto è salvata **una volta sola**. Nella `node_modules` del singolo progetto non ci sono copie ma **hard link** a quell'archivio (un hard link è una seconda voce di cartella che punta agli stessi byte su disco: lo stesso file compare in più posti pur esistendo fisicamente una volta). Ne segue un risparmio doppio: installare un pacchetto già presente nell'archivio è quasi istantaneo, perché si creano link invece di scaricare e copiare, e dieci progetti che usano la stessa libreria la tengono su disco una volta sola invece di dieci.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 700 250" role="img" aria-label="pnpm mantiene un archivio unico sul disco dove ogni versione di ogni pacchetto è salvata una sola volta; le cartelle node_modules dei vari progetti (apps/web, apps/admin, packages/ui) non contengono copie ma hard link che puntano a quell'archivio." style="width:100%;max-width:680px;height:auto;color:inherit">
+<g font-family="system-ui,Arial,sans-serif" fill="currentColor">
+<rect x="24" y="50" width="196" height="152" rx="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.7"/>
+<text x="122" y="72" font-size="11" text-anchor="middle" font-weight="700">archivio unico</text>
+<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11" text-anchor="middle">
+<text x="122" y="104">react@19.1.0</text>
+<text x="122" y="130">lodash@4.17.21</text>
+<text x="122" y="156">vite@7.0.0</text>
+</g>
+<text x="122" y="186" font-size="9" text-anchor="middle" fill-opacity="0.6">ogni versione, una volta sola</text>
+<g font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10.5" text-anchor="middle">
+<rect x="476" y="46" width="200" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="576" y="72">apps/web · node_modules</text>
+<rect x="476" y="116" width="200" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="576" y="142">apps/admin · node_modules</text>
+<rect x="476" y="186" width="200" height="44" rx="7" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="576" y="212">packages/ui · node_modules</text>
+</g>
+<path d="M476 68 L226 98" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M220 99 L228 100 L227 92 Z" fill="currentColor"/>
+<path d="M476 138 L226 130" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M220 130 L228 133 L228 126 Z" fill="currentColor"/>
+<path d="M476 208 L226 162" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M220 160 L228 164 L229 156 Z" fill="currentColor"/>
+<text x="352" y="118" font-size="9" text-anchor="middle" fill-opacity="0.7">hard link</text>
+</g>
+</svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">I <code>node_modules</code> dei progetti non copiano i pacchetti: li <strong>collegano</strong> all'archivio comune. Più progetti condividono gli stessi byte su disco.</figcaption>
+</figure>
+
+C'è una seconda differenza, sulla **struttura** di `node_modules`. NPM la costruisce «piatta»: tutte le dipendenze, dirette e indirette, finiscono allo stesso livello, e questo consente per sbaglio di importare un pacchetto mai dichiarato (una *phantom dependency*, arrivata come dipendenza di una dipendenza). pnpm mette invece al primo livello solo le dipendenze **dichiarate** nel `package.json`, tenendo tutto il resto in una sottocartella `.pnpm`: se un import non è tra le dipendenze dichiarate, semplicemente non si risolve. È più rigoroso, e intercetta in anticipo un errore che con NPM passerebbe silenzioso.
+
+### Monorepo: workspaces e catalogs
+
+Un **monorepo** è un unico repository che ospita più pacchetti insieme — più applicazioni e librerie che condividono codice. pnpm lo gestisce nativamente con i **workspace**: un file `pnpm-workspace.yaml` alla radice elenca dove stanno i pacchetti.
+
+```yaml
+packages:
+  - 'apps/*'
+  - 'packages/*'
+```
+
+Da qui pnpm tratta ogni cartella sotto `apps/` e `packages/` come un pacchetto del workspace, li installa insieme e lascia che si riferiscano l'un l'altro senza passare dal registry.
+
+Su un monorepo grande nasce però il problema dell'**allineamento delle versioni**: se dieci pacchetti dipendono tutti da React, è facile che scivolino su versioni leggermente diverse, con bug sottili e difficili da spiegare. La risposta di pnpm (dalla versione 10) sono i **catalogs**: le versioni si dichiarano in **un punto solo**, sempre nella `pnpm-workspace.yaml`, e i singoli `package.json` non scrivono più il numero ma un rimando.
+
+```yaml
+# pnpm-workspace.yaml — le versioni, in un posto solo
+catalog:                       # il catalogo "default", senza nome
+  react: ^19.1.0
+
+catalogs:                      # cataloghi con un nome
+  ng18:
+    '@angular/core': ^18.2.13
+    '@angular/router': ^18.2.13
+```
+
+```json
+// package.json di un pacchetto: nessun numero, solo il rimando
+{
+  "dependencies": {
+    "react": "catalog:",              // pesca dal catalogo default
+    "@angular/core": "catalog:ng18"   // pesca dal catalogo "ng18"
+  }
+}
+```
+
+Aggiornare React per tutto il monorepo diventa così **una riga sola** da cambiare nella `pnpm-workspace.yaml`, invece di una caccia dentro decine di `package.json`. Il `catalog:` senza nome pesca dal catalogo di default; `catalog:ng18` da quello nominato.
+
+Nella stessa `pnpm-workspace.yaml` compaiono spesso altre due voci:
+
+- **`overrides`** — forza una versione precisa in **tutto** l'albero, comprese le dipendenze indirette. Serve quando una libreria annidata trascina una versione che si vuole scavalcare, per esempio per chiudere una falla di sicurezza. La sintassi `genitore>figlio` mira in profondità:
+  ```yaml
+  overrides:
+    'sonarqube-scanner>axios': '1.11.0'   # axios, ma solo dentro sonarqube-scanner, forzato a 1.11.0
+  ```
+- **`allowBuilds`** — decide **quali pacchetti possono eseguire script durante l'installazione**. Alcuni pacchetti hanno script (`postinstall`) che partono appena installati, ad esempio per compilare parti native: comodi, ma anche una porta per codice ostile, perché un pacchetto compromesso potrebbe far girare qualsiasi cosa sulla macchina. Per questo, dalla versione 10, pnpm di default **non li esegue** e pretende una lista esplicita di chi è autorizzato:
+  ```yaml
+  allowBuilds:
+    esbuild: true
+    '@parcel/watcher': true
+  ```
+  È una difesa contro gli attacchi alla *supply chain* (la catena di fornitura del software): il default sicuro è «nessuno esegue script all'installazione», e si apre la porta solo ai pacchetti di cui ci si fida.
+
+## Il registry
+
+Il **registry** è il magazzino online da cui i gestori scaricano i pacchetti e su cui li pubblicano: un archivio di tarball (`.tgz`, vedi sotto) interrogabile per nome e versione. Dietro `npm install react` c'è proprio questo: il gestore chiede al registry il pacchetto `react`, riceve il `.tgz` della versione risolta e lo scompatta in `node_modules`.
+
+Il punto che spesso sfugge è che **il registry è un servizio a sé, separato dal gestore**. Quello pubblico e predefinito è il **registry npm** (`registry.npmjs.org`), che però non «appartiene» al comando npm: è l'infrastruttura condivisa da cui attingono **tutti** i gestori dell'ecosistema. NPM, Yarn e pnpm sono tre programmi diversi che, di default, scaricano dallo **stesso** magazzino; cambiare gestore non cambia la fonte dei pacchetti. Da qui due risvolti pratici:
+
+- **Registry privati.** Un'azienda può ospitare un proprio registry interno — con strumenti come **Artifactory**, **Nexus**, **Azure Artifacts** — per le librerie che non devono uscire e per fare da specchio (cache) di quello pubblico. Si indirizza il gestore lì con il file `.npmrc` (`registry=https://…`), a livello di progetto o di utente. È il motivo per cui, in un contesto di lavoro, `npm install` può attingere a un indirizzo aziendale anziché a `npmjs.org`.
+- **Alternative al registry npm.** Il registry pubblico non è immune da problemi (pacchetti compromessi, versioni ripubblicate a sorpresa). Da qui la nascita di **JSR** (*JavaScript Registry*), un registry più recente costruito con scelte orientate alla sicurezza: le versioni pubblicate sono **immutabili** — una volta uscita, la `1.0.0` non si può più sostituire — e **non esistono script eseguiti all'installazione**, così l'atto di installare non può far girare codice. JSR non rimpiazza npm, che resta di gran lunga il più fornito e con l'inerzia di un intero ecosistema, ma gli si affianca; i gestori moderni (pnpm, Yarn) vi accedono in modo trasparente per i pacchetti nello spazio dei nomi `@jsr`.
+
 ## NVM
 
 **nvm** (*Node Version Manager*) è uno strumento per installare e gestire **più versioni di Node.js** sulla stessa macchina, passando dall'una all'altra secondo il progetto. Il problema che risolve è concreto: Node evolve con major version che portano breaking change (Node 18, 20, 22 hanno API diverse) e un progetto avviato anni fa può essere incompatibile con le versioni più recenti, mentre i progetti nuovi vogliono le ultime funzionalità. Con nvm si installa ciascuna versione in modo isolato e si sceglie quale è attiva, senza che le versioni si calpestino tra loro.

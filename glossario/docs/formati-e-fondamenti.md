@@ -28,6 +28,39 @@ XML è un linguaggio di markup che struttura i dati con **tag** di apertura e ch
 
 A differenza del CSV, gestisce dati annidati e complessi (un `<libro>` può contenere `<capitolo>`, che contiene `<paragrafo>`). È usato per scambio dati tra sistemi (es. SOAP) e per configurazioni. Per la sua verbosità, in molti casi è stato soppiantato da **JSON**.
 
+## YAML (YAML Ain't Markup Language)
+
+YAML è un formato testuale per rappresentare dati strutturati, pensato per essere **leggibile da una persona** prima ancora che da una macchina. Nasce per un compito preciso, la **configurazione**: descrivere le impostazioni di uno strumento in un file che si scrive e si rilegge a occhio, senza il rumore di parentesi e virgolette. Rappresenta le stesse cose di JSON — mappe (coppie chiave-valore), liste, stringhe, numeri, booleani — ma con una sintassi ridotta all'osso.
+
+L'idea che lo distingue è che la **struttura si esprime con l'indentazione**, cioè con gli spazi a inizio riga, invece che con le parentesi. Ogni livello di annidamento è uno scalino di spazi più a destra; una coppia si scrive `chiave: valore`; gli elementi di una lista si aprono con un trattino `-`. Confrontato con lo stesso dato in JSON, il risparmio di segni si vede subito:
+
+```yaml
+# YAML — l'annidamento è dato dagli spazi
+progetto: dev-notes
+versione: 1.0
+autori:
+  - Mario Rossi
+  - Luca Bianchi
+scripts:
+  build: vite build
+  test: vitest
+```
+
+```json
+// JSON — lo stesso dato, con parentesi e virgole
+{
+  "progetto": "dev-notes",
+  "versione": 1.0,
+  "autori": ["Mario Rossi", "Luca Bianchi"],
+  "scripts": { "build": "vite build", "test": "vitest" }
+}
+```
+
+Ogni file JSON è a sua volta YAML valido (YAML ne è un **soprainsieme**), ma di norma si sceglie l'uno o l'altro: JSON viaggia tra programmi e nelle API, YAML si usa dove a leggere e modificare il file è una persona. Lo si incontra soprattutto nei file di **configurazione** degli strumenti di sviluppo: le **pipeline di CI** (`azure-pipelines.yml`, i workflow di GitHub Actions), `docker-compose.yml`, i manifest di Kubernetes, la `pnpm-workspace.yaml` di un monorepo. Il `#` introduce un commento.
+
+> [!warning|label:YAML · due trappole silenziose]
+> **L'indentazione conta** e deve usare **spazi, non tab**: un tab o uno spazio di troppo cambia la struttura o rende il file invalido, ed è la causa numero uno di pipeline che non partono. Seconda insidia, il cosiddetto *Norway problem*: alcune parole non quotate vengono lette come booleani, così il codice del paese `NO` (Norvegia) diventa `false`, e lo stesso capita a `yes`, `on`, `off`. La difesa è mettere tra virgolette i valori che devono restare stringhe: `paese: "NO"`.
+
 ## Bit e Byte
 
 Alla base di ogni operazione di un computer c'è il **sistema binario**: due soli simboli, `0` e `1`.
