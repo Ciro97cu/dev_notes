@@ -14,13 +14,13 @@ Un task passa a **Coperto** soltanto quando esistono:
 3. una verifica pratica o una simulazione motivata;
 4. domande originali con spiegazione dei distrattori.
 
-Lo stato iniziale è quindi prudente: **14/14 task pianificati, 1 avviato, 0 dichiarati coperti**.
+Allo stato attuale: **14/14 task mappati; D1T1 coperto** (modulo 02 e LAB 02), gli altri pianificati.
 
 ## Domain 1 · Design Secure Architectures — 30%
 
 | ID e Task Statement | Conoscenze e decisioni da padroneggiare | Moduli e pratica | Stato |
 |---|---|---|---|
-| **D1T1 · Design secure access to AWS resources** | Shared Responsibility, least privilege, IAM e federation; scegliere utenti, gruppi, ruoli, policy, STS, resource policy, MFA, accesso cross-account, IAM Identity Center, Control Tower e SCP in base allo scenario. | M01 Cloud e account; M02 IAM e multi-account; LAB 01 bootstrap; lab IAM pianificato | **Avviato** |
+| **D1T1 · Design secure access to AWS resources** | Shared Responsibility, least privilege, IAM e federation; scegliere utenti, gruppi, ruoli, policy, STS, resource policy, MFA, accesso cross-account, IAM Identity Center, Control Tower e SCP in base allo scenario. | M01 Cloud e account; M02 IAM, credenziali temporanee e multi-account; LAB 01 bootstrap; LAB 02 role e credenziali temporanee | **Coperto** |
 | **D1T2 · Design secure workloads and applications** | Protezione delle credenziali applicative, service endpoint, porte e protocolli, threat vector e servizi di sicurezza; progettare segmentazione VPC, security group, NACL, route table, WAF, Shield, Secrets Manager, VPN e Direct Connect. | M02, M03 Networking, M09 Edge e hybrid; security lab pianificato | Pianificato |
 | **D1T3 · Determine appropriate data security controls** | Data governance, classification, retention, recovery, encryption e key management; scegliere policy di accesso, KMS, ACM/TLS, rotazione, backup e replica coerenti con compliance e lifecycle. | M02, M05 Storage, M06 Database, M08 Resilience; encryption lab pianificato | Pianificato |
 
