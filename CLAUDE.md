@@ -33,7 +33,7 @@ Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **EC
 - **Come riportare**: **segnalare** le novità **in fondo al messaggio**, dopo aver completato ciò che era stato chiesto. L'integrazione nei vault **non** è automatica: se e come recepirle è **decisione dell'utente** (una volta decisa, si integra con le note storiche del caso — vedi sotto).
 - Dopo il controllo, **aggiornare la data** qui sotto al **primo giorno del mese corrente** (formato `AAAA-MM-01`).
 
-**Ultima verifica novità: 2026-08-01.**
+**Ultima verifica novità: 2026-09-01.**
 
 ## Organizzazione
 - **Una fonte di verità**: un concetto è spiegato in un solo punto; gli altri file rimandano con un link, non riscrivono.
