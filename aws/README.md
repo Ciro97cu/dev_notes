@@ -2,8 +2,8 @@
 
 Questo vault costruisce le conoscenze necessarie per progettare architetture AWS e preparare l'esame **AWS Certified Solutions Architect - Associate (SAA-C03)**. Il percorso parte da zero, ma non riduce lo studio a un catalogo di servizi: ogni servizio entra quando risolve un requisito di sicurezza, resilienza, prestazioni o costo.
 
-> [!info|label:Milestone 4 · Compute elastico]
-> Sono disponibili l'orientamento all'esame, la matrice dei 14 task statement, i moduli 00-04 e i laboratori 01-04: dopo account, identità e rete, il modulo sul compute elastico (EC2, opzioni d'acquisto, load balancing e Auto Scaling), con il laboratorio di launch template e Auto Scaling group a costo zero. I moduli successivi vengono pubblicati soltanto dopo verifica tecnica ed editoriale.
+> [!info|label:Milestone 5 · Storage]
+> Sono disponibili l'orientamento all'esame, la matrice dei 14 task statement, i moduli 00-05 e i laboratori 01-05: dopo account, identità, rete e compute, il modulo sullo storage (object/block/file, classi S3, ciclo di vita, EBS ed EFS), con il laboratorio del bucket S3 sicuro e versionato. I moduli successivi vengono pubblicati soltanto dopo verifica tecnica ed editoriale.
 
 ## Percorso didattico
 
@@ -16,7 +16,7 @@ Il percorso segue una progressione da principiante, mentre la [matrice SAA-C03](
 | 02 | [IAM, credenziali temporanee e multi-account](docs/02-iam-identita-multi-account.md) | Disponibile |
 | 03 | [Amazon VPC e network security](docs/03-vpc-network-security.md) | Disponibile |
 | 04 | [Compute elastico: EC2, Auto Scaling e load balancing](docs/04-compute-ec2-autoscaling.md) | Disponibile |
-| 05 | Storage: S3, EBS, EFS e data lifecycle | In preparazione |
+| 05 | [Storage: S3, EBS, EFS e data lifecycle](docs/05-storage-s3-ebs-efs.md) | Disponibile |
 | 06 | Database e caching: RDS, Aurora, DynamoDB, ElastiCache | In preparazione |
 | 07 | Integration, serverless e container | In preparazione |
 | 08 | High availability e disaster recovery | In preparazione |
@@ -35,6 +35,7 @@ I micro-lab sono indipendenti e possono essere ripetuti senza conservare infrast
 | [LAB 02 · Role e credenziali temporanee](labs/02-role-credenziali-temporanee.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
 | [LAB 03 · VPC minima con CloudFormation](labs/03-vpc-minima-cloudformation.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
 | [LAB 04 · Launch template e Auto Scaling](labs/04-launch-template-auto-scaling.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
+| [LAB 05 · Bucket S3 sicuro e versionato](labs/05-bucket-s3-sicuro.md) | AWS CloudShell + CLI + CloudFormation | ~Nessuno |
 
 Ogni laboratorio futuro dichiarerà prima dell'esecuzione la Region, le risorse create, il costo atteso, il limite temporale e il teardown. I servizi che richiedono infrastrutture costose o difficili da eliminare verranno studiati con simulazioni o negli ambienti gestiti di AWS Skill Builder.
 
