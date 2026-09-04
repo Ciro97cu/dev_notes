@@ -39,6 +39,9 @@
 - **Governance e operazioni**
   - [11 · Observability, governance e IaC](/docs/11-observability-governance-iac.md)
 
+- **Costo e review**
+  - [12 · Cost optimization e architecture review](/docs/12-cost-optimization-architecture-review.md)
+
 - **Laboratori**
   - [LAB 01 · Bootstrap dell'account](/labs/01-bootstrap-account.md)
   - [LAB 02 · Role e credenziali temporanee](/labs/02-role-credenziali-temporanee.md)
@@ -51,3 +54,4 @@
   - [LAB 09 · Gateway endpoint privato a S3](/labs/09-vpc-gateway-endpoint.md)
   - [LAB 10 · Interrogare S3 con Athena](/labs/10-athena-su-s3.md)
   - [LAB 11 · Drift detection con CloudFormation](/labs/11-cloudformation-drift.md)
+  - [LAB 12 · Budget di costo con AWS Budgets](/labs/12-budget-di-costo.md)

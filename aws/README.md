@@ -2,8 +2,8 @@
 
 Questo vault costruisce le conoscenze necessarie per progettare architetture AWS e preparare l'esame **AWS Certified Solutions Architect - Associate (SAA-C03)**. Il percorso parte da zero, ma non riduce lo studio a un catalogo di servizi: ogni servizio entra quando risolve un requisito di sicurezza, resilienza, prestazioni o costo.
 
-> [!info|label:Milestone 11 · Governance e operazioni]
-> Sono disponibili l'orientamento all'esame, la matrice dei 14 task statement, i moduli 00-11 e i laboratori 01-11: dopo dati e analytics, il modulo trasversale su observability, governance e Infrastructure as Code (CloudWatch, CloudTrail, AWS Config, Trusted Advisor, CloudFormation), con il laboratorio di drift detection. Tutti i 14 Task Statement hanno copertura avviata. Il modulo conclusivo viene pubblicato dopo verifica tecnica ed editoriale.
+> [!info|label:Percorso teorico completo · moduli 00-12]
+> Sono disponibili **tutti i moduli (00-12) e i laboratori (01-12)**: dai fondamenti (account, identità, rete, compute, storage, database) a integrazione, resilienza, edge, dati, governance e cost optimization, ciascuno con un laboratorio pratico a costo zero e una matrice di copertura dei 14 Task Statement. Prossimo passo del percorso: il simulatore d'esame client-side e le passate di approfondimento verso lo stato «Coperto» dei task.
 
 ## Percorso didattico
 
@@ -23,7 +23,7 @@ Il percorso segue una progressione da principiante, mentre la [matrice SAA-C03](
 | 09 | [Edge networking e connettività ibrida](docs/09-edge-networking-hybrid.md) | Disponibile |
 | 10 | [Data ingestion e analytics](docs/10-data-ingestion-analytics.md) | Disponibile |
 | 11 | [Observability, governance e Infrastructure as Code](docs/11-observability-governance-iac.md) | Disponibile |
-| 12 | Cost optimization e architecture review | In preparazione |
+| 12 | [Cost optimization e architecture review](docs/12-cost-optimization-architecture-review.md) | Disponibile |
 
 ## Pratica guidata
 
@@ -42,6 +42,7 @@ I micro-lab sono indipendenti e possono essere ripetuti senza conservare infrast
 | [LAB 09 · Gateway endpoint privato a S3](labs/09-vpc-gateway-endpoint.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
 | [LAB 10 · Interrogare S3 con Athena](labs/10-athena-su-s3.md) | AWS CloudShell + CLI + CloudFormation | ~Nessuno |
 | [LAB 11 · Drift detection con CloudFormation](labs/11-cloudformation-drift.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
+| [LAB 12 · Budget di costo con AWS Budgets](labs/12-budget-di-costo.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
 
 Ogni laboratorio futuro dichiarerà prima dell'esecuzione la Region, le risorse create, il costo atteso, il limite temporale e il teardown. I servizi che richiedono infrastrutture costose o difficili da eliminare verranno studiati con simulazioni o negli ambienti gestiti di AWS Skill Builder.
 
