@@ -12,6 +12,10 @@
 - **Identità e accesso**
   - [02 · IAM, credenziali e multi-account](/docs/02-iam-identita-multi-account.md)
 
+- **Rete e sicurezza**
+  - [03 · VPC e network security](/docs/03-vpc-network-security.md)
+
 - **Laboratori**
   - [LAB 01 · Bootstrap dell'account](/labs/01-bootstrap-account.md)
   - [LAB 02 · Role e credenziali temporanee](/labs/02-role-credenziali-temporanee.md)
+  - [LAB 03 · VPC minima con CloudFormation](/labs/03-vpc-minima-cloudformation.md)
