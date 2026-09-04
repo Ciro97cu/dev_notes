@@ -1,6 +1,6 @@
 # Dev Notes — regole comuni
 
-Monorepo di appunti di studio personali, pubblicati come **hub** di 9 siti [docsify](https://docsify.js.org/) statici e indipendenti (zero build): [`html/`](html/), [`css/`](css/), [`javascript/`](javascript/), [`typescript/`](typescript/), [`angular/`](angular/), [`git/`](git/), [`terminale/`](terminale/), [`code/`](code/), [`glossario/`](glossario/). Vedi [README.md](README.md) per l'architettura del sito.
+Monorepo di appunti di studio personali, pubblicati come **hub** di 10 siti [docsify](https://docsify.js.org/) statici e indipendenti (zero build): [`html/`](html/), [`css/`](css/), [`javascript/`](javascript/), [`typescript/`](typescript/), [`angular/`](angular/), [`aws/`](aws/), [`git/`](git/), [`terminale/`](terminale/), [`code/`](code/), [`glossario/`](glossario/). Vedi [README.md](README.md) per l'architettura del sito.
 
 Questo file raccoglie le regole **comuni a tutti i vault**. Ogni cartella ha un proprio `CLAUDE.md` con le regole **specifiche** del vault, che ha la precedenza dove più stringente. Entrambi si caricano da soli: il generale sempre, quello di cartella quando lavori su file di quel sottoalbero.
 
@@ -33,7 +33,7 @@ Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **EC
 - **Come riportare**: **segnalare** le novità **in fondo al messaggio**, dopo aver completato ciò che era stato chiesto. L'integrazione nei vault **non** è automatica: se e come recepirle è **decisione dell'utente** (una volta decisa, si integra con le note storiche del caso — vedi sotto).
 - Dopo il controllo, **aggiornare la data** qui sotto al **primo giorno del mese corrente** (formato `AAAA-MM-01`).
 
-**Ultima verifica novità: 2026-08-01.**
+**Ultima verifica novità: 2026-09-01.**
 
 ## Organizzazione
 - **Una fonte di verità**: un concetto è spiegato in un solo punto; gli altri file rimandano con un link, non riscrivono.

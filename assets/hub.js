@@ -86,7 +86,8 @@
   var VAULTS = {
     html: { n: 'HTML', a: '#e34f26' }, css: { n: 'CSS', a: '#1572b6' },
     javascript: { n: 'JavaScript', a: '#e6c200' }, typescript: { n: 'TypeScript', a: '#3178c6' },
-    angular: { n: 'Angular', a: '#dd0031' }, git: { n: 'Git', a: '#f05133' },
+    angular: { n: 'Angular', a: '#dd0031' }, aws: { n: 'AWS', a: '#ff9900' },
+    git: { n: 'Git', a: '#f05133' },
     terminale: { n: 'Terminale', a: '#64748b' },
     code: { n: 'Code', a: '#059669' }, glossario: { n: 'Glossario', a: '#78716c' }
   };
