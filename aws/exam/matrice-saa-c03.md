@@ -14,7 +14,7 @@ Un task passa a **Coperto** soltanto quando esistono:
 3. una verifica pratica o una simulazione motivata;
 4. domande originali con spiegazione dei distrattori.
 
-Allo stato attuale: **percorso teorico completo (moduli 00-12, laboratori 01-12)**. **14/14 task mappati; D1T1 coperto** (M02 + LAB 02) e i **restanti 13 avviati** (M03-M12 + LAB 03-12). Nessun task resta solo pianificato; l'approfondimento verso «Coperto» procede col simulatore d'esame e le passate successive.
+Allo stato attuale: **percorso teorico completo (moduli 00-12, laboratori 01-12)**. **14/14 task mappati; D1T1 coperto** (M02 + LAB 02) e i **restanti 13 avviati** (M03-M12 + LAB 03-12). Nessun task resta solo pianificato. È disponibile anche il [simulatore d'esame](simulatore.md) con domande originali scenario-based; l'approfondimento verso «Coperto» procede con le passate successive.
 
 ## Domain 1 · Design Secure Architectures — 30%
 

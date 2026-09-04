@@ -117,7 +117,7 @@ Il bootstrap dell'account è l'eccezione naturale: identità root, MFA e imposta
 
 Il **Ripasso lampo** verifica il capitolo con `<details>` nativi. Le domande scenario-based appartengono invece a set separati: una risposta corretta o più risposte corrette, requisiti non ambigui e spiegazione di ogni distrattore.
 
-Il simulatore client-side verrà introdotto soltanto dopo la revisione dei contenuti teorici. Il suo risultato sarà dichiarato "punteggio didattico": non replicherà né predirà lo scaled score AWS.
+Il simulatore client-side ([exam/simulatore.md](exam/simulatore.md), motore in [assets/simulatore.js](assets/simulatore.js)) è stato introdotto dopo la revisione dei contenuti teorici: domande **originali** scenario-based con spiegazione di ogni distrattore, montato via plugin docsify `simulatorePlugin` su `<div id="dn-quiz">`. Il suo risultato è un "punteggio didattico": non replica né predice lo scaled score AWS. Nuove domande si aggiungono all'array `QUESTIONS` di `simulatore.js`.
 
 ## Checklist di manutenzione
 
