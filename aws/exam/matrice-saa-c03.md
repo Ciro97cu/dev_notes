@@ -14,7 +14,7 @@ Un task passa a **Coperto** soltanto quando esistono:
 3. una verifica pratica o una simulazione motivata;
 4. domande originali con spiegazione dei distrattori.
 
-Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2, D2T1, D3T1, D3T2, D3T3, D4T1, D4T2, D4T3 avviati** (M03-M07 + LAB 03-07); gli altri pianificati.
+Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2, D2T1, D2T2, D3T1, D3T2, D3T3, D4T1, D4T2, D4T3 avviati** (M03-M08 + LAB 03-08); gli altri pianificati.
 
 ## Domain 1 · Design Secure Architectures — 30%
 
@@ -29,7 +29,7 @@ Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2,
 | ID e Task Statement | Conoscenze e decisioni da padroneggiare | Moduli e pratica | Stato |
 |---|---|---|---|
 | **D2T1 · Design scalable and loosely coupled architectures** | API, caching, event-driven architecture, microservices stateful/stateless, multi-tier, messaging, container, serverless, workflow e scaling; scegliere servizi purpose-built e confini che consentano ai componenti di scalare indipendentemente. | M07 Integration (SQS, SNS, EventBridge, Lambda, container, Step Functions, API Gateway); LAB 07 coda SQS; M04/M06 compute e database; progetto ordini pianificato | **Avviato** |
-| **D2T2 · Design highly available and/or fault-tolerant architectures** | Global infrastructure, failover, immutable infrastructure, service quota, proxy, durability e visibility; eliminare single point of failure e scegliere Multi-AZ/Multi-Region, backup, RPO/RTO e strategia DR adatta. | M01 foundations, M04-M06, M08 Resilience, M09 Edge; failure drill multi-AZ pianificato | Pianificato |
+| **D2T2 · Design highly available and/or fault-tolerant architectures** | Global infrastructure, failover, immutable infrastructure, service quota, proxy, durability e visibility; eliminare single point of failure e scegliere Multi-AZ/Multi-Region, backup, RPO/RTO e strategia DR adatta. | M08 HA/DR (Multi-AZ, RTO/RPO, 4 strategie DR, AWS Backup, Route 53); LAB 08 AWS Backup; M01/M04-M06 fondamenti; M09 Edge | **Avviato** |
 
 ## Domain 3 · Design High-Performing Architectures — 24%
 
