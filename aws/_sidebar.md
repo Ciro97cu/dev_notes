@@ -21,9 +21,13 @@
 - **Storage**
   - [05 · S3, EBS, EFS e ciclo di vita](/docs/05-storage-s3-ebs-efs.md)
 
+- **Database**
+  - [06 · RDS, Aurora, DynamoDB, ElastiCache](/docs/06-database-caching.md)
+
 - **Laboratori**
   - [LAB 01 · Bootstrap dell'account](/labs/01-bootstrap-account.md)
   - [LAB 02 · Role e credenziali temporanee](/labs/02-role-credenziali-temporanee.md)
   - [LAB 03 · VPC minima con CloudFormation](/labs/03-vpc-minima-cloudformation.md)
   - [LAB 04 · Launch template e Auto Scaling](/labs/04-launch-template-auto-scaling.md)
   - [LAB 05 · Bucket S3 sicuro e versionato](/labs/05-bucket-s3-sicuro.md)
+  - [LAB 06 · Tabella DynamoDB on-demand](/labs/06-tabella-dynamodb.md)
