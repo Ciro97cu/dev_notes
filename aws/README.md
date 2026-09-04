@@ -2,8 +2,8 @@
 
 Questo vault costruisce le conoscenze necessarie per progettare architetture AWS e preparare l'esame **AWS Certified Solutions Architect - Associate (SAA-C03)**. Il percorso parte da zero, ma non riduce lo studio a un catalogo di servizi: ogni servizio entra quando risolve un requisito di sicurezza, resilienza, prestazioni o costo.
 
-> [!info|label:Milestone 8 · Resilienza]
-> Sono disponibili l'orientamento all'esame, la matrice dei 14 task statement, i moduli 00-08 e i laboratori 01-08: dopo integrazione e serverless, il modulo su alta disponibilità e disaster recovery (RTO/RPO, le quattro strategie DR, AWS Backup, Route 53), con il laboratorio del piano AWS Backup. I moduli successivi vengono pubblicati soltanto dopo verifica tecnica ed editoriale.
+> [!info|label:Milestone 9 · Edge e connettività]
+> Sono disponibili l'orientamento all'esame, la matrice dei 14 task statement, i moduli 00-09 e i laboratori 01-09: dopo la resilienza, il modulo su edge networking e connettività ibrida (CloudFront, Global Accelerator, Route 53, VPN e Direct Connect), con il laboratorio del gateway endpoint privato a S3. I moduli successivi vengono pubblicati soltanto dopo verifica tecnica ed editoriale.
 
 ## Percorso didattico
 
@@ -20,7 +20,7 @@ Il percorso segue una progressione da principiante, mentre la [matrice SAA-C03](
 | 06 | [Database e caching: RDS, Aurora, DynamoDB, ElastiCache](docs/06-database-caching.md) | Disponibile |
 | 07 | [Integration, serverless e container](docs/07-integration-serverless-container.md) | Disponibile |
 | 08 | [High availability e disaster recovery](docs/08-alta-disponibilita-disaster-recovery.md) | Disponibile |
-| 09 | Edge networking e connettività ibrida | In preparazione |
+| 09 | [Edge networking e connettività ibrida](docs/09-edge-networking-hybrid.md) | Disponibile |
 | 10 | Data ingestion e analytics | In preparazione |
 | 11 | Observability, governance e Infrastructure as Code | In preparazione |
 | 12 | Cost optimization e architecture review | In preparazione |
@@ -39,6 +39,7 @@ I micro-lab sono indipendenti e possono essere ripetuti senza conservare infrast
 | [LAB 06 · Tabella DynamoDB on-demand](labs/06-tabella-dynamodb.md) | AWS CloudShell + CLI + CloudFormation | ~Nessuno |
 | [LAB 07 · Coda SQS con dead-letter queue](labs/07-coda-sqs-dlq.md) | AWS CloudShell + CLI + CloudFormation | ~Nessuno |
 | [LAB 08 · Piano di backup con AWS Backup](labs/08-aws-backup-plan.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
+| [LAB 09 · Gateway endpoint privato a S3](labs/09-vpc-gateway-endpoint.md) | AWS CloudShell + CLI + CloudFormation | Nessuno |
 
 Ogni laboratorio futuro dichiarerà prima dell'esecuzione la Region, le risorse create, il costo atteso, il limite temporale e il teardown. I servizi che richiedono infrastrutture costose o difficili da eliminare verranno studiati con simulazioni o negli ambienti gestiti di AWS Skill Builder.
 

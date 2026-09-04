@@ -14,7 +14,7 @@ Un task passa a **Coperto** soltanto quando esistono:
 3. una verifica pratica o una simulazione motivata;
 4. domande originali con spiegazione dei distrattori.
 
-Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2, D2T1, D2T2, D3T1, D3T2, D3T3, D4T1, D4T2, D4T3 avviati** (M03-M08 + LAB 03-08); gli altri pianificati.
+Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2, D2T1, D2T2, D3T1, D3T2, D3T3, D3T4, D4T1, D4T2, D4T3, D4T4 avviati** (M03-M09 + LAB 03-09); gli altri pianificati.
 
 ## Domain 1 · Design Secure Architectures — 30%
 
@@ -38,7 +38,7 @@ Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2,
 | **D3T1 · Determine high-performing and/or scalable storage solutions** | Object, file e block storage, servizi managed e opzioni ibride; scegliere servizio e configurazione che soddisfano throughput, latenza e crescita futura. | M05 Storage (object/block/file, classi S3, EBS, EFS); LAB 05 bucket S3; FSx e opzioni ibride pianificati | **Avviato** |
 | **D3T2 · Design high-performing and elastic compute solutions** | EC2, Batch, EMR, Lambda, Fargate, ECS/EKS, messaging e scaling; identificare metriche di scaling e dimensionare il compute senza accoppiare i componenti. | M04 Compute (EC2, ELB, Auto Scaling, pattern ALB+ASG); LAB 04 Auto Scaling; M07 Integration (serverless/container) pianificato | **Avviato** |
 | **D3T3 · Determine high-performing database solutions** | Access pattern, engine, relational/non-relational/in-memory, capacity, IOPS, connection, proxy, cache e replica; scegliere architettura, read replica e cache in base a letture, scritture e latenza. | M06 Database (RDS Multi-AZ/Read Replica, Aurora, DynamoDB, ElastiCache/DAX); LAB 06 DynamoDB; purpose-built pianificati | **Avviato** |
-| **D3T4 · Determine high-performing and/or scalable network architectures** | Subnet tier, routing, addressing, edge, load balancing e connettività privata/ibrida; progettare topologia globale o multi-tier, collocare le risorse e scegliere bilanciatore e collegamento. | M03 Networking, M04 Compute, M09 Edge; network lab pianificato | Pianificato |
+| **D3T4 · Determine high-performing and/or scalable network architectures** | Subnet tier, routing, addressing, edge, load balancing e connettività privata/ibrida; progettare topologia globale o multi-tier, collocare le risorse e scegliere bilanciatore e collegamento. | M09 Edge (CloudFront, Global Accelerator, Route 53, VPN/Direct Connect, Transit Gateway); LAB 09 gateway endpoint; M03/M04 rete e compute | **Avviato** |
 | **D3T5 · Determine high-performing data ingestion and transformation solutions** | Frequenza, volume, velocità, accesso sicuro, transfer, stream, transformation, analytics e visualization; scegliere ingestion, compute, data lake e formato dei dati. | M10 Data ingestion; pipeline lab pianificato | Pianificato |
 
 ## Domain 4 · Design Cost-Optimized Architectures — 20%
@@ -48,7 +48,7 @@ Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2,
 | **D4T1 · Design cost-optimized storage solutions** | Storage type, tier, access pattern, lifecycle, backup, hybrid transfer e strumenti di costo; dimensionare, migrare e archiviare i dati con il servizio e il tier meno costosi che rispettano i requisiti. | M05 Storage (classi, lifecycle, tiering); LAB 05; M12 Cost e transfer ibrido pianificati | **Avviato** |
 | **D4T2 · Design cost-optimized compute solutions** | Instance family/size, scaling, serverless/container, global e hybrid compute, Spot, Reserved Instances e Savings Plans; scegliere disponibilità, bilanciatore e capacità senza spreco. | M04 Compute (opzioni d'acquisto Spot/RI/Savings Plans, rightsizing); LAB 04; M07 e M12 Cost pianificati | **Avviato** |
 | **D4T3 · Design cost-optimized database solutions** | Engine, tipo di database, capacity, cache, connection/proxy, retention, backup e replica; confrontare managed, serverless, relazionale e purpose-built anche nei costi di migrazione. | M06 Database (capacità on-demand/provisioned, caching, serverless); LAB 06; M12 Cost pianificato | **Avviato** |
-| **D4T4 · Design cost-optimized network architectures** | NAT gateway, load balancing, DNS, peering, Transit Gateway, VPN, Direct Connect, bandwidth e data transfer; ridurre passaggi cross-AZ/Region e scegliere endpoint, CDN, route e collegamenti adatti. | M03 Networking, M09 Edge, M12 Cost; network cost review pianificata | Pianificato |
+| **D4T4 · Design cost-optimized network architectures** | NAT gateway, load balancing, DNS, peering, Transit Gateway, VPN, Direct Connect, bandwidth e data transfer; ridurre passaggi cross-AZ/Region e scegliere endpoint, CDN, route e collegamenti adatti. | M09 Edge (CDN, gateway endpoint vs NAT, VPN vs Direct Connect, data transfer); LAB 09; M03 rete; M12 Cost pianificato | **Avviato** |
 
 ## Copertura trasversale dei servizi
 
