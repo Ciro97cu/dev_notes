@@ -14,7 +14,7 @@ Un task passa a **Coperto** soltanto quando esistono:
 3. una verifica pratica o una simulazione motivata;
 4. domande originali con spiegazione dei distrattori.
 
-Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2, D2T1, D2T2, D3T1, D3T2, D3T3, D3T4, D4T1, D4T2, D4T3, D4T4 avviati** (M03-M09 + LAB 03-09); gli altri pianificati.
+Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02) e i **restanti 13 avviati** (M03-M10 + LAB 03-10). Nessun task resta solo pianificato; l'approfondimento verso «Coperto» procede col simulatore e le passate successive.
 
 ## Domain 1 · Design Secure Architectures — 30%
 
@@ -39,7 +39,7 @@ Allo stato attuale: **14/14 task mappati; D1T1 coperto** (M02 + LAB 02); **D1T2,
 | **D3T2 · Design high-performing and elastic compute solutions** | EC2, Batch, EMR, Lambda, Fargate, ECS/EKS, messaging e scaling; identificare metriche di scaling e dimensionare il compute senza accoppiare i componenti. | M04 Compute (EC2, ELB, Auto Scaling, pattern ALB+ASG); LAB 04 Auto Scaling; M07 Integration (serverless/container) pianificato | **Avviato** |
 | **D3T3 · Determine high-performing database solutions** | Access pattern, engine, relational/non-relational/in-memory, capacity, IOPS, connection, proxy, cache e replica; scegliere architettura, read replica e cache in base a letture, scritture e latenza. | M06 Database (RDS Multi-AZ/Read Replica, Aurora, DynamoDB, ElastiCache/DAX); LAB 06 DynamoDB; purpose-built pianificati | **Avviato** |
 | **D3T4 · Determine high-performing and/or scalable network architectures** | Subnet tier, routing, addressing, edge, load balancing e connettività privata/ibrida; progettare topologia globale o multi-tier, collocare le risorse e scegliere bilanciatore e collegamento. | M09 Edge (CloudFront, Global Accelerator, Route 53, VPN/Direct Connect, Transit Gateway); LAB 09 gateway endpoint; M03/M04 rete e compute | **Avviato** |
-| **D3T5 · Determine high-performing data ingestion and transformation solutions** | Frequenza, volume, velocità, accesso sicuro, transfer, stream, transformation, analytics e visualization; scegliere ingestion, compute, data lake e formato dei dati. | M10 Data ingestion; pipeline lab pianificato | Pianificato |
+| **D3T5 · Determine high-performing data ingestion and transformation solutions** | Frequenza, volume, velocità, accesso sicuro, transfer, stream, transformation, analytics e visualization; scegliere ingestion, compute, data lake e formato dei dati. | M10 Data (Kinesis Streams/Firehose, S3 data lake, Glue, Athena/Redshift/EMR, QuickSight); LAB 10 Athena su S3 | **Avviato** |
 
 ## Domain 4 · Design Cost-Optimized Architectures — 20%
 
