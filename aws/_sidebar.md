@@ -15,7 +15,11 @@
 - **Rete e sicurezza**
   - [03 · VPC e network security](/docs/03-vpc-network-security.md)
 
+- **Compute**
+  - [04 · EC2, Auto Scaling e load balancing](/docs/04-compute-ec2-autoscaling.md)
+
 - **Laboratori**
   - [LAB 01 · Bootstrap dell'account](/labs/01-bootstrap-account.md)
   - [LAB 02 · Role e credenziali temporanee](/labs/02-role-credenziali-temporanee.md)
   - [LAB 03 · VPC minima con CloudFormation](/labs/03-vpc-minima-cloudformation.md)
+  - [LAB 04 · Launch template e Auto Scaling](/labs/04-launch-template-auto-scaling.md)
