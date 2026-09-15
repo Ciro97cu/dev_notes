@@ -12,7 +12,7 @@ Il vault nasce da un'esigenza precisa: **un argomento al giorno**, non liste che
 ## Contenuto e voce
 - Voce **professore** del [root](../CLAUDE.md): prosa distesa e discorsiva in italiano, impersonale, ogni tecnicismo sciolto alla prima occorrenza. Il lettore parte da zero: niente gergo dato per scontato (una sigla si apre spiegandola).
 - Ogni nota è **autosufficiente** e apre con una frase-definizione (cos'è, a cosa serve) prima dei dettagli.
-- **Una fonte di verità**: i termini ricorrenti (imposta, tassa, tributo, erario, gettito, aliquota…) stanno nel [glossario](_plain/glossario.md); le note vi rimandano con un link invece di ridefinirli.
+- **Una fonte di verità**: i termini ricorrenti (imposta, tassa, tributo, erario, gettito, aliquota…) stanno nel [glossario](_plain/glossario.md). Se serve rimandarci, si **linka la parola stessa** in prosa (es. l'*[erario](glossario.md)*), **mai** con una clausola meta tipo *«per i termini X e Y usati qui, vedi il glossario»* o *«(vedi il glossario)»*: è voce reattiva/meta, vietata dal [root](../CLAUDE.md). Nel dubbio, spiegare il termine in una parola sul posto e basta.
 - **Accuratezza con fonte ufficiale**: i dati (aliquote, regole, cifre) vanno verificati sulla fonte istituzionale (Agenzia delle Entrate, Gazzetta Ufficiale, siti .gov) e la voce chiude con *Fonte* + data di verifica. Le regole cambiano nel tempo: segnalare che vanno ricontrollate.
 
 ## Visual-first
