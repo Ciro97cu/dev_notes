@@ -56,6 +56,16 @@ function dnPathOf(href) {
   return href;
 }
 function dnEscHtml(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+// docsify mette lo slug GREZZO nell'id dell'heading ma URL-ENCODED nell'href della
+// sidebar (es. «» → %c2%ab%c2%bb, é → %c3%a9). Per confrontarli, si decodifica la
+// parte dopo "?id=" così l'ident letto dalla sidebar combacia con quello del DOM.
+function dnDecodeIdent(ident) {
+  var q = ident.indexOf('?id=');
+  if (q < 0) return ident;
+  var id = ident.slice(q + 4);
+  try { id = decodeURIComponent(id); } catch (e) {}
+  return ident.slice(0, q + 4) + id;
+}
 
 // "Progresso di studio": segna i capitoli come letti (persistito via NotesStore),
 // mostra ✓ nella sidebar e una barra "X/N" in cima alla navigazione, con un
@@ -142,7 +152,7 @@ function studyProgressPlugin(hook, vm) {
     var read = getRead();
     var links = [].slice.call(document.querySelectorAll('.sidebar-nav a'));
     links.forEach(function (a) {
-      var ident = (a.getAttribute('href') || '').replace(/^#/, '');   // /docs/x  o  /docs/x?id=sez
+      var ident = dnDecodeIdent((a.getAttribute('href') || '').replace(/^#/, ''));   // /docs/x  o  /docs/x?id=sez
       var base = ident.split('?')[0];
       if (!base || DN_SKIP[base]) return;
       var chk = a.querySelector('.dn-check');
