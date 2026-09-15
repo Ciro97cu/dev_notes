@@ -1,34 +1,36 @@
 /*
- * civica/encrypt.mjs — cifratore locale del vault privato.
+ * civica/encrypt.mjs — cifratore locale del vault privato (docsify cifrato).
  *
- * Legge le note IN CHIARO da  civica/_plain/*.md  e le cifra in
- *   civica/notes/<id>.enc   (una nota cifrata per file, id opaco)
- *   civica/index.enc        (elenco cifrato dei titoli)
- *   civica/crypto.json      (salt + iterazioni + verificatore — pubblici, NON è la chiave)
+ * Legge TUTTO l'albero di contenuti IN CHIARO da  civica/_plain/**.md
+ * (le pagine docsify: README.md, _sidebar.md, _coverpage.md, le note…) e lo
+ * impacchetta in UN SOLO file cifrato:
+ *   civica/content.enc      mappa { "percorso.md": "markdown…" } cifrata (AES-256-GCM)
+ *   civica/crypto.json      salt + iterazioni + verificatore — pubblici, NON è la chiave
  *
- * La PASSPHRASE non viene mai salvata: si digita a ogni esecuzione
- * (oppure, per automazione, via variabile d'ambiente CIVICA_PASSPHRASE).
- * Il testo in chiaro resta in _plain/ (gitignored): nel repo e su GitHub
- * finiscono soltanto i .enc, illeggibili senza la passphrase.
+ * Un unico blob cifrato ha un vantaggio di riservatezza: su GitHub non trapela
+ * nemmeno QUANTE note ci sono né i loro nomi (a differenza di tanti file .enc).
+ *
+ * La PASSPHRASE non viene mai salvata: si digita a ogni esecuzione (oppure, per
+ * automazione, via variabile d'ambiente CIVICA_PASSPHRASE). Il testo in chiaro
+ * resta in _plain/ (gitignored): nel repo e su GitHub finisce solo content.enc,
+ * illeggibile senza la passphrase.
  *
  * Uso:   node civica/encrypt.mjs      (poi: git add civica && git commit)
  *
- * Crittografia: AES-256-GCM, chiave derivata dalla passphrase con
- * PBKDF2-SHA-256 (300k iterazioni) su un salt casuale. Stessi parametri
- * del lettore nel browser (reader.js), così i .enc sono interoperabili.
+ * Crittografia: AES-256-GCM, chiave derivata dalla passphrase con PBKDF2-SHA-256
+ * (300k iterazioni) su un salt casuale. Stessi parametri del lettore nel browser
+ * (assets/gate.js), così il blob è interoperabile.
  */
-import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join, basename } from 'node:path';
-import { createInterface } from 'node:readline';
+import { dirname, join, relative, sep } from 'node:path';
 import { webcrypto as wc } from 'node:crypto';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PLAIN = join(HERE, '_plain');
-const NOTES = join(HERE, 'notes');
 const CRYPTO = join(HERE, 'crypto.json');
-const INDEX = join(HERE, 'index.enc');
+const CONTENT = join(HERE, 'content.enc');
 
 const enc = new TextEncoder();
 const dec = new TextDecoder();
@@ -64,24 +66,62 @@ async function decryptText(key, blobStr) {
   return dec.decode(pt);
 }
 
-async function sha256hex(s) {
-  const h = await wc.subtle.digest('SHA-256', enc.encode(s));
-  return [...new Uint8Array(h)].map((b) => b.toString(16).padStart(2, '0')).join('');
+// Raccoglie ricorsivamente tutti i .md sotto _plain/, con chiave = percorso
+// relativo in stile URL ("docs/iva.md"), che è ciò che docsify richiede.
+async function collectMarkdown(dir) {
+  const out = {};
+  async function walk(d) {
+    for (const ent of await readdir(d, { withFileTypes: true })) {
+      const p = join(d, ent.name);
+      if (ent.isDirectory()) { await walk(p); continue; }
+      if (!ent.name.endsWith('.md')) continue;
+      const key = relative(PLAIN, p).split(sep).join('/');
+      out[key] = await readFile(p, 'utf8');
+    }
+  }
+  await walk(dir);
+  return out;
 }
 
 function askPassphrase() {
   if (process.env.CIVICA_PASSPHRASE) return Promise.resolve(process.env.CIVICA_PASSPHRASE);
+  const input = process.stdin;
+  if (!input.isTTY) {
+    console.error('Nessun terminale interattivo per digitare la passphrase.');
+    console.error('Eseguire lo script in un terminale vero, oppure passarla così:');
+    console.error('  CIVICA_PASSPHRASE="la-tua-passphrase" node civica/encrypt.mjs');
+    process.exit(1);
+  }
+  // Lettura muta carattere per carattere (raw mode): niente dipendenza dagli
+  // interni di readline, che in alcuni terminali non raccoglievano l'input.
   return new Promise((resolve) => {
-    const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-    rl._writeToOutput = () => {}; // input muto: la passphrase non compare a schermo
-    process.stdout.write('Passphrase: ');
-    rl.question('', (ans) => { rl.close(); process.stdout.write('\n'); resolve(ans); });
+    process.stdout.write('Passphrase (digitala, non compare a schermo): ');
+    input.setRawMode(true);
+    input.resume();
+    input.setEncoding('utf8');
+    let buf = '';
+    const done = (value) => {
+      input.setRawMode(false);
+      input.pause();
+      input.removeListener('data', onData);
+      process.stdout.write('\n');
+      resolve(value);
+    };
+    const onData = (chunk) => {
+      for (const ch of chunk) {
+        if (ch === '\r' || ch === '\n' || ch === '') { done(buf); return; } // Invio / Ctrl-D
+        if (ch === '') { input.setRawMode(false); process.stdout.write('\n'); process.exit(1); } // Ctrl-C
+        if (ch === '' || ch === '\b') { buf = buf.slice(0, -1); continue; } // backspace
+        if (ch >= ' ') buf += ch; // ignora le altre sequenze di controllo (frecce ecc.)
+      }
+    };
+    input.on('data', onData);
   });
 }
 
 async function main() {
   if (!existsSync(PLAIN)) {
-    console.error('Manca civica/_plain/ con le note in chiaro (*.md).');
+    console.error('Manca civica/_plain/ con le pagine in chiaro (*.md).');
     process.exit(1);
   }
   const meta = await loadOrInitCrypto();
@@ -103,19 +143,12 @@ async function main() {
   }
   await writeFile(CRYPTO, JSON.stringify(meta, null, 2) + '\n');
 
-  await mkdir(NOTES, { recursive: true });
-  const files = (await readdir(PLAIN)).filter((f) => f.endsWith('.md')).sort();
-  const index = [];
-  for (const f of files) {
-    const text = await readFile(join(PLAIN, f), 'utf8');
-    const m = text.match(/^#\s+(.+)$/m);
-    const title = m ? m[1].trim() : basename(f, '.md');
-    const id = (await sha256hex(f)).slice(0, 16);
-    await writeFile(join(NOTES, id + '.enc'), await encryptText(key, text));
-    index.push({ id, title });
-  }
-  await writeFile(INDEX, await encryptText(key, JSON.stringify(index)));
-  console.log(`Cifrate ${files.length} note.`);
+  const map = await collectMarkdown(PLAIN);
+  const paths = Object.keys(map).sort();
+  if (!paths.length) { console.error('Nessun .md in _plain/: interrompo.'); process.exit(1); }
+  await writeFile(CONTENT, await encryptText(key, JSON.stringify(map)));
+  console.log(`Cifrate ${paths.length} pagine in content.enc:`);
+  for (const p of paths) console.log('  · ' + p);
   console.log('Ora:  git add civica && git commit -m "civica: aggiorna note (cifrate)"  (il chiaro resta in _plain/, escluso da git).');
 }
 
