@@ -14,12 +14,14 @@
   if (!lockBtn) return;
 
   var enc = new TextEncoder(), dec = new TextDecoder();
+  var SKEY = 'civica-key';   // chiave derivata (per la sessione) condivisa col vault
   function unb64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
+  function b64(buf) { var a = new Uint8Array(buf), s = ''; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
   async function deriveKey(pass, meta) {
     var bk = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveKey']);
     return crypto.subtle.deriveKey(
       { name: 'PBKDF2', salt: unb64(meta.salt), iterations: meta.iterations, hash: 'SHA-256' },
-      bk, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+      bk, { name: 'AES-GCM', length: 256 }, true, ['decrypt']   // estraibile: la salviamo in sessione per l'auto-sblocco del vault
     );
   }
   async function decryptText(k, blobStr) {
@@ -60,6 +62,8 @@
       var ok = false;
       try { ok = (await decryptText(key, meta.check)) === 'civica-ok'; } catch (e) { ok = false; }
       if (!ok) { showErr('Passphrase errata.'); return; }
+      // Salva la chiave (non la passphrase) in sessione: il vault si aprirà già sbloccato.
+      try { sessionStorage.setItem(SKEY, b64(await crypto.subtle.exportKey('raw', key))); } catch (e) {}
       revealCard();
       closePop();
     } catch (e) {
@@ -92,10 +96,14 @@
     if (cardEls) { cardEls.forEach(function (el) { el.remove(); }); cardEls = null; }
     revealed = false;
     lockBtn.classList.remove('on');
+    try { sessionStorage.removeItem(SKEY); } catch (e) {}   // ri-blocca anche il vault
   }
 
   lockBtn.addEventListener('click', function () {
     if (revealed) { hideCard(); return; }
     openPop();
   });
+
+  // Se la sessione è già sbloccata (hub → vault → ritorno all'hub), mostra la card.
+  try { if (sessionStorage.getItem(SKEY)) revealCard(); } catch (e) {}
 })();

@@ -108,7 +108,22 @@
 
   // ── Cancello ──
   var errEl, input;
+  var SKEY = 'civica-key';   // chiave derivata condivisa dall'hub (auto-sblocco)
   function showErr(msg) { if (errEl) errEl.textContent = msg || ''; }
+
+  // Verifica il verificatore, decifra i contenuti e avvia docsify. Comune al
+  // percorso con passphrase e a quello con chiave già in sessione.
+  async function finishUnlock(key, meta) {
+    var ok = false;
+    try { ok = (await decryptText(key, meta.check)) === 'civica-ok'; } catch (e) { ok = false; }
+    if (!ok) return false;
+    var blobStr = await (await realFetch('content.enc', { cache: 'no-store' })).text();
+    MEM = JSON.parse(await decryptText(key, blobStr));
+    installShims();
+    wipeSearchOnUnload();
+    boot();
+    return true;
+  }
 
   async function unlock() {
     var pass = input.value;
@@ -117,21 +132,30 @@
     try {
       var meta = await (await realFetch('crypto.json', { cache: 'no-store' })).json();
       var key = await deriveKey(pass, meta);
-      var ok = false;
-      try { ok = (await decryptText(key, meta.check)) === 'civica-ok'; } catch (e) { ok = false; }
-      if (!ok) { showErr('Passphrase errata.'); return; }
-      var blobStr = await (await realFetch('content.enc', { cache: 'no-store' })).text();
-      MEM = JSON.parse(await decryptText(key, blobStr));
-      installShims();
-      wipeSearchOnUnload();
-      boot();
+      if (!(await finishUnlock(key, meta))) { showErr('Passphrase errata.'); return; }
     } catch (e) {
       if (e && (e.status === 404 || /content\.enc|crypto\.json/.test(String(e)))) showErr('Vault non ancora inizializzato (esegui encrypt.mjs).');
       else showErr('Errore nel caricamento.');
     }
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  // Auto-sblocco: se l'hub ha già verificato la passphrase, la chiave è in
+  // sessionStorage — la importiamo e apriamo senza richiedere di nuovo nulla.
+  async function tryAutoUnlock() {
+    var raw = null;
+    try { raw = sessionStorage.getItem(SKEY); } catch (e) {}
+    if (!raw) return false;
+    try {
+      var meta = await (await realFetch('crypto.json', { cache: 'no-store' })).json();
+      var key = await crypto.subtle.importKey('raw', unb64(raw), { name: 'AES-GCM' }, false, ['decrypt']);
+      return await finishUnlock(key, meta);
+    } catch (e) {
+      try { sessionStorage.removeItem(SKEY); } catch (_) {}
+      return false;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', async function () {
     input = document.getElementById('cv-pass');
     errEl = document.getElementById('cv-err');
     var btn = document.getElementById('cv-unlock');
@@ -139,6 +163,7 @@
     if (!(window.crypto && crypto.subtle)) { showErr('Apri il vault su http://localhost o https:// (la cifratura non funziona da file://).'); return; }
     btn.addEventListener('click', unlock);
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock(); });
+    if (await tryAutoUnlock()) return;   // arrivo dall'hub già sbloccato → salto il prompt
     input.focus();
   });
 })();
