@@ -36,9 +36,12 @@ encrypt.mjs        cifratore locale
 ## Callout e Ripasso lampo
 Come gli altri vault docsify: callout con **sintassi a pipe** (`> [!tipo|label:Titolo]`, vedi [root](../CLAUDE.md)); l'auto-valutazione a fine nota è la sezione **`## Ripasso lampo`** con box `<details>` pieghevoli (`<summary>` = domanda). Il reso di callout e `<details>` è già stilizzato in `assets/styles.css`.
 
+## Ordinamento degli argomenti (per logica, non per data)
+Sidebar e indice seguono un **ordine logico**, non l'ordine in cui le note vengono scritte: si va dalle **fondamenta** al concreto — prima *Lo Stato* (chi fa le regole: Costituzione e poteri, come nasce una legge, Parlamento, Governo), poi *Il fisco* (le tasse che ne discendono, dal reddito ai consumi: IRPEF, busta paga, IVA), poi economia e Europa, e i *Riferimenti* (glossario) in fondo. Dentro ogni gruppo le voci vanno dal generale/fondante al particolare. Quando aggiungi una nota, **inseriscila al suo posto logico**, non in coda: riordina `_sidebar.md` e `README.md` se serve.
+
 ## Checklist quando aggiungi/rinomini una nota
-- [ ] `_plain/_sidebar.md` — voce nel gruppo giusto.
-- [ ] `_plain/README.md` — riga nell'indice degli argomenti.
+- [ ] `_plain/_sidebar.md` — voce nel **posto logico** del gruppo giusto (non in fondo per forza).
+- [ ] `_plain/README.md` — riga nell'indice, nello stesso ordine logico della sidebar.
 - [ ] Termini nuovi ricorrenti → aggiunti al [glossario](_plain/glossario.md), con link dalla nota.
 - [ ] **SVG inline** dove la nota ha una dimensione visiva, verificato in WebKit.
 - [ ] *Fonte* ufficiale + data di verifica in fondo.
