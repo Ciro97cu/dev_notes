@@ -1,12 +1,13 @@
 /*
- * hub-civica.js — mostra/nasconde nell'hub la card del vault privato civica.
+ * hub-civica.js — porta d'ingresso al vault privato civica dall'hub.
  *
  * L'hub è PUBBLICO: qui non c'è nessun segreto. L'iconcina lucchetto nel footer
  * apre un campo passphrase; la passphrase viene verificata DAVVERO contro
- * civica/crypto.json (deriva la chiave e decifra il verificatore), non con un
- * finto controllo. Se è giusta compare la card che punta a civica/ (che è a sua
- * volta cifrato); lo stesso lucchetto la rimuove. La passphrase non viene
- * memorizzata: nel vault va reinserita. Ricaricando l'hub, la card sparisce.
+ * civica/crypto.json (deriva la chiave e decifra il verificatore). Se è giusta,
+ * si salva la chiave derivata (NON la passphrase) in sessionStorage e si va
+ * DIRITTI nel vault (civica/), che si apre già sbloccato. Nessuna card resta
+ * nell'hub: tornando indietro non si vede nulla. Se la sessione è già sbloccata,
+ * il lucchetto entra senza richiedere di nuovo la passphrase.
  */
 (function () {
   'use strict';
@@ -30,9 +31,12 @@
     return dec.decode(pt);
   }
 
-  var pop = null, cardEls = null, revealed = false;
+  function enterVault() { location.assign('civica/'); }
+  function hasSession() { try { return !!sessionStorage.getItem(SKEY); } catch (e) { return false; } }
 
+  var pop = null;
   function closePop() { if (pop) { pop.remove(); pop = null; } lockBtn.setAttribute('aria-expanded', 'false'); }
+  function showErr(m) { var e = pop && pop.querySelector('#cvh-err'); if (e) e.textContent = m || ''; }
 
   function openPop() {
     if (pop) { closePop(); return; }
@@ -40,7 +44,7 @@
     pop = document.createElement('div');
     pop.className = 'cvh-pop';
     pop.innerHTML =
-      '<div class="cvh-row"><input id="cvh-pass" type="password" autocomplete="off" spellcheck="false" placeholder="passphrase"><button id="cvh-go" type="button">Apri</button></div>' +
+      '<div class="cvh-row"><input id="cvh-pass" type="password" autocomplete="off" spellcheck="false" placeholder="passphrase"><button id="cvh-go" type="button">Entra</button></div>' +
       '<div class="cvh-err" id="cvh-err"></div>';
     document.body.appendChild(pop);
     lockBtn.setAttribute('aria-expanded', 'true');
@@ -50,8 +54,6 @@
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); else if (e.key === 'Escape') closePop(); });
     input.focus();
   }
-
-  function showErr(m) { var e = pop && pop.querySelector('#cvh-err'); if (e) e.textContent = m || ''; }
 
   async function submit(pass) {
     if (!pass) { showErr('Inserisci la passphrase.'); return; }
@@ -64,46 +66,14 @@
       if (!ok) { showErr('Passphrase errata.'); return; }
       // Salva la chiave (non la passphrase) in sessione: il vault si aprirà già sbloccato.
       try { sessionStorage.setItem(SKEY, b64(await crypto.subtle.exportKey('raw', key))); } catch (e) {}
-      revealCard();
-      closePop();
+      enterVault();
     } catch (e) {
       showErr('Vault non ancora inizializzato.');
     }
   }
 
-  function revealCard() {
-    var grid = document.querySelector('main.grid');
-    if (!grid || revealed) { revealed = true; lockBtn.classList.add('on'); return; }
-    var h = document.createElement('h2');
-    h.className = 'group-h';
-    h.textContent = 'Privato';
-    var a = document.createElement('a');
-    a.className = 'card';
-    a.href = 'civica/';
-    a.setAttribute('style', '--accent:#1c7d70');
-    a.innerHTML =
-      '<span class="tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M12 3 3 8h18z"/><path d="M5 8v9"/><path d="M10 8v9"/><path d="M14 8v9"/><path d="M19 8v9"/></svg></span>' +
-      '<span class="body"><span class="title">civica</span><span class="desc">Educazione civica: fisco, Stato e attualità. Privato e cifrato.</span></span>';
-    grid.appendChild(h);
-    grid.appendChild(a);
-    cardEls = [h, a];
-    revealed = true;
-    lockBtn.classList.add('on');
-    a.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
-
-  function hideCard() {
-    if (cardEls) { cardEls.forEach(function (el) { el.remove(); }); cardEls = null; }
-    revealed = false;
-    lockBtn.classList.remove('on');
-    try { sessionStorage.removeItem(SKEY); } catch (e) {}   // ri-blocca anche il vault
-  }
-
   lockBtn.addEventListener('click', function () {
-    if (revealed) { hideCard(); return; }
+    if (hasSession()) { enterVault(); return; }   // già sbloccato in questa sessione: entra diretto
     openPop();
   });
-
-  // Se la sessione è già sbloccata (hub → vault → ritorno all'hub), mostra la card.
-  try { if (sessionStorage.getItem(SKEY)) revealCard(); } catch (e) {}
 })();

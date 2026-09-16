@@ -30,7 +30,7 @@ Un unico blob cifrato ha un vantaggio di riservatezza: su GitHub non trapela nem
 
 Apri `civica/` nel browser **su `http://localhost` o `https://`** (la cifratura del browser non funziona da `file://`), inserisci la passphrase: il cancello decifra i contenuti **in memoria** e apre il vault, senza mandare nulla in rete.
 
-In alternativa si entra **dall'hub**: l'iconcina lucchetto nel footer chiede la passphrase (verificata contro `crypto.json`) e mostra la card civica; cliccandola il vault si apre **già sbloccato**, perché l'hub ha messo la chiave derivata in `sessionStorage` (non la passphrase). Ricliccando il lucchetto la card sparisce e la sessione si ri-blocca (la chiave viene rimossa). La chiave in sessione dura finché non chiudi la scheda o non ri-blocchi: è il prezzo della comodità di non reinserire la passphrase.
+In alternativa si entra **dall'hub**: l'iconcina lucchetto nel footer chiede la passphrase (verificata contro `crypto.json`) e, se giusta, porta **diritti nel vault**, che si apre già sbloccato — nessuna card resta nell'hub, tornando indietro non si vede nulla. L'hub salva la chiave derivata (non la passphrase) in `sessionStorage`, così il vault non richiede di nuovo la passphrase; se la sessione è già sbloccata, il lucchetto entra diretto senza chiedere nulla. La chiave in sessione dura finché non si chiude la scheda del browser (allora si ri-blocca).
 
 ## Avvertenze di sicurezza
 
