@@ -5,17 +5,26 @@
  * apre un campo passphrase; la passphrase viene verificata DAVVERO contro
  * civica/crypto.json (deriva la chiave e decifra il verificatore). Se è giusta,
  * si salva la chiave derivata (NON la passphrase) in sessionStorage e si va
- * DIRITTI nel vault (civica/), che si apre già sbloccato. Nessuna card resta
- * nell'hub: tornando indietro non si vede nulla. Se la sessione è già sbloccata,
- * il lucchetto entra senza richiedere di nuovo la passphrase.
+ * DIRITTI nel vault (civica/), che si apre già sbloccato senza chiederla di nuovo.
+ *
+ * L'hub è "terreno bloccato": ogni volta che lo si carica la chiave di sessione
+ * viene CANCELLATA, così tornando all'hub il vault si ri-blocca e il prossimo
+ * ingresso richiede di nuovo la passphrase. Dentro il vault, invece, la chiave
+ * resta per la sua sessione (un refresh non fa ripartire il prompt).
  */
 (function () {
   'use strict';
+  var SKEY = 'civica-key';   // chiave derivata (per la sessione) condivisa col vault
+
+  // Stare nell'hub = fuori dal vault: si ri-blocca (togliamo la chiave di sessione).
+  function relock() { try { sessionStorage.removeItem(SKEY); } catch (e) {} }
+  relock();
+  window.addEventListener('pageshow', relock);   // anche al ritorno da bfcache
+
   var lockBtn = document.getElementById('hub-civica-lock');
   if (!lockBtn) return;
 
   var enc = new TextEncoder(), dec = new TextDecoder();
-  var SKEY = 'civica-key';   // chiave derivata (per la sessione) condivisa col vault
   function unb64(s) { return Uint8Array.from(atob(s), function (c) { return c.charCodeAt(0); }); }
   function b64(buf) { var a = new Uint8Array(buf), s = ''; for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s); }
   async function deriveKey(pass, meta) {
@@ -30,9 +39,6 @@
     var pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(o.iv) }, k, unb64(o.ct));
     return dec.decode(pt);
   }
-
-  function enterVault() { location.assign('civica/'); }
-  function hasSession() { try { return !!sessionStorage.getItem(SKEY); } catch (e) { return false; } }
 
   var pop = null;
   function closePop() { if (pop) { pop.remove(); pop = null; } lockBtn.setAttribute('aria-expanded', 'false'); }
@@ -66,14 +72,11 @@
       if (!ok) { showErr('Passphrase errata.'); return; }
       // Salva la chiave (non la passphrase) in sessione: il vault si aprirà già sbloccato.
       try { sessionStorage.setItem(SKEY, b64(await crypto.subtle.exportKey('raw', key))); } catch (e) {}
-      enterVault();
+      location.assign('civica/');
     } catch (e) {
       showErr('Vault non ancora inizializzato.');
     }
   }
 
-  lockBtn.addEventListener('click', function () {
-    if (hasSession()) { enterVault(); return; }   // già sbloccato in questa sessione: entra diretto
-    openPop();
-  });
+  lockBtn.addEventListener('click', openPop);
 })();
