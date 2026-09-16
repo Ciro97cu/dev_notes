@@ -1,14 +1,14 @@
 /* ============================================================
-   Vault civica — tema brand teal civico #1c7d70, chiaro + scuro.
+   Vault civica — tema brand marrone civico #7b4f2a, chiaro + scuro.
    Override del tema "vue" di docsify + design token.
    Callout impeccable-compliant (box pieni tintati, NO side-stripe).
    ============================================================ */
 
 :root {
   /* Brand */
-  --css-blue: #1c7d70;
-  --css-blue-dark: #146055;
-  --css-accent: #109184;
+  --css-blue: #8a5a2b;
+  --css-blue-dark: #6d4620;
+  --css-accent: #a2712f;
   --theme-color: var(--css-blue);
   --on-accent: #fff;
 
@@ -25,10 +25,10 @@
   --border: #e4e8ec;
   --sidebar-bg: #fbfcfd;
   --code-bg: #f4f6f8;
-  --code-inline-bg: #e4f2ef;
-  --code-inline-text: #0c6055;
+  --code-inline-bg: #f2ebe1;
+  --code-inline-text: #6d4620;
   --link: var(--css-blue-dark);
-  --table-head-bg: #e8f4f1;
+  --table-head-bg: #f1e9dd;
 
   /* Citazione page-ref */
   --ref-bg: #f6f8fa;
@@ -48,11 +48,11 @@
 }
 
 html.dark {
-  --css-blue: #4fc3b2;
-  --css-blue-dark: #6fd4c4;
-  --css-accent: #109184;
-  --theme-color: #4fc3b2;
-  --on-accent: #08201c;
+  --css-blue: #cda468;
+  --css-blue-dark: #dcb884;
+  --css-accent: #a2712f;
+  --theme-color: #cda468;
+  --on-accent: #241708;
 
   --bg: #0d1117;
   --bg-soft: #161b22;
@@ -62,10 +62,10 @@ html.dark {
   --border: #232b35;
   --sidebar-bg: #0b0f14;
   --code-bg: #12181f;
-  --code-inline-bg: #0e2420;
-  --code-inline-text: #74d6c6;
-  --link: #6fd4c4;
-  --table-head-bg: #10201d;
+  --code-inline-bg: #241a10;
+  --code-inline-text: #dcb884;
+  --link: #dcb884;
+  --table-head-bg: #201810;
 
   --ref-bg: #12181f;
   --ref-text: #9aa5b1;
@@ -287,7 +287,7 @@ section.cover {
   overflow: hidden;
   background:
     radial-gradient(130% 100% at 12% 6%, rgba(255, 255, 255, .16), transparent 45%) center / cover no-repeat,
-    linear-gradient(135deg, #0f5f54 0%, #1c7d70 55%, #0c463d 100%) center / cover no-repeat,
+    linear-gradient(135deg, #5b3d1f 0%, #7b4f2a 55%, #432c16 100%) center / cover no-repeat,
     #1572b6 !important;
 }
 section.cover #cover-dots { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
