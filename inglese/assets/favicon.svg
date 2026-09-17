@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" role="img" aria-label="Inglese">
+  <g fill="#2f5c8a">
+    <path d="M50 30 C 40 24 22 24 14 30 L 14 74 C 22 68 40 68 50 74 Z"/>
+    <path d="M50 30 C 60 24 78 24 86 30 L 86 74 C 78 68 60 68 50 74 Z"/>
+  </g>
+  <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+    <path d="M50 33 L 50 70"/>
+    <path d="M22 39 H 41"/><path d="M22 48 H 41"/><path d="M22 57 H 39"/>
+    <path d="M59 39 H 78"/><path d="M59 48 H 78"/><path d="M61 57 H 78"/>
+  </g>
+</svg>

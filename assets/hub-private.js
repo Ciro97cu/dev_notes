@@ -1,27 +1,25 @@
 /*
- * hub-civica.js — porta d'ingresso al vault privato civica dall'hub.
+ * hub-private.js — porta d'ingresso ai vault privati (civica, inglese, …) dall'hub.
  *
  * L'hub è PUBBLICO: qui non c'è nessun segreto. L'iconcina lucchetto nel footer
- * apre un campo passphrase; la passphrase viene verificata DAVVERO contro
- * civica/crypto.json (deriva la chiave e decifra il verificatore). Se è giusta,
- * si salva la chiave derivata (NON la passphrase) in sessionStorage e si va
- * DIRITTI nel vault (civica/), che si apre già sbloccato senza chiederla di nuovo.
+ * apre un campo passphrase; la passphrase viene provata DAVVERO contro ogni vault
+ * nascosto (deriva la chiave e decifra il verificatore <vault>-ok). La password
+ * SCEGLIE il vault: quella di civica apre civica, quella di inglese apre inglese
+ * (per questo devono essere diverse). Al match si salva la chiave derivata (NON la
+ * passphrase) in sessionStorage e si va DIRITTI nel vault, già sbloccato.
  *
- * L'hub è "terreno bloccato": ogni volta che lo si carica la chiave di sessione
- * viene CANCELLATA, così tornando all'hub il vault si ri-blocca e il prossimo
- * ingresso richiede di nuovo la passphrase. Dentro il vault, invece, la chiave
- * resta per la sua sessione (un refresh non fa ripartire il prompt).
+ * L'hub è "terreno bloccato": a ogni caricamento le chiavi di sessione vengono
+ * cancellate, così tornando all'hub i vault si ri-bloccano.
  */
 (function () {
   'use strict';
-  var SKEY = 'civica-key';   // chiave derivata (per la sessione) condivisa col vault
+  var VAULTS = ['civica', 'inglese'];   // cartelle dei vault nascosti
 
-  // Stare nell'hub = fuori dal vault: si ri-blocca (togliamo la chiave di sessione).
-  function relock() { try { sessionStorage.removeItem(SKEY); } catch (e) {} }
+  function relock() { try { for (var i = 0; i < VAULTS.length; i++) sessionStorage.removeItem(VAULTS[i] + '-key'); } catch (e) {} }
   relock();
   window.addEventListener('pageshow', relock);   // anche al ritorno da bfcache
 
-  var lockBtn = document.getElementById('hub-civica-lock');
+  var lockBtn = document.getElementById('hub-private-lock');
   if (!lockBtn) return;
 
   var enc = new TextEncoder(), dec = new TextDecoder();
@@ -61,21 +59,31 @@
     input.focus();
   }
 
+  // Prova la password contro un vault: se apre, ritorna la chiave esportata (b64).
+  async function tryVault(vault, pass) {
+    var r = await fetch(vault + '/crypto.json', { cache: 'no-store' });
+    if (!r.ok) return null;                       // vault non ancora inizializzato
+    var meta = await r.json();
+    var key = await deriveKey(pass, meta);
+    var ok = false;
+    try { ok = (await decryptText(key, meta.check)) === (vault + '-ok'); } catch (e) { ok = false; }
+    if (!ok) return null;
+    return b64(await crypto.subtle.exportKey('raw', key));
+  }
+
   async function submit(pass) {
     if (!pass) { showErr('Inserisci la passphrase.'); return; }
     showErr('verifico…');
-    try {
-      var meta = await (await fetch('civica/crypto.json', { cache: 'no-store' })).json();
-      var key = await deriveKey(pass, meta);
-      var ok = false;
-      try { ok = (await decryptText(key, meta.check)) === 'civica-ok'; } catch (e) { ok = false; }
-      if (!ok) { showErr('Passphrase errata.'); return; }
-      // Salva la chiave (non la passphrase) in sessione: il vault si aprirà già sbloccato.
-      try { sessionStorage.setItem(SKEY, b64(await crypto.subtle.exportKey('raw', key))); } catch (e) {}
-      location.assign('civica/');
-    } catch (e) {
-      showErr('Vault non ancora inizializzato.');
+    for (var i = 0; i < VAULTS.length; i++) {
+      var vault = VAULTS[i], keyB64 = null;
+      try { keyB64 = await tryVault(vault, pass); } catch (e) { keyB64 = null; }
+      if (keyB64) {
+        try { sessionStorage.setItem(vault + '-key', keyB64); } catch (e) {}
+        location.assign(vault + '/');            // la password ha scelto il vault
+        return;
+      }
     }
+    showErr('Passphrase errata.');
   }
 
   lockBtn.addEventListener('click', openPop);

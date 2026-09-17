@@ -26,9 +26,9 @@
   <link rel="stylesheet" href="assets/hub.css" />
   <style>
     /* Iconcina discreta nel footer per il vault privato (civica) */
-    #hub-civica-lock{background:none;border:0;cursor:pointer;color:var(--footer);opacity:.45;padding:0 .1rem;margin-left:.15rem;vertical-align:-2px;line-height:0;transition:opacity .15s,color .15s}
-    #hub-civica-lock:hover{opacity:.9}
-    #hub-civica-lock.on{opacity:1;color:#7b4f2a}
+    #hub-private-lock{background:none;border:0;cursor:pointer;color:var(--footer);opacity:.45;padding:0 .1rem;margin-left:.15rem;vertical-align:-2px;line-height:0;transition:opacity .15s,color .15s}
+    #hub-private-lock:hover{opacity:.9}
+    #hub-private-lock.on{opacity:1;color:#7b4f2a}
     .cvh-pop{position:fixed;left:50%;bottom:54px;transform:translateX(-50%);z-index:2147483200;width:min(340px,92vw);background:var(--panel);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--card-shadow);padding:.9rem;backdrop-filter:blur(8px)}
     .cvh-pop .cvh-row{display:flex;gap:.5rem}
     .cvh-pop input{flex:1;font:inherit;padding:.55rem .7rem;border:1px solid var(--card-border);border-radius:10px;background:var(--bg);color:var(--fg)}
@@ -161,14 +161,14 @@
     </main>
   </div>
 
-  <footer>Dev Notes · appunti personali di studio · <code>docsify</code>, zero build<button id="hub-civica-lock" type="button" aria-label="Area privata" title="Area privata"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button></footer>
+  <footer>Dev Notes · appunti personali di studio · <code>docsify</code>, zero build<button id="hub-private-lock" type="button" aria-label="Area privata" title="Area privata"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button></footer>
 
   <button id="hub-help-btn" type="button" aria-label="Scorciatoie da tastiera" title="Scorciatoie da tastiera (?)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
   <button id="hub-data-btn" type="button" aria-label="Backup e trasferimento dati" title="Backup e trasferimento dati (d)"></button>
   <button id="theme-toggle" type="button" aria-label="Cambia tema chiaro/scuro"></button>
   <script src="assets/hub.js"></script>
   <script src="assets/hub-search.js"></script>
-  <script src="assets/hub-civica.js"></script>
+  <script src="assets/hub-private.js"></script>
   <script src="assets/version.js"></script>
 
 </body>
