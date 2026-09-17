@@ -1,0 +1,6 @@
+# Il testo IN CHIARO delle note vive qui e NON deve mai finire in git/GitHub.
+# Nel repo finisce solo il blob cifrato (content.enc) + crypto.json (salt/iter).
+_plain/
+# file di anteprima/test temporanei
+__*.html
+__test*

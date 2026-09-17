@@ -24,10 +24,12 @@
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname, join, relative, sep } from 'node:path';
+import { dirname, join, relative, sep, basename } from 'node:path';
 import { webcrypto as wc } from 'node:crypto';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+const VAULT = basename(HERE);          // nome del vault (cartella): civica, inglese…
+const OK = VAULT + '-ok';              // verificatore per-vault (retro-compatibile con civica)
 const PLAIN = join(HERE, '_plain');
 const CRYPTO = join(HERE, 'crypto.json');
 const CONTENT = join(HERE, 'content.enc');
@@ -133,13 +135,13 @@ async function main() {
   // Verificatore: impedisce di ri-cifrare tutto con una passphrase diversa per errore.
   if (meta.check) {
     let ok = false;
-    try { ok = (await decryptText(key, meta.check)) === 'civica-ok'; } catch { ok = false; }
+    try { ok = (await decryptText(key, meta.check)) === OK; } catch { ok = false; }
     if (!ok) {
       console.error('Passphrase diversa da quella usata finora: interrompo per non rendere le note irrecuperabili.');
       process.exit(1);
     }
   } else {
-    meta.check = await encryptText(key, 'civica-ok');
+    meta.check = await encryptText(key, OK);
   }
   await writeFile(CRYPTO, JSON.stringify(meta, null, 2) + '\n');
 
@@ -149,7 +151,7 @@ async function main() {
   await writeFile(CONTENT, await encryptText(key, JSON.stringify(map)));
   console.log(`Cifrate ${paths.length} pagine in content.enc:`);
   for (const p of paths) console.log('  · ' + p);
-  console.log('Ora:  git add civica && git commit -m "civica: aggiorna note (cifrate)"  (il chiaro resta in _plain/, escluso da git).');
+  console.log('Ora:  git add ' + VAULT + ' && git commit -m "' + VAULT + ': aggiorna note (cifrate)"  (il chiaro resta in _plain/, escluso da git).');
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

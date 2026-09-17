@@ -20,6 +20,8 @@
   'use strict';
   var enc = new TextEncoder(), dec = new TextDecoder();
   var DIR = location.pathname.replace(/[^/]*$/, '');           // es. "/civica/"
+  var VAULT = (DIR.match(/([^/]+)\/$/) || [])[1] || 'vault';   // nome cartella: civica, inglese…
+  var CHECK = VAULT + '-ok';                                   // verificatore per-vault
   var realFetch = window.fetch ? window.fetch.bind(window) : null;
   var realOpen = XMLHttpRequest.prototype.open;
   var MEM = null, blobCache = {};
@@ -82,40 +84,43 @@
 
   function boot() {
     document.getElementById('cv-gate').remove();
-    var app = document.getElementById('app');
-    app.style.display = '';
-    // Prima i plugin (si registrano in $docsify.plugins), POI il core docsify,
-    // POI le lingue Prism (che estendono il Prism incluso nel core).
+    document.getElementById('app').style.display = '';
+    // ORDINE: core PRIMA (imposta window.Docsify), poi i plugin (molti leggono
+    // window.Docsify al caricamento), poi le lingue Prism. Poiché il core, iniettato
+    // dinamicamente, programma l'init con setTimeout(0), i plugin devono registrarsi
+    // PRIMA di quel tick: perciò scarichiamo tutto come testo e lo eseguiamo INLINE
+    // in sequenza — esecuzione sincrona in un solo tick, deterministica.
     var scripts = [
+      '../assets/vendor/docsify.min.js',
       '../assets/vendor/docsify-search.min.js',
       '../assets/vendor/docsify-copy-code.min.js',
       '../assets/vendor/docsify-pagination.min.js',
       '../assets/vendor/docsify-flexible-alerts.min.js',
-      '../assets/vendor/docsify.min.js',
       '../assets/vendor/prism-bash.min.js',
       '../assets/vendor/prism-json.min.js',
       '../assets/vendor/prism-markup.min.js'
     ];
-    (function next(i) {
-      if (i >= scripts.length) return;
-      var s = document.createElement('script');
-      s.src = scripts[i];
-      s.onload = function () { next(i + 1); };
-      s.onerror = function () { next(i + 1); };
-      document.body.appendChild(s);
-    })(0);
+    Promise.all(scripts.map(function (u) {
+      return realFetch(u).then(function (r) { return r.text(); });
+    })).then(function (codes) {
+      codes.forEach(function (code) {
+        var s = document.createElement('script');
+        s.textContent = code;                 // script inline: esegue SINCRONO all'append
+        document.head.appendChild(s);
+      });
+    }).catch(function () { showErr('Errore nel caricamento del lettore.'); });
   }
 
   // ── Cancello ──
   var errEl, input;
-  var SKEY = 'civica-key';   // chiave derivata condivisa dall'hub (auto-sblocco)
+  var SKEY = VAULT + '-key';   // chiave derivata condivisa dall'hub (auto-sblocco), per-vault
   function showErr(msg) { if (errEl) errEl.textContent = msg || ''; }
 
   // Verifica il verificatore, decifra i contenuti e avvia docsify. Comune al
   // percorso con passphrase e a quello con chiave già in sessione.
   async function finishUnlock(key, meta) {
     var ok = false;
-    try { ok = (await decryptText(key, meta.check)) === 'civica-ok'; } catch (e) { ok = false; }
+    try { ok = (await decryptText(key, meta.check)) === CHECK; } catch (e) { ok = false; }
     if (!ok) return false;
     var blobStr = await (await realFetch('content.enc', { cache: 'no-store' })).text();
     MEM = JSON.parse(await decryptText(key, blobStr));
