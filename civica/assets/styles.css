@@ -302,12 +302,12 @@ section.cover .cover-main {
 }
 .cover-wrap { display: flex; flex-direction: column; align-items: center; }
 .cover-logo {
-  width: 96px;
-  height: 96px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 1rem;
-  /* alone bianco SOTTILE (0.6px): stacca dallo sfondo ma non riempie i tagli
-     interni del disegno, così il lineart (cupola, colonne, arco) resta visibile. */
-  filter: drop-shadow(0.6px 0 0 #fff) drop-shadow(-0.6px 0 0 #fff) drop-shadow(0 0.6px 0 #fff) drop-shadow(0 -0.6px 0 #fff) drop-shadow(0 4px 9px rgba(0,0,0,.4));
+  /* il logo è una "targa" chiara con il municipio marrone: si vede tutto il
+     disegno; basta un'ombra morbida per staccarla dal fondo (niente alone). */
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.42));
 }
 section.cover .cover-wrap h1 {
   margin: .2rem 0 .1rem;
