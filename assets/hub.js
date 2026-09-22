@@ -357,9 +357,12 @@
     return obj.data;
   }
 
-  // Parametri del QR animato: blocchi piccoli = QR meno denso e più facile da inquadrare;
-  // FPS basso = ogni frame resta stabile più a lungo (la camera fa in tempo a leggerlo).
-  var CHUNK = 200, FPS = 5, QR_PX = 260;
+  // Parametri del QR animato. CHUNK grande = meno blocchi K = ciclo più corto: il payload
+  // è base64 (QR in byte mode), che a livello L regge ~850 byte già a versione 20, quindi
+  // 500 byte/blocco restano leggibili su una camera moderna senza sfiorare quel limite.
+  // FPS moderato = ogni frame resta stabile abbastanza da essere letto (uno perso non fa
+  // ricominciare: il fountain aspetta il successivo).
+  var CHUNK = 500, FPS = 7, QR_PX = 260;
 
   // ── Modal comune ──────────────────────────────────────────────────────────
   function makeModal(label) {
