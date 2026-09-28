@@ -29,7 +29,7 @@ Babel · SWC · transpilazione vs compilazione · plugin e preset
 NPM · NPX · Yarn · pnpm (store, workspaces, catalogs, overrides, allowBuilds) · Registry (npm, privati, JSR) · NVM · Tarball (.tgz)
 
 **[Moduli e bundling](docs/moduli-e-bundling.md)**
-CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitting
+CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitting · Module Federation
 
 **[Anatomia di un progetto](docs/anatomia-progetto.md)**
 package.json · dependencies vs devDependencies · scripts · engines · range semver (^ ~) · lockfile · file dot (.gitignore, .husky, .vscode, .github, .env, .npmrc)

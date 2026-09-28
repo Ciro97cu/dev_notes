@@ -152,3 +152,45 @@ Anche qui va tenuto d'occhio il [barrel](docs/moduli-e-bundling.md?id=barrel-bar
 
 > [!tip]
 > Riferimento: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import" target="_blank" rel="noopener">MDN · <code>import()</code></a>. In Angular il lazy loading delle route è il tema di <a href="../angular/#/capitoli/04-router-navigation-lazy-loading" target="_blank" rel="noopener">ch04 · Navigation &amp; Lazy Loading</a>, il code-splitting per rotta in <a href="../angular/#/cert/performance" target="_blank" rel="noopener">cert · Performance</a>.
+
+## Module Federation
+
+Il **Module Federation** è una funzionalità dei bundler — introdotta in **webpack 5** e oggi presente anche in **rspack** e, via plugin, in Vite/Rollup — che permette a un'applicazione di **caricare a runtime codice prodotto da un'altra applicazione**, costruita e rilasciata in modo del tutto indipendente, come se fosse un modulo locale. È la base "nativa del bundler" per costruire [micro frontend](docs/micro-frontend-singlespa.md): più app separate, ciascuna con il proprio team, build e deploy, che in pagina si compongono in un'esperienza unica.
+
+Il problema che risolve è il passo successivo al [code-splitting](docs/moduli-e-bundling.md?id=lazy-loading). Il lazy loading spezza **una sola** applicazione in più chunk, ma tutti prodotti dallo **stesso** build: la shell sa già a build-time cosa contengono. Il Module Federation sposta quel confine **tra build diversi**: la shell importa un modulo che vive in un altro progetto, servito da un altro URL, **senza averne il codice quando viene compilata**. Il collegamento si stringe solo mentre l'app gira nel browser.
+
+Attorno a questo girano pochi termini. Si chiama **host** (o *shell*) l'app che consuma, **remote** quella che espone. Un remote pubblica, accanto al proprio bundle, un piccolo manifest — per convenzione **`remoteEntry.js`** — che elenca ciò che mette a disposizione (gli **`exposes`**, per esempio `./Button`); l'host lo scarica a runtime per sapere come caricare quei moduli. Le dipendenze comuni (React, Angular…) si dichiarano **`shared`**, così vengono **caricate una volta sola** e riusate da tutti invece di essere duplicate in ogni app, con una negoziazione di versione (`singleton`, `requiredVersion`). Nulla vieta a un'app di essere insieme host e remote.
+
+```js
+// remote (mfe1) — espone un componente e condivide react in singola istanza
+new ModuleFederationPlugin({
+  name: 'mfe1',
+  filename: 'remoteEntry.js',
+  exposes: { './Button': './src/Button' },
+  shared: { react: { singleton: true } },
+});
+
+// host (shell) — dichiara da dove prendere il remote
+new ModuleFederationPlugin({
+  name: 'shell',
+  remotes: { mfe1: 'mfe1@https://cdn.example.com/mfe1/remoteEntry.js' },
+  shared: { react: { singleton: true } },
+});
+```
+
+```js
+// nella shell: un import() dinamico che attraversa il confine di deploy
+const { Button } = await import('mfe1/Button');
+```
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 600 300" role="img" aria-label="Module Federation: la shell importa a runtime moduli da due remote deployati a parte, mentre la dipendenza shared viene caricata una sola volta e riusata da tutti" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="300" y="22" font-size="12.5" text-anchor="middle" font-weight="700">Module Federation: la shell carica a runtime moduli da app deployate a parte</text><rect x="34" y="120" width="140" height="60" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="104" y="147" font-size="11.5" text-anchor="middle" font-weight="700">host (shell)</text><text x="104" y="164" font-size="9.5" text-anchor="middle" opacity=".7">consuma i remote</text><rect x="250" y="46" width="150" height="58" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="325" y="72" font-size="11" text-anchor="middle" font-weight="700">mfe1 (remote)</text><text x="325" y="90" font-size="9.5" text-anchor="middle" opacity=".7">remoteEntry.js</text><rect x="430" y="46" width="150" height="58" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="505" y="72" font-size="11" text-anchor="middle" font-weight="700">mfe2 (remote)</text><text x="505" y="90" font-size="9.5" text-anchor="middle" opacity=".7">remoteEntry.js</text><path d="M150 120 L312 104" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M312 104 L303.4 108.9 L302.6 101 Z" fill="currentColor"/><path d="M168 124 L442 104" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M442 104 L433.3 109.5 L432.7 101.5 Z" fill="currentColor"/><text x="224" y="103" font-size="9.5" text-anchor="middle" font-weight="600">@ runtime</text><rect x="250" y="230" width="200" height="46" rx="8" fill="var(--link,#78716c)" fill-opacity=".16" stroke="currentColor" stroke-width="1.6"/><text x="350" y="252" font-size="11" text-anchor="middle" font-weight="700">react · shared</text><text x="350" y="268" font-size="9.5" text-anchor="middle" opacity=".75">caricata una sola volta</text><path d="M270 230 L124 182" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/><path d="M330 230 L326 106" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/><path d="M402 230 L500 106" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">I riquadri tratteggiati sono app <strong>deployate a parte</strong>. Le frecce piene: la shell importa i moduli dei remote <strong>a runtime</strong>, leggendone il <code>remoteEntry.js</code>. Le linee punteggiate: la dipendenza <code>shared</code> (qui React) è caricata <strong>una volta sola</strong> e riusata da shell e remote, evitando copie duplicate in pagina.</figcaption>
+</figure>
+
+Il guadagno è organizzativo prima ancora che tecnico: ogni team **rilascia in autonomia** e un cambiamento in un remote va online **senza ricompilare l'host**, mentre le dipendenze `shared` evitano di scaricare due volte lo stesso framework. Il prezzo è un **accoppiamento a runtime**: se le versioni delle librerie `shared` divergono e non si impone una singola istanza (`singleton`), si aprono bug sottili — due copie di React nella stessa pagina, per dire — e il debugging attraversa più deploy.
+
+Lo stesso bisogno di *condividere moduli a runtime* lo affrontano anche altre strade: [single-spa con le import map](docs/micro-frontend-singlespa.md) lo risolve a livello di **browser** anziché di **bundler**; Angular lo reinterpreta come **Native Federation**, riportando l'idea sugli standard del web (import map + esbuild) per non restare legata a webpack — vedi <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">ch18 · Micro Frontends</a>. Dalla versione 2.0, del resto, anche il Module Federation ha scorporato il proprio runtime dal singolo bundler.
+
+> [!tip]
+> Riferimento: <a href="https://module-federation.io/" target="_blank" rel="noopener">module-federation.io</a> e <a href="https://webpack.js.org/concepts/module-federation/" target="_blank" rel="noopener">webpack · Module Federation</a>.
