@@ -28,6 +28,9 @@ Babel · SWC · transpilazione vs compilazione · plugin e preset
 **[Package manager e pacchetti](docs/package-manager.md)**
 NPM · NPX · Yarn · pnpm (store, workspaces, catalogs, overrides, allowBuilds) · Registry (npm, privati, JSR) · NVM · Tarball (.tgz)
 
+**[Bundler (webpack, Vite, Rollup…)](docs/bundler.md)**
+Cos'è un bundler (grafo dei moduli, risoluzione, ottimizzazione) · bundler vs transpiler · webpack · Rollup · Rolldown · Vite · esbuild · Rspack · Parcel e Turbopack · quale scegliere · il bundler in Angular (builder `application`, esbuild e Vite, ng-packagr)
+
 **[Moduli e bundling](docs/moduli-e-bundling.md)**
 CommonJS · Barrel (barrel file) · Tree-shaking · Lazy loading · code-splitting · Module Federation
 
