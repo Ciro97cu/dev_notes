@@ -1,6 +1,6 @@
 # Moduli e bundling
 
-Come JavaScript organizza il codice in moduli e come i bundler ne sfruttano la struttura per ridurre e spezzare il codice spedito al browser.
+Come JavaScript organizza il codice in moduli e come i [bundler](docs/bundler.md) ne sfruttano la struttura per ridurre e spezzare il codice spedito al browser.
 
 ## CommonJS
 
