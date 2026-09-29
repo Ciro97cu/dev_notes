@@ -40,6 +40,43 @@ setTimeout(later, 1000);
 
 ---
 
+## Call stack e mono-thread
+
+*➕ Fuori dal libro — YDKJS cita il call stack solo di sfuggita (come limite, «Maximum call stack size exceeded», e come stack frame parlando di tail call optimization nel capitolo sulla metaprogrammazione), senza mai ricostruirne il ruolo nel modello di esecuzione. Questa sezione colma quel passaggio, perché è la metà che rende comprensibile l'event loop qui sotto.*
+
+Prima di vedere chi decide *quando* parte un chunk, conviene capire **come** un chunk viene eseguito. La struttura che se ne occupa è il **call stack** (la pila delle chiamate): l'elenco, sempre aggiornato, di quali funzioni sono in corso in questo istante e in quale ordine si sono chiamate a vicenda.
+
+Il funzionamento è quello di una pila di piatti. A ogni chiamata di funzione il motore vi **impila** un *frame*, il blocchetto che custodisce parametri, variabili locali e il punto a cui tornare; quando la funzione restituisce, il frame viene **tolto dalla cima** e il controllo torna a chi l'aveva chiamata. L'ultimo entrato è il primo a uscire. Come quei frame occupino concretamente la memoria è descritto in <a href="../glossario/#/docs/memoria?id=memoria-stack-e-heap" target="_blank" rel="noopener">glossario · Stack e heap</a>.
+
+```js
+function bar() { console.log("dentro bar"); }
+function foo() { bar(); }
+foo();
+
+/* Evoluzione della pila, con la cima a destra:
+   [ main ]              → parte il programma
+   [ main, foo ]         → foo() chiamata
+   [ main, foo, bar ]    → bar() chiamata da foo
+   [ main, foo ]         → bar ha restituito: frame rimosso
+   [ main ]              → foo ha restituito
+   [ ]                   → pila vuota                     */
+```
+
+Qui sta il significato della frase «JavaScript è **mono-thread**» (*single-threaded*): esiste **un solo call stack**, quindi si esegue **una cosa per volta**. Da questo discende direttamente il *run-to-completion* descritto più avanti — una funzione non può essere interrotta a metà, perché finché il suo frame sta sulla pila nessun altro codice può prenderne il posto.
+
+E da questo discende anche la regola che tiene insieme le due metà del modello, altrimenti invisibile: **l'event loop preleva il prossimo evento dalla coda solo quando il call stack è vuoto.** Un callback non si intromette mai in mezzo al codice in corso; aspetta che la pila si sia svuotata.
+
+Resta l'equivoco più diffuso, che conviene sciogliere subito: **«JavaScript è mono-thread» non significa «il browser è mono-thread»**. Il motore JS ha una sola pila, ma l'ambiente che lo ospita no: timer, richieste di rete e ascolto degli eventi del DOM sono gestiti dal browser **altrove**, su thread propri. È esattamente per questo che l'asincronia è possibile senza che il linguaggio abbia i thread — quando si chiama `setTimeout`, il conteggio non avviene sulla pila ma nell'ambiente host, che alla scadenza si limita a **mettere il callback in coda**. Il codice JS non attende mai: delega e tira avanti.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 600 330" role="img" aria-label="Il modello di esecuzione di JavaScript: un solo call stack con i frame impilati, le Web API del browser su altri thread, la coda dei callback e l'event loop che rifornisce la pila solo quando è vuota" style="width:100%;max-width:580px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="300" y="22" font-size="12.5" text-anchor="middle" font-weight="700">Un solo call stack, e il loop che lo rifornisce quando è vuoto</text><rect x="36" y="64" width="156" height="166" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><text x="114" y="84" font-size="11" text-anchor="middle" font-weight="700">CALL STACK</text><text x="114" y="98" font-size="8.5" text-anchor="middle" opacity=".7">una cosa per volta</text><rect x="52" y="112" width="124" height="30" rx="5" fill="var(--link,#78716c)" fill-opacity=".18" stroke="currentColor" stroke-width="1.5"/><text x="114" y="132" font-size="10.5" text-anchor="middle" font-weight="700">bar()</text><rect x="52" y="148" width="124" height="30" rx="5" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="114" y="168" font-size="10.5" text-anchor="middle">foo()</text><rect x="52" y="184" width="124" height="30" rx="5" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="114" y="204" font-size="10.5" text-anchor="middle">main</text><rect x="392" y="64" width="172" height="92" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6" stroke-dasharray="5 3"/><text x="478" y="88" font-size="11" text-anchor="middle" font-weight="700">WEB API</text><text x="478" y="104" font-size="8.5" text-anchor="middle" opacity=".75">altri thread del browser</text><text x="478" y="130" font-size="9.5" text-anchor="middle">timer · rete · eventi DOM</text><path d="M192 120 L385 104" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M388 104 L380.3 108.1 L379.7 101.2 Z" fill="currentColor"/><text x="290" y="96" font-size="9" text-anchor="middle" font-weight="600">setTimeout, fetch…</text><path d="M478 158 L478 241" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M478 244 L474.5 236 L481.5 236 Z" fill="currentColor"/><text x="470" y="205" font-size="9" text-anchor="end" opacity=".85">quando è pronto</text><text x="400" y="242" font-size="9.5" text-anchor="middle" font-weight="600" opacity=".75">coda dei callback</text><rect x="236" y="250" width="328" height="52" rx="8" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.6"/><rect x="252" y="262" width="62" height="28" rx="5" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="283" y="281" font-size="9.5" text-anchor="middle">cb1</text><rect x="322" y="262" width="62" height="28" rx="5" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="353" y="281" font-size="9.5" text-anchor="middle">cb2</text><rect x="392" y="262" width="62" height="28" rx="5" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="423" y="281" font-size="9.5" text-anchor="middle">cb3</text><text x="492" y="282" font-size="12" text-anchor="middle" opacity=".7">…</text><path d="M232 276 C 170 276 118 272 112 242" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M112 234 L108.5 242 L115.5 242 Z" fill="currentColor"/><text x="168" y="300" font-size="10" text-anchor="middle" font-weight="700">event loop</text><text x="168" y="314" font-size="8.5" text-anchor="middle" opacity=".8">solo se lo stack è vuoto</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Sulla pila si esegue solo il frame in <strong>cima</strong> (evidenziato): gli altri attendono che torni. Le operazioni asincrone non stanno sulla pila — vengono affidate alle <strong>Web API</strong> del browser, che girano su altri thread e a operazione conclusa depositano il callback nella <strong>coda</strong>. L&apos;<strong>event loop</strong> la travasa nella pila un elemento per volta, e <strong>solo quando la pila è vuota</strong>.</figcaption>
+</figure>
+
+Due conseguenze pratiche chiudono il quadro. La prima è il **blocco**: siccome il loop aspetta la pila vuota, un calcolo sincrono lungo tiene il proprio frame in cima e impedisce a *qualunque* altro evento di essere servito — clic e ridisegni compresi. È la ragione tecnica per cui una pagina «si congela», e il rimedio è la concorrenza cooperativa descritta più avanti. La seconda è lo **stack overflow**: la pila ha una profondità massima, decisa dal motore e non dalla specifica, quindi una ricorsione troppo profonda la esaurisce e produce il classico `RangeError: Maximum call stack size exceeded`.
+
+---
+
 ## Event loop
 
 Una claim sorprendente: fino a ES6, JavaScript **non aveva nozione nativa di asincronia**. Il JS engine esegue un chunk di codice alla volta, quando viene invocato. Chi lo invoca? L'ambiente host.
@@ -247,6 +284,8 @@ Questo concetto (operazioni atomicamente sicure che però possono essere riordin
 
 **Now vs Later**: ogni programma è diviso in chunk "adesso" e chunk "dopo". Il callback è il meccanismo base per eseguire codice "dopo".
 
+**Call stack**: una sola pila, quindi una funzione per volta — a ogni chiamata si impila un frame, al `return` si toglie. L'event loop preleva il prossimo evento **solo a pila vuota**: da qui il run-to-completion, e il fatto che un calcolo lungo congeli la pagina. Mono-thread è il **linguaggio**, non il browser: timer, rete ed eventi DOM girano su altri thread dell'host.
+
 **Event loop**: l'ambiente host (browser/Node.js) mantiene una coda di eventi. Il JS engine esegue un chunk per tick. `setTimeout` inserisce nella coda solo allo scadere del timer — non immediatamente.
 
 **Single-threaded**: JS non ha race condition a livello di istruzione. Ha però nondeterminismo a livello di funzione (quale callback viene chiamato prima).
@@ -287,6 +326,20 @@ setTimeout(() => console.log("Event — dopo"), 0);
 ---
 
 ## Domande
+
+<details>
+<summary>Se JavaScript è mono-thread, come riesce a fare più cose insieme?</summary>
+
+L'equivoco sta nel soggetto: mono-thread è il **motore JavaScript**, non l'ambiente che lo ospita. Il motore ha un solo <code>call stack</code>, quindi esegue una funzione per volta e non può essere interrotto a metà. Le operazioni che richiedono attesa, però, non vengono svolte sulla pila: `setTimeout`, le richieste di rete e l'ascolto degli eventi del DOM sono affidati alle **Web API** del browser, che hanno thread propri. Il codice JS delega e prosegue immediatamente; quando l'operazione è conclusa, l'host deposita il callback nella coda, e l'event loop lo travasa sulla pila — ma **solo quando la pila è vuota**. Il parallelismo quindi esiste davvero, ma sta nell'ambiente; il codice JavaScript resta sequenziale.
+
+</details>
+
+<details>
+<summary>Perché un ciclo sincrono molto lungo «congela» la pagina?</summary>
+
+Perché l'event loop preleva il prossimo evento dalla coda **soltanto quando il call stack è vuoto**. Un calcolo sincrono lungo mantiene il proprio frame in cima alla pila per tutta la durata, quindi la pila non si svuota mai e il loop non arriva mai a servire ciò che si è accumulato in coda: clic, scroll, risposte Ajax e persino i ridisegni dell'interfaccia restano in attesa. La pagina non è «rotta», è in fila dietro al calcolo. Il rimedio è la **cooperative concurrency**: spezzare il lavoro in batch e cedere il controllo tra un batch e l'altro con `setTimeout(fn, 0)`, così la pila si svuota a intervalli regolari e gli altri eventi trovano spazio.
+
+</details>
 
 <details>
 <summary>Perché `setTimeout(fn, 100)` non garantisce l'esecuzione esatta a 100ms?</summary>
