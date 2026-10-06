@@ -1,6 +1,6 @@
 # JavaScript moderno — oltre YDKJS
 
-La serie *You Don't Know JS* si ferma a **ES6 (ES2015)** e alle prime proposte che la seguirono (`async`/`await`, l'operatore `**`, spread/rest sugli oggetti, `Array.prototype.includes`), trattate nel capitolo [Oltre ES6](/docs/libro6/08-oltre-es6.md). Da lì in poi TC39 ha adottato un ciclo di rilascio **annuale**: ogni giugno una nuova edizione dello standard raccoglie le proposte che hanno raggiunto lo **Stage 4** (finalizzate e implementate).
+La serie *You Don't Know JS* si ferma a **ES6 (ES2015)** e alle prime proposte che la seguirono (`async`/`await`, l'operatore `**`, spread/rest sugli oggetti, `Array.prototype.includes`), trattate nel capitolo [Oltre ES6](/docs/libro6/08-oltre-es6.md). Da lì in poi TC39 ha adottato un ciclo di rilascio **annuale**: ogni giugno una nuova edizione dello standard raccoglie le proposte arrivate allo **Stage 4** (finalizzate e implementate) **entro la chiusura dell'edizione**, nei primi mesi dell'anno. Quelle che ci arrivano dopo sono già definitive, ma slittano all'edizione successiva.
 
 Questa sezione è **distaccata** dalla guida al libro: raccoglie le funzionalità entrate nel linguaggio **dopo** ciò che YDKJS copre, una pagina per edizione, verificate sulla documentazione ufficiale [MDN](https://developer.mozilla.org/) e sulla lista delle [finished proposals di TC39](https://github.com/tc39/proposals/blob/main/finished-proposals.md). Vale la stessa regola dell'*unica fonte di verità*: ciò che è già spiegato nel libro non viene riscritto qui, ma richiamato con un link.
 
@@ -22,7 +22,8 @@ Se termini come **Stage 4**, *finished proposals* o **TC39** non sono familiari,
 | [ES2023](es2023.md) | ES14 | `findLast`/`findLastIndex`, metodi *change-by-copy*, hashbang, Symbol come chiavi WeakMap |
 | [ES2024](es2024.md) | ES15 | `Object.groupBy`/`Map.groupBy`, `Promise.withResolvers`, RegExp flag `v`, resizable `ArrayBuffer` |
 | [ES2025](es2025.md) | ES16 | iterator helpers, metodi di `Set`, import attributes, `Promise.try`, `RegExp.escape`, `Float16Array` |
-| [ES2026](es2026.md) | ES17 | `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause` |
+| [ES2026](es2026.md) | ES17 | upsert (`getOrInsert`), `Iterator.concat`, `Array.fromAsync`, `Error.isError`, `Math.sumPrecise`, `JSON.rawJSON`, `Uint8Array` ↔ Base64 |
+| [ES2027](es2027.md) | ES18 | *in preparazione* — `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause`, `chunks`/`windows`/`includes`/`join` sugli iteratori |
 
 ## Convenzioni
 
