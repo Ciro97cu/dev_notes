@@ -113,7 +113,7 @@ La regola d'oro: eredita ciò che ha senso propagare al testo di tutta la pagina
 
 ### Le parole chiave universali
 
-Ogni proprietà accetta cinque [valori di controllo dell'ereditarietà](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Inheritance):
+Ogni proprietà accetta sei [valori di controllo dell'ereditarietà](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Inheritance):
 
 | Keyword | Effetto |
 |---|---|
@@ -122,6 +122,7 @@ Ogni proprietà accetta cinque [valori di controllo dell'ereditarietà](https://
 | `unset` | si comporta come `inherit` se la proprietà eredita, altrimenti come `initial` |
 | `revert` | torna al valore dell'origine precedente (di norma il **foglio user-agent** del browser) |
 | `revert-layer` | torna al valore del **cascade layer precedente** (vedi `@layer`) |
+| `revert-rule` | ignora soltanto la **regola corrente**: vale ciò che la cascata darebbe senza di essa |
 
 ```css
 .reset {
@@ -133,6 +134,30 @@ Ogni proprietà accetta cinque [valori di controllo dell'ereditarietà](https://
 ```
 
 La proprietà scorciatoia **`all`** applica una di queste keyword a (quasi) tutte le proprietà in un colpo solo — utile per reset mirati.
+
+Le tre keyword della famiglia `revert` fanno la stessa cosa — riportano indietro la cascata come se una parte delle dichiarazioni non esistesse — ma a **granularità diverse**. `revert` scarta l'intera **origine** (per un foglio d'autore, tutto il foglio, e si torna agli stili del browser); `revert-layer` scarta solo il **layer** corrente; **`revert-rule`** scarta soltanto la **regola** in cui compare, lasciando valide le altre regole dello stesso layer. È la più chirurgica delle tre: la cascata ricalcola il valore come se quella singola regola non ci fosse.
+
+```css
+p {
+  color: blue;
+  font-weight: bold;
+}
+
+p.special {
+  color: revert-rule;               /* ignora questa dichiarazione: torna blue */
+  border: 1px solid currentColor;   /* il resto della regola resta valido */
+}
+```
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 460 196" role="img" aria-label="Granularità delle keyword revert: revert scarta l'intera origine, revert-layer il layer corrente, revert-rule solo la regola in cui compare, mentre la regola accanto resta valida" style="width:100%;max-width:460px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="16" y="16" width="428" height="164" rx="10" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="32" y="38" font-size="10" font-weight="700" fill="currentColor">foglio dell&apos;autore (origine)</text><text x="428" y="38" font-size="10" text-anchor="end" font-weight="700" fill="var(--link,#1572b6)">revert</text><rect x="36" y="52" width="388" height="112" rx="8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><text x="52" y="74" font-size="9.5" font-weight="700" fill="currentColor">@layer components</text><text x="408" y="74" font-size="10" text-anchor="end" font-weight="700" fill="var(--link,#1572b6)">revert-layer</text><rect x="56" y="90" width="164" height="56" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.4"/><text x="138" y="114" font-size="9.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" fill="currentColor">p { color: blue }</text><text x="138" y="132" font-size="8.5" text-anchor="middle" opacity=".7" fill="currentColor">resta valida</text><rect x="236" y="90" width="172" height="56" rx="6" fill="var(--link,#1572b6)" fill-opacity=".14" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3"/><text x="322" y="114" font-size="9.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" fill="currentColor">p.special { … }</text><text x="322" y="132" font-size="10" text-anchor="middle" font-weight="700" fill="var(--link,#1572b6)">revert-rule</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Le tre keyword <code>revert*</code> riportano indietro la cascata a granularità diverse: <code>revert</code> ignora l'intera <strong>origine</strong>, <code>revert-layer</code> il <strong>layer</strong> corrente, <code>revert-rule</code> soltanto la <strong>regola</strong> in cui compare. La regola <code>p</code> accanto resta valida, ed è lei a fornire il colore.</figcaption>
+</figure>
+
+Un uso tipico riguarda l'attributo `style`: scrivere `style="color: revert-rule"` fa ignorare la dichiarazione inline, e torna a valere quella del foglio di stile.
+
+> [!info|label:Baseline]
+> `revert-rule` è **Baseline: newly available** da settembre 2026, con Safari 27 a completare il supporto (Chrome 148, Firefox 150). *(verificato: 2026-10-06)*
 
 > [!tip]
 > **`currentColor`** è il ponte fra ciò che eredita e ciò che no: è un valore che vale sempre il `color` calcolato dell'elemento. Così `border: 1px solid currentColor` o `background: currentColor` seguono il colore del testo (che eredita), senza doverlo ripetere.
@@ -230,8 +255,15 @@ Collegamenti: [[01-fondamenti]] · [[02-selettori-combinatori]] · [[03-pseudo-c
 
 </details>
 
+<details>
+<summary>Che differenza c'è fra <code>revert</code>, <code>revert-layer</code> e <code>revert-rule</code>?</summary>
+
+Tutte e tre fanno ricalcolare il valore come se una parte delle dichiarazioni non esistesse, ma a scale diverse: `revert` ignora l'intera **origine** (per un foglio d'autore si torna agli stili del browser), `revert-layer` il **layer** corrente, `revert-rule` soltanto la **regola** in cui compare. Con `revert-rule` le altre regole dello stesso layer restano valide, quindi il valore arriva dalla regola successiva nella cascata.
+
+</details>
+
 **In sintesi:**
 - La cascade risolve i conflitti in tre passi: **origine/importanza → specificità → ordine**; si scende solo a parità.
 - Specificità a colonne **`a-b-c`** (ID · CLASS · TYPE); confronto da sinistra, **niente riporto**; inline e `!important` fuori scala. `:where()` = `0-0-0`.
-- **Ereditano** le proprietà del testo (`color`, `font-*`, `line-height`…), **non** quelle del box (`margin`, `border`, `background`); si controlla con `inherit`/`initial`/`unset`/`revert`/`revert-layer` e si riusa il colore con `currentColor`.
+- **Ereditano** le proprietà del testo (`color`, `font-*`, `line-height`…), **non** quelle del box (`margin`, `border`, `background`); si controlla con `inherit`/`initial`/`unset`/`revert`/`revert-layer`/`revert-rule` e si riusa il colore con `currentColor`.
 - **`@layer`** (Baseline) riordina la priorità *prima* della specificità: la via moderna ai conflitti, al posto del `!important`. **`@scope`** (emergente) aggiunge la *scoping proximity*.

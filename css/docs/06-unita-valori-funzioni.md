@@ -217,6 +217,39 @@ h1 {
 > [!tip]
 > Per rispettare lo zoom al 200% (accessibilità), nella tipografia il valore **max** dovrebbe essere almeno il doppio del **min** ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/clamp)). `clamp(1rem, 2.5vw, 2rem)` va bene; un max troppo vicino al min blocca l'ingrandimento.
 
+## `progress()` — a che punto si è fra due valori
+
+`progress()` è una funzione matematica che risponde alla domanda complementare a quella di `clamp()`: dato un valore e un intervallo, dice **a che punto** si trova il valore fra l'inizio e la fine, sotto forma di **numero da `0` a `1`**. `0` significa «all'inizio», `1` «alla fine», `0.5` «a metà strada».
+
+```css
+progress(50px, 0px, 100px)   /* 0.5 — a metà strada */
+progress(300, 0, 1000)       /* 0.3 */
+```
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 460 140" role="img" aria-label="progress(50px, 0px, 100px): il valore 50px sta a metà dell'intervallo fra 0px e 100px, quindi la funzione restituisce 0.5" style="width:100%;max-width:460px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><path d="M60 72 L400 72" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/><path d="M60 72 L230 72" fill="none" stroke="var(--link,#1572b6)" stroke-width="4" stroke-linecap="round"/><path d="M60 63 L60 81 M400 63 L400 81" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="230" cy="72" r="6" fill="var(--link,#1572b6)"/><text x="60" y="50" font-size="9.5" text-anchor="middle" opacity=".75" fill="currentColor">inizio</text><text x="400" y="50" font-size="9.5" text-anchor="middle" opacity=".75" fill="currentColor">fine</text><text x="230" y="50" font-size="10" text-anchor="middle" font-weight="700" fill="currentColor">valore: 50px</text><text x="60" y="100" font-size="9.5" text-anchor="middle" fill="currentColor">0px</text><text x="400" y="100" font-size="9.5" text-anchor="middle" fill="currentColor">100px</text><text x="60" y="120" font-size="10.5" text-anchor="middle" font-weight="700" fill="var(--link,#1572b6)">0</text><text x="230" y="120" font-size="10.5" text-anchor="middle" font-weight="700" fill="var(--link,#1572b6)">0.5</text><text x="400" y="120" font-size="10.5" text-anchor="middle" font-weight="700" fill="var(--link,#1572b6)">1</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>progress(50px, 0px, 100px)</code> misura la posizione del valore lungo l'intervallo: a metà strada fra inizio e fine restituisce <strong>0.5</strong>. Il risultato è un numero puro, pronto da usare come coefficiente in <code>calc()</code>.</figcaption>
+</figure>
+
+Il calcolo è `(valore − inizio) / (fine − inizio)`, e per impostazione predefinita il risultato viene **limitato** fra `0` e `1`: oltre la fine resta `1`, prima dell'inizio resta `0`. La keyword **`no-clamp`**, scritta davanti al primo argomento e senza virgola, toglie il limite e lascia proseguire il calcolo oltre i due estremi. I tre argomenti devono essere dello **stesso tipo** — tutti numeri, tutte lunghezze o tutte percentuali — anche se con unità diverse.
+
+```css
+scale: progress(15, 0, 10);            /* 1 — limitato */
+scale: progress(no-clamp 15, 0, 10);   /* 1.5 */
+```
+
+Restituendo un numero puro, `progress()` diventa un **coefficiente** da moltiplicare dentro `calc()`. È il tassello che `clamp()` non offre: invece di fissare soltanto un pavimento e un soffitto, misura la posizione, e quindi permette di far variare una proprietà in proporzione a un'altra grandezza. Per esempio un'opacità che cresce da `0.3` a `1` mentre il viewport si allarga da `320px` a `1200px`:
+
+```css
+.hero {
+  /* 0 a 320px di viewport, 1 a 1200px: opacità da 0.3 a 1 */
+  opacity: calc(0.3 + 0.7 * progress(100vw, 320px, 1200px));
+}
+```
+
+> [!info|label:Baseline]
+> `progress()` è **Baseline: newly available** da settembre 2026, con Firefox 155 a completare il supporto: usabile nei browser aggiornati, ma non ancora *widely available*. *(verificato: 2026-10-06)*
+
 ## Custom properties (`--nome` + `var()`)
 
 Le **custom properties** (dette anche *variabili CSS*) sono il cardine del CSS moderno: valori con un nome, che si dichiarano una volta e si riusano ovunque, si sovrascrivono nella cascade e si leggono/scrivono anche da JavaScript.
@@ -354,8 +387,15 @@ No: è un pixel **di riferimento** (logico). Su schermi ad alta densità il **de
 
 </details>
 
+<details>
+<summary>Cosa restituisce <code>progress(50px, 0px, 100px)</code> e a cosa serve?</summary>
+
+Restituisce **`0.5`**: un numero puro che dice a che punto si trova il primo valore fra l'inizio e la fine dell'intervallo, calcolato come `(valore − inizio) / (fine − inizio)` e limitato fra `0` e `1`, salvo la keyword `no-clamp`. Essendo un numero, si usa come **coefficiente** dentro `calc()`, per far variare in modo fluido una proprietà mentre un'altra grandezza — tipicamente la larghezza del viewport o del container — attraversa un intervallo.
+
+</details>
+
 **In sintesi:**
 - I valori hanno un **tipo** (keyword, lunghezza, numero, percentuale, funzione); numero ≠ lunghezza (`line-height: 1.5` vs `1.5rem`).
 - Su schermo l'unica assoluta utile è `px`; le relative scalano: `rem` (tipografia/spaziatura), `em` (relativa al testo), `%`/`vw`/`vh` (layout), `svh`/`dvh` (altezze mobile), `ch` (misura di riga), `lh`/`rlh` (altezza di riga).
-- `calc()` mischia unità (spazi obbligatori attorno a `+`/`-`); `clamp()`/`min()`/`max()` danno dimensioni fluide senza media query.
+- `calc()` mischia unità (spazi obbligatori attorno a `+`/`-`); `clamp()`/`min()`/`max()` danno dimensioni fluide senza media query; `progress()` misura invece la posizione in un intervallo (da `0` a `1`) e si usa come coefficiente.
 - Le **custom properties** (`--nome` + `var(--nome, fallback)`) sono variabili vive: ereditano, si sovrascrivono nella cascade e si pilotano da JS; `@property` le tipizza per poterle **animare**.
