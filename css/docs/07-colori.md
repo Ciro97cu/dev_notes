@@ -175,6 +175,26 @@ I canali risolvono a `<number>` (le percentuali diventano numeri, la tinta un va
 > }
 > ```
 
+### `alpha()` — cambiare solo la trasparenza
+
+Il caso più frequente della sintassi relativa è il primo dell'esempio: lo stesso colore, ma semitrasparente. Per questo esiste una scorciatoia dedicata, **`alpha()`**, che prende un colore d'origine e ne restituisce una copia con la sola **trasparenza** modificata, senza elencarne i canali né scegliere uno spazio colore: canali e spazio colore d'origine restano intatti.
+
+```css
+:root { --brand: oklch(0.62 0.17 250); }
+
+/* stesso brand al 50%: sintassi relativa completa e scorciatoia */
+.overlay-a { background: oklch(from var(--brand) l c h / 50%); }
+.overlay-b { background: alpha(from var(--brand) / 50%); }
+
+/* trasparenza relativa a quella d'origine: la dimezza */
+.ghost { background: alpha(from var(--brand) / calc(alpha * 0.5)); }
+```
+
+La parola `from` è obbligatoria. Dopo la barra, la keyword `alpha` vale la trasparenza del colore d'origine come numero (`1` = opaco), così la si può scalare con `calc()` o contenere con `clamp()`.
+
+> [!info|label:Baseline]
+> `alpha()` è **Baseline: newly available** da settembre 2026 (Chrome 151, Firefox 155, Safari 27). Dove serve compatibilità con browser meno recenti resta valida la forma completa `oklch(from … l c h / 50%)`. *(verificato: 2026-10-06)*
+
 ## Alpha nel colore vs `opacity`
 
 Sono due cose diverse, spesso confuse:
@@ -213,7 +233,15 @@ body {
 }
 ```
 
-`color-scheme` è Baseline dal 2022; `light-dark()` è **newly available** dal 2024 e **richiede** che `color-scheme` sia impostato. Riferimenti: [color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme) e [light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark) su MDN.
+Oltre ai colori, `light-dark()` accetta anche **immagini**: due `url()` o due gradienti, uno per tema (oppure `none`). Così si cambia un'immagine di sfondo insieme al tema senza ricorrere a una media query `prefers-color-scheme`.
+
+```css
+.hero {
+  background-image: light-dark(url("hero-chiaro.webp"), url("hero-scuro.webp"));
+}
+```
+
+`color-scheme` è Baseline dal 2022; `light-dark()` è **newly available** dal 2024 per i colori e dal settembre 2026 per le immagini *(verificato: 2026-10-06)*, e in entrambi i casi **richiede** che `color-scheme` sia impostato. Riferimenti: [color-scheme](https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme) e [light-dark()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark) su MDN.
 
 ## `contrast-color()` — il colore di massimo contrasto
 
@@ -303,8 +331,15 @@ Restituisce automaticamente il **bianco o il nero** (quello di contrasto maggior
 
 </details>
 
+<details>
+<summary>Cosa fa <code>alpha(from var(--brand) / 50%)</code> e perché è più comoda della sintassi relativa completa?</summary>
+
+Restituisce lo stesso colore di `--brand` con la sola **trasparenza** portata al 50%. Lo stesso effetto si ottiene con `oklch(from var(--brand) l c h / 50%)`, ma lì bisogna scegliere uno spazio colore ed elencarne i canali; `alpha()` lascia intatti i canali **e lo spazio colore d'origine** e tocca solo l'alpha. Dopo la barra si può usare la keyword `alpha`, che vale la trasparenza originale: `calc(alpha * 0.5)` la dimezza.
+
+</details>
+
 **In sintesi:**
 - Un colore si può scrivere in molti modi; per palette curate preferire **`oklch()`** (uniforme e wide-gamut), tenendo hex/`rgb()`/`hsl()` per casi comuni e valori ereditati.
 - Sintassi moderna di `rgb()`/`hsl()`: **spazi** tra i canali e **alpha dopo `/`**; la forma con **virgole** (`rgba()`/`hsla()`) è legacy ma valida.
-- `color-mix()` mescola, la **relative color syntax** deriva varianti: gestione della palette in CSS puro, senza Sass.
+- `color-mix()` mescola, la **relative color syntax** deriva varianti (con `alpha()` come scorciatoia per la sola trasparenza): gestione della palette in CSS puro, senza Sass.
 - **Alpha** = trasparenza di un singolo colore; **`opacity`** = trasparenza dell'intero elemento. `color-scheme` + `light-dark()` per il tema chiaro/scuro; `contrast-color()` per il testo di massimo contrasto su sfondi variabili; `accent-color` per i controlli di form.

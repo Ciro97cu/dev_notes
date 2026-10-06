@@ -161,6 +161,15 @@ h1 {
 > [!warning]
 > `font-variation-settings` va usato solo per assi non esprimibili altrimenti: sovrascrive **tutti** gli assi insieme, quindi modificarne uno richiede di ridichiarare gli altri (o passarli da custom property).
 
+> [!info|label:Baseline]
+> `font-width` è il nome attuale della proprietà (e del descrittore di `@font-face`) che sceglie la larghezza del font, da `condensed` a `expanded` o in percentuale fra `50%` e `200%`; `font-stretch` resta come alias storico. Secondo il riepilogo Baseline di web.dev è diventata *newly available* a settembre 2026, mentre la scheda di MDN la indica ancora come a disponibilità limitata: finché le due fonti non si allineano conviene dichiarare entrambe, prima `font-stretch` e poi `font-width`. *(verificato: 2026-10-06)*
+> ```css
+> p {
+>   font-stretch: condensed;   /* per i browser che non conoscono font-width */
+>   font-width: condensed;
+> }
+> ```
+
 ## Spaziatura e trasformazione del testo
 
 - **`letter-spacing`** — spazio extra tra i caratteri (`0.05em`); valori negativi stringono.
