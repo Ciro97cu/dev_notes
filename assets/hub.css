@@ -1,6 +1,9 @@
 :root {
   --grad-a: #7c3aed;   /* violet */
   --grad-b: #06b6d4;   /* cyan   */
+  /* stesse tinte del wordmark, scurite per il testo piccolo su sfondo chiaro */
+  --grad-a-text: #7c3aed;
+  --grad-b-text: #0e7490;
 
   --bg: #f5f7fb;
   --fg: #0f172a;
@@ -13,6 +16,8 @@
   --panel: rgba(255, 255, 255, 0.9);   /* pannello della palette: più opaco delle card, per leggibilità */
 }
 html.dark {
+  --grad-a-text: #a78bfa;   /* schiarite per il testo piccolo su sfondo scuro */
+  --grad-b-text: #22d3ee;
   --bg: #080b12;
   --fg: #e8eef6;
   --fg-soft: #99a4b4;
@@ -117,7 +122,16 @@ body::before {
   font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
   color: var(--fg-soft);
 }
-.group-h::after { content: ""; flex: 1 1 auto; height: 1px; background: var(--card-border); }
+/* testo dell'intestazione nei colori del wordmark (viola → ciano); tonalità per tema
+   scelte per restare leggibili a corpo piccolo (≥ 4.5:1 su entrambi gli sfondi) */
+.group-h > span {
+  background: linear-gradient(100deg, var(--grad-a-text), var(--grad-b-text));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* il filetto prosegue il ciano con cui finisce il testo e sfuma verso destra */
+.group-h::after { content: ""; flex: 1 1 auto; height: 1px; background: linear-gradient(90deg, color-mix(in srgb, var(--grad-b-text) 45%, transparent), transparent); }
 .grid > .group-h:first-of-type { margin-top: 0; }
 @media (max-width: 640px) {
   /* minmax(0,…): la traccia si comprime, così la card non sborda mai fuori dallo schermo.
