@@ -23,16 +23,22 @@ Fino a macOS Mojave (2018) la shell predefinita era **bash**; da **Catalina (10.
 
 Due domande diverse, due comandi. `echo $SHELL` mostra la shell **di login** configurata per l'utente, cioè quella che parte di default; `echo $0` (o `ps -p $$`) mostra invece la shell **in esecuzione in questo momento**, che potrebbe essere un'altra se ne è stata avviata una a mano.
 
+C'è poi una terza domanda, cioè *quale versione* sia installata, e la risposta arriva dall'opzione `--version`: `zsh --version` per zsh, `bash --version` per bash. Funzionano entrambe anche mentre si sta usando zsh, perché una shell non è altro che un programma come gli altri, con il proprio eseguibile su disco (`/bin/zsh`, `/bin/bash`). Scrivere `bash --version` non *cambia* shell: avvia per un istante il programma `bash`, che stampa la propria versione e termina, restituendo il controllo a zsh. Su macOS la risposta è la 3.2.57 congelata di cui sopra. Se però si è installata una bash più recente con Homebrew, `bash --version` mostra quella, perché la shell esegue la prima `bash` che trova scorrendo le cartelle del PATH (il meccanismo è spiegato nel [capitolo 5](05-variabili-ambiente-path.md)); `/bin/bash --version`, che indica il percorso esatto, continua invece a riferirsi alla bash di sistema.
+
 | Comando | Cosa mostra |
 |---------|-------------|
 | `echo $SHELL` | la shell di login predefinita (es. `/bin/zsh`) |
 | `echo $0` | il nome della shell attiva ora (es. `-zsh`) |
 | `ps -p $$` | il processo della shell corrente |
+| `zsh --version` | la versione di zsh installata (es. `zsh 5.9`) |
+| `bash --version` | la versione della prima `bash` trovata nel PATH (su macOS, senza installazioni extra, `3.2.57`) |
+| `/bin/bash --version` | la versione della bash di sistema, anche se ne è installata un'altra |
 | `chsh -s /bin/zsh` | cambia la shell di login (ha effetto dalla prossima sessione) |
 
 ```bash
 echo $SHELL        # /bin/zsh  → la predefinita dell'utente
-zsh --version      # zsh 5.9   → quale versione
+zsh --version      # zsh 5.9   → quale versione di zsh
+bash --version     # GNU bash, version 3.2.57 → la bash di sistema su macOS
 chsh -s /bin/zsh   # imposta zsh come shell di login (chiede la password)
 ```
 
@@ -91,6 +97,13 @@ Perché la 3.2 è l'ultima versione di bash con licenza **GPLv2**. Dalla 4.0 bas
 <summary>Che differenza c'è tra <code>echo $SHELL</code> e <code>echo $0</code>?</summary>
 
 `echo $SHELL` mostra la shell **di login** configurata per l'utente (quella che parte di default), mentre `echo $0` mostra la shell **effettivamente in esecuzione** in quel momento. Di solito coincidono, ma non per forza: se si è avviata a mano un'altra shell, `$SHELL` resta la predefinita mentre `$0` riflette quella attiva.
+
+</details>
+
+<details>
+<summary>Perché <code>bash --version</code> funziona anche se la shell in uso è zsh?</summary>
+
+Perché bash è un programma come un altro, con il suo eseguibile (`/bin/bash`). Il comando non cambia shell: avvia `bash` per un istante, che stampa la versione e termina, e il controllo torna a zsh. Se esistono più bash, risponde la prima trovata nel PATH; `/bin/bash --version` interroga sempre quella di sistema.
 
 </details>
 
