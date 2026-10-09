@@ -1,0 +1,31 @@
+# Pubblica l'hub su GitHub Pages, a mano: Actions › «Deploy Pages» › Run workflow.
+# Nessuna build: i file del repo vengono caricati così come sono (architettura zero-build).
+# Richiede Settings › Pages › Source = «GitHub Actions».
+name: Deploy Pages
+
+on:
+  workflow_dispatch:        # solo manuale; per pubblicare anche a ogni push aggiungere: push: { branches: [main] }
+
+permissions:
+  contents: read            # leggere il repo
+  pages: write              # pubblicare su Pages
+  id-token: write           # autenticare il deploy (OIDC)
+
+concurrency:
+  group: pages
+  cancel-in-progress: true  # un nuovo deploy annulla quello rimasto appeso
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .           # tutto il repo; .git, .github e i file nascosti restano fuori
+      - id: deployment
+        uses: actions/deploy-pages@v5
