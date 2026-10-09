@@ -7,6 +7,7 @@ Il vault è **fuori dall'hub** per scelta: nessuna card in `index.html`, nessuna
 ## Come funziona
 
 - `_plain/**.md` — le pagine docsify in **chiaro** (`README.md`, `_sidebar.md`, `_coverpage.md`, le note). Gitignored.
+- `decrypt.mjs` — l'inverso: ricostruisce `_plain/` da `content.enc` (vedi *Recuperare il testo in chiaro*).
 - `encrypt.mjs` — impacchetta tutto `_plain/` in **un solo** blob cifrato `content.enc` (AES-256-GCM, chiave da passphrase via PBKDF2-SHA-256, 300k iterazioni). Da eseguire in locale.
 - `content.enc` + `crypto.json` (salt/iterazioni + verificatore, pubblici) — i **cifrati**: questi si committano.
 - `index.html` + `assets/gate.js` — il cancello: chiede la passphrase, decifra `content.enc` in memoria e avvia docsify.
@@ -26,6 +27,16 @@ Si accede anche dall'hub con l'iconcina lucchetto nel footer, dove **la password
    ```bash
    git add inglese && git commit -m "inglese: aggiorna note (cifrate)"
    ```
+
+## Recuperare il testo in chiaro (nuovo computer)
+
+Il chiaro vive solo in `_plain/`, esclusa da git: su un computer dove manca, `encrypt.mjs` si ferma con «Manca inglese/_plain/». Lo si ricostruisce decifrando `content.enc` con la passphrase del vault:
+
+```bash
+node inglese/decrypt.mjs
+```
+
+Lo script verifica la passphrase su `crypto.json`, poi riscrive tutte le pagine in `_plain/`. Se `_plain/` esiste già e non è vuota si ferma, per non sovrascrivere modifiche più recenti (`--force` per farlo comunque). Da lì si riprende il flusso normale: modifica, `encrypt.mjs`, commit.
 
 ## Leggere
 

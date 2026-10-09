@@ -7,6 +7,7 @@ Il vault è **fuori dall'hub** per scelta: nessuna card in `index.html`, nessuna
 ## Come funziona
 
 - `_plain/**.md` — le pagine docsify in **chiaro** (`README.md`, `_sidebar.md`, `_coverpage.md`, le note). Gitignored: restano solo sul tuo computer.
+- `decrypt.mjs` — l'inverso: ricostruisce `_plain/` da `content.enc` (vedi *Recuperare il testo in chiaro*).
 - `encrypt.mjs` — impacchetta tutto `_plain/` in **un solo** blob cifrato `content.enc` (AES-256-GCM, chiave da passphrase via PBKDF2-SHA-256, 300k iterazioni). Da eseguire in locale.
 - `content.enc` + `crypto.json` (salt/iterazioni + verificatore, pubblici) — i **cifrati**: questi sì si committano.
 - `index.html` + `assets/gate.js` — il cancello: chiede la passphrase, decifra `content.enc` in memoria e avvia docsify dirottando le sue richieste sui contenuti decifrati (via blob URL). Niente Service Worker: docsify è una SPA, un solo contesto JS.
@@ -25,6 +26,16 @@ Un unico blob cifrato ha un vantaggio di riservatezza: su GitHub non trapela nem
    git add civica && git commit -m "civica: aggiorna note (cifrate)"
    ```
    (`_plain/` è escluso da git: nel repo finisce solo `content.enc`.)
+
+## Recuperare il testo in chiaro (nuovo computer)
+
+Il chiaro vive solo in `_plain/`, esclusa da git: su un computer dove manca, `encrypt.mjs` si ferma con «Manca civica/_plain/». Lo si ricostruisce decifrando `content.enc` con la passphrase del vault:
+
+```bash
+node civica/decrypt.mjs
+```
+
+Lo script verifica la passphrase su `crypto.json`, poi riscrive tutte le pagine in `_plain/`. Se `_plain/` esiste già e non è vuota si ferma, per non sovrascrivere modifiche più recenti (`--force` per farlo comunque). Da lì si riprende il flusso normale: modifica, `encrypt.mjs`, commit.
 
 ## Leggere
 
