@@ -12,7 +12,7 @@
     worker-src 'self' blob: data:;
     child-src 'self' blob: data:;
     frame-src 'self';
-    connect-src 'self';
+    connect-src 'self' https://api.github.com;
   " />
   <title>Appunti Angular</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +36,7 @@
   <script src="../assets/shared/04-plugins.js"></script>
   <script src="../assets/shared/05-study.js"></script>
   <script src="../assets/shared/06-highlighter.js"></script>
-  <script src="../assets/shared/07-backup.js"></script>
+  <script src="../assets/shared/08-sync.js"></script>
   <script src="assets/app.js"></script>
   <script src="../assets/vendor/docsify.min.js"></script>
   <script src="../assets/vendor/docsify-search.min.js"></script>

@@ -83,6 +83,17 @@
         return;
       }
     }
+    // Non è la passphrase di un vault: forse è quella della sincronizzazione personale (08-sync.js).
+    if (window.dnSync) {
+      var syncOk = false;
+      try { syncOk = await window.dnSync.tryActivate(pass); } catch (e) { syncOk = false; }
+      if (syncOk) {
+        showErr('Sincronizzazione attivata, allineo i dati…');
+        try { sessionStorage.setItem('dn-sync-welcome', '1'); } catch (e) {}
+        location.reload();                       // al ricaricamento 08-sync.js fa il primo allineamento
+        return;
+      }
+    }
     showErr('Passphrase errata.');
   }
 

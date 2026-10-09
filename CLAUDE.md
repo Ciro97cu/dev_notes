@@ -73,7 +73,7 @@ Lo script **valida l'XML** di ogni SVG e li **renderizza con `qlmanage`** (Quick
 - Preferire poche etichette essenziali nell'SVG e demandare il resto alla **didascalia** in prosa sotto la figura.
 
 ## Architettura (zero-build) — tenerla documentata
-L'hub è **zero-build** e **client-side**: docsify rende i Markdown nel browser (CSR) e le dipendenze sono **self-hosted** in `assets/vendor/` (non da CDN), con la sola eccezione dell'editor Monaco del playground. La mappa completa — com'è fatto e **perché** questa scelta è stata preferita ad altre — vive in [README.md](README.md), sezione *Architettura*.
+L'hub è **zero-build** e **client-side**: docsify rende i Markdown nel browser (CSR) e le dipendenze sono **self-hosted** in `assets/vendor/` (non da CDN), con la sola eccezione dell'editor Monaco del playground. L'unica chiamata di rete verso l'esterno è la **sincronizzazione personale** via GitHub Gist (`assets/shared/08-sync.js`, `connect-src https://api.github.com`), spenta finché non la si attiva con la passphrase dal lucchetto dell'hub. La mappa completa — com'è fatto e **perché** questa scelta è stata preferita ad altre — vive in [README.md](README.md), sezione *Architettura*.
 
 Il *perché*, in sintesi: per appunti personali semplicità e zero attrito valgono più di SEO e prima-pittura (che qui non servono). Un **SSG** richiederebbe una build più una CI; un **bundler** sposterebbe file già pronti a vuoto (docsify è a runtime, non c'è nulla da compilare); un **framework** sarebbe sproporzionato per note in Markdown. Le dipendenze in locale tolgono il single-point-of-failure del CDN senza introdurre alcuna build.
 
