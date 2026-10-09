@@ -5,14 +5,16 @@
   <!-- Content Security Policy: l'hub non ha dipendenze esterne (tutto self), quindi è
        stretta. 'unsafe-inline' serve solo agli <style> iniettati a runtime da hub.js e
        agli attributi style= nelle modali; img-src data: per il QR (canvas → data URI);
-       niente eval, niente connect esterni → nessuna esfiltrazione anche in caso di XSS. -->
+       niente eval. Unico connect esterno: api.github.com, usato SOLO dalla sincronizzazione
+       personale (08-sync.js) quando è stata attivata con la passphrase; per chi visita il sito
+       nessuna richiesta parte verso l'esterno. -->
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self';
     style-src 'self' 'unsafe-inline';
     img-src 'self' data:;
     font-src 'self';
-    connect-src 'self';
+    connect-src 'self' https://api.github.com;
     media-src 'self' blob:;
     object-src 'none';
     base-uri 'self';
@@ -174,7 +176,7 @@
   <script src="assets/hub.js"></script>
   <script src="assets/hub-search.js"></script>
   <script src="assets/hub-private.js"></script>
-  <script src="assets/shared/07-backup.js"></script>
+  <script src="assets/shared/08-sync.js"></script>
   <script src="assets/version.js"></script>
 
 </body>

@@ -199,8 +199,8 @@
     '<div class="dn-title">Dati — tutti i vault</div>' +
     '<button type="button" data-act="export">'      + ICON_DL   + 'Esporta tutto su file…</button>' +
     '<button type="button" data-act="import">'      + ICON_UP   + 'Importa da file…</button>' +
-    '<button type="button" data-act="backup">'      + ICON_DL   + 'Salva backup nella cartella…</button>' +
-    '<button type="button" data-act="backup-dir">'  + ICON_DB   + 'Cambia cartella di backup…</button>' +
+    '<button type="button" data-act="sync-now" hidden>' + ICON_UP + 'Sincronizza ora</button>' +
+    '<button type="button" data-act="sync-off" hidden>' + ICON_DB + 'Disattiva sincronizzazione qui</button>' +
     '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
     '<button type="button" data-act="qr-show">'     + ICON_QR   + 'Condividi via QR animato…</button>' +
     '<button type="button" data-act="qr-scan">'     + ICON_CAM  + 'Scannerizza QR animato…</button>' +
@@ -213,7 +213,13 @@
   document.body.appendChild(fileIn);
 
   function close() { pop.classList.remove('open'); }
-  btn.addEventListener('click', function (e) { e.stopPropagation(); pop.classList.toggle('open'); });
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    // voci della sincronizzazione personale: visibili solo dove è attiva (08-sync.js)
+    var on = !!(window.dnSync && window.dnSync.enabled());
+    pop.querySelectorAll('[data-act^="sync-"]').forEach(function (b) { b.hidden = !on; });
+    pop.classList.toggle('open');
+  });
   document.addEventListener('click', function (e) { if (!pop.contains(e.target) && e.target !== btn) close(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
 
@@ -504,8 +510,8 @@
     var act = b.getAttribute('data-act');
     if      (act === 'export')  { exportAll(); }
     else if (act === 'import')  { fileIn.value = ''; fileIn.click(); close(); }
-    else if (act === 'backup')     { close(); if (window.dnBackup) window.dnBackup.saveNow(); }
-    else if (act === 'backup-dir') { close(); if (window.dnBackup) window.dnBackup.chooseFolder(); }
+    else if (act === 'sync-now')   { close(); if (window.dnSync) window.dnSync.syncNow(); }
+    else if (act === 'sync-off')   { close(); if (window.dnSync) window.dnSync.disable(); }
     else if (act === 'qr-show') { close(); shareOpen(); }
     else if (act === 'qr-scan') { close(); scanOpen(); }
   });
