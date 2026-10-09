@@ -1,0 +1,7 @@
+{
+  "v": 1,
+  "salt": "llTkbQfg1ji8BRkEEYBGTA==",
+  "iterations": 300000,
+  "check": "{\"v\":1,\"iv\":\"yHG7e8ycjcvbwvPB\",\"ct\":\"wMP/TtKMNHWaGXR5CiaG+Yal04ysBnJylrBWeoUvgGBF\"}",
+  "secret": "{\"v\":1,\"iv\":\"PSJSWFULp8YbNsGH\",\"ct\":\"JyHmbyguqhUAf5nnT75fJ4sIUnrJlObQstdwzBa3Rv6iAiBRntr3S6vNr64l3poBMT6ziLeqvVPp4IBR/aowBxcR4G4Gzn5Q6LCCsQ61DviiNcOuAr1db0I0igepmSmODjA9p4vtd5fol/cn9uZf1btAME2mshm4eGd6/kPonC+jfFEIitB0PcIn415POphsBxJ96dqjzepACScheFzrhbADog==\"}"
+}
