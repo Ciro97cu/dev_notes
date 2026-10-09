@@ -88,7 +88,7 @@ Quando l'utente chiede di scrivere o modificare una nota (di solito linkando un 
 5. **Aggiorna i file di supporto** (indice, `_sidebar.md`, glossario…) secondo la checklist del `CLAUDE.md` di cartella quando aggiungi o rinomini una nota.
 
 ## Commit e versioning
-Al **termine di ogni task** si **committa**: il repo è di appunti personali, quindi commit **diretti su `main`** (niente branch/PR), con messaggio **conventional commit** in italiano e lo scope del vault (es. `docs(angular): …`, `fix(glossario): …`, `feat(css): …`). Prima del commit un `git status` per non includere file estranei.
+Al **termine di ogni task** si **committa**: il repo è di appunti personali, quindi commit **diretti su `main`** (niente branch/PR), con messaggio **conventional commit** in italiano e lo scope del vault (es. `docs(angular): …`, `fix(glossario): …`, `feat(css): …`). **Nessuna riga di attribuzione** nei messaggi: niente `Co-Authored-By:` (Claude, Copilot o altri), niente «Generated with…»; l'unico autore del repo è l'utente. Prima del commit un `git status` per non includere file estranei.
 
 **Ogni commit incrementa la versione dell'hub** in [`assets/version.js`](assets/version.js) (costante `DN_VERSION`, SemVer). Il tipo di bump segue il commento nel file:
 - **PATCH** (`1.50.2 → 1.50.3`) — correzioni, ritocchi, passate di stile.
