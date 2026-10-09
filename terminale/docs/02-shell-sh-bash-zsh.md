@@ -19,11 +19,11 @@ Le shell moderne aggiungono comodità *sopra* quella base. **bash** (*Bourne Aga
 
 Fino a macOS Mojave (2018) la shell predefinita era **bash**; da **Catalina (10.15, 2019)** è diventata **zsh**. Il motivo è più di <a href="../glossario/#/docs/licenze" target="_blank" rel="noopener">licenze</a> che tecnico. La versione di bash inclusa in macOS è ferma alla **3.2.57**, del 2007: è l'ultima rilasciata con licenza **GPLv2** (un tipo di licenza *copyleft*, che obbliga a mantenere aperto il codice derivato). Dalla 4.0 in poi bash è passata alla **GPLv3**, una versione più stringente che Apple ha scelto di non distribuire con il sistema; così bash è rimasta congelata a una versione di quindici anni fa, mentre **zsh**, con una licenza più permissiva (stile MIT, che invece non impone quell'obbligo), è diventata la nuova predefinita. In pratica: la bash di sistema su macOS è antica, e per usarne una moderna la si installa a parte (con Homebrew, vedi [capitolo 7](07-node-npm-frontend.md)). Farlo è del tutto legittimo, perché la GPLv3, come ogni licenza copyleft, pone condizioni a chi **distribuisce** il software, non a chi lo **usa**: il suo stesso testo afferma il permesso illimitato di eseguire il programma ([sezione 2](https://www.gnu.org/licenses/gpl-3.0.html#section2)). Gli obblighi ricadrebbero su Apple in quanto distributrice, se mettesse bash nel sistema; chi la installa per sé è un semplice utente e non ne ha alcuno (il meccanismo è spiegato nel <a href="../glossario/#/docs/licenze?id=il-copyleft-la-famiglia-gpl" target="_blank" rel="noopener">glossario, alla voce sul copyleft</a>).
 
-## Quale shell sto usando?
+## Quale shell è in uso?
 
-Due domande diverse, due comandi. `echo $SHELL` mostra la shell **di login** configurata per l'utente, cioè quella che parte di default; `echo $0` (o `ps -p $$`) mostra invece la shell **in esecuzione in questo momento**, che potrebbe essere un'altra se ne è stata avviata una a mano.
+Chiedersi quale shell sia in uso ammette in realtà due risposte, perché la shell che parte di default e quella attiva in questo momento non coincidono per forza. La prima è la shell **di login**, configurata per l'utente e avviata a ogni apertura del terminale: la mostra `echo $SHELL`. La seconda è la shell **in esecuzione adesso**, che può essere un'altra se ne è stata avviata una a mano dentro la prima: la mostrano `echo $0` e `ps -p $$`.
 
-C'è poi una terza domanda, cioè *quale versione* sia installata, e la risposta arriva dall'opzione `--version`: `zsh --version` per zsh, `bash --version` per bash. Funzionano entrambe anche mentre si sta usando zsh, perché una shell non è altro che un programma come gli altri, con il proprio eseguibile su disco (`/bin/zsh`, `/bin/bash`). Scrivere `bash --version` non *cambia* shell: avvia per un istante il programma `bash`, che stampa la propria versione e termina, restituendo il controllo a zsh. Su macOS la risposta è la 3.2.57 congelata di cui sopra. Se però si è installata una bash più recente con Homebrew, `bash --version` mostra quella, perché la shell esegue la prima `bash` che trova scorrendo le cartelle del PATH (il meccanismo è spiegato nel [capitolo 5](05-variabili-ambiente-path.md)); `/bin/bash --version`, che indica il percorso esatto, continua invece a riferirsi alla bash di sistema.
+A queste due informazioni se ne aggiunge una terza, la *versione* installata, che si ottiene con l'opzione `--version`: `zsh --version` per zsh, `bash --version` per bash. Funzionano entrambe anche mentre si sta usando zsh, perché una shell non è altro che un programma come gli altri, con il proprio eseguibile su disco (`/bin/zsh`, `/bin/bash`). Scrivere `bash --version` non *cambia* shell: avvia per un istante il programma `bash`, che stampa la propria versione e termina, restituendo il controllo a zsh. Su macOS la risposta è la 3.2.57 congelata di cui sopra. Se però si è installata una bash più recente con Homebrew, `bash --version` mostra quella, perché la shell esegue la prima `bash` che trova scorrendo le cartelle del PATH (il meccanismo è spiegato nel [capitolo 5](05-variabili-ambiente-path.md)); `/bin/bash --version`, che indica il percorso esatto, continua invece a riferirsi alla bash di sistema.
 
 | Comando | Cosa mostra |
 |---------|-------------|
@@ -47,12 +47,12 @@ chsh -s /bin/zsh   # imposta zsh come shell di login (chiede la password)
 Per l'uso interattivo di tutti i giorni bash e zsh sono intercambiabili; conviene però conoscere alcune differenze, perché ogni tanto spiegano un comportamento inatteso.
 
 - **Il prompt**: zsh usa `%`, bash usa `$` (per un utente normale). È il segnale più immediato di quale shell si sta usando.
-- **Il completamento con Tab**: zsh lo fa in modo più ricco (completa opzioni, percorsi, nomi di branch Git) e con un menu navigabile; bash è più essenziale.
+- **Il completamento con Tab**: zsh può farlo in modo molto più ricco di bash, completando anche le opzioni dei comandi e i nomi dei branch Git, e mostrare i candidati in un menu da percorrere con la tastiera. Sulla zsh di macOS, però, queste funzioni vanno attivate (vedi [più avanti](#il-menu-di-completamento-di-zsh)).
 - **Il glob**: zsh supporta di serie il glob **ricorsivo** `**/` (per esempio `ls **/*.js` trova i `.js` in tutte le sottocartelle), che in bash va abilitato a parte.
 - **Gli array partono da indici diversi**: in zsh il primo elemento di un array è `[1]`, in bash è `[0]`. È una trappola classica quando si adatta uno script da una shell all'altra.
 - **La personalizzazione**: attorno a zsh esiste un ecosistema di temi e plugin (il più noto è *Oh My Zsh*, [approfondito nel capitolo 6](06-file-configurazione-shell.md)) che rende il prompt informativo con poco sforzo.
 
-Le prime due, quelle che pesano davvero **negli script**, si vedono meglio con un esempio: a parità di codice danno un risultato diverso. Gli **array**, prima di tutto:
+Le due differenze che pesano davvero **negli script**, gli array e il glob, si vedono meglio con un esempio: a parità di codice danno un risultato diverso. Gli **array**, prima di tutto:
 
 ```bash
 frutta=(mela banana pera)
@@ -76,6 +76,30 @@ Sono proprio i casi dietro l'avvertenza qui sotto: lo stesso script può comport
 
 > [!warning]
 > Uno script scritto per zsh non è detto giri identico in bash (e viceversa), proprio per differenze come l'indice degli array o le opzioni di glob. Per script destinati a girare su macchine diverse conviene attenersi alla base POSIX (`sh`) o dichiarare esplicitamente `bash`.
+
+## Il menu di completamento di zsh
+
+Il completamento avanzato di zsh è un sistema a sé, il *completion system*, che conosce la sintassi di centinaia di comandi: per questo, premendo Tab dopo `git switch `, può proporre i nomi dei branch, e dopo `ls -` le opzioni di `ls`. Sulla zsh di macOS questo sistema **non è attivo di serie**: senza configurazione, Tab completa soltanto nomi di comandi e di file. Lo si attiva con qualche riga in `~/.zshrc`, il file letto da ogni shell interattiva ([capitolo 6](06-file-configurazione-shell.md)). La prima riga carica il completion system; la seconda chiede di mostrare i candidati in un menu in cui ci si sposta con la tastiera, che nel manuale di zsh si chiama [*menu selection*](https://zsh.sourceforge.io/Doc/Release/Zsh-Modules.html#Menu-selection); la terza, facoltativa, fa tornare indietro nel menu con Shift-Tab. Chi usa Oh My Zsh non deve aggiungere nulla, perché queste impostazioni sono già nella sua configurazione.
+
+```bash
+autoload -Uz compinit && compinit          # attiva il completion system
+zstyle ':completion:*' menu select         # candidati in un menu navigabile
+bindkey '^[[Z' reverse-menu-complete       # Shift-Tab: candidato precedente
+```
+
+Con la configurazione attiva, quando Tab trova più candidati li elenca sotto il prompt, e un secondo Tab entra nel menu evidenziando il primo. Da lì la tastiera funziona così:
+
+| Tasto | Effetto nel menu |
+|-------|------------------|
+| `Tab` | evidenzia il candidato successivo |
+| `Shift-Tab` | evidenzia il candidato precedente (con la riga `bindkey` qui sopra) |
+| `↑` `↓` `←` `→` | spostano l'evidenziazione tra righe e colonne della griglia |
+| `Invio` | inserisce il candidato ed esce dal menu, **senza** eseguire il comando |
+| `Ctrl-G` | esce dal menu e riporta la riga com'era prima del Tab |
+| qualsiasi altro tasto | chiude il menu tenendo il candidato scelto, e il tasto prosegue normalmente |
+
+> [!tip]
+> `Invio` nel menu conferma solo la scelta: per lanciare il comando serve un secondo `Invio`. Le modifiche a `~/.zshrc` valgono dalla prossima finestra del terminale, oppure subito con `source ~/.zshrc`.
 
 ## Ripasso lampo
 
