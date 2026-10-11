@@ -299,7 +299,7 @@ html.dark .card--term { --accent: #e6e6e6; }
 #hub-data-pop .dn-note { font-size: .74rem; line-height: 1.45; opacity: .7; padding: .4rem .6rem .3rem; border-top: 1px solid var(--card-border); margin-top: .3rem; }
 
 /* Sincronizzazione personale: interruttore nel menu Dati, colorato quando è attiva,
-   e pallino sul bottone Dati per vederne lo stato senza aprire il menu. */
+   e icona del bottone Dati colorata per vederne lo stato senza aprire il menu. */
 #hub-data-pop .dn-sync { align-items: center; }
 #hub-data-pop .dn-sync-txt { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
 #hub-data-pop .dn-sync-sub { font-size: .74rem; opacity: .65; }
@@ -319,7 +319,7 @@ html.dark .card--term { --accent: #e6e6e6; }
 #hub-data-pop .dn-sync-row button { width: auto; flex: 0 0 auto; padding: .4rem .7rem; background: var(--grad-a); color: #fff; font-weight: 600; font-size: .85rem; }
 #hub-data-pop .dn-sync-row button:hover { background: var(--grad-a); opacity: .88; }
 #hub-data-pop .dn-sync-err { font-size: .76rem; opacity: .75; min-height: 1em; padding-top: .3rem; }
-#hub-data-btn.sync-on::after { content: ""; position: absolute; top: 6px; right: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--grad-a); box-shadow: 0 0 0 2px var(--card); }
+#hub-data-btn.sync-on { color: var(--grad-a-text, var(--grad-a)); }
 @media (prefers-reduced-motion: reduce) { #hub-data-pop .dn-sync-sw, #hub-data-pop .dn-sync-sw::after { transition: none; } }
 
 footer {

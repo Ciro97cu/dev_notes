@@ -225,7 +225,7 @@
   document.body.appendChild(fileIn);
 
   function close() { pop.classList.remove('open'); }
-  // ── Stato della sincronizzazione: interruttore nel popover + pallino sul bottone ──
+  // ── Stato della sincronizzazione: interruttore nel popover + icona del bottone colorata ──
   var syncBtn = pop.querySelector('.dn-sync'), syncSub = pop.querySelector('.dn-sync-sub');
   var syncForm = pop.querySelector('.dn-sync-form'), syncIn = syncForm.querySelector('input');
   var syncErr = syncForm.querySelector('.dn-sync-err'), syncNow = pop.querySelector('[data-act="sync-now"]');
