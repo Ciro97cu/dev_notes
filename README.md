@@ -2,7 +2,7 @@
 
 Hub unico degli appunti di sviluppo: un **sito statico** pubblicato con GitHub Pages, **senza build** — nessun bundler, nessun passo di compilazione, i file si servono così come sono.
 
-L'hub (`index.html` nella root) raggiunge dieci raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
+L'hub (`index.html` nella root) raggiunge undici raccolte, ognuna un sito [docsify](https://docsify.js.org/) indipendente nella propria sottocartella:
 
 | Sezione | Cartella | Contenuto |
 |---|---|---|
@@ -11,6 +11,7 @@ L'hub (`index.html` nella root) raggiunge dieci raccolte, ognuna un sito [docsif
 | JavaScript | [`javascript/`](javascript/) | Guida completa (basata su *You Don't Know JS*) |
 | TypeScript | [`typescript/`](typescript/) | Guida completa (validata su TypeScript 7.0) |
 | Angular | [`angular/`](angular/) | Modern Angular 3ª ed. (Angular 22) — signals e oltre |
+| Node.js | [`node/`](node/) | Il runtime sotto il tooling frontend (indice di Rappl, aggiornato a Node 24 LTS, revisione mensile) |
 | AWS | [`aws/`](aws/) | Solutions Architect Associate (SAA-C03): teoria, decisioni e laboratori guidati |
 | Git | [`git/`](git/) | Controllo di versione, da zero ad avanzato |
 | Terminale | [`terminale/`](terminale/) | La riga di comando: shell (bash/zsh), filesystem, PATH e pacchetti globali |

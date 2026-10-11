@@ -1,6 +1,6 @@
 # Dev Notes — regole comuni
 
-Monorepo di appunti di studio personali, pubblicati come **hub** di 10 siti [docsify](https://docsify.js.org/) statici e indipendenti (zero build): [`html/`](html/), [`css/`](css/), [`javascript/`](javascript/), [`typescript/`](typescript/), [`angular/`](angular/), [`aws/`](aws/), [`git/`](git/), [`terminale/`](terminale/), [`code/`](code/), [`glossario/`](glossario/). Vedi [README.md](README.md) per l'architettura del sito.
+Monorepo di appunti di studio personali, pubblicati come **hub** di 11 siti [docsify](https://docsify.js.org/) statici e indipendenti (zero build): [`html/`](html/), [`css/`](css/), [`javascript/`](javascript/), [`typescript/`](typescript/), [`angular/`](angular/), [`node/`](node/), [`aws/`](aws/), [`git/`](git/), [`terminale/`](terminale/), [`code/`](code/), [`glossario/`](glossario/). Vedi [README.md](README.md) per l'architettura del sito.
 
 Questo file raccoglie le regole **comuni a tutti i vault**. Ogni cartella ha un proprio `CLAUDE.md` con le regole **specifiche** del vault, che ha la precedenza dove più stringente. Entrambi si caricano da soli: il generale sempre, quello di cartella quando lavori su file di quel sottoalbero.
 
@@ -25,12 +25,13 @@ Quando la prosa descrive un **meccanismo di codice**, citare il costrutto esatto
 - **Codice funzionante e re-indentato** fedelmente alle convenzioni del linguaggio (l'estrazione da PDF appiattisce l'indentazione → ricostruirla).
 - **Aggiunte oltre la fonte**: contenuto non presente nel libro/serie del vault va segnalato con una nota in corsivo prefissata dall'icona ➕ (es. *➕ Fuori dal libro …*), così si distingue a colpo d'occhio da ciò che viene dalla fonte.
 
-## Controllo periodico delle novità (ECMAScript / TypeScript / CSS)
-Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **ECMAScript** (sezione `moderno` di `javascript/`), **TypeScript** (versione del compilatore in `typescript/`), **CSS** (feature Baseline in `css/`). Per non lavorare su informazioni stale senza però appesantire ogni turno, vale una **verifica a cadenza mensile**:
+## Controllo periodico delle novità (ECMAScript / TypeScript / CSS / Node.js)
+Alcuni vault trattano tecnologie che si evolvono e vanno tenute aggiornate: **ECMAScript** (sezione `moderno` di `javascript/`), **TypeScript** (versione del compilatore in `typescript/`), **CSS** (feature Baseline in `css/`), **Node.js** e il suo tooling (vault `node/`, che è *soggetto a revisione mensile*: vedi le sue regole). Per non lavorare su informazioni stale senza però appesantire ogni turno, vale una **verifica a cadenza mensile**:
 
 - **Quando**: il controllo è **mensile**, ancorato al **mese di calendario**. Se il mese di `currentDate` è **successivo** a quello indicato qui sotto (*Ultima verifica novità*), alla prima occasione utile eseguire il controllo; altrimenti **saltare** (costo zero sugli altri turni).
-- **Cosa**: una ricerca web mirata sullo stato più recente di ECMAScript (ultima edizione ratificata + proposte Stage 4), TypeScript (ultima release stabile) e CSS (feature entrate in Baseline). **Angular escluso per ora.**
+- **Cosa**: una ricerca web mirata sullo stato più recente di ECMAScript (ultima edizione ratificata + proposte Stage 4), TypeScript (ultima release stabile), CSS (feature entrate in Baseline) e Node.js (release LTS/Current dal [calendario ufficiale](https://github.com/nodejs/Release), API passate a stabile o deprecate, versioni principali degli strumenti trattati nel vault `node/`). **Angular escluso per ora.**
 - **Come riportare**: **segnalare** le novità **in fondo al messaggio**, dopo aver completato ciò che era stato chiesto. L'integrazione nei vault **non** è automatica: se e come recepirle è **decisione dell'utente** (una volta decisa, si integra con le note storiche del caso — vedi sotto).
+- **Ciò che diventa inesatto non si cancella in silenzio**: quando una revisione rende superata una nota, la strada attuale diventa quella principale e la vecchia passa in un callout `> [!info|label:Legacy]` con la data, come già si fa nel vault CSS.
 - Dopo il controllo, **aggiornare la data** qui sotto al **primo giorno del mese corrente** (formato `AAAA-MM-01`).
 
 **Ultima verifica novità: 2026-10-01.**

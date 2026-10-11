@@ -47,7 +47,7 @@ if (serveI18n) { const t = require('./i18n'); /* … */ }
 | Cosa ricevi | il valore al momento del `require` (no *live binding*) | **live binding**: riflette le riassegnazioni |
 | Analisi statica | no: niente tree-shaking | sì: tree-shaking e code-splitting |
 
-I due sistemi convivono e **interoperano**, con qualche attrito. Da un modulo ESM si può `import`are un CJS: Node ne espone il `module.exports` come **export di default**. Al contrario, un `require()` di un modulo ESM storicamente dava errore (`ERR_REQUIRE_ESM`) e imponeva l'`import()` dinamico; le versioni recenti di Node lo consentono per i moduli ESM **sincroni** (fallisce solo se c'è un *top-level await*). Quale sistema usa un file lo decide l'estensione (`.cjs` è CommonJS, `.mjs` è ESM), oppure, per i `.js`, il campo `"type"` del `package.json` più vicino (`"module"` per l'ESM).
+I due sistemi convivono e **interoperano**: come Node decide quale usare per un file (estensioni `.mjs`/`.cjs`, campo `"type"`), come uno importa l'altro (`require(esm)`) e che cosa sostituisce `__dirname` negli ES modules (`import.meta`) è spiegato nel <a href="../node/#/docs/02-moduli-e-pacchetti" target="_blank" rel="noopener">vault Node · Moduli e pacchetti</a>.
 
 > [!tip]
 > La trattazione **storica** (dal *module pattern* con IIFE fino all'ESM) è nel vault JavaScript, in <a href="../javascript/#/docs/libro6/03-organizzazione" target="_blank" rel="noopener">Organizzazione del codice</a>. Dettagli su moduli e `require(esm)`: <a href="https://nodejs.org/api/modules.html" target="_blank" rel="noopener">Node.js · CommonJS modules</a>.
