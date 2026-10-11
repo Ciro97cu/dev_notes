@@ -300,18 +300,24 @@ html.dark .card--term { --accent: #e6e6e6; }
 
 /* Sincronizzazione personale: interruttore nel menu Dati, colorato quando è attiva,
    e icona del bottone Dati colorata per vederne lo stato senza aprire il menu. */
-#hub-data-pop .dn-sync { align-items: center; }
+#hub-data-pop .dn-sync { display: flex; align-items: center; border-radius: 8px; }
+#hub-data-pop .dn-sync > button { width: auto; }
+#hub-data-pop .dn-sync-now { flex: 0 0 auto; padding: .5rem .45rem .5rem .6rem; }
+#hub-data-pop .dn-sync-tg { flex: 1 1 auto; min-width: 0; padding-left: .3rem; }
 #hub-data-pop .dn-sync-txt { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
 #hub-data-pop .dn-sync-sub { font-size: .74rem; opacity: .65; }
 #hub-data-pop .dn-sync-sw { flex: 0 0 auto; position: relative; width: 30px; height: 17px; border-radius: 9px; background: rgba(127,127,127,.35); transition: background-color .2s ease; }
 #hub-data-pop .dn-sync-sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 13px; height: 13px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .2s ease; }
 #hub-data-pop .dn-sync.on { color: var(--grad-a-text, var(--grad-a)); background: color-mix(in srgb, var(--grad-a) 12%, transparent); }
-#hub-data-pop .dn-sync.on:hover { background: color-mix(in srgb, var(--grad-a) 18%, transparent); }
+#hub-data-pop .dn-sync.on > button { color: inherit; }
+#hub-data-pop .dn-sync.on > button:hover { background: color-mix(in srgb, var(--grad-a) 12%, transparent); }
 #hub-data-pop .dn-sync.on svg { opacity: 1; }
 #hub-data-pop .dn-sync.on .dn-sync-lbl { font-weight: 600; }
 #hub-data-pop .dn-sync.on .dn-sync-sub { opacity: .85; }
 #hub-data-pop .dn-sync.on .dn-sync-sw { background: var(--grad-a); }
 #hub-data-pop .dn-sync.on .dn-sync-sw::after { transform: translateX(13px); }
+#hub-data-pop .dn-sync-now.spin svg { animation: dn-sync-spin .8s linear infinite; }
+@keyframes dn-sync-spin { to { transform: rotate(360deg); } }
 #hub-data-pop .dn-sync-form { padding: .15rem .6rem .45rem; }
 #hub-data-pop .dn-sync-row { display: flex; gap: .4rem; }
 #hub-data-pop .dn-sync-row input { flex: 1 1 auto; min-width: 0; padding: .4rem .55rem; border-radius: 8px; border: 1px solid var(--card-border); background: transparent; color: var(--fg); font: inherit; font-size: .85rem; }
@@ -320,7 +326,7 @@ html.dark .card--term { --accent: #e6e6e6; }
 #hub-data-pop .dn-sync-row button:hover { background: var(--grad-a); opacity: .88; }
 #hub-data-pop .dn-sync-err { font-size: .76rem; opacity: .75; min-height: 1em; padding-top: .3rem; }
 #hub-data-btn.sync-on { color: var(--grad-a-text, var(--grad-a)); }
-@media (prefers-reduced-motion: reduce) { #hub-data-pop .dn-sync-sw, #hub-data-pop .dn-sync-sw::after { transition: none; } }
+@media (prefers-reduced-motion: reduce) { #hub-data-pop .dn-sync-sw, #hub-data-pop .dn-sync-sw::after { transition: none; } #hub-data-pop .dn-sync-now.spin svg { animation: none; opacity: .45; } }
 
 footer {
   position: relative;

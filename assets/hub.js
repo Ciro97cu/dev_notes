@@ -203,16 +203,19 @@
     '<button type="button" data-act="export">'      + ICON_DL   + 'Esporta tutto su file…</button>' +
     '<button type="button" data-act="import">'      + ICON_UP   + 'Importa da file…</button>' +
     '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
-    // Sincronizzazione personale (08-sync.js): interruttore colorato quando è attiva.
-    // Accendere chiede la passphrase (modulo qui sotto); spegnere no.
-    '<button type="button" data-act="sync-toggle" class="dn-sync" role="switch" aria-checked="false">' + ICON_SYNC +
-      '<span class="dn-sync-txt"><span class="dn-sync-lbl">Sincronizzazione</span><span class="dn-sync-sub"></span></span>' +
-      '<span class="dn-sync-sw" aria-hidden="true"></span></button>' +
+    // Sincronizzazione personale (08-sync.js): riga colorata quando è attiva. Le frecce
+    // sincronizzano subito; il resto della riga è l'interruttore. Accendere chiede la
+    // passphrase (modulo qui sotto); spegnere no.
+    '<div class="dn-sync">' +
+      '<button type="button" data-act="sync-now" class="dn-sync-now">' + ICON_SYNC + '</button>' +
+      '<button type="button" data-act="sync-toggle" class="dn-sync-tg" role="switch" aria-checked="false">' +
+        '<span class="dn-sync-txt"><span class="dn-sync-lbl">Sincronizzazione</span><span class="dn-sync-sub"></span></span>' +
+        '<span class="dn-sync-sw" aria-hidden="true"></span></button>' +
+    '</div>' +
     '<div class="dn-sync-form" hidden>' +
       '<div class="dn-sync-row"><input type="password" autocomplete="off" spellcheck="false" placeholder="passphrase di sync" aria-label="Passphrase della sincronizzazione">' +
       '<button type="button" data-act="sync-go">Attiva</button></div>' +
       '<div class="dn-sync-err" role="status"></div></div>' +
-    '<button type="button" data-act="sync-now" hidden>' + ICON_UP + 'Sincronizza ora</button>' +
     '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
     '<button type="button" data-act="qr-show">'     + ICON_QR   + 'Condividi via QR animato…</button>' +
     '<button type="button" data-act="qr-scan">'     + ICON_CAM  + 'Scannerizza QR animato…</button>' +
@@ -226,9 +229,10 @@
 
   function close() { pop.classList.remove('open'); }
   // ── Stato della sincronizzazione: interruttore nel popover + icona del bottone colorata ──
-  var syncBtn = pop.querySelector('.dn-sync'), syncSub = pop.querySelector('.dn-sync-sub');
+  var syncRow = pop.querySelector('.dn-sync'), syncTg = pop.querySelector('.dn-sync-tg'), syncNow = pop.querySelector('.dn-sync-now');
+  var syncSub = pop.querySelector('.dn-sync-sub');
   var syncForm = pop.querySelector('.dn-sync-form'), syncIn = syncForm.querySelector('input');
-  var syncErr = syncForm.querySelector('.dn-sync-err'), syncNow = pop.querySelector('[data-act="sync-now"]');
+  var syncErr = syncForm.querySelector('.dn-sync-err');
   function hhmm(ts) {
     var d = new Date(ts), p = function (n) { return (n < 10 ? '0' : '') + n; };
     var day = d.toDateString() === new Date().toDateString() ? '' : p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ';
@@ -236,15 +240,16 @@
   }
   function refreshSync() {
     var s = window.dnSync ? window.dnSync.status() : { on: false };
-    syncBtn.classList.toggle('on', s.on);
-    syncBtn.setAttribute('aria-checked', s.on ? 'true' : 'false');
-    syncBtn.title = s.on ? 'Clic per disattivarla su questo dispositivo' : 'Clic per attivarla (serve la passphrase)';
+    syncRow.classList.toggle('on', s.on);
+    syncTg.setAttribute('aria-checked', s.on ? 'true' : 'false');
+    syncTg.title = s.on ? 'Clic per disattivarla su questo dispositivo' : 'Clic per attivarla (serve la passphrase)';
+    syncNow.title = s.on ? 'Sincronizza ora' : 'Attiva la sincronizzazione';
+    syncNow.setAttribute('aria-label', syncNow.title);
     syncSub.textContent = !s.on ? 'spenta su questo dispositivo'
       : (s.err && s.err > s.ok) ? 'attiva · ultimo tentativo non riuscito'
       : s.ok ? 'attiva · allineata alle ' + hhmm(s.ok)
       : 'attiva · primo allineamento in corso';
     syncSub.title = (s.on && s.err > s.ok && s.msg) ? s.msg : '';
-    syncNow.hidden = !s.on;
     if (s.on) syncForm.hidden = true;
     btn.classList.toggle('sync-on', s.on);
     btn.title = 'Trasferimento dati (d)' + (s.on ? ' · sincronizzazione attiva' : '');
@@ -563,10 +568,17 @@
     var act = b.getAttribute('data-act');
     if      (act === 'export')  { exportAll(); }
     else if (act === 'import')  { fileIn.value = ''; fileIn.click(); close(); }
-    else if (act === 'sync-now')    { close(); if (window.dnSync) window.dnSync.syncNow(); }
-    else if (act === 'sync-toggle') {
+    else if (act === 'sync-now' || act === 'sync-toggle') {
       if (!window.dnSync) return;
-      if (window.dnSync.enabled()) { window.dnSync.disable(); return; }   // spegnere: nessuna passphrase
+      var on = window.dnSync.enabled();
+      if (on && act === 'sync-now') {                                       // frecce: allinea subito
+        if (syncNow.classList.contains('spin')) return;
+        syncNow.classList.add('spin');
+        var minSpin = new Promise(function (r) { setTimeout(r, 700); });   // il giro si vede anche se è rapido
+        Promise.all([window.dnSync.syncNow(), minSpin]).then(function () { syncNow.classList.remove('spin'); refreshSync(); });
+        return;
+      }
+      if (on) { window.dnSync.disable(); return; }                          // spegnere: nessuna passphrase
       syncForm.hidden = !syncForm.hidden; syncErr.textContent = '';
       if (!syncForm.hidden) syncIn.focus();
     }
