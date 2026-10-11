@@ -302,7 +302,7 @@ html.dark .card--term { --accent: #e6e6e6; }
    e icona del bottone Dati colorata per vederne lo stato senza aprire il menu. */
 #hub-data-pop .dn-sync { display: flex; align-items: center; border-radius: 8px; }
 #hub-data-pop .dn-sync > button { width: auto; }
-#hub-data-pop .dn-sync-now { flex: 0 0 auto; padding: .5rem .45rem .5rem .6rem; }
+#hub-data-pop .dn-sync-now { flex: 0 0 auto; padding: .5rem .5rem .5rem .9rem; }
 #hub-data-pop .dn-sync-tg { flex: 1 1 auto; min-width: 0; padding-left: .3rem; }
 #hub-data-pop .dn-sync-txt { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
 #hub-data-pop .dn-sync-sub { font-size: .74rem; opacity: .65; }
