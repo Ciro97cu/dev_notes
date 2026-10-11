@@ -1,4 +1,4 @@
-# Pubblica l'hub su GitHub Pages, a mano: Actions › «Deploy Pages» › Run workflow.
+# Pubblica l'hub su GitHub Pages, a mano: Actions › «Deploy Pages» › Run workflow, oppure scripts/deploy.sh dal terminale.
 # Nessuna build: i file del repo vengono caricati così come sono (architettura zero-build).
 # Richiede Settings › Pages › Source = «GitHub Actions».
 name: Deploy Pages

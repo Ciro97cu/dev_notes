@@ -96,7 +96,7 @@ Al **termine di ogni task** si **committa**: il repo è di appunti personali, qu
 - **MINOR** (`1.50.3 → 1.51.0`) — nuove note o funzionalità.
 - **MAJOR** (`1.50.3 → 2.0.0`) — cambi strutturali di hub/vault.
 
-A ogni bump si crea il **tag git corrispondente** (`git tag -a vX.Y.Z -m "…"`): il numero è mostrato nel footer dell'hub e linkato ai tag su GitHub, così un hard-refresh conferma che il deploy è salito. Il deploy su GitHub Pages è **manuale** (workflow `Deploy Pages`, vedi [README.md](README.md) › *Architettura*): dopo il push va lanciato da *Actions › Deploy Pages › Run workflow*, quindi a fine task ricordarlo all'utente insieme al push.
+A ogni bump si crea il **tag git corrispondente** (`git tag -a vX.Y.Z -m "…"`): il numero è mostrato nel footer dell'hub e linkato ai tag su GitHub, così un hard-refresh conferma che il deploy è salito. Il deploy su GitHub Pages è **manuale** (workflow `Deploy Pages`, vedi [README.md](README.md) › *Architettura*): si lancia dal terminale con `./scripts/deploy.sh` (push di commit e tag, avvio del workflow con `gh`, attesa dell'esito) oppure da *Actions › Deploy Pages › Run workflow*. A fine task ricordarlo all'utente; il deploy resta una sua decisione, quindi non lanciare lo script senza che lo chieda.
 
 ## Creare un nuovo vault — checklist e trappole
 Aggiungere un vault è una **modifica architetturale** (va riflessa nel [README.md](README.md) di root). Lezioni imparate sul campo, da non riperdere:
