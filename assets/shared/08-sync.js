@@ -7,8 +7,9 @@
  * cifrato, creato con scripts/sync-setup.mjs — che contiene il token GitHub (permesso «Gists»
  * soltanto) e l'ID del gist. Sul dispositivo resta la chiave derivata, non la passphrase.
  *
- * Con la sync attiva: all'apertura di una pagina si scaricano i dati dal gist; ogni modifica
- * locale si invia pochi secondi dopo. Nel gist finisce solo testo cifrato (AES-256-GCM).
+ * Con la sync attiva: all'apertura di una pagina si scaricano i dati dal gist; le modifiche
+ * locali si raggruppano e si inviano dopo 20 s di quiete (al massimo 90 s dalla prima) o
+ * subito uscendo dalla pagina. Nel gist finisce solo testo cifrato (AES-256-GCM).
  * Revisione remota = updated_at del gist: se è cambiata e qui non c'è niente di nuovo, vince il
  * remoto; se sono cambiati entrambi, si uniscono (array per unione, oggetti chiave per chiave).
  *
@@ -199,11 +200,19 @@
     if (!enabled() || !(window.crypto && crypto.subtle)) return;
     if (sessionStorage.getItem('dn-sync-welcome')) { sessionStorage.removeItem('dn-sync-welcome'); toast('Sincronizzazione attiva su questo dispositivo'); }
     sync().then(function (changed) { if (changed) reloadOnce(); }, fail);
-    // Modifiche locali: controllo leggero ogni 5 s (impronta dei dati), invio solo se cambiate.
+    // Modifiche locali: controllo leggero ogni 4 s (impronta dei dati). Le modifiche si
+    // raggruppano: si invia dopo QUIET ms senza altre modifiche, o comunque entro MAX_WAIT
+    // dalla prima; uscendo dalla pagina si invia subito (visibilitychange qui sotto).
+    var QUIET = 20000, MAX_WAIT = 90000, seenFp = null, changedAt = 0, dirtySince = 0;
     setInterval(function () {
       if (document.visibilityState !== 'visible' || running) return;
-      if (fingerprint(collect()) !== readMeta().fp) sync().then(function (ch) { if (ch) toast('Dati aggiornati da un altro dispositivo', { label: 'Ricarica', run: function () { location.reload(); } }); }, fail);
-    }, 5000);
+      var fp = fingerprint(collect()), now = Date.now();
+      if (fp === readMeta().fp) { seenFp = fp; dirtySince = 0; return; }      // già allineato
+      if (fp !== seenFp) { seenFp = fp; changedAt = now; if (!dirtySince) dirtySince = now; }
+      if (now - changedAt < QUIET && now - dirtySince < MAX_WAIT) return;     // si sta ancora modificando
+      dirtySince = 0;
+      sync().then(function (ch) { if (ch) toast('Dati aggiornati da un altro dispositivo', { label: 'Ricarica', run: function () { location.reload(); } }); }, fail);
+    }, 4000);
     // Tornando sulla scheda: recupera ciò che un altro dispositivo ha scritto nel frattempo.
     var hiddenAt = 0;
     document.addEventListener('visibilitychange', function () {

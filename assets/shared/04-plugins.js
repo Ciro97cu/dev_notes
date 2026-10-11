@@ -142,9 +142,15 @@ function resumePlugin(hook, vm) {
     }
     return id;
   }
+  // Scrive solo se pagina o sezione cambiano: riscrivere a ogni pausa di scroll (con un `t`
+  // sempre nuovo) farebbe sembrare «modificati» i dati e partire la sincronizzazione di continuo.
+  var lastSaved = '';
   function persist() {
     if (!current) return;
-    try { localStorage.setItem(KEY, JSON.stringify({ p: current, id: currentId(), t: Date.now() })); } catch (e) {}  // t: per il «Continua» globale sull'hub
+    var id = currentId(), sig = current + '#' + id;
+    if (sig === lastSaved) return;
+    lastSaved = sig;
+    try { localStorage.setItem(KEY, JSON.stringify({ p: current, id: id, t: Date.now() })); } catch (e) {}  // t: per il «Continua» globale sull'hub
   }
   function read() {
     try {

@@ -126,30 +126,79 @@ function dnHighlightWordAt(x, y) {
   var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
   dnCapture(dnColor);
 }
+// Voce salvata per l'intervallo [s,e) del testo indicizzato: quote e contesto presi dallo
+// stesso testo su cui dnLocate li cercherà (non da sel.toString(), che aggiunge a capo
+// fra un blocco e l'altro e renderebbe orfane le evidenziazioni su più paragrafi).
+function dnMakeItem(index, s, e, color) {
+  var r = dnRangeAt(index, s, e);
+  return { c: color, scope: r ? dnScopeFor(r.startContainer) : '', q: index.text.slice(s, e),
+           pre: index.text.slice(Math.max(0, s - 32), s), suf: index.text.slice(e, e + 32) };
+}
+// [gs,ge) è interamente coperto dagli intervalli evidenziati (anche da più d'uno contigui)?
+function dnCovered(spans, gs, ge) {
+  var iv = spans.filter(function (h) { return h.e > gs && h.s < ge; }).sort(function (a, b) { return a.s - b.s; });
+  var pos = gs;
+  for (var i = 0; i < iv.length && pos < ge; i++) { if (iv[i].s > pos) break; if (iv[i].e > pos) pos = iv[i].e; }
+  return pos >= ge;
+}
+// Regole di macOS Preview, sul testo della pagina:
+//  · selezione TUTTA dentro evidenziazioni esistenti → toglie SOLO la parte selezionata
+//    (ripassando e mancando un carattere, quel carattere resta evidenziato);
+//  · selezione che esce anche di poco da un'evidenziazione (o non ne tocca) → la ESTENDE:
+//    si fonde con le evidenziazioni che sovrappone o tocca in un'unica evidenziazione
+//    nel colore attivo, senza mai cancellare nulla.
+// Gli spazi ai bordi della selezione non contano (un ripasso che prende lo spazio dopo
+// la parola resta un ripasso).
 function dnCapture(color) {
   var sel = window.getSelection();
   if (!sel || sel.isCollapsed || !sel.rangeCount) return;
   var range = sel.getRangeAt(0);
   var sec = document.querySelector('.markdown-section');
   if (!sec || !sec.contains(range.startContainer) || !sec.contains(range.endContainer)) return;
-  var quote = sel.toString(); if (!quote.trim()) return;
-  var index = dnTextIndex(sec);
+  var index = dnTextIndex(sec), t = index.text;
   var gs = dnGlobalOffset(index, range.startContainer, range.startOffset);
   var ge = dnGlobalOffset(index, range.endContainer, range.endOffset);
   if (gs < 0 || ge < 0 || ge <= gs) return;
+  while (gs < ge && /\s/.test(t[gs])) gs++;
+  while (ge > gs && /\s/.test(t[ge - 1])) ge--;
+  if (ge <= gs) { sel.removeAllRanges(); return; }
+
   var all = window.NotesStore.read('highlights', {}), p = dnPath();
   if (!all || typeof all !== 'object') all = {};
-  if (!Array.isArray(all[p])) all[p] = [];
-  // Toggle: se la nuova selezione tocca evidenziazioni esistenti, le RIMUOVE (niente gomma).
-  var removed = false;
-  for (var i = all[p].length - 1; i >= 0; i--) {
-    var off = dnItemOffsets(index, all[p][i]); if (!off) continue;
-    if (gs < off[1] && off[0] < ge) { all[p].splice(i, 1); removed = true; }
+  var list = Array.isArray(all[p]) ? all[p] : [];
+  var spans = [], orphans = [];                       // orfane (testo non più trovato): si conservano
+  list.forEach(function (it) {
+    var off = (it && typeof it.q === 'string' && it.q) ? dnItemOffsets(index, it) : null;
+    if (off) spans.push({ s: off[0], e: off[1], it: it }); else if (it) orphans.push(it);
+  });
+
+  var next = [];
+  if (dnCovered(spans, gs, ge)) {                     // gomma: sottrae [gs,ge) e spezza dove serve
+    var keep = function (a, b, c) {                   // pezzo rimasto, senza spazi ai bordi
+      while (a < b && /\s/.test(t[a])) a++;
+      while (b > a && /\s/.test(t[b - 1])) b--;
+      if (b > a) next.push(dnMakeItem(index, a, b, c));
+    };
+    spans.forEach(function (h) {
+      if (h.e <= gs || h.s >= ge) { next.push(h.it); return; }
+      if (h.s < gs) keep(h.s, gs, h.it.c);
+      if (h.e > ge) keep(ge, h.e, h.it.c);
+    });
+  } else {                                            // pennarello: unione con ciò che si sovrappone o tocca
+    var s = gs, e = ge, merged = {}, grew = true;
+    while (grew) {                                    // ripete: un'estensione può arrivare a toccarne un'altra
+      grew = false;
+      spans.forEach(function (h, i) {
+        if (merged[i] || h.s > e || h.e < s) return;
+        merged[i] = 1; grew = true;
+        if (h.s < s) s = h.s;
+        if (h.e > e) e = h.e;
+      });
+    }
+    spans.forEach(function (h, i) { if (!merged[i]) next.push(h.it); });
+    next.push(dnMakeItem(index, s, e, color));
   }
-  if (!removed) {
-    all[p].push({ c: color, scope: dnScopeFor(range.startContainer), q: quote,
-                  pre: index.text.slice(Math.max(0, gs - 32), gs), suf: index.text.slice(ge, ge + 32) });
-  }
+  all[p] = orphans.concat(next);
   window.NotesStore.write('highlights', all);
   sel.removeAllRanges();
   dnRender(p);
@@ -235,7 +284,7 @@ function dnBuildToolbar() {
     '<div class="dn-hl-pop" role="menu"><div class="dn-title">Evidenziatore</div>' +
       '<div class="dn-swatches">' + sw + '</div>' +
       '<div class="dn-hl-actions"><button type="button" data-act="off">Chiudi</button></div>' +
-      '<div class="dn-hl-hint">Scegli un colore, poi tocca una parola o seleziona il testo. Ripassaci sopra per togliere l\'evidenziazione.</div>' +
+      '<div class="dn-hl-hint">Scegli un colore, poi tocca una parola o seleziona il testo. Selezionando oltre un\'evidenziazione la estendi; ripassando dentro togli solo la parte ripassata.</div>' +
     '</div>';
   document.body.appendChild(w);
   var btn = w.querySelector('#dn-hl-btn'), pop = w.querySelector('.dn-hl-pop');
