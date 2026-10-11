@@ -161,6 +161,8 @@
   var ICON_CAM  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2-3z"/><circle cx="12" cy="13" r="3"/></svg>';
   var ICON_QR   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>';
 
+  var ICON_SYNC = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/></svg>';
+
   btn.innerHTML = ICON_DB;
   btn.title = 'Trasferimento dati (d)';
 
@@ -200,8 +202,17 @@
     '<div class="dn-title">Dati — tutti i vault</div>' +
     '<button type="button" data-act="export">'      + ICON_DL   + 'Esporta tutto su file…</button>' +
     '<button type="button" data-act="import">'      + ICON_UP   + 'Importa da file…</button>' +
+    '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
+    // Sincronizzazione personale (08-sync.js): interruttore colorato quando è attiva.
+    // Accendere chiede la passphrase (modulo qui sotto); spegnere no.
+    '<button type="button" data-act="sync-toggle" class="dn-sync" role="switch" aria-checked="false">' + ICON_SYNC +
+      '<span class="dn-sync-txt"><span class="dn-sync-lbl">Sincronizzazione</span><span class="dn-sync-sub"></span></span>' +
+      '<span class="dn-sync-sw" aria-hidden="true"></span></button>' +
+    '<div class="dn-sync-form" hidden>' +
+      '<div class="dn-sync-row"><input type="password" autocomplete="off" spellcheck="false" placeholder="passphrase di sync" aria-label="Passphrase della sincronizzazione">' +
+      '<button type="button" data-act="sync-go">Attiva</button></div>' +
+      '<div class="dn-sync-err" role="status"></div></div>' +
     '<button type="button" data-act="sync-now" hidden>' + ICON_UP + 'Sincronizza ora</button>' +
-    '<button type="button" data-act="sync-off" hidden>' + ICON_DB + 'Disattiva sincronizzazione qui</button>' +
     '<hr style="border:none;border-top:1px solid var(--card-border);margin:.3rem">' +
     '<button type="button" data-act="qr-show">'     + ICON_QR   + 'Condividi via QR animato…</button>' +
     '<button type="button" data-act="qr-scan">'     + ICON_CAM  + 'Scannerizza QR animato…</button>' +
@@ -214,11 +225,37 @@
   document.body.appendChild(fileIn);
 
   function close() { pop.classList.remove('open'); }
+  // ── Stato della sincronizzazione: interruttore nel popover + pallino sul bottone ──
+  var syncBtn = pop.querySelector('.dn-sync'), syncSub = pop.querySelector('.dn-sync-sub');
+  var syncForm = pop.querySelector('.dn-sync-form'), syncIn = syncForm.querySelector('input');
+  var syncErr = syncForm.querySelector('.dn-sync-err'), syncNow = pop.querySelector('[data-act="sync-now"]');
+  function hhmm(ts) {
+    var d = new Date(ts), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    var day = d.toDateString() === new Date().toDateString() ? '' : p(d.getDate()) + '/' + p(d.getMonth() + 1) + ' ';
+    return day + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+  function refreshSync() {
+    var s = window.dnSync ? window.dnSync.status() : { on: false };
+    syncBtn.classList.toggle('on', s.on);
+    syncBtn.setAttribute('aria-checked', s.on ? 'true' : 'false');
+    syncBtn.title = s.on ? 'Clic per disattivarla su questo dispositivo' : 'Clic per attivarla (serve la passphrase)';
+    syncSub.textContent = !s.on ? 'spenta su questo dispositivo'
+      : (s.err && s.err > s.ok) ? 'attiva · ultimo tentativo non riuscito'
+      : s.ok ? 'attiva · allineata alle ' + hhmm(s.ok)
+      : 'attiva · primo allineamento in corso';
+    syncSub.title = (s.on && s.err > s.ok && s.msg) ? s.msg : '';
+    syncNow.hidden = !s.on;
+    if (s.on) syncForm.hidden = true;
+    btn.classList.toggle('sync-on', s.on);
+    btn.title = 'Trasferimento dati (d)' + (s.on ? ' · sincronizzazione attiva' : '');
+  }
+  window.addEventListener('dn-sync-status', refreshSync);
+  refreshSync();
+
   btn.addEventListener('click', function (e) {
     e.stopPropagation();
-    // voci della sincronizzazione personale: visibili solo dove è attiva (08-sync.js)
-    var on = !!(window.dnSync && window.dnSync.enabled());
-    pop.querySelectorAll('[data-act^="sync-"]').forEach(function (b) { b.hidden = !on; });
+    syncForm.hidden = true; syncIn.value = ''; syncErr.textContent = '';
+    refreshSync();
     pop.classList.toggle('open');
   });
   document.addEventListener('click', function (e) { if (!pop.contains(e.target) && e.target !== btn) close(); });
@@ -504,6 +541,21 @@
     });
   }
 
+  // Accensione: la passphrase decifra sync.json (08-sync.js); al ricaricamento parte il primo allineamento.
+  async function activateSync() {
+    var pass = syncIn.value;
+    if (!pass) { syncErr.textContent = 'Inserisci la passphrase.'; return; }
+    if (!(window.crypto && crypto.subtle)) { syncErr.textContent = 'Serve https:// o http://localhost.'; return; }
+    syncErr.textContent = 'verifico…';
+    var ok = false;
+    try { ok = await window.dnSync.tryActivate(pass); } catch (err) { ok = false; }
+    if (!ok) { syncErr.textContent = 'Passphrase errata.'; syncIn.select(); return; }
+    syncErr.textContent = 'Attivata, allineo i dati…';
+    try { sessionStorage.setItem('dn-sync-welcome', '1'); } catch (err) {}
+    location.reload();
+  }
+  syncIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); activateSync(); } });
+
   // ── Click handler popover ─────────────────────────────────────────────────
   pop.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-act]');
@@ -511,8 +563,14 @@
     var act = b.getAttribute('data-act');
     if      (act === 'export')  { exportAll(); }
     else if (act === 'import')  { fileIn.value = ''; fileIn.click(); close(); }
-    else if (act === 'sync-now')   { close(); if (window.dnSync) window.dnSync.syncNow(); }
-    else if (act === 'sync-off')   { close(); if (window.dnSync) window.dnSync.disable(); }
+    else if (act === 'sync-now')    { close(); if (window.dnSync) window.dnSync.syncNow(); }
+    else if (act === 'sync-toggle') {
+      if (!window.dnSync) return;
+      if (window.dnSync.enabled()) { window.dnSync.disable(); return; }   // spegnere: nessuna passphrase
+      syncForm.hidden = !syncForm.hidden; syncErr.textContent = '';
+      if (!syncForm.hidden) syncIn.focus();
+    }
+    else if (act === 'sync-go')     { activateSync(); }
     else if (act === 'qr-show') { close(); shareOpen(); }
     else if (act === 'qr-scan') { close(); scanOpen(); }
   });

@@ -2,8 +2,9 @@
  * 08-sync.js — sincronizzazione personale dei dati di studio fra dispositivi, via GitHub Gist.
  *
  * Spenta per chiunque visiti il sito: nessuna richiesta esterna, i dati restano in locale.
- * Si accende su un dispositivo inserendo la passphrase di sync nel lucchetto dell'hub
- * (hub-private.js chiama dnSync.tryActivate): la passphrase decifra /sync.json — pubblico ma
+ * Si accende su un dispositivo dalla voce «Sincronizzazione» del menu Dati dell'hub (hub.js), o
+ * dal lucchetto in fondo all'hub (hub-private.js); entrambi chiamano dnSync.tryActivate. Per
+ * spegnerla non serve la passphrase. La passphrase decifra /sync.json — pubblico ma
  * cifrato, creato con scripts/sync-setup.mjs — che contiene il token GitHub (permesso «Gists»
  * soltanto) e l'ID del gist. Sul dispositivo resta la chiave derivata, non la passphrase.
  *
@@ -19,6 +20,7 @@
   'use strict';
   var KEYSTORE = 'dn-sync';                     // chiave AES derivata (b64): sync attiva qui
   var META = 'dn-sync-meta';                    // { fp, remoteAt }: ultimo stato allineato
+  var STATUS = 'dn-sync-status';                // { ok, err, msg }: esito dell'ultimo giro (per il menu)
   var FILE = 'dev-notes-sync.json';             // nome del file dentro il gist
   var OK = 'dev-notes-sync-ok';                 // verificatore della passphrase in sync.json
   var THEME = 'dev-notes-theme';
@@ -77,6 +79,15 @@
   }
   function readMeta() { try { return JSON.parse(localStorage.getItem(META)) || {}; } catch (e) { return {}; } }
   function writeMeta(m) { try { localStorage.setItem(META, JSON.stringify(m)); } catch (e) {} }
+  // Esito dell'ultimo giro, letto dal menu Dati dell'hub; l'evento lo avvisa del cambiamento.
+  function readStatus() { try { return JSON.parse(localStorage.getItem(STATUS)) || {}; } catch (e) { return {}; } }
+  function setStatus(patch) {
+    var s = readStatus();
+    Object.keys(patch).forEach(function (k) { s[k] = patch[k]; });
+    try { localStorage.setItem(STATUS, JSON.stringify(s)); } catch (e) {}
+    notify();
+  }
+  function notify() { try { window.dispatchEvent(new CustomEvent('dn-sync-status')); } catch (e) {} }
 
   // ── Crittografia (stessi parametri di hub-private.js / encrypt.mjs) ──────
   var enc = new TextEncoder(), dec = new TextDecoder();
@@ -158,7 +169,8 @@
       }
       return changed;
     })();
-    running.then(function () { running = null; }, function () { running = null; });
+    running.then(function () { running = null; setStatus({ ok: Date.now(), err: 0, msg: '' }); },
+      function (e) { running = null; setStatus({ err: Date.now(), msg: String(e && e.message || e) }); });
     return running;
   }
 
@@ -226,9 +238,11 @@
     });
   }
 
-  // ── API per hub-private.js e per il menu Dati dell'hub ───────────────────
+  // ── API per il menu Dati dell'hub (hub.js) e per hub-private.js ─────────
   window.dnSync = {
     enabled: enabled,
+    // { on, ok, err, msg }: ok/err sono i timestamp dell'ultimo giro riuscito / fallito.
+    status: function () { var s = readStatus(); return { on: enabled(), ok: s.ok || 0, err: s.err || 0, msg: s.msg || '' }; },
     // Prova la passphrase contro sync.json; se apre, attiva la sync su questo dispositivo.
     tryActivate: async function (pass) {
       var meta;
@@ -238,7 +252,9 @@
       if (!ok) return false;
       localStorage.setItem(KEYSTORE, b64(await crypto.subtle.exportKey('raw', key)));
       localStorage.removeItem(META);                       // primo allineamento: unione locale + remoto
+      localStorage.removeItem(STATUS);
       creds = null;
+      notify();
       return true;
     },
     syncNow: function () {
@@ -246,10 +262,12 @@
       return sync().then(function (ch) { if (ch) reloadOnce(); else toast('Sincronizzazione completata'); }, fail);
     },
     disable: function () {
-      try { localStorage.removeItem(KEYSTORE); localStorage.removeItem(META); } catch (e) {}
+      try { localStorage.removeItem(KEYSTORE); localStorage.removeItem(META); localStorage.removeItem(STATUS); } catch (e) {}
       creds = null;
+      notify();
       toast('Sincronizzazione disattivata su questo dispositivo');
     }
   };
+  notify();                                              // il menu dell'hub (caricato prima) legge lo stato
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
