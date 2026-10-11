@@ -81,7 +81,7 @@ packages:
 
 Da qui pnpm tratta ogni cartella sotto `apps/` e `packages/` come un pacchetto del workspace, li installa insieme e lascia che si riferiscano l'un l'altro senza passare dal registry.
 
-Su un monorepo grande nasce però il problema dell'**allineamento delle versioni**: se dieci pacchetti dipendono tutti da React, è facile che scivolino su versioni leggermente diverse, con bug sottili e difficili da spiegare. La risposta di pnpm (dalla versione 10) sono i **catalogs**: le versioni si dichiarano in **un punto solo**, sempre nella `pnpm-workspace.yaml`, e i singoli `package.json` non scrivono più il numero ma un rimando.
+Su un monorepo grande nasce però il problema dell'**allineamento delle versioni**: se dieci pacchetti dipendono tutti da React, è facile che scivolino su versioni leggermente diverse, con bug sottili e difficili da spiegare. La risposta di pnpm ([dalla versione 9.5](https://github.com/pnpm/pnpm/releases/tag/v9.5.0), luglio 2024) sono i **catalogs**: le versioni si dichiarano in **un punto solo**, sempre nella `pnpm-workspace.yaml`, e i singoli `package.json` non scrivono più il numero ma un rimando.
 
 ```yaml
 # pnpm-workspace.yaml — le versioni, in un posto solo
@@ -113,7 +113,7 @@ Nella stessa `pnpm-workspace.yaml` compaiono spesso altre due voci:
   overrides:
     'sonarqube-scanner>axios': '1.11.0'   # axios, ma solo dentro sonarqube-scanner, forzato a 1.11.0
   ```
-- **`allowBuilds`** — decide **quali pacchetti possono eseguire script durante l'installazione**. Alcuni pacchetti hanno script (`postinstall`) che partono appena installati, ad esempio per compilare parti native: comodi, ma anche una porta per codice ostile, perché un pacchetto compromesso potrebbe far girare qualsiasi cosa sulla macchina. Per questo, dalla versione 10, pnpm di default **non li esegue** e pretende una lista esplicita di chi è autorizzato:
+- **`allowBuilds`** — decide **quali pacchetti possono eseguire script durante l'installazione**. Alcuni pacchetti hanno script (`postinstall`) che partono appena installati, ad esempio per compilare parti native: comodi, ma anche una porta per codice ostile, perché un pacchetto compromesso potrebbe far girare qualsiasi cosa sulla macchina. Per questo, [dalla versione 10](https://github.com/pnpm/pnpm/releases/tag/v10.0.0), pnpm di default **non li esegue** e pretende una lista esplicita di chi è autorizzato (la voce `allowBuilds` è arrivata con la [10.26](https://github.com/pnpm/pnpm/releases/tag/v10.26.0) e da pnpm 11 sostituisce le vecchie `onlyBuiltDependencies`/`ignoredBuiltDependencies`):
   ```yaml
   allowBuilds:
     esbuild: true
