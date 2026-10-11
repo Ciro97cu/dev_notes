@@ -11,7 +11,7 @@
   - [Date, calendari e tempo](docs/date-calendari-tempo.md)
 
 - **Ecosistema JavaScript**
-  - [Transpiler (Babel, SWC)](docs/transpiler.md)
+  - [Transpiler (Babel, SWC, Oxc)](docs/transpiler.md)
   - [Package manager e pacchetti](docs/package-manager.md)
   - [Bundler (webpack, Vite, Rollup…)](docs/bundler.md)
   - [Moduli e bundling](docs/moduli-e-bundling.md)

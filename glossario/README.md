@@ -22,8 +22,8 @@ CSV · XML · YAML · Bit e Byte · Base64 (btoa/atob) · Font sul web (TTF/OTF/
 **[Date, calendari e tempo](docs/date-calendari-tempo.md)**
 Calendario gregoriano e non (solare · lunare · lunisolare · ere imperiali) · anni bisestili (regola 4/100/400) · anno tropico · perché serve alle librerie di date
 
-**[Transpiler (Babel, SWC)](docs/transpiler.md)**
-Babel · SWC · transpilazione vs compilazione · plugin e preset
+**[Transpiler (Babel, SWC, Oxc)](docs/transpiler.md)**
+Babel (target e browserslist, Babel 8) · SWC · Oxc · transpilazione vs compilazione · plugin e preset
 
 **[Package manager e pacchetti](docs/package-manager.md)**
 NPM · NPX · Yarn · pnpm (store, workspaces, catalogs, overrides, allowBuilds) · Registry (npm, privati, JSR) · NVM · Tarball (.tgz)

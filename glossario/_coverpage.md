@@ -22,7 +22,7 @@
         <ul>
           <li><strong>Web &amp; browser</strong>: dominio, CORS, cache, DevTools, rendering, HTTP, privacy.</li>
           <li><strong>Formati &amp; fondamenti</strong>: CSV, XML, bit e byte, Base64, date e calendari.</li>
-          <li><strong>Ecosistema JS</strong>: transpiler (Babel, SWC), package manager (NPM, NVM…), moduli e bundling.</li>
+          <li><strong>Ecosistema JS</strong>: transpiler (Babel, SWC, Oxc), package manager (NPM, NVM…), moduli e bundling.</li>
           <li><strong>Open source e licenze</strong>: permissive vs copyleft, MIT, GPL, Apache, SPDX.</li>
           <li><strong>Sicurezza e accesso</strong>: SSH, chiavi pubblica/privata, HTTPS vs SSH.</li>
           <li><strong>React</strong>: codice dichiarativo, hooks, ottimizzazione.</li>

@@ -45,7 +45,7 @@ Non è uno strumento che di solito si installa a mano: lo si incontra perché **
 
 [Vite](https://vite.dev/) è anzitutto un modo diverso di intendere lo sviluppo. In fase di *dev* non impacchetta quasi nulla: sfrutta i **moduli nativi** del browser e serve i file su richiesta, così l'avvio è immediato anche su progetti grandi e resta tale al crescere del codice. Per la produzione, invece, un bundle serve ancora, e lì fa il lavoro pieno.
 
-Il cambiamento importante è recente. Fino alla versione 7 Vite usava **due** strumenti — esbuild per pre-elaborare le dipendenze in sviluppo e Rollup per la build di produzione. Con **Vite 8, stabile dal 12 marzo 2026**, entrambi sono stati sostituiti da **Rolldown**, un unico bundler in Rust che copre sviluppo e produzione, con build dichiarate fino a 10-30 volte più rapide e compatibilità piena con i plugin esistenti. È l'evoluzione architetturale più profonda dai tempi di Vite 2.
+Il cambiamento importante è recente. Fino alla versione 7 Vite usava **due** strumenti — esbuild per pre-elaborare le dipendenze in sviluppo e Rollup per la build di produzione. Con **Vite 8, stabile dal 12 marzo 2026**, entrambi sono stati sostituiti da **Rolldown**, un unico bundler in Rust che copre sviluppo e produzione, con build dichiarate fino a 10-30 volte più rapide e compatibilità piena con i plugin esistenti. È l'evoluzione architetturale più profonda dai tempi di Vite 2. Come si usa Vite in un progetto (dev server, build di produzione, configurazione, variabili d'ambiente, plugin) è spiegato nel <a href="../node/#/docs/06-bundler" target="_blank" rel="noopener">vault Node, capitolo 06</a>.
 
 ## esbuild
 

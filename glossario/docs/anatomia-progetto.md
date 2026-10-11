@@ -63,8 +63,8 @@ Il file `package.json` è il documento d'identità del progetto: un file JSON, n
     "vue": "^3.5.0"
   },
   "devDependencies": {
-    "vite": "^7.0.0",
-    "vitest": "^2.0.0"
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0"
   }
 }
 ```
@@ -89,6 +89,8 @@ Il meccanismo si legge in due tempi. Alla prima installazione, `npm install` leg
 > [!tip|label:install contro ci]
 > `npm install` può **aggiornare** il lockfile: se nel frattempo un range ammette una versione più recente, la coglie e riscrive il lock. Nelle installazioni automatiche, dove si vuole l'albero identico e nessuna sorpresa, si usa invece `npm ci` (*clean install*): legge **solo** il lockfile, fallisce se non combacia con `package.json`, e non lo modifica mai. È il comando che gira nelle pipeline.
 
+Gli equivalenti degli altri gestori (`pnpm install --frozen-lockfile`, `yarn install --immutable`, `bun ci`) e la regola del lockfile unico per repository sono nel <a href="../node/#/docs/03-package-manager?id=il-lockfile-e-le-installazioni-riproducibili" target="_blank" rel="noopener">vault Node, capitolo 03</a>.
+
 ## I file e le cartelle col punto davanti
 
 Molte voci della root iniziano con un punto: `.gitignore`, `.husky`, `.vscode`. Il punto non è decorativo: sui sistemi Unix un nome che comincia per `.` è **nascosto** dagli elenchi normali (il vault Terminale lo spiega tra i <a href="../terminale/#/docs/03-navigare-filesystem" target="_blank" rel="noopener">file nascosti</a>), e per convenzione lì si mette la **configurazione**: file che si vogliono presenti ma fuori dai piedi. I più ricorrenti in un progetto front-end:
@@ -96,9 +98,9 @@ Molte voci della root iniziano con un punto: `.gitignore`, `.husky`, `.vscode`. 
 - **`.gitignore`** — l'elenco di ciò che git deve **ignorare**: `node_modules/`, le cartelle di build (`dist/`), i file `.env`. È il file che *realizza* la colonna destra del disegno qui sopra.
 - **`.husky/`** — contiene i **git hook** del progetto: script che partono in automatico a un evento di git, tipicamente un controllo *prima* di ogni commit (far girare il linter o i test) per fermare codice non conforme prima ancora che entri nella storia. Husky è lo strumento che rende questi hook parte del repository, e quindi condivisi da tutto il team. L'idea di *hook* è la stessa vista nel vault Terminale per la shell (<a href="../terminale/#/docs/06-file-configurazione-shell?id=hook-far-girare-codice-in-automatico" target="_blank" rel="noopener">Hook</a>): codice agganciato a un evento; qui l'evento è di git anziché di shell.
 - **`.vscode/`** — impostazioni dell'editor **VS Code** valide per questo progetto e condivise nel repo: estensioni consigliate, formattazione al salvataggio, configurazioni di debug. Fa sì che chiunque apra il progetto lavori con le stesse regole senza doverle reimpostare a mano.
-- **`.github/`** — la cartella che GitHub legge per convenzione: dentro `.github/workflows/` stanno le **pipeline di CI** in formato YAML, più i template per issue e pull request. È il ponte tra il repository e l'automazione descritta in [CI/CD e pipeline](ci-cd-pipeline.md).
-- **`.editorconfig`** — poche regole di stile *indipendenti dall'editor* (indentazione a spazi o tab, tipo di fine riga), lette da quasi tutti gli editor per uniformare i file a prescindere da chi li scrive.
+- **`.github/`** — la cartella che GitHub legge per convenzione: dentro `.github/workflows/` stanno le **pipeline di CI** in formato YAML, più i template per issue e pull request. È il ponte tra il repository e l'automazione descritta in [CI/CD e pipeline](docs/ci-cd-pipeline.md).
+- **`.editorconfig`** — poche regole di stile *indipendenti dall'editor* (indentazione a spazi o tab, tipo di fine riga), lette da quasi tutti gli editor per uniformare i file a prescindere da chi li scrive. Il suo rapporto con il formatter, e gli hook di `.husky/` che fanno girare linter e formatter prima del commit, sono nel <a href="../node/#/docs/05-linter-e-formatter?id=editorconfig" target="_blank" rel="noopener">vault Node, capitolo 05</a>.
 - **`.env`** — le variabili d'ambiente locali: indirizzi di servizi, chiavi, **segreti**. Proprio perché contiene segreti **non si committa mai** (sta in `.gitignore`); al più si versiona un `.env.example` con i nomi delle chiavi ma senza i valori. La nozione di variabile d'ambiente è nel vault Terminale (<a href="../terminale/#/docs/05-variabili-ambiente-path" target="_blank" rel="noopener">Variabili d'ambiente</a>).
-- **`.npmrc` / `.nvmrc`** — configurazione del gestore di pacchetti (`.npmrc`: quale registry usare, eventuali credenziali) e versione di Node del progetto (`.nvmrc`, letto da nvm; vedi [Package manager](package-manager.md?id=nvm)).
+- **`.npmrc` / `.nvmrc`** — configurazione del gestore di pacchetti (`.npmrc`: quale registry usare, eventuali credenziali) e versione di Node del progetto (`.nvmrc`, letto da nvm; vedi [Package manager](docs/package-manager.md?id=nvm)).
 
 Resta `node_modules/`, che non ha il punto ma appartiene alla stessa storia: è la cartella dove il gestore **scarica materialmente** i pacchetti risolti dal lockfile. Cresce a dismisura, si ricrea con un comando, e per entrambe le ragioni vive fuori da git.

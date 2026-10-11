@@ -12,7 +12,7 @@ npm install --save-dev vitest # dipendenza di solo sviluppo → "devDependencies
 npm run build                 # esegue lo script "build" dichiarato in package.json
 ```
 
-Dipendenze e script vivono in `package.json`, mentre le versioni **esatte** installate sono bloccate nel lockfile `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze; il rapporto tra i due file è approfondito in [Anatomia di un progetto](anatomia-progetto.md).
+Dipendenze e script vivono in `package.json`, mentre le versioni **esatte** installate sono bloccate nel lockfile `package-lock.json`, così ogni macchina ricostruisce lo stesso albero di dipendenze; il rapporto tra i due file è approfondito in [Anatomia di un progetto](docs/anatomia-progetto.md).
 
 Molti pacchetti hanno un nome **con scope**: un prefisso `@qualcosa/` che li raggruppa sotto un'organizzazione, come `@angular/core` o `@types/node`. Lo scope evita le collisioni di nomi (chiunque può pubblicare un pacchetto chiamato `core`, ma `@angular/core` appartiene solo ad Angular) e torna utile con i registry privati, dove un'azienda pubblica i propri pacchetti sotto uno scope suo (`@azienda/…`).
 
@@ -21,26 +21,25 @@ Molti pacchetti hanno un nome **con scope**: un prefisso `@qualcosa/` che li rag
 NPX è uno strumento fornito con NPM (dalla versione 5.2.0) per **eseguire** pacchetti. La differenza rispetto a NPM: può eseguire un pacchetto **senza installarlo prima**, utile per strumenti usati una tantum.
 
 ```bash
-npx create-react-app my-app   # scarica ed esegue create-react-app senza installarlo globalmente
+npx create-vite@latest my-app   # scarica ed esegue create-vite senza installarlo globalmente
 ```
+
+È lo stesso meccanismo che sta dietro a `npm create vite@latest`: [`npm create <nome>`](https://docs.npmjs.com/cli/v11/commands/npm-init) (alias di `npm init <nome>`) esegue il pacchetto `create-<nome>` proprio come farebbe NPX.
 
 Può anche eseguire binari di pacchetti locali del progetto (quelli in `node_modules/.bin`).
 
 ## Yarn
 
-Yarn è un gestore di pacchetti JavaScript, alternativa a NPM, che consuma anch'esso il registro npm. Nato in Facebook (con Google, Exponent, Tilde) per risolvere problemi storici di NPM su velocità e determinismo:
-- **Cache locale** dei pacchetti già scaricati, per installazioni più rapide.
-- **Lockfile** (`yarn.lock`): tutti gli sviluppatori installano le **stesse** versioni.
-- **Compatibilità** con il registro npm.
+Yarn è un gestore di pacchetti JavaScript, alternativa a NPM, che consuma anch'esso il registro npm. La linea attuale è **Yarn 4**: dalla versione 2 in poi si parla di Yarn *moderno* (o *Berry*), un progetto riscritto che si distingue soprattutto per **come** rende disponibili i pacchetti. Per impostazione predefinita non crea la cartella `node_modules`: genera un unico file, `.pnp.cjs`, una mappa che dice a Node dove si trova ogni pacchetto e quali dipendenze può vedere. È la strategia chiamata **Plug'n'Play** (PnP), che rende le installazioni rapide e impedisce di importare pacchetti non dichiarati, al prezzo di qualche attrito con gli strumenti che si aspettano una `node_modules` vera. Come funziona e quando conviene è spiegato nel <a href="../node/#/docs/03-package-manager?id=yarn-plug39n39play-senza-node_modules" target="_blank" rel="noopener">vault Node, capitolo 03</a>.
 
-> [!note]
-> Le versioni moderne di NPM hanno colmato gran parte del divario (cache, `package-lock.json`), quindi oggi la scelta è spesso questione di preferenza o di ecosistema del progetto.
+> [!info|label:Legacy]
+> **Yarn Classic** (la 1.x) è la prima generazione, nata in Facebook (con Google, Exponent, Tilde) per risolvere problemi storici di NPM su velocità e determinismo: una **cache locale** dei pacchetti già scaricati, per installazioni più rapide; un **lockfile** (`yarn.lock`) perché tutti gli sviluppatori installassero le **stesse** versioni; piena **compatibilità** con il registro npm. Su quei fronti le versioni successive di NPM hanno poi colmato gran parte del divario (cache, `package-lock.json`). Yarn Classic è ancora la versione che installa il pacchetto `yarn` su npm, ma è ferma alla 1.22 e [accetta ormai solo correzioni di sicurezza](https://github.com/yarnpkg/yarn): per un progetto nuovo la strada è Yarn moderno. *(Aggiornato a ottobre 2026.)*
 
 ## pnpm
 
 pnpm (*performant npm*) è un terzo gestore di pacchetti, alternativo a NPM e Yarn, che pesca dallo stesso registry npm ma cambia in modo radicale **come** i pacchetti finiscono sul disco. Il problema che affronta è lo spreco del modello classico: con NPM ogni progetto ha la sua `node_modules` piena di copie, così la stessa versione di una libreria vive duplicata in decine di cartelle, occupando spazio e allungando le installazioni.
 
-La soluzione di pnpm è un **archivio unico** (*content-addressable store*): una sola cartella sul disco, di norma sotto la home dell'utente, dove ogni versione di ogni pacchetto è salvata **una volta sola**. Nella `node_modules` del singolo progetto non ci sono copie ma **hard link** a quell'archivio (un hard link è una seconda voce di cartella che punta agli stessi byte su disco: lo stesso file compare in più posti pur esistendo fisicamente una volta). Ne segue un risparmio doppio: installare un pacchetto già presente nell'archivio è quasi istantaneo, perché si creano link invece di scaricare e copiare, e dieci progetti che usano la stessa libreria la tengono su disco una volta sola invece di dieci.
+La soluzione di pnpm è un **archivio unico** (*content-addressable store*): una sola cartella sul disco, di norma sotto la home dell'utente, dove ogni versione di ogni pacchetto è salvata **una volta sola**. Nella `node_modules` del singolo progetto non ci sono copie: i file dei pacchetti sono **hard link** a quell'archivio (un hard link è una seconda voce di cartella che punta agli stessi byte su disco: lo stesso file compare in più posti pur esistendo fisicamente una volta). Ne segue un risparmio doppio: installare un pacchetto già presente nell'archivio è quasi istantaneo, perché si creano link invece di scaricare e copiare, e dieci progetti che usano la stessa libreria la tengono su disco una volta sola invece di dieci.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 700 250" role="img" aria-label="pnpm mantiene un archivio unico sul disco dove ogni versione di ogni pacchetto è salvata una sola volta; le cartelle node_modules dei vari progetti (apps/web, apps/admin, packages/ui) non contengono copie ma hard link che puntano a quell'archivio." style="width:100%;max-width:680px;height:auto;color:inherit">
@@ -67,7 +66,7 @@ La soluzione di pnpm è un **archivio unico** (*content-addressable store*): una
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">I <code>node_modules</code> dei progetti non copiano i pacchetti: li <strong>collegano</strong> all'archivio comune. Più progetti condividono gli stessi byte su disco.</figcaption>
 </figure>
 
-C'è una seconda differenza, sulla **struttura** di `node_modules`. NPM la costruisce «piatta»: tutte le dipendenze, dirette e indirette, finiscono allo stesso livello, e questo consente per sbaglio di importare un pacchetto mai dichiarato (una *phantom dependency*, arrivata come dipendenza di una dipendenza). pnpm mette invece al primo livello solo le dipendenze **dichiarate** nel `package.json`, tenendo tutto il resto in una sottocartella `.pnpm`: se un import non è tra le dipendenze dichiarate, semplicemente non si risolve. È più rigoroso, e intercetta in anticipo un errore che con NPM passerebbe silenzioso.
+C'è una seconda differenza, sulla **struttura** di `node_modules`. NPM la costruisce «piatta»: tutte le dipendenze, dirette e indirette, finiscono allo stesso livello, e questo consente per sbaglio di importare un pacchetto mai dichiarato (una *phantom dependency*, arrivata come dipendenza di una dipendenza). pnpm mette invece al primo livello solo le dipendenze **dichiarate** nel `package.json`, come link simbolici, tenendo tutto il resto in una sottocartella `.pnpm`: se un import non è tra le dipendenze dichiarate, semplicemente non si risolve. È più rigoroso, e intercetta in anticipo un errore che con NPM passerebbe silenzioso. Com'è fatta dentro questa struttura, e perché Node la attraversa senza bisogno di modifiche, è spiegato nel <a href="../node/#/docs/03-package-manager?id=pnpm-un-archivio-unico-e-collegamenti-simbolici" target="_blank" rel="noopener">vault Node, capitolo 03</a>.
 
 ### Monorepo: workspaces e catalogs
 
@@ -79,7 +78,7 @@ packages:
   - 'packages/*'
 ```
 
-Da qui pnpm tratta ogni cartella sotto `apps/` e `packages/` come un pacchetto del workspace, li installa insieme e lascia che si riferiscano l'un l'altro senza passare dal registry.
+Da qui pnpm tratta ogni cartella sotto `apps/` e `packages/` come un pacchetto del workspace, li installa insieme e lascia che si riferiscano l'un l'altro senza passare dal registry. I workspace degli altri gestori, il protocollo `workspace:` e l'orchestrazione dei task sono trattati nel <a href="../node/#/docs/09-monorepo" target="_blank" rel="noopener">vault Node, capitolo 09 · Monorepo</a>.
 
 Su un monorepo grande nasce però il problema dell'**allineamento delle versioni**: se dieci pacchetti dipendono tutti da React, è facile che scivolino su versioni leggermente diverse, con bug sottili e difficili da spiegare. La risposta di pnpm ([dalla versione 9.5](https://github.com/pnpm/pnpm/releases/tag/v9.5.0), luglio 2024) sono i **catalogs**: le versioni si dichiarano in **un punto solo**, sempre nella `pnpm-workspace.yaml`, e i singoli `package.json` non scrivono più il numero ma un rimando.
 
@@ -197,7 +196,7 @@ Il file `.nvmrc` **resta nel progetto** (di norma versionato in git) e ha un sol
 > `.nvmrc` è un semplice file di testo con dentro un numero di versione: non viene *eseguito*, viene **letto** dal version manager. È una convenzione di **nvm**, che è una funzione di shell e gira sui sistemi **Unix-like** (macOS, Linux, e WSL su Windows), non sul Windows nativo. Là si usa di solito **nvm-windows**, un progetto diverso con lo stesso nome che **non** legge `.nvmrc`, così il file resta ignorato. Che `.nvmrc` «valga» dipende quindi dal **manager**, non dal file: quelli cross-platform come **fnm** (qui sotto) lo leggono anche su Windows.
 
 > [!warning]
-> I pacchetti installati globalmente con `npm install -g` sono **legati alla versione di Node attiva al momento dell'installazione**. Dopo un `nvm use 20`, il `$PATH` punta al `bin` di Node 20, dove quei pacchetti non sono stati installati: sembrano sparire. Non sono persi (vivono ancora sotto `~/.nvm/versions/node/<versione>/bin`), ma per usarli sulla nuova versione vanno reinstallati lì. Il motivo (PATH e npm prefix globale) è spiegato nel vault Terminale, [cap. 07 · Node, npm e il frontend](../terminale/#/docs/07-node-npm-frontend?id=le-versioni-di-node-nvm).
+> I pacchetti installati globalmente con `npm install -g` sono **legati alla versione di Node attiva al momento dell'installazione**. Dopo un `nvm use 20`, il `$PATH` punta al `bin` di Node 20, dove quei pacchetti non sono stati installati: sembrano sparire. Non sono persi (vivono ancora sotto `~/.nvm/versions/node/<versione>/bin`), ma per usarli sulla nuova versione vanno reinstallati lì. Il motivo (PATH e npm prefix globale) è spiegato nel vault Terminale, <a href="../terminale/#/docs/07-node-npm-frontend?id=le-versioni-di-node-nvm" target="_blank" rel="noopener">cap. 07 · Node, npm e il frontend</a>.
 
 **Alternative:** **fnm** (*Fast Node Manager*, scritto in Rust) offre le stesse funzionalità di nvm con tempi di avvio sensibilmente più rapidi e supporto nativo a Windows, macOS e Linux. È considerato oggi una valida alternativa moderna; la scelta tra i due è spesso una questione di ecosistema e preferenza personale.
 
@@ -213,7 +212,7 @@ Nell'ecosistema JavaScript conta perché **un pacchetto npm *è* un tarball**: i
 </figure>
 
 - **`npm pack`** crea il `.tgz` in locale (eseguendo prima l'eventuale build);
-- **`npm publish`** carica quello stesso `.tgz` sul registry;
+- **`npm publish`** carica quello stesso `.tgz` sul registry (come prepararlo e pubblicarlo in sicurezza è spiegato nel <a href="../node/#/docs/08-pubblicare-pacchetti-npm" target="_blank" rel="noopener">vault Node, capitolo 08</a>);
 - **`npm install`** scarica un `.tgz`, dal registry (`install <nome>`) o da un file locale, e lo scompatta in `node_modules`.
 
 Per questo, quando **non si può pubblicare sul registry** (libreria interna o ad-hoc, ambiente isolato), si distribuisce il pacchetto **a mano** come `.tgz` e lo si installa direttamente:
