@@ -43,6 +43,9 @@ integrazione continua · consegna continua · pipeline (stage/job/step) · runne
 **[Licenze software (MIT, GPL…)](docs/licenze.md)**
 Permissive vs copyleft · MIT · ISC · BSD · Apache 2.0 · GPLv2/GPLv3 · LGPL · AGPL · nessuna licenza (tutti i diritti riservati) · public domain (CC0) · doppia licenza · campo `license` e SPDX
 
+**[Crittografia: codifica, hash e cifratura](docs/crittografia.md)**
+Codifica vs hash vs cifratura · SHA-256 · cifratura simmetrica (AES) · AES-GCM (IV, tag di autenticazione) · PBKDF2 (salt, iterazioni) e Argon2id · cifratura asimmetrica e ibrida (TLS) · esempio: il lucchetto dell'area privata
+
 **[SSH e chiavi pubblica/privata](docs/ssh.md)**
 Cos'è SSH (secure shell) · password vs chiavi · crittografia asimmetrica (chiave pubblica/privata) · autenticazione a sfida e risposta · `ssh-keygen`, `.pub`, `~/.ssh/config` · HTTPS vs SSH per Git
 

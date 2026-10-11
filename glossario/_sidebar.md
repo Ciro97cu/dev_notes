@@ -24,6 +24,7 @@
   - [Licenze software (MIT, GPL…)](docs/licenze.md)
 
 - **Sicurezza e accesso**
+  - [Crittografia: codifica, hash, cifratura](docs/crittografia.md)
   - [SSH e chiavi pubblica/privata](docs/ssh.md)
 
 - **React**
