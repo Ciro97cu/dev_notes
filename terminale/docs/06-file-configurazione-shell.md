@@ -55,6 +55,8 @@ Un esempio concreto di cosa finisce, di solito, in ciascuno dei quattro file:
 - **`~/.zshrc`**: il grosso, cioè alias, `export`, aggiunte al PATH, prompt e inizializzazione dei tool (l'esempio completo è qui sotto).
 - **`~/.zlogin`**: raro, un comando di fine avvio (es. un saluto: `echo "Pronto, $USER"`).
 
+Ognuno di questi file personali ha poi un gemello di sistema in `/etc` (`/etc/zshenv`, `/etc/zprofile`, `/etc/zshrc`, `/etc/zlogin`), valido per tutti gli utenti, che zsh legge **subito prima** del corrispondente file nella home, quando esiste ([manuale di zsh](https://zsh.sourceforge.io/Doc/Release/Files.html)). Su macOS il più importante è `/etc/zprofile`: costruisce la base del PATH, come spiega il [capitolo 5](05-variabili-ambiente-path.md?id=come-si-costruisce-il-path), e imposta `LANG=C.UTF-8` quando il Terminale non ha indicato una lingua.
+
 ## E in bash? (la trappola classica)
 
 Con bash i file sono altri e nascondono l'inghippo che fa impazzire di più. Una shell di login legge `~/.bash_profile`; una shell interattiva *non* di login legge invece `~/.bashrc`. Siccome su macOS Terminal apre shell **di login**, viene letto `~/.bash_profile` e **non** `~/.bashrc` — così le personalizzazioni scritte in `~/.bashrc` sembrano ignorate. La soluzione usuale è far leggere l'uno dall'altro, aggiungendo in cima a `~/.bash_profile` una riga che «tira dentro» `~/.bashrc`:

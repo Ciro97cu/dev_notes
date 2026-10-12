@@ -78,6 +78,36 @@ C'è però un dettaglio cruciale: questa riga vale **solo per la shell corrente*
 > [!tip]
 > Se dopo aver installato un programma il terminale risponde `command not found`, il problema quasi sempre non è l'installazione ma il **PATH**: la cartella dove sta l'eseguibile non è (ancora) elencata nel PATH. Verificarlo con `echo $PATH` e cercare l'eseguibile con `which`/`type` è il primo passo di diagnosi.
 
+## Come si costruisce il PATH
+
+Il PATH non è scritto per intero in nessun file. Si **costruisce a pezzi** ogni volta che si apre una shell: alcuni file di avvio vengono letti uno dopo l'altro, e ciascuno aggiunge le sue cartelle all'elenco lasciato dai precedenti. La riga `export PATH="$HOME/.local/bin:$PATH"` vista sopra lo mostra bene, perché non riscrive l'elenco: prende quello costruito fino a quel momento (`$PATH`) e ci mette davanti una cartella. Aprendo una finestra del Terminale su macOS i passi sono tre; l'ordine completo in cui zsh legge i file di avvio è nel [capitolo 6](06-file-configurazione-shell.md?id=i-file-di-avvio-di-zsh).
+
+1. **La base di macOS.** Il primo file che tocca il PATH è `/etc/zprofile`, un file di sistema uguale per tutti gli utenti. Al suo interno esegue un piccolo programma, `/usr/libexec/path_helper`, che parte dalle cartelle elencate in `/etc/paths`, una per riga, e poi aggiunge **in coda** quelle che trova nei file della cartella `/etc/paths.d` (lo descrive `man path_helper`). In `/etc/paths.d` un programma installato può lasciare un proprio file con le sue cartelle, senza toccare quelli degli altri: sul Mac di riferimento, per esempio, c'è un file `homebrew` che contiene `/opt/homebrew/bin`.
+2. **I file personali.** Subito dopo zsh legge `~/.zprofile`, se esiste, e poi `~/.zshrc`. Ogni riga del tipo `export PATH="…:$PATH"` mette la sua cartella **davanti** all'elenco del passo 1.
+3. **Gli strumenti caricati dal `~/.zshrc`.** Alcuni strumenti, caricati da una riga del `~/.zshrc`, modificano il PATH a loro volta. nvm, per esempio, mette in testa la cartella della versione di Node attiva: essendo l'ultimo ad agire, finisce primo.
+
+<figure style="margin:1rem 0;text-align:center">
+<svg viewBox="0 0 540 232" role="img" aria-label="Il PATH si costruisce in tre passi. Passo 1, macOS con path_helper: /usr/local/bin, /usr/bin, /bin, /usr/sbin, /sbin presi da /etc/paths, più /opt/homebrew/bin in coda, preso da /etc/paths.d. Passo 2, il file .zshrc mette ~/.local/bin davanti a tutto il passo 1. Passo 3, nvm mette davanti la cartella di Node, prima di ~/.local/bin e del passo 1." style="width:100%;max-width:540px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="20" y="22" font-size="11.5" font-weight="700">1 · macOS: /etc/zprofile esegue path_helper</text><g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5"><rect x="20" y="32" width="104" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="72" y="49" text-anchor="middle">/usr/local/bin</text><rect x="130" y="32" width="66" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="163" y="49" text-anchor="middle">/usr/bin</text><rect x="202" y="32" width="44" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="224" y="49" text-anchor="middle">/bin</text><rect x="252" y="32" width="74" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="289" y="49" text-anchor="middle">/usr/sbin</text><rect x="332" y="32" width="50" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="357" y="49" text-anchor="middle">/sbin</text><rect x="388" y="32" width="132" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3"/><text x="454" y="49" text-anchor="middle">/opt/homebrew/bin</text></g><g font-size="9.5" opacity=".65" text-anchor="middle"><text x="201" y="74">da /etc/paths</text><text x="454" y="74">in coda, da /etc/paths.d</text></g><text x="20" y="104" font-size="11.5" font-weight="700">2 · ~/.zshrc: export PATH="$HOME/.local/bin:$PATH"</text><rect x="20" y="114" width="96" height="26" rx="6" fill="var(--link,#78716c)" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/><text x="68" y="131" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" text-anchor="middle" font-weight="700">~/.local/bin</text><rect x="122" y="114" width="398" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/><text x="321" y="131" font-size="10.5" text-anchor="middle" opacity=".7">tutto il passo 1</text><text x="20" y="176" font-size="11.5" font-weight="700">3 · nvm, caricato dal ~/.zshrc</text><rect x="20" y="186" width="156" height="26" rx="6" fill="var(--link,#78716c)" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/><text x="98" y="203" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" text-anchor="middle" font-weight="700">~/.nvm/…/v24.21.0/bin</text><rect x="182" y="186" width="96" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="230" y="203" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" text-anchor="middle">~/.local/bin</text><rect x="284" y="186" width="236" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/><text x="402" y="203" font-size="10.5" text-anchor="middle" opacity=".7">tutto il passo 1</text></g></svg>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il PATH cresce a ogni passo: ciascuno parte dall'elenco lasciato dal precedente e mette le sue cartelle <strong>davanti</strong> (in evidenza), tranne <code>/etc/paths.d</code>, che aggiunge <strong>in coda</strong>. L'ultimo ad agire finisce primo, ed è per questo che il <code>node</code> di nvm vince su tutti. Un PATH reale ha anche altre voci di sistema, come <code>/System/Cryptexes/App/usr/bin</code>, che arrivano dagli stessi file del passo 1.</figcaption>
+</figure>
+
+I file del passo 1 si possono leggere direttamente, e il PATH finale si può stampare una cartella per riga, invece che tutto attaccato con i `:`.
+
+| Comando | Cosa fa |
+|---------|---------|
+| `cat /etc/paths` | mostra le cartelle di base, una per riga |
+| `ls /etc/paths.d` | elenca i file lasciati dai programmi installati |
+| `cat /etc/paths.d/*` | mostra le cartelle che quei file aggiungono in coda |
+
+```bash
+echo $PATH | tr ':' '\n'   # tr sostituisce ogni ":" con un a capo: una cartella per riga, nell'ordine di ricerca
+```
+
+Ne discende una conseguenza pratica. Le cartelle che arrivano da `/etc/paths.d` finiscono **in fondo**, dopo quelle di sistema, quindi un programma installato lì perde il confronto con un eventuale omonimo di macOS. È il caso di Homebrew quando manca la riga che la sua guida consiglia di aggiungere a `~/.zprofile`, `eval "$(/opt/homebrew/bin/brew shellenv)"` ([capitolo 6](06-file-configurazione-shell.md?id=i-file-di-avvio-di-zsh)): senza, i programmi di Homebrew funzionano lo stesso, ma restano in coda.
+
+> [!info|label:Su Linux]
+> `path_helper` esiste solo su macOS. Su Linux il PATH di base viene da file di sistema che cambiano da una distribuzione all'altra; i passi 2 e 3, cioè i file personali e gli strumenti come nvm, funzionano invece allo stesso modo.
+
 ## Ripasso lampo
 
 <details>
@@ -112,5 +142,12 @@ Quella dell'**ultima** riga che antepone (`export PATH="X:$PATH"`): ogni riga me
 <summary>Ho installato un tool ma la shell dice <code>command not found</code>: da dove parto?</summary>
 
 Quasi sempre è un problema di **PATH**, non di installazione: la cartella con l'eseguibile non è nel PATH. Si controlla con `echo $PATH` e si cerca l'eseguibile con `which`/`type`. La si aggiunge con `export PATH="…:$PATH"`, e per renderlo permanente si mette quella riga in un file di avvio (capitolo 6).
+
+</details>
+
+<details>
+<summary>Da dove arrivano le cartelle del PATH che non ho aggiunto io?</summary>
+
+Da macOS. All'apertura del terminale `/etc/zprofile` esegue `path_helper`, che costruisce la base con le cartelle di `/etc/paths` e aggiunge in coda quelle dei file in `/etc/paths.d`. Solo dopo i file personali (`~/.zprofile`, `~/.zshrc`) e strumenti come nvm mettono le loro cartelle **davanti** a quell'elenco.
 
 </details>

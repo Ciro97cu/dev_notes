@@ -10,9 +10,9 @@ Appunti di studio sul **terminale** e la **shell**: come muoversi nella riga di 
 |---|----------|-----------|
 | 01 | [Cos'è il terminale](docs/01-cos-e-il-terminale.md) | Il mondo Unix (Unix-like, POSIX); terminal emulator, shell e prompt; anatomia di una riga di comando |
 | 02 | [Le shell: sh, bash, zsh](docs/02-shell-sh-bash-zsh.md) | Cos'è una shell, la famiglia POSIX, perché macOS usa zsh, differenze pratiche |
-| 03 | [Navigare nel filesystem](docs/03-navigare-filesystem.md) | L'albero, `/` e `~`, path assoluti/relativi, `pwd` · `ls` · `cd` |
+| 03 | [Navigare nel filesystem](docs/03-navigare-filesystem.md) | L'albero, `/` e `~`, path assoluti/relativi, `pwd` · `ls` · `cd`, le cartelle di sistema (`bin`, `usr`, `opt`, `etc`…) e i prefissi |
 | 04 | [File e cartelle](docs/04-file-e-cartelle.md) | `touch` · `mkdir` · `cp` · `mv` · `rm`, wildcard, `cat` · `open` |
-| 05 | [Variabili d'ambiente e PATH](docs/05-variabili-ambiente-path.md) | env var, `export`, come la shell trova un comando lungo il PATH |
-| 06 | [File di configurazione della shell](docs/06-file-configurazione-shell.md) | `.zshrc`/`.bashrc`, login vs interactive, `source`, alias, hook (`chpwd`), Oh My Zsh |
+| 05 | [Variabili d'ambiente e PATH](docs/05-variabili-ambiente-path.md) | env var, `export`, come la shell trova un comando lungo il PATH, come si costruisce il PATH (`/etc/paths`, `path_helper`) |
+| 06 | [File di configurazione della shell](docs/06-file-configurazione-shell.md) | `.zshrc`/`.bashrc`, login vs interactive, i file di sistema in `/etc`, `source`, alias, hook (`chpwd`), Oh My Zsh |
 | 07 | [Node, npm e il frontend](docs/07-node-npm-frontend.md) | dipendenze, script (`npm run`), `npx`, locale vs globale + PATH, nvm, dev server |
 | 08 | [Comandi di tutti i giorni](docs/08-comandi-di-tutti-i-giorni.md) | pipe e redirezione, `grep` · `find`, permessi, scorciatoie da tastiera |
