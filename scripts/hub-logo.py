@@ -22,6 +22,7 @@ from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
+from fontTools.pens.boundsPen import BoundsPen
 
 SRC = sys.argv[1]; OUT = sys.argv[2]
 fred = instantiateVariableFont(TTFont(f'{SRC}/Fredoka.ttf'), {'wght': 700, 'wdth': 100})
@@ -42,7 +43,7 @@ ITEMS = [
     dict(t='di studio', x=558, y=110, s=42, r=-9, fill=C['a']),
     dict(t='デヴ・ノーツ', x=170, y=232, s=42, r=-4, font='jp', fill=C['n']),
     dict(rect=(54, 54), x=378, y=120, r=-8, rx=9, fill=C['md']),
-    dict(t='MD', x=378, y=131, s=30, r=-8, fill='#ffffff'),
+    dict(t='MD', x=378, y=120, s=30, r=-8, fill='#ffffff', ink=True),   # centrato sul disegno, nel quadrato
     dict(t='{{ note }}', x=250, y=312, s=40, r=-6, fill=C['a']),
     dict(t='</>', x=72, y=306, s=52, r=-8, fill=C['n']),
 ]
@@ -55,10 +56,20 @@ def text_path(it):
     total = sum(hmtx[n][0] for n in names)
     k = it['s'] / upm; a = math.radians(it.get('r', 0)); ca, sa = math.cos(a), math.sin(a)
     pen = SVGPathPen(gs, ntos=lambda v: f'{v:.1f}'.rstrip('0').rstrip('.'))
-    xoff = -total / 2
+    # punto del testo che finisce in (x, y): con ink=True il centro del disegno delle lettere
+    # (utile dentro un riquadro), altrimenti il centro della larghezza sulla linea di base
+    cx, cy = total / 2, 0
+    if it.get('ink'):
+        bp, x0 = BoundsPen(gs), 0
+        for n in names:
+            gs[n].draw(TransformPen(bp, (1, 0, 0, 1, x0, 0))); x0 += hmtx[n][0]
+        xmin, ymin, xmax, ymax = bp.bounds
+        cx, cy = (xmin + xmax) / 2, (ymin + ymax) / 2
+    xoff = -cx
     for n in names:
         # font (y in su) -> scala k, ribalta y, ruota r, trasla (x, y)
-        m = (k * ca, k * sa, k * sa, -k * ca, it['x'] + k * ca * xoff, it['y'] + k * sa * xoff)
+        dx, dy = k * xoff, k * cy
+        m = (k * ca, k * sa, k * sa, -k * ca, it['x'] + ca * dx - sa * dy, it['y'] + sa * dx + ca * dy)
         gs[n].draw(TransformPen(pen, m))
         xoff += hmtx[n][0]
     return pen.getCommands()
