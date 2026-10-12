@@ -1,9 +1,9 @@
 :root {
-  --grad-a: #7c3aed;   /* violet */
-  --grad-b: #06b6d4;   /* cyan   */
-  /* stesse tinte del wordmark, scurite per il testo piccolo su sfondo chiaro */
-  --grad-a-text: #7c3aed;
-  --grad-b-text: #0e7490;
+  --grad-a: #e2365f;   /* rosa    (lettere del logo) */
+  --grad-b: #cc46c4;   /* magenta (lettere e ombra del logo) */
+  /* stesse tinte del logo, scurite per il testo piccolo su sfondo chiaro */
+  --grad-a-text: #c81e4d;
+  --grad-b-text: #a62fa0;
 
   --bg: #f5f7fb;
   --fg: #0f172a;
@@ -16,8 +16,8 @@
   --panel: rgba(255, 255, 255, 0.9);   /* pannello della palette: più opaco delle card, per leggibilità */
 }
 html.dark {
-  --grad-a-text: #a78bfa;   /* schiarite per il testo piccolo su sfondo scuro */
-  --grad-b-text: #22d3ee;
+  --grad-a-text: #ff7a98;   /* schiarite per il testo piccolo su sfondo scuro */
+  --grad-b-text: #e58ae0;
   --bg: #080b12;
   --fg: #e8eef6;
   --fg-soft: #99a4b4;
@@ -89,25 +89,11 @@ body::before {
 
 /* ---------- Hero ---------- */
 .hero { text-align: center; margin-bottom: clamp(2.5rem, 6vw, 4rem); }
-.logo {
-  width: 84px; height: 84px; margin: 0 auto 1.2rem;
-  filter: drop-shadow(0 8px 26px color-mix(in srgb, var(--grad-a) 45%, transparent));
-  animation: floaty 6s ease-in-out infinite;
-}
+.wordmark { margin: 0 auto; width: min(560px, 100%); line-height: 0; }
+/* logo adesivo: SVG a tracciati con ombra estrusa e bordo bianco già disegnati; galleggia piano */
+.dn-logo { display: block; width: 100%; height: auto; overflow: visible; animation: floaty 6s ease-in-out infinite; }
 @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-@media (prefers-reduced-motion: reduce) { .logo { animation: none; } }
-
-.wordmark {
-  margin: 0;
-  font-size: clamp(2.6rem, 7vw, 3.8rem);
-  font-weight: 800;
-  letter-spacing: -.03em;
-  line-height: 1;
-  background: linear-gradient(100deg, var(--grad-a), var(--grad-b) 70%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
+@media (prefers-reduced-motion: reduce) { .dn-logo { animation: none; } }
 /* ---------- Griglia card ---------- */
 .grid {
   display: grid;
@@ -138,9 +124,9 @@ body::before {
      Un `1fr` "nudo" vale minmax(auto,1fr): il suo minimo è il min-content della card, e su
      schermi molto stretti quello faceva uscire le card dal bordo. */
   .grid { grid-template-columns: minmax(0, 1fr); }
-  .wrap { padding: 2.75rem 1.1rem 1.75rem; }   /* meno spazio in cima, ritmo più equilibrato */
+  .wrap { padding: 4.4rem 1.1rem 1.75rem; }    /* in cima resta lo spazio dei pulsanti fissi (tema, dati, aiuto), così il logo non ci finisce sotto */
   .hero { margin-bottom: 1.8rem; }
-  .logo { width: 68px; height: 68px; margin-bottom: .85rem; }
+  .wordmark { width: min(400px, 100%); }
   .card { padding: 1.05rem 1.15rem; gap: .85rem; }
   .tile { width: 48px; height: 48px; font-size: 1.9rem; }
   .tile svg { width: 42px; height: 42px; }
