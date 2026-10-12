@@ -29,6 +29,22 @@ Alcune variabili si incontrano di continuo, ed è utile riconoscerle:
 | `$PATH` | l'elenco delle cartelle in cui cercare i comandi (sotto) |
 | `$LANG` | lingua e codifica (es. `it_IT.UTF-8`) |
 
+### Cambiare o togliere una variabile
+
+Una variabile già impostata si cambia semplicemente **assegnandola di nuovo**: il nuovo valore sostituisce il vecchio. Quello che conta è *dove* la si riassegna, perché da lì dipende quanto dura la modifica. Per togliere del tutto una variabile c'è invece `unset`.
+
+| Comando | Effetto | Quanto dura |
+|---------|---------|-------------|
+| `export EDITOR="vim"` | sostituisce il valore precedente | finché si chiude la finestra |
+| `EDITOR="nano" git commit` | assegna il valore **solo** al comando che segue, sulla stessa riga | solo per quel programma |
+| `unset EDITOR` | toglie la variabile | finché si chiude la finestra |
+| una riga `export …` nel `~/.zshrc` | imposta il valore di partenza | in ogni nuova finestra ([capitolo 6](06-file-configurazione-shell.md)) |
+
+Un programma, quando parte, riceve una **copia** delle variabili d'ambiente di quel momento. Ne seguono due conseguenze che all'inizio spiazzano. La prima è che un programma già avviato non vede le modifiche fatte dopo: per fargli leggere il nuovo valore va chiuso e riavviato. La seconda è che ogni finestra del Terminale ha la sua copia, quindi un `export` scritto in una finestra non arriva alle altre. Dopo aver modificato il `~/.zshrc`, per applicare il cambio alla finestra già aperta si usa `source ~/.zshrc`; le nuove finestre lo leggono da sole.
+
+> [!tip]
+> Prima e dopo una modifica conviene controllare il valore con `echo $NOME` (oppure `printenv NOME`): è il modo più rapido per capire quale valore vede davvero la shell.
+
 ## Il PATH: come la shell trova un comando
 
 Quando si digita `node` e si preme Invio, la shell non cerca quel programma «ovunque»: consulta la variabile **`PATH`**, che è un **elenco ordinato di cartelle** separate dal carattere `:`. La shell scorre quelle cartelle **una dopo l'altra, da sinistra a destra**, e appena trova una che contiene un eseguibile di nome `node` lo lancia — **la prima che vince**, ignorando le successive. Se nessuna cartella del PATH contiene quel comando, si riceve il classico `command not found`.
@@ -44,18 +60,40 @@ echo $PATH
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">L'ordine del PATH conta: la prima cartella che contiene il comando vince. È così che il <code>node</code> gestito da nvm «copre» un eventuale <code>node</code> di sistema — la sua cartella viene prima nel PATH.</figcaption>
 </figure>
 
-Per sapere *quale* eseguibile vince, senza tirare a indovinare, ci sono tre comandi equivalenti nella sostanza:
+### Non solo file: alias, funzioni e comandi integrati
 
-| Comando | Cosa fa |
-|---------|---------|
-| `which node` | stampa il percorso completo dell'eseguibile che verrebbe eseguito |
-| `type node` | come sopra, ma dice anche se è un comando, un alias o una funzione |
-| `command -v node` | la forma più portabile (utile negli script) |
+Il PATH entra in gioco solo alla fine. Un nome digitato nel terminale può infatti corrispondere a quattro cose diverse, e la shell le prova in un ordine preciso: prima gli **alias**, poi le **funzioni**, poi i **comandi integrati**, e solo se nessuno di questi corrisponde cerca un file nelle cartelle del PATH ([manuale di zsh](https://zsh.sourceforge.io/Doc/Release/Command-Execution.html)). Anche qui vince il primo che trova.
+
+| Tipo | Che cos'è | Esempio |
+|------|-----------|---------|
+| **alias** | un soprannome: la shell sostituisce il nome con un testo più lungo, prima di eseguirlo | `alias ll="ls -la"`: scrivendo `ll` parte `ls -la` |
+| **funzione** | un piccolo programma scritto nel linguaggio della shell, con un nome; di solito si definisce nel `~/.zshrc` | `saluta() { echo "ciao $1"; }` |
+| **comando integrato** (*builtin*) | un comando che fa parte della shell stessa e non è un file su disco | `cd`, `echo`, `export` |
+| **eseguibile** | un file vero, che sta in una delle cartelle del PATH | `/usr/bin/git`, il `node` di nvm |
+
+L'ordine spiega alcune sorprese. Un alias con lo stesso nome di un programma lo copre: con `alias ls="ls -G"` (l'opzione che su macOS colora l'elenco), scrivere `ls` esegue sempre la versione con l'opzione, senza toccare il programma. E `cd` è un comando integrato per una ragione precisa: deve cambiare la cartella della shell stessa, cosa che un programma separato non potrebbe fare, perché cambierebbe solo la propria cartella e poi terminerebbe.
+
+Per sapere chi vince, senza tirare a indovinare, ci sono quattro comandi:
+
+| Comando | Cosa mostra |
+|---------|-------------|
+| `type ll` | chi vince e di che tipo è: `ll is an alias for ls -la` |
+| `which ll` | chi vince; in zsh è un comando integrato e riconosce anche alias e funzioni |
+| `where ll` | **tutti** i candidati, nell'ordine in cui la shell li prova (solo zsh) |
+| `command -v ll` | chi vince, nella forma più portabile: è quella da usare negli script |
+
+`where` è il più istruttivo, perché mostra anche chi perde:
 
 ```bash
 which node
 # /Users/ciro/.nvm/versions/node/v22.22.0/bin/node   → vince quello di nvm
+where cd
+# cd: shell built-in command    → vince il comando integrato
+# /usr/bin/cd                   → esiste anche un file con quel nome, ma arriva dopo
 ```
+
+> [!info|label:In bash]
+> `where` non esiste: per vedere tutti i candidati si usa `type -a`. Anche `which` si comporta diversamente, perché in bash è un programma esterno (`/usr/bin/which`) che guarda solo il PATH, quindi non vede alias e funzioni.
 
 ## Aggiungere una cartella al PATH
 
@@ -80,11 +118,11 @@ C'è però un dettaglio cruciale: questa riga vale **solo per la shell corrente*
 
 ## Come si costruisce il PATH
 
-Il PATH non è scritto per intero in nessun file. Si **costruisce a pezzi** ogni volta che si apre una shell: alcuni file di avvio vengono letti uno dopo l'altro, e ciascuno aggiunge le sue cartelle all'elenco lasciato dai precedenti. La riga `export PATH="$HOME/.local/bin:$PATH"` vista sopra lo mostra bene, perché non riscrive l'elenco: prende quello costruito fino a quel momento (`$PATH`) e ci mette davanti una cartella. Aprendo una finestra del Terminale su macOS i passi sono tre; l'ordine completo in cui zsh legge i file di avvio è nel [capitolo 6](06-file-configurazione-shell.md?id=i-file-di-avvio-di-zsh).
+Il PATH non è scritto per intero in nessun file: si **costruisce a pezzi** ogni volta che si apre una finestra del Terminale. Alcuni file vengono letti uno dopo l'altro, e ciascuno aggiunge le sue cartelle all'elenco lasciato dai precedenti, senza riscriverlo. Lo mostra la riga `export PATH="$HOME/.local/bin:$PATH"` vista sopra: `$PATH` vale «l'elenco costruito fin qui», e la riga ci mette davanti una cartella. Su macOS i passi sono tre; l'ordine completo dei file di avvio è nel [capitolo 6](06-file-configurazione-shell.md?id=i-file-di-avvio-di-zsh).
 
-1. **La base di macOS.** Il primo file che tocca il PATH è `/etc/zprofile`, un file di sistema uguale per tutti gli utenti. Al suo interno esegue un piccolo programma, `/usr/libexec/path_helper`, che parte dalle cartelle elencate in `/etc/paths`, una per riga, e poi aggiunge **in coda** quelle che trova nei file della cartella `/etc/paths.d` (lo descrive `man path_helper`). In `/etc/paths.d` un programma installato può lasciare un proprio file con le sue cartelle, senza toccare quelli degli altri: sul Mac di riferimento, per esempio, c'è un file `homebrew` che contiene `/opt/homebrew/bin`.
-2. **I file personali.** Subito dopo zsh legge `~/.zprofile`, se esiste, e poi `~/.zshrc`. Ogni riga del tipo `export PATH="…:$PATH"` mette la sua cartella **davanti** all'elenco del passo 1.
-3. **Gli strumenti caricati dal `~/.zshrc`.** Alcuni strumenti, caricati da una riga del `~/.zshrc`, modificano il PATH a loro volta. nvm, per esempio, mette in testa la cartella della versione di Node attiva: essendo l'ultimo ad agire, finisce primo.
+1. **macOS prepara la base.** Il primo file letto è `/etc/zprofile`, un file di sistema uguale per tutti gli utenti. Al suo interno lancia un piccolo programma di macOS, `path_helper`, che fa due cose (lo descrive `man path_helper`): prende le cartelle elencate nel file `/etc/paths`, una per riga, e poi aggiunge **in coda** quelle scritte nei file della cartella `/etc/paths.d`. In quella cartella ogni programma installato può lasciare un proprio file con le cartelle che gli servono: sul Mac di riferimento, per esempio, c'è il file `homebrew`, che contiene `/opt/homebrew/bin`.
+2. **I file personali aggiungono davanti.** Poi zsh legge `~/.zprofile`, se esiste, e `~/.zshrc`. Ogni riga come `export PATH="…:$PATH"` mette la sua cartella **davanti** all'elenco del passo 1.
+3. **Gli strumenti aggiungono davanti a tutti.** Alcuni strumenti caricati dal `~/.zshrc` modificano il PATH a loro volta. nvm, per esempio, mette in testa la cartella della versione di Node attiva: è l'ultimo ad agire, quindi finisce primo.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 540 232" role="img" aria-label="Il PATH si costruisce in tre passi. Passo 1, macOS con path_helper: /usr/local/bin, /usr/bin, /bin, /usr/sbin, /sbin presi da /etc/paths, più /opt/homebrew/bin in coda, preso da /etc/paths.d. Passo 2, il file .zshrc mette ~/.local/bin davanti a tutto il passo 1. Passo 3, nvm mette davanti la cartella di Node, prima di ~/.local/bin e del passo 1." style="width:100%;max-width:540px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="20" y="22" font-size="11.5" font-weight="700">1 · macOS: /etc/zprofile esegue path_helper</text><g font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5"><rect x="20" y="32" width="104" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="72" y="49" text-anchor="middle">/usr/local/bin</text><rect x="130" y="32" width="66" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="163" y="49" text-anchor="middle">/usr/bin</text><rect x="202" y="32" width="44" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="224" y="49" text-anchor="middle">/bin</text><rect x="252" y="32" width="74" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="289" y="49" text-anchor="middle">/usr/sbin</text><rect x="332" y="32" width="50" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="357" y="49" text-anchor="middle">/sbin</text><rect x="388" y="32" width="132" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3"/><text x="454" y="49" text-anchor="middle">/opt/homebrew/bin</text></g><g font-size="9.5" opacity=".65" text-anchor="middle"><text x="201" y="74">da /etc/paths</text><text x="454" y="74">in coda, da /etc/paths.d</text></g><text x="20" y="104" font-size="11.5" font-weight="700">2 · ~/.zshrc: export PATH="$HOME/.local/bin:$PATH"</text><rect x="20" y="114" width="96" height="26" rx="6" fill="var(--link,#78716c)" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/><text x="68" y="131" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" text-anchor="middle" font-weight="700">~/.local/bin</text><rect x="122" y="114" width="398" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/><text x="321" y="131" font-size="10.5" text-anchor="middle" opacity=".7">tutto il passo 1</text><text x="20" y="176" font-size="11.5" font-weight="700">3 · nvm, caricato dal ~/.zshrc</text><rect x="20" y="186" width="156" height="26" rx="6" fill="var(--link,#78716c)" fill-opacity=".18" stroke="currentColor" stroke-width="1.6"/><text x="98" y="203" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" text-anchor="middle" font-weight="700">~/.nvm/…/v24.21.0/bin</text><rect x="182" y="186" width="96" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3"/><text x="230" y="203" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="10.5" text-anchor="middle">~/.local/bin</text><rect x="284" y="186" width="236" height="26" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 3" opacity=".55"/><text x="402" y="203" font-size="10.5" text-anchor="middle" opacity=".7">tutto il passo 1</text></g></svg>
@@ -103,7 +141,7 @@ I file del passo 1 si possono leggere direttamente, e il PATH finale si può sta
 echo $PATH | tr ':' '\n'   # tr sostituisce ogni ":" con un a capo: una cartella per riga, nell'ordine di ricerca
 ```
 
-Ne discende una conseguenza pratica. Le cartelle che arrivano da `/etc/paths.d` finiscono **in fondo**, dopo quelle di sistema, quindi un programma installato lì perde il confronto con un eventuale omonimo di macOS. È il caso di Homebrew quando manca la riga che la sua guida consiglia di aggiungere a `~/.zprofile`, `eval "$(/opt/homebrew/bin/brew shellenv)"` ([capitolo 6](06-file-configurazione-shell.md?id=i-file-di-avvio-di-zsh)): senza, i programmi di Homebrew funzionano lo stesso, ma restano in coda.
+Ne segue una conseguenza pratica: le cartelle che arrivano da `/etc/paths.d` finiscono **in fondo**, dopo quelle di sistema, quindi un programma installato lì perde il confronto con un eventuale omonimo di macOS. Succede a Homebrew quando manca la riga che la sua guida consiglia di mettere in `~/.zprofile`, `eval "$(/opt/homebrew/bin/brew shellenv)"` ([capitolo 6](06-file-configurazione-shell.md?id=i-file-di-avvio-di-zsh)): i suoi programmi funzionano lo stesso, ma restano in coda.
 
 > [!info|label:Su Linux]
 > `path_helper` esiste solo su macOS. Su Linux il PATH di base viene da file di sistema che cambiano da una distribuzione all'altra; i passi 2 e 3, cioè i file personali e gli strumenti come nvm, funzionano invece allo stesso modo.
@@ -149,5 +187,19 @@ Quasi sempre è un problema di **PATH**, non di installazione: la cartella con l
 <summary>Da dove arrivano le cartelle del PATH che non ho aggiunto io?</summary>
 
 Da macOS. All'apertura del terminale `/etc/zprofile` esegue `path_helper`, che costruisce la base con le cartelle di `/etc/paths` e aggiunge in coda quelle dei file in `/etc/paths.d`. Solo dopo i file personali (`~/.zprofile`, `~/.zshrc`) e strumenti come nvm mettono le loro cartelle **davanti** a quell'elenco.
+
+</details>
+
+<details>
+<summary>Che differenza c'è fra un alias, una funzione, un comando integrato e un eseguibile?</summary>
+
+L'**alias** è un soprannome che la shell sostituisce con un testo più lungo; la **funzione** è un piccolo programma scritto nel linguaggio della shell; il **comando integrato** (`cd`, `echo`) fa parte della shell stessa; l'**eseguibile** è un file in una cartella del PATH. La shell li prova in quest'ordine e vince il primo: `type` dice chi vince, `where` (in zsh) mostra tutti i candidati.
+
+</details>
+
+<details>
+<summary>Ho cambiato una variabile con <code>export</code>, ma un programma aperto continua a usare il valore vecchio: perché?</summary>
+
+Perché un programma riceve una **copia** delle variabili d'ambiente nel momento in cui parte, e le modifiche successive non lo raggiungono. Va chiuso e riavviato dalla finestra in cui si è fatto l'`export`. Per lo stesso motivo un `export` vale solo nella sua finestra, non nelle altre.
 
 </details>
