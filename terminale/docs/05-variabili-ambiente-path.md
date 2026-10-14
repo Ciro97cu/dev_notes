@@ -6,15 +6,17 @@ Una **variabile d'ambiente** è un valore con un nome che la shell tiene da part
 
 Il valore di una variabile si legge anteponendo al nome il simbolo `$`: `echo $HOME` stampa il percorso della home. Alcune variabili sono già pronte, impostate dal sistema; altre le si può creare. Qui c'è però una distinzione sottile ma importante, tra due modi di assegnare un valore:
 
-- `NOME=valore` crea una variabile **solo per la shell corrente**: la vede la shell, ma **non** i programmi che essa avvia.
-- `export NOME=valore` crea una variabile **d'ambiente**: viene **ereditata** anche dai programmi lanciati dalla shell (i suoi processi «figli»).
+- `NOME=valore` crea una variabile che può usare **solo la shell**: `echo $NOME` funziona, ma un programma lanciato da lì, come `node`, non la vede.
+- `export NOME=valore` crea una variabile **d'ambiente**: la shell la passa anche ai programmi che lancia (i suoi processi «figli»), quindi `node` la vede.
 
 È questa la ragione per cui, quando una guida dice di impostare una variabile che serve a un programma (per esempio `EDITOR`), usa sempre `export`: senza, quel programma non la vedrebbe.
 
+In nessuno dei due casi la variabile viene scritta in un file: vive nella memoria della shell di quella finestra del Terminale e sparisce quando la finestra si chiude. Per averla in ogni finestra si scrive la riga nel `~/.zshrc`, come spiega il [capitolo 6](06-file-configurazione-shell.md).
+
 ```bash
 echo $HOME               # /Users/ciro           → legge una variabile esistente
-NOME="Ciro"              # variabile solo per questa shell
-export EDITOR="code"     # variabile d'ambiente: la ereditano i programmi figli
+NOME="Ciro"              # solo la shell la vede (echo $NOME), i programmi no
+export EDITOR="code"     # la vedono anche i programmi lanciati da qui
 env                      # elenca tutte le variabili d'ambiente attuali
 ```
 
@@ -31,16 +33,16 @@ Alcune variabili si incontrano di continuo, ed è utile riconoscerle:
 
 ### Cambiare o togliere una variabile
 
-Una variabile già impostata si cambia semplicemente **assegnandola di nuovo**: il nuovo valore sostituisce il vecchio. Quello che conta è *dove* la si riassegna, perché da lì dipende quanto dura la modifica. Per togliere del tutto una variabile c'è invece `unset`.
+Una variabile già impostata si cambia semplicemente **assegnandola di nuovo**: il nuovo valore sostituisce il vecchio. Per toglierla c'è invece `unset`. Quello che cambia da un caso all'altro è **quanto dura** la modifica.
 
 | Comando | Effetto | Quanto dura |
 |---------|---------|-------------|
-| `export EDITOR="vim"` | sostituisce il valore precedente | finché si chiude la finestra |
-| `EDITOR="nano" git commit` | assegna il valore **solo** al comando che segue, sulla stessa riga | solo per quel programma |
-| `unset EDITOR` | toglie la variabile | finché si chiude la finestra |
-| una riga `export …` nel `~/.zshrc` | imposta il valore di partenza | in ogni nuova finestra ([capitolo 6](06-file-configurazione-shell.md)) |
+| `export EDITOR="vim"` | cambia il valore | solo in questa finestra: chiudendola, la modifica si perde |
+| `EDITOR="nano" git commit` | usa quel valore **solo** per il comando scritto sulla stessa riga | solo per quel comando: nella shell la variabile resta com'era |
+| `unset EDITOR` | toglie la variabile | solo in questa finestra: se la variabile è scritta nel `~/.zshrc`, nelle finestre nuove ricompare |
+| una riga `export …` nel `~/.zshrc` | scrive la variabile in un file, che ogni nuova finestra rilegge | sempre, finché la riga resta nel file ([capitolo 6](06-file-configurazione-shell.md)) |
 
-Un programma, quando parte, riceve una **copia** delle variabili d'ambiente di quel momento. Ne seguono due conseguenze che all'inizio spiazzano. La prima è che un programma già avviato non vede le modifiche fatte dopo: per fargli leggere il nuovo valore va chiuso e riavviato. La seconda è che ogni finestra del Terminale ha la sua copia, quindi un `export` scritto in una finestra non arriva alle altre. Dopo aver modificato il `~/.zshrc`, per applicare il cambio alla finestra già aperta si usa `source ~/.zshrc`; le nuove finestre lo leggono da sole.
+Un programma, quando parte, riceve una **copia** delle variabili d'ambiente di quel momento, e ogni finestra del Terminale ha le sue. Per questo una modifica non raggiunge un programma già avviato, che va chiuso e riavviato per vederla, né le altre finestre aperte. Dopo aver cambiato il `~/.zshrc`, le finestre nuove lo leggono da sole; per applicarlo a quella già aperta si usa `source ~/.zshrc`.
 
 > [!tip]
 > Prima e dopo una modifica conviene controllare il valore con `echo $NOME` (oppure `printenv NOME`): è il modo più rapido per capire quale valore vede davvero la shell.
