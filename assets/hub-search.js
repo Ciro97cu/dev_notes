@@ -4,8 +4,11 @@
  * Come funziona, zero-build e tutto lato client:
  *  1. alla prima apertura fa fetch di ogni <vault>/_sidebar.md (il manifesto delle
  *     pagine + titoli), poi degli .md linkati, ne estrae testo/intestazioni;
- *  2. costruisce un indice full-text unico e lo mette in cache in localStorage con
- *     chiave legata a DN_VERSION → si ricostruisce da solo quando bumpi la versione;
+ *  2. costruisce un indice full-text unico (testo INTERO di ogni pagina) e lo mette in
+ *     cache in IndexedDB con la versione DN_VERSION: si ricostruisce da solo al bump.
+ *     Non in localStorage: il testo di tutti i vault (~3 milioni di caratteri) supera i
+ *     pochi MB che localStorage concede, e un tempo per farcelo stare il corpo veniva
+ *     troncato ai primi 3500 caratteri, lasciando fuori dalla ricerca il 70% degli appunti;
  *  3. i risultati sono raggruppati per vault e colorati col colore-brand di ciascuno.
  * Nessuna dipendenza esterna, nessuna modifica alla CSP (fetch same-origin).
  */
@@ -26,7 +29,8 @@
   var META = {}, ORDER = {};
   VAULTS.forEach(function (v, i) { META[v.k] = v; ORDER[v.k] = i; });
 
-  var CACHE_KEY = 'dn-hub-search-index';
+  var OLD_CACHE_KEY = 'dn-hub-search-index';   // vecchia cache troncata in localStorage: si elimina
+  var IDB_NAME = 'dn-hub-search', IDB_STORE = 'index', IDB_KEY = 'docs';
   var MAX_PER_VAULT = 8, DEBOUNCE = 110;
   var isMac = /mac|iphone|ipad|ipod/i.test(navigator.platform || navigator.userAgent || '');
 
@@ -58,18 +62,28 @@
     return String(s).replace(/`/g, '').replace(/\s+/g, ' ').trim();
   }
 
-  function plain(md) {                        // markdown → testo piano cercabile
-    return md
+  // markdown → testo piano cercabile. Il codice (blocchi e inline) viene messo da parte e rimesso
+  // intatto alla fine, così nomi come `path_helper`, `~/.zshrc` o `#include` restano
+  // cercabili; fuori dal codice i simboli si tolgono solo dove fanno da formattazione.
+  function plain(md) {
+    var code = [];
+    var t = md
       .replace(/^---\n[\s\S]*?\n---\n/, '')   // frontmatter
       .replace(/<svg[\s\S]*?<\/svg>/gi, ' ')  // blocchi SVG interi
-      .replace(/```[^\n]*\n?/g, ' ')          // righe di fence (```html … e chiusura)
-      .replace(/`([^`]+)`/g, '$1')            // code inline → contenuto
+      .replace(/```[^\n]*\n([\s\S]*?)```/g, function (_, c) { code.push(c); return ' \u0000' + (code.length - 1) + '\u0000 '; })   // blocchi di codice: contenuto intatto
+      .replace(/```[^\n]*\n?/g, ' ')          // eventuali fence rimaste spaiate
+      .replace(/`([^`]+)`/g, function (_, c) { code.push(c); return '\u0000' + (code.length - 1) + '\u0000'; })
       .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')  // immagini
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')// link → testo
       .replace(/<[^>]+>/g, ' ')               // tag html rimasti
-      .replace(/&[a-z]+;/gi, ' ')             // entità (&lt; ecc.)
-      .replace(/[#>*_~|]+/g, ' ')             // punteggiatura markdown
-      .replace(/\s+/g, ' ').trim();
+      .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&[a-z]+;/gi, ' ')
+      .replace(/^\s{0,3}#{1,6}\s+/gm, '')     // # dei titoli
+      .replace(/^\s*(?:>\s?)+(?:\[![^\]]*\])?/gm, '')   // > delle citazioni e [!tipo] dei callout
+      .replace(/\*\*|__|~~/g, '')               // grassetto e barrato
+      .replace(/(^|[^\w])[*_]+(?=\w)|(\w)[*_]+(?!\w)/g, '$1$2')   // corsivo, ma non i _ dentro una parola
+      .replace(/\|/g, ' ');                      // separatori delle tabelle
+    t = t.replace(/\u0000(\d+)\u0000/g, function (_, i) { return code[+i]; });
+    return t.replace(/\s+/g, ' ').trim();
   }
 
   function headings(md) {                     // [{t, id}] dalle intestazioni ## …
@@ -99,7 +113,7 @@
   }
 
   function makeDoc(k, p, text) {
-    var body = plain(text).slice(0, 3500);
+    var body = plain(text);                   // testo intero: niente tagli, tutto è cercabile
     return { k: k, title: p.title, route: p.route, h: headings(text), body: body };
   }
 
@@ -118,37 +132,56 @@
       .catch(function () { return []; });
   }
 
-  function hydrate(docs) {
-    docs.forEach(function (d) {
-      d._hay = (d.title + ' ' + d.h.map(function (x) { return x.t; }).join(' ') + ' ' + d.body).toLowerCase();
+  // Cache dell'indice in IndexedDB (API del browser per dati grandi, asincrona). Se non è
+  // disponibile (es. navigazione privata), l'indice si ricostruisce a ogni apertura: funziona lo stesso.
+  function idb() {
+    return new Promise(function (res, rej) {
+      if (!window.indexedDB) return rej(new Error('IndexedDB non disponibile'));
+      var r = indexedDB.open(IDB_NAME, 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore(IDB_STORE); };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
     });
-    return docs;
+  }
+  function idbGet() {
+    return idb().then(function (db) {
+      return new Promise(function (res, rej) {
+        var q = db.transaction(IDB_STORE).objectStore(IDB_STORE).get(IDB_KEY);
+        q.onsuccess = function () { res(q.result); };
+        q.onerror = function () { rej(q.error); };
+      });
+    });
+  }
+  function idbPut(val) {
+    return idb().then(function (db) {
+      return new Promise(function (res, rej) {
+        var tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.objectStore(IDB_STORE).put(val, IDB_KEY);
+        tx.oncomplete = function () { res(); };
+        tx.onerror = function () { rej(tx.error); };
+      });
+    });
   }
 
   function ensureIndex() {
     if (index) return Promise.resolve(index);
     if (building) return building;
-    try {
-      var raw = localStorage.getItem(CACHE_KEY);
-      if (raw) {
-        var c = JSON.parse(raw);
-        if (c && c.v === (window.DN_VERSION || '?') && c.docs && c.docs.length) {
-          index = hydrate(c.docs);
-          return Promise.resolve(index);
-        }
-      }
-    } catch (e) {}
-    setStatus('Indicizzo gli appunti…');
-    building = Promise.all(VAULTS.map(indexVault)).then(function (arr) {
-      var docs = [].concat.apply([], arr);
-      index = hydrate(docs);
-      building = null;
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          v: window.DN_VERSION || '?', t: Date.now(),
+    try { localStorage.removeItem(OLD_CACHE_KEY); } catch (e) {}
+    var ver = window.DN_VERSION || '?';
+    building = idbGet().catch(function () { return null; }).then(function (c) {
+      if (c && c.v === ver && c.docs && c.docs.length) return c.docs;      // cache valida
+      setStatus('Indicizzo gli appunti…');
+      return Promise.all(VAULTS.map(indexVault)).then(function (arr) {
+        var docs = [].concat.apply([], arr);
+        idbPut({
+          v: ver, t: Date.now(),
           docs: docs.map(function (d) { return { k: d.k, title: d.title, route: d.route, h: d.h, body: d.body }; })
-        }));
-      } catch (e) {}
+        }).catch(function () {});
+        return docs;
+      });
+    }).then(function (docs) {
+      index = docs;
+      building = null;
       return index;
     });
     return building;
