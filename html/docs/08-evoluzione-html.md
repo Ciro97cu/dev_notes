@@ -6,7 +6,7 @@ tags: [tipo/modulo, future-proof, standard]
 # 08 · Evoluzione dell'HTML
 > modulo 8 — *HTML* · rif. WHATWG
 
-Come CSS e JavaScript, anche HTML si evolve — ma con un modello **diverso da entrambi**. Conoscerlo spiega una domanda che prima o poi ci si pone: perché non esiste (e non esisterà) un "HTML6"? E, di conseguenza, come ci si tiene aggiornati su cosa si può usare.
+Come CSS e JavaScript, anche HTML si evolve, ma con un modello **diverso da entrambi**. Conoscerlo spiega una domanda che prima o poi ci si pone: perché non esiste (e non esisterà) un "HTML6"? E, di conseguenza, come ci si tiene aggiornati su cosa si può usare.
 
 ## HTML è un *Living Standard*
 
@@ -16,7 +16,7 @@ Ci si è arrivati dopo una storia movimentata. HTML4 (1999) era del W3C, che poi
 
 ## Tre modelli a confronto
 
-È il punto che chiude il cerchio con gli altri due vault: le tre tecnologie del web si evolvono in **tre modi diversi**.
+Il confronto con gli altri due vault mostra che le tre tecnologie del web si evolvono in **tre modi diversi**.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 700 215" role="img" aria-label="Tre modelli di evoluzione: JavaScript edizioni annuali, CSS moduli, HTML Living Standard" style="width:100%;max-width:680px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="12" y="58" font-size="13" font-weight="700">JavaScript</text><text x="12" y="128" font-size="13" font-weight="700">CSS</text><text x="12" y="200" font-size="13" font-weight="700">HTML</text><line x1="120" y1="54" x2="678" y2="54" stroke="currentColor" stroke-width="1.5"/><circle cx="170" cy="54" r="4" fill="currentColor"/><text x="170" y="72" font-size="9" text-anchor="middle" opacity=".8">ES2015</text><circle cx="296" cy="54" r="4" fill="currentColor"/><text x="296" y="72" font-size="9" text-anchor="middle" opacity=".8">ES2018</text><circle cx="422" cy="54" r="4" fill="currentColor"/><text x="422" y="72" font-size="9" text-anchor="middle" opacity=".8">ES2021</text><circle cx="548" cy="54" r="4" fill="currentColor"/><text x="548" y="72" font-size="9" text-anchor="middle" opacity=".8">ES2024</text><circle cx="660" cy="54" r="4" fill="currentColor"/><text x="660" y="72" font-size="9" text-anchor="middle" opacity=".8">ES2026</text><rect x="130" y="111" width="120" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="190" y="128" font-size="9.5" text-anchor="middle">Grid · REC</text><rect x="292" y="111" width="130" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="357" y="128" font-size="9.5" text-anchor="middle">Nesting · CR</text><rect x="470" y="111" width="130" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="535" y="128" font-size="9.5" text-anchor="middle">Anchor · WD</text><text x="398" y="184" font-size="10" text-anchor="middle" opacity=".85">Living Standard — aggiornato in continuo, nessuna versione</text><line x1="130" y1="196" x2="666" y2="196" stroke="currentColor" stroke-width="1.8"/><path d="M674 196 L664 191 L664 201 Z" fill="currentColor"/></g></svg>
@@ -76,7 +76,7 @@ Il **WHATWG** (nato nel 2004 dai produttori di browser). Nel 2019 un accordo for
 <details>
 <summary>Se HTML non ha versioni, come si sa cosa si può usare?</summary>
 
-Si controlla il **supporto della singola feature** su Baseline, Can I Use e MDN — come per il CSS. Il `<!doctype html>` non è una versione, indica solo "HTML moderno".
+Si controlla il **supporto della singola feature** su Baseline, Can I Use e MDN, come per il CSS. Il `<!doctype html>` non è una versione, indica solo "HTML moderno".
 
 </details>
 
@@ -88,7 +88,7 @@ Che l'HTML resta **retrocompatibile**: le pagine vecchie continuano a funzionare
 </details>
 
 **In sintesi:**
-- HTML è un **Living Standard** del **WHATWG**: aggiornato in continuo, **nessuna versione** — niente "HTML6", solo "HTML".
+- HTML è un **Living Standard** del **WHATWG**: aggiornato in continuo, **nessuna versione** (niente "HTML6", solo "HTML").
 - Tre modelli diversi: JavaScript = **edizioni annuali**, CSS = **moduli** con stadi, HTML = **flusso continuo**.
 - "Nessuna versione" significa ragionare per **feature** (Baseline/Can I Use/MDN); il lavoro è pubblico su GitHub (`whatwg/html`).
 - **"Don't break the web"**: retrocompatibilità, legacy solo storico; a prova di futuro con **HTML semantico + progressive enhancement**.

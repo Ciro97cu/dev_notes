@@ -8,7 +8,7 @@ tags: [tipo/modulo, fondamenti]
 
 HTML (*HyperText Markup Language*) è il linguaggio che dà **struttura e significato** al contenuto di una pagina web: non descrive come le cose *appaiono* (quello è compito del CSS) né cosa *fanno* (quello è JavaScript) ma **cos'è** ciascun pezzo di contenuto (un titolo, un paragrafo, un elenco, un'immagine). È il fondamento su cui gli altri due si appoggiano: senza una struttura chiara, stile e comportamento non hanno appigli solidi.
 
-La divisione dei ruoli è netta e conviene tenerla a mente da subito: **HTML** dà la struttura, **CSS** la presentazione ([vedi il vault CSS](../css/)), **JavaScript** il comportamento. Tenere separate le tre cose è ciò che rende una pagina manutenibile.
+La divisione dei ruoli è netta e conviene tenerla a mente da subito: **HTML** dà la struttura, **CSS** la presentazione ([si veda il vault CSS](../css/)), **JavaScript** il comportamento. Tenere separate le tre cose è ciò che rende una pagina manutenibile.
 
 ## Lo scheletro di una pagina
 
@@ -30,10 +30,10 @@ Ogni documento HTML valido ha la stessa ossatura minima:
 
 Quattro pezzi, ciascuno con un ruolo preciso:
 
-- **`<!doctype html>`** — la prima riga, che dichiara al browser "questo è HTML moderno". Non è un tag vero e proprio ma un residuo storico: senza, il browser entra in *quirks mode* e imita il rendering buggato di vent'anni fa. Va sempre messo, così com'è.
-- **`<html lang="it">`** — l'elemento radice che contiene tutto. L'attributo `lang` non è un dettaglio: dice la lingua del contenuto agli screen reader (che scelgono la pronuncia giusta) e ai motori di ricerca. Ometterlo è un errore di accessibilità comune.
-- **`<head>`** — i **metadati**: informazioni *sulla* pagina che non compaiono nel corpo (codifica dei caratteri, titolo nella scheda del browser, collegamenti al CSS…). Se ne parla nel modulo [[02-head-metadati]].
-- **`<body>`** — il **contenuto visibile**: tutto ciò che l'utente vede e con cui interagisce.
+- **`<!doctype html>`**: la prima riga, che dichiara al browser "questo è HTML moderno". Non è un tag ma un residuo storico: senza, il browser entra in *quirks mode* e imita il rendering buggato di vent'anni fa. Va sempre messo, così com'è.
+- **`<html lang="it">`**: l'elemento radice che contiene tutto. L'attributo `lang` dice la lingua del contenuto agli screen reader (che scelgono la pronuncia giusta) e ai motori di ricerca. Ometterlo è un errore di accessibilità comune.
+- **`<head>`**: i **metadati**, cioè informazioni *sulla* pagina che non compaiono nel corpo (codifica dei caratteri, titolo nella scheda del browser, collegamenti al CSS…). Se ne parla nel modulo [[02-head-metadati]].
+- **`<body>`**: il **contenuto visibile**, tutto ciò che l'utente vede e con cui interagisce.
 
 ## Come si legge un elemento
 
@@ -43,7 +43,7 @@ Il mattone dell'HTML è l'**elemento**, di solito formato da un tag di apertura,
 <p class="intro">Un paragrafo.</p>
 ```
 
-Qui `<p>` apre, `</p>` chiude, e in mezzo sta il contenuto. `class="intro"` è un **attributo**: una coppia nome-valore che aggiunge informazioni all'elemento — un aggancio per il CSS, un dato di accessibilità, un comportamento.
+Qui `<p>` apre, `</p>` chiude, e in mezzo sta il contenuto. `class="intro"` è un **attributo**: una coppia nome-valore che aggiunge informazioni all'elemento (un aggancio per il CSS, un dato di accessibilità, un comportamento).
 
 Alcuni elementi non hanno contenuto né tag di chiusura: si chiamano **void element** e rappresentano qualcosa di autoconsistente, come `<img src="foto.jpg" alt="…">`, `<br>`, `<input>`, `<meta>`. Non si "chiudono" perché non c'è nulla da racchiudere.
 
@@ -59,10 +59,10 @@ Quando il browser riceve il testo HTML non lo tiene come stringa: lo **analizza*
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il browser trasforma il markup in un <strong>albero DOM</strong>: ogni elemento diventa un nodo (rettangoli), e il testo dentro un elemento diventa a sua volta un <strong>nodo di testo</strong> (ellissi tratteggiate). CSS e JavaScript lavorano su quest'albero, non sul testo HTML.</figcaption>
 </figure>
 
-Questo passaggio è il concetto centrale del modulo, perché **CSS e JavaScript non lavorano sul testo HTML, ma su quest'albero**. Un selettore CSS come `body h1` naviga il DOM; una riga di JavaScript come `document.querySelector('p')` cerca un nodo nell'albero e può modificarlo, e ogni sua modifica si riflette subito sulla pagina. L'HTML che si scrive è quindi la *forma iniziale* di quell'albero — il punto di partenza che poi vive nel browser.
+Questo passaggio è il concetto centrale del modulo, perché **CSS e JavaScript non lavorano sul testo HTML, ma su quest'albero**. Un selettore CSS come `body h1` naviga il DOM; una riga di JavaScript come `document.querySelector('p')` cerca un nodo nell'albero e può modificarlo, e ogni sua modifica si riflette subito sulla pagina. L'HTML che si scrive è quindi la *forma iniziale* di quell'albero, il punto di partenza che poi vive nel browser.
 
 > [!tip]
-> È il motivo per cui un markup ordinato e semanticamente corretto conta più di quanto sembri: un DOM pulito è più facile da stilare, da manipolare e da far leggere alle tecnologie assistive. La qualità della struttura si propaga a tutto il resto.
+> È il motivo per cui un markup ordinato e semanticamente corretto conta più di quanto sembri: un DOM pulito è più facile da stilare, da manipolare e da far leggere alle tecnologie assistive.
 
 ## Ripasso lampo
 
@@ -90,7 +90,7 @@ Dichiara la lingua del contenuto: gli screen reader scelgono la pronuncia corret
 <details>
 <summary>Cos'è il DOM e perché conta che il markup sia pulito?</summary>
 
-Il **DOM** è l'albero di nodi in cui il browser trasforma il markup: ogni elemento (e ogni testo) diventa un nodo. CSS e JavaScript lavorano su quest'albero, non sul testo HTML — quindi un DOM pulito è più facile da stilare, manipolare e far leggere alle tecnologie assistive.
+Il **DOM** è l'albero di nodi in cui il browser trasforma il markup: ogni elemento (e ogni testo) diventa un nodo. CSS e JavaScript lavorano su quest'albero, non sul testo HTML, quindi un DOM pulito è più facile da stilare, manipolare e far leggere alle tecnologie assistive.
 
 </details>
 
@@ -104,4 +104,4 @@ Un elemento senza contenuto né tag di chiusura, che rappresenta qualcosa di aut
 **In sintesi:**
 - **HTML = struttura**, CSS = presentazione, JS = comportamento: tre ruoli separati, ognuno nel suo posto.
 - Ossatura minima: `<!doctype html>`, poi `<html lang>` che racchiude `<head>` (metadati) e `<body>` (contenuto).
-- Il browser trasforma il markup in un **albero DOM** di nodi; CSS e JS lavorano su quell'albero, non sul testo — perciò un markup pulito e ben annidato si ripaga ovunque.
+- Il browser trasforma il markup in un **albero DOM** di nodi; CSS e JS lavorano su quell'albero, non sul testo, perciò un markup pulito e ben annidato si ripaga ovunque.

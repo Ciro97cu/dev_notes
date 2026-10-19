@@ -6,20 +6,20 @@ tags: [tipo/modulo, form, accessibilita]
 # 05 · Form
 > modulo 5 — *HTML* · rif. MDN
 
-I form sono il modo in cui l'utente **inserisce dati** e li invia: campi, caselle, menu a tendina e un pulsante di invio. È l'area di HTML dove si sbaglia di più in usabilità e accessibilità, perché è fatta di tante piccole decisioni (quale tipo di campo, come etichettarlo, come validarlo) ognuna con conseguenze concrete su chi compila. La buona notizia è che HTML, se lo si asseconda, offre gratis moltissimo: tastiere giuste, validazione, supporto ai password manager. L'accessibilità dei form si intreccia con quella generale, ripresa in [[07-accessibilita-aria]].
+I form sono il modo in cui l'utente **inserisce dati** e li invia: campi, caselle, menu a tendina e un pulsante di invio. È l'area di HTML dove si sbaglia di più in usabilità e accessibilità, perché è fatta di tante piccole decisioni (quale tipo di campo, come etichettarlo, come validarlo) ognuna con conseguenze concrete su chi compila. HTML, se lo si asseconda, offre gratis moltissimo: tastiere giuste, validazione, supporto ai password manager. L'accessibilità dei form si intreccia con quella generale, ripresa in [[07-accessibilita-aria]].
 
 ## L'ossatura: `<form>` e i controlli
 
 Un form è racchiuso da `<form>`, che ha due attributi chiave: `action` (dove mandare i dati) e `method`. Il `method` è una decisione:
 
-- **`get`** — i dati finiscono **nell'URL** (`?q=pane`). Adatto a ricerche e filtri: ripetibile, condivisibile, senza effetti collaterali.
-- **`post`** — i dati viaggiano **nel corpo** della richiesta. Adatto a operazioni che **cambiano stato** (registrarsi, pubblicare), e per dati non banali.
+- **`get`**: i dati finiscono **nell'URL** (`?q=pane`). Adatto a ricerche e filtri: ripetibile, condivisibile, senza effetti collaterali.
+- **`post`**: i dati viaggiano **nel corpo** della richiesta. Adatto a operazioni che **cambiano stato** (registrarsi, pubblicare), e per dati non banali.
 
 Dentro il form stanno i **controlli**: `<input>` (il più versatile), `<textarea>`, `<select>` e `<button>`.
 
 ## Il tipo di `<input>` giusto
 
-L'attributo `type` di `<input>` non è un dettaglio estetico: decide la **tastiera** che appare su mobile, la **validazione** automatica e a volte un'interfaccia dedicata (un calendario, un selettore di colore). Sceglierlo bene è metà del lavoro:
+L'attributo `type` di `<input>` decide la **tastiera** che appare su mobile, la **validazione** automatica e a volte un'interfaccia dedicata (un calendario, un selettore di colore). Sceglierlo bene è metà del lavoro:
 
 ```html
 <input type="email">   <!-- tastiera con @, controllo del formato -->
@@ -32,7 +32,7 @@ Oltre a questi: `text`, `password`, `search`, `url`, `checkbox` (scelte multiple
 
 ## `<label>`: mai un campo senza
 
-È la decisione più importante di tutto il modulo: **ogni controllo deve avere una `<label>`**. L'etichetta si collega al campo in due modi — con `for` che punta all'`id`, oppure avvolgendo il controllo:
+È la decisione più importante di tutto il modulo: **ogni controllo deve avere una `<label>`**. L'etichetta si collega al campo in due modi, con `for` che punta all'`id` oppure avvolgendo il controllo:
 
 ```html
 <label for="email">Email</label>
@@ -50,12 +50,12 @@ Quando più controlli formano un gruppo (tipicamente un insieme di `radio`) si r
 
 ## Menu, aree di testo e pulsanti
 
-- **`<select>`** con `<option>` (e `<optgroup>` per raggrupparle) — un menu a tendina.
-- **`<textarea>`** — testo su più righe.
-- **`<button>`** — un pulsante vero. Attenzione al `type`: il default è **`submit`**, quindi un `<button>` dentro un form **invia** il form anche se non lo si voleva. Per un pulsante che fa altro (con JavaScript) serve `type="button"`.
+- **`<select>`** con `<option>` (e `<optgroup>` per raggrupparle): un menu a tendina.
+- **`<textarea>`**: testo su più righe.
+- **`<button>`**: un pulsante vero. Il suo `type` di default è **`submit`**, quindi un `<button>` dentro un form **invia** il form anche se non lo si voleva. Per un pulsante che fa altro (con JavaScript) serve `type="button"`.
 
 > [!tip]
-> Preferire sempre `<button>` a un `<div>` reso cliccabile: il `<button>` è raggiungibile da tastiera, si attiva con Invio e Spazio, ed è annunciato come pulsante — tutto gratis. Ricrearlo con un `<div>` significa reimplementare a mano ciò che il browser dà già.
+> Preferire sempre `<button>` a un `<div>` reso cliccabile: il `<button>` è raggiungibile da tastiera, si attiva con Invio e Spazio ed è annunciato come pulsante. Ricrearlo con un `<div>` significa reimplementare a mano ciò che il browser dà già.
 
 ## Validazione nativa (gratis)
 
@@ -66,14 +66,14 @@ Aggiungendo dei **vincoli** agli input, il browser li controlla da solo al momen
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Con i vincoli sugli input (<code>required</code>, <code>type</code>, <code>pattern</code>…) il browser valida da solo prima dell'invio: se tutto è a posto il form parte, altrimenti l'invio è bloccato con messaggio e focus sul primo campo non valido.</figcaption>
 </figure>
 
-Lo stato dei campi è anche stilabile in CSS con `:valid`, `:invalid` e `:user-invalid` (vedi <a href="../css/#/docs/03-pseudo-classi-elementi" target="_blank" rel="noopener">CSS · Pseudo-classi</a>). Quando serve un controllo **su misura** (un messaggio personalizzato, una regola che HTML non esprime) si usa la **Constraint Validation API** in JavaScript: `checkValidity()`, `setCustomValidity()` e l'oggetto `validity` del campo.
+Lo stato dei campi è anche stilabile in CSS con `:valid`, `:invalid` e `:user-invalid` (si veda <a href="../css/#/docs/03-pseudo-classi-elementi" target="_blank" rel="noopener">CSS · Pseudo-classi</a>). Quando serve un controllo **su misura** (un messaggio personalizzato, una regola che HTML non esprime) si usa la **Constraint Validation API** in JavaScript: `checkValidity()`, `setCustomValidity()` e l'oggetto `validity` del campo.
 
 ## `name` e `autocomplete`
 
-Due attributi che fanno la differenza pur passando inosservati:
+Due attributi contano molto pur passando inosservati:
 
-- **`name`** — è la **chiave** con cui il valore viene inviato al server (`email=anna@…`). Senza `name`, il campo non viene proprio spedito.
-- **`autocomplete`** — dà al browser e ai password manager un'etichetta standard del dato (`autocomplete="email"`, `"current-password"`, `"street-address"`), così possono compilare i campi. È un guadagno enorme di velocità e accessibilità: da attivare, non da disabilitare per abitudine.
+- **`name`**: è la **chiave** con cui il valore viene inviato al server (`email=anna@…`). Senza `name`, il campo non viene proprio spedito.
+- **`autocomplete`**: dà al browser e ai password manager un'etichetta standard del dato (`autocomplete="email"`, `"current-password"`, `"street-address"`), così possono compilare i campi. Si guadagna molto in velocità e accessibilità, quindi va attivato e non disabilitato per abitudine.
 
 ## Ripasso lampo
 
@@ -101,7 +101,7 @@ Perché il placeholder sparisce appena si digita, non è letto in modo affidabil
 <details>
 <summary>Che vincoli offre la validazione nativa e cosa fa il browser se falliscono?</summary>
 
-`required`, `type` (email/url), `min`/`max`/`step`, `minlength`/`maxlength`, `pattern`. Se un vincolo non è rispettato, il browser **blocca l'invio**, mostra un messaggio e porta il focus sul primo campo non valido — senza JavaScript. Per messaggi su misura c'è la Constraint Validation API.
+`required`, `type` (email/url), `min`/`max`/`step`, `minlength`/`maxlength`, `pattern`. Se un vincolo non è rispettato, il browser **blocca l'invio**, mostra un messaggio e porta il focus sul primo campo non valido, senza bisogno di JavaScript. Per messaggi su misura c'è la Constraint Validation API.
 
 </details>
 

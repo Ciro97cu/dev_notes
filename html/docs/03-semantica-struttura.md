@@ -6,7 +6,7 @@ tags: [tipo/modulo, semantica, accessibilita]
 # 03 · Semantica e struttura
 > modulo 3 — *HTML* · rif. MDN
 
-Fare HTML **semantico** significa scegliere gli elementi per il loro **significato**, non per come appaiono. `<div>` non dice nulla: è una scatola neutra. `<nav>`, `<article>`, `<header>` invece dichiarano *cos'è* quella porzione di pagina — e questa informazione la leggono in tre: il browser, i motori di ricerca e, soprattutto, le tecnologie assistive. Scegliere l'elemento giusto è la decisione più importante che si prende scrivendo HTML, perché tutto il resto (accessibilità, SEO, manutenibilità) ne discende.
+Fare HTML **semantico** significa scegliere gli elementi per il loro **significato**, non per come appaiono. `<div>` non dice nulla: è una scatola neutra. `<nav>`, `<article>`, `<header>` invece dichiarano *cos'è* quella porzione di pagina. Questa informazione la leggono in tre: il browser, i motori di ricerca e, soprattutto, le tecnologie assistive. Scegliere l'elemento giusto è la decisione più importante che si prende scrivendo HTML, perché tutto il resto (accessibilità, SEO, manutenibilità) ne discende.
 
 ## I landmark: l'ossatura della pagina
 
@@ -17,35 +17,35 @@ Un piccolo gruppo di elementi definisce le **regioni** principali di una pagina,
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">I landmark strutturano la pagina: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, un unico <code>&lt;main&gt;</code> (che qui contiene un <code>&lt;article&gt;</code> e una <code>&lt;section&gt;</code>), <code>&lt;aside&gt;</code> e <code>&lt;footer&gt;</code>. Uno screen reader salta direttamente da un landmark all'altro.</figcaption>
 </figure>
 
-- **`<header>`** — l'intestazione: logo, titolo, spesso la navigazione principale. Può comparire anche dentro un `<article>` (l'intestazione dell'articolo).
-- **`<nav>`** — un blocco di **link di navigazione** importanti (menu principale, breadcrumb). Non ogni gruppo di link è un `<nav>`: si riserva a quelli strutturali.
-- **`<main>`** — il **contenuto principale** della pagina. Ce n'è **uno solo**, ed è irripetibile per ogni pagina: non deve contenere ciò che si ripete ovunque (header, nav, footer).
-- **`<aside>`** — contenuto **collaterale**: barra laterale, richiami, box correlati. Legato al contenuto ma non essenziale a capirlo.
-- **`<footer>`** — il piè di pagina: copyright, contatti, link secondari.
+- **`<header>`**: l'intestazione, con logo, titolo e spesso la navigazione principale. Può comparire anche dentro un `<article>` (l'intestazione dell'articolo).
+- **`<nav>`**: un blocco di **link di navigazione** importanti (menu principale, breadcrumb). Non ogni gruppo di link è un `<nav>`: si riserva a quelli strutturali.
+- **`<main>`**: il **contenuto principale** della pagina. Ce n'è **uno solo**, ed è irripetibile per ogni pagina: non deve contenere ciò che si ripete ovunque (header, nav, footer).
+- **`<aside>`**: contenuto **collaterale** (barra laterale, richiami, box correlati), legato al contenuto ma non essenziale a capirlo.
+- **`<footer>`**: il piè di pagina, con copyright, contatti, link secondari.
 
 ## Sezionare il contenuto: `<article>` e `<section>`
 
 Dentro `<main>` il contenuto si organizza con due elementi che si confondono spesso:
 
-- **`<article>`** — un blocco **autosufficiente**, che avrebbe senso anche estratto dalla pagina e messo altrove: un post, una notizia, una scheda prodotto, un commento. Il test: "starebbe in piedi da solo in un feed?".
-- **`<section>`** — un **raggruppamento tematico** di contenuto, di solito con un proprio titolo. Non è autosufficiente come l'article: è una *parte* di qualcosa (i capitoli di un articolo, le aree di una dashboard).
+- **`<article>`**: un blocco **autosufficiente**, che avrebbe senso anche estratto dalla pagina e messo altrove, come un post, una notizia, una scheda prodotto, un commento. Il test: "starebbe in piedi da solo in un feed?".
+- **`<section>`**: un **raggruppamento tematico** di contenuto, di solito con un proprio titolo. Non è autosufficiente come l'article: è una *parte* di qualcosa (i capitoli di un articolo, le aree di una dashboard).
 
 > [!tip]
-> Regola pratica: se il blocco ha senso **da solo**, è un `<article>`; se è una **parte tematica** di un tutto, è una `<section>`; se serve solo a **raggruppare e stilare** senza significato, è un `<div>`. E ogni `<section>` dovrebbe avere un titolo: se non riesci a darglielo, probabilmente era un `<div>`.
+> Regola pratica: se il blocco ha senso **da solo**, è un `<article>`; se è una **parte tematica** di un tutto, è una `<section>`; se serve solo a **raggruppare e stilare** senza significato, è un `<div>`. E ogni `<section>` dovrebbe avere un titolo: se non si riesce a dargliene uno, probabilmente era un `<div>`.
 
 ## I titoli e l'outline
 
-Gli elementi da `<h1>` a `<h6>` non sono "testo grande": costruiscono l'**outline** del documento, la scaletta gerarchica che gli screen reader usano per farsi un'idea della pagina e per navigarla (molti utenti saltano di titolo in titolo). Due regole che contano davvero:
+Gli elementi da `<h1>` a `<h6>` non sono "testo grande": costruiscono l'**outline** del documento, la scaletta gerarchica che gli screen reader usano per farsi un'idea della pagina e per navigarla (molti utenti saltano di titolo in titolo). Valgono due regole:
 
 - **Non saltare i livelli**: dopo un `<h2>` viene un `<h3>`, non un `<h4>`. I salti confondono la scaletta.
-- **La gerarchia è semantica, non visiva**: se un titolo deve *sembrare* più piccolo, lo si fa col CSS, non scegliendo un `<h4>` al posto di un `<h2>`. Il livello racconta la *struttura*, non la dimensione.
+- **La gerarchia è semantica, non visiva**: se un titolo deve *sembrare* più piccolo, lo si fa col CSS, non scegliendo un `<h4>` al posto di un `<h2>`.
 
 ## Altri elementi semantici utili
 
 Oltre ai landmark, alcuni elementi danno significato a contenuti specifici ed evitano un `<div>` generico:
 
-- **`<figure>` / `<figcaption>`** — un'illustrazione (immagine, diagramma, snippet) con la sua didascalia legata.
-- **`<time datetime="2026-08-19">`** — una data/ora in formato leggibile dalla macchina, oltre che dall'utente.
+- **`<figure>` / `<figcaption>`**: un'illustrazione (immagine, diagramma, snippet) con la sua didascalia legata.
+- **`<time datetime="2026-08-19">`**: una data/ora in formato leggibile dalla macchina, oltre che dall'utente.
 - **`<details>` / `<summary>`** — un blocco a comparsa **nativo** (come le domande del *Ripasso lampo* di questi appunti), senza una riga di JavaScript.
 - **`<blockquote>` / `<q>`** — una citazione, rispettivamente a blocco e in linea.
 - **`<mark>`** — testo evidenziato per pertinenza (per esempio i termini cercati).
@@ -90,7 +90,7 @@ Perché i titoli costruiscono l'**outline** del documento, che gli screen reader
 <details>
 <summary>Quando è giusto usare <code>&lt;div&gt;</code>?</summary>
 
-Solo quando nessun elemento semantico calza e serve un contenitore neutro per stilare o agganciare JavaScript. È l'ultima scelta, non la prima: aggiungerlo dove esiste un elemento con significato è l'antipattern della "divite".
+Solo quando nessun elemento semantico calza e serve un contenitore neutro per stilare o agganciare JavaScript. È l'ultima scelta: aggiungerlo dove esiste un elemento con significato è l'antipattern della "divite".
 
 </details>
 
@@ -98,4 +98,4 @@ Solo quando nessun elemento semantico calza e serve un contenitore neutro per st
 - **Semantica = scegliere per significato**, non per aspetto: è la base di accessibilità, SEO e manutenibilità.
 - I **landmark** (`<header>`, `<nav>`, `<main>` unico, `<aside>`, `<footer>`) danno l'ossatura navigabile della pagina.
 - `<article>` = autosufficiente, `<section>` = parte tematica con titolo, `<div>`/`<span>` = contenitori senza significato, da usare per ultimi.
-- I titoli `<h1>`–`<h6>` formano l'**outline**: non saltare i livelli, la gerarchia è semantica non visiva.
+- I titoli da `<h1>` a `<h6>` formano l'**outline**: non saltare i livelli, la gerarchia è semantica non visiva.
