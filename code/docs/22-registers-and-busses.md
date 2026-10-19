@@ -1,7 +1,7 @@
 # 22 · Registri e bus
 > cap. 22 di «Code» (Petzold, 2ª ed.) — orig. *Registers and Busses*
 
-Molte delle operazioni quotidiane di un computer non sono calcoli spettacolari ma un più umile **spostare byte da una parte all'altra**: caricare un file, salvarlo, riprodurre musica o video. La stessa cosa avviene, in miniatura, *dentro* la CPU: i byte viaggiano dalla memoria alla CPU e all'ALU, i risultati tornano indietro. Questo movimento non è appariscente come il calcolo, ma è altrettanto essenziale. Il capitolo 21 ha costruito la ALU; questo capitolo costruisce ciò che le sta intorno — i **registri**, dove i byte sostano, e i **bus**, le autostrade su cui si spostano.
+Molte delle operazioni quotidiane di un computer consistono semplicemente nello **spostare byte da una parte all'altra**: caricare un file, salvarlo, riprodurre musica o video. La stessa cosa avviene, in miniatura, *dentro* la CPU: i byte viaggiano dalla memoria alla CPU e all'ALU, i risultati tornano indietro. Questo movimento è meno appariscente del calcolo, ma altrettanto necessario. Il capitolo 21 ha costruito la ALU; questo capitolo costruisce ciò che le sta intorno: i **registri**, dove i byte sostano, e i **bus**, le autostrade su cui si spostano.
 
 ## I registri
 
@@ -13,7 +13,7 @@ Mentre i byte vengono elaborati, la CPU li tiene in una piccola scorta di latch 
 | **B, C, D, E** | registri di uso generale |
 | **H, L** | registri di uso generale che, **insieme**, formano un indirizzo a 16 bit |
 
-I registri **H** e **L** hanno una dote speciale: accoppiati, i loro 16 bit formano un **indirizzo di memoria**, indicato con la notazione **[HL]**. Accedere alla memoria attraverso l'indirizzo contenuto in HL si chiama **indirizzamento indiretto** (*indirect addressing*), e, come si vedrà, è utilissimo: la coppia HL diventa una specie di "dito" che punta a una cella di memoria. Nelle istruzioni, quel byte di memoria si tratta quasi come un ottavo registro, chiamato **M** (da *memory*).
+I registri **H** e **L** hanno una dote speciale: accoppiati, i loro 16 bit formano un **indirizzo di memoria**, indicato con la notazione **[HL]**. Accedere alla memoria attraverso l'indirizzo contenuto in HL si chiama **indirizzamento indiretto** (*indirect addressing*) ed è utilissimo: la coppia HL diventa una specie di "dito" che punta a una cella di memoria. Nelle istruzioni, quel byte di memoria si tratta quasi come un ottavo registro, chiamato **M** (da *memory*).
 
 ## Istruzioni, opcode e linguaggio assembly
 

@@ -1,15 +1,15 @@
 # 08 · Relè e porte logiche
 > cap. 8 di «Code» (Petzold, 2ª ed.) — orig. *Relays and Gates*
 
-Ridotto all'essenziale, **un computer è una sintesi di algebra booleana ed elettricità**, e i componenti che incarnano questa fusione sono le **porte logiche** (*logic gates*). Non sono i cancelli attraverso cui passano acqua o persone: sono dispositivi che eseguono semplici operazioni della logica di Boole **bloccando o lasciando passare la corrente**. Questo capitolo le costruisce mettendo insieme i **relè** del capitolo 7 — quegli interruttori comandati dall'elettricità.
+Ridotto all'essenziale, **un computer è una sintesi di algebra booleana ed elettricità**, e i componenti che incarnano questa fusione sono le **porte logiche** (*logic gates*). Non sono i cancelli attraverso cui passano acqua o persone: sono dispositivi che eseguono semplici operazioni della logica di Boole **bloccando o lasciando passare la corrente**. Questo capitolo le costruisce mettendo insieme i **relè** del capitolo 7, cioè gli interruttori comandati dall'elettricità.
 
 ## Dal circuito di interruttori alle porte
 
-Riprendiamo il gatto del [capitolo 6](06-logic-with-switches.md), la cui espressione era `(M × N × (W + T)) + (F × N × (1 − W)) + B`. Quel circuito di interruttori è una **rete**: `×` = interruttori in serie (AND), `+` = in parallelo (OR). Poiché equivale a un'espressione booleana, si può **semplificare** con l'algebra. Riordinando (commutativa) e raccogliendo `N` (distributiva), da due comparse di `N` si passa a una sola:
+Si riprenda il gatto del [capitolo 6](06-logic-with-switches.md), la cui espressione era `(M × N × (W + T)) + (F × N × (1 − W)) + B`. Quel circuito di interruttori è una **rete**: `×` = interruttori in serie (AND), `+` = in parallelo (OR). Poiché equivale a un'espressione booleana, si può **semplificare** con l'algebra. Riordinando (commutativa) e raccogliendo `N` (distributiva), da due comparse di `N` si passa a una sola:
 
 > `N × ((M × (W + T)) + (F × (1 − W))) + B`
 
-Un interruttore in meno. Ma restano ancora interruttori separati per *maschio*/*femmina* e per *bianco*/*non bianco*, mentre uno solo dovrebbe bastare: acceso per femmina, spento per maschio. Serve un dispositivo che, dallo stesso ingresso, ricavi **sia un valore sia il suo opposto**. È qui che entrano i relè — e nascono le porte.
+Si risparmia così un interruttore, ma restano ancora interruttori separati per *maschio*/*femmina* e per *bianco*/*non bianco*, mentre uno solo dovrebbe bastare: acceso per femmina, spento per maschio. Serve un dispositivo che, dallo stesso ingresso, ricavi **sia un valore sia il suo opposto**. È qui che entrano i relè, e con loro nascono le porte.
 
 ## AND: relè in serie
 
@@ -21,7 +21,7 @@ Due relè **in parallelo** formano una porta **OR**: l'uscita è 1 se **almeno u
 
 ## NOT: l'inverter
 
-I relè hanno in realtà **due contatti** (sono a *doppio scambio*): a riposo la barra tocca il contatto *normalmente chiuso*, e quando l'elettromagnete la attira tocca quello *normalmente aperto* (quello usato finora). Usando il contatto **normalmente chiuso** l'uscita si **rovescia**: la lampadina è accesa quando l'ingresso è **spento**. Un singolo relè cablato così è un **inverter**, cioè l'operatore booleano **NOT**: trasforma 0 in 1 e 1 in 0. Il suo simbolo è un triangolo con un **pallino** sull'uscita (il pallino significa "inverti"). Risolve anche il problema di prima: da un solo interruttore *femmina* si ottiene `F` diretto e `M` come `NOT F`.
+I relè hanno però **due contatti** (sono a *doppio scambio*): a riposo la barra tocca il contatto *normalmente chiuso*, e quando l'elettromagnete la attira tocca quello *normalmente aperto* (quello usato finora). Usando il contatto **normalmente chiuso** l'uscita si **rovescia**: la lampadina è accesa quando l'ingresso è **spento**. Un singolo relè cablato così è un **inverter**, cioè l'operatore booleano **NOT**: trasforma 0 in 1 e 1 in 0. Il suo simbolo è un triangolo con un **pallino** sull'uscita (il pallino significa "inverti"). Risolve anche il problema di prima: da un solo interruttore *femmina* si ottiene `F` diretto e `M` come `NOT F`.
 
 ## NAND e NOR: le porte "negate"
 
@@ -71,19 +71,19 @@ E il loro comportamento, in due tabelle di verità (0 = niente tensione/falso, 1
 
 ## La porta come "scatola nera"
 
-Il vero salto è concettuale: una volta definito il simbolo, si può **dimenticare come è fatta dentro** una porta. Non importa se è cablata con relè, con valvole o con transistor: conta solo la relazione tra **ingressi** e **uscita**, espressa dalla sua tabella. Da qui in poi si ragiona con le porte come mattoni astratti, e l'uscita di una porta può diventare l'ingresso di un'altra.
+Il passo successivo è concettuale: una volta definito il simbolo, si può **dimenticare come è fatta dentro** una porta. Non importa se è cablata con relè, con valvole o con transistor: conta solo la relazione tra **ingressi** e **uscita**, espressa dalla sua tabella. Da qui in poi si ragiona con le porte come mattoni astratti, e l'uscita di una porta può diventare l'ingresso di un'altra.
 
-Questo permette anche di vedere le stesse funzioni da angolazioni diverse — è la sostanza delle *leggi di De Morgan*. Cablando due relè "in un altro modo" (usando i contatti opposti) si scopre, per esempio, che una **NAND** equivale a una **OR con gli ingressi invertiti**, e una **NOR** a una **AND con gli ingressi invertiti**. Stessa tabella, circuiti diversi.
+Questo permette anche di vedere le stesse funzioni da angolazioni diverse, ed è ciò che dicono le *leggi di De Morgan*. Cablando due relè "in un altro modo" (usando i contatti opposti) si scopre, per esempio, che una **NAND** equivale a una **OR con gli ingressi invertiti**, e una **NOR** a una **AND con gli ingressi invertiti**: stessa tabella, circuiti diversi.
 
 > [!tip]
-> Le regole da memorizzare: **relè in serie = AND**, **in parallelo = OR**, **contatto normalmente chiuso = NOT**. Aggiungendo un pallino di inversione all'uscita si ottengono **NAND** e **NOR**. Con queste sei porte — anzi, si dimostrerà, con le sole NAND (o le sole NOR) — si può costruire *qualsiasi* funzione logica.
+> Le regole da memorizzare: **relè in serie = AND**, **in parallelo = OR**, **contatto normalmente chiuso = NOT**. Aggiungendo un pallino di inversione all'uscita si ottengono **NAND** e **NOR**. Con queste sei porte (anzi, si dimostrerà, con le sole NAND o le sole NOR) si può costruire *qualsiasi* funzione logica.
 
 > [!warning]
 > Il pallino sul simbolo significa sempre **inversione** dell'uscita: AND + pallino = NAND, OR + pallino = NOR, triangolo + pallino = NOT. Il triangolo **senza** pallino è il *buffer*, che lascia il segnale invariato.
 
 ## Verso l'aritmetica
 
-Con le porte logiche abbiamo il vocabolario con cui è scritto tutto l'hardware digitale. Il passo naturale sarebbe usarle per **fare i conti** — ed è esattamente dove il libro arriverà (sommare con le porte logiche). Prima, però, conviene fermarsi a capire bene i **numeri** e come rappresentarli: è il tema dei prossimi capitoli, dai sistemi di numerazione al binario, ai byte e all'esadecimale.
+Con le porte logiche si ha il vocabolario con cui è scritto tutto l'hardware digitale. Il passo naturale sarebbe usarle per **fare i conti**, ed è esattamente dove il libro arriverà (sommare con le porte logiche). Prima, però, conviene fermarsi a capire bene i **numeri** e come rappresentarli: è il tema dei prossimi capitoli, dai sistemi di numerazione al binario, ai byte e all'esadecimale.
 
 ## Ripasso lampo
 
@@ -118,7 +118,7 @@ Sono le **negazioni** di AND e OR (simbolo = AND/OR con il pallino di inversione
 <details>
 <summary>Perché il concetto di porta come "scatola nera" è così importante?</summary>
 
-Perché permette di **dimenticare l'implementazione** (relè, valvole, transistor) e ragionare solo su **ingressi e uscita** tramite la tabella di verità. Così le porte diventano mattoni astratti componibili: l'uscita di una alimenta l'ingresso di un'altra, e combinandole si costruisce qualunque funzione — fino all'aritmetica e al processore.
+Perché permette di **dimenticare l'implementazione** (relè, valvole, transistor) e ragionare solo su **ingressi e uscita** tramite la tabella di verità. Così le porte diventano mattoni astratti componibili: l'uscita di una alimenta l'ingresso di un'altra, e combinandole si costruisce qualunque funzione, fino all'aritmetica e al processore.
 
 </details>
 

@@ -5,17 +5,17 @@ Il libro si chiude dove l'informatica, in un certo senso, si dissolve nel mondo:
 
 ## Un sogno più vecchio di internet
 
-L'idea di raccogliere e collegare tutta la conoscenza umana precede di decenni il computer. Nel 1938 lo scrittore **H. G. Wells** (lo stesso di *La macchina del tempo* e *La guerra dei mondi*) pubblicò *World Brain*, proponendo un'enciclopedia mondiale, continuamente aggiornata, che fungesse da "cervello del mondo". Nel 1945 l'ingegnere **Vannevar Bush** immaginò il **Memex**, una scrivania capace di collegare documenti tra loro con percorsi di associazioni. E nel 1965 il visionario **Ted Nelson** coniò la parola **hypertext** (ipertesto) per un corpo di materiale scritto interconnesso in modo così complesso da non poter esistere sulla carta. Tre visioni della stessa cosa (informazioni legate da rimandi) molto prima che ci fosse un modo per realizzarle.
+L'idea di raccogliere e collegare tutta la conoscenza umana precede di decenni il computer. Nel 1938 lo scrittore **H. G. Wells** (lo stesso di *La macchina del tempo* e *La guerra dei mondi*) pubblicò *World Brain*, proponendo un'enciclopedia mondiale, continuamente aggiornata, che fungesse da "cervello del mondo". Nel 1945 l'ingegnere **Vannevar Bush** immaginò il **Memex**, una scrivania capace di collegare documenti tra loro con percorsi di associazioni. E nel 1965 il visionario **Ted Nelson** coniò la parola **hypertext** (ipertesto) per un corpo di materiale scritto interconnesso in modo così complesso da non poter esistere sulla carta. Sono tre visioni della stessa cosa (informazioni legate da rimandi), nate molto prima che ci fosse un modo per realizzarle.
 
 ## Come i computer si parlano: internet
 
 Perché quelle visioni diventassero realtà servivano computer capaci di comunicare a distanza. I primi lo facevano attraverso la linea telefonica, con un **modem** (da *modulatore-demodulatore*): un dispositivo come il Bell 103 (AT&T, 1962) che codifica i bit in toni udibili con la tecnica del *frequency-shift keying* (una frequenza per lo 0, un'altra per l'1) e li riconverte all'altro capo. La sua velocità si misurava in **baud** (dal nome di Émile Baudot), il numero di simboli al secondo.
 
-Internet stesso nacque da una ricerca del Dipartimento della Difesa statunitense: **ARPANET**, operativa dal 1971, ne stabilì i concetti fondamentali, primo tra tutti il **packet switching** — spezzare i messaggi in **pacchetti** che viaggiano indipendentemente e vengono riassemblati a destinazione. Oggi tutto è interconnesso da **router** (che instradano i pacchetti da un capo all'altro della rete, contenendo essi stessi delle CPU e delle tabelle di instradamento) e ogni dispositivo ha una scheda di rete, la **NIC**, con un identificatore univoco cablato nell'hardware, il **MAC address** (12 cifre esadecimali).
+Internet stesso nacque da una ricerca del Dipartimento della Difesa statunitense: **ARPANET**, operativa dal 1971, ne stabilì i concetti fondamentali, primo tra tutti il **packet switching**: spezzare i messaggi in **pacchetti** che viaggiano indipendentemente e vengono riassemblati a destinazione. Oggi tutto è interconnesso da **router** (che instradano i pacchetti da un capo all'altro della rete, contenendo essi stessi delle CPU e delle tabelle di instradamento) e ogni dispositivo ha una scheda di rete, la **NIC**, con un identificatore univoco cablato nell'hardware, il **MAC address** (12 cifre esadecimali).
 
 ## Il World Wide Web
 
-La maggior parte delle persone, però, non usa "internet" in astratto: usa il **World Wide Web**, inventato nel 1989 dallo scienziato inglese **Tim Berners-Lee**, che riprese proprio la parola *hypertext* di Nelson. Il documento base del web è la **pagina**, scritta in **HTML** (*Hypertext Markup Language*): un testo con **tag** che ne marcano le parti — `<p>` per un paragrafo, `<h1>` per un titolo, `<img>` per un'immagine. Il tag più importante è `<a>` (da *anchor*, àncora), che racchiude un **hyperlink**: un testo che, cliccato, carica un'altra pagina. È il collegamento tra le pagine (l'ipertesto di Nelson finalmente realizzato) a fare del web una ragnatela.
+La maggior parte delle persone, però, usa internet attraverso il **World Wide Web**, inventato nel 1989 dallo scienziato inglese **Tim Berners-Lee**, che riprese proprio la parola *hypertext* di Nelson. Il documento base del web è la **pagina**, scritta in **HTML** (*Hypertext Markup Language*): un testo con **tag** che ne marcano le parti (`<p>` per un paragrafo, `<h1>` per un titolo, `<img>` per un'immagine). Il tag più importante è `<a>` (da *anchor*, àncora), che racchiude un **hyperlink**: un testo che, cliccato, carica un'altra pagina. È il collegamento tra le pagine (l'ipertesto di Nelson finalmente realizzato) a fare del web una ragnatela.
 
 Ogni pagina è identificata da una **URL** (*Uniform Resource Locator*), che ne descrive con precisione la posizione:
 
@@ -28,7 +28,7 @@ Digitando una URL, il browser invia una **richiesta HTTP** al server indicato da
 
 ## Il cervello del mondo, oggi
 
-E così il cerchio si chiude. Il sito che più si avvicina alla *World Encyclopedia* di Wells è, con tutta evidenza, **Wikipedia**: un'enciclopedia modificabile dai suoi stessi lettori che, invece di degenerare nel caos, è diventata, sotto la guida di Jimmy Wales, uno dei luoghi più preziosi della rete. È il "cervello del mondo" immaginato quasi un secolo fa, realizzato con i bit, le porte logiche, le CPU e i protocolli costruiti pagina dopo pagina in questo libro.
+Il sito che più si avvicina alla *World Encyclopedia* di Wells è, con tutta evidenza, **Wikipedia**: un'enciclopedia modificabile dai suoi stessi lettori che, invece di degenerare nel caos, è diventata, sotto la guida di Jimmy Wales, uno dei luoghi più preziosi della rete. È il "cervello del mondo" immaginato quasi un secolo fa, realizzato con i bit, le porte logiche, le CPU e i protocolli costruiti pagina dopo pagina in questo libro.
 
 ```mermaid
 flowchart TB
@@ -40,9 +40,9 @@ flowchart TB
 ```
 
 > [!tip]
-> Il messaggio di fondo di tutto «Code» è uno solo, ripetuto a ogni livello: **la complessità nasce dalla combinazione di cose semplici**. Un interruttore che apre e chiude un circuito, ripetuto e collegato con ingegno, diventa una porta logica; le porte diventano aritmetica e memoria; queste diventano una CPU; la CPU esegue software; il software, in rete, diventa il web. Non c'è magia in nessun gradino — solo 0 e 1, e l'ingegno di chi li ha combinati.
+> Il messaggio di fondo di tutto «Code» è uno solo, ripetuto a ogni livello: **la complessità nasce dalla combinazione di cose semplici**. Un interruttore che apre e chiude un circuito, ripetuto e collegato con ingegno, diventa una porta logica; le porte diventano aritmetica e memoria; queste diventano una CPU; la CPU esegue software; il software, in rete, diventa il web. In nessun gradino c'è altro che 0 e 1, e l'ingegno di chi li ha combinati.
 
-Petzold chiude con una nota di misura. Wells credeva che la sola esistenza di un corpo di conoscenza potesse guidare il mondo verso un futuro migliore; l'autore confessa di essere meno ottimista — "costruiscilo e verranno" non è una garanzia, e la natura umana raramente si conforma alle aspettative. Ma l'ultima riga del libro non è di rassegnazione, bensì di responsabilità: **«Eppure ognuno di noi deve fare ciò che può»**. È il congedo giusto per un libro che ha mostrato, un bit alla volta, quanto lontano possa arrivare la comprensione paziente.
+Petzold chiude con una nota di misura. Wells credeva che la sola esistenza di un corpo di conoscenza potesse guidare il mondo verso un futuro migliore; l'autore confessa di essere meno ottimista: "costruiscilo e verranno" non è una garanzia, e la natura umana raramente si conforma alle aspettative. L'ultima riga del libro, però, è un richiamo alla responsabilità: **«Eppure ognuno di noi deve fare ciò che può»**.
 
 ## Ripasso lampo
 
@@ -84,7 +84,7 @@ Il codice **client-side** (per esempio JavaScript) gira sul computer dell'utente
 <details>
 <summary>Qual è il messaggio di fondo dell'intero libro «Code»?</summary>
 
-Che **la complessità nasce combinando cose semplici**: un interruttore diventa una porta logica, le porte diventano aritmetica e memoria, queste una CPU, la CPU esegue software, il software in rete diventa il web. A ogni gradino non c'è magia, solo 0 e 1 combinati con ingegno.
+Che **la complessità nasce combinando cose semplici**: un interruttore diventa una porta logica, le porte diventano aritmetica e memoria, queste una CPU, la CPU esegue software, il software in rete diventa il web. A ogni gradino ci sono solo 0 e 1, combinati con ingegno.
 
 </details>
 

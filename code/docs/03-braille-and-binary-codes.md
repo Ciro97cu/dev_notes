@@ -1,7 +1,7 @@
 # 03 · Braille e codici binari
 > cap. 3 di «Code» (Petzold, 2ª ed.) — orig. *Braille and Binary Codes*
 
-Samuel Morse non fu il primo a tradurre la lingua scritta in un codice interpretabile, né il primo a essere ricordato più per il nome del suo codice che per sé stesso. Quell'onore spetta a un adolescente cieco francese, **Louis Braille**, nato diciotto anni dopo Morse ma precocissimo. In questo capitolo si "disseziona" il Braille — non per impararlo, ma per capire meglio la natura dei codici. E la scoperta centrale è che il Braille, molto prima dei computer, è già a tutti gli effetti un **codice binario**, governato dalle stesse potenze di due del capitolo precedente.
+Samuel Morse non fu il primo a tradurre la lingua scritta in un codice interpretabile, né il primo a essere ricordato più per il nome del suo codice che per sé stesso. Quell'onore spetta a un adolescente cieco francese, **Louis Braille**, nato diciotto anni dopo Morse ma precocissimo. In questo capitolo si "disseziona" il Braille, non per impararlo ma per capire meglio la natura dei codici. Si scopre così che il Braille, molto prima dei computer, è già un **codice binario**, governato dalle stesse potenze di due del capitolo precedente.
 
 ## Una storia di puntini in rilievo
 
@@ -9,7 +9,7 @@ Louis Braille nacque nel **1809** a Coupvray, in Francia, venticinque miglia a e
 
 Il grande ostacolo nell'istruzione dei bambini ciechi era la mancanza di materiale di lettura accessibile. **Valentin Haüy** (1745–1822), fondatore della scuola parigina, aveva inventato un sistema per imprimere in rilievo sulla carta le lettere in un grande font arrotondato, leggibile al tatto. Ma era difficile da usare e pochi libri furono prodotti così. Haüy era prigioniero di un preconcetto: per lui una A doveva *avere la forma* di una A. Non aveva colto che, per chi non vede, poteva essere più adatto un tipo di codice del tutto diverso dalle lettere in rilievo.
 
-L'idea alternativa arrivò da una fonte inattesa. **Charles Barbier**, capitano dell'esercito francese, aveva ideato entro il 1815 un sistema detto *écriture nocturne* ("scrittura notturna"): un motivo di **punti in rilievo** su carta spessa, pensato perché i soldati si passassero messaggi al buio, in silenzio. I punti si imprimevano dal retro del foglio con uno stilo a punta e si leggevano con le dita. Louis Braille conobbe il sistema di Barbier a dodici anni. Gli piacquero i punti in rilievo, non solo perché comodi da **leggere** con le dita, ma anche perché facili da **scrivere**: uno studente con carta e stilo poteva finalmente prendere appunti e rileggerli. Braille lo perfezionò e in tre anni, a quindici, arrivò al proprio sistema, le cui basi si usano ancora oggi. Nel 1835 contrasse la tubercolosi, che lo uccise poco dopo il quarantatreesimo compleanno, nel 1852.
+L'idea alternativa arrivò da una fonte inattesa. **Charles Barbier**, capitano dell'esercito francese, aveva ideato entro il 1815 un sistema detto *écriture nocturne* ("scrittura notturna"): un motivo di **punti in rilievo** su carta spessa, pensato perché i soldati si passassero messaggi al buio, in silenzio. I punti si imprimevano dal retro del foglio con uno stilo a punta e si leggevano con le dita. Louis Braille conobbe il sistema di Barbier a dodici anni. Gli piacquero i punti in rilievo perché erano comodi da **leggere** con le dita e anche facili da **scrivere**: uno studente con carta e stilo poteva finalmente prendere appunti e rileggerli. Braille lo perfezionò e in tre anni, a quindici, arrivò al proprio sistema, le cui basi si usano ancora oggi. Nel 1835 contrasse la tubercolosi, che lo uccise poco dopo il quarantatreesimo compleanno, nel 1852.
 
 ## La cella a sei punti
 
@@ -43,15 +43,15 @@ Sulla carta ogni punto è **in rilievo** oppure **piatto**. Per mostrare il Brai
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Punti grandi = in rilievo (1, 3, 5); punti piccoli = piatti (2, 4, 6).</figcaption>
 </figure>
 
-Ed ecco il punto che conta: quei punti sono **binari**. Ogni punto è o piatto o in rilievo — due soli stati, esattamente come il punto e la linea del Morse o come l'acceso/spento di un interruttore. Possiamo quindi applicare ciò che sappiamo dal capitolo 2: con **sei** elementi binari il numero di combinazioni è
+Quei punti sono **binari**. Ogni punto è o piatto o in rilievo: due soli stati, esattamente come il punto e la linea del Morse o come l'acceso/spento di un interruttore. Si può quindi applicare quanto visto nel capitolo 2: con **sei** elementi binari il numero di combinazioni è
 
 > **2 × 2 × 2 × 2 × 2 × 2 = 2⁶ = 64.**
 
-Il sistema Braille può perciò rappresentare **64 codici** distinti, e non uno di più: 64 è il tetto imposto dalla cella a sei punti. Non è necessario che siano usati tutti, ma è il limite.
+Il sistema Braille può perciò rappresentare al massimo **64 codici** distinti: 64 è il tetto imposto dalla cella a sei punti, anche se non è necessario usarli tutti.
 
 ## L'alfabeto e il suo schema
 
-Le lettere minuscole non sono assegnate a caso: seguono uno schema regolare, che si vede meglio dividendole in tre righe. La **prima riga** (a-j) usa solo i quattro punti in alto — 1, 2, 4, 5. La **seconda riga** (k-t) ripete esattamente la prima **aggiungendo il punto 3**. La **terza riga** (u-z) ripete la prima **aggiungendo i punti 3 e 6**.
+Le lettere minuscole non sono assegnate a caso: seguono uno schema regolare, che si vede meglio dividendole in tre righe. La **prima riga** (a-j) usa solo i quattro punti in alto: 1, 2, 4, 5. La **seconda riga** (k-t) ripete esattamente la prima **aggiungendo il punto 3**. La **terza riga** (u-z) ripete la prima **aggiungendo i punti 3 e 6**.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 470 170" role="img" aria-label="Come la a diventa k aggiungendo il punto 3, e u aggiungendo i punti 3 e 6" style="width:100%;max-width:460px;height:auto;color:inherit">
@@ -84,21 +84,21 @@ Le lettere minuscole non sono assegnate a caso: seguono uno schema regolare, che
 
 Ecco le tre righe per intero (il glifo mostra i punti in rilievo; la colonna *Punti* li elenca):
 
-**Riga 1 — solo punti 1, 2, 4, 5**
+**Riga 1: solo punti 1, 2, 4, 5**
 
 | a | b | c | d | e | f | g | h | i | j |
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | ⠁ | ⠃ | ⠉ | ⠙ | ⠑ | ⠋ | ⠛ | ⠓ | ⠊ | ⠚ |
 | 1 | 12 | 14 | 145 | 15 | 124 | 1245 | 125 | 24 | 245 |
 
-**Riga 2 — come la riga 1 + punto 3**
+**Riga 2: come la riga 1 + punto 3**
 
 | k | l | m | n | o | p | q | r | s | t |
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | ⠅ | ⠇ | ⠍ | ⠝ | ⠕ | ⠏ | ⠟ | ⠗ | ⠎ | ⠞ |
 | 13 | 123 | 134 | 1345 | 135 | 1234 | 12345 | 1235 | 234 | 2345 |
 
-**Riga 3 — come la riga 1 + punti 3 e 6** (la w manca: non esisteva nel francese classico di Braille)
+**Riga 3: come la riga 1 + punti 3 e 6** (la w manca: non esisteva nel francese classico di Braille)
 
 | u | v | x | y | z |
 |:--:|:--:|:--:|:--:|:--:|
@@ -114,18 +114,18 @@ Con queste 25 lettere si scrive già. La frase "you and me", per esempio, si dis
 
 Restano coperti solo 25 dei 64 codici possibili.
 
-C'è un motivo di fondo dietro questa regolarità. Il Braille nasce per essere **punzonato a mano**, operazione poco precisa; per questo le lettere sono definite come **forme uniche** che, anche spostate un po' sulla pagina, mantengono il significato: la a è "un punto", la b "due punti in verticale", la c "due punti in orizzontale". È **ridondanza** che tollera l'imprecisione, e quindi una forma di **correzione d'errore** — utile perché un codice è soggetto a errori di *scrittura* (encoding), di *lettura* (decoding) e di *trasmissione* (una pagina rovinata).
+Dietro questa regolarità c'è un motivo: il Braille nasce per essere **punzonato a mano**, operazione poco precisa; per questo le lettere sono definite come **forme uniche** che, anche spostate un po' sulla pagina, mantengono il significato: la a è "un punto", la b "due punti in verticale", la c "due punti in orizzontale". È **ridondanza** che tollera l'imprecisione, e quindi una forma di **correzione d'errore**, utile perché un codice è soggetto a errori di *scrittura* (encoding), di *lettura* (decoding) e di *trasmissione* (una pagina rovinata).
 
 ## Riusare i 64 codici: indicatori, shift ed escape
 
-Venticinque lettere sono ben poche rispetto a 64 codici, e il sistema usato oggi per l'inglese (il **Grade 2 Braille**) non spreca nulla: introduce contrazioni (un codice-lettera isolato vale una parola comune) e riusa gli stessi 64 codici facendoli **cambiare significato a seconda del contesto**. È qui che il Braille anticipa due idee fondamentali dell'informatica.
+Venticinque lettere sono ben poche rispetto a 64 codici, e il sistema usato oggi per l'inglese (il **Grade 2 Braille**) non spreca nulla: introduce contrazioni (un codice-lettera isolato vale una parola comune) e riusa gli stessi 64 codici facendoli **cambiare significato a seconda del contesto**. Qui il Braille anticipa due idee dell'informatica.
 
-La prima è l'**indicatore di numero**. Esiste un codice (i punti 3-4-5-6, ⠼) che, posto davanti, dichiara: "*i codici che seguono vanno letti come numeri*". Le cifre 1-0 riusano esattamente i codici delle lettere a-j. Così la sequenza ⠼⠃⠑⠋ significa **256** (indicatore di numero, poi b→2, e→5, f→6). Questo indicatore non riguarda un solo codice: cambia il senso di **tutti** quelli successivi finché un altro indicatore (quello di lettera) non lo annulla. Un codice che altera il significato di tutto ciò che segue, finché non viene disfatto, si chiama **codice di precedenza** o **shift**: è esattamente ciò che fa il tasto **Shift** di una tastiera.
+La prima è l'**indicatore di numero**. Esiste un codice (i punti 3-4-5-6, ⠼) che, posto davanti, dichiara: "*i codici che seguono vanno letti come numeri*". Le cifre 1-0 riusano esattamente i codici delle lettere a-j. Così la sequenza ⠼⠃⠑⠋ significa **256** (indicatore di numero, poi b→2, e→5, f→6). Questo indicatore cambia il senso di **tutti** i codici successivi, finché un altro indicatore (quello di lettera) non lo annulla. Un codice che altera il significato di tutto ciò che segue, finché non viene disfatto, si chiama **codice di precedenza** o **shift**: è esattamente ciò che fa il tasto **Shift** di una tastiera.
 
-La seconda è l'**indicatore di maiuscola** (il solo punto 6, ⠠), che rende maiuscola **soltanto la lettera immediatamente successiva**. Un codice che cambia l'interpretazione del *prossimo* codice, e solo di quello, si chiama **codice di escape**: "esci" un istante dall'interpretazione normale per leggere il codice seguente in modo diverso. Così il nome ⠠⠇⠕⠥⠊⠎ si legge *Louis* (indicatore di maiuscola, poi l, o, u, i, s).
+La seconda è l'**indicatore di maiuscola** (il solo punto 6, ⠠), che rende maiuscola **soltanto la lettera immediatamente successiva**. Un codice che cambia l'interpretazione del *prossimo* codice, e solo di quello, si chiama **codice di escape**: "si esce" un istante dall'interpretazione normale per leggere il codice seguente in modo diverso. Così il nome ⠠⠇⠕⠥⠊⠎ si legge *Louis* (indicatore di maiuscola, poi l, o, u, i, s).
 
 > [!warning]
-> Shift ed escape rendono la decodifica **dipendente dal contesto**: un singolo codice non si può più interpretare da solo, bisogna sapere quali codici l'hanno preceduto. È potente (permette di dire tanto con pochi simboli) ma è anche la radice di parecchia complessità nei codici che rappresentano il linguaggio scritto in binario.
+> Shift ed escape rendono la decodifica **dipendente dal contesto**: un singolo codice non si può più interpretare da solo, bisogna sapere quali codici l'hanno preceduto. È un vantaggio (permette di dire tanto con pochi simboli) ma è anche la radice di parecchia complessità nei codici che rappresentano il linguaggio scritto in binario.
 
 ## Otto punti, 256 codici
 

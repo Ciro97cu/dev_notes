@@ -1,7 +1,7 @@
 # 14 · Sommare con le porte logiche
 > cap. 14 di «Code» (Petzold, 2ª ed.) — orig. *Adding with Logic Gates*
 
-L'addizione è l'operazione aritmetica più elementare, e per costruire un computer bisogna prima saper costruire qualcosa che **sommi due numeri**. Non è un dettaglio: a ben vedere, sommare è quasi l'*unica* cosa che un computer sa fare — sottrarre, moltiplicare, dividere, guidare una sonda su Marte, tutto poggia in fondo sull'addizione. In questo capitolo si mette insieme una **macchina addizionatrice** usando i mattoni dei capitoli precedenti (interruttori, lampadine, relè) già cablati nelle **porte logiche** del [capitolo 8](08-relays-and-gates.md). Sarà una macchina di carta e di mente: lavora in **binario**, riceve i due numeri da una fila di **interruttori** e mostra il risultato con una fila di **lampadine**.
+L'addizione è l'operazione aritmetica più elementare, e per costruire un computer bisogna prima saper costruire qualcosa che **sommi due numeri**. Sommare è quasi l'*unica* cosa che un computer sa fare: sottrarre, moltiplicare, dividere, guidare una sonda su Marte, tutto poggia sull'addizione. In questo capitolo si mette insieme una **macchina addizionatrice** usando i mattoni dei capitoli precedenti (interruttori, lampadine, relè) già cablati nelle **porte logiche** del [capitolo 8](08-relays-and-gates.md). Sarà una macchina di carta e di mente: lavora in **binario**, riceve i due numeri da una fila di **interruttori** e mostra il risultato con una fila di **lampadine**.
 
 ## L'addizione binaria: somma e riporto
 
@@ -9,7 +9,7 @@ Sommare in binario funziona come in decimale: si procede **colonna per colonna**
 
 > `0 + 0 = 0` · `0 + 1 = 1` · `1 + 0 = 1` · `1 + 1 = 10`
 
-L'ultimo caso è la chiave: `1 + 1` non entra in una cifra sola, quindi dà `0` **con riporto di 1**. Sommare una coppia di bit produce dunque **due** bit di risultato: un **bit di somma** e un **bit di riporto** (*carry*), esattamente come quando si dice "1 più 1 fa 0, riporto 1". Conviene perciò spezzare l'addizione in **due tabelle separate**, una per la somma e una per il riporto:
+Nell'ultimo caso `1 + 1` non entra in una cifra sola, quindi dà `0` **con riporto di 1**. Sommare una coppia di bit produce dunque **due** bit di risultato: un **bit di somma** e un **bit di riporto** (*carry*), esattamente come quando si dice "1 più 1 fa 0, riporto 1". Conviene perciò spezzare l'addizione in **due tabelle separate**, una per la somma e una per il riporto:
 
 | A | B | Somma |
 |:--:|:--:|:--:|
@@ -25,11 +25,11 @@ L'ultimo caso è la chiave: `1 + 1` non entra in una cifra sola, quindi dà `0` 
 | 1 | 0 | 0 |
 | 1 | 1 | 1 |
 
-Sommando due numeri interi si procede colonna per colonna riportando l'eventuale 1 alla colonna successiva — per esempio `01100101 + 10110110 = 100011011`. La macchina lavorerà su numeri di **8 bit** (un byte, da `00h` a `FFh`, cioè 0-255): la somma di due valori a 8 bit può arrivare fino a **510** (`1FEh`, nove cifre binarie), quindi serve prevedere anche una nona lampadina per il riporto finale.
+Sommando due numeri interi si procede colonna per colonna riportando l'eventuale 1 alla colonna successiva: per esempio `01100101 + 10110110 = 100011011`. La macchina lavorerà su numeri di **8 bit** (un byte, da `00h` a `FFh`, cioè 0-255): la somma di due valori a 8 bit può arrivare fino a **510** (`1FEh`, nove cifre binarie), quindi serve prevedere anche una nona lampadina per il riporto finale.
 
 ## La somma è una XOR, il riporto è una AND
 
-Il bello è che quelle due tabelle **coincidono esattamente** con due porte logiche già note. La tabella della somma (`0, 1, 1, 0`) è quella della porta **XOR** (*OR esclusivo*): l'uscita è 1 quando gli ingressi sono **diversi**, cioè "A oppure B, ma non entrambi". La tabella del riporto (1 solo quando `1 + 1`) è invece quella della porta **AND**. La XOR, a sua volta, si costruisce con le porte del capitolo 8 (una OR e una NAND che entrano in una AND), ma una volta riconosciuta la si usa come un mattone unico.
+Quelle due tabelle **coincidono esattamente** con due porte logiche già note. La tabella della somma (`0, 1, 1, 0`) è quella della porta **XOR** (*OR esclusivo*): l'uscita è 1 quando gli ingressi sono **diversi**, cioè "A oppure B, ma non entrambi". La tabella del riporto (1 solo quando `1 + 1`) è invece quella della porta **AND**. La XOR, a sua volta, si costruisce con le porte del capitolo 8 (una OR e una NAND che entrano in una AND), ma una volta riconosciuta la si usa come un mattone unico.
 
 Per sommare due singoli bit `A` e `B`, dunque, bastano **due porte**: una XOR che produce la somma e una AND che produce il riporto.
 
@@ -55,7 +55,7 @@ Per sommare due singoli bit `A` e `B`, dunque, bastano **due porte**: una XOR ch
 
 ## Il half adder
 
-Questa coppia di porte è così utile che la si **incapsula** in un unico blocco, chiamato **half adder** (semi-sommatore): due ingressi `A` e `B`, due uscite `S` (Sum, la somma) e `CO` (Carry Out, il riporto). *Incapsulare* significa nascondere un insieme complesso dietro una scatola più semplice — una **scatola nera** di cui, all'occorrenza, si può sempre riaprire il coperchio per vedere le porte (e i relè) all'interno.
+Questa coppia di porte è così utile che la si **incapsula** in un unico blocco, chiamato **half adder** (semi-sommatore): due ingressi `A` e `B`, due uscite `S` (Sum, la somma) e `CO` (Carry Out, il riporto). *Incapsulare* significa nascondere un insieme complesso dietro una scatola più semplice: una **scatola nera** di cui, all'occorrenza, si può sempre riaprire il coperchio per vedere le porte (e i relè) all'interno.
 
 Perché *half* (metà)? Perché il half adder somma sì due bit, ma **non sa tenere conto di un riporto in arrivo** dalla colonna precedente. Ha solo due ingressi, mentre a partire dalla seconda colonna se ne sommano **tre**: le due cifre *più* il riporto che arriva da destra. Il half adder va quindi bene solo per la **colonna meno significativa**; per tutte le altre serve qualcosa di più.
 
@@ -108,7 +108,7 @@ Il full adder ha quindi **tre** ingressi (`A`, `B`, `Carry In`) e **due** uscite
 
 ## Quanti relè servono (i famosi 144)
 
-Vale la pena contare i relè, ricordando che ogni porta AND, OR e NAND è fatta di **due** relè:
+Per contare i relè si ricordi che ogni porta AND, OR e NAND è fatta di **due** relè:
 
 - una **XOR** = OR + NAND + AND = **6 relè**;
 - un **half adder** = XOR + AND = **8 relè**;
@@ -138,16 +138,16 @@ Anche questa catena si incapsula in un'unica scatola: il **sommatore a 8 bit**, 
 Una volta scatolato, il sommatore a 8 bit diventa a sua volta un mattone. Per sommare numeri di **16 bit** se ne mettono **due in cascata**: si spezza ogni numero in **byte basso** (*low byte*) e **byte alto** (*high byte*), il sommatore di destra somma i byte bassi, e il suo `Carry Out` viene collegato al `Carry In` del sommatore di sinistra, che somma i byte alti. Nei diagrammi, le frecce a **doppia linea** con dentro un "8" indicano un percorso dati di un intero byte (*data path*). Con lo stesso trucco si arriva a 32, 64 bit e oltre.
 
 > [!warning]
-> Il riporto di questa architettura si propaga **da destra a sinistra**, un full adder alla volta (*ripple carry*): il full adder più a sinistra deve attendere che il riporto abbia attraversato tutti quelli a destra. È corretto, ma non è il modo più veloce di sommare — un limite che si sente quando si punta alla velocità.
+> Il riporto di questa architettura si propaga **da destra a sinistra**, un full adder alla volta (*ripple carry*): il full adder più a sinistra deve attendere che il riporto abbia attraversato tutti quelli a destra. È corretto, ma non è il modo più veloce di sommare, e il limite si sente quando si punta alla velocità.
 
-E qui sorge la domanda giusta: *«Ma è davvero così che i computer sommano i numeri?»*. Ottima domanda — è il filo del prossimo capitolo.
+Resta una domanda: *«Ma è davvero così che i computer sommano i numeri?»*. È il filo del prossimo capitolo.
 
 ## Ripasso lampo
 
 <details>
 <summary>Perché sommare due bit produce <em>due</em> bit di risultato?</summary>
 
-Perché `1 + 1` in binario fa `10`: non entra in una cifra sola. Ogni somma di una coppia di bit dà quindi un **bit di somma** e un **bit di riporto** (*carry*) — proprio come "1 più 1 fa 0, riporto 1". Per questo la macchina calcola somma e riporto con due circuiti separati.
+Perché `1 + 1` in binario fa `10`: non entra in una cifra sola. Ogni somma di una coppia di bit dà quindi un **bit di somma** e un **bit di riporto** (*carry*), proprio come "1 più 1 fa 0, riporto 1". Per questo la macchina calcola somma e riporto con due circuiti separati.
 
 </details>
 
@@ -184,4 +184,4 @@ Si **incatenano** più sommatori: il `Carry Out` di ogni stadio diventa il `Carr
 - Sommare in binario dà, per ogni coppia di bit, un **bit di somma** e un **bit di riporto**; la somma è una porta **XOR**, il riporto una **AND**.
 - Le due porte formano un **half adder** (`A`, `B` → Somma, Carry Out); due half adder più una **OR** formano un **full adder**, che accetta anche un **Carry In** (tre ingressi).
 - Otto full adder in catena, con il riporto che si propaga (*ripple carry*), fanno un **sommatore a 8 bit** (`144` relè); i pedici `A₀…A₇` sono le potenze di due (`01101001` = 105).
-- Incapsulando e mettendo in **cascata** i sommatori si arriva a 16, 32, 64 bit — ma il ripple carry non è il modo più **veloce** di sommare, spunto per il prossimo capitolo.
+- Incapsulando e mettendo in **cascata** i sommatori si arriva a 16, 32, 64 bit, ma il ripple carry non è il modo più **veloce** di sommare, spunto per il prossimo capitolo.

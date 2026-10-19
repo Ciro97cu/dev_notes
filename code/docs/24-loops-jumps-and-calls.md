@@ -1,7 +1,7 @@
 # 24 · Cicli, salti e chiamate
 > cap. 24 di «Code» (Petzold, 2ª ed.) — orig. *Loops, Jumps, and Calls*
 
-La ripetizione è, in un certo senso, l'essenza stessa del calcolo automatico: nessuno ha bisogno di un computer per sommare due numeri, ma per sommarne mille o un milione sì. Questa parentela tra calcolo e ripetizione era chiara fin dagli albori: nella sua celebre nota del 1843 sulla macchina analitica di Charles Babbage, **Ada Lovelace** chiamò *ciclo* (*cycle*) un gruppo di operazioni ripetuto, e *ciclo di un ciclo* quello che oggi chiamiamo **ciclo annidato** (*nested loop*). Questo capitolo aggiunge alla CPU le istruzioni che rendono possibile la ripetizione e, più in generale, il **controllo del flusso**: i salti, i salti condizionati, i cicli e le chiamate a subroutine.
+La ripetizione è, in un certo senso, l'essenza stessa del calcolo automatico: nessuno ha bisogno di un computer per sommare due numeri, ma per sommarne mille o un milione sì. Questa parentela tra calcolo e ripetizione era chiara fin dagli albori: nella sua celebre nota del 1843 sulla macchina analitica di Charles Babbage, **Ada Lovelace** chiamò *ciclo* (*cycle*) un gruppo di operazioni ripetuto, e *ciclo di un ciclo* quello che oggi si chiama **ciclo annidato** (*nested loop*). Questo capitolo aggiunge alla CPU le istruzioni che rendono possibile la ripetizione e, più in generale, il **controllo del flusso**: i salti, i salti condizionati, i cicli e le chiamate a subroutine.
 
 ## Il salto: JMP
 
@@ -22,7 +22,7 @@ Un salto sempre eseguito non basterebbe a fare granché: servono salti che avven
 
 ## Il loop
 
-Un **ciclo** (*loop*) è fatto di tre parti: l'**inizializzazione** (si preparano i valori di partenza), il **corpo** (le istruzioni da ripetere) e un **salto condizionato** che decide se ripetere ancora o uscire. Ecco la struttura del programma che somma 200 byte in memoria, usando la coppia HL come "dito" che scorre la lista e il registro C come contatore:
+Un **ciclo** (*loop*) è fatto di tre parti: l'**inizializzazione** (si preparano i valori di partenza), il **corpo** (le istruzioni da ripetere) e un **salto condizionato** che decide se ripetere ancora o uscire. Il programma che somma 200 byte in memoria, usando la coppia HL come "dito" che scorre la lista e il registro C come contatore, ha questa struttura:
 
 ```mermaid
 flowchart TB
@@ -35,13 +35,13 @@ flowchart TB
 Ogni passaggio nel corpo si chiama **iterazione**. Nel programma vero, il corpo decrementa il contatore con `SUI 1` (*subtract immediate*, sottrai 1) e poi usa `JZ` per **uscire dal loop** quando il contatore arriva a zero, oppure `JMP` (incondizionato) per tornare in cima e ripetere. Scrivendo il programma in linguaggio assembly, gli indirizzi di salto non si mettono come numeri fissi ma come **etichette** (`Loop:`, `Done:`): è l'assemblatore a calcolare gli indirizzi reali, e il programma resta leggibile e facile da modificare.
 
 > [!tip]
-> Un loop non richiede istruzioni speciali "di ciclo": basta un **salto condizionato** che rimandi indietro finché una condizione è vera. Somma di 200 byte o di un milione, il codice è lo **stesso** — cambia solo il valore iniziale del contatore. È questa la differenza tra ricopiare le istruzioni (capitolo 23) e *generalizzare*.
+> Un loop non richiede istruzioni speciali "di ciclo": basta un **salto condizionato** che rimandi indietro finché una condizione è vera. Somma di 200 byte o di un milione, il codice è lo **stesso**: cambia solo il valore iniziale del contatore. È questa la differenza tra ricopiare le istruzioni (capitolo 23) e *generalizzare*.
 
 ## Le subroutine: CALL e RET
 
 Spesso lo stesso gruppo di istruzioni serve in più punti di un programma: convertire un byte in cifre, moltiplicare due numeri, e così via. Ricopiarlo ogni volta sarebbe uno spreco. La soluzione è la **subroutine**: un blocco di istruzioni scritto una volta sola e richiamato quando serve. La si invoca con **CALL** (`CDh`) e la si conclude con **RET** (`C9h`, *return*).
 
-`CALL addr` assomiglia a `JMP`: salta all'indirizzo indicato. Ma fa qualcosa in più di cruciale: **ricorda da dove è partito**, così che `RET`, alla fine della subroutine, possa **tornare** esattamente all'istruzione successiva alla chiamata. Questo permette persino di **annidare** le chiamate — una subroutine (`ToAscii`) che ne chiama un'altra (`Digit`) — perché ogni ritorno sa dove tornare.
+`CALL addr` assomiglia a `JMP`: salta all'indirizzo indicato. In più, però, **ricorda da dove è partito**, così che `RET`, alla fine della subroutine, possa **tornare** esattamente all'istruzione successiva alla chiamata. Questo permette persino di **annidare** le chiamate (una subroutine, `ToAscii`, che ne chiama un'altra, `Digit`), perché ogni ritorno sa dove tornare.
 
 ## Lo stack
 

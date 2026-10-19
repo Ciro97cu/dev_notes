@@ -1,7 +1,7 @@
 # 04 · Anatomia di una torcia
 > cap. 4 di «Code» (Petzold, 2ª ed.) — orig. *Anatomy of a Flashlight*
 
-Dopo tre capitoli sui codici, il libro cambia marcia e affronta l'**elettricità** — perché è con l'elettricità che, di lì a poco, costruiremo la logica dei computer. L'oggetto di studio è il più semplice apparecchio elettrico di casa: la **torcia**. Smontarla mostra tutto ciò che serve. E c'è un motivo di fondo per cui proprio la torcia apre la strada ai computer: una torcia è **accesa o spenta**, non ha vie di mezzo — di nuovo quel binario incontrato con Morse e Braille.
+Dopo tre capitoli sui codici, il libro cambia marcia e affronta l'**elettricità**, perché è con l'elettricità che, di lì a poco, si costruirà la logica dei computer. L'oggetto di studio è il più semplice apparecchio elettrico di casa: la **torcia**. Smontarla mostra tutto ciò che serve. Proprio la torcia apre la strada ai computer perché è **accesa o spenta**, senza vie di mezzo: di nuovo quel binario incontrato con Morse e Braille.
 
 ## I pezzi
 
@@ -60,13 +60,13 @@ La prima cosa da notare è che un **circuito è un cerchio**. La lampadina si ac
 
 ## Cosa scorre nel filo: gli elettroni
 
-Il cerchio suggerisce che qualcosa gira intorno al circuito. L'analogia più comune è quella dell'acqua nei tubi, ma prima o poi si rompe: l'elettricità non somiglia davvero a niente. Un modo per capirla è la **teoria degli elettroni**. La materia è fatta di **atomi**, e ogni atomo ha neutroni, protoni ed **elettroni**; di solito gli elettroni sono tanti quanti i protoni, ma in certe condizioni un elettrone si può staccare — ed è lì che nasce l'elettricità. La parola stessa viene dal greco *ήλεκτρον* (*elektron*), che significa "ambra": gli antichi greci strofinavano l'ambra con la lana e osservavano l'**elettricità statica**, perché la lana strappa elettroni all'ambra (come il tappeto li strappa alle suole delle scarpe).
+Il cerchio suggerisce che qualcosa gira intorno al circuito. L'analogia più comune è quella dell'acqua nei tubi, ma prima o poi si rompe: l'elettricità non somiglia davvero a niente. Un modo per capirla è la **teoria degli elettroni**. La materia è fatta di **atomi**, e ogni atomo ha neutroni, protoni ed **elettroni**; di solito gli elettroni sono tanti quanti i protoni, ma in certe condizioni un elettrone si può staccare, ed è lì che nasce l'elettricità. La parola stessa viene dal greco *ήλεκτρον* (*elektron*), che significa "ambra": gli antichi greci strofinavano l'ambra con la lana e osservavano l'**elettricità statica**, perché la lana strappa elettroni all'ambra (come il tappeto li strappa alle suole delle scarpe).
 
-Protoni ed elettroni hanno una **carica**, indicata con **+** e **−**: i segni non hanno senso aritmetico, dicono solo che le due cariche sono *opposte*. Cariche in numero uguale sono stabili; uno squilibrio tende a correggersi — è la scintilla che senti toccando una maniglia, o il fulmine tra nuvola e nuvola. Nella torcia, però, il flusso è ordinato e continuo: un atomo cede un elettrone a un vicino e ne strappa uno a un altro atomo adiacente, e così via. **L'elettricità nel circuito è il passaggio di elettroni di atomo in atomo.**
+Protoni ed elettroni hanno una **carica**, indicata con **+** e **−**: i segni non hanno senso aritmetico, dicono solo che le due cariche sono *opposte*. Cariche in numero uguale sono stabili; uno squilibrio tende a correggersi: è la scintilla che si sente toccando una maniglia, o il fulmine tra nuvola e nuvola. Nella torcia, però, il flusso è ordinato e continuo: un atomo cede un elettrone a un vicino e ne strappa uno a un altro atomo adiacente, e così via. **L'elettricità nel circuito è il passaggio di elettroni di atomo in atomo.**
 
 ## Le batterie: da energia chimica a elettrica
 
-Questo passaggio non parte da solo: serve qualcosa che lo inneschi, ed è la **batteria**. Le batterie da torcia (D, C, AA, AAA a seconda della misura) hanno un'estremità piatta col segno **−** e una con una piccola sporgenza col segno **+**. Dentro avviene una **reazione chimica** scelta apposta per accumulare elettroni in eccesso al terminale negativo e richiederne all'altro: così l'**energia chimica diventa energia elettrica**, a circa **1,5 volt**. La reazione può procedere solo se un circuito porta via gli elettroni dal negativo e li riconsegna al positivo: la batteria alimenta il circuito, ma è anche vero il contrario — il circuito permette alla reazione della batteria di avvenire, finché i reagenti non si esauriscono.
+Questo passaggio non parte da solo: serve qualcosa che lo inneschi, ed è la **batteria**. Le batterie da torcia (D, C, AA, AAA a seconda della misura) hanno un'estremità piatta col segno **−** e una con una piccola sporgenza col segno **+**. Dentro avviene una **reazione chimica** scelta apposta per accumulare elettroni in eccesso al terminale negativo e richiederne all'altro: così l'**energia chimica diventa energia elettrica**, a circa **1,5 volt**. La reazione può procedere solo se un circuito porta via gli elettroni dal negativo e li riconsegna al positivo: la batteria alimenta il circuito, ma è anche vero il contrario: il circuito permette alla reazione della batteria di avvenire, finché i reagenti non si esauriscono.
 
 Il modo in cui si collegano più batterie cambia il risultato:
 
@@ -96,34 +96,34 @@ Il modo in cui si collegano più batterie cambia il risultato:
 
 ## Conduttori, isolanti, resistenza
 
-Perché servono i fili? L'elettricità *può* attraversare l'aria (i fulmini), ma con enorme fatica. Alcune sostanze la trasportano molto meglio, e dipende dalla loro struttura atomica: un atomo con **un solo elettrone nel guscio esterno** lo cede facilmente, ed è ciò che serve per condurre. I migliori **conduttori** sono **rame, argento e oro** (stessa colonna della tavola periodica); il rame è il più usato per i fili. L'opposto è la **resistenza**: le sostanze molto resistenti sono **isolanti** — gomma e plastica (con cui si rivestono i fili), stoffa, legno, aria secca. Il rame ha resistenza bassa ma non nulla: un filo **più lungo** resiste di più (chilometri di filo spegnerebbero la torcia), uno **più spesso** resiste di meno (offre più elettroni al passaggio).
+Perché servono i fili? L'elettricità *può* attraversare l'aria (i fulmini), ma con enorme fatica. Alcune sostanze la trasportano molto meglio, e dipende dalla loro struttura atomica: un atomo con **un solo elettrone nel guscio esterno** lo cede facilmente, ed è ciò che serve per condurre. I migliori **conduttori** sono **rame, argento e oro** (stessa colonna della tavola periodica); il rame è il più usato per i fili. L'opposto è la **resistenza**: le sostanze molto resistenti sono **isolanti**: gomma e plastica (con cui si rivestono i fili), stoffa, legno, aria secca. Il rame ha resistenza bassa ma non nulla: un filo **più lungo** resiste di più (chilometri di filo spegnerebbero la torcia), uno **più spesso** resiste di meno (offre più elettroni al passaggio).
 
 ## Volt, ampere, ohm — e la legge di Ohm
 
-Tre grandezze descrivono l'elettricità, e la cosa più utile è capirle con l'**analogia dell'acqua in un tubo**:
+Tre grandezze descrivono l'elettricità, e si capiscono meglio con l'**analogia dell'acqua in un tubo**:
 
 | Grandezza | Unità (e chi le dà il nome) | Cos'è | Nell'acqua |
 |---|---|---|---|
-| **Tensione** (E) | volt — *Alessandro Volta* (1745-1827) | il *potenziale* di fare lavoro (esiste anche a circuito staccato) | la **pressione** |
-| **Corrente** (I) | ampere — *André-Marie Ampère* (1775-1836) | quanti elettroni passano (1 A ≈ 6 quintilioni di elettroni al secondo) | la **quantità d'acqua** che scorre |
-| **Resistenza** (R) | ohm — *Georg Simon Ohm* (1789-1854) | quanto la sostanza ostacola il passaggio | la **strettezza** del tubo |
+| **Tensione** (E) | volt, da *Alessandro Volta* (1745-1827) | il *potenziale* di fare lavoro (esiste anche a circuito staccato) | la **pressione** |
+| **Corrente** (I) | ampere, da *André-Marie Ampère* (1775-1836) | quanti elettroni passano (1 A ≈ 6 quintilioni di elettroni al secondo) | la **quantità d'acqua** che scorre |
+| **Resistenza** (R) | ohm, da *Georg Simon Ohm* (1789-1854) | quanto la sostanza ostacola il passaggio | la **strettezza** del tubo |
 
 La **tensione** è un potenziale, come un mattone sollevato: fermo in mano non fa nulla, ma più in alto sta, più lavoro può fare cadendo. Da queste tre grandezze nasce la relazione più famosa dell'elettricità, la **legge di Ohm**:
 
-> **I = E / R** — la corrente è pari alla tensione diviso la resistenza.
+> **I = E / R**: la corrente è pari alla tensione diviso la resistenza.
 
-Cioè: più tensione (pressione) → più corrente; più resistenza (tubo stretto) → meno corrente. Due casi limite lo chiariscono. Una batteria appoggiata da sola: E = 1,5 V ma la resistenza dell'aria è enorme, quindi I ≈ 0. Un **corto circuito** (i due poli uniti da un filo di rame): resistenza bassissima, corrente altissima, il filo si scalda fino a incandescenza e può fondere. Ed è esattamente così che funziona la **lampadina**: il filamento ha una resistenza tale (~4 ohm) che l'energia elettrica si converte in luce e calore. Con due batterie in serie (3 V) la corrente è 3 / 4 = **0,75 ampere**.
+Cioè: più tensione (pressione) dà più corrente, più resistenza (tubo stretto) dà meno corrente. Due casi limite lo chiariscono. Una batteria appoggiata da sola: E = 1,5 V ma la resistenza dell'aria è enorme, quindi I ≈ 0. Un **corto circuito** (i due poli uniti da un filo di rame): resistenza bassissima, corrente altissima, il filo si scalda fino a incandescenza e può fondere. Ed è esattamente così che funziona la **lampadina**: il filamento ha una resistenza tale (~4 ohm) che l'energia elettrica si converte in luce e calore. Con due batterie in serie (3 V) la corrente è 3 / 4 = **0,75 ampere**.
 
-C'è infine il **watt** (da *James Watt*, 1736-1819), misura della **potenza**: **P = E × I**. La nostra lampadina è quindi da 3 V × 0,75 A = **2,25 watt**. I LED stanno sostituendo le incandescenti proprio perché danno la stessa luce con meno calore e meno watt.
+C'è infine il **watt** (da *James Watt*, 1736-1819), misura della **potenza**: **P = E × I**. La lampadina della torcia è quindi da 3 V × 0,75 A = **2,25 watt**. I LED stanno sostituendo le incandescenti proprio perché danno la stessa luce con meno calore e meno watt.
 
 ## L'interruttore: acceso o spento
 
-Restava il pezzo più importante: l'**interruttore**. Decide se l'elettricità scorre. Quando lascia passare la corrente si dice **chiuso** (*on*); quando la blocca, **aperto** (*off*). Attenzione al ribaltamento rispetto alle porte: una **porta chiusa** blocca il passaggio, un **interruttore chiuso** lo consente.
+Restava il pezzo più importante: l'**interruttore**. Decide se l'elettricità scorre. Quando lascia passare la corrente si dice **chiuso** (*on*); quando la blocca, **aperto** (*off*). Rispetto alle porte il significato è ribaltato: una **porta chiusa** blocca il passaggio, un **interruttore chiuso** lo consente.
 
-E qui i due fili del libro si riannodano. O l'interruttore è chiuso o è aperto; o la corrente scorre o non scorre; o la lampadina è accesa o spenta. Non c'è via di mezzo. Esattamente come i codici binari di Morse e Braille, la torcia ha **due soli stati**. È questa somiglianza tra codici binari e semplici circuiti elettrici che, nei prossimi capitoli, permetterà di costruire con gli interruttori prima la **logica** e poi il computer.
+O l'interruttore è chiuso o è aperto; o la corrente scorre o non scorre; o la lampadina è accesa o spenta. Non c'è via di mezzo. Esattamente come i codici binari di Morse e Braille, la torcia ha **due soli stati**. È questa somiglianza tra codici binari e semplici circuiti elettrici che, nei prossimi capitoli, permetterà di costruire con gli interruttori prima la **logica** e poi il computer.
 
 > [!tip]
-> Tieni insieme i due fili del libro: un interruttore è **acceso/spento** come un punto/linea o un rilievo/piatto. Il computer nascerà dal mettere in fila tanti di questi "due stati" — non da qualcosa di più complicato.
+> I due fili del libro vanno tenuti insieme: un interruttore è **acceso/spento** come un punto/linea o un rilievo/piatto. Il computer nascerà dal mettere in fila tanti di questi "due stati", non da qualcosa di più complicato.
 
 > [!warning]
 > *Chiuso* e *aperto* per un interruttore sono l'opposto che per una porta: **chiuso = passa corrente** (acceso), **aperto = non passa** (spento). È una fonte classica di confusione.

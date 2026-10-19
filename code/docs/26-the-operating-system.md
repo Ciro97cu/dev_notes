@@ -5,7 +5,7 @@ Al termine del capitolo 25 la macchina è, in teoria, completa: CPU, memoria, pe
 
 ## Come parte tutto: il bootstrap
 
-Quando l'Intel 8080 viene acceso o resettato, comincia a eseguire codice macchina a un indirizzo preciso: `0000h`. Ci si aspetta quindi che lì ci sia già la prima istruzione da eseguire. Ma come ci è finita? Nei computer più primitivi la si inseriva a mano, con un **pannello di controllo** di interruttori simile a quello del capitolo 19 (con in più un tasto **Reset** collegato alla CPU). È scomodissimo. La soluzione elegante è mettere in una **ROM** un piccolo programma, il **bootstrap loader** (caricatore d'avvio): all'accensione, questo codice legge dal disco il primo settore, lo carica in memoria e lo esegue, e quel settore a sua volta carica il resto del sistema operativo. Il nome viene dall'idea, un po' paradossale, di "tirarsi su per i lacci dei propri stivali" (*to pull oneself up by one's bootstraps*) — da cui anche il verbo moderno *fare il boot*.
+Quando l'Intel 8080 viene acceso o resettato, comincia a eseguire codice macchina a un indirizzo preciso: `0000h`. Ci si aspetta quindi che lì ci sia già la prima istruzione da eseguire. Ma come ci è finita? Nei computer più primitivi la si inseriva a mano, con un **pannello di controllo** di interruttori simile a quello del capitolo 19 (con in più un tasto **Reset** collegato alla CPU). È scomodissimo. La soluzione più comoda è mettere in una **ROM** un piccolo programma, il **bootstrap loader** (caricatore d'avvio): all'accensione, questo codice legge dal disco il primo settore, lo carica in memoria e lo esegue, e quel settore a sua volta carica il resto del sistema operativo. Il nome viene dall'idea, un po' paradossale, di "tirarsi su per i lacci dei propri stivali" (*to pull oneself up by one's bootstraps*), da cui anche il verbo moderno *fare il boot*.
 
 ## Che cos'è un sistema operativo
 
@@ -16,18 +16,18 @@ Un **sistema operativo** (spesso abbreviato **SO**, in inglese OS) è lo strato 
 <figcaption><em>I livelli. L'<strong>utente</strong> comanda le <strong>applicazioni</strong> tramite l'interfaccia utente (<strong>UI</strong>); le applicazioni chiamano il <strong>sistema operativo</strong> tramite l'<strong>API</strong>; il sistema operativo pilota l'<strong>hardware</strong>. Ogni livello nasconde i dettagli di quello sotto.</em></figcaption>
 </figure>
 
-Storicamente, il sistema operativo più importante per i microprocessori a 8 bit fu **CP/M** (all'inizio *Control Program/Monitor*, poi *Control Program for Microcomputers*), scritto a metà degli anni '70 per l'Intel 8080 da **Gary Kildall** (1942-1994), fondatore della Digital Research (DRI). Serve da modello per questo capitolo.
+Storicamente, il sistema operativo più importante per i microprocessori a 8 bit fu **CP/M** (all'inizio *Control Program/Monitor*, poi *Control Program for Microcomputers*), scritto a metà degli anni '70 per l'Intel 8080 da **Gary Kildall** (1942-1994), fondatore della Digital Research (DRI). È il modello di questo capitolo.
 
 ## Il file system
 
-Una delle funzioni fondamentali di un SO è il **file system**, che organizza i dati sul disco in **file**, ciascuno con un **nome**. Il file system di CP/M, pur semplice, soddisfa due requisiti importanti. Primo: ogni file è identificato da un nome, anch'esso registrato sul disco. Secondo, meno ovvio ma cruciale, un file **non** deve occupare settori consecutivi: mentre si creano e cancellano file di dimensioni diverse, lo spazio libero si **frammenta**, e poter sparpagliare un file su settori non contigui è ciò che permette di sfruttarlo tutto. Una **tabella** sul disco tiene traccia di quali settori appartengono a quale file.
+Una delle funzioni principali di un SO è il **file system**, che organizza i dati sul disco in **file**, ciascuno con un **nome**. Il file system di CP/M, pur semplice, soddisfa due requisiti importanti. Primo: ogni file è identificato da un nome, anch'esso registrato sul disco. Secondo, meno ovvio, un file **non** deve occupare settori consecutivi: mentre si creano e cancellano file di dimensioni diverse, lo spazio libero si **frammenta**, e poter sparpagliare un file su settori non contigui è ciò che permette di sfruttarlo tutto. Una **tabella** sul disco tiene traccia di quali settori appartengono a quale file.
 
 <figure>
 <svg viewBox="0 0 450 116" role="img" aria-label="Un file occupa settori sparsi e non consecutivi sul disco; una tabella associa il file ai suoi settori" style="width:100%;max-width:520px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="30" y="52" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="50.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">0</text><rect x="70" y="52" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="90.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">1</text><rect x="110" y="52" width="40" height="40" fill="var(--link,#059669)" stroke="currentColor" stroke-width="1.3"/><text x="130.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="#fff">2</text><rect x="150" y="52" width="40" height="40" fill="var(--link,#059669)" stroke="currentColor" stroke-width="1.3"/><text x="170.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="#fff">3</text><rect x="190" y="52" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="210.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">4</text><rect x="230" y="52" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="250.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">5</text><rect x="270" y="52" width="40" height="40" fill="var(--link,#059669)" stroke="currentColor" stroke-width="1.3"/><text x="290.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="#fff">6</text><rect x="310" y="52" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="330.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">7</text><rect x="350" y="52" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.3"/><text x="370.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">8</text><rect x="390" y="52" width="40" height="40" fill="var(--link,#059669)" stroke="currentColor" stroke-width="1.3"/><text x="410.0" y="76.0" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="#fff">9</text><text x="230.0" y="38" font-size="10" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">settori del disco</text><text x="30" y="114" font-size="10" text-anchor="start" font-weight="700" opacity="1" fill="currentColor">File A → settori 2, 3, 6, 9  (non consecutivi)</text></g></svg>
 <figcaption><em>Un file può occupare settori <strong>sparsi</strong> sul disco (qui il 2, 3, 6, 9): è così che il file system usa anche lo spazio frammentato. Una tabella sul disco associa ogni file all'elenco dei suoi settori.</em></figcaption>
 </figure>
 
-In CP/M il nome di un file ha due parti: il **filename** (fino a 8 caratteri) e il **tipo** o **estensione** (fino a 3 caratteri), separati da un punto. Alcuni tipi sono standard: `TXT` indica un file di testo (solo codici ASCII, leggibile dagli umani), `COM` (da *command*) un file che contiene istruzioni in codice macchina — cioè un **programma**. Questa convenzione, detta **8.3** ("otto punto tre"), è sopravvissuta: i file system moderni hanno tolto i limiti di lunghezza, ma l'idea del nome-più-estensione è tuttora dappertutto.
+In CP/M il nome di un file ha due parti: il **filename** (fino a 8 caratteri) e il **tipo** o **estensione** (fino a 3 caratteri), separati da un punto. Alcuni tipi sono standard: `TXT` indica un file di testo (solo codici ASCII, leggibile dagli umani), `COM` (da *command*) un file che contiene istruzioni in codice macchina, cioè un **programma**. Questa convenzione, detta **8.3** ("otto punto tre"), è sopravvissuta: i file system moderni hanno tolto i limiti di lunghezza, ma l'idea del nome-più-estensione è tuttora dappertutto.
 
 ## L'API: i servizi per i programmi
 
@@ -35,14 +35,14 @@ Perché un programma non debba conoscere i dettagli elettrici di ogni periferica
 
 | Registro C | Funzione CP/M |
 |:---:|---|
-| `01h` | Console Input — leggi un carattere dalla tastiera |
-| `02h` | Console Output — scrivi un carattere sul display |
-| `09h` | Print String — stampa una stringa di caratteri |
-| `15h` | Open File — apri un file esistente |
-| `16h` | Close File — chiudi un file |
-| `20h` | Read Sequential — leggi byte dal file |
-| `21h` | Write Sequential — scrivi byte nel file |
-| `22h` | Make File — crea un nuovo file |
+| `01h` | Console Input: leggi un carattere dalla tastiera |
+| `02h` | Console Output: scrivi un carattere sul display |
+| `09h` | Print String: stampa una stringa di caratteri |
+| `15h` | Open File: apri un file esistente |
+| `16h` | Close File: chiudi un file |
+| `20h` | Read Sequential: leggi byte dal file |
+| `21h` | Write Sequential: scrivi byte nel file |
+| `22h` | Make File: crea un nuovo file |
 
 Dietro le quinte, l'indirizzo `0005h` contiene un'istruzione `JMP` che salta al codice vero del sistema operativo. Il programma applicativo, così, chiede *cosa* vuole senza sapere *come* venga fatto né su quale hardware: è la stessa idea dei livelli vista sopra.
 
@@ -52,10 +52,10 @@ Se all'API guarda il programmatore, all'**interfaccia utente** (UI) guarda invec
 
 ## Un po' di storia
 
-Da CP/M la genealogia dei sistemi operativi si dirama. Il **MS-DOS** dei primi PC IBM ne ereditò molte idee. Poi vennero le interfacce **grafiche** di Windows e del Mac, e, sui dispositivi mobili, i sistemi di Apple e Android, con API diverse ma interfacce simili. A parte, e influentissimo, c'è **UNIX**, sviluppato nei primi anni '70 ai Bell Labs soprattutto da **Ken Thompson** (n. 1943) e **Dennis Ritchie** (1941-2011); il nome è un gioco di parole su *Multics*, un sistema precedente. UNIX fu concepito per essere **portabile** (adattabile a computer diversi) e diffuso nelle università dal 1973; da qui la sua "filosofia" — usare i file di testo come denominatore comune e concatenare tante piccole **utility** a riga di comando. Da questo ceppo, con il progetto **GNU** della *Free Software Foundation*, è poi nato tutto il mondo di **Linux**.
+Da CP/M la genealogia dei sistemi operativi si dirama. Il **MS-DOS** dei primi PC IBM ne ereditò molte idee. Poi vennero le interfacce **grafiche** di Windows e del Mac, e, sui dispositivi mobili, i sistemi di Apple e Android, con API diverse ma interfacce simili. A parte, e influentissimo, c'è **UNIX**, sviluppato nei primi anni '70 ai Bell Labs soprattutto da **Ken Thompson** (n. 1943) e **Dennis Ritchie** (1941-2011); il nome è un gioco di parole su *Multics*, un sistema precedente. UNIX fu concepito per essere **portabile** (adattabile a computer diversi) e diffuso nelle università dal 1973; da qui la sua "filosofia": usare i file di testo come denominatore comune e concatenare tante piccole **utility** a riga di comando. Da questo ceppo, con il progetto **GNU** della *Free Software Foundation*, è poi nato tutto il mondo di **Linux**.
 
 > [!tip]
-> Un sistema operativo è, in fondo, un grande esercizio di **astrazione**: nasconde la complessità dell'hardware dietro concetti semplici e stabili — un *file* con un nome, una *stringa* da stampare, un *comando* da lanciare. Il programma dice cosa vuole, il SO sa come farlo. Ogni livello semplifica quello sopra ignorando i dettagli di quello sotto.
+> Un sistema operativo è un grande esercizio di **astrazione**: nasconde la complessità dell'hardware dietro concetti semplici e stabili, come un *file* con un nome, una *stringa* da stampare, un *comando* da lanciare. Il programma dice cosa vuole, il SO sa come farlo. Ogni livello semplifica quello sopra ignorando i dettagli di quello sotto.
 
 Anche con un sistema operativo che offre file e servizi, però, scrivere programmi in codice macchina o in assembly resta faticoso e legato a un singolo processore. Il passo successivo (rendere la programmazione più umana e indipendente dall'hardware) sono i **linguaggi ad alto livello**, protagonisti del capitolo 27.
 
@@ -64,7 +64,7 @@ Anche con un sistema operativo che offre file e servizi, però, scrivere program
 <details>
 <summary>Cos'è il <code>bootstrap</code> e perché si chiama così?</summary>
 
-È il modo in cui il primo codice arriva in memoria all'accensione: un piccolo programma in **ROM** (il *bootstrap loader*) legge dal disco il primo settore, lo carica ed esegue, e quello carica il resto del sistema operativo. Il nome viene dall'idea paradossale di "tirarsi su per i lacci degli stivali" — da cui il verbo *fare il boot*.
+È il modo in cui il primo codice arriva in memoria all'accensione: un piccolo programma in **ROM** (il *bootstrap loader*) legge dal disco il primo settore, lo carica ed esegue, e quello carica il resto del sistema operativo. Il nome viene dall'idea paradossale di "tirarsi su per i lacci degli stivali", da cui il verbo *fare il boot*.
 
 </details>
 
@@ -108,4 +108,4 @@ Verso l'**utente** è l'**interfaccia utente** (in CP/M una riga di comando gest
 - Il **sistema operativo** sta tra hardware e applicazioni; le nasconde la complessità dell'hardware. Modello storico: **CP/M** (Kildall, DRI, 8080).
 - Il **file system** dà ai dati dei **file** con un nome (convenzione **8.3**, tipi `TXT`/`COM`), memorizzati anche su **settori non consecutivi** grazie a una tabella.
 - L'**API** offre ai programmi subroutine di servizio (in CP/M l'interfaccia **"Call 5"**); l'**interfaccia utente** (shell) serve invece chi usa il computer.
-- La storia va da CP/M a MS-DOS, Windows/macOS, mobile, e soprattutto **UNIX** (Thompson e Ritchie) → **GNU/Linux**. Programmare resta però scomodo: servono i **linguaggi ad alto livello** (cap. 27).
+- La storia va da CP/M a MS-DOS, Windows/macOS, mobile, e soprattutto **UNIX** (Thompson e Ritchie), da cui discende **GNU/Linux**. Programmare resta però scomodo: servono i **linguaggi ad alto livello** (cap. 27).

@@ -1,11 +1,11 @@
 # 21 · L'unità aritmetico-logica
 > cap. 21 di «Code» (Petzold, 2ª ed.) — orig. *The Arithmetic Logic Unit*
 
-Un computer moderno, per quanto complesso, si divide grosso modo in tre categorie di componenti: la **memoria** (costruita nel capitolo 19), la **CPU** (*central processing unit*, l'unità centrale di elaborazione) e i dispositivi di **ingresso/uscita** (I/O), spesso chiamati **periferiche**. La memoria, come si è visto, contiene sequenze di byte; alcuni sono **codici-istruzione** — collettivamente il **codice** (*code*) — e tutto il resto sono **dati** (*data*): numeri, testo, immagini, suoni, qualunque cosa si possa rappresentare con 0 e 1. Questo capitolo costruisce il cuore aritmetico della CPU, l'**unità aritmetico-logica** o **ALU**, il circuito che macina i numeri.
+Un computer moderno, per quanto complesso, si divide grosso modo in tre categorie di componenti: la **memoria** (costruita nel capitolo 19), la **CPU** (*central processing unit*, l'unità centrale di elaborazione) e i dispositivi di **ingresso/uscita** (I/O), spesso chiamati **periferiche**. La memoria, come si è visto, contiene sequenze di byte; alcuni sono **codici-istruzione**, collettivamente detti il **codice** (*code*), e tutto il resto sono **dati** (*data*): numeri, testo, immagini, suoni, qualunque cosa si possa rappresentare con 0 e 1. Questo capitolo costruisce il cuore aritmetico della CPU, l'**unità aritmetico-logica** o **ALU**, il circuito che macina i numeri.
 
 ## Codice e dati: un vero programma
 
-Prima di costruire la ALU conviene vedere come appare un pezzo di memoria che contiene un programma. Petzold, invece di inventarsi dei codici, usa quelli **reali del microprocessore Intel 8080** — lo stesso che farà da modello per la CPU dei prossimi capitoli. Ecco un programma che somma 1388h (5000 in decimale) e 09C4h (2500), entrambi numeri a 16 bit, e ne scrive il risultato in memoria:
+Prima di costruire la ALU conviene vedere come appare un pezzo di memoria che contiene un programma. Petzold, invece di inventarsi dei codici, usa quelli **reali del microprocessore Intel 8080**, lo stesso che farà da modello per la CPU dei prossimi capitoli. Il programma che segue somma 1388h (5000 in decimale) e 09C4h (2500), entrambi numeri a 16 bit, e ne scrive il risultato in memoria:
 
 | Indirizzo | Byte | Significato |
 |:---:|:---:|---|
@@ -23,7 +23,7 @@ Prima di costruire la ALU conviene vedere come appare un pezzo di memoria che co
 | 000C–Dh | `11h 00h` | …all'indirizzo 0011h |
 | 000Eh | `76h` | ferma la CPU |
 
-La macchina somma prima i due byte **bassi** (88h e C4h) e ne salva il risultato a 0010h; poi somma i due byte **alti** (13h e 09h) tenendo conto di un eventuale **riporto** dalla prima somma, e salva a 0011h. Il risultato a 16 bit finisce nei due byte 0010h–0011h. Una sequenza di istruzioni come questa ha un nome che si conosce già: è un **programma**. I codici usati non sono inventati ma sono opcode veri dell'8080:
+La macchina somma prima i due byte **bassi** (88h e C4h) e ne salva il risultato a 0010h; poi somma i due byte **alti** (13h e 09h) tenendo conto di un eventuale **riporto** dalla prima somma, e salva a 0011h. Il risultato a 16 bit finisce nei due byte 0010h e 0011h. Una sequenza di istruzioni come questa ha un nome che si conosce già: è un **programma**. I codici usati sono opcode veri dell'8080:
 
 | Opcode | Mnemonico | Operazione |
 |:---:|:---:|---|
@@ -35,7 +35,7 @@ La macchina somma prima i due byte **bassi** (88h e C4h) e ne salva il risultato
 
 ## Non solo aritmetica: la logica
 
-La "L" di ALU sta per **logica**, e non è un dettaglio: molte manipolazioni utili non sono somme ma **operazioni booleane** bit per bit. L'esempio classico è la conversione tra maiuscole e minuscole in ASCII. Confrontando i codici di una lettera maiuscola e della sua minuscola si scopre che differiscono per **un solo bit**, il terzo da sinistra (quello di valore 20h): la minuscola ha quel bit a 1. Per trasformare una maiuscola in minuscola non serve una somma (che rovinerebbe le lettere già minuscole) ma un'operazione **OR** con 20h, che *forza* quel bit a 1 e lascia intatto tutto il resto:
+La "L" di ALU sta per **logica**: molte manipolazioni utili non sono somme ma **operazioni booleane** bit per bit. L'esempio classico è la conversione tra maiuscole e minuscole in ASCII. Confrontando i codici di una lettera maiuscola e della sua minuscola si scopre che differiscono per **un solo bit**, il terzo da sinistra (quello di valore 20h): la minuscola ha quel bit a 1. Per trasformare una maiuscola in minuscola non serve una somma (che rovinerebbe le lettere già minuscole) ma un'operazione **OR** con 20h, che *forza* quel bit a 1 e lascia intatto tutto il resto:
 
 ```
   01010100   (T, maiuscola)
@@ -48,7 +48,7 @@ Fare l'OR con 20h su una lettera già minuscola la lascia invariata (il bit è g
 
 ## Dentro la ALU
 
-La ALU si costruisce affiancando due moduli che lavorano **in parallelo** sugli stessi due ingressi A e B a 8 bit: il modulo **Add/Subtract** (il sommatore-sottrattore del capitolo 16) e il modulo **Logic**, che contiene un blocco AND, uno OR e uno XOR. Tutti calcolano contemporaneamente il proprio risultato; poi dei **tri-state buffer** (dal capitolo 19) lasciano passare all'uscita **uno solo** di quei risultati, scelto in base a un codice di **funzione** a 3 bit — F₂, F₁, F₀.
+La ALU si costruisce affiancando due moduli che lavorano **in parallelo** sugli stessi due ingressi A e B a 8 bit: il modulo **Add/Subtract** (il sommatore-sottrattore del capitolo 16) e il modulo **Logic**, che contiene un blocco AND, uno OR e uno XOR. Tutti calcolano contemporaneamente il proprio risultato; poi dei **tri-state buffer** (dal capitolo 19) lasciano passare all'uscita **uno solo** di quei risultati, scelto in base a un codice di **funzione** a 3 bit (F₂, F₁, F₀).
 
 ```mermaid
 flowchart TB
@@ -69,7 +69,7 @@ Il bit F₂ fa da grande interruttore: quando vale 0 è abilitato il modulo arit
 
 Oltre al risultato, la ALU produce alcuni bit che ne **riassumono l'esito**: i **flag** (bandiere di stato). Petzold ne usa tre:
 
-- **Carry** (riporto, abbreviato **CY**): segnala che una somma ha prodotto un riporto oltre l'ottavo bit (o un prestito in una sottrazione). È essenziale per l'aritmetica multi-byte: il Carry in uscita **rientra** come *Carry In* nell'operazione successiva, così si sommano numeri più grandi di un byte (come nel programma qui sopra, dove ACI usa il riporto della somma dei byte bassi).
+- **Carry** (riporto, abbreviato **CY**): segnala che una somma ha prodotto un riporto oltre l'ottavo bit (o un prestito in una sottrazione). Serve per l'aritmetica multi-byte: il Carry in uscita **rientra** come *Carry In* nell'operazione successiva, così si sommano numeri più grandi di un byte (come nel programma qui sopra, dove ACI usa il riporto della somma dei byte bassi).
 - **Zero** (**Z**): vale 1 quando il risultato è **tutto zeri**. Lo determina una porta **NOR a otto ingressi** applicata al risultato.
 - **Sign** (segno, **S**): è semplicemente il **bit più alto** del risultato che, nella notazione in complemento a due del capitolo 16, indica un numero negativo.
 
@@ -84,7 +84,7 @@ Nascondendo tutta questa logica in una scatola, la ALU si presenta con pochi ter
 <figcaption><em>La ALU come scatola. In alto: il codice di <strong>funzione</strong> (3 bit, F₂F₁F₀) che sceglie l'operazione, e i due operandi <strong>A</strong> e <strong>B</strong> a 8 bit. Ai lati <strong>Clock</strong> ed <strong>Enable</strong>. In basso i <strong>Flags</strong> (Carry, Zero, Sign) e il <strong>risultato</strong> a 8 bit.</em></figcaption>
 </figure>
 
-L'unità aritmetico-logica è completa. È un componente essenziale della CPU, ma da sola non basta: servono ancora un modo per **portare** i numeri dentro la ALU, per **conservarne** i risultati e per **spostarli** da una parte all'altra. È esattamente ciò che costruisce il capitolo 22, con i **registri** e i **bus**.
+L'unità aritmetico-logica è completa, ma da sola non basta a fare una CPU: servono ancora un modo per **portare** i numeri dentro la ALU, per **conservarne** i risultati e per **spostarli** da una parte all'altra. È esattamente ciò che costruisce il capitolo 22, con i **registri** e i **bus**.
 
 ## Ripasso lampo
 

@@ -14,13 +14,13 @@ Per spostare e manipolare i bit con comodità, un computer li raggruppa in una q
 | 010 | 2 | 110 | 6 |
 | 011 | 3 | 111 | 7 |
 
-Ma l'industria prese un'altra strada. Riconosciuta l'importanza dei numeri binari, apparve quasi innaturale lavorare con dimensioni come 6, 12, 18 o 24 — che **non** sono potenze di due, ma multipli di tre. Ed entra in scena il byte.
+Ma l'industria prese un'altra strada. Riconosciuta l'importanza dei numeri binari, apparve quasi innaturale lavorare con dimensioni come 6, 12, 18 o 24, che **non** sono potenze di due ma multipli di tre.
 
 ## Il byte: otto bit
 
 La parola **byte** nacque all'IBM intorno al **1956**, come variante di *bite* ("boccone"): fu scritta con la *y* perché nessuno la confondesse con *bit*. All'inizio indicava semplicemente il numero di bit di un certo percorso dati, ma verso la metà degli anni '60, con il grande complesso di elaboratori aziendali **System/360**, si fissò sul significato che ha ancora oggi: un byte è un gruppo di **otto bit**. È diventata l'unità di misura universale del dato digitale.
 
-Otto bit sono una misura felice: come quantità a 8 bit un byte assume i valori da `00000000` a `11111111`, cioè da **0 a 255** in decimale — **2⁸ = 256** possibilità. Non troppo piccolo, non troppo grande. Un byte basta per un carattere di testo nella maggior parte delle lingue scritte (meno di 256 simboli); dove non basta (gli ideogrammi di cinese, giapponese e coreano) ne servono **due** (2¹⁶ = 65.536 possibilità), che di solito abbondano. Un byte descrive bene anche le 256 sfumature di grigio che l'occhio distingue in una foto in bianco e nero, e con **tre** byte si dà il colore di un pixel (rosso, verde, blu). Non stupisce che la rivoluzione del personal computer, tra fine anni '70 e primi '80, sia partita da macchine a 8 bit, poi raddoppiate a 16, 32 e 64 (cioè 2, 4 e 8 byte). Mezzo byte, quattro bit, ha pure un nome, **nibble** (o *nybble*), ma si sente molto meno spesso.
+Otto bit sono una misura felice, né troppo piccola né troppo grande: come quantità a 8 bit un byte assume i valori da `00000000` a `11111111`, cioè da **0 a 255** in decimale, quindi **2⁸ = 256** possibilità. Un byte basta per un carattere di testo nella maggior parte delle lingue scritte (meno di 256 simboli); dove non basta (gli ideogrammi di cinese, giapponese e coreano) ne servono **due** (2¹⁶ = 65.536 possibilità), che di solito abbondano. Un byte descrive bene anche le 256 sfumature di grigio che l'occhio distingue in una foto in bianco e nero, e con **tre** byte si dà il colore di un pixel (rosso, verde, blu). Non stupisce che la rivoluzione del personal computer, tra fine anni '70 e primi '80, sia partita da macchine a 8 bit, poi raddoppiate a 16, 32 e 64 (cioè 2, 4 e 8 byte). Mezzo byte, quattro bit, ha pure un nome, **nibble** (o *nybble*), ma si sente molto meno spesso.
 
 ## Perché non l'ottale: otto non si divide per tre
 
@@ -37,14 +37,14 @@ Poiché i byte compaiono di continuo nelle viscere di un computer, conviene pote
     <g font-size="13"><path d="M18 80 V84 H37 V80" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="28" y="100" fill="currentColor" font-weight="700">1</text><path d="M39 80 V84 H100 V80" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="70" y="100" fill="currentColor" font-weight="700">3</text><path d="M102 80 V84 H163 V80" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="132" y="100" fill="currentColor" font-weight="700">1</text><path d="M165 80 V84 H226 V80" fill="none" stroke="var(--link,#059669)" stroke-width="2.4"/><text x="196" y="100" fill="var(--link,#059669)" font-weight="700">7</text><path d="M228 80 V84 H289 V80" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="258" y="100" fill="currentColor" font-weight="700">0</text><path d="M291 80 V84 H352 V80" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="322" y="100" fill="currentColor" font-weight="700">5</text></g>
   </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Lo stesso numero di 16 bit. In alto i gruppi da <strong>4</strong> (esadecimale <code>B3C5</code>) restano dentro i due byte; in basso i gruppi da <strong>3</strong> (ottale <code>131705</code>) scavalcano il confine — il gruppo evidenziato prende un bit dal byte 1 e due dal byte 2.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Lo stesso numero di 16 bit. In alto i gruppi da <strong>4</strong> (esadecimale <code>B3C5</code>) restano dentro i due byte; in basso i gruppi da <strong>3</strong> (ottale <code>131705</code>) scavalcano il confine: il gruppo evidenziato prende un bit dal byte 1 e due dal byte 2.</figcaption>
 </figure>
 
-Dividere ogni byte in due valori di quattro bit richiede la base **sedici**. Ed è l'esadecimale.
+Dividere ogni byte in due valori di quattro bit richiede la base **sedici**, cioè l'esadecimale.
 
 ## Esadecimale: la base sedici
 
-L'**esadecimale** (spesso abbreviato *hex*, benché lo stile Microsoft lo sconsigli) è la base sedici. Il nome stesso è ibrido: il prefisso *hexa-* significa "sei", ma qui vale *sedici, cioè sei più dieci*. La sua stranezza vera, però, è un'altra: mentre l'ottale usa **meno** cifre del decimale (spariscono l'8 e il 9), l'esadecimale ne richiede **di più**. Servono simboli per le quantità dieci, undici, dodici, tredici, quattordici e quindici, che in decimale occupano due cifre. Non essendocene di tradizionali, si sono presi in prestito le prime sei **lettere** dell'alfabeto:
+L'**esadecimale** (spesso abbreviato *hex*, benché lo stile Microsoft lo sconsigli) è la base sedici. Il nome stesso è ibrido: il prefisso *hexa-* significa "sei", ma qui vale *sedici, cioè sei più dieci*. Più strano ancora, mentre l'ottale usa **meno** cifre del decimale (spariscono l'8 e il 9), l'esadecimale ne richiede **di più**. Servono simboli per le quantità dieci, undici, dodici, tredici, quattordici e quindici, che in decimale occupano due cifre. Non essendocene di tradizionali, si sono presi in prestito le prime sei **lettere** dell'alfabeto:
 
 | binario | hex | dec | binario | hex | dec |
 |:--:|:--:|:--:|:--:|:--:|:--:|
@@ -57,7 +57,7 @@ L'**esadecimale** (spesso abbreviato *hex*, benché lo stile Microsoft lo sconsi
 | 0110 | 6 | 6 | 1110 | **E** | 14 |
 | 0111 | 7 | 7 | 1111 | **F** | 15 |
 
-Usare lettere per i numeri non è piacevolissimo (e la confusione aumenta quando poi si useranno i numeri per rappresentare le lettere), ma l'esadecimale esiste per **un solo scopo**: scrivere il valore dei byte nel modo più compatto ragionevolmente possibile. E in questo riesce benissimo.
+Usare lettere per i numeri non è piacevolissimo (e la confusione aumenta quando poi si useranno i numeri per rappresentare le lettere), ma l'esadecimale esiste per **un solo scopo**: scrivere il valore dei byte nel modo più compatto ragionevolmente possibile, e ci riesce benissimo.
 
 ## Un byte = due cifre esadecimali
 
@@ -79,7 +79,7 @@ Ogni byte, essendo di otto bit, è esattamente **due cifre esadecimali**, da `00
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>1011</code> vale B, <code>0110</code> vale 6: il byte <code>10110110</code> è <strong>B6h</strong>. Allo stesso modo <code>01010111</code> è <strong>57h</strong>.</figcaption>
 </figure>
 
-Resta un problema di ambiguità: `B6` si riconosce subito come esadecimale per via della lettera, ma `57` potrebbe essere decimale. Servono dunque dei segni per distinguere le basi — e ne esistono una ventina, secondo il linguaggio o l'ambiente. In questo libro (e in queste note) si usa una **`h` minuscola in coda** al numero: `B6h`, `57h`. Come per i binari, anche gli esadecimali si scrivono spesso con **zeri iniziali** per rendere chiaro quante cifre, e quindi quanti byte, si stanno maneggiando: un valore a 16 bit è `2` byte e `4` cifre hex, uno a 32 bit è `4` byte e `8` cifre hex.
+Resta un problema di ambiguità: `B6` si riconosce subito come esadecimale per via della lettera, ma `57` potrebbe essere decimale. Servono dunque dei segni per distinguere le basi, e ne esistono una ventina, secondo il linguaggio o l'ambiente. In questo libro (e in queste note) si usa una **`h` minuscola in coda** al numero: `B6h`, `57h`. Come per i binari, anche gli esadecimali si scrivono spesso con **zeri iniziali** per rendere chiaro quante cifre, e quindi quanti byte, si stanno maneggiando: un valore a 16 bit è `2` byte e `4` cifre hex, uno a 32 bit è `4` byte e `8` cifre hex.
 
 ## La notazione posizionale in base sedici
 
@@ -98,11 +98,11 @@ L'esadecimale è un normale sistema **posizionale** ([cap. 9](09-our-ten-digits.
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">9A48Ch = 9×16⁴ + A×16³ + 4×16² + 8×16¹ + C×16⁰ = 589.824 + 40.960 + 1.024 + 128 + 12 = <strong>631.948</strong> (ricordando A = 10 e C = 12). Stesso meccanismo del decimale, con potenze di sedici.</figcaption>
 </figure>
 
-Il verso opposto (da decimale a esadecimale) si fa con le **divisioni**. Se il numero sta in un byte (fino a 255) basta dividerlo per 16: quoziente e resto sono le due cifre. Per esempio `182 ÷ 16 = 11` con resto `6`, cioè `B6h`. Per numeri fino a 65.535 si procede allo stesso modo dividendo via via per le potenze di sedici (4096, 256, 16): così `31.148` diventa `79ACh`, e il grazioso `51.966` diventa **`CAFE`** — un numero che sembra una parola.
+Il verso opposto (da decimale a esadecimale) si fa con le **divisioni**. Se il numero sta in un byte (fino a 255) basta dividerlo per 16: quoziente e resto sono le due cifre. Per esempio `182 ÷ 16 = 11` con resto `6`, cioè `B6h`. Per numeri fino a 65.535 si procede allo stesso modo dividendo via via per le potenze di sedici (4096, 256, 16): così `31.148` diventa `79ACh`, e il grazioso `51.966` diventa **`CAFE`**, un numero che sembra una parola.
 
 ## Esadecimale nel mondo reale: i colori RGB
 
-L'uso più familiare dell'esadecimale, per chi ha smanettato con l'HTML, sono i **colori**. Ogni pixel dello schermo è una combinazione di tre luci primarie additive — **rosso, verde, blu** (*RGB*) — e l'intensità di ciascuna è un byte (0-255). Servono quindi **tre byte**, sei cifre esadecimali, spesso precedute da un cancelletto:
+L'uso più familiare dell'esadecimale, per chi ha smanettato con l'HTML, sono i **colori**. Ogni pixel dello schermo è una combinazione di tre luci primarie additive (**rosso, verde, blu**, cioè *RGB*), e l'intensità di ciascuna è un byte (0-255). Servono quindi **tre byte**, sei cifre esadecimali, spesso precedute da un cancelletto:
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 380 96" role="img" aria-label="Il colore #E74536 scomposto nei suoi tre byte RGB" style="width:100%;max-width:420px;height:auto;color:inherit">
@@ -126,7 +126,7 @@ Come ogni base, anche l'esadecimale ha la sua **tavola dell'addizione**, e si so
 > L'esadecimale non è un sistema "nuovo": è il decimale con quattro cifre in più (A-F). Serve a **una cosa sola**, scrivere i byte in modo compatto: **1 byte = 2 cifre hex** (da `00h` a `FFh`), **2 byte = 4 cifre**, e così via. Ogni gruppo di **4 bit** ↔ **1 cifra hex**.
 
 > [!warning]
-> Occhio all'ambiguità delle basi: `57` da solo può essere decimale (cinquantasette) o esadecimale (`57h` = 87 in decimale). Per questo serve un marcatore — qui la `h` finale (`57h`). Le singole cifre no: un `9` vale 9 in ogni base, e una `A` è per forza esadecimale.
+> Occhio all'ambiguità delle basi: `57` da solo può essere decimale (cinquantasette) o esadecimale (`57h` = 87 in decimale). Per questo serve un marcatore, qui la `h` finale (`57h`). Le singole cifre no: un `9` vale 9 in ogni base, e una `A` è per forza esadecimale.
 
 ## Ripasso lampo
 
@@ -161,13 +161,13 @@ Con la notazione posizionale in base 16: `9×16⁴ + A×16³ + 4×16² + 8×16¹
 <details>
 <summary>Cosa rappresenta un colore come <code>#E74536</code>?</summary>
 
-Tre byte, cioè le intensità (0-255) delle tre componenti **rosso, verde, blu**: E7h = 231 di rosso, 45h = 69 di verde, 36h = 54 di blu — equivalente a `rgb(231, 69, 54)`. Ogni pixel dello schermo è una di queste 256³ ≈ 16,8 milioni di combinazioni.
+Tre byte, cioè le intensità (0-255) delle tre componenti **rosso, verde, blu**: E7h = 231 di rosso, 45h = 69 di verde, 36h = 54 di blu, cioè `rgb(231, 69, 54)`. Ogni pixel dello schermo è una di queste 256³ ≈ 16,8 milioni di combinazioni.
 
 </details>
 
 **In sintesi:**
 
 - I bit si raggruppano in **word**; il raggruppamento universale è il **byte** = **8 bit**, con valori da 0 a 255 (2⁸ = 256).
-- L'**ottale** non si sposa col byte (8 non è multiplo di 3); l'**esadecimale** (base 16) sì, perché **4 bit = 1 cifra hex** e quindi **1 byte = 2 cifre hex** (`00h`–`FFh`).
+- L'**ottale** non si sposa col byte (8 non è multiplo di 3); l'**esadecimale** (base 16) sì, perché **4 bit = 1 cifra hex** e quindi **1 byte = 2 cifre hex** (da `00h` a `FFh`).
 - Le cifre hex sono `0-9` più `A-F` (10-15); si distingue la base con un marcatore (qui la `h` finale). È notazione posizionale a potenze di **sedici**.
 - Uso tipico: i **colori RGB** a tre byte (`#E74536` = rgb(231, 69, 54)). Per i conti c'è la tavola dell'addizione, la calcolatrice in modalità Programmatore, o il sommatore del **capitolo 14**.

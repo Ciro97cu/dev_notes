@@ -1,11 +1,11 @@
 # 19 · Un assemblaggio di memoria
 > cap. 19 di «Code» (Petzold, 2ª ed.) — orig. *An Assemblage of Memory*
 
-La memoria è ciò che tiene in vita un'informazione nell'intervallo tra il momento in cui la si mette da parte e quello in cui la si va a riprendere. Si **scrive** e più tardi si **legge**; si **salva** e più tardi si **recupera**; si **memorizza** e più tardi si **accede**. Gli esseri umani lo fanno con il cervello (in modo disordinato e non del tutto affidabile, tanto che la scrittura fu probabilmente inventata proprio per rimediare ai difetti della memoria) e con supporti esterni come la carta, i dischi, il nastro magnetico. Anche i circuiti sanno ricordare: si è visto alla fine del capitolo 18 che una matrice di diodi conserva un'informazione fissa (una ROM). Questo capitolo compie il passo decisivo: costruire, a partire dai flip-flop, una memoria in cui i bit non solo si leggono, ma si possono anche **scrivere** e riscrivere a piacere. È la memoria vera e propria di un computer, e alla fine avrà un nome che tutti conoscono: **RAM**.
+La memoria è ciò che tiene in vita un'informazione nell'intervallo tra il momento in cui la si mette da parte e quello in cui la si va a riprendere. Si **scrive** e più tardi si **legge**; si **salva** e più tardi si **recupera**; si **memorizza** e più tardi si **accede**. Gli esseri umani lo fanno con il cervello (in modo disordinato e non del tutto affidabile, tanto che la scrittura fu probabilmente inventata proprio per rimediare ai difetti della memoria) e con supporti esterni come la carta, i dischi, il nastro magnetico. Anche i circuiti sanno ricordare: si è visto alla fine del capitolo 18 che una matrice di diodi conserva un'informazione fissa (una ROM). Questo capitolo costruisce, a partire dai flip-flop, una memoria in cui i bit, oltre che letti, possono essere **scritti** e riscritti a piacere. È questa la memoria di un computer, e alla fine avrà un nome che tutti conoscono: **RAM**.
 
 ## Un bit di memoria
 
-Il mattone di partenza è già in mano dal capitolo 17: il **latch a D** level-triggered. Ha due ingressi — **Write** (che qui prende il posto del "tieni a mente") e **Data In** (il bit da conservare) — e una uscita, **Data Out**. Quando Write vale 1, l'uscita copia l'ingresso Data In; quando Write torna a 0, l'uscita **congela** l'ultimo valore e non cambia più, qualunque cosa faccia Data In. Questo, né più né meno, è **un bit di memoria**: ci si scrive un valore alzando e riabbassando Write, e da quel momento il bit resta disponibile in lettura su Data Out. Come nota Petzold, la posizione fisica di ingressi e uscite non conta: ciò che conta è la funzione.
+Il mattone di partenza è già in mano dal capitolo 17: il **latch a D** level-triggered. Ha due ingressi, **Write** (che qui prende il posto del "tieni a mente") e **Data In** (il bit da conservare), e una uscita, **Data Out**. Quando Write vale 1, l'uscita copia l'ingresso Data In; quando Write torna a 0, l'uscita **congela** l'ultimo valore e non cambia più, qualunque cosa faccia Data In. Questo è **un bit di memoria**: ci si scrive un valore alzando e riabbassando Write, e da quel momento il bit resta disponibile in lettura su Data Out. Come nota Petzold, la posizione fisica di ingressi e uscite non conta: ciò che conta è la funzione.
 
 ## Un byte di memoria
 
@@ -44,7 +44,7 @@ Questa sigla, **RAM**, sta per *Random Access Memory*, memoria ad **accesso casu
 
 > **numero di locazioni = 2 ^ (numero di bit di indirizzo)**
 
-Con 0 bit c'è una sola locazione, con 4 bit se ne hanno 16, con 16 bit se ne hanno **65.536**. Una RAM da 65.536 byte si dice anche da **64 kilobyte** (64 K, 64 KB), e qui c'è una piccola sorpresa: nel mondo dei bit *kilo* non vale 1000 ma **1024**, cioè 2¹⁰. Il motivo è che il sistema metrico ragiona per potenze di 10 e i numeri binari per potenze di 2, e le due scale non coincidono mai esattamente; capita però che si sfiorino, perché 1024 è molto vicino a 1000. Così 65.536 = 64 × 1024 diventa "64 KB".
+Con 0 bit c'è una sola locazione, con 4 bit se ne hanno 16, con 16 bit se ne hanno **65.536**. Una RAM da 65.536 byte si dice anche da **64 kilobyte** (64 K, 64 KB), perché nel mondo dei bit *kilo* non vale 1000 ma **1024**, cioè 2¹⁰. Il motivo è che il sistema metrico ragiona per potenze di 10 e i numeri binari per potenze di 2, e le due scale non coincidono mai esattamente; capita però che si sfiorino, perché 1024 è molto vicino a 1000. Così 65.536 = 64 × 1024 diventa "64 KB".
 
 > [!warning]
 > La RAM costruita con i flip-flop è **volatile**: conserva i suoi bit solo finché è alimentata. Togliendo la corrente, tutti i flip-flop perdono il loro stato e il contenuto svanisce. È la differenza pratica con una ROM (che invece mantiene i dati) e il motivo per cui un computer, all'accensione, trova la propria RAM "vuota" e deve ricaricarvi tutto.
@@ -58,7 +58,7 @@ Fin qui una regola è sempre valsa: non si collegano tra loro le uscite di più 
 <figcaption><em>Il tri-state buffer. Con <strong>Enable = 1</strong> l'uscita copia l'ingresso; con <strong>Enable = 0</strong> l'uscita non vale né 0 né 1: "flotta", cioè si comporta come se fosse fisicamente scollegata.</em></figcaption>
 </figure>
 
-Quel terzo stato (oltre a 0 e 1, lo stato "flottante") è la chiave: si possono collegare insieme le uscite di **tanti** tri-state buffer sullo stesso filo senza cortocircuiti, a patto che se ne abiliti **uno solo alla volta**. È esattamente il ruolo dell'ingresso **Enable** della scatola RAM vista sopra: quando è 0, la RAM stacca la propria uscita dal filo condiviso e lascia il posto ad altri. Questa idea (molte sorgenti che si alternano su un filo comune) è il seme del **bus**, che il capitolo 22 svilupperà appieno.
+Grazie a quel terzo stato (oltre a 0 e 1, lo stato "flottante") si possono collegare insieme le uscite di **tanti** tri-state buffer sullo stesso filo senza cortocircuiti, a patto che se ne abiliti **uno solo alla volta**. A questo serve l'ingresso **Enable** della scatola RAM vista sopra: quando è 0, la RAM stacca la propria uscita dal filo condiviso e lascia il posto ad altri. Questa idea (molte sorgenti che si alternano su un filo comune) è il seme del **bus**, che il capitolo 22 svilupperà appieno.
 
 ## Caricare la memoria a mano: il pannello di controllo
 
@@ -67,7 +67,7 @@ Resta un'ultima domanda pratica: come si mettono dei valori nella RAM, prima anc
 > [!tip]
 > Una RAM non è altro che **tante celle da un bit** (flip-flop) più la **logica di indirizzamento** (decoder in scrittura, selettore in lettura) che sceglie su quale cella agire. Tutto il resto (le dimensioni giganti delle memorie reali) è solo questo schema ripetuto e ingrandito.
 
-Quella memoria, per ora, contiene numeri caricati a mano. Ma nulla vieta che tra quei numeri ce ne siano alcuni che non rappresentano *dati* bensì **istruzioni** — comandi da eseguire uno dopo l'altro. È il salto che compie il capitolo 20: smettere di azionare l'aritmetica a mano e lasciare che sia la macchina, leggendo la propria memoria, ad automatizzarla.
+Quella memoria, per ora, contiene numeri caricati a mano. Ma nulla vieta che tra quei numeri ce ne siano alcuni che non sono *dati* ma **istruzioni**, cioè comandi da eseguire uno dopo l'altro. È il salto che compie il capitolo 20: smettere di azionare l'aritmetica a mano e lasciare che sia la macchina, leggendo la propria memoria, ad automatizzarla.
 
 ## Ripasso lampo
 
@@ -81,7 +81,7 @@ Quella memoria, per ora, contiene numeri caricati a mano. Ma nulla vieta che tra
 <details>
 <summary>A cosa servono il <code>decoder</code> e il <code>selettore</code> in una RAM?</summary>
 
-Traducono l'indirizzo nelle due operazioni fondamentali. Il **decoder** (in scrittura) instrada l'impulso di Write verso la sola cella indirizzata, così solo quella viene modificata. Il **selettore** (in lettura) lascia passare verso Data Out l'uscita della sola cella indirizzata. Entrambi usano porte AND comandate dai bit dell'indirizzo.
+Traducono l'indirizzo nelle due operazioni di base. Il **decoder** (in scrittura) instrada l'impulso di Write verso la sola cella indirizzata, così solo quella viene modificata. Il **selettore** (in lettura) lascia passare verso Data Out l'uscita della sola cella indirizzata. Entrambi usano porte AND comandate dai bit dell'indirizzo.
 
 </details>
 
@@ -116,6 +116,6 @@ La RAM costruita con flip-flop è **volatile**: perde tutto il contenuto quando 
 **In sintesi:**
 - Un **bit di memoria** è un latch a D: **Write** cattura **Data In**, poi il bit resta congelato su **Data Out**.
 - Otto celle con Write comune fanno un **byte**; molte locazioni, ciascuna con un **indirizzo**, fanno una memoria.
-- Un **decoder** (scrittura) e un **selettore** (lettura) usano l'indirizzo per agire su una sola cella: è il cuore della **RAM** (*Random Access Memory*), leggibile **e** scrivibile.
-- Le locazioni sono **2^(bit di indirizzo)**: 16 bit → 65.536 byte = 64 KB (dove *kilo* = 1024 = 2¹⁰). La RAM a flip-flop è **volatile**.
-- Il **tri-state buffer** (Enable → uscita che "flotta") permette a più uscite di condividere un filo: il seme del **bus**. Un **pannello di controllo** con interruttori e un tasto **Takeover** carica la memoria a mano.
+- Un **decoder** (scrittura) e un **selettore** (lettura) usano l'indirizzo per agire su una sola cella: su questo si regge la **RAM** (*Random Access Memory*), leggibile **e** scrivibile.
+- Le locazioni sono **2^(bit di indirizzo)**: 16 bit danno 65.536 byte = 64 KB (dove *kilo* = 1024 = 2¹⁰). La RAM a flip-flop è **volatile**.
+- Il **tri-state buffer** (con Enable spento l'uscita "flotta") permette a più uscite di condividere un filo: il seme del **bus**. Un **pannello di controllo** con interruttori e un tasto **Takeover** carica la memoria a mano.

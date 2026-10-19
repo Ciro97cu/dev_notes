@@ -1,19 +1,19 @@
 # 01 · Migliori amici
 > cap. 1 di «Code» (Petzold, 2ª ed.) — orig. *Best Friends*
 
-Immaginiamo di avere dieci anni e un migliore amico che abita nella casa di fronte, con le finestre delle camere che si guardano. Dopo il "tutti a letto!" imposto dai genitori a un'ora indecentemente presto, resta la voglia di scambiarsi ancora pensieri, segreti e battute. Di giorno bastano gesti ampi dalla finestra; ma a luci spente, e magari senza telefono (confiscato all'ora di andare a dormire), serve qualcosa di più furbo. Per fortuna, torce ne abbiamo. Una torcia è silenziosa, il suo fascio è direzionale e non filtra sotto la porta a tradire i piani: sembra perfetta per parlarsi al buio. Il libro parte proprio da qui, da un problema quotidiano, perché è il modo più naturale per arrivare all'idea di **codice** — l'idea che sta sotto a tutto il resto dell'informatica.
+Immaginiamo di avere dieci anni e un migliore amico che abita nella casa di fronte, con le finestre delle camere che si guardano. Dopo il "tutti a letto!" imposto dai genitori a un'ora indecentemente presto, resta la voglia di scambiarsi ancora pensieri, segreti e battute. Di giorno bastano gesti ampi dalla finestra; ma a luci spente, e magari senza telefono (confiscato all'ora di andare a dormire), serve qualcosa di più furbo. Per fortuna, torce ne abbiamo. Una torcia è silenziosa, il suo fascio è direzionale e non filtra sotto la porta a tradire i piani: sembra perfetta per parlarsi al buio. Il libro parte proprio da qui, da un problema quotidiano, perché è il modo più naturale per arrivare all'idea di **codice**, che sta sotto a tutto il resto dell'informatica.
 
 ## Dalla torcia ai lampi
 
 Il primo tentativo è quello ovvio: *disegnare* le lettere in aria con il fascio di luce, un cerchio per la O, un tratto verticale per la I. È un disastro: gli svolazzi luminosi sono troppo imprecisi, e la mente non riesce a rimetterli insieme in lettere.
 
-Il secondo tentativo è più promettente. Invece di disegnare, si *conta*: ogni lettera corrisponde a un certo numero di lampi. Una A è 1 lampo, una B è 2, una C è 3, e così via fino a 26 lampi per la Z, con una pausa breve tra lettera e lettera e una più lunga tra parola e parola. Il vantaggio è che non serve più muovere la torcia: basta accenderla e spegnerla. Il problema si scopre al primo messaggio: "How are you?" richiede in tutto **131 lampi**, e per giunta ci si è dimenticati della punteggiatura — quanti lampi vale un punto interrogativo?
+Il secondo tentativo è più promettente. Invece di disegnare, si *conta*: ogni lettera corrisponde a un certo numero di lampi. Una A è 1 lampo, una B è 2, una C è 3, e così via fino a 26 lampi per la Z, con una pausa breve tra lettera e lettera e una più lunga tra parola e parola. Il vantaggio è che non serve più muovere la torcia: basta accenderla e spegnerla. Il problema si scopre al primo messaggio: "How are you?" richiede in tutto **131 lampi**, e per giunta ci si è dimenticati della punteggiatura: quanti lampi vale un punto interrogativo?
 
 La direzione però è giusta, e qualcun altro ha già risolto il problema molto tempo prima. Cercando in biblioteca (o in rete) si scopre una meravigliosa invenzione: il **codice Morse**.
 
 ## Il codice Morse
 
-La differenza rispetto al sistema "conta i lampi" è cruciale. Lì ogni lettera era un certo numero di lampi *tutti uguali*. Nel Morse i lampi sono di **due tipi**: brevi e lunghi. La cosa sembra complicare le cose, e invece le rende molto più efficienti: quello stesso "How are you?" passa da 131 a soli **32 lampi**, punto interrogativo incluso.
+Nel sistema "conta i lampi" ogni lettera era un certo numero di lampi *tutti uguali*. Nel Morse i lampi sono di **due tipi**: brevi e lunghi. La cosa sembra complicare le cose, e invece le rende molto più efficienti: quello stesso "How are you?" passa da 131 a soli **32 lampi**, punto interrogativo incluso.
 
 Quando si parla di Morse non si dice "lampo breve" e "lampo lungo", ma **punto** (*dot*) e **linea** (*dash*): è il modo comodo di scriverli sulla carta. Ogni lettera dell'alfabeto corrisponde a una breve sequenza di punti e linee.
 
@@ -29,11 +29,11 @@ Quando si parla di Morse non si dice "lampo breve" e "lampo lungo", ma **punto**
 | H | `••••` | Q | `——•—` | Z | `——••` |
 | I | `••`   | R | `•—•`  |   |        |
 
-Il termine *code* nel libro non ha nulla di segreto o di misterioso. Un **codice** è semplicemente *un sistema per trasferire informazioni* — tra persone, tra persone e computer, o all'interno del computer stesso. In questo senso ne usiamo in continuazione: la **parola parlata** è un codice (suoni che chi conosce la lingua sa interpretare); le **lingue dei segni** lo sono (in Nord America l'ASL, nata all'inizio dell'Ottocento all'American School for the Deaf, e la LSQ, variante della lingua dei segni francese); la **parola scritta** lo è; il **Braille** lo è (lo vedremo nel capitolo 3); la **stenografia** lo è. Usiamo tanti codici diversi perché ognuno è comodo in una situazione in cui gli altri non lo sono: la voce non si conserva su carta, la carta non attraversa il buio a distanza. Come dice Petzold, *un codice è utile se serve a uno scopo che nessun altro codice può servire*. E i computer, a loro volta, usano codici per immagazzinare e trasmettere testo, numeri, suoni, immagini, filmati e persino le istruzioni che eseguono.
+Il termine *code* nel libro non ha nulla di segreto o di misterioso. Un **codice** è semplicemente *un sistema per trasferire informazioni*: tra persone, tra persone e computer, o all'interno del computer stesso. In questo senso se ne usano in continuazione: la **parola parlata** è un codice (suoni che chi conosce la lingua sa interpretare); le **lingue dei segni** lo sono (in Nord America l'ASL, nata all'inizio dell'Ottocento all'American School for the Deaf, e la LSQ, variante della lingua dei segni francese); la **parola scritta** lo è; il **Braille** lo è (è l'argomento del capitolo 3); la **stenografia** lo è. Si usano tanti codici diversi perché ognuno è comodo in una situazione in cui gli altri non lo sono: la voce non si conserva su carta, la carta non attraversa il buio a distanza. Come dice Petzold, *un codice è utile se serve a uno scopo che nessun altro codice può servire*. E i computer, a loro volta, usano codici per immagazzinare e trasmettere testo, numeri, suoni, immagini, filmati e persino le istruzioni che eseguono.
 
 ## Come si manda il Morse
 
-C'è una differenza tra la *tabella* del Morse e ciò che si trasmette davvero: la tabella mostra punti e linee, ma con la torcia non si mandano punti e linee — si mandano **lampi**. Un punto è un'accensione breve; una linea un'accensione più lunga. Per convenzione, **la linea dura circa tre volte il punto**.
+C'è una differenza tra la *tabella* del Morse e ciò che si trasmette davvero: la tabella mostra punti e linee, ma con la torcia si mandano **lampi**. Un punto è un'accensione breve; una linea un'accensione più lunga. Per convenzione, **la linea dura circa tre volte il punto**.
 
 Ancora più importanti sono le **pause**, perché senza di esse i lampi si confonderebbero. La durata di riferimento è quella del punto, e tutto è relativo ad essa:
 
@@ -78,7 +78,7 @@ Poiché tutto è relativo al punto, non conta la velocità *assoluta*: la linea 
 
 ## La struttura del codice
 
-A prima vista l'assegnazione delle sequenze alle lettere sembra casuale come la disposizione dei tasti di una tastiera. A guardarla meglio, non lo è: **i codici più corti sono dati alle lettere più frequenti**, come la E (`•`) e la T (`—`); quelle rare, come Q e Z, hanno codici più lunghi. È una scelta di efficienza — chi gioca a Scarabeo lo nota subito.
+A prima vista l'assegnazione delle sequenze alle lettere sembra casuale come la disposizione dei tasti di una tastiera. A guardarla meglio, non lo è: **i codici più corti sono dati alle lettere più frequenti**, come la E (`•`) e la T (`—`); quelle rare, come Q e Z, hanno codici più lunghi. È una scelta di efficienza, e chi gioca a Scarabeo lo nota subito.
 
 Quasi tutti conoscono un pezzo di Morse: tre punti, tre linee, tre punti sono l'**SOS**, il segnale internazionale di soccorso. Non è l'abbreviazione di nulla: è semplicemente una sequenza facile da ricordare. E durante la Seconda guerra mondiale la BBC apriva alcune trasmissioni con l'inizio della Quinta di Beethoven (*bah-bah-bah-baaah*) che è il Morse della lettera **V**, per *Victory*.
 
@@ -96,10 +96,10 @@ Ci sono poi codici per la punteggiatura (cinque, sei o sette simboli) e per le l
 
 ## La chiave è "due"
 
-E qui sta il punto che regge tutto il libro. Due tipi di lampo, due suoni vocali, **due qualunque cose diverse** possono, combinate nel modo giusto, trasmettere ogni tipo di informazione. Il Morse non ha nulla a che vedere con i computer, eppure ci ha già consegnato l'intuizione fondamentale: bastano *due* stati distinti. È l'idea di **binario**, e il prossimo capitolo la trasforma da curiosità in un principio con una formula precisa.
+Due tipi di lampo, due suoni vocali, **due qualunque cose diverse** possono, combinate nel modo giusto, trasmettere ogni tipo di informazione: su questa idea si regge tutto il libro. Il Morse non ha nulla a che vedere con i computer, eppure contiene già l'intuizione di partenza: bastano *due* stati distinti. È l'idea di **binario**, e il prossimo capitolo la trasforma da curiosità in un principio con una formula precisa.
 
 > [!tip]
-> Il messaggio da portare via non è il Morse in sé, ma la sua morale: con **due soli simboli** e delle **pause**, combinati, si rappresenta qualsiasi informazione. Tutto il resto del libro è la costruzione, pezzo su pezzo, di questa idea.
+> Del Morse va ricordata soprattutto la morale: con **due soli simboli** e delle **pause**, combinati, si rappresenta qualsiasi informazione. Tutto il resto del libro è la costruzione, pezzo su pezzo, di questa idea.
 
 > [!warning]
 > Non confondere il codice con la sua trasmissione: la tabella mostra *punti e linee*, ma sul canale (la torcia) viaggiano *lampi di durata diversa e pause*. Sono le **pause**, spesso dimenticate, a rendere il messaggio decifrabile.

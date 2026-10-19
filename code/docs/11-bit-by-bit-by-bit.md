@@ -1,13 +1,13 @@
 # 11 · Bit dopo bit dopo bit
 > cap. 11 di «Code» (Petzold, 2ª ed.) — orig. *Bit by Bit by Bit*
 
-Il capitolo 10 ha presentato il **bit** come cifra del binario, uno `0` o un `1`. Questo capitolo lo guarda da un'altra angolazione (non come cifra di un numero, ma come **unità di informazione**) e mostra che gran parte dei codici che ci circondano, dal Braille al codice a barre della zuppa in scatola, sono in fondo mucchietti di bit. Il titolo triplicato è un piccolo scherzo: si costruisce tutto *bit dopo bit dopo bit*.
+Il capitolo 10 ha presentato il **bit** come cifra del binario, uno `0` o un `1`. Questo capitolo lo guarda da un'altra angolazione (non come cifra di un numero, ma come **unità di informazione**) e mostra che gran parte dei codici che ci circondano, dal Braille al codice a barre della zuppa in scatola, sono mucchietti di bit. Il titolo triplicato è un piccolo scherzo: si costruisce tutto *bit dopo bit dopo bit*.
 
 ## Un bit è la più piccola quantità d'informazione
 
-Fuori dalla matematica, un bit è semplicemente una risposta a una domanda che ammette **due sole risposte**: sì/no, acceso/spento, vero/falso, presente/assente. È la quantità d'informazione più piccola che possa esistere, perché una domanda con una sola risposta possibile non informa di nulla, e una con due è già il minimo che riduca l'incertezza. Il mondo ne è pieno: un interruttore della luce (su/giù), il pollice di un imperatore romano (verso l'alto/verso il basso), la risposta a "sei sposato?" — ognuno di questi porta esattamente **un bit**.
+Fuori dalla matematica, un bit è semplicemente una risposta a una domanda che ammette **due sole risposte**: sì/no, acceso/spento, vero/falso, presente/assente. È la quantità d'informazione più piccola che possa esistere, perché una domanda con una sola risposta possibile non informa di nulla, e una con due è già il minimo che riduca l'incertezza. Il mondo ne è pieno: un interruttore della luce (su/giù), il pollice di un imperatore romano (verso l'alto/verso il basso), la risposta a "sei sposato?": ognuno di questi porta esattamente **un bit**.
 
-Un solo bit, però, può pesare moltissimo se ci si è **accordati prima** su cosa significa. L'esempio che Petzold ama è la celebre cavalcata di **Paul Revere** (18 aprile 1775), resa immortale dal verso di Longfellow *"One, if by land, and two, if by sea"*. L'accordo era: **una** lanterna accesa nel campanile della Old North Church avrebbe significato "gli inglesi arrivano via terra", **due** lanterne "via mare". La scelta tra le due possibilità è un solo bit — ma un bit capace di cambiare la storia, perché il **codice** (il patto stabilito in anticipo) è ciò che gli dà senso. Si noti anche il terzo stato implicito: **nessuna** lanterna significava "non arrivano ancora". Il valore di un bit non sta nel bit, ma nell'accordo che lo interpreta.
+Un solo bit, però, può pesare moltissimo se ci si è **accordati prima** su cosa significa. L'esempio che Petzold ama è la celebre cavalcata di **Paul Revere** (18 aprile 1775), resa immortale dal verso di Longfellow *"One, if by land, and two, if by sea"*. L'accordo era: **una** lanterna accesa nel campanile della Old North Church avrebbe significato "gli inglesi arrivano via terra", **due** lanterne "via mare". La scelta tra le due possibilità è un solo bit, ma capace di cambiare la storia, perché il **codice** (il patto stabilito in anticipo) è ciò che gli dà senso. Si noti anche il terzo stato implicito: **nessuna** lanterna significava "non arrivano ancora".
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 320 150" role="img" aria-label="Le lanterne di Paul Revere: una lanterna via terra, due lanterne via mare" style="width:100%;max-width:360px;height:auto;color:inherit">
@@ -45,18 +45,18 @@ Un bit distingue due possibilità; ma **mettendo insieme più bit** il numero di
 | 9 | 512 |
 | 10 | 1024 |
 
-Questa è la stessa legge già incontrata più volte: le combinazioni del Braille (6 punti → 2⁶ = 64 caratteri) del [capitolo 3](03-braille-and-binary-codes.md), e in generale il conteggio del [capitolo 2](02-codes-and-combinations.md). Il messaggio da portare via è semplice: **ogni bit in più moltiplica per due** la capacità del codice.
+Questa è la stessa legge già incontrata più volte, nelle combinazioni del Braille (6 punti → 2⁶ = 64 caratteri) del [capitolo 3](03-braille-and-binary-codes.md) e in generale nel conteggio del [capitolo 2](02-codes-and-combinations.md): **ogni bit in più moltiplica per due** la capacità del codice.
 
 ## A ritroso: quanti bit servono? (il logaritmo in base due)
 
-Spesso la domanda arriva dal verso opposto: *"ho un certo numero di cose da distinguere — quanti bit mi servono?"*. È l'operazione inversa dell'elevamento a potenza, cioè il **logaritmo in base due**. Se `2⁷ = 128`, allora `log₂ 128 = 7`: sette bit bastano per 128 codici. Quando il numero non è una potenza esatta di due si **arrotonda per eccesso**: per rappresentare il numero decimale `200` non bastano 7 bit (che arrivano a 128), ne servono **8** (2⁸ = 256, più che sufficienti). Allo stesso modo, le tre possibilità di Paul Revere (terra / mare / niente) darebbero `log₂ 3 ≈ 1,6`, che in pratica si arrotonda a **2 bit**.
+Spesso la domanda arriva dal verso opposto: *"ho un certo numero di cose da distinguere: quanti bit mi servono?"*. È l'operazione inversa dell'elevamento a potenza, cioè il **logaritmo in base due**. Se `2⁷ = 128`, allora `log₂ 128 = 7`: sette bit bastano per 128 codici. Quando il numero non è una potenza esatta di due si **arrotonda per eccesso**: per rappresentare il numero decimale `200` non bastano 7 bit (che arrivano a 128), ne servono **8** (2⁸ = 256, più che sufficienti). Allo stesso modo, le tre possibilità di Paul Revere (terra / mare / niente) darebbero `log₂ 3 ≈ 1,6`, che in pratica si arrotonda a **2 bit**.
 
 > [!tip]
-> Le due direzioni della stessa legge: **avanti** con la potenza — *"con `n` bit distinguo `2ⁿ` cose"*; **indietro** con il logaritmo — *"per distinguere `N` cose mi servono `log₂ N` bit, arrotondati per eccesso"*.
+> Le due direzioni della stessa legge: **avanti** con la potenza (*"con `n` bit distinguo `2ⁿ` cose"*); **indietro** con il logaritmo (*"per distinguere `N` cose mi servono `log₂ N` bit, arrotondati per eccesso"*).
 
 ## Codici del mondo reale, fatti di bit
 
-Una volta capito che *qualunque* scelta tra alternative si può codificare in bit, si comincia a vederli ovunque. Il **Morse** (punto/linea) e il **Braille** (punto in rilievo/liscio) dei primi capitoli erano già codici binari. Un esempio più recente e spettacolare è il paracadute del rover **Perseverance**, atterrato su Marte il **18 febbraio 2021**: le sue strisce arancioni e bianche, disposte in quattro anelli concentrici, non erano decorative ma un **messaggio binario** (bianco = 0, arancione = 1) che, decodificato a gruppi, componeva il motto del JPL *"DARE MIGHTY THINGS"* e le coordinate del laboratorio. Puro spirito da ingegneri: nascondere dei bit in bella vista.
+Una volta capito che *qualunque* scelta tra alternative si può codificare in bit, si comincia a vederli ovunque. Il **Morse** (punto/linea) e il **Braille** (punto in rilievo/liscio) dei primi capitoli erano già codici binari. Un esempio più recente e spettacolare è il paracadute del rover **Perseverance**, atterrato su Marte il **18 febbraio 2021**: le sue strisce arancioni e bianche, disposte in quattro anelli concentrici, non erano decorative ma un **messaggio binario** (bianco = 0, arancione = 1) che, decodificato a gruppi, componeva il motto del JPL *"DARE MIGHTY THINGS"* e le coordinate del laboratorio.
 
 ## Il codice a barre UPC
 
@@ -117,13 +117,13 @@ Le dodici cifre stampate sotto le barre (`0 51000 01251 7`) non sono lì per bel
 - Le cinque dopo (`01251`) sono il **codice del prodotto**, scelto dal produttore per quello specifico articolo (la zuppa di pollo da 10¾ oz).
 - L'ultima cifra (`7`) è la **cifra di controllo** (*modulo check character*), calcolata dalle altre undici per smascherare le letture sbagliate.
 
-Il calcolo della cifra di controllo è un piccolo gioiello di semplicità: si sommano le cifre di posto **dispari**, si moltiplica per 3, si aggiunge la somma delle cifre di posto **pari**, e la cifra di controllo è quella che rende il totale un **multiplo di 10**. Per la zuppa: `(0+1+0+0+2+1) × 3 + (5+0+0+1+5) = 12 + 11 = 23`, e `23 + 7 = 30`, multiplo di 10. Se lo scanner legge una cifra sbagliata, quasi sempre il conto non torna e la lettura viene **rifiutata** invece di far pagare il prodotto sbagliato.
+Il calcolo della cifra di controllo è semplice: si sommano le cifre di posto **dispari**, si moltiplica per 3, si aggiunge la somma delle cifre di posto **pari**, e la cifra di controllo è quella che rende il totale un **multiplo di 10**. Per la zuppa: `(0+1+0+0+2+1) × 3 + (5+0+0+1+5) = 12 + 11 = 23`, e `23 + 7 = 30`, multiplo di 10. Se lo scanner legge una cifra sbagliata, quasi sempre il conto non torna e la lettura viene **rifiutata** invece di far pagare il prodotto sbagliato.
 
 > [!warning]
-> Una cosa che il codice a barre **non** contiene è il **prezzo**. Lo scanner legge solo l'identità del prodotto; il prezzo lo cerca il computer del negozio nel proprio archivio. È il motivo per cui un supermercato può cambiare i prezzi senza rietichettare gli scaffali — e per cui lo stesso prodotto costa diversamente in due negozi con lo stesso identico codice a barre.
+> Una cosa che il codice a barre **non** contiene è il **prezzo**. Lo scanner legge solo l'identità del prodotto; il prezzo lo cerca il computer del negozio nel proprio archivio. È il motivo per cui un supermercato può cambiare i prezzi senza rietichettare gli scaffali, e per cui lo stesso prodotto costa diversamente in due negozi con lo stesso identico codice a barre.
 
 > [!tip]
-> L'idea da fissare del capitolo: dietro codici apparentemente diversissimi (lanterne, Morse, Braille, barre nere) c'è **sempre** la stessa sostanza — bit, cioè scelte tra due stati. Cambiano il supporto e l'accordo, non la natura dell'informazione.
+> L'idea da fissare del capitolo: dietro codici apparentemente diversissimi (lanterne, Morse, Braille, barre nere) c'è **sempre** la stessa sostanza: bit, cioè scelte tra due stati. Cambiano il supporto e l'accordo, non la natura dell'informazione.
 
 ## Ripasso lampo
 
@@ -167,4 +167,4 @@ Con `n` bit si hanno **2ⁿ** combinazioni (ogni bit in più raddoppia). Per sap
 - Un **bit** è la più piccola quantità d'informazione: la scelta tra **due** stati. Il suo significato nasce dal **codice** concordato in anticipo (le lanterne di Paul Revere).
 - Con `n` bit si distinguono **2ⁿ** cose (ogni bit raddoppia); all'inverso, per `N` possibilità servono **log₂ N** bit, arrotondati per eccesso.
 - Innumerevoli codici reali sono bit travestiti: Morse, Braille, il paracadute di Perseverance e i **codici a barre**.
-- Lo **UPC** usa **95 bit** per 12 cifre (guardie + 6 + 6 cifre da 7 bit, con parità che consente la lettura in entrambi i versi). Codifica tipo di prodotto, produttore, prodotto e una **cifra di controllo** — ma **non** il prezzo.
+- Lo **UPC** usa **95 bit** per 12 cifre (guardie + 6 + 6 cifre da 7 bit, con parità che consente la lettura in entrambi i versi). Codifica tipo di prodotto, produttore, prodotto e una **cifra di controllo**, ma **non** il prezzo.

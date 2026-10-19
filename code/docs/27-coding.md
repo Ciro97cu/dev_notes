@@ -51,7 +51,7 @@ document.getElementById("result").innerHTML = message;
 
 Ci sono due statement, ciascuno chiuso da un punto e virgola. Nel primo, `let` è una keyword che crea la variabile `message` e le assegna una stringa di testo; nel secondo, quel testo viene inserito in un elemento della pagina web. Modificando il file e ricaricando la pagina si vede subito il risultato: un ciclo di prova rapidissimo.
 
-*➕ Fuori dal libro: JavaScript è trattato in profondità nel <a href="../javascript/" target="_blank" rel="noopener">vault JavaScript</a> di questi appunti — questo capitolo ne offre solo un primo assaggio.*
+*➕ Fuori dal libro: JavaScript è trattato in profondità nel <a href="../javascript/" target="_blank" rel="noopener">vault JavaScript</a> di questi appunti; questo capitolo ne offre solo un primo assaggio.*
 
 ## Il floating-point e le sue sorprese
 
@@ -62,7 +62,7 @@ I numeri con la virgola (come `27.5` o `125.2`) si chiamano numeri **floating-po
 <figcaption><em>Il formato a doppia precisione IEEE 754: 1 bit di <strong>segno</strong>, 11 di <strong>esponente</strong>, 52 di <strong>mantissa</strong>, in tutto 64 bit. È la notazione scientifica (mantissa × 2 alla esponente), ma in binario.</em></figcaption>
 </figure>
 
-Ed ecco la sorpresa: molti numeri decimali **non** hanno una rappresentazione binaria esatta. Il decimale `1.1`, per esempio, in binario è una sequenza che si ripete all'infinito, e con 52 bit va troncata: il valore realmente memorizzato non è `1.1` ma `1,100000000000000008881…`. Quando poi si fanno calcoli con numeri non esatti, anche i risultati sono inesatti — ed è per questo che, in JavaScript, moltiplicare `55.2` per `27.8` dà `1534.5600000000002` invece di `1534.56`. Non è un errore del linguaggio, ma una conseguenza inevitabile del rappresentare un continuo di numeri con una quantità **finita** di bit; la disciplina che studia questi limiti si chiama **matematica discreta**. Da notare che perfino le funzioni "difficili" (radici, logaritmi, seno e coseno) si calcolano in fondo con le sole quattro operazioni: il seno, per esempio, tramite una somma di infiniti termini (una *serie*) che si tronca alla precisione voluta.
+Molti numeri decimali, infatti, **non** hanno una rappresentazione binaria esatta. Il decimale `1.1`, per esempio, in binario è una sequenza che si ripete all'infinito, e con 52 bit va troncata: il valore realmente memorizzato non è `1.1` ma `1,100000000000000008881…`. Quando poi si fanno calcoli con numeri non esatti, anche i risultati sono inesatti, ed è per questo che, in JavaScript, moltiplicare `55.2` per `27.8` dà `1534.5600000000002` invece di `1534.56`. Non è un errore del linguaggio, ma una conseguenza inevitabile del rappresentare un continuo di numeri con una quantità **finita** di bit; la disciplina che studia questi limiti si chiama **matematica discreta**. Perfino le funzioni "difficili" (radici, logaritmi, seno e coseno) si calcolano con le sole quattro operazioni: il seno, per esempio, tramite una somma di infiniti termini (una *serie*) che si tronca alla precisione voluta.
 
 > [!warning]
 > Non confrontare mai due numeri floating-point con un test di uguaglianza "secco" (`a === b`) aspettandosi che torni sempre giusto: piccoli errori di arrotondamento come quello di `1.1` possono far fallire il confronto. È una delle insidie più classiche per chi inizia a programmare, e discende direttamente dallo standard IEEE 754.

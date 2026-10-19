@@ -23,16 +23,16 @@ Il **fetch** (prelievo) usa il Program Counter per indirizzare la memoria e port
 
 ## Decodificare l'istruzione
 
-Perché la CPU sappia *cosa* significa un opcode, i suoi otto bit vanno interpretati. Se ne occupa il **decoder delle istruzioni**: i due bit più alti passano per un decoder 2-a-4, gli altri sei per due decoder 3-a-8 (che riconoscono i campi *destinazione* e *sorgente* dei registri), e una rete di porte AND ne ricava i segnali che identificano ciascun tipo di istruzione — *Move Group* (opcode che iniziano con `01`), *Arithmetic/Logic Group* (che iniziano con `10`), le mosse da/verso memoria, `MVI`, `ADI`, `LDA`, `STA`, `INX`/`DCX HL` e così via. È lo stesso mestiere del decoder del capitolo 10, qui allargato a riconoscere l'intero repertorio di istruzioni.
+Perché la CPU sappia *cosa* significa un opcode, i suoi otto bit vanno interpretati. Se ne occupa il **decoder delle istruzioni**: i due bit più alti passano per un decoder 2-a-4, gli altri sei per due decoder 3-a-8 (che riconoscono i campi *destinazione* e *sorgente* dei registri), e una rete di porte AND ne ricava i segnali che identificano ciascun tipo di istruzione: *Move Group* (opcode che iniziano con `01`), *Arithmetic/Logic Group* (che iniziano con `10`), le mosse da/verso memoria, `MVI`, `ADI`, `LDA`, `STA`, `INX`/`DCX HL` e così via. È lo stesso mestiere del decoder del capitolo 10, qui allargato a riconoscere l'intero repertorio di istruzioni.
 
 ## Generare i segnali di controllo
 
 Sapere *quale* istruzione si sta eseguendo non basta: bisogna produrre, per ogni componente, i segnali giusti **nell'istante giusto**. Un'operazione come `ADD M` richiede più passi (prima portare l'operando dalla memoria all'ALU, poi far scattare l'ALU, poi salvarne il risultato) e ciascun passo dura un **ciclo macchina** (*machine cycle*). Per ogni combinazione di *istruzione decodificata* e *ciclo macchina corrente*, la CPU deve attivare un preciso sottoinsieme di Enable, Clock, Select e Write.
 
-Il modo elegante con cui Petzold genera questi segnali è una vecchia conoscenza: una **matrice di diodi**, cioè una **ROM** come quella del capitolo 18. Gli ingressi della ROM sono i segnali del decoder e del ciclo macchina; le sue uscite sono i segnali di controllo cablati nella disposizione dei diodi. In pratica, la ROM contiene una piccola "tabella" che dice: *per questa istruzione, in questo ciclo, accendi questi segnali*.
+Per generare questi segnali Petzold ricorre a una vecchia conoscenza: una **matrice di diodi**, cioè una **ROM** come quella del capitolo 18. Gli ingressi della ROM sono i segnali del decoder e del ciclo macchina; le sue uscite sono i segnali di controllo cablati nella disposizione dei diodi. In pratica, la ROM contiene una piccola "tabella" che dice: *per questa istruzione, in questo ciclo, accendi questi segnali*.
 
 > [!tip]
-> Il cervello della CPU è tutto qui: un **decoder** che riconosce l'istruzione e una **ROM di controllo** (matrice di diodi) che, istruzione per istruzione e ciclo per ciclo, decide quali segnali di Enable/Clock/Select/Write attivare. Non c'è nessuna magia: solo logica combinatoria e i mattoni costruiti nei capitoli precedenti.
+> Il controllo della CPU si riduce a due pezzi: un **decoder** che riconosce l'istruzione e una **ROM di controllo** (matrice di diodi) che, istruzione per istruzione e ciclo per ciclo, decide quali segnali di Enable/Clock/Select/Write attivare. Entrambi sono logica combinatoria, fatta con i mattoni costruiti nei capitoli precedenti.
 
 ## La CPU completa
 
@@ -53,7 +53,7 @@ flowchart TB
   CU -. "Enable / Clock / Write" .-> ALU
 ```
 
-Questa CPU esegue programmi reali dell'8080. Ecco un esempio che somma **cinque byte** conservati in memoria a partire dall'indirizzo `1000h`, usando la coppia HL come "dito" che scorre la memoria:
+Questa CPU esegue programmi reali dell'8080. Il programma che segue somma **cinque byte** conservati in memoria a partire dall'indirizzo `1000h`, usando la coppia HL come "dito" che scorre la memoria:
 
 ```
 MVI L,00h    ; L = 00h
@@ -71,10 +71,10 @@ STA 0011h    ; salva la somma
 HLT
 ```
 
-L'istruzione `INX HL` (*increment*) fa avanzare di uno l'indirizzo in HL, così dopo ogni `ADD M` si passa al byte successivo. Il programma funziona, ma salta all'occhio la **ripetizione**: la coppia `INX HL` / `ADD M` compare quattro volte. Per sommare cento o mille byte questo approccio non regge — bisognerebbe ricopiare le istruzioni cento o mille volte. Non è una soluzione *generalizzata*, e proprio da questo disagio nasce il bisogno del capitolo 24: un'istruzione capace di far **ripetere** un gruppo di istruzioni, cioè il **loop**.
+L'istruzione `INX HL` (*increment*) fa avanzare di uno l'indirizzo in HL, così dopo ogni `ADD M` si passa al byte successivo. Il programma funziona, ma salta all'occhio la **ripetizione**: la coppia `INX HL` / `ADD M` compare quattro volte. Per sommare cento o mille byte questo approccio non regge: bisognerebbe ricopiare le istruzioni cento o mille volte. Non è una soluzione *generalizzata*, e proprio da questo disagio nasce il bisogno del capitolo 24: un'istruzione capace di far **ripetere** un gruppo di istruzioni, cioè il **loop**.
 
 > [!warning]
-> Un'istruzione non si esegue in un unico istante: richiede uno o più **cicli macchina**, e in ognuno l'unità di controllo attiva segnali diversi. È il motivo per cui una CPU reale, che compie milioni di operazioni al secondo, dedica una parte del suo lavoro non al calcolo ma al **coordinamento** interno — prelevare, decodificare, instradare i byte.
+> Un'istruzione non si esegue in un unico istante: richiede uno o più **cicli macchina**, e in ognuno l'unità di controllo attiva segnali diversi. È il motivo per cui una CPU reale, che compie milioni di operazioni al secondo, dedica una parte del suo lavoro non al calcolo ma al **coordinamento** interno: prelevare, decodificare, instradare i byte.
 
 ## Ripasso lampo
 

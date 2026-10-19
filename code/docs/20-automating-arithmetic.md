@@ -18,13 +18,13 @@ Ogni pressione del pulsante **Add** somma il numero impostato al totale già pre
 
 Nel capitolo 19 si è costruita una **RAM** con un pannello di controllo per caricarci dei valori. La si può mettere al servizio della macchina accumulatrice: invece di prendere il numero dagli interruttori, lo si prende dal **Data Out** della RAM; e invece di limitarsi ad accendere lampadine, il risultato può tornare al **Data In**. Ma per sommare una lista di numeri serve che la macchina scorra la memoria **da sola**, indirizzo dopo indirizzo. Il pezzo giusto c'è già: un **contatore** (dal capitolo 17). Il suo valore fa da **indirizzo** per la RAM; a ogni colpo di clock avanza da 0000h a 0001h a 0002h e così via, presentando al sommatore un byte dopo l'altro, e l'accumulatore somma ciascuno al totale.
 
-Perché tutto ciò funzioni, i vari impulsi vanno **sincronizzati**: leggere la memoria e sommare richiede un po' di tempo, quindi il colpo di clock che memorizza il totale nel latch deve arrivare *dopo* quello che fa avanzare il contatore, e il contatore deve avanzare di nuovo solo *dopo* che il latch ha memorizzato. Questi segnali di coordinamento — che Petzold chiama **segnali di controllo** (*control signals*) — si ottengono da un oscillatore seguito da un paio di flip-flop che ne ricavano due impulsi sfalsati. Sono, di solito, la parte più intricata di una macchina come questa.
+Perché tutto ciò funzioni, i vari impulsi vanno **sincronizzati**: leggere la memoria e sommare richiede un po' di tempo, quindi il colpo di clock che memorizza il totale nel latch deve arrivare *dopo* quello che fa avanzare il contatore, e il contatore deve avanzare di nuovo solo *dopo* che il latch ha memorizzato. Questi segnali di coordinamento, che Petzold chiama **segnali di controllo** (*control signals*), si ottengono da un oscillatore seguito da un paio di flip-flop che ne ricavano due impulsi sfalsati. Sono, di solito, la parte più complicata di una macchina come questa.
 
 ## L'accumulatore a tre byte e il codice-istruzione
 
-Un accumulatore da un solo byte arriva presto al limite (255). Per numeri più grandi Petzold costruisce l'**accumulatore a tre byte**, capace di 24 bit di precisione: tre latch (basso, medio, alto) con la relativa propagazione del **riporto** da un byte al successivo, e un blocco di **complemento a uno** sulla strada dei dati, per poter anche **sottrarre** (invertendo i bit, come nel capitolo 16). Ma la novità concettuale davvero importante è un'altra: compare un latch speciale, l'**Instruction Latch**, che non conserva un dato bensì un **codice-istruzione** — un byte che dice alla macchina *cosa fare*.
+Un accumulatore da un solo byte arriva presto al limite (255). Per numeri più grandi Petzold costruisce l'**accumulatore a tre byte**, capace di 24 bit di precisione: tre latch (basso, medio, alto) con la relativa propagazione del **riporto** da un byte al successivo, e un blocco di **complemento a uno** sulla strada dei dati, per poter anche **sottrarre** (invertendo i bit, come nel capitolo 16). La novità concettuale più importante, però, è un latch speciale, l'**Instruction Latch**, che invece di un dato conserva un **codice-istruzione**: un byte che dice alla macchina *cosa fare*.
 
-L'idea cambia tutto. La memoria viene organizzata in **gruppi di quattro byte**: il primo è il codice-istruzione, i tre seguenti sono i byte del numero su cui operare. Il contatore scorre la memoria e i suoi due bit più bassi indicano a che punto si è nel gruppo:
+La memoria viene organizzata in **gruppi di quattro byte**: il primo è il codice-istruzione, i tre seguenti sono i byte del numero su cui operare. Il contatore scorre la memoria e i suoi due bit più bassi indicano a che punto si è nel gruppo:
 
 | 2 bit bassi dell'indirizzo | byte letto |
 |:---:|---|
@@ -60,18 +60,18 @@ I codici-istruzione di questa macchina sono quattro, scelti con cura perché i l
 I valori non sono casuali. Add (`02h`) e Subtract (`03h`) condividono il bit di valore 2 (il bit Q₁ dell'Instruction Latch): è quel bit, uguale a 1 in entrambe, ad abilitare i clock che caricano i tre byte nell'accumulatore; il bit di valore 1 (Q₀), acceso solo in Subtract, comanda invece il complemento a uno e il riporto iniziale. Store usa il bit di valore 4 (Q₂) per abilitare i tri-state e scrivere il totale in memoria; Halt usa il bit di valore 8 (Q₃) per spegnere l'oscillatore che "muove" tutta la macchina.
 
 > [!tip]
-> Il colpo di genio è **spostare il comando dentro la memoria**: la macchina non esegue una sequenza cablata una volta per tutte, ma legge da sé, byte dopo byte, *cosa* deve fare. Cambiando i byte in memoria si cambia il comportamento della macchina senza toccarne un solo filo.
+> Il comando si sposta **dentro la memoria**: la macchina non esegue una sequenza cablata una volta per tutte, ma legge da sé, byte dopo byte, *cosa* deve fare. Cambiando i byte in memoria si cambia il comportamento della macchina senza toccarne un solo filo.
 
 ## La grande rivelazione (e la nascita del computer)
 
-L'accumulatore a tre byte, in sé, è un vicolo cieco: il limite di tre byte è cablato nell'hardware e non si allarga facilmente. Ma lungo la strada si è scoperto qualcosa di enorme: **una macchina può comportarsi seguendo codici conservati in memoria**. Qui i codici erano solo quattro, però un codice sta in un byte, e un byte ha 256 valori: si possono quindi definire fino a **256 istruzioni** diverse. Le singole istruzioni possono restare semplici, ma combinandole se ne ottengono compiti via via più complessi.
+L'accumulatore a tre byte, in sé, è un vicolo cieco: il limite di tre byte è cablato nell'hardware e non si allarga facilmente. Lungo la strada, però, si è scoperto che **una macchina può comportarsi seguendo codici conservati in memoria**. Qui i codici erano solo quattro, però un codice sta in un byte, e un byte ha 256 valori: si possono quindi definire fino a **256 istruzioni** diverse. Le singole istruzioni possono restare semplici, ma combinandole se ne ottengono compiti via via più complessi.
 
-È il principio che regge ogni computer, ed è anche il confine tra le sue due metà: i compiti **semplici** si realizzano in **hardware** (i circuiti che eseguono ciascuna istruzione), quelli **complessi** in **software** (sequenze di istruzioni). Da un lato i mattoni cablati, dall'altro la libertà di combinarli a piacere. Una macchina così (che legge istruzioni dalla memoria e le esegue) è, a tutti gli effetti, un **computer**.
+È il principio che regge ogni computer, ed è anche il confine tra le sue due metà: i compiti **semplici** si realizzano in **hardware** (i circuiti che eseguono ciascuna istruzione), quelli **complessi** in **software** (sequenze di istruzioni). Una macchina così (che legge istruzioni dalla memoria e le esegue) è, a tutti gli effetti, un **computer**.
 
 > [!info]
 > Costruire una macchina del genere nel 1970 sarebbe stato un lavoro immane; nel 1980 bastava **comprarne** una su un chip. Il primo "computer su un chip" fu l'**Intel 4004** (novembre 1971): 4 bit, 2.250 transistor, 4 KB di memoria indirizzabile. Seguirono l'**8008** (1972, 8 bit, 16 KB), pensato per i *sistemi embedded*, e soprattutto l'**Intel 8080** (aprile 1974): 8 bit, circa 4.500 transistor, 64 KB di memoria, in un chip a 40 piedini. Sarà proprio l'8080 il microprocessore di riferimento nei prossimi capitoli.
 
-Il capitolo 21 riprende da qui: quel sommatore al centro della macchina verrà potenziato fino a diventare un'**unità aritmetico-logica** (ALU), capace non solo di sommare e sottrarre ma anche di eseguire le operazioni logiche (AND, OR, XOR) sui bit.
+Il capitolo 21 riprende da qui: quel sommatore al centro della macchina verrà potenziato fino a diventare un'**unità aritmetico-logica** (ALU), capace di sommare, di sottrarre e anche di eseguire le operazioni logiche (AND, OR, XOR) sui bit.
 
 ## Ripasso lampo
 

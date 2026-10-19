@@ -7,7 +7,7 @@ Il capitolo 6 si è chiuso con un desiderio preciso: un dispositivo che faccia l
 
 Samuel Finley Breese Morse nacque nel **1791** a Charlestown, Massachusetts. Prima di essere l'inventore che tutti ricordano fu un affermato **ritrattista** (il suo *General Lafayette* del 1825 è al municipio di New York) e un pioniere della **fotografia** (imparò il dagherrotipo da Louis Daguerre e lo insegnò a Mathew Brady). Ma è per il telegrafo e per il codice che porta il suo nome che lo si ricorda.
 
-Prima del telegrafo, la comunicazione era **istantanea solo a portata di voce o di vista** (il *semaforo*, cioè bracci o bandiere su colline, in schemi codificati); su lunghe distanze viaggiava lenta, affidata a cavalli, treni e navi. L'idea del telegrafo elettrico è la stessa della torcia a distanza del [capitolo 5](05-communicating-around-corners.md): fai qualcosa a un capo del filo e succede qualcosa all'altro capo. Morse però non poteva usare una lampadina (sarebbe stata inventata solo nel 1879): sfruttò invece l'**elettromagnetismo**.
+Prima del telegrafo, la comunicazione era **istantanea solo a portata di voce o di vista** (il *semaforo*, cioè bracci o bandiere su colline, in schemi codificati); su lunghe distanze viaggiava lenta, affidata a cavalli, treni e navi. L'idea del telegrafo elettrico è la stessa della torcia a distanza del [capitolo 5](05-communicating-around-corners.md): si fa qualcosa a un capo del filo e succede qualcosa all'altro capo. Morse però non poteva usare una lampadina (sarebbe stata inventata solo nel 1879): sfruttò invece l'**elettromagnetismo**.
 
 ## L'elettromagnete
 
@@ -38,7 +38,7 @@ Sembra un corto circuito, ma il filo è così sottile da avere resistenza a suff
 
 ## Tasto, sounder e "What hath God wrought"
 
-Per **trasmettere** si usa il **tasto** (*key*), in sostanza un interruttore fatto per essere azionato in fretta: un tocco breve è un punto, uno più lungo una linea. Al **ricevitore**, un elettromagnete tira un braccio metallico: in origine il braccio muoveva un pennino che tracciava punti e linee su un rotolo di carta, ma gli operatori impararono presto a *ascoltare* il rimbalzo, e il pennino fu sostituito dal **sounder**, che fa "click" quando la corrente arriva e "clack" quando cessa (click-clack veloce = punto, lento = linea).
+Per **trasmettere** si usa il **tasto** (*key*), cioè un interruttore fatto per essere azionato in fretta: un tocco breve è un punto, uno più lungo una linea. Al **ricevitore**, un elettromagnete tira un braccio metallico: in origine il braccio muoveva un pennino che tracciava punti e linee su un rotolo di carta, ma gli operatori impararono presto a *ascoltare* il rimbalzo, e il pennino fu sostituito dal **sounder**, che fa "click" quando la corrente arriva e "clack" quando cessa (click-clack veloce = punto, lento = linea).
 
 Notificato l'ufficio brevetti nel 1836 e ottenuto il finanziamento del Congresso, il **24 maggio 1844** una linea tra Washington e Baltimora trasmise il celebre messaggio *"What hath God wrought!"*. Tasto, sounder, batteria e fili si collegano come la torcia del capitolo 5: con l'alta tensione basta **un filo** (la Terra fa da ritorno) e si usa la **V** al posto della batteria a massa. È l'inizio della comunicazione moderna (la prima più veloce di un cavallo) e, cosa notevole, si basa su un **codice binario**.
 
@@ -46,7 +46,7 @@ Notificato l'ufficio brevetti nel 1836 e ottenuto il finanziamento del Congresso
 
 C'è però il limite già visto nel capitolo 5: **più lungo è il filo, più resistenza**, e il segnale si indebolisce. Le linee arrivavano a circa 300 volt su circa 300 miglia, ma non oltre. La soluzione è un **sistema a relè**: ogni paio di centinaia di miglia, una persona con tasto e sounder **riceve** il messaggio e lo **ritrasmette** con energia fresca.
 
-Immagina di essere tu quell'addetto, in una capanna tra New York e la California: dalla finestra a est arriva un filo collegato a un sounder, il tuo tasto è collegato a una batteria e a un filo che esce a ovest. A furia di ripetere, noti che il braccio del sounder rimbalza esattamente come rimbalza il tasto — così colleghi i due con un pezzo di legno e dello spago, e il ritrasmettitore **funziona da solo**. Questo dispositivo, che Morse aveva capito da subito, si chiama **relè** (o *repeater*): una corrente in ingresso alimenta un elettromagnete che tira una leva; ma la leva è parte di un **interruttore che collega una batteria all'uscita**. Così un segnale in ingresso **debole** viene "amplificato" in un segnale in uscita **forte**.
+Si immagini quell'addetto, in una capanna tra New York e la California: dalla finestra a est arriva un filo collegato a un sounder, e il suo tasto è collegato a una batteria e a un filo che esce a ovest. A furia di ripetere, l'addetto nota che il braccio del sounder rimbalza esattamente come rimbalza il tasto, così collega i due con un pezzo di legno e dello spago, e il ritrasmettitore **funziona da solo**. Questo dispositivo, che Morse aveva capito da subito, si chiama **relè** (o *repeater*): una corrente in ingresso alimenta un elettromagnete che tira una leva; ma la leva è parte di un **interruttore che collega una batteria all'uscita**. Così un segnale in ingresso **debole** viene "amplificato" in un segnale in uscita **forte**.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 340 205" role="img" aria-label="Schema di un relè: la corrente In aziona l'elettromagnete che tira la leva e chiude il contatto verso Out, alimentato da V" style="width:100%;max-width:360px;height:auto;color:inherit">
@@ -75,11 +75,11 @@ Immagina di essere tu quell'addetto, in una capanna tra New York e la California
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Quando la corrente <strong>In</strong> percorre l'elettromagnete, questo attira la leva verso il basso: la leva chiude il contatto e collega <strong>V</strong> all'uscita <strong>Out</strong>. Un ingresso debole comanda un'uscita forte e fresca.</figcaption>
 </figure>
 
-I nomi *In* e *Out* descrivono i fili che entrano ed escono dalla capanna, ma valgono anche come **ingresso** e **uscita** di un segnale elettrico: il segnale *In* provoca un cambiamento nel segnale *Out*. È **causa ed effetto**.
+I nomi *In* e *Out* descrivono i fili che entrano ed escono dalla capanna, ma valgono anche come **ingresso** e **uscita** di un segnale elettrico: il segnale *In* provoca un cambiamento nel segnale *Out*, in un rapporto di **causa ed effetto**.
 
 ## Un interruttore comandato dall'elettricità
 
-Ed ecco il punto che apre tutto il resto del libro. Il relè è un **interruttore**, sì, ma un interruttore acceso e spento **non da una mano, bensì da una corrente elettrica**. Nel capitolo 6 gli interruttori in serie e in parallelo facevano logica, ma andavano azionati a mano; il relè fa esattamente quel lavoro **in automatico**, e l'uscita di un relè può azionare l'ingresso di un altro. Con dispositivi del genere, come suggerisce Petzold, "si potrebbe davvero assemblare gran parte di un computer". È proprio ciò che faremo nel prossimo capitolo, collegando i relè per costruire le **porte logiche**.
+Il relè è un **interruttore**, ma acceso e spento **non da una mano, bensì da una corrente elettrica**: da qui parte tutto il resto del libro. Nel capitolo 6 gli interruttori in serie e in parallelo facevano logica, ma andavano azionati a mano; il relè fa esattamente quel lavoro **in automatico**, e l'uscita di un relè può azionare l'ingresso di un altro. Con dispositivi del genere, come suggerisce Petzold, "si potrebbe davvero assemblare gran parte di un computer". È ciò che si farà nel prossimo capitolo, collegando i relè per costruire le **porte logiche**.
 
 > [!tip]
 > Il relè in una frase: **un interruttore azionato da un elettromagnete** invece che dalla mano. Questa singola idea (*In* comanda *Out* per via elettrica) è il mattone da cui, combinandolo, nascono le porte logiche e quindi il processore.
@@ -129,4 +129,4 @@ Perché è un **interruttore comandato dall'elettricità**, non dalla mano. Gli 
 - Il **telegrafo** di Morse (1844) porta l'idea della "torcia a distanza" del cap.5 nel mondo reale, usando l'**elettromagnete** (niente lampadina, non ancora inventata) e un **codice binario** (punto/linea).
 - Su lunghe distanze la **resistenza** indebolisce il segnale: servono stazioni a **relè** che ricevono e ritrasmettono.
 - Il **relè** è un elettromagnete che aziona un interruttore collegato a una batteria fresca: un ingresso debole comanda un'uscita forte (ripetitore).
-- Soprattutto, il relè è un **interruttore comandato dall'elettricità**: combinandolo si fa logica in automatico — la base delle **porte logiche** del prossimo capitolo.
+- Soprattutto, il relè è un **interruttore comandato dall'elettricità**: combinandolo si fa logica in automatico, ed è la base delle **porte logiche** del prossimo capitolo.

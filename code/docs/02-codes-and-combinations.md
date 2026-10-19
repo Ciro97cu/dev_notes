@@ -5,7 +5,7 @@ Il codice Morse fu inventato attorno al **1837** da Samuel Finley Breese Morse (
 
 ## Trasmettere è facile, ricevere no
 
-Quasi tutti trovano il Morse più facile da *mandare* che da *ricevere*. Trasmettere è comodo: si ha la tabella lettera → punti-e-linee e si procede. Ricevere è il problema inverso e più faticoso, perché bisogna lavorare **a ritroso**: arriva, poniamo, `—•——` e occorre risalire alla lettera (è la Y). La tabella che abbiamo va in una sola direzione (da **lettera** a **punti e linee**) ma quella opposta, da **punti e linee** a **lettera**, non esiste. E non è chiaro come costruirla: nei punti e nelle linee non c'è nulla da mettere in "ordine alfabetico". Conviene allora abbandonare l'alfabeto e organizzare i codici in un altro modo — per **quantità** di punti e linee.
+Quasi tutti trovano il Morse più facile da *mandare* che da *ricevere*. Trasmettere è comodo: si ha la tabella lettera → punti-e-linee e si procede. Ricevere è il problema inverso e più faticoso, perché bisogna lavorare **a ritroso**: arriva, poniamo, `—•——` e occorre risalire alla lettera (è la Y). La tabella disponibile va in una sola direzione (da **lettera** a **punti e linee**) ma quella opposta, da **punti e linee** a **lettera**, non esiste. E non è chiaro come costruirla: nei punti e nelle linee non c'è nulla da mettere in "ordine alfabetico". Conviene allora abbandonare l'alfabeto e organizzare i codici in un altro modo: per **quantità** di punti e linee.
 
 ## Organizzare per numero di simboli
 
@@ -32,7 +32,7 @@ Con **tre** simboli se ne ottengono otto:
 | `•—•` | R | `——•` | G |
 | `•——` | W | `———` | O |
 
-E con **quattro** simboli sedici, di cui quattro assegnate a lettere accentate (tre con dieresi, una con cediglia — servono a coprire lingue europee, dato che 30 codici sono più dei 26 dell'alfabeto latino):
+E con **quattro** simboli sedici, di cui quattro assegnate a lettere accentate (tre con dieresi, una con cediglia; servono a coprire lingue europee, dato che 30 codici sono più dei 26 dell'alfabeto latino):
 
 | Codice | Lettera | Codice | Lettera |
 |:--:|:--:|:--:|:--:|
@@ -45,13 +45,13 @@ E con **quattro** simboli sedici, di cui quattro assegnate a lettere accentate (
 | `•——•` | P | `———•` | Ö |
 | `•———` | J | `————` | Ş |
 
-Guardando le quattro tabelle salta all'occhio una regolarità: **ogni tabella ha il doppio dei codici di quella precedente** (2, 4, 8, 16). Il motivo è semplice e vale la pena fissarlo, perché è il cuore del capitolo: ogni tabella contiene *tutti* i codici della precedente seguiti da un punto, **più** tutti quelli della precedente seguiti da una linea. Aggiungere un simbolo raddoppia le possibilità.
+Guardando le quattro tabelle salta all'occhio una regolarità: **ogni tabella ha il doppio dei codici di quella precedente** (2, 4, 8, 16). Il motivo, su cui si regge il capitolo, è semplice: ogni tabella contiene *tutti* i codici della precedente seguiti da un punto, **più** tutti quelli della precedente seguiti da una linea. Aggiungere un simbolo raddoppia le possibilità.
 
 ## La formula: potenze di due
 
 Se aggiungere un simbolo raddoppia i codici, allora con `n` simboli i codici sono 2 moltiplicato per sé stesso `n` volte, cioè **2 elevato a `n`**:
 
-> **numero di codici = 2ⁿ** — dove *n* è il numero di punti e linee.
+> **numero di codici = 2ⁿ**, dove *n* è il numero di punti e linee.
 
 Non serve scrivere tutte le combinazioni per contarle: basta moltiplicare il 2 per sé stesso.
 
@@ -109,21 +109,21 @@ graph LR
   O -->|"—"| SC["Ş"]
 ```
 
-Costruire un albero del genere non è solo una comodità per chi decodifica: è, con ogni probabilità, ciò che è servito per **definire** il Morse in primo luogo. L'albero garantisce due cose: che non si usi mai lo stesso codice per due lettere diverse, e che si sfruttino tutte le combinazioni possibili senza allungare le sequenze più del necessario.
+Un albero del genere, oltre a essere comodo per chi decodifica, è con ogni probabilità ciò che è servito per **definire** il Morse in primo luogo. L'albero garantisce due cose: che non si usi mai lo stesso codice per due lettere diverse, e che si sfruttino tutte le combinazioni possibili senza allungare le sequenze più del necessario.
 
 ## Fino a 64 (e perché tanti restano vuoti)
 
-Volendo, l'albero si estende. Con **cinque** simboli si aggiungono 32 codici (2⁵): è qui che stanno i numeri, che infatti in Morse hanno cinque tra punti e linee. Per includere tutta la punteggiatura si arriva a **sei** simboli, altri 64 codici (2⁶). In totale, fino a sei simboli, si hanno 2 + 4 + 8 + 16 + 32 + 64 = **126** caratteri: molti più di quelli che servono. Il Morse ne lascia perciò parecchi **non definiti** — cioè non associati a nulla. Ricevere un codice non definito è un segnale utile: quasi certamente chi trasmetteva ha commesso un errore.
+Volendo, l'albero si estende. Con **cinque** simboli si aggiungono 32 codici (2⁵): è qui che stanno i numeri, che infatti in Morse hanno cinque tra punti e linee. Per includere tutta la punteggiatura si arriva a **sei** simboli, altri 64 codici (2⁶). In totale, fino a sei simboli, si hanno 2 + 4 + 8 + 16 + 32 + 64 = **126** caratteri: molti più di quelli che servono. Il Morse ne lascia perciò parecchi **non definiti**, cioè non associati a nulla. Ricevere un codice non definito è un segnale utile: quasi certamente chi trasmetteva ha commesso un errore.
 
 ## Morse è binario
 
 Il Morse si dice **binario** (letteralmente "due per due") perché è fatto di due sole cose: un punto e una linea. È la stessa struttura di una moneta, che può cadere solo su testa o croce. E come dieci lanci di moneta producono 2¹⁰ = 1024 sequenze diverse di teste e croci, così ogni combinazione di oggetti o codici binari si conta con le **potenze di due**.
 
 > [!tip]
-> Il numero chiave del libro è **due**. Ogni volta che qualcosa ha due soli stati (punto/linea, testa/croce, acceso/spento) il numero di combinazioni con `n` di questi elementi è `2ⁿ`. Da qui in avanti questa formula tornerà a ogni gradino.
+> Il libro ruota attorno al numero **due**. Ogni volta che qualcosa ha due soli stati (punto/linea, testa/croce, acceso/spento) il numero di combinazioni con `n` di questi elementi è `2ⁿ`. Da qui in avanti questa formula tornerà a ogni gradino.
 
 > [!warning]
-> Raddoppio, non incremento. Passando da `n` a `n+1` simboli i codici **raddoppiano** (da 2ⁿ a 2ⁿ⁺¹), non aumentano di una quantità fissa. È la differenza tra crescita esponenziale e lineare, ed è il motivo per cui pochi bit bastano a rappresentare tantissime cose.
+> Passando da `n` a `n+1` simboli i codici **raddoppiano** (da 2ⁿ a 2ⁿ⁺¹), non aumentano di una quantità fissa. È la differenza tra crescita esponenziale e lineare, ed è il motivo per cui pochi bit bastano a rappresentare tantissime cose.
 
 ## Ripasso lampo
 
@@ -151,7 +151,7 @@ Perché ricevere impone di lavorare **a ritroso**, dalla sequenza di punti e lin
 <details>
 <summary>In che senso il Morse è "binario"?</summary>
 
-Perché è composto da **due sole** entità, il punto e la linea — esattamente come una moneta ha solo testa e croce. Le combinazioni di elementi binari si contano sempre con le potenze di due.
+Perché è composto da **due sole** entità, il punto e la linea, esattamente come una moneta ha solo testa e croce. Le combinazioni di elementi binari si contano sempre con le potenze di due.
 
 </details>
 

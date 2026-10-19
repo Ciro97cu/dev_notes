@@ -5,18 +5,18 @@ Ogni volta che si tocca uno schermo o si digita su una tastiera si maneggia **te
 
 ## Codici a lunghezza fissa e variabile: da Morse e Braille a Baudot
 
-Il libro era partito da due codici binari: il **Morse** e il **Braille**. Il Morse è un codice a **lunghezza variabile** — ogni carattere usa un numero diverso di elementi (punti e linee) — mentre il **Braille** è a **lunghezza fissa**, sei bit per carattere. Il Braille, però, ha bisogno di uno **shift code**: un carattere speciale che cambia il significato di quelli successivi (per esempio per passare alle cifre o alle maiuscole). Lo stesso trucco compare in un terzo codice, il **Baudot**, ideato negli anni 1870 da **Émile Baudot** del servizio telegrafico francese e usato fino agli anni '60 per i **telegrammi** (Western Union). Il Baudot girava su una **telescrivente** (*teletypewriter*): una macchina simile a una macchina da scrivere, i cui tasti sono interruttori che generano un codice binario, un bit dopo l'altro, e la cui stampante reagisce ai codici in arrivo. È da qui che viene la parola **baud**: la velocità di trasmissione dei bit.
+Il libro era partito da due codici binari: il **Morse** e il **Braille**. Il Morse è un codice a **lunghezza variabile** (ogni carattere usa un numero diverso di elementi, punti e linee), mentre il **Braille** è a **lunghezza fissa**, sei bit per carattere. Il Braille, però, ha bisogno di uno **shift code**: un carattere speciale che cambia il significato di quelli successivi (per esempio per passare alle cifre o alle maiuscole). Lo stesso trucco compare in un terzo codice, il **Baudot**, ideato negli anni 1870 da **Émile Baudot** del servizio telegrafico francese e usato fino agli anni '60 per i **telegrammi** (Western Union). Il Baudot girava su una **telescrivente** (*teletypewriter*): una macchina simile a una macchina da scrivere, i cui tasti sono interruttori che generano un codice binario, un bit dopo l'altro, e la cui stampante reagisce ai codici in arrivo. È da qui che viene la parola **baud**: la velocità di trasmissione dei bit.
 
-Il Baudot è un codice a **5 bit**, quindi con soli **32** codici possibili (`00h`-`1Fh`) — troppo pochi per 26 lettere *più* le cifre e la punteggiatura. La soluzione furono due shift code: **Letter Shift** (`1Fh`) e **Figure Shift** (`1Bh`). Dopo un Figure Shift, i codici seguenti vengono letti come **numeri e simboli**; dopo un Letter Shift, tornano a essere **lettere**. Lo stesso codice `01h`, per dire, vale `T` in modalità lettere e `5` in modalità figure.
+Il Baudot è un codice a **5 bit**, quindi con soli **32** codici possibili (`00h`-`1Fh`): troppo pochi per 26 lettere *più* le cifre e la punteggiatura. La soluzione furono due shift code: **Letter Shift** (`1Fh`) e **Figure Shift** (`1Bh`). Dopo un Figure Shift, i codici seguenti vengono letti come **numeri e simboli**; dopo un Letter Shift, tornano a essere **lettere**. Lo stesso codice `01h`, per dire, vale `T` in modalità lettere e `5` in modalità figure.
 
 > [!warning]
 > Gli shift code sono fragili: il significato di un byte dipende da uno stato deciso *prima*. Se si trasmette due volte di fila `I SPENT $25 TODAY.` e l'ultimo shift rimasto attivo era il Figure Shift, la seconda riga viene interpretata a partire dai numeri e si stampa un'accozzaglia come `8 '03,5 $25 TODAY.`. Proprio questa fragilità spinse a cercare un codice **senza** shift, con posti separati per maiuscole e minuscole.
 
 ## ASCII: sette bit, un solo standard
 
-Quanti bit servono per un codice senza shift? Per l'inglese: 26 maiuscole + 26 minuscole + 10 cifre fanno 62, più la punteggiatura si supera 64 (il limite di 6 bit) ma si resta sotto **128** (il limite di 7). La risposta è quindi **7 bit**. È la scelta dell'**ASCII** (*American Standard Code for Information Interchange*), formalizzato nel **1967** e da allora lo standard più importante dell'informatica — con un'unica grande eccezione, Unicode, di cui si dirà tra poco.
+Quanti bit servono per un codice senza shift? Per l'inglese: 26 maiuscole + 26 minuscole + 10 cifre fanno 62, più la punteggiatura si supera 64 (il limite di 6 bit) ma si resta sotto **128** (il limite di 7). La risposta è quindi **7 bit**. È la scelta dell'**ASCII** (*American Standard Code for Information Interchange*), formalizzato nel **1967** e da allora lo standard più importante dell'informatica, con un'unica grande eccezione: Unicode, di cui si dirà tra poco.
 
-Con 7 bit l'ASCII copre i codici da `00h` a `7Fh` (128 in tutto), che si leggono comodamente in quattro gruppi da 32. I 95 codici "visibili" sono i **caratteri grafici**: lo **spazio** (`20h`), la punteggiatura e le cifre (`20h`-`3Fh`, con le cifre `0`-`9` a `30h`-`39h`), le **maiuscole** (`41h`-`5Ah`) e le **minuscole** (`61h`-`7Ah`). Una simmetria elegante lega maiuscole e minuscole:
+Con 7 bit l'ASCII copre i codici da `00h` a `7Fh` (128 in tutto), che si leggono comodamente in quattro gruppi da 32. I 95 codici "visibili" sono i **caratteri grafici**: lo **spazio** (`20h`), la punteggiatura e le cifre (`20h`-`3Fh`, con le cifre `0`-`9` a `30h`-`39h`), le **maiuscole** (`41h`-`5Ah`) e le **minuscole** (`61h`-`7Ah`). Una simmetria lega maiuscole e minuscole:
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 400 112" role="img" aria-label="A e a in ASCII differiscono di un solo bit, quello del valore 32" style="width:100%;max-width:440px;height:auto;color:inherit">
@@ -30,10 +30,10 @@ Con 7 bit l'ASCII copre i codici da `00h` a `7Fh` (128 in tutto), che si leggono
     </g>
   </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Una lettera minuscola dista <code>20h</code> (32) dalla sua maiuscola: <code>A</code> è <code>41h</code>, <code>a</code> è <code>61h</code>. Basta ribaltare un bit per cambiare caso — un solo bit di differenza.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Una lettera minuscola dista <code>20h</code> (32) dalla sua maiuscola: <code>A</code> è <code>41h</code>, <code>a</code> è <code>61h</code>. Basta ribaltare un solo bit per cambiare caso.</figcaption>
 </figure>
 
-Codificare una frase è quindi diretto: `Hello, you!` diventa `48 65 6C 6C 6F 2C 20 79 6F 75 21`. Va notato un punto sottile: dentro un testo, il *numero* 12 della frase `I am 12 years old.` **non** è il byte `0Ch`, ma i due caratteri `1` e `2`, cioè `31h 32h`.
+Codificare una frase è quindi diretto: `Hello, you!` diventa `48 65 6C 6C 6F 2C 20 79 6F 75 21`. Dentro un testo, però, il *numero* 12 della frase `I am 12 years old.` **non** è il byte `0Ch`, ma i due caratteri `1` e `2`, cioè `31h 32h`.
 
 I restanti 33 codici (`00h`-`1Fh` e `7Fh`) sono i **caratteri di controllo**: non hanno una forma visibile ma comandano un'azione, eredità dell'epoca delle telescriventi. I più importanti sono ancora oggi in uso:
 
@@ -48,16 +48,16 @@ I restanti 33 codici (`00h`-`1Fh` e `7Fh`) sono i **caratteri di controllo**: no
 | `1Bh` | ESC | escape |
 | `7Fh` | DEL | delete |
 
-L'ASCII descrive **testo semplice** (*plain text*), senza corsivo, grassetto, font o dimensioni: quella roba è il **testo formattato** (*rich text*). L'**HTML** è il formato rich-text più diffuso, e la cosa curiosa è che resta comunque plain text: aggiunge la formattazione con **tag** fatti di normali caratteri ASCII (`<` e `>` sono `3Ch` e `3Eh`). Così `This is <b>bold</b> text` è testo ASCII puro che il browser *interpreta* rendendo **bold** in grassetto.
+L'ASCII descrive **testo semplice** (*plain text*), senza corsivo, grassetto, font o dimensioni: quella roba è il **testo formattato** (*rich text*). L'**HTML** è il formato rich-text più diffuso, eppure resta plain text: aggiunge la formattazione con **tag** fatti di normali caratteri ASCII (`<` e `>` sono `3Ch` e `3Eh`). Così `This is <b>bold</b> text` è testo ASCII puro che il browser *interpreta* rendendo **bold** in grassetto.
 
 > [!warning]
 > Non esiste ancora uno standard universale per marcare la **fine riga** nel testo semplice: premendo Invio, Windows (Notepad) inserisce **due** codici, `0Dh 0Ah` (CR+LF); macOS (TextEdit) solo `0Ah`; il vecchio Mac OS classico solo `0Dh`. È una delle incongruenze che rendono fastidioso leggere su un sistema un file creato su un altro.
 
 ## Oltre l'inglese: EBCDIC, ASCII estesa, code page
 
-L'ASCII non fu adottato dentro **IBM**, che usava un proprio codice a 8 bit, l'**EBCDIC** (*Extended BCD Interchange Code*), derivato dalle schede perforate (*punch card*) — 80 caratteri per scheda, introdotte da IBM nel 1928 e usate per oltre cinquant'anni. Nell'EBCDIC le lettere non stanno in sequenza continua ma a gruppi con dei buchi, il che complica l'ordinamento alfabetico; nell'ASCII, invece, maiuscole e minuscole sono contigue e ordinarle è banale.
+L'ASCII non fu adottato dentro **IBM**, che usava un proprio codice a 8 bit, l'**EBCDIC** (*Extended BCD Interchange Code*), derivato dalle schede perforate (*punch card*), da 80 caratteri ciascuna, introdotte da IBM nel 1928 e usate per oltre cinquant'anni. Nell'EBCDIC le lettere non stanno in sequenza continua ma a gruppi con dei buchi, il che complica l'ordinamento alfabetico; nell'ASCII, invece, maiuscole e minuscole sono contigue e ordinarle è banale.
 
-Il problema più serio è che l'ASCII è *americano*: non ha le lettere accentate delle lingue europee, né gli alfabeti non latini (greco, cirillico, arabo, ebraico, gli alfabeti indiani e del sud-est asiatico), né tantomeno le decine di migliaia di ideogrammi di cinese, giapponese e coreano. Poiché però i byte hanno 8 bit e l'ASCII ne usa 7, restava mezzo alfabeto libero: si potevano definire codici **ASCII estesi**, in cui i primi 128 (`00h`-`7Fh`) sono l'ASCII standard e i secondi 128 (`80h`-`FFh`) contengono quello che serve. Il guaio è che questa estensione fu fatta **molte volte e in modi diversi**. Ogni variante è una **code page** (termine nato in IBM): Windows adottò l'insieme **Windows-1252** (una superset dell'ISO-8859-1, *Latin Alphabet No. 1*), con simboli e lettere accentate europee. Per interpretare bene un testo bisogna sapere *quale* code page l'ha prodotto: sul web questa informazione sta nell'intestazione (**header**) del file HTML. Per gli ideogrammi asiatici nacquero invece i **double-byte character set** (DBCS), come lo **Shift-JIS** giapponese, in cui certi codici introducono un carattere a **2 byte** — ma anche qui, standard multipli e incompatibili.
+Il problema più serio è che l'ASCII è *americano*: non ha le lettere accentate delle lingue europee, né gli alfabeti non latini (greco, cirillico, arabo, ebraico, gli alfabeti indiani e del sud-est asiatico), né tantomeno le decine di migliaia di ideogrammi di cinese, giapponese e coreano. Poiché però i byte hanno 8 bit e l'ASCII ne usa 7, restava mezzo alfabeto libero: si potevano definire codici **ASCII estesi**, in cui i primi 128 (`00h`-`7Fh`) sono l'ASCII standard e i secondi 128 (`80h`-`FFh`) contengono quello che serve. Il guaio è che questa estensione fu fatta **molte volte e in modi diversi**. Ogni variante è una **code page** (termine nato in IBM): Windows adottò l'insieme **Windows-1252** (una superset dell'ISO-8859-1, *Latin Alphabet No. 1*), con simboli e lettere accentate europee. Per interpretare bene un testo bisogna sapere *quale* code page l'ha prodotto: sul web questa informazione sta nell'intestazione (**header**) del file HTML. Per gli ideogrammi asiatici nacquero invece i **double-byte character set** (DBCS), come lo **Shift-JIS** giapponese, in cui certi codici introducono un carattere a **2 byte**; ma anche qui gli standard erano multipli e incompatibili.
 
 ## Unicode: un codice per tutte le lingue
 
@@ -82,18 +82,18 @@ Verso la metà degli anni '90 fu chiaro che 16 bit non bastavano: servivano scri
 
 Un conto è il code point (il *numero* del carattere), un altro è **come** lo si scrive in memoria: quest'ultima è la **codifica**, e Unicode ne definisce tre, dette *Unicode Transformation Format* (UTF).
 
-- **UTF-32** — ogni carattere in **4 byte** fissi. Semplice ma sprecone: *Moby-Dick*, che in ASCII pesa circa 1,25 milioni di byte, diventerebbe circa 5 milioni. Dei 32 bit se ne usano solo 21, 11 sono buttati.
-- **UTF-16** — la maggior parte dei caratteri in **2 byte**, quelli oltre `U+FFFF` in 4 (usando l'intervallo `U+D800`-`U+DFFF`, tenuto libero apposta).
-- **UTF-8** — il più importante: circa il **97% delle pagine web** lo usa, ed è il default di Notepad e TextEdit. Codifica ogni carattere con **da 1 a 4 byte** secondo il valore.
+- **UTF-32**: ogni carattere in **4 byte** fissi. Semplice ma sprecone: *Moby-Dick*, che in ASCII pesa circa 1,25 milioni di byte, diventerebbe circa 5 milioni. Dei 32 bit se ne usano solo 21, 11 sono buttati.
+- **UTF-16**: la maggior parte dei caratteri in **2 byte**, quelli oltre `U+FFFF` in 4 (usando l'intervallo `U+D800`-`U+DFFF`, tenuto libero apposta).
+- **UTF-8**: il più importante: circa il **97% delle pagine web** lo usa, ed è il default di Notepad e TextEdit. Codifica ogni carattere con **da 1 a 4 byte** secondo il valore.
 
 Il pregio decisivo di UTF-8 è di essere **retrocompatibile con l'ASCII**: un file di soli caratteri ASCII a 7 bit *è già* un file UTF-8 valido. Gli altri caratteri si spalmano su più byte secondo uno schema regolare:
 
 | Intervallo Unicode | Bit utili | Sequenza di byte |
 |:--|:--:|:--|
-| `U+0000` – `U+007F` | 7 | `0xxxxxxx` |
-| `U+0080` – `U+07FF` | 11 | `110xxxxx 10xxxxxx` |
-| `U+0800` – `U+FFFF` | 16 | `1110xxxx 10xxxxxx 10xxxxxx` |
-| `U+10000` – `U+10FFFF` | 21 | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` |
+| `U+0000`-`U+007F` | 7 | `0xxxxxxx` |
+| `U+0080`-`U+07FF` | 11 | `110xxxxx 10xxxxxx` |
+| `U+0800`-`U+FFFF` | 16 | `1110xxxx 10xxxxxx 10xxxxxx` |
+| `U+10000`-`U+10FFFF` | 21 | `11110xxx 10xxxxxx 10xxxxxx 10xxxxxx` |
 
 I bit fissi in testa a ogni byte (le `x` sono i bit del code point) rendono la decodifica **non ambigua**: un byte che inizia per `0` è un carattere ASCII; uno che inizia per `10` è la *continuazione* di una sequenza; uno che inizia con due o più `1` è il *primo* byte di una sequenza, e il numero di `1` iniziali dice **quanti** byte la compongono. Ecco per esempio come il simbolo della sterlina `£` (`U+00A3`, nell'intervallo a 2 byte) diventa i byte `C2h A3h`:
 
@@ -118,7 +118,7 @@ I bit fissi in testa a ogni byte (le `x` sono i bit del code point) rendono la d
 
 ## Il mistero del «Weâ€™ve»
 
-Ora tutti i pezzi sono al loro posto. In quell'email, l'apostrofo di *We've* non era il vecchio apostrofo ASCII (`U+0027`) ma il più elegante **Right Single Quotation Mark** (`U+2019`), che in UTF-8 occupa **tre** byte: `E2h 80h 99h`. Fin qui nessun problema. Ma l'header del file HTML dichiarava per sbaglio la code page **`windows-1252`** invece di **`utf-8`**: il programma di posta ha quindi letto quei tre byte **uno per uno** con la tabella Windows-1252, dove valgono `â`, `€`, `™`.
+In quell'email, l'apostrofo di *We've* non era il vecchio apostrofo ASCII (`U+0027`) ma il più elegante **Right Single Quotation Mark** (`U+2019`), che in UTF-8 occupa **tre** byte: `E2h 80h 99h`. Fin qui nessun problema. Ma l'header del file HTML dichiarava per sbaglio la code page **`windows-1252`** invece di **`utf-8`**: il programma di posta ha quindi letto quei tre byte **uno per uno** con la tabella Windows-1252, dove valgono `â`, `€`, `™`.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 460 176" role="img" aria-label="Gli stessi tre byte E2 80 99 letti come UTF-8 o come Windows-1252" style="width:100%;max-width:460px;height:auto;color:inherit">
@@ -133,10 +133,10 @@ Ora tutti i pezzi sono al loro posto. In quell'email, l'apostrofo di *We've* non
     <text x="241" y="168" font-size="13" text-anchor="middle">come Windows-1252 → â € ™ (tre caratteri)</text>
   </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Stessi byte, due letture diverse: dichiarare la code page sbagliata trasforma un apostrofo in <code>â€™</code>. Mistero risolto.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Stessi byte, due letture diverse: dichiarare la code page sbagliata trasforma un apostrofo in <code>â€™</code>.</figcaption>
 </figure>
 
-Unicode ha reso l'informatica un'esperienza davvero universale e multiculturale, ed è per questo uno standard importantissimo. Ma, come ogni cosa, funziona **solo se lo si usa correttamente**.
+Unicode ha reso l'informatica un'esperienza universale e multiculturale, ma funziona **solo se lo si usa correttamente**.
 
 > [!tip]
 > La catena da tenere a mente: un **carattere** ha un **code point** Unicode (`U+…`); il code point viene scritto in byte da una **codifica** (UTF-8/16/32); per rileggere quei byte serve conoscere la **stessa** codifica. Sbagliare la codifica dichiarata è la causa numero uno dei caratteri storti (*mojibake*).
@@ -187,7 +187,7 @@ Perché l'apostrofo era il Right Single Quotation Mark `U+2019`, che in UTF-8 è
 
 **In sintesi:**
 
-- Prima dell'ASCII: **Morse** (lunghezza variabile) e **Braille**/**Baudot** (lunghezza fissa), questi ultimi con **shift code** fragili — lo stesso bit vale cose diverse secondo la modalità.
+- Prima dell'ASCII: **Morse** (lunghezza variabile) e **Braille**/**Baudot** (lunghezza fissa), questi ultimi con **shift code** fragili: lo stesso bit vale cose diverse secondo la modalità.
 - L'**ASCII** (7 bit, 1967) risolve con posti separati: **95 caratteri grafici** + **33 di controllo**; maiuscole e minuscole a distanza `20h`. Descrive **plain text**; l'HTML aggiunge formattazione con tag pur restando testo ASCII.
-- L'ASCII è americano: per le altre lingue nacquero **EBCDIC**, gli **ASCII estesi**/**code page** (Windows-1252…) e i **DBCS** asiatici — tanti standard incompatibili.
+- L'ASCII è americano: per le altre lingue nacquero **EBCDIC**, gli **ASCII estesi**/**code page** (Windows-1252…) e i **DBCS** asiatici: tanti standard incompatibili.
 - **Unicode** (1988) dà a ogni carattere un **code point** (`U+…`), oggi fino a `U+10FFFF` (>1 milione). Le **codifiche** UTF-8/16/32 lo scrivono in byte; **UTF-8** domina (~97% del web) perché è ASCII-compatibile. Sbagliare la codifica dichiarata genera il *mojibake* (`Weâ€™ve`).
