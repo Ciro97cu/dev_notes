@@ -2,7 +2,7 @@
 
 Un `enum` permette di definire un insieme di costanti con nomi leggibili, raggruppando sotto un'unica entità una serie di valori correlati. L'obiettivo principale è rendere il codice più espressivo e più sicuro: invece di disseminare numeri o stringhe "magici" nel programma, si fa riferimento a identificatori parlanti, e il compilatore limita i valori ammessi a quelli dichiarati nell'enum.
 
-A differenza della maggior parte dei costrutti di tipo di TypeScript, un `enum` non vive soltanto a livello di tipi: viene emesso anche nel JavaScript generato come oggetto reale, presente quindi a runtime. Questa caratteristica lo distingue dalle alternative basate sui tipi (union di literal, oggetti `as const`) e merita attenzione nel momento in cui si sceglie come modellare un insieme finito di valori.
+A differenza della maggior parte dei costrutti di tipo di TypeScript, un `enum` viene emesso anche nel JavaScript generato come oggetto reale, presente quindi a runtime. Questa caratteristica lo distingue dalle alternative basate sui tipi (union di literal, oggetti `as const`) e merita attenzione nel momento in cui si sceglie come modellare un insieme finito di valori.
 
 ## Enum numerici
 
@@ -48,7 +48,7 @@ console.log(Direzione[0]);      // "Su"
 console.log(Direzione["Giu"]);  // 1
 ```
 
-Va però osservato che un enum numerico è permissivo in fase di assegnazione: qualsiasi `number` viene accettato dove è atteso il tipo dell'enum, anche se non corrisponde ad alcun membro dichiarato. Questo riduce le garanzie offerte dal type system.
+Un enum numerico è però permissivo in fase di assegnazione: qualsiasi `number` viene accettato dove è atteso il tipo dell'enum, anche se non corrisponde ad alcun membro dichiarato. Questo riduce le garanzie offerte dal type system.
 
 ```ts
 enum Direzione {

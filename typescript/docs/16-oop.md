@@ -76,7 +76,7 @@ console.log(conto.saldo);
 
 ## Getters e setters
 
-Gli accessor `get` e `set` permettono di intercettare la lettura e la scrittura di una proprietà come se si trattasse di un campo ordinario, eseguendo però del codice arbitrario al loro interno. Un `getter` viene invocato quando si legge la proprietà e può restituire un valore calcolato; un `setter` viene invocato quando le si assegna un valore e rappresenta il punto naturale in cui inserire la validazione. Un caso tipico prevede una proprietà `private` con un nome convenzionale preceduto dal trattino basso, affiancata da una coppia di accessor pubblici che ne controllano l'accesso.
+Gli accessor `get` e `set` permettono di intercettare la lettura e la scrittura di una proprietà come se si trattasse di un campo ordinario, eseguendo però del codice arbitrario al loro interno. Un `getter` viene invocato quando si legge la proprietà e può restituire un valore calcolato; un `setter` viene invocato quando le si assegna un valore ed è il punto naturale in cui inserire la validazione. Un caso tipico prevede una proprietà `private` con un nome convenzionale preceduto dal trattino basso, affiancata da una coppia di accessor pubblici che ne controllano l'accesso.
 
 ```ts
 class Temperatura {
@@ -232,7 +232,7 @@ console.log(a === b); // true
 const c = new Configurazione();
 ```
 
-Poiché il campo `istanza` è esso stesso statico, persiste per l'intera durata del programma e funge da riferimento condiviso che lega insieme tutte le chiamate a `getIstanza`.
+Poiché il campo `istanza` è esso stesso statico, persiste per l'intera durata del programma ed è il riferimento condiviso che lega insieme tutte le chiamate a `getIstanza`.
 
 ## Domande
 
@@ -260,7 +260,7 @@ Tramite il nome della classe e non tramite `this`. Un membro statico appartiene 
 <details>
 <summary>Cosa accade se si tenta di istanziare direttamente una classe abstract con new?</summary>
 
-Il compilatore emette l'errore "Cannot create an instance of an abstract class." Una classe astratta funge unicamente da base per la derivazione: deve essere estesa da una sottoclasse concreta che implementi tutti i suoi metodi astratti, e solo quella sottoclasse può essere istanziata.
+Il compilatore emette l'errore "Cannot create an instance of an abstract class." Una classe astratta serve unicamente da base per la derivazione: deve essere estesa da una sottoclasse concreta che implementi tutti i suoi metodi astratti, e solo quella sottoclasse può essere istanziata.
 
 </details>
 

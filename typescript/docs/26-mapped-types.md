@@ -50,7 +50,7 @@ type SolaLettura<T> = {
 };
 ```
 
-La vera novità dei mapped type è la possibilità di **rimuovere** un modificatore, non solo di aggiungerlo, anteponendogli il segno `-`. Il prefisso `+`, ammesso per simmetria, indica esplicitamente l'aggiunta ma è di norma superfluo. In questo modo si costruiscono le trasformazioni inverse: rendere mutabile un tipo `readonly`, oppure rendere obbligatorie tutte le proprietà opzionali.
+Nei mapped type un modificatore si può anche **rimuovere**, anteponendogli il segno `-`. Il prefisso `+`, ammesso per simmetria, indica esplicitamente l'aggiunta ma è di norma superfluo. In questo modo si costruiscono le trasformazioni inverse: rendere mutabile un tipo `readonly`, oppure rendere obbligatorie tutte le proprietà opzionali.
 
 ```ts
 // Rimuove readonly da ogni proprietà
@@ -129,6 +129,6 @@ Si antepone il segno `-` al modificatore da rimuovere: `-readonly` elimina la so
 <details>
 <summary>Che cosa permette la clausola `as` nella rimappatura delle chiavi?</summary>
 
-Permette di calcolare un nuovo nome per ciascuna chiave durante la mappatura. Combinata con i template literal type consente di derivare nomi a partire da quelli esistenti, ad esempio anteponendo `get` e capitalizzando la chiave per generare una famiglia di getter. Assegnando invece `never` come nuovo nome, la proprietà viene esclusa dal tipo risultante: unita a un conditional type, questa tecnica realizza un vero e proprio filtro, che conserva solo le chiavi le cui proprietà soddisfano una determinata condizione sul loro tipo.
+Permette di calcolare un nuovo nome per ciascuna chiave durante la mappatura. Combinata con i template literal type consente di derivare nomi a partire da quelli esistenti, ad esempio anteponendo `get` e capitalizzando la chiave per generare una famiglia di getter. Assegnando invece `never` come nuovo nome, la proprietà viene esclusa dal tipo risultante: unita a un conditional type, questa tecnica realizza un filtro, che conserva solo le chiavi le cui proprietà soddisfano una determinata condizione sul loro tipo.
 
 </details>

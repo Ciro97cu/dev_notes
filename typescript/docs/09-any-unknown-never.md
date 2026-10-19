@@ -1,6 +1,6 @@
 # any, unknown e never
 
-Oltre ai tipi che descrivono valori concreti, il type system di TypeScript mette a disposizione alcuni tipi speciali che ne governano i confini. Tra questi, `any`, `unknown` e `never` ricoprono ruoli particolari: il primo disattiva i controlli, il secondo rappresenta in modo sicuro un valore di cui ancora non si conosce la forma, il terzo descrive ciò che non può mai esistere. Comprenderne le differenze è fondamentale per scrivere codice robusto e per sfruttare al meglio il type checking.
+Oltre ai tipi che descrivono valori concreti, il type system di TypeScript mette a disposizione alcuni tipi speciali che ne governano i confini. Tra questi, `any`, `unknown` e `never` ricoprono ruoli particolari: il primo disattiva i controlli, il secondo rappresenta in modo sicuro un valore di cui ancora non si conosce la forma, il terzo descrive ciò che non può mai esistere. Conoscerne le differenze serve a scrivere codice affidabile e a sfruttare al meglio il type checking.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 545 285" role="img" aria-label="Assegnabilità: unknown top type, never bottom type, any bypassa" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="150" y="24" width="190" height="44" rx="8" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="245" y="46" font-size="15" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">unknown</text><text x="245" y="62" font-size="9.5" text-anchor="middle" font-weight="400" opacity=".65" fill="currentColor">top type</text><rect x="140" y="118" width="210" height="44" rx="8" fill="var(--link,#3178c6)" fill-opacity=".08" stroke="currentColor" stroke-width="1.6"/><text x="245" y="140" font-size="11.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">string · number · object · …</text><rect x="150" y="212" width="190" height="44" rx="8" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="245" y="234" font-size="15" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">never</text><text x="245" y="250" font-size="9.5" text-anchor="middle" font-weight="400" opacity=".65" fill="currentColor">bottom type</text><line x1="245" y1="212" x2="245" y2="168" stroke="currentColor" stroke-width="1.6"/><path d="M241 168 L245 162 L249 168 Z" fill="currentColor"/><line x1="245" y1="118" x2="245" y2="74" stroke="currentColor" stroke-width="1.6"/><path d="M241 74 L245 68 L249 74 Z" fill="currentColor"/><text x="70" y="150" font-size="10.5" font-weight="700" fill="currentColor" transform="rotate(-90 70 150)">assegnabilità ↑</text><line x1="96" y1="250" x2="96" y2="36" stroke="currentColor" stroke-width="1.4"/><path d="M92 36 L96 30 L100 36 Z" fill="currentColor"/><rect x="380" y="118" width="150" height="44" rx="8" fill="var(--link,#3178c6)" fill-opacity=".08" stroke="currentColor" stroke-width="1.6"/><text x="455" y="138" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">any</text><text x="455" y="154" font-size="9" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">bypassa i controlli</text><text x="455" y="180" font-size="9" text-anchor="middle" font-weight="400" opacity=".6" fill="currentColor">↕ in entrambe le direzioni</text></g></svg>
@@ -9,7 +9,7 @@ Oltre ai tipi che descrivono valori concreti, il type system di TypeScript mette
 
 ## any
 
-Il tipo `any` rappresenta qualsiasi valore e di fatto disattiva il type system per la variabile a cui viene applicato. A un valore di tipo `any` si può assegnare qualunque cosa, e da esso si può leggere qualunque proprietà o invocare qualunque metodo senza che il compilatore sollevi obiezioni. Questa libertà ha però un costo elevato: si perdono il type checking, l'autocompletamento e la documentazione implicita che i tipi forniscono. Gli errori che il compilatore avrebbe normalmente intercettato vengono rimandati al runtime, dove diventano molto più difficili da individuare.
+Il tipo `any` rappresenta qualsiasi valore e disattiva il type system per la variabile a cui viene applicato. A un valore di tipo `any` si può assegnare qualunque cosa, e da esso si può leggere qualunque proprietà o invocare qualunque metodo senza che il compilatore sollevi obiezioni. Questa libertà ha però un costo elevato: si perdono il type checking, l'autocompletamento e la documentazione implicita che i tipi forniscono. Gli errori che il compilatore avrebbe normalmente intercettato vengono rimandati al runtime, dove diventano molto più difficili da individuare.
 
 ```ts
 let valore: any = "ciao";
@@ -49,7 +49,7 @@ function salutaTipizzato(nome: string) {
 }
 ```
 
-Il tipo `any` resta utile in casi circoscritti, come la migrazione progressiva di una base di codice JavaScript verso TypeScript, ma il suo impiego va considerato un'eccezione temporanea e non una scelta di progettazione. Quando si ha a che fare con un valore di tipo realmente sconosciuto, la risposta corretta è `unknown`.
+Il tipo `any` resta utile in casi circoscritti, come la migrazione progressiva di una base di codice JavaScript verso TypeScript, ma il suo impiego va considerato un'eccezione temporanea. Quando si ha a che fare con un valore di tipo realmente sconosciuto, la risposta corretta è `unknown`.
 
 ## unknown
 
@@ -131,7 +131,7 @@ try {
 }
 ```
 
-Il motivo per cui `unknown` è preferibile ad `any` si riassume così: entrambi accettano qualsiasi valore in ingresso, ma `unknown` mantiene attivo il type system imponendo una verifica prima dell'uso, mentre `any` lo disattiva completamente. Con `unknown` la sicurezza dei tipi viene preservata e gli errori emergono durante la compilazione; con `any` vengono semplicemente rimandati al runtime. Quando un valore è davvero sconosciuto, dunque, la scelta corretta è `unknown`.
+`unknown` è preferibile ad `any` perché, pur accettando entrambi qualsiasi valore in ingresso, `unknown` mantiene attivo il type system imponendo una verifica prima dell'uso, mentre `any` lo disattiva completamente. Con `unknown` la sicurezza dei tipi viene preservata e gli errori emergono durante la compilazione; con `any` vengono semplicemente rimandati al runtime. Quando un valore è davvero sconosciuto, dunque, la scelta corretta è `unknown`.
 
 ## never
 

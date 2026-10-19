@@ -38,7 +38,7 @@ console.log(persona.nome, persona.eta);
 
 ## Built-in generics
 
-Gran parte della libreria standard è già definita in termini di generics, spesso senza che ciò risulti evidente. Il tipo `Array<T>` descrive un array i cui elementi sono tutti di tipo `T`; la notazione `T[]` è semplicemente una forma abbreviata ed equivalente. Allo stesso modo, `Promise<T>` rappresenta un'operazione asincrona che, una volta completata, si risolve con un valore di tipo `T`.
+Gran parte della libreria standard è già definita in termini di generics, spesso senza che ciò risulti evidente. Il tipo `Array<T>` descrive un array i cui elementi sono tutti di tipo `T`; la notazione `T[]` è semplicemente una forma abbreviata ed equivalente. Allo stesso modo, `Promise<T>` descrive un'operazione asincrona che, una volta completata, si risolve con un valore di tipo `T`.
 
 ```ts
 // Le due forme sono equivalenti
@@ -99,7 +99,7 @@ interface Persona {
 type ChiaviPersona = keyof Persona; // "nome" | "eta"
 ```
 
-La vera utilità emerge combinando `keyof` con i generics. Una funzione che estrae il valore di una proprietà da un oggetto deve garantire due cose: che la chiave richiesta esista davvero e che il tipo restituito corrisponda a quello della proprietà. Entrambi gli obiettivi si raggiungono con il pattern `K extends keyof T`, abbinato all'indexed access type `T[K]`:
+`keyof` diventa utile soprattutto in combinazione con i generics. Una funzione che estrae il valore di una proprietà da un oggetto deve garantire due cose: che la chiave richiesta esista davvero e che il tipo restituito corrisponda a quello della proprietà. Entrambi gli obiettivi si raggiungono con il pattern `K extends keyof T`, abbinato all'indexed access type `T[K]`:
 
 ```ts
 function getProprieta<T, K extends keyof T>(oggetto: T, chiave: K): T[K] {
@@ -185,7 +185,7 @@ In questo caso il constraint assicura che ogni tipo gestito dal `Repository` dis
 
 ## const type parameters
 
-Per impostazione predefinita l'inferenza dei generics allarga i literal ai loro tipi di base: passando la stringa `"auto"` a una funzione generica, il parametro di tipo viene dedotto come `string`, non come il literal `"auto"`. Talvolta però si desidera che l'inferenza conservi i literal, come accadrebbe se il chiamante scrivesse `as const`. Il modificatore `const`, anteposto a un parametro di tipo, ottiene esattamente questo, spostando la decisione dall'utente all'autore della funzione.
+Per impostazione predefinita l'inferenza dei generics allarga i literal ai loro tipi di base: passando la stringa `"auto"` a una funzione generica, il parametro di tipo viene dedotto come `string`, non come il literal `"auto"`. Talvolta però si desidera che l'inferenza conservi i literal, come accadrebbe se il chiamante scrivesse `as const`. Il modificatore `const`, anteposto a un parametro di tipo, produce questo comportamento e sposta la decisione dall'utente all'autore della funzione.
 
 ```ts
 function configura<const T>(opzioni: T): T {

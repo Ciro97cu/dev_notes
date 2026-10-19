@@ -1,6 +1,6 @@
 # Classi
 
-Le classi sono il costrutto che TypeScript mette a disposizione per definire strutture dati complesse insieme al comportamento che opera su di esse. Una classe funge da modello (blueprint) a partire dal quale si creano oggetti, chiamati istanze, tramite l'operatore `new`. Pur trattandosi di un costrutto già presente in JavaScript moderno, TypeScript lo arricchisce con il controllo statico dei tipi, con gli access modifier e con una serie di scorciatoie sintattiche che riducono il codice ripetitivo.
+Le classi sono il costrutto che TypeScript mette a disposizione per definire strutture dati complesse insieme al comportamento che opera su di esse. Una classe è il modello (blueprint) a partire dal quale si creano oggetti, chiamati istanze, tramite l'operatore `new`. Pur trattandosi di un costrutto già presente in JavaScript moderno, TypeScript lo arricchisce con il controllo statico dei tipi, con gli access modifier e con una serie di scorciatoie sintattiche che riducono il codice ripetitivo.
 
 Una classe si definisce con la keyword `class` seguita dal nome, per convenzione in PascalCase, e da un blocco che ne racchiude i membri.
 
@@ -15,7 +15,7 @@ console.log(p instanceof Persona); // true
 
 Lo stato di un'istanza è descritto dalle sue proprietà, ovvero variabili associate all'oggetto e dichiarate all'interno del corpo della classe con il proprio tipo. Il comportamento è invece definito dai metodi, funzioni che operano su quello stato. Esiste poi un metodo speciale, il `constructor`, che viene invocato automaticamente al momento della creazione dell'istanza con `new` e che serve a inizializzare le proprietà a partire dagli argomenti ricevuti.
 
-Va tenuto presente che, con le impostazioni predefinite di TypeScript 7.0 (dove `strict` vale `true`), è attivo anche `strictPropertyInitialization`: ogni proprietà dichiarata deve essere inizializzata, nel constructor oppure tramite un valore di default, altrimenti il compilatore segnala un errore.
+Con le impostazioni predefinite di TypeScript 7.0 (dove `strict` vale `true`) è attivo anche `strictPropertyInitialization`: ogni proprietà dichiarata deve essere inizializzata, nel constructor oppure tramite un valore di default, altrimenti il compilatore segnala un errore.
 
 ```ts
 class Persona {
@@ -47,7 +47,7 @@ class Conto {
 
 ## this e il problema dei callback
 
-All'interno di un metodo, la keyword `this` fa riferimento all'istanza su cui il metodo è stato invocato. Il punto delicato è che, in JavaScript, il valore di `this` non è legato al punto in cui il metodo viene definito, bensì al modo in cui viene chiamato. Quando un metodo viene estratto dall'oggetto e passato altrove come callback, ad esempio a `setTimeout` o a un gestore di eventi, perde il proprio collegamento con l'istanza: in modalità strict, che con TypeScript 7.0 è quella predefinita, `this` diventa `undefined`, con il conseguente errore a runtime.
+All'interno di un metodo, la keyword `this` fa riferimento all'istanza su cui il metodo è stato invocato. In JavaScript, però, il valore di `this` non è legato al punto in cui il metodo viene definito, bensì al modo in cui viene chiamato. Quando un metodo viene estratto dall'oggetto e passato altrove come callback, ad esempio a `setTimeout` o a un gestore di eventi, perde il proprio collegamento con l'istanza: in modalità strict, che con TypeScript 7.0 è quella predefinita, `this` diventa `undefined`, con il conseguente errore a runtime.
 
 ```ts
 class Contatore {
@@ -155,7 +155,7 @@ console.log(conto.saldo);
 // Errore: Property 'saldo' is private and only accessible within class 'ContoBancario'.
 ```
 
-Va segnalato che gli access modifier di TypeScript impongono i loro vincoli soltanto in fase di compilazione e vengono rimossi dal JavaScript generato. Quando serve un incapsulamento effettivo anche a runtime, JavaScript moderno offre i campi privati nativi con il prefisso `#`, riconosciuti pienamente da TypeScript.
+Gli access modifier di TypeScript impongono i loro vincoli soltanto in fase di compilazione e vengono rimossi dal JavaScript generato. Quando serve un incapsulamento effettivo anche a runtime, JavaScript moderno offre i campi privati nativi con il prefisso `#`, riconosciuti pienamente da TypeScript.
 
 ```ts
 class Segreto {
@@ -193,7 +193,7 @@ console.log(libro.nome);  // Il nome della rosa
 console.log(libro.codice); // ABC-001
 ```
 
-Il punto fondamentale è che il modificatore non può essere omesso: senza `public`, `private`, `protected` o `readonly` davanti al parametro, quest'ultimo resta un semplice argomento del constructor e non viene promosso a proprietà dell'istanza.
+Il modificatore non può essere omesso: senza `public`, `private`, `protected` o `readonly` davanti al parametro, quest'ultimo resta un semplice argomento del constructor e non viene promosso a proprietà dell'istanza.
 
 ```ts
 class Esempio {

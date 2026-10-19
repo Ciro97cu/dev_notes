@@ -41,7 +41,7 @@ function registra(messaggio: string): void {
 }
 ```
 
-Va osservata una particolarità del tipo `void` come tipo di ritorno atteso: quando una funzione viene assegnata a un tipo che prevede ritorno `void`, è comunque ammesso che la sua implementazione restituisca un valore, il quale viene semplicemente ignorato. Questo comportamento, all'apparenza sorprendente, è ciò che consente di passare funzioni come `Array.prototype.push` a metodi come `forEach`, che si aspettano una callback con ritorno `void`.
+Il tipo `void` come tipo di ritorno atteso ha una particolarità: quando una funzione viene assegnata a un tipo che prevede ritorno `void`, è comunque ammesso che la sua implementazione restituisca un valore, il quale viene semplicemente ignorato. Questo comportamento, all'apparenza sorprendente, è ciò che consente di passare funzioni come `Array.prototype.push` a metodi come `forEach`, che si aspettano una callback con ritorno `void`.
 
 ```ts
 type Callback = (valore: number) => void;
@@ -188,7 +188,7 @@ const singolo = trova(1);      // tipo Utente | undefined
 const elenco = trova([1, 2]);  // tipo Utente[]
 ```
 
-Va tenuto presente che, quando le firme alternative differiscono unicamente per il tipo di alcuni argomenti senza che ne dipenda il tipo di ritorno, soluzioni come i parametri opzionali, i valori di default o gli union type sono spesso più semplici e altrettanto efficaci. Gli overload andrebbero quindi riservati ai casi in cui esprimono una relazione che le altre tecniche non sanno catturare.
+Quando le firme alternative differiscono unicamente per il tipo di alcuni argomenti senza che ne dipenda il tipo di ritorno, soluzioni come i parametri opzionali, i valori di default o gli union type sono spesso più semplici e altrettanto efficaci. Gli overload andrebbero quindi riservati ai casi in cui esprimono una relazione che le altre tecniche non sanno catturare.
 
 ## Domande
 

@@ -34,7 +34,7 @@ Quando `keyof` viene applicato a un tipo con index signature, restituisce il tip
 
 ## typeof in posizione di tipo
 
-La keyword `typeof` ha due impieghi distinti che è importante non confondere. In un'espressione, `typeof valore` è l'operatore JavaScript che restituisce a runtime una stringa come `"string"` o `"object"`. In posizione di tipo, invece, `typeof valore` è un type query: non produce alcun valore a runtime, ma comunica al compilatore di ricavare il tipo statico di quella variabile o costante.
+La keyword `typeof` ha due impieghi distinti, da non confondere. In un'espressione, `typeof valore` è l'operatore JavaScript che restituisce a runtime una stringa come `"string"` o `"object"`. In posizione di tipo, invece, `typeof valore` è un type query: non produce alcun valore a runtime, ma comunica al compilatore di ricavare il tipo statico di quella variabile o costante.
 
 ```ts
 const configurazione = {
@@ -47,7 +47,7 @@ type Configurazione = typeof configurazione;
 // { host: string; porta: number }
 ```
 
-Questo strumento è prezioso quando la fonte di verità è un valore concreto (un oggetto di configurazione, un insieme di costanti) e si vuole derivarne il tipo senza riscriverlo a mano, mantenendo automaticamente l'allineamento fra valore e tipo.
+Questo strumento è utile quando la fonte di verità è un valore concreto (un oggetto di configurazione, un insieme di costanti) e si vuole derivarne il tipo senza riscriverlo a mano, mantenendo automaticamente l'allineamento fra valore e tipo.
 
 ## keyof typeof
 
@@ -105,7 +105,7 @@ proprieta(persona, "indirizzo");
 // Errore: Argument of type '"indirizzo"' is not assignable to parameter of type 'keyof Persona'.
 ```
 
-Il vincolo `K extends keyof T` è ciò che rende sicura la funzione: senza di esso si potrebbe passare una chiave qualsiasi, e il tipo di ritorno non potrebbe essere legato alla proprietà richiesta.
+Il vincolo `K extends keyof T` rende sicura la funzione: senza di esso si potrebbe passare una chiave qualsiasi, e il tipo di ritorno non potrebbe essere legato alla proprietà richiesta.
 
 ## Domande
 
@@ -133,6 +133,6 @@ Serve a ottenere l'union delle chiavi di un oggetto esistente senza doverne dich
 <details>
 <summary>Perché nel getter type-safe è necessario il vincolo `K extends keyof T`?</summary>
 
-Perché è ciò che collega la chiave richiesta all'insieme delle proprietà effettivamente esistenti e permette di dichiarare il tipo di ritorno come `T[K]`. Senza il vincolo, `K` potrebbe essere qualunque tipo, il compilatore non potrebbe garantire che la chiave esista sull'oggetto e non saprebbe determinare il tipo del valore restituito. Con `K extends keyof T` una chiave inesistente viene rifiutata già in compilazione, e per ogni chiave valida il tipo di ritorno corrisponde esattamente al tipo di quella proprietà.
+Perché collega la chiave richiesta all'insieme delle proprietà effettivamente esistenti e permette di dichiarare il tipo di ritorno come `T[K]`. Senza il vincolo, `K` potrebbe essere qualunque tipo, il compilatore non potrebbe garantire che la chiave esista sull'oggetto e non saprebbe determinare il tipo del valore restituito. Con `K extends keyof T` una chiave inesistente viene rifiutata già in compilazione, e per ogni chiave valida il tipo di ritorno corrisponde esattamente al tipo di quella proprietà.
 
 </details>

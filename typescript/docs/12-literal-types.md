@@ -1,6 +1,6 @@
 # Literal types
 
-Un literal type rappresenta un singolo valore concreto trattato come tipo a sé stante. Anziché ammettere qualunque valore appartenente a un tipo primitivo, un literal type restringe ciò che è assegnabile a un'unica costante specifica: una determinata stringa, un determinato numero o un determinato valore booleano. In questo modo il type system non descrive più semplicemente la "forma" del dato, ma vincola il dato a far parte di un insieme chiuso e predeterminato di valori leciti.
+Un literal type rappresenta un singolo valore concreto trattato come tipo a sé stante. Anziché ammettere qualunque valore appartenente a un tipo primitivo, un literal type restringe ciò che è assegnabile a un'unica costante specifica: una determinata stringa, un determinato numero o un determinato valore booleano. In questo modo il type system, oltre a descrivere la "forma" del dato, lo vincola a far parte di un insieme chiuso e predeterminato di valori leciti.
 
 I literal type esistono in tre varianti, allineate ai primitivi che li generano. I string literal type, come `"submit"`, ammettono soltanto quell'esatta sequenza di caratteri. I numeric literal type, come `200` o `404`, ammettono soltanto quel valore numerico. I boolean literal type, `true` e `false`, restringono il valore a una sola delle due possibilità del tipo `boolean`.
 
@@ -15,7 +15,7 @@ metodo = "reset";
 
 ## Restringere i valori con i literal type
 
-Un literal type isolato è raramente utile, perché un valore vincolato a una sola costante non offre alcuna libertà. La loro potenza emerge quando vengono combinati in un union type: si ottiene così un insieme finito ed esplicito di valori ammessi, che il compilatore verifica in fase di sviluppo. Questo pattern permette di modellare con precisione concetti che nella realtà assumono solo poche varianti, come lo stato di una richiesta, il tipo di un pulsante HTML o la direzione di un movimento.
+Un literal type isolato è raramente utile, perché un valore vincolato a una sola costante non offre alcuna libertà. Diventano utili quando vengono combinati in un union type: si ottiene così un insieme finito ed esplicito di valori ammessi, che il compilatore verifica in fase di sviluppo. Questo pattern permette di modellare con precisione concetti che nella realtà assumono solo poche varianti, come lo stato di una richiesta, il tipo di un pulsante HTML o la direzione di un movimento.
 
 ```ts
 // Union di string literal: solo questi tre valori sono leciti
@@ -55,7 +55,7 @@ gestisci(301);
 // Errore: Argument of type '301' is not assignable to parameter of type 'CodiceStato'.
 ```
 
-I literal type collaborano in modo naturale con il narrowing. All'interno di un blocco controllato da un confronto di uguaglianza o da uno `switch`, il compilatore riduce automaticamente il tipo al singolo literal corrispondente, rendendo sicuro l'accesso al ramo di codice pertinente. Questa combinazione è alla base delle discriminated union, in cui una proprietà tipizzata con un literal type funge da discriminante fra le varianti di un oggetto.
+I literal type collaborano in modo naturale con il narrowing. All'interno di un blocco controllato da un confronto di uguaglianza o da uno `switch`, il compilatore riduce automaticamente il tipo al singolo literal corrispondente, rendendo sicuro l'accesso al ramo di codice pertinente. Questa combinazione è alla base delle discriminated union, in cui una proprietà tipizzata con un literal type è il discriminante fra le varianti di un oggetto.
 
 ## Widening dei literal type
 
@@ -143,7 +143,7 @@ Con `let saluto = "ciao"` il compilatore applica il widening e inferisce il tipo
 <details>
 <summary>Perché un literal type isolato come `type T = "submit"` è poco utile, e come se ne sfrutta realmente la potenza?</summary>
 
-Un literal type isolato vincola la variabile a un unico valore, lasciando di fatto una sola possibilità e quindi nessuna libertà. La loro utilità emerge combinandoli in un union type, ad esempio `type ButtonType = "submit" | "reset" | "button"`: si ottiene un insieme finito ed esplicito di valori ammessi, verificato dal compilatore in fase di sviluppo e suggerito dal completamento automatico.
+Un literal type isolato vincola la variabile a un unico valore, lasciando una sola possibilità e quindi nessuna libertà. La loro utilità emerge combinandoli in un union type, ad esempio `type ButtonType = "submit" | "reset" | "button"`: si ottiene un insieme finito ed esplicito di valori ammessi, verificato dal compilatore in fase di sviluppo e suggerito dal completamento automatico.
 </details>
 
 <details>
@@ -161,5 +161,5 @@ Senza `as const`, le proprietà di un oggetto subiscono il widening verso i tipi
 <details>
 <summary>In quali contesti i literal type collaborano con il narrowing del compilatore?</summary>
 
-All'interno di un confronto di uguaglianza o di uno `switch`, il compilatore restringe automaticamente il tipo al singolo literal corrispondente nel ramo pertinente, rendendo sicuro l'accesso ai valori. Questa collaborazione è il fondamento delle discriminated union, dove una proprietà tipizzata con un literal type funge da discriminante per distinguere in modo type-safe le varianti di un oggetto.
+All'interno di un confronto di uguaglianza o di uno `switch`, il compilatore restringe automaticamente il tipo al singolo literal corrispondente nel ramo pertinente, rendendo sicuro l'accesso ai valori. Questa collaborazione è il fondamento delle discriminated union, dove una proprietà tipizzata con un literal type serve da discriminante per distinguere in modo type-safe le varianti di un oggetto.
 </details>

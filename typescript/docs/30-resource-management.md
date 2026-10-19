@@ -4,7 +4,7 @@ Molte risorse (file aperti, connessioni di rete, lock, sottoscrizioni) vanno ril
 
 ## La dichiarazione using
 
-Una dichiarazione `using` si comporta come `const`, con una differenza fondamentale: la risorsa assegnata deve possedere un metodo `[Symbol.dispose]()`, e quel metodo viene chiamato automaticamente all'uscita dallo scope che contiene la dichiarazione. Un oggetto che espone tale metodo è detto disposable e implementa l'interfaccia `Disposable`.
+Una dichiarazione `using` si comporta come `const`, con una differenza: la risorsa assegnata deve possedere un metodo `[Symbol.dispose]()`, e quel metodo viene chiamato automaticamente all'uscita dallo scope che contiene la dichiarazione. Un oggetto che espone tale metodo è detto disposable e implementa l'interfaccia `Disposable`.
 
 ```ts
 class RisorsaFile implements Disposable {

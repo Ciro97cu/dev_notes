@@ -19,7 +19,7 @@ errori.E003 = "Sessione scaduta";
 errori["E004"] = "Permesso negato";
 ```
 
-Il nome scelto per la chiave (`codice` nell'esempio) è puramente documentativo: serve a chiarire l'intento, ma non vincola in alcun modo i nomi effettivi delle proprietà. Ciò che conta sono i due tipi coinvolti, quello della chiave e quello del valore.
+Il nome scelto per la chiave (`codice` nell'esempio) è puramente documentativo: serve a chiarire l'intento, ma non vincola in alcun modo i nomi effettivi delle proprietà. Contano invece i due tipi coinvolti, quello della chiave e quello del valore.
 
 ## Vincolo di omogeneità
 
@@ -56,7 +56,7 @@ interface ConfigurazioneNonValida {
 }
 ```
 
-Quando si desidera ammettere valori di natura diversa pur mantenendo una struttura aperta, la soluzione corretta non è violare l'omogeneità, bensì ampliare il tipo dei valori con un union type. In questo modo il vincolo resta soddisfatto, perché ogni valore continua a essere assegnabile al tipo dichiarato.
+Quando si desidera ammettere valori di natura diversa pur mantenendo una struttura aperta, si amplia il tipo dei valori con un union type. In questo modo il vincolo resta soddisfatto, perché ogni valore continua a essere assegnabile al tipo dichiarato.
 
 ```ts
 interface Impostazioni {
@@ -72,7 +72,7 @@ const preferenze: Impostazioni = {
 
 ## Chiavi numeriche trattate come stringhe
 
-Le chiavi degli oggetti in JavaScript sono sempre, di fatto, delle stringhe (o dei `symbol`). Per questo motivo, anche quando si dichiara una index signature con chiavi numeriche tramite `[indice: number]`, le chiavi numeriche vengono normalizzate a stringhe a runtime: scrivere `oggetto[0]` equivale ad accedere alla proprietà `"0"`.
+Le chiavi degli oggetti in JavaScript sono sempre delle stringhe (o dei `symbol`). Per questo motivo, anche quando si dichiara una index signature con chiavi numeriche tramite `[indice: number]`, le chiavi numeriche vengono normalizzate a stringhe a runtime: scrivere `oggetto[0]` equivale ad accedere alla proprietà `"0"`.
 
 TypeScript modella questo comportamento imponendo una regola di coerenza: se un tipo possiede sia una index signature numerica sia una index signature di tipo stringa, il tipo dei valori della signature numerica deve essere assegnabile al tipo dei valori della signature di stringa. La signature numerica viene quindi considerata un caso più ristretto di quella di stringa.
 
@@ -186,7 +186,7 @@ La chiave numerica viene normalizzata a stringa, poiché in JavaScript le chiavi
 <details>
 <summary>Perché una proprietà esplicita dichiarata accanto a una index signature può generare un errore del compilatore?</summary>
 
-Perché il tipo della proprietà esplicita deve essere compatibile con il tipo dei valori della index signature. Data una signature `[opzione: string]: string`, una proprietà `attiva: boolean` produce un errore del tipo "Property 'attiva' of type 'boolean' is not assignable to 'string' index type 'string'.", in quanto `boolean` non è assegnabile a `string`. La proprietà esplicita deve rientrare nel tipo dei valori imposto dalla signature.
+Perché il tipo della proprietà esplicita deve essere compatibile con il tipo dei valori della index signature. Data una signature `[opzione: string]: string`, una proprietà `attiva: boolean` produce un errore del tipo "Property 'attiva' of type 'boolean' is not assignable to 'string' index type 'string'.", in quanto `boolean` non è assegnabile a `string`.
 </details>
 
 <details>

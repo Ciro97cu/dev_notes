@@ -1,6 +1,6 @@
 # Introduzione a TypeScript
 
-TypeScript è un linguaggio di programmazione open source sviluppato da Microsoft. La sua caratteristica fondamentale è quella di essere un superset di JavaScript: ogni programma JavaScript valido è anche un programma TypeScript valido. Su questa base, TypeScript aggiunge un sistema di tipi statici che il compilatore analizza prima dell'esecuzione, consentendo di scrivere codice più chiaro e manutenibile e di individuare un'ampia categoria di errori durante lo sviluppo, anziché a runtime.
+TypeScript è un linguaggio di programmazione open source sviluppato da Microsoft. La sua caratteristica principale è di essere un superset di JavaScript: ogni programma JavaScript valido è anche un programma TypeScript valido. Su questa base, TypeScript aggiunge un sistema di tipi statici che il compilatore analizza prima dell'esecuzione, consentendo di scrivere codice più chiaro e manutenibile e di individuare un'ampia categoria di errori durante lo sviluppo, anziché a runtime.
 
 Poiché TypeScript estende JavaScript senza modificarne la semantica di esecuzione, il codice scritto viene tradotto (transpiled) in JavaScript standard, eseguibile in qualsiasi browser o in Node.js. Le annotazioni di tipo esistono soltanto in fase di sviluppo e di compilazione: vengono rimosse durante la generazione del JavaScript e non hanno alcun effetto sul comportamento a runtime.
 
@@ -88,7 +88,7 @@ descrivi({ nome: "Anna" });
 
 ## Principali innovazioni
 
-Rispetto a JavaScript, TypeScript introduce un insieme di costrutti che ampliano in modo significativo le possibilità espressive del codice. Di seguito vengono presentate le innovazioni più rilevanti, ciascuna con un esempio essenziale; ognuna di esse è approfondita nelle pagine dedicate della guida.
+Rispetto a JavaScript, TypeScript introduce un insieme di costrutti che ampliano in modo significativo le possibilità espressive del codice. Le innovazioni più rilevanti compaiono qui con un esempio essenziale ciascuna, e ognuna è approfondita nelle pagine dedicate della guida.
 
 ### Tipi statici
 
@@ -189,7 +189,7 @@ type B = Elemento<string>; // string
 
 ### Tooling
 
-Le informazioni di tipo non servono soltanto al compilatore: alimentano anche gli strumenti di sviluppo. Il compilatore ufficiale `tsc` verifica e traduce il codice, mentre l'integrazione con gli editor offre diagnostica in tempo reale, completamento e refactoring. Per eseguire rapidamente un file TypeScript durante lo sviluppo si può ricorrere a strumenti come `tsx`, mentre la compilazione continua resta disponibile tramite la modalità watch.
+Oltre che al compilatore, le informazioni di tipo servono agli strumenti di sviluppo. Il compilatore ufficiale `tsc` verifica e traduce il codice, mentre l'integrazione con gli editor offre diagnostica in tempo reale, completamento e refactoring. Per eseguire rapidamente un file TypeScript durante lo sviluppo si può ricorrere a strumenti come `tsx`, mentre la compilazione continua resta disponibile tramite la modalità watch.
 
 ```bash
 # Installazione di TypeScript nel progetto

@@ -23,7 +23,7 @@ let valore = "ciao"; // il tipo viene fissato a string
 valore = 42;          // Errore: Type 'number' is not assignable to type 'string'.
 ```
 
-È importante sottolineare che l'analisi statica non aggiunge alcun controllo a runtime: il JavaScript generato non contiene verifiche di tipo, perché tutto il lavoro avviene in fase di compilazione. I tipi servono allo sviluppatore e al compilatore, ma scompaiono nel codice eseguibile.
+L'analisi statica non aggiunge alcun controllo a runtime: il JavaScript generato non contiene verifiche di tipo, perché tutto il lavoro avviene in fase di compilazione. I tipi servono allo sviluppatore e al compilatore, ma scompaiono nel codice eseguibile.
 
 ## Type assignment e type inference
 
@@ -68,9 +68,9 @@ descrizione = "in lavorazione"; // assegnazione valida
 
 ## Parametri di funzione e any implicito
 
-I parametri di una funzione rappresentano il caso più frequente in cui la type inference non dispone di informazioni sufficienti: al momento della dichiarazione non esiste alcun valore da cui dedurre il tipo, poiché il valore arriverà soltanto al momento della chiamata. Un parametro privo di annotazione assumerebbe quindi il tipo `any` in modo implicito, perdendo ogni garanzia offerta dal type system.
+I parametri di una funzione sono il caso più frequente in cui la type inference non dispone di informazioni sufficienti: al momento della dichiarazione non esiste alcun valore da cui dedurre il tipo, poiché il valore arriverà soltanto al momento della chiamata. Un parametro privo di annotazione assumerebbe quindi il tipo `any` in modo implicito, perdendo ogni garanzia offerta dal type system.
 
-Con `strict` attivo per impostazione predefinita in TypeScript 7.0, l'opzione `noImplicitAny` è anch'essa abilitata di default: di conseguenza, un parametro senza tipo esplicito non viene tollerato silenziosamente, ma genera un errore di compilazione.
+Con `strict` attivo per impostazione predefinita in TypeScript 7.0, l'opzione `noImplicitAny` è anch'essa abilitata di default: di conseguenza un parametro senza tipo esplicito genera un errore di compilazione.
 
 ```ts
 // Errore: Parameter 'a' implicitly has an 'any' type.
@@ -103,7 +103,7 @@ const nomi = ["anna", "luca", "marco"];
 const maiuscoli = nomi.map((nome) => nome.toUpperCase());
 ```
 
-Vale la pena osservare che, quando una funzione viene passata in un contesto che ne descrive già la firma attesa, entra in gioco la cosiddetta contextual typing: in quei casi TypeScript è in grado di dedurre il tipo dei parametri dal contesto e l'errore di any implicito non si presenta. Resta invece sempre necessaria l'annotazione quando una funzione viene dichiarata in modo indipendente, senza un contesto che ne suggerisca la forma.
+Quando una funzione viene passata in un contesto che ne descrive già la firma attesa, entra in gioco la cosiddetta contextual typing: in quei casi TypeScript è in grado di dedurre il tipo dei parametri dal contesto e l'errore di any implicito non si presenta. Resta invece sempre necessaria l'annotazione quando una funzione viene dichiarata in modo indipendente, senza un contesto che ne suggerisca la forma.
 
 ## Domande
 

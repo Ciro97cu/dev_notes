@@ -71,7 +71,7 @@ type Parti = Dividi<"a.b.c">; // ["a", "b", "c"]
 
 ## Caratteri Unicode
 
-L'inferenza dei template literal type ragiona in termini di code point Unicode: un carattere astral, cioè fuori dal Basic Multilingual Plane come molte emoji, viene trattato come una singola unità e non come la coppia di code unit UTF-16 che lo rappresenta internamente. Questo rende coerente la manipolazione dei tipi stringa con la percezione intuitiva dei caratteri, senza sorprese sulle stringhe che contengono simboli complessi.
+L'inferenza dei template literal type ragiona in termini di code point Unicode: un carattere astral, cioè fuori dal Basic Multilingual Plane come molte emoji, viene trattato come una singola unità e non come la coppia di code unit UTF-16 che lo rappresenta internamente. Così la manipolazione dei tipi stringa resta coerente con la percezione intuitiva dei caratteri, anche sulle stringhe che contengono simboli complessi.
 
 ## Domande
 

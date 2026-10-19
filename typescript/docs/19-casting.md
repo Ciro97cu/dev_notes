@@ -83,7 +83,7 @@ if (campo) {
 }
 ```
 
-Vale la pena ribadire che l'asserzione `as HTMLInputElement` non garantisce in alcun modo che l'elemento sia davvero un input: se l'`id` puntasse a un `<div>`, l'accesso a `value` restituirebbe `undefined` a runtime senza alcun segnale dal compilatore. La responsabilità della correttezza ricade interamente sul programmatore.
+L'asserzione `as HTMLInputElement` non garantisce in alcun modo che l'elemento sia davvero un input: se l'`id` puntasse a un `<div>`, l'accesso a `value` restituirebbe `undefined` a runtime senza alcun segnale dal compilatore. La responsabilità della correttezza ricade interamente sul programmatore.
 
 ## const assertions
 
@@ -140,7 +140,7 @@ configurazione.porta = 9090;
 
 ### Differenza con Object.freeze
 
-È importante non confondere il livello su cui agiscono `as const` e `Object.freeze`, perché operano in due piani completamente diversi.
+`as const` e `Object.freeze` vanno tenuti distinti, perché operano su due piani completamente diversi.
 
 `as const` interviene esclusivamente a livello di tipo, durante la compilazione. Marca le proprietà come readonly per il type checker, ma non emette alcun codice e non ha effetto a runtime: il valore JavaScript prodotto resta un oggetto ordinario, perfettamente mutabile se ci si aggira intorno al sistema dei tipi (ad esempio con una type assertion).
 
@@ -158,7 +158,7 @@ const conFreeze = Object.freeze({ porta: 8080 });
 (conFreeze as { porta: number }).porta = 9090;
 ```
 
-In sintesi, `as const` offre garanzie statiche a costo zero in fase di esecuzione, mentre `Object.freeze` offre garanzie effettive a runtime. I due strumenti sono complementari: TypeScript tipizza peraltro il risultato di `Object.freeze` proprio con proprietà readonly, combinando entrambi i piani quando serve un'immutabilità reale e verificata dal compilatore.
+`as const` offre quindi garanzie statiche a costo zero in fase di esecuzione, mentre `Object.freeze` offre garanzie effettive a runtime. I due strumenti sono complementari: TypeScript tipizza peraltro il risultato di `Object.freeze` proprio con proprietà readonly, combinando entrambi i piani quando serve un'immutabilità reale e verificata dal compilatore.
 
 ## Domande
 
@@ -189,5 +189,5 @@ Senza `as const`, l'array viene inferito con il tipo allargato e mutabile `strin
 <details>
 <summary>Quale differenza esiste fra `as const` e `Object.freeze` in termini di livello di azione?</summary>
 
-`as const` opera solo a livello di tipo, durante la compilazione: marca le proprietà come readonly per il type checker ma non produce alcun effetto a runtime, lasciando l'oggetto JavaScript di fatto mutabile. `Object.freeze` opera a runtime: rende l'oggetto effettivamente immutabile impedendo aggiunte, rimozioni e modifiche durante l'esecuzione, sebbene solo al primo livello (è superficiale). Il primo dà garanzie statiche a costo zero, il secondo garanzie effettive in esecuzione.
+`as const` opera solo a livello di tipo, durante la compilazione: marca le proprietà come readonly per il type checker ma non produce alcun effetto a runtime, lasciando l'oggetto JavaScript mutabile. `Object.freeze` opera a runtime: rende l'oggetto effettivamente immutabile impedendo aggiunte, rimozioni e modifiche durante l'esecuzione, sebbene solo al primo livello (è superficiale). Il primo dà garanzie statiche a costo zero, il secondo garanzie effettive in esecuzione.
 </details>

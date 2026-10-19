@@ -1,6 +1,6 @@
 # Union e intersection types
 
-I union type e gli intersection type sono due dei costrutti più potenti del type system di TypeScript. Permettono di comporre tipi esistenti per descrivere valori che, nel codice reale, raramente appartengono a una sola categoria rigida. Un union type esprime un'alternativa ("uno tra"), mentre un intersection type esprime una combinazione ("tutto insieme"). Comprenderne la differenza e il modo in cui il compilatore tratta i membri risultanti è fondamentale per scrivere codice flessibile ma comunque type-safe.
+I union type e gli intersection type sono due costrutti del type system di TypeScript che permettono di comporre tipi esistenti per descrivere valori che, nel codice reale, raramente appartengono a una sola categoria rigida. Un union type esprime un'alternativa ("uno tra"), mentre un intersection type esprime una combinazione ("tutto insieme"). Conoscerne la differenza, e il modo in cui il compilatore tratta i membri risultanti, permette di scrivere codice flessibile ma comunque type-safe.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 560 212" role="img" aria-label="union A|B uno tra, intersection A&amp;B tutto insieme" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><circle cx="90" cy="120" r="48" fill="var(--link,#3178c6)" fill-opacity=".20" stroke="var(--link,#3178c6)" stroke-width="1.8"/><circle cx="150" cy="120" r="48" fill="var(--link,#3178c6)" fill-opacity=".20" stroke="var(--link,#3178c6)" stroke-width="1.8"/><text x="72" y="125" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">A</text><text x="168" y="125" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">B</text><text x="120" y="44" font-size="12.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">union   A | B</text><text x="120" y="196" font-size="10.5" text-anchor="middle" font-weight="400" opacity=".75" fill="currentColor">un valore è A oppure B</text><line x1="280" y1="34" x2="280" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/><defs><clipPath id="clip300"><circle cx="370" cy="120" r="48"/></clipPath></defs><circle cx="430" cy="120" r="48" fill="var(--link,#3178c6)" fill-opacity=".34" clip-path="url(#clip300)"/><circle cx="370" cy="120" r="48" fill="none" stroke="var(--link,#3178c6)" stroke-width="1.8"/><circle cx="430" cy="120" r="48" fill="none" stroke="var(--link,#3178c6)" stroke-width="1.8"/><text x="352" y="125" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">A</text><text x="448" y="125" font-size="14" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">B</text><text x="400" y="44" font-size="12.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">intersection   A &amp; B</text><text x="400" y="196" font-size="10.5" text-anchor="middle" font-weight="400" opacity=".75" fill="currentColor">un valore è A e B</text></g></svg>
@@ -57,7 +57,7 @@ Il narrowing con `typeof` funziona perché TypeScript analizza il flusso del cod
 
 ## Intersection types
 
-Un intersection type combina più tipi in uno solo, ottenuto con l'operatore `&`. Il tipo risultante possiede simultaneamente tutte le proprietà di tutti i tipi combinati: un valore che soddisfa un'intersezione deve quindi essere conforme a ciascuno dei tipi che la compongono. Mentre l'union rappresenta un'alternativa, l'intersection rappresenta un'aggregazione, ed è particolarmente utile per comporre forme di oggetto a partire da blocchi riutilizzabili.
+Un intersection type combina più tipi in uno solo, ottenuto con l'operatore `&`. Il tipo risultante possiede simultaneamente tutte le proprietà di tutti i tipi combinati: un valore che soddisfa un'intersezione deve quindi essere conforme a ciascuno dei tipi che la compongono. Mentre l'union esprime un'alternativa, l'intersection esprime un'aggregazione, ed è particolarmente utile per comporre forme di oggetto a partire da blocchi riutilizzabili.
 
 ```ts
 type Identificabile = {
@@ -92,7 +92,7 @@ function registra(entita: Entita): void {
 }
 ```
 
-Gli intersection type sono spesso preferibili all'ereditarietà tra interfacce quando si vogliono comporre tipi in modo orizzontale, mescolando capacità diverse in maniera simile ai mixin. Va però considerato che, se i tipi combinati dichiarano la stessa proprietà con tipi incompatibili tra loro, l'intersezione di quella proprietà diventa `never`, rendendo di fatto impossibile soddisfare il tipo.
+Gli intersection type sono spesso preferibili all'ereditarietà tra interfacce quando si vogliono comporre tipi in modo orizzontale, mescolando capacità diverse in maniera simile ai mixin. Se però i tipi combinati dichiarano la stessa proprietà con tipi incompatibili tra loro, l'intersezione di quella proprietà diventa `never` e il tipo risulta impossibile da soddisfare.
 
 ```ts
 type A = { valore: string };

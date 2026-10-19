@@ -1,8 +1,8 @@
 # Decorators
 
-Un decorator è una dichiarazione speciale che si applica a una classe oppure a uno dei suoi membri (metodo, accessor o field) tramite la sintassi `@espressione`. La sua funzione è quella di osservare, annotare o modificare l'elemento decorato, intervenendo sul suo comportamento senza disperdere la logica all'interno del corpo della classe. In TypeScript 7.0 i decorator seguono lo standard ECMAScript (Stage 3) e sono abilitati per impostazione predefinita: non è più necessaria alcuna opzione del compilatore per utilizzarli.
+Un decorator è una dichiarazione speciale che si applica a una classe oppure a uno dei suoi membri (metodo, accessor o field) tramite la sintassi `@espressione`. Serve a osservare, annotare o modificare l'elemento decorato, intervenendo sul suo comportamento senza disperdere la logica all'interno del corpo della classe. In TypeScript 7.0 i decorator seguono lo standard ECMAScript (Stage 3) e sono abilitati per impostazione predefinita: non è più necessaria alcuna opzione del compilatore per utilizzarli.
 
-Il punto fondamentale da comprendere è il momento in cui un decorator viene eseguito. Un decorator non viene invocato quando si crea un'istanza con `new`, bensì quando la classe viene definita, cioè una sola volta, nel momento in cui il motore valuta la dichiarazione `class`. Questo significa che il codice contenuto direttamente nel decorator viene eseguito a tempo di definizione, mentre la logica che deve operare sulle singole istanze va registrata separatamente, come si vedrà più avanti con `addInitializer`.
+Un decorator non viene invocato quando si crea un'istanza con `new`, bensì quando la classe viene definita, cioè una sola volta, nel momento in cui il motore valuta la dichiarazione `class`. Questo significa che il codice contenuto direttamente nel decorator viene eseguito a tempo di definizione, mentre la logica che deve operare sulle singole istanze va registrata separatamente, come si vedrà più avanti con `addInitializer`.
 
 Nello standard un decorator è una funzione che riceve sempre due argomenti: il valore decorato e un oggetto di contesto. La forma generale è `(value, context)`. Il tipo del primo argomento e quello del `context` dipendono dall'elemento decorato: per una classe si usa `ClassDecoratorContext`, per un metodo `ClassMethodDecoratorContext`, per un field `ClassFieldDecoratorContext`, per gli accessor `ClassGetterDecoratorContext`, `ClassSetterDecoratorContext` e `ClassAccessorDecoratorContext`. L'oggetto di contesto espone informazioni utili come `kind` (il tipo di elemento), `name` (il nome del membro), `static` e `private` (booleani che indicano la natura del membro), il metodo `addInitializer` e, per gli accessor, l'oggetto `access`.
 
@@ -25,7 +25,7 @@ const p = new Persona("Ada");
 
 ## Decorator Factory
 
-Spesso è necessario configurare il comportamento di un decorator con dei parametri. Poiché la sintassi `@espressione` valuta l'espressione e ne usa il risultato come decorator, è sufficiente che quell'espressione sia una chiamata di funzione che restituisce a sua volta il decorator vero e proprio. Una funzione di questo genere prende il nome di decorator factory: riceve gli argomenti di configurazione e ritorna la funzione `(value, context)` che verrà effettivamente applicata.
+Spesso è necessario configurare il comportamento di un decorator con dei parametri. Poiché la sintassi `@espressione` valuta l'espressione e ne usa il risultato come decorator, è sufficiente che quell'espressione sia una chiamata di funzione che restituisce a sua volta il decorator. Una funzione di questo genere prende il nome di decorator factory: riceve gli argomenti di configurazione e ritorna la funzione `(value, context)` che verrà effettivamente applicata.
 
 ```ts
 // La factory riceve un prefisso e restituisce il decorator.
@@ -75,7 +75,7 @@ class Esempio {}
 // primo(): decorator applicato
 ```
 
-L'esempio mostra chiaramente le due direzioni: le factory `primo()` e `secondo()` vengono eseguite nell'ordine di lettura, mentre l'applicazione effettiva avviene in ordine inverso, partendo da quello più interno.
+Nell'esempio le factory `primo()` e `secondo()` vengono eseguite nell'ordine di lettura, mentre l'applicazione effettiva avviene in ordine inverso, partendo da quello più interno.
 
 ## Property, Accessor, Method Decorators
 
@@ -161,11 +161,11 @@ t.temperatura = 22; // Scrittura di temperatura: 22
 t.temperatura;      // Lettura di temperatura: 22
 ```
 
-Vale la pena ribadire che lo standard Stage 3 non prevede decorator per i parametri: la decorazione si applica esclusivamente alla classe, ai metodi, ai field e agli accessor.
+Lo standard Stage 3 non prevede decorator per i parametri: la decorazione si applica esclusivamente alla classe, ai metodi, ai field e agli accessor.
 
 ## Returning (and changing) a Class in a Class Decorator
 
-Un class decorator può non limitarsi a osservare la classe, ma può restituire un nuovo valore che la sostituisce. Quando il valore restituito è una classe, esso prende il posto di quella originale per tutto il resto del programma. Questa possibilità consente di estendere o avvolgere la classe decorata, ad esempio aggiungendo membri o eseguendo logica al momento della costruzione di ogni istanza. Per tipizzare correttamente il costruttore in ingresso si vincola il generic alla forma di una classe costruibile, ossia `new (...args: any[]) => object`.
+Un class decorator può anche restituire un nuovo valore che sostituisce la classe. Quando il valore restituito è una classe, esso prende il posto di quella originale per tutto il resto del programma. Questa possibilità consente di estendere o avvolgere la classe decorata, ad esempio aggiungendo membri o eseguendo logica al momento della costruzione di ogni istanza. Per tipizzare correttamente il costruttore in ingresso si vincola il generic alla forma di una classe costruibile, ossia `new (...args: any[]) => object`.
 
 ```ts
 // Class decorator che restituisce una sottoclasse: aggiunge un timestamp
@@ -193,7 +193,7 @@ console.log(d.titolo);     // "Relazione"
 console.log(d.creatoIl);   // data e ora della creazione
 ```
 
-La classe restituita estende quella ricevuta come `value`, ne preserva quindi proprietà e metodi originali, e vi aggiunge il nuovo campo `creatoIl`. Poiché la sostituzione avviene a livello della definizione, ogni successivo `new Documento(...)` produce in realtà un'istanza della sottoclasse generata dal decorator.
+La classe restituita estende quella ricevuta come `value`, ne preserva quindi proprietà e metodi originali, e vi aggiunge il nuovo campo `creatoIl`. Poiché la sostituzione avviene a livello della definizione, ogni successivo `new Documento(...)` produce un'istanza della sottoclasse generata dal decorator.
 
 ## Autobinding Decorator
 

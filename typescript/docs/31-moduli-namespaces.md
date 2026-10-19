@@ -1,6 +1,6 @@
 # Moduli e namespaces
 
-Quando un progetto cresce, mantenere tutto il codice in un unico file diventa rapidamente ingestibile. TypeScript offre due meccanismi storici per organizzare il codice in unità riutilizzabili e isolate: i moduli ES e i namespaces. I moduli ES rappresentano lo standard attuale ed è l'approccio da adottare per qualsiasi codice nuovo; i namespaces vanno considerati un retaggio del passato, utile da conoscere ma non da preferire.
+Quando un progetto cresce, mantenere tutto il codice in un unico file diventa rapidamente ingestibile. TypeScript offre due meccanismi storici per organizzare il codice in unità riutilizzabili e isolate: i moduli ES e i namespaces. I moduli ES sono lo standard attuale e l'approccio da adottare per qualsiasi codice nuovo; i namespaces vanno considerati un retaggio del passato, utile da conoscere ma non da preferire.
 
 ## Moduli ES
 
@@ -239,7 +239,7 @@ const gruppi = chunk([1, 2, 3, 4, 5], 2);
 console.log(gruppi); // [[1, 2], [3, 4], [5]]
 ```
 
-Va tenuto presente che con i default di TypeScript 7.0 l'opzione `types` parte da un array vuoto: i pacchetti sotto `node_modules/@types` non vengono più enumerati implicitamente. Per i tipi globali di ambienti come Node serve dichiararli espressamente nel `tsconfig.json`.
+Con i default di TypeScript 7.0, però, l'opzione `types` parte da un array vuoto: i pacchetti sotto `node_modules/@types` non vengono più enumerati implicitamente. Per i tipi globali di ambienti come Node serve dichiararli espressamente nel `tsconfig.json`.
 
 ```json
 {
@@ -304,7 +304,7 @@ Perché i moduli ES forniscono nativamente l'isolamento dello scope che i namesp
 <details>
 <summary>Dopo aver installato un pacchetto `@types`, è necessario importarlo per usarne i tipi?</summary>
 
-No. Il compilatore individua e applica automaticamente le dichiarazioni dei pacchetti presenti come `@types`, quindi è sufficiente importare la libreria vera e propria per ottenere il type checking. Va però ricordato che con i default di TypeScript 7.0 l'opzione `types` parte vuota, perciò i tipi globali di ambienti come Node vanno abilitati esplicitamente indicando `"types": ["node"]` nel `tsconfig.json`.
+No. Il compilatore individua e applica automaticamente le dichiarazioni dei pacchetti presenti come `@types`, quindi è sufficiente importare la libreria stessa per ottenere il type checking. Con i default di TypeScript 7.0, però, l'opzione `types` parte vuota, perciò i tipi globali di ambienti come Node vanno abilitati esplicitamente indicando `"types": ["node"]` nel `tsconfig.json`.
 
 </details>
 

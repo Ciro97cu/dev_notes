@@ -1,6 +1,6 @@
 # Interfaces
 
-Un'interface descrive la forma di un valore: definisce quali proprietà e quali metodi un oggetto deve possedere, senza specificarne l'implementazione. Si tratta a tutti gli effetti di un contratto. Chi dichiara di rispettare quel contratto si impegna a fornire esattamente i membri richiesti, con i tipi indicati; il compilatore verifica che l'impegno sia mantenuto e segnala ogni discrepanza in fase di compilazione, prima che il codice venga eseguito.
+Un'interface descrive la forma di un valore: definisce quali proprietà e quali metodi un oggetto deve possedere, senza specificarne l'implementazione. Si tratta di un contratto. Chi dichiara di rispettare quel contratto si impegna a fornire esattamente i membri richiesti, con i tipi indicati; il compilatore verifica che l'impegno sia mantenuto e segnala ogni discrepanza in fase di compilazione, prima che il codice venga eseguito.
 
 A differenza di una classe, un'interface non genera alcun codice JavaScript: esiste soltanto durante il type checking e scompare nell'output compilato. Il suo scopo è puramente descrittivo, e per questo viene impiegata per dichiarare le forme degli oggetti che attraversano un'applicazione, dai parametri delle funzioni ai valori di ritorno delle API.
 
@@ -33,7 +33,7 @@ const incompleto: Persona = {
 
 ## Implementare un'interface con una classe
 
-Una classe dichiara di rispettare un contratto tramite la keyword `implements`. Il compilatore controlla allora che la classe definisca tutti i membri descritti dall'interface, con firme compatibili. L'aspetto più rilevante è che una classe può implementare più interface contemporaneamente, elencandole separate da virgola: in questo modo si compongono contratti diversi senza ricorrere all'ereditarietà.
+Una classe dichiara di rispettare un contratto tramite la keyword `implements`. Il compilatore controlla allora che la classe definisca tutti i membri descritti dall'interface, con firme compatibili. Una classe può inoltre implementare più interface contemporaneamente, elencandole separate da virgola: in questo modo si compongono contratti diversi senza ricorrere all'ereditarietà.
 
 ```ts
 interface Identificabile {
@@ -86,11 +86,11 @@ config.chiave = "retry";
 // Errore: Cannot assign to 'chiave' because it is a read-only property.
 ```
 
-Va sottolineato che `readonly` agisce esclusivamente a livello di tipo durante la compilazione: non produce alcun controllo a runtime e non equivale al `private` di una classe, che riguarda invece l'accessibilità del membro.
+Il modificatore `readonly` agisce esclusivamente a livello di tipo durante la compilazione: non produce alcun controllo a runtime e non equivale al `private` di una classe, che riguarda invece l'accessibilità del membro.
 
 ## Estendere interface con extends
 
-Un'interface può ereditare i membri di un'altra tramite `extends`, ottenendo un contratto più ampio che comprende sia i propri membri sia quelli ereditati. Qui emerge una differenza sostanziale rispetto alle classi: mentre una classe può estendere una sola classe (ereditarietà singola), un'interface può estendere più interface insieme, fondendone i contratti in uno unico.
+Un'interface può ereditare i membri di un'altra tramite `extends`, ottenendo un contratto più ampio che comprende sia i propri membri sia quelli ereditati. In questo le interface differiscono in modo sostanziale dalle classi: mentre una classe può estendere una sola classe (ereditarietà singola), un'interface può estendere più interface insieme, fondendone i contratti in uno unico.
 
 ```ts
 interface Animale {
@@ -114,7 +114,7 @@ const fido: Cane = {
 };
 ```
 
-`Cane` raccoglie tutti i membri di `Animale`, di `Domestico` e i propri. Una classe, al contrario, non potrebbe estendere due classi: l'eredità multipla è una prerogativa delle interface, ed è proprio per questo che il meccanismo dei contratti risulta più flessibile della gerarchia di classi.
+`Cane` raccoglie tutti i membri di `Animale`, di `Domestico` e i propri. Una classe, al contrario, non potrebbe estendere due classi: l'eredità multipla è una prerogativa delle interface, e per questo il meccanismo dei contratti risulta più flessibile della gerarchia di classi.
 
 ```ts
 class A {}
@@ -205,7 +205,7 @@ type PuntoT = {
 };
 ```
 
-La differenza più significativa riguarda la riapribilità. Un'interface supporta il declaration merging: dichiarando più volte un'interface con lo stesso nome, le sue dichiarazioni si fondono e i membri si sommano. Questo comportamento è prezioso per arricchire tipi forniti da librerie esterne o per estendere dichiarazioni globali.
+La differenza più significativa riguarda la riapribilità. Un'interface supporta il declaration merging: dichiarando più volte un'interface con lo stesso nome, le sue dichiarazioni si fondono e i membri si sommano. Questo comportamento serve ad arricchire tipi forniti da librerie esterne o a estendere dichiarazioni globali.
 
 ```ts
 interface Finestra {

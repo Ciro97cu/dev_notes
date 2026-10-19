@@ -21,7 +21,7 @@ Il file di dichiarazione non emette alcun JavaScript in fase di compilazione: se
 
 ## Pacchetti `@types` e risoluzione automatica
 
-Per le librerie JavaScript più diffuse non è necessario scrivere i file di dichiarazione a mano. La community mantiene il repository **DefinitelyTyped**, da cui vengono pubblicati pacchetti dedicati sotto lo scope `@types`. Questi pacchetti contengono soltanto file `.d.ts` e si installano come dipendenze di sviluppo, affiancandoli alla libreria vera e propria.
+Per le librerie JavaScript più diffuse non è necessario scrivere i file di dichiarazione a mano. La community mantiene il repository **DefinitelyTyped**, da cui vengono pubblicati pacchetti dedicati sotto lo scope `@types`. Questi pacchetti contengono soltanto file `.d.ts` e si installano come dipendenze di sviluppo, affiancandoli alla libreria stessa.
 
 Un esempio classico è `lodash`: la libreria è scritta in JavaScript, quindi i suoi tipi si ottengono installando `@types/lodash`.
 
@@ -40,7 +40,7 @@ const gruppi: number[][] = chunk([1, 2, 3, 4, 5], 2);
 // gruppi -> [[1, 2], [3, 4], [5]]
 ```
 
-Va osservato che, con i valori predefiniti di TypeScript 7.0, l'opzione `types` è impostata su `[]` solo per quanto riguarda i tipi globali da includere d'ufficio (come quelli di Node). I tipi degli `@types` associati a un modulo che viene effettivamente importato continuano invece a essere risolti automaticamente in base agli import presenti nel codice. Per i tipi globali di Node, ad esempio, occorre richiederli esplicitamente:
+Con i valori predefiniti di TypeScript 7.0, l'opzione `types` è impostata su `[]` solo per quanto riguarda i tipi globali da includere d'ufficio (come quelli di Node). I tipi degli `@types` associati a un modulo che viene effettivamente importato continuano invece a essere risolti automaticamente in base agli import presenti nel codice. Per i tipi globali di Node, ad esempio, occorre richiederli esplicitamente:
 
 ```json
 {
@@ -156,7 +156,7 @@ trackEvent("pagina_vista", { percorso: "/home" });
 console.log(ANALYTICS_ID);
 ```
 
-La keyword `declare` è il filo conduttore di tutti questi scenari: comunica al compilatore che qualcosa esiste a runtime e ne fornisce soltanto la descrizione di tipo, senza generare alcun output JavaScript.
+La keyword `declare` ricorre in tutti questi scenari: comunica al compilatore che qualcosa esiste a runtime e ne fornisce soltanto la descrizione di tipo, senza generare alcun output JavaScript.
 
 ## Domande
 

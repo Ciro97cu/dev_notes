@@ -1,8 +1,8 @@
 # Tipi primitivi
 
-I tipi primitivi rappresentano i valori più elementari del linguaggio: non sono oggetti e non possiedono metodi propri (gli eventuali metodi sono forniti dai wrapper object di JavaScript). In TypeScript ogni primitivo ha un tipo dedicato, scritto rigorosamente in minuscolo: `boolean`, `number`, `bigint`, `string`, oltre a `symbol`, `null` e `undefined`. È importante non confonderli con i tipi `Boolean`, `Number` o `String` con l'iniziale maiuscola, che corrispondono ai wrapper object e che non vanno mai usati per annotare valori primitivi.
+I tipi primitivi sono i valori più elementari del linguaggio: non sono oggetti e non possiedono metodi propri (gli eventuali metodi sono forniti dai wrapper object di JavaScript). In TypeScript ogni primitivo ha un tipo dedicato, scritto rigorosamente in minuscolo: `boolean`, `number`, `bigint`, `string`, oltre a `symbol`, `null` e `undefined`. Da questi si distinguono i tipi `Boolean`, `Number` o `String` con l'iniziale maiuscola, che corrispondono ai wrapper object e non vanno mai usati per annotare valori primitivi.
 
-In questa pagina vengono trattati i tre primitivi più frequenti nel codice quotidiano: `boolean`, i tipi numerici (`number` e `bigint`) e `string`.
+I tre primitivi più frequenti nel codice quotidiano sono `boolean`, i tipi numerici (`number` e `bigint`) e `string`.
 
 ## Boolean
 
@@ -108,7 +108,7 @@ const corretta: bigint = a + BigInt(b);
 
 ## String
 
-Il tipo `string` rappresenta sequenze di caratteri, ossia il testo. I letterali stringa si possono delimitare con apici singoli, con apici doppi oppure con i backtick. Le prime due forme sono equivalenti e si scelgono in base alle convenzioni del progetto; i backtick introducono invece i template literals, una variante più potente.
+Il tipo `string` rappresenta sequenze di caratteri, ossia il testo. I letterali stringa si possono delimitare con apici singoli, con apici doppi oppure con i backtick. Le prime due forme sono equivalenti e si scelgono in base alle convenzioni del progetto; i backtick introducono invece i template literals, una variante con capacità aggiuntive.
 
 ```ts
 let nome: string = "Ada";
@@ -147,7 +147,7 @@ function prezzoConIva(netto: number): number {
 const importo = `Totale: ${prezzoConIva(100).toFixed(2)} euro`;
 ```
 
-Va inoltre tenuta presente la distinzione tra il tipo `string`, che descrive una qualunque stringa, e i literal type, che vincolano il valore a una stringa specifica. Una variabile dichiarata con `const` e inizializzata con un letterale stringa assume come tipo proprio quel letterale, mentre con `let` il tipo viene allargato (widening) a `string`.
+Il tipo `string`, che descrive una qualunque stringa, si distingue dai literal type, che vincolano il valore a una stringa specifica. Una variabile dichiarata con `const` e inizializzata con un letterale stringa assume come tipo proprio quel letterale, mentre con `let` il tipo viene allargato (widening) a `string`.
 
 ```ts
 const fisso = "submit"; // tipo "submit"

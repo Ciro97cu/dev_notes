@@ -18,7 +18,7 @@ Le opzioni si suddividono in due grandi famiglie: quelle che determinano *quali*
 }
 ```
 
-Va tenuto presente che molte impostazioni hanno valori predefiniti già orientati allo sviluppo moderno: in TypeScript 7.0 la modalità rigorosa è attiva di default, il sistema di moduli predefinito è `esnext` e il `target` è allineato all'anno corrente. Le opzioni descritte di seguito servono quindi soprattutto a deviare consapevolmente da questi default o a renderli espliciti.
+Molte impostazioni hanno valori predefiniti già orientati allo sviluppo moderno: in TypeScript 7.0 la modalità rigorosa è attiva di default, il sistema di moduli predefinito è `esnext` e il `target` è allineato all'anno corrente. Impostare a mano le opzioni serve quindi soprattutto a deviare consapevolmente da questi default o a renderli espliciti.
 
 ## include & exclude
 
@@ -250,7 +250,7 @@ Con questa configurazione, un file `src/servizi/auth.ts` viene compilato in `dis
 
 ## strict
 
-`strict` è un'opzione ombrello che abilita in blocco l'intera famiglia dei controlli rigorosi: `noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitThis`, `useUnknownInCatchVariables` e `alwaysStrict`. In TypeScript 7.0 questa modalità è attiva di default, perché rappresenta la base per scrivere codice solido e privo di insidie legate ai valori nulli o ai tipi impliciti. Ciascun controllo può comunque essere riattivato o disattivato singolarmente, ponendo l'opzione specifica dopo `strict`.
+`strict` è un'opzione ombrello che abilita in blocco l'intera famiglia dei controlli rigorosi: `noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `strictBindCallApply`, `strictPropertyInitialization`, `noImplicitThis`, `useUnknownInCatchVariables` e `alwaysStrict`. In TypeScript 7.0 questa modalità è attiva di default, perché è la base per scrivere codice solido e privo di insidie legate ai valori nulli o ai tipi impliciti. Ciascun controllo può comunque essere riattivato o disattivato singolarmente, ponendo l'opzione specifica dopo `strict`.
 
 ```json
 {

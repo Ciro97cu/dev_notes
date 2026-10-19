@@ -16,7 +16,7 @@ const codice: Identificativo = "ABC-123";
 const annoNascita: Anno = 1990;
 ```
 
-Va sottolineato che un alias di questo genere non introduce alcun controllo aggiuntivo: `Identificativo` resta a tutti gli effetti un `string` ed è interscambiabile con qualunque altra stringa. Per ottenere tipi nominali realmente distinti occorrono tecniche diverse, come i branded type, che esulano dal semplice alias.
+Un alias di questo genere non introduce alcun controllo aggiuntivo: `Identificativo` resta a tutti gli effetti un `string` ed è interscambiabile con qualunque altra stringa. Per ottenere tipi nominali realmente distinti occorrono tecniche diverse, come i branded type, che esulano dal semplice alias.
 
 ## Union type con nome
 

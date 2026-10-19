@@ -1,6 +1,6 @@
 # Optional chaining e nullish coalescing
 
-Quando si lavora con strutture dati provenienti da API, configurazioni o input dell'utente, capita spesso che alcune proprietà intermedie possano mancare o che un valore possa essere assente. TypeScript, in coppia con la sintassi moderna di JavaScript, mette a disposizione due operatori pensati esattamente per questi casi: l'optional chaining (`?.`) per l'accesso sicuro alle proprietà annidate e il nullish coalescing (`??`) per fornire un valore di ripiego soltanto quando l'operando è effettivamente assente.
+Quando si lavora con strutture dati provenienti da API, configurazioni o input dell'utente, capita spesso che alcune proprietà intermedie possano mancare o che un valore possa essere assente. TypeScript, in coppia con la sintassi moderna di JavaScript, mette a disposizione due operatori pensati per questi casi: l'optional chaining (`?.`) per l'accesso sicuro alle proprietà annidate e il nullish coalescing (`??`) per fornire un valore di ripiego soltanto quando l'operando è effettivamente assente.
 
 ## Optional chaining (`?.`)
 
@@ -53,7 +53,7 @@ function elabora(servizio: Servizio): void {
 elabora({}); // nessuna chiamata al logger, nessun errore
 ```
 
-È importante non confondere `?.()` con la garanzia che il valore sia una funzione: l'optional chiama il metodo solo se l'oggetto che lo contiene non è nullish. Se la proprietà esiste ma non è invocabile, l'errore resta. Va inoltre evidenziato che lo short-circuit coinvolge l'intera espressione a destra del punto in cui la catena si interrompe: appena un anello risulta nullish, le valutazioni successive non vengono eseguite affatto.
+`?.()` non garantisce che il valore sia una funzione: l'optional chiama il metodo solo se l'oggetto che lo contiene non è nullish. Se la proprietà esiste ma non è invocabile, l'errore resta. Lo short-circuit, inoltre, coinvolge l'intera espressione a destra del punto in cui la catena si interrompe: appena un anello risulta nullish, le valutazioni successive non vengono eseguite affatto.
 
 ```ts
 interface Configurazione {
@@ -89,7 +89,7 @@ Il tipo del risultato di `??` esclude la parte nullish dell'operando di sinistra
 
 ### Differenza tra `??` e `||`
 
-La distinzione fondamentale riguarda il trattamento dei valori falsy. L'operatore `||` restituisce l'operando di destra ogni volta che quello di sinistra è falsy, e in JavaScript sono falsy non solo `null` e `undefined`, ma anche `0`, la stringa vuota `''`, `false` e `NaN`. L'operatore `??`, invece, considera "mancante" esclusivamente `null` e `undefined`, lasciando intatti tutti gli altri valori. Questa differenza è cruciale quando `0`, `''` o `false` sono valori legittimi da preservare.
+La distinzione riguarda il trattamento dei valori falsy. L'operatore `||` restituisce l'operando di destra ogni volta che quello di sinistra è falsy, e in JavaScript sono falsy non solo `null` e `undefined`, ma anche `0`, la stringa vuota `''`, `false` e `NaN`. L'operatore `??`, invece, considera "mancante" esclusivamente `null` e `undefined`, lasciando intatti tutti gli altri valori. Questa differenza conta quando `0`, `''` o `false` sono valori legittimi da preservare.
 
 ```ts
 interface Impostazioni {
@@ -144,7 +144,7 @@ console.log(temaCorrente({}));                              // "chiaro"
 console.log(temaCorrente({ preferenze: { tema: "scuro" } })); // "scuro"
 ```
 
-Va ricordato che per ragioni di precedenza non è consentito combinare direttamente `??` con `&&` o `||` senza parentesi: il compilatore segnala l'ambiguità e impone di rendere esplicito il raggruppamento.
+Per ragioni di precedenza non è consentito combinare direttamente `??` con `&&` o `||` senza parentesi: il compilatore segnala l'ambiguità e impone di rendere esplicito il raggruppamento.
 
 ```ts
 const a: number | null = null;

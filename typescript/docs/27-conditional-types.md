@@ -113,7 +113,7 @@ type E = Estrai<string | number | boolean, boolean>; // boolean
 <details>
 <summary>Come si legge un conditional type `T extends U ? X : Y`?</summary>
 
-Si legge come un operatore ternario applicato ai tipi: se `T` è assegnabile a `U`, cioè se ogni valore di `T` sarebbe accettato dove è atteso un `U`, il tipo risultante è `X`, altrimenti è `Y`. La condizione non confronta valori a runtime ma verifica una relazione di assegnabilità fra tipi in fase di compilazione. Diventa realmente utile quando `T` è un parametro generico, perché permette di far dipendere il tipo prodotto dalla forma del tipo ricevuto in ingresso.
+Si legge come un operatore ternario applicato ai tipi: se `T` è assegnabile a `U`, cioè se ogni valore di `T` sarebbe accettato dove è atteso un `U`, il tipo risultante è `X`, altrimenti è `Y`. La condizione non confronta valori a runtime ma verifica una relazione di assegnabilità fra tipi in fase di compilazione. Diventa utile soprattutto quando `T` è un parametro generico, perché permette di far dipendere il tipo prodotto dalla forma del tipo ricevuto in ingresso.
 
 </details>
 

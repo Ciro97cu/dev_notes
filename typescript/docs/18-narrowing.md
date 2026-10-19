@@ -2,7 +2,7 @@
 
 Quando una variabile ha un tipo ampio, come un union type oppure `unknown`, il compilatore non può sapere in anticipo quale forma concreta assuma quel valore in un determinato punto del programma. Il narrowing è il processo con cui TypeScript restringe progressivamente quel tipo a qualcosa di più specifico, basandosi sul flusso del controllo (control flow analysis). Lo strumento che innesca il narrowing è la type guard: un'espressione che esegue un controllo a runtime il cui esito permette al compilatore di trattare la variabile come un tipo più preciso all'interno del ramo corrispondente.
 
-Il principio è importante perché su un union type si possono raggiungere direttamente solo le proprietà e i metodi comuni a tutti i membri dell'union. Per accedere ai membri specifici di una variante è necessario prima dimostrare al compilatore, tramite un controllo, di trovarsi effettivamente di fronte a quella variante. Il narrowing fa esattamente questo: dopo la type guard, dentro il blocco condizionato, il tipo risulta ristretto e l'accesso ai membri specifici diventa lecito e type-safe.
+Il principio è importante perché su un union type si possono raggiungere direttamente solo le proprietà e i metodi comuni a tutti i membri dell'union. Per accedere ai membri specifici di una variante è necessario prima dimostrare al compilatore, tramite un controllo, di trovarsi effettivamente di fronte a quella variante. Dopo la type guard, dentro il blocco condizionato, il tipo risulta ristretto e l'accesso ai membri specifici diventa lecito e type-safe.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 520 228" role="img" aria-label="Narrowing: da un tipo largo a tipi stretti con type guard" style="width:100%;max-width:540px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="160" y="20" width="200" height="42" rx="8" fill="var(--link,#3178c6)" fill-opacity=".08" stroke="currentColor" stroke-width="1.6"/><text x="260" y="46" font-size="12" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">x: string | number | Cane</text><line x1="260" y1="62" x2="100.0" y2="170.6" stroke="currentColor" stroke-width="1.4"/><path d="M97.7 167.3 L95.0 174.0 L102.2 173.9 Z" fill="currentColor"/><line x1="260" y1="62" x2="260.0" y2="168.0" stroke="currentColor" stroke-width="1.4"/><path d="M256.0 168.0 L260.0 174.0 L264.0 168.0 Z" fill="currentColor"/><line x1="260" y1="62" x2="420.0" y2="170.6" stroke="currentColor" stroke-width="1.4"/><path d="M417.8 173.9 L425.0 174.0 L422.3 167.3 Z" fill="currentColor"/><rect x="39.0" y="106" width="112" height="18" rx="4" fill="var(--bg,#ffffff)" fill-opacity="1" stroke="currentColor" stroke-width="0"/><text x="95" y="119" font-size="9" text-anchor="middle" font-weight="400" opacity=".85" fill="currentColor">typeof x === "string"</text><rect x="204.0" y="106" width="112" height="18" rx="4" fill="var(--bg,#ffffff)" fill-opacity="1" stroke="currentColor" stroke-width="0"/><text x="260" y="119" font-size="9" text-anchor="middle" font-weight="400" opacity=".85" fill="currentColor">typeof x === "number"</text><rect x="393.0" y="106" width="64" height="18" rx="4" fill="var(--bg,#ffffff)" fill-opacity="1" stroke="currentColor" stroke-width="0"/><text x="425" y="119" font-size="9" text-anchor="middle" font-weight="400" opacity=".85" fill="currentColor">"abbaia" in x</text><rect x="40" y="176" width="110" height="40" rx="8" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="95" y="201" font-size="12" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">string</text><rect x="205" y="176" width="110" height="40" rx="8" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="260" y="201" font-size="12" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">number</text><rect x="370" y="176" width="110" height="40" rx="8" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="425" y="201" font-size="12" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Cane</text></g></svg>
@@ -148,7 +148,7 @@ function descriviFigura(figura: Figura): string {
 
 Le type guard integrate coprono i casi più comuni, ma talvolta la logica che determina il tipo di un valore è troppo articolata per essere espressa con `typeof`, `in` o `instanceof`, oppure va riutilizzata in più punti. In queste situazioni si definisce una funzione di type guard personalizzata, il cui tipo di ritorno non è `boolean` bensì un type predicate nella forma `parametro is Tipo`.
 
-Quando una funzione del genere restituisce `true`, il compilatore non si limita a registrare un valore booleano: applica il narrowing e tratta l'argomento indicato come appartenente al tipo specificato nel predicate. In questo modo la conoscenza incapsulata nella funzione si propaga al codice chiamante.
+Quando una funzione del genere restituisce `true`, il compilatore, oltre a registrare l'esito booleano, applica il narrowing e tratta l'argomento indicato come appartenente al tipo specificato nel predicate. In questo modo la conoscenza incapsulata nella funzione si propaga al codice chiamante.
 
 ```ts
 interface Pesce {
@@ -175,7 +175,7 @@ function muovi(animale: Pesce | Uccello): void {
 }
 ```
 
-I type predicate sono particolarmente preziosi nei filtri sugli array, dove permettono di trasformare il tipo dell'array risultante anziché lasciarlo invariato. Un `filter` con una funzione di type guard restituisce un array già ristretto al tipo voluto.
+I type predicate sono particolarmente utili nei filtri sugli array, dove permettono di trasformare il tipo dell'array risultante anziché lasciarlo invariato. Un `filter` con una funzione di type guard restituisce un array già ristretto al tipo voluto.
 
 ```ts
 const animali: (Pesce | Uccello)[] = [
@@ -189,7 +189,7 @@ const animali: (Pesce | Uccello)[] = [
 const soloPesci: Pesce[] = animali.filter(isPesce);
 ```
 
-È bene sottolineare che il type predicate è un'asserzione di cui il compilatore si fida: spetta a chi scrive la funzione garantire che il controllo a runtime corrisponda effettivamente al tipo dichiarato. Un predicate scritto in modo scorretto non produce errori di compilazione, ma sposta il problema all'esecuzione, vanificando la sicurezza che il type system intende offrire.
+Il type predicate è un'asserzione di cui il compilatore si fida: spetta a chi scrive la funzione garantire che il controllo a runtime corrisponda effettivamente al tipo dichiarato. Un predicate scritto in modo scorretto non produce errori di compilazione, ma sposta il problema all'esecuzione, vanificando la sicurezza che il type system intende offrire.
 
 ### Type predicate inferiti
 

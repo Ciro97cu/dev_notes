@@ -1,6 +1,6 @@
 # Utility types
 
-Gli utility type sono generics predefiniti nella libreria standard di TypeScript che operano su un tipo esistente e ne producono uno nuovo come trasformazione. Il vantaggio principale risiede nel fatto che la struttura originale non viene riscritta né duplicata: a partire da un'unica definizione di riferimento si derivano varianti adattate a contesti diversi, e ogni modifica al tipo di partenza si propaga automaticamente a tutti i tipi derivati. Si tratta quindi di strumenti che rafforzano la coerenza del codice e riducono la ridondanza.
+Gli utility type sono generics predefiniti nella libreria standard di TypeScript che operano su un tipo esistente e ne producono uno nuovo come trasformazione. Il vantaggio principale è che la struttura originale non viene riscritta né duplicata: a partire da un'unica definizione di riferimento si derivano varianti adattate a contesti diversi, e ogni modifica al tipo di partenza si propaga automaticamente a tutti i tipi derivati.
 
 La maggior parte degli utility type è costruita internamente con mapped type e conditional type, ma per il loro utilizzo non è necessario conoscerne l'implementazione: è sufficiente comprendere quale trasformazione applicano. Vengono descritti di seguito quelli di uso più frequente.
 
@@ -35,7 +35,7 @@ const todo: Todo = {
 const aggiornato = aggiornaTodo(todo, { completato: true });
 ```
 
-Poiché tutte le proprietà diventano opzionali, un oggetto vuoto `{}` è un valore valido per `Partial<Todo>`. Va quindi tenuto presente che `Partial` non garantisce la presenza di alcun campo.
+Poiché tutte le proprietà diventano opzionali, un oggetto vuoto `{}` è un valore valido per `Partial<Todo>`. `Partial` quindi non garantisce la presenza di alcun campo.
 
 ## Required<T>
 
@@ -82,7 +82,7 @@ const origine: Readonly<Punto> = { x: 0, y: 0 };
 origine.x = 10;
 ```
 
-Occorre precisare che `Readonly<T>` agisce solo al primo livello e solo a livello di tipo: non rende immutabili gli oggetti annidati né impedisce la mutazione a runtime. Per un'immutabilità effettiva durante l'esecuzione si ricorre a `Object.freeze`.
+`Readonly<T>`, però, agisce solo al primo livello e solo a livello di tipo: non rende immutabili gli oggetti annidati né impedisce la mutazione a runtime. Per un'immutabilità effettiva durante l'esecuzione si ricorre a `Object.freeze`.
 
 ## Record<K, T>
 

@@ -1,6 +1,6 @@
 # Array e tuple
 
-Quando i dati da gestire non sono valori singoli ma collezioni ordinate, TypeScript mette a disposizione due costrutti distinti: gli array, pensati per sequenze omogenee di lunghezza variabile, e le tuple, pensate per insiemi a lunghezza fissa in cui ogni posizione ha un significato e un tipo precisi. Pur condividendo la stessa rappresentazione a runtime (entrambi sono array JavaScript), il type system li tratta in modo molto diverso, ed è proprio questa differenza a renderli utili in scenari complementari.
+Quando i dati da gestire non sono valori singoli ma collezioni ordinate, TypeScript mette a disposizione due costrutti distinti: gli array, pensati per sequenze omogenee di lunghezza variabile, e le tuple, pensate per insiemi a lunghezza fissa in cui ogni posizione ha un significato e un tipo precisi. Pur condividendo la stessa rappresentazione a runtime (entrambi sono array JavaScript), il type system li tratta in modo molto diverso, e questa differenza li rende utili in scenari complementari.
 
 ## Array
 
@@ -118,7 +118,7 @@ type IntervalloDate = [inizio: Date, fine: Date];
 const vacanze: IntervalloDate = [new Date("2026-08-01"), new Date("2026-08-15")];
 ```
 
-Va però tenuta presente una particolarità ereditata da JavaScript: a runtime una tupla resta un normale array, e il metodo `push` consente di aggiungere elementi oltre la lunghezza dichiarata senza che il compilatore lo impedisca. Il controllo sulla lunghezza viene applicato all'assegnazione tramite letterale e all'accesso per indice, ma non alle chiamate di `push`. Per questo motivo l'uso di `push` su una tupla va evitato quando si vuole preservare la garanzia sulla lunghezza fissa.
+Una tupla ha però una particolarità ereditata da JavaScript: a runtime resta un normale array, e il metodo `push` consente di aggiungere elementi oltre la lunghezza dichiarata senza che il compilatore lo impedisca. Il controllo sulla lunghezza viene applicato all'assegnazione tramite letterale e all'accesso per indice, ma non alle chiamate di `push`. Per questo motivo l'uso di `push` su una tupla va evitato quando si vuole preservare la garanzia sulla lunghezza fissa.
 
 ```ts
 const coppia: [string, number] = ["punteggio", 10];
