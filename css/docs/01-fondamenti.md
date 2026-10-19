@@ -28,7 +28,7 @@ h1 {
 
 ## Come si aggiunge il CSS a una pagina
 
-Ci sono tre modi; in pratica se ne usa **uno** — il foglio esterno.
+Ci sono tre modi; in pratica se ne usa **uno**: il foglio esterno.
 
 ### Foglio esterno (`<link>`) — il modo standard
 
@@ -71,7 +71,7 @@ Mescola presentazione e contenuto, non è riutilizzabile e ha una **specificità
 
 ## Il modello mentale: HTML struttura, CSS veste
 
-Il browser costruisce l'albero degli elementi dall'HTML, poi applica le regole CSS per calcolare l'aspetto finale di ognuno. Quando più regole toccano lo stesso elemento, entrano in gioco **cascade**, **specificità** ed **ereditarietà** — i meccanismi che decidono quale valore vince (modulo [[04-cascade-specificita-ereditarieta]]).
+Il browser costruisce l'albero degli elementi dall'HTML, poi applica le regole CSS per calcolare l'aspetto finale di ognuno. Quando più regole toccano lo stesso elemento, entrano in gioco **cascade**, **specificità** ed **ereditarietà**: i meccanismi che decidono quale valore vince (modulo [[04-cascade-specificita-ereditarieta]]).
 
 Collegamenti: [[02-selettori-combinatori]] · [[04-cascade-specificita-ereditarieta]]
 
@@ -107,5 +107,5 @@ Gli `@import` si scaricano in serie invece che in parallelo, ritardando il rende
 
 **In sintesi:**
 - CSS descrive la **presentazione**; l'HTML il **contenuto**. Una regola = selettore + dichiarazioni `property: value;`.
-- Tre modi per applicarlo — esterno (`<link>`, lo standard), interno (`<style>`), inline (`style`, da evitare).
+- Tre modi per applicarlo: esterno (`<link>`, lo standard), interno (`<style>`), inline (`style`, da evitare).
 - Commenti solo con `/* … */`; quando più regole competono, decidono cascade, specificità ed ereditarietà.

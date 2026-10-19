@@ -10,7 +10,7 @@ La tipografia è gran parte di ciò che rende leggibile una pagina. Questo modul
 
 ## `font-family` e il fallback stack
 
-`font-family` non prende un solo font, ma una **lista di preferenze**: il browser usa il primo disponibile sul sistema e, se manca, scala al successivo. L'ultimo valore deve sempre essere una **generic family** (una famiglia astratta che il browser sostituisce con un font di sistema), così c'è comunque un ripiego sensato.
+`font-family` accetta una **lista di preferenze**: il browser usa il primo disponibile sul sistema e, se manca, scala al successivo. L'ultimo valore deve sempre essere una **generic family** (una famiglia astratta che il browser sostituisce con un font di sistema), così c'è comunque un ripiego sensato.
 
 ```css
 body {
@@ -31,7 +31,7 @@ code {
 
 ### La generic family `math`
 
-Tra le generic family ne esiste una di nicchia, **`math`**, pensata per il rendering di contenuti **matematici** (MathML): seleziona un font ottimizzato per le formule — indici, radici, parentesi che si estendono su più righe, glifi a doppia barratura. Gli user agent la applicano di default agli elementi `<math>`, ma la si può richiamare anche esplicitamente:
+Tra le generic family ne esiste una di nicchia, **`math`**, pensata per il rendering di contenuti **matematici** (MathML): seleziona un font ottimizzato per le formule (indici, radici, parentesi che si estendono su più righe, glifi a doppia barratura). Gli user agent la applicano di default agli elementi `<math>`, ma la si può richiamare anche esplicitamente:
 
 ```css
 math { font-family: math; }
@@ -42,11 +42,11 @@ math { font-family: math; }
 
 ## Dimensione, peso, stile
 
-- **`font-size`** — la dimensione del testo. Da preferire l'unità **`rem`** (relativa alla dimensione di root), che scala con le preferenze di accessibilità dell'utente meglio dei `px` fissi; dettagli su unità relative e `clamp()` per la tipografia fluida in [[06-unita-valori-funzioni]].
-- **`font-weight`** — lo spessore: keyword `normal` (= `400`) e `bold` (= `700`), oppure la scala numerica `100`–`900`. Esistono anche i relativi `lighter`/`bolder` (un gradino rispetto al genitore). Le variable font accettano qualsiasi valore intermedio (es. `625`).
-- **`font-style`** — `normal`, `italic` (usa la variante corsiva disegnata dal font) oppure `oblique` (inclina il glifo, con angolo opzionale: `oblique 14deg`).
-- **`font-variant`** — nella forma breve serve soprattutto `small-caps` (le minuscole rese come maiuscoletto). Le sotto-proprietà `font-variant-*` (ligature, cifre, ecc.) danno controllo fine ma non entrano nella shorthand `font`.
-- **`line-height`** — l'altezza di riga, cioè l'interlinea. Va espressa preferibilmente come **numero senza unità** (`1.5`): viene interpretata come moltiplicatore del `font-size` dell'elemento, evitando i problemi di ereditarietà dei valori con unità.
+- **`font-size`**: la dimensione del testo. Da preferire l'unità **`rem`** (relativa alla dimensione di root), che scala con le preferenze di accessibilità dell'utente meglio dei `px` fissi; dettagli su unità relative e `clamp()` per la tipografia fluida in [[06-unita-valori-funzioni]].
+- **`font-weight`**: lo spessore, con le keyword `normal` (= `400`) e `bold` (= `700`) oppure la scala numerica `100`–`900`. Esistono anche i relativi `lighter`/`bolder` (un gradino rispetto al genitore). Le variable font accettano qualsiasi valore intermedio (es. `625`).
+- **`font-style`**: `normal`, `italic` (usa la variante corsiva disegnata dal font) oppure `oblique` (inclina il glifo, con angolo opzionale: `oblique 14deg`).
+- **`font-variant`**: nella forma breve serve soprattutto `small-caps` (le minuscole rese come maiuscoletto). Le sotto-proprietà `font-variant-*` (ligature, cifre, ecc.) danno controllo fine ma non entrano nella shorthand `font`.
+- **`line-height`**: l'altezza di riga, cioè l'interlinea. Va espressa preferibilmente come **numero senza unità** (`1.5`): viene interpretata come moltiplicatore del `font-size` dell'elemento, evitando i problemi di ereditarietà dei valori con unità.
 
 ```css
 h1 {
@@ -115,8 +115,8 @@ Finché il web font non è scaricato, il browser deve decidere cosa mostrare. `f
 | Valore | Block period | Swap period | Effetto |
 |--------|--------------|-------------|---------|
 | `auto` | — | — | Sceglie il browser (di norma simile a `block`) |
-| `block` | breve | infinito | Testo invisibile per un attimo, poi il web font — rischio **FOIT** (*Flash Of Invisible Text*) |
-| `swap` | quasi nullo | infinito | Fallback subito, swap al web font — **FOUT** (*Flash Of Unstyled Text*), ma testo sempre leggibile |
+| `block` | breve | infinito | Testo invisibile per un attimo, poi il web font, con rischio di **FOIT** (*Flash Of Invisible Text*) |
+| `swap` | quasi nullo | infinito | Fallback subito, swap al web font con un **FOUT** (*Flash Of Unstyled Text*), ma testo sempre leggibile |
 | `fallback` | quasi nullo | breve | Come `swap` ma dopo poco "congela" il fallback se il font tarda |
 | `optional` | quasi nullo | nullo | Il browser può rinunciare al web font se non è pronto subito: zero reflow |
 
@@ -149,7 +149,7 @@ h1 {
 }
 ```
 
-Gli assi standard mappano su proprietà CSS normali — `wght` → `font-weight`, `wdth` → `font-width` (già `font-stretch`), `ital`/`slnt` → `font-style`, `opsz` → `font-optical-sizing`: usare quelle è sempre preferibile. Per assi non mappati o custom c'è `font-variation-settings`, che indirizza gli assi per **tag** di quattro lettere (minuscoli i registrati, maiuscoli i custom):
+Gli assi standard mappano su proprietà CSS normali: `wght` → `font-weight`, `wdth` → `font-width` (già `font-stretch`), `ital`/`slnt` → `font-style`, `opsz` → `font-optical-sizing`. Usare quelle è sempre preferibile. Per assi non mappati o custom c'è `font-variation-settings`, che indirizza gli assi per **tag** di quattro lettere (minuscoli i registrati, maiuscoli i custom):
 
 ```css
 h1 {
@@ -172,11 +172,11 @@ h1 {
 
 ## Spaziatura e trasformazione del testo
 
-- **`letter-spacing`** — spazio extra tra i caratteri (`0.05em`); valori negativi stringono.
-- **`word-spacing`** — spazio aggiuntivo tra le parole.
-- **`text-indent`** — rientro della prima riga di un blocco.
-- **`text-transform`** — cambia il *rendering* delle lettere senza toccare il testo: `uppercase`, `lowercase`, `capitalize`, `none`.
-- **`text-align`** — allineamento orizzontale. Da preferire i valori **logici** `start`/`end` (si adattano a testi LTR e RTL) ai fisici `left`/`right`; restano `center` e `justify`.
+- **`letter-spacing`**: spazio extra tra i caratteri (`0.05em`); valori negativi stringono.
+- **`word-spacing`**: spazio aggiuntivo tra le parole.
+- **`text-indent`**: rientro della prima riga di un blocco.
+- **`text-transform`**: cambia il *rendering* delle lettere senza toccare il testo (`uppercase`, `lowercase`, `capitalize`, `none`).
+- **`text-align`**: allineamento orizzontale. Da preferire i valori **logici** `start`/`end` (si adattano a testi LTR e RTL) ai fisici `left`/`right`; restano `center` e `justify`.
 
 ```css
 .lead {
@@ -195,8 +195,8 @@ h1 {
 
 `text-wrap` sceglie l'**algoritmo di ritorno a capo**. Due valori moderni migliorano la tipografia quasi a costo zero in markup:
 
-- **`text-wrap: balance`** — bilancia il numero di caratteri sulle righe. Pensato per **testi brevi** (titoli, didascalie, citazioni): i browser lo applicano solo entro un tetto di righe (≈6 su Chromium, ≈10 su Firefox) perché è costoso.
-- **`text-wrap: pretty`** — come il wrapping normale ma con un algoritmo più curato che evita soprattutto le **righe orfane** (l'ultima riga con una sola parola). Adatto ai **paragrafi** lunghi.
+- **`text-wrap: balance`**: bilancia il numero di caratteri sulle righe. Pensato per **testi brevi** (titoli, didascalie, citazioni): i browser lo applicano solo entro un tetto di righe (≈6 su Chromium, ≈10 su Firefox) perché è costoso.
+- **`text-wrap: pretty`**: come il wrapping normale ma con un algoritmo più curato che evita soprattutto le **righe orfane** (l'ultima riga con una sola parola). Adatto ai **paragrafi** lunghi.
 
 ```css
 h1, h2, h3 {
@@ -209,13 +209,13 @@ p {
 ```
 
 > [!info|label:Baseline]
-> `text-wrap: balance`/`pretty` è **Baseline dal 2024**: ampiamente supportato. È additivo — dove non è disponibile il testo va semplicemente a capo in modo normale, senza rotture. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap))
+> `text-wrap: balance`/`pretty` è **Baseline dal 2024**: ampiamente supportato. È additivo: dove non è disponibile, il testo va semplicemente a capo in modo normale, senza rotture. ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/text-wrap))
 
 Per le **parole troppo lunghe** che sfondano il contenitore (URL, token) ci sono tre leve distinte:
 
-- **`overflow-wrap: break-word`** — spezza una parola solo se **da sola** non ci sta: è l'opzione gentile, rispetta i confini di parola finché può.
-- **`word-break: break-all`** — spezza a qualsiasi carattere pur di riempire la riga (più aggressivo); `keep-all` invece impedisce di spezzare il testo CJK.
-- **`hyphens: auto`** — inserisce trattini di sillabazione secondo le regole della lingua; richiede l'attributo `lang` sull'elemento per funzionare bene.
+- **`overflow-wrap: break-word`**: spezza una parola solo se **da sola** non ci sta. È l'opzione gentile, rispetta i confini di parola finché può.
+- **`word-break: break-all`**: spezza a qualsiasi carattere pur di riempire la riga (più aggressivo); `keep-all` invece impedisce di spezzare il testo CJK.
+- **`hyphens: auto`**: inserisce trattini di sillabazione secondo le regole della lingua; richiede l'attributo `lang` sull'elemento per funzionare bene.
 
 ```css
 .comment {
@@ -236,7 +236,7 @@ Per le **parole troppo lunghe** che sfondano il contenitore (URL, token) ci sono
 | `pre-wrap` | preservati | sì | preservate |
 | `pre-line` | collassati | sì | preservate |
 
-Il troncamento con puntini di sospensione è il caso d'uso classico di `nowrap`. `text-overflow: ellipsis` **non** forza da solo l'overflow: serve il pattern a tre proprietà — nascondere l'eccesso, impedire l'a capo, poi chiedere l'ellissi.
+Il troncamento con puntini di sospensione è il caso d'uso classico di `nowrap`. `text-overflow: ellipsis` **non** forza da solo l'overflow, quindi serve il pattern a tre proprietà: nascondere l'eccesso, impedire l'a capo, poi chiedere l'ellissi.
 
 ```css
 .ellipsis {
@@ -253,11 +253,11 @@ Il troncamento con puntini di sospensione è il caso d'uso classico di `nowrap`.
 
 `text-decoration` è la shorthand delle linee decorative del testo. I longhand danno controllo granulare:
 
-- **`text-decoration-line`** — quale linea: `underline`, `overline`, `line-through`, `none` (e combinazioni, es. `underline overline`).
-- **`text-decoration-color`** — il colore della linea (default `currentcolor`, cioè eredita dal testo → [[07-colori]]).
-- **`text-decoration-style`** — l'aspetto: `solid`, `double`, `dotted`, `dashed`, `wavy`.
-- **`text-decoration-thickness`** — lo spessore: `auto`, `from-font`, o una lunghezza.
-- **`text-underline-offset`** — la distanza tra sottolineatura e testo (non fa parte della shorthand, ma si abbina spesso).
+- **`text-decoration-line`**: quale linea (`underline`, `overline`, `line-through`, `none`, e combinazioni come `underline overline`).
+- **`text-decoration-color`**: il colore della linea (default `currentcolor`, cioè eredita dal testo; vedi [[07-colori]]).
+- **`text-decoration-style`**: l'aspetto (`solid`, `double`, `dotted`, `dashed`, `wavy`).
+- **`text-decoration-thickness`**: lo spessore (`auto`, `from-font` o una lunghezza).
+- **`text-underline-offset`**: la distanza tra sottolineatura e testo (non fa parte della shorthand, ma si abbina spesso).
 
 ```css
 a {
@@ -310,7 +310,7 @@ Collegamenti: [[06-unita-valori-funzioni]] · [[07-colori]]
 <details>
 <summary>Differenza tra <code>font-display: swap</code> e <code>optional</code>?</summary>
 
-`swap` mostra subito un fallback e sostituisce il web font appena arriva (FOUT, ma testo sempre leggibile) — buono per il testo di lettura. `optional` dà una finestra minima e poi **può rinunciare** al web font se non è pronto: zero scatti di layout, ideale per font non essenziali.
+`swap` mostra subito un fallback e sostituisce il web font appena arriva (FOUT, ma testo sempre leggibile): è adatto al testo di lettura. `optional` dà una finestra minima e poi **può rinunciare** al web font se non è pronto: zero scatti di layout, ideale per font non essenziali.
 
 </details>
 

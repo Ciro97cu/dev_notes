@@ -16,8 +16,8 @@ CSS definisce ~150 **named colors** (parole chiave come `red`, `crimson`, `rebec
 
 Due keyword meritano attenzione perché non sono colori "fissi":
 
-- **`transparent`** — nero completamente trasparente, equivale a `rgb(0 0 0 / 0)`. Utile per bordi/sfondi invisibili ma presenti nel layout.
-- **`currentColor`** — risolve al valore **calcolato** della proprietà `color` dell'elemento. Poiché `color` si eredita, `currentColor` propaga la tinta del testo ad altre proprietà: un bordo o un `fill` SVG che "seguono" automaticamente il colore del testo.
+- **`transparent`**: nero completamente trasparente, equivale a `rgb(0 0 0 / 0)`. Utile per bordi/sfondi invisibili ma presenti nel layout.
+- **`currentColor`**: risolve al valore **calcolato** della proprietà `color` dell'elemento. Poiché `color` si eredita, `currentColor` propaga la tinta del testo ad altre proprietà: un bordo o un `fill` SVG che "seguono" automaticamente il colore del testo.
 
 ```css
 .badge {
@@ -76,7 +76,7 @@ color: hsl(200 100% 50%);        /* azzurro pieno */
 color: hsl(200 100% 50% / .5);   /* stesso colore, alpha 0.5 */
 ```
 
-Ruotare `H` a parità di `S`/`L` genera una gamma di tinte "coordinate" — comodo per temi. Il limite di `hsl()` è la **non uniformità percettiva**: a `L` costante alcune tinte (il giallo) appaiono molto più chiare di altre (il blu), quindi una palette costruita solo variando `H` risulta squilibrata. Il problema lo risolve `oklch()` (più sotto). Dettagli su [hsl() — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl).
+Ruotare `H` a parità di `S`/`L` genera una gamma di tinte "coordinate", comoda per i temi. Il limite di `hsl()` è la **non uniformità percettiva**: a `L` costante alcune tinte (il giallo) appaiono molto più chiare di altre (il blu), quindi una palette costruita solo variando `H` risulta squilibrata. Il problema lo risolve `oklch()` (più sotto). Dettagli su [hsl() — MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl).
 
 > [!info|label:Legacy]
 > Come per `rgb`, esiste la forma con virgole e l'alias `hsla()`:
@@ -95,16 +95,16 @@ background: hwb(0 100% 0% / 50%); /* bianco al 50% */
 
 ## `oklch()` / `oklab()` — colore percettivamente uniforme
 
-Prima la sostanza, in parole semplici. Ogni colore ha una **luminosità**: quanto appare chiaro o scuro all'occhio. Il guaio di `hsl()` è che la sua `L` (lightness) **non coincide** con la luminosità che si percepisce davvero: prendendo un giallo e un blu **entrambi a `L` 50%**, il giallo sembra accecante e il blu quasi notturno — stesso numero, occhio ingannato. `oklch()` nasce proprio per questo: la sua `L` è **tarata sulla percezione umana**, così due colori con la stessa `L` appaiono davvero ugualmente chiari. È questo il senso di "**percettivamente uniforme**".
+Ogni colore ha una **luminosità**: quanto appare chiaro o scuro all'occhio. Il guaio di `hsl()` è che la sua `L` (lightness) **non coincide** con la luminosità che si percepisce davvero: prendendo un giallo e un blu **entrambi a `L` 50%**, il giallo sembra accecante e il blu quasi notturno, pur avendo lo stesso numero. `oklch()` nasce proprio per questo: la sua `L` è **tarata sulla percezione umana**, così due colori con la stessa `L` appaiono davvero ugualmente chiari. È questo il senso di "**percettivamente uniforme**".
 
-La differenza si vede a colpo d'occhio — in entrambe le strisce ogni tinta ha la **stessa** `L`, cambia solo la tinta (`H`):
+La differenza si vede a colpo d'occhio. In entrambe le strisce ogni tinta ha la **stessa** `L`, cambia solo la tinta (`H`):
 
 <div style="margin:1.1rem 0">
-  <div style="font-size:.82rem;opacity:.75;margin-bottom:.3rem"><code>hsl()</code> — tutte a <code>L 50%</code>: la luminosità "balla" (giallo e ciano sparano, blu e viola si spengono)</div>
+  <div style="font-size:.82rem;opacity:.75;margin-bottom:.3rem"><code>hsl()</code> con tutte le tinte a <code>L 50%</code>: la luminosità "balla" (giallo e ciano sparano, blu e viola si spengono)</div>
   <div style="display:flex;height:46px;border-radius:8px;overflow:hidden">
     <span style="flex:1;background:hsl(30 95% 50%)"></span><span style="flex:1;background:hsl(60 95% 50%)"></span><span style="flex:1;background:hsl(140 95% 50%)"></span><span style="flex:1;background:hsl(200 95% 50%)"></span><span style="flex:1;background:hsl(260 95% 50%)"></span><span style="flex:1;background:hsl(320 95% 50%)"></span>
   </div>
-  <div style="font-size:.82rem;opacity:.75;margin:.6rem 0 .3rem"><code>oklch()</code> — tutte a <code>L 0.65</code>: la luminosità percepita resta costante</div>
+  <div style="font-size:.82rem;opacity:.75;margin:.6rem 0 .3rem"><code>oklch()</code> con tutte le tinte a <code>L 0.65</code>: la luminosità percepita resta costante</div>
   <div style="display:flex;height:46px;border-radius:8px;overflow:hidden">
     <span style="flex:1;background:oklch(0.65 0.16 30)"></span><span style="flex:1;background:oklch(0.65 0.16 60)"></span><span style="flex:1;background:oklch(0.65 0.16 140)"></span><span style="flex:1;background:oklch(0.65 0.16 200)"></span><span style="flex:1;background:oklch(0.65 0.16 260)"></span><span style="flex:1;background:oklch(0.65 0.16 320)"></span>
   </div>
@@ -117,14 +117,14 @@ color: oklch(0.7 0.15 200);        /* L=0.7  C=0.15  H=200 */
 color: oklch(70% 0.15 200 / 50%);  /* stessa tinta, alpha 50% */
 ```
 
-- **L** (*lightness*) — luminosità percepita, da `0` (nero) a `1` (bianco); accetta anche `0%`–`100%`.
-- **C** (*chroma*) — intensità del colore: `0` è grigio, verso l'alto è più saturo. Non ha un tetto rigido; in pratica si arriva a ~`0.37`–`0.4` (con `100%` = `0.4`).
-- **H** (*hue*) — angolo di tinta `0`–`360` (gli angoli **non** coincidono con quelli di `hsl()`).
+- **L** (*lightness*): luminosità percepita, da `0` (nero) a `1` (bianco); accetta anche `0%`–`100%`.
+- **C** (*chroma*): intensità del colore, dove `0` è grigio e verso l'alto è più saturo. Non ha un tetto rigido; in pratica si arriva a ~`0.37`–`0.4` (con `100%` = `0.4`).
+- **H** (*hue*): angolo di tinta `0`–`360` (gli angoli **non** coincidono con quelli di `hsl()`).
 
 Due vantaggi rispetto a `hsl()`:
 
-1. **Uniformità percettiva** — a parità di `L`, tinte diverse appaiono ugualmente chiare. Una palette costruita fissando `L` e `C` e ruotando `H` risulta bilanciata: nessun colore "salta" fuori. Idem per generare varianti (schiarire/scurire) muovendo solo `L`.
-2. **Gamut ampio** — copre anche i colori **Display P3**, più vivi di quelli esprimibili in sRGB (`rgb`/`hsl`): su schermi wide-gamut si ottengono tinte più sature.
+1. **Uniformità percettiva**: a parità di `L`, tinte diverse appaiono ugualmente chiare. Una palette costruita fissando `L` e `C` e ruotando `H` risulta bilanciata: nessun colore "salta" fuori. Idem per generare varianti (schiarire/scurire) muovendo solo `L`.
+2. **Gamut ampio**: copre anche i colori **Display P3**, più vivi di quelli esprimibili in sRGB (`rgb`/`hsl`), e su schermi wide-gamut si ottengono tinte più sature.
 
 `oklab()` è la stessa cosa in coordinate cartesiane (`L a b`, con `a`/`b` = assi verde-rosso e blu-giallo): raramente si scrive a mano, serve soprattutto come **spazio di interpolazione** per gradienti e mescolanze. Riferimenti: [oklch()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch) e [oklab()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklab) su MDN. Baseline da maggio 2023.
 
@@ -222,7 +222,7 @@ Regola pratica: per rendere trasparente **un singolo colore**, usare l'alpha; `o
 }
 ```
 
-Con `light dark` attivo si sblocca la funzione **`light-dark()`**, che sceglie tra due colori in base allo schema attivo — senza scrivere una media query:
+Con `light dark` attivo si sblocca la funzione **`light-dark()`**, che sceglie tra due colori in base allo schema attivo, senza scrivere una media query:
 
 ```css
 :root { color-scheme: light dark; }
@@ -313,7 +313,7 @@ A mescolare `--brand` con il 20% di bianco nello spazio `oklch`, ottenendo una v
 <details>
 <summary>Cosa fa <code>oklch(from var(--brand) l c h / 50%)</code> e cos'è <code>currentColor</code>?</summary>
 
-La *relative color syntax* prende `--brand`, ne estrae i canali `l c h` e li riemette invariati ma con alpha al 50% — cioè la stessa tinta semitrasparente. `currentColor` invece risolve al valore calcolato della proprietà `color`, così bordi/sfondi/SVG possono "seguire" il colore del testo.
+La *relative color syntax* prende `--brand`, ne estrae i canali `l c h` e li riemette invariati ma con alpha al 50%, cioè la stessa tinta semitrasparente. `currentColor` invece risolve al valore calcolato della proprietà `color`, così bordi/sfondi/SVG possono "seguire" il colore del testo.
 
 </details>
 

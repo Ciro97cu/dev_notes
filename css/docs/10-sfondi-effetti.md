@@ -10,7 +10,7 @@ Questo modulo raccoglie tutto ciò che dà "consistenza visiva" a un elemento ol
 
 ## Le sotto-proprietà di `background`
 
-`background` non è una singola proprietà ma una **famiglia**: ognuno dei livelli di sfondo è descritto da otto proprietà indipendenti, che poi lo shorthand riassume. Vale la pena conoscerle una a una, perché spesso si scrivono estese per chiarezza.
+Dietro `background` c'è una **famiglia** di proprietà: ognuno dei livelli di sfondo è descritto da otto proprietà indipendenti, che poi lo shorthand riassume. Conviene conoscerle una a una, perché spesso si scrivono estese per chiarezza.
 
 | Proprietà | Cosa controlla | Default |
 |---|---|---|
@@ -35,18 +35,18 @@ Questo modulo raccoglie tutto ciò che dà "consistenza visiva" a un elemento ol
 
 ### `background-size`: `cover` vs `contain`
 
-I due valori chiave scalano l'immagine mantenendo le proporzioni, ma con obiettivi opposti:
+Entrambi i valori scalano l'immagine mantenendo le proporzioni, ma con obiettivi opposti:
 
-- `cover` — l'immagine **riempie** tutto il box; l'eccedenza viene ritagliata. È lo standard per le hero image.
-- `contain` — l'immagine **rientra** interamente nel box; restano bande vuote (letter/pillarboxing) se le proporzioni non combaciano.
+- `cover`: l'immagine **riempie** tutto il box; l'eccedenza viene ritagliata. È lo standard per le hero image.
+- `contain`: l'immagine **rientra** interamente nel box; restano bande vuote (letter/pillarboxing) se le proporzioni non combaciano.
 
 Si possono anche dare misure esplicite (`background-size: 200px 100px`, oppure `100% auto`).
 
 ### `background-repeat`, `background-origin`, `background-clip`
 
 - `background-repeat`: `repeat` (default), `repeat-x`, `repeat-y`, `no-repeat`, e i più raffinati `space` (ripete senza tagliare, distribuendo lo spazio) e `round` (riscala per far entrare un numero intero di tessere). ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/background-repeat))
-- `background-origin`: da dove **parte** l'immagine — `padding-box` (default), `border-box`, `content-box`.
-- `background-clip`: fin dove lo sfondo è **visibile** — `border-box` (default), `padding-box`, `content-box`, e il valore moderno `text` (→ [gradient text](#testo-riempito-di-gradiente-background-clip-text)).
+- `background-origin`: da dove **parte** l'immagine, fra `padding-box` (default), `border-box` e `content-box`.
+- `background-clip`: fin dove lo sfondo è **visibile**, fra `border-box` (default), `padding-box`, `content-box` e il valore moderno `text` (→ [gradient text](#testo-riempito-di-gradiente-background-clip-text)).
 
 ### `background-attachment`
 
@@ -85,7 +85,7 @@ Regole pratiche:
 
 ## Sfondi multipli
 
-`background-image` (e quindi lo shorthand) accetta una **lista separata da virgola**: si sovrappongono più layer. L'ordine di stacking è controintuitivo — **il primo della lista sta sopra**, l'ultimo sotto. Dove un layer superiore è trasparente, si vedono quelli sotto.
+`background-image` (e quindi lo shorthand) accetta una **lista separata da virgola**: si sovrappongono più layer. L'ordine di stacking è controintuitivo: **il primo della lista sta sopra**, l'ultimo sotto. Dove un layer superiore è trasparente, si vedono quelli sotto.
 
 ```css
 .card {
@@ -96,7 +96,7 @@ Regole pratiche:
 ```
 
 > [!tip]
-> Il **colore** di sfondo può stare solo nell'**ultimo** layer (è, di fatto, il fondale di tutti). Un pattern comune è sovrapporre un gradiente semitrasparente a una foto per garantire il contrasto del testo — proprio come nell'esempio sopra.
+> Il **colore** di sfondo può stare solo nell'**ultimo** layer (fa da fondale a tutti). Un pattern comune è sovrapporre un gradiente semitrasparente a una foto per garantire il contrasto del testo, come nell'esempio sopra.
 
 ## Gradienti
 
@@ -109,7 +109,7 @@ Transizione lungo una retta. La direzione è opzionale (**default `to bottom`**,
 - Angolo: `0deg` = verso l'alto, `90deg` = verso destra, `180deg` = verso il basso, `270deg` = verso sinistra. Accetta anche `turn` e `rad`.
 - Keyword: `to right`, `to bottom`, `to top left`…
 
-I **color stop** possono avere una posizione (`%` o lunghezza). Due stop alla **stessa** posizione creano una transizione netta (hard stop) — utile per strisce e bandiere.
+I **color stop** possono avere una posizione (`%` o lunghezza). Due stop alla **stessa** posizione creano una transizione netta (hard stop), utile per strisce e bandiere.
 
 ```css
 /* Sfumatura diagonale */
@@ -173,7 +173,7 @@ I colori ruotano **attorno** a un centro (come le lancette di un orologio), inve
 
 ## Testo riempito di gradiente (`background-clip: text`)
 
-`background-clip: text` ritaglia lo sfondo **sulla sagoma del testo**: combinato con un `color` trasparente, il gradiente riempie le glifi. È la tecnica moderna per il "gradient text".
+`background-clip: text` ritaglia lo sfondo **sulla sagoma del testo**: combinato con un `color` trasparente, il gradiente riempie i glifi. È la tecnica moderna per il "gradient text".
 
 ```css
 .title {
@@ -191,11 +191,11 @@ I colori ruotano **attorno** a un centro (come le lancette di un orologio), inve
 
 Aggiunge una o più ombre al **box** dell'elemento (rispetta il `border-radius`). Ordine dei valori: `offset-x offset-y [blur] [spread] [color] [inset]`.
 
-- `offset-x` / `offset-y` — spostamento (obbligatori); valori positivi = destra/basso.
-- `blur` — sfocatura (default `0`); più è alto, più l'ombra è morbida e diffusa.
-- `spread` — dilata (valore positivo) o restringe (negativo) l'ombra.
-- `color` — può stare **prima o dopo** i numeri; default = `color` dell'elemento.
-- `inset` — trasforma l'ombra in **interna** (incassata).
+- `offset-x` / `offset-y`: spostamento (obbligatori); valori positivi = destra/basso.
+- `blur`: sfocatura (default `0`); più è alto, più l'ombra è morbida e diffusa.
+- `spread`: dilata (valore positivo) o restringe (negativo) l'ombra.
+- `color`: può stare **prima o dopo** i numeri; default = `color` dell'elemento.
+- `inset`: trasforma l'ombra in **interna** (incassata).
 
 Ombre multiple: **lista separata da virgola**, la prima disegnata sopra.
 
@@ -267,13 +267,13 @@ Come `filter`, ma applicato a **ciò che sta dietro** l'elemento, non all'elemen
 
 ## `object-fit` e `object-position`
 
-Su elementi **rimpiazzati** (`<img>`, `<video>`) con dimensioni fissate, `object-fit` decide come il contenuto riempie il proprio box — è il `background-size` dei media veri e propri.
+Su elementi **rimpiazzati** (`<img>`, `<video>`) con dimensioni fissate, `object-fit` decide come il contenuto riempie il proprio box: fa per i media ciò che `background-size` fa per le immagini di sfondo.
 
-- `fill` (default) — deforma per riempire, **ignora** le proporzioni.
-- `contain` — rientra tutto, con bande vuote.
-- `cover` — copre tutto, ritagliando l'eccedenza.
-- `none` — dimensione intrinseca, nessun ridimensionamento.
-- `scale-down` — il più piccolo tra `none` e `contain`.
+- `fill` (default): deforma per riempire, **ignora** le proporzioni.
+- `contain`: rientra tutto, con bande vuote.
+- `cover`: copre tutto, ritagliando l'eccedenza.
+- `none`: dimensione intrinseca, nessun ridimensionamento.
+- `scale-down`: il più piccolo tra `none` e `contain`.
 
 `object-position` allinea il contenuto nel box (come `background-position`), utile per scegliere quale parte resta visibile con `cover`.
 
@@ -316,7 +316,7 @@ Funzioni disponibili: `circle()`, `ellipse()`, `polygon()`, `inset()`, `rect()`,
 **SVG** (*Scalable Vector Graphics*) descrive la grafica con formule geometriche in XML anziché con una griglia di pixel. Vantaggi: è **scalabile** senza perdita di qualità (ideale per icone e loghi su schermi ad alta densità), **leggero** per forme semplici e **stilizzabile/animabile** con CSS. Due modi d'uso principali:
 
 - **Inline** (`<svg>…</svg>` nel markup): il DOM dell'SVG è accessibile, quindi si possono stilizzare i singoli tracciati con CSS (`fill`, `stroke`) e animarli. È la via per icone interattive e grafici che cambiano stato.
-- **Come immagine di sfondo** (`background-image: url("icon.svg")` o `<img src>`): comodo e cacheabile, ma l'SVG è "chiuso" — dall'esterno non se ne stilizzano le parti interne.
+- **Come immagine di sfondo** (`background-image: url("icon.svg")` o `<img src>`): comodo e cacheabile, ma l'SVG è "chiuso": dall'esterno non se ne stilizzano le parti interne.
 
 ```css
 /* Icona SVG di sfondo, dimensionata come una qualsiasi background-image */

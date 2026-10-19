@@ -30,10 +30,10 @@ Al passaggio del mouse il colore non salta: transita da `royalblue` a `navy` in 
 
 Lo shorthand `transition` racchiude quattro proprietà (cinque con `transition-behavior`, vista più avanti):
 
-- **`transition-property`** — quali proprietà osservare. Un nome (`opacity`), una lista separata da virgole (`opacity, transform`), la parola chiave `all` (tutte quelle animabili) o `none`.
-- **`transition-duration`** — quanto dura, in secondi (`0.2s`) o millisecondi (`200ms`). Senza durata non c'è transizione.
-- **`transition-timing-function`** — la **curva** con cui il valore avanza nel tempo (vedi sotto). Default: `ease`.
-- **`transition-delay`** — quanto attendere prima di iniziare. Un valore negativo fa "saltare" la transizione a metà corsa.
+- **`transition-property`**: quali proprietà osservare. Un nome (`opacity`), una lista separata da virgole (`opacity, transform`), la parola chiave `all` (tutte quelle animabili) o `none`.
+- **`transition-duration`**: quanto dura, in secondi (`0.2s`) o millisecondi (`200ms`). Senza durata non c'è transizione.
+- **`transition-timing-function`**: la **curva** con cui il valore avanza nel tempo (vedi sotto). Default: `ease`.
+- **`transition-delay`**: quanto attendere prima di iniziare. Un valore negativo fa "saltare" la transizione a metà corsa.
 
 ```css
 .card {
@@ -68,26 +68,26 @@ Ogni voce della lista può avere durata, curva e delay propri. [MDN — transiti
 Non tutte le proprietà sono animabili, e tra quelle che lo sono non tutte costano uguale. Le proprietà si dividono in due famiglie:
 
 - **Interpolabili**: hanno valori intermedi calcolabili (`opacity`, `color`, `transform`, `width`, `margin`…). Sono quelle che transitano in modo fluido.
-- **Discrete**: passano da un valore all'altro senza stati intermedi (`display`, `visibility`, `overlay`). Di norma **non** transitano — servono accorgimenti specifici, visti nella sezione su `@starting-style`.
+- **Discrete**: passano da un valore all'altro senza stati intermedi (`display`, `visibility`, `overlay`). Di norma **non** transitano: servono accorgimenti specifici, visti nella sezione su `@starting-style`.
 
 Tra le interpolabili, la scelta ha un impatto enorme sulle prestazioni. Animare proprietà che cambiano la geometria (`width`, `height`, `top`, `left`, `margin`) costringe il browser a **ricalcolare il layout** (reflow) e a ridipingere, a ogni fotogramma: è la causa più comune di animazioni a scatti. Animare invece **`transform` e `opacity`** viene gestito dal **compositor**, spesso con accelerazione GPU, senza toccare layout né paint.
 
 > [!tip]
-> Regola d'oro: per muovere, scalare o ruotare qualcosa si usa `transform`; per farlo comparire/scomparire si usa `opacity`. Sono le due proprietà più economiche da animare. Per spostare un box si preferisce `transform: translate()` a `top`/`left` (dettagli in [[14-transforms]]).
+> Regola pratica: per muovere, scalare o ruotare qualcosa si usa `transform`; per farlo comparire/scomparire si usa `opacity`. Sono le due proprietà più economiche da animare. Per spostare un box si preferisce `transform: translate()` a `top`/`left` (dettagli in [[14-transforms]]).
 
 ## Timing functions: la curva del movimento
 
-La *timing function* descrive come il progresso si distribuisce nel tempo — non *quanto* dura, ma se parte piano e accelera, se rallenta alla fine, se procede a scatti. Vale identica per transizioni (`transition-timing-function`) e animazioni (`animation-timing-function`).
+La *timing function* descrive come il progresso si distribuisce nel tempo: non *quanto* dura, ma se parte piano e accelera, se rallenta alla fine, se procede a scatti. Vale identica per transizioni (`transition-timing-function`) e animazioni (`animation-timing-function`).
 
 I preset più usati:
 
-- **`ease`** (default) — parte lenta, accelera, rallenta alla fine.
-- **`linear`** — velocità costante, senza accelerazioni.
-- **`ease-in`** — parte lenta e accelera fino alla fine.
-- **`ease-out`** — parte veloce e decelera. Ottima per elementi che **entrano** (sensazione naturale di arrivo).
-- **`ease-in-out`** — lenta agli estremi, veloce al centro.
+- **`ease`** (default): parte lenta, accelera, rallenta alla fine.
+- **`linear`**: velocità costante, senza accelerazioni.
+- **`ease-in`**: parte lenta e accelera fino alla fine.
+- **`ease-out`**: parte veloce e decelera. Ottima per elementi che **entrano** (sensazione naturale di arrivo).
+- **`ease-in-out`**: lenta agli estremi, veloce al centro.
 
-Ognuno è in realtà una scorciatoia per una `cubic-bezier()`.
+Ognuno è una scorciatoia per una `cubic-bezier()`.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 468 118" role="img" aria-label="Curve delle timing function: linear, ease, ease-in, ease-out, ease-in-out (progresso in funzione del tempo)" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><path d="M16 26 L16 84 L86 84" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M16 84.0 L86 26.0" fill="none" stroke="currentColor" stroke-width="1" opacity=".28" stroke-dasharray="3 3"/><path d="M16 84.0 L86 26.0" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round"/><text x="51.0" y="100" font-size="9.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">linear</text><path d="M108 26 L108 84 L178 84" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M108 84.0 L178 26.0" fill="none" stroke="currentColor" stroke-width="1" opacity=".28" stroke-dasharray="3 3"/><path d="M108.0 84.0 C 125.5 78.2 125.5 26.0 178.0 26.0" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round"/><text x="143.0" y="100" font-size="9.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">ease</text><path d="M200 26 L200 84 L270 84" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M200 84.0 L270 26.0" fill="none" stroke="currentColor" stroke-width="1" opacity=".28" stroke-dasharray="3 3"/><path d="M200.0 84.0 C 229.4 84.0 270.0 26.0 270.0 26.0" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round"/><text x="235.0" y="100" font-size="9.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">ease-in</text><path d="M292 26 L292 84 L362 84" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M292 84.0 L362 26.0" fill="none" stroke="currentColor" stroke-width="1" opacity=".28" stroke-dasharray="3 3"/><path d="M292.0 84.0 C 292.0 84.0 332.6 26.0 362.0 26.0" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round"/><text x="327.0" y="100" font-size="9.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">ease-out</text><path d="M384 26 L384 84 L454 84" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M384 84.0 L454 26.0" fill="none" stroke="currentColor" stroke-width="1" opacity=".28" stroke-dasharray="3 3"/><path d="M384.0 84.0 C 413.4 84.0 424.6 26.0 454.0 26.0" fill="none" stroke="var(--link,#1572b6)" stroke-width="2" stroke-linecap="round"/><text x="419.0" y="100" font-size="9.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">ease-in-out</text><text x="12" y="16" font-size="8" text-anchor="start" font-weight="400" opacity=".6" fill="currentColor">progresso</text><text x="454" y="102" font-size="8" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor"></text></g></svg>
@@ -96,7 +96,7 @@ Ognuno è in realtà una scorciatoia per una `cubic-bezier()`.
 
 ### `cubic-bezier()` — curve su misura
 
-Definisce la curva con i due punti di controllo di una Bézier cubica: `cubic-bezier(x1, y1, x2, y2)`. Le **x devono stare in `[0, 1]`** (rappresentano il tempo), mentre le **y possono uscire** da quell'intervallo — è così che si ottiene un *overshoot*, cioè un piccolo scarto oltre il valore finale prima di assestarsi.
+Definisce la curva con i due punti di controllo di una Bézier cubica: `cubic-bezier(x1, y1, x2, y2)`. Le **x devono stare in `[0, 1]`** (rappresentano il tempo), mentre le **y possono uscire** da quell'intervallo: così si ottiene un *overshoot*, cioè un piccolo scarto oltre il valore finale prima di assestarsi.
 
 ```css
 /* overshoot elastico: y2 = 1.56 supera 1 e "rimbalza" oltre il target */
@@ -120,7 +120,7 @@ Le posizioni del salto sono `jump-start`, `jump-end` (default), `jump-none`, `ju
 </figure>
 
 > [!tip]
-> La funzione `linear()` (moderna) approssima curve arbitrarie elencando più punti di progresso — utile per effetti *spring/bounce* difficili da rendere con una singola Bézier: `linear(0, 0.25 40%, 1)`. Da non confondere con la *parola chiave* `linear`. [MDN — easing-function](https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function)
+> La funzione `linear()` (moderna) approssima curve arbitrarie elencando più punti di progresso, utile per effetti *spring/bounce* difficili da rendere con una singola Bézier: `linear(0, 0.25 40%, 1)`. Da non confondere con la *parola chiave* `linear`. [MDN — easing-function](https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function)
 
 ### Cosa fa scattare una transizione
 
@@ -156,14 +156,14 @@ Più percentuali possono condividere lo stesso blocco separandole con la virgola
 
 ### Applicare l'animazione: le proprietà
 
-- **`animation-name`** — il nome del blocco `@keyframes` da usare.
-- **`animation-duration`** — durata di un ciclo (obbligatoria perché si veda qualcosa).
-- **`animation-timing-function`** — la curva, come per le transizioni. Si applica **tra un keyframe e il successivo**, non all'intera animazione.
-- **`animation-delay`** — ritardo prima del primo ciclo.
-- **`animation-iteration-count`** — quante volte ripetere: un numero, oppure `infinite`.
-- **`animation-direction`** — il verso: `normal`, `reverse` (all'indietro), `alternate` (avanti/indietro alternati), `alternate-reverse`.
-- **`animation-fill-mode`** — quali stili tenere **fuori** dal periodo di esecuzione: `forwards` mantiene l'ultimo keyframe a fine animazione, `backwards` applica il primo keyframe già durante il delay, `both` fa entrambe le cose, `none` (default) non ne conserva nessuno.
-- **`animation-play-state`** — `running` o `paused`; cambiandola (via classe o JS) si mette in pausa e si riprende.
+- **`animation-name`**: il nome del blocco `@keyframes` da usare.
+- **`animation-duration`**: durata di un ciclo (obbligatoria perché si veda qualcosa).
+- **`animation-timing-function`**: la curva, come per le transizioni. Si applica **tra un keyframe e il successivo**, non all'intera animazione.
+- **`animation-delay`**: ritardo prima del primo ciclo.
+- **`animation-iteration-count`**: quante volte ripetere: un numero, oppure `infinite`.
+- **`animation-direction`**: il verso: `normal`, `reverse` (all'indietro), `alternate` (avanti/indietro alternati), `alternate-reverse`.
+- **`animation-fill-mode`**: quali stili tenere **fuori** dal periodo di esecuzione: `forwards` mantiene l'ultimo keyframe a fine animazione, `backwards` applica il primo keyframe già durante il delay, `both` fa entrambe le cose, `none` (default) non ne conserva nessuno.
+- **`animation-play-state`**: `running` o `paused`; cambiandola (via classe o JS) si mette in pausa e si riprende.
 
 ```css
 .spinner {
@@ -282,7 +282,7 @@ Ci sono due scenari:
 > [!info|label:Baseline]
 > Le view transitions **same-document** sono **Baseline: Newly available** (da fine 2025: Chrome/Edge dal 2023, Safari 18, Firefox 144). [MDN — startViewTransition()](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition) *(verificato: 2026-08-13)*
 
-Mentre una transizione same-document è in corso, la radice del documento si può stilizzare con la pseudo-classe **`:active-view-transition`**, che matcha `:root` per tutta la durata dell'animazione e smette di farlo appena questa finisce. Serve ad applicare stili validi **solo** durante la transizione — per esempio bloccare temporaneamente l'interazione. La variante **`:active-view-transition-type(<type>)`** restringe il match a un tipo dichiarato (i type passati a `startViewTransition()`, o con `@view-transition { types: … }` nel caso cross-document), così si differenziano gli stili in base al tipo di navigazione:
+Mentre una transizione same-document è in corso, la radice del documento si può stilizzare con la pseudo-classe **`:active-view-transition`**, che matcha `:root` per tutta la durata dell'animazione e smette di farlo appena questa finisce. Serve ad applicare stili validi **solo** durante la transizione, per esempio a bloccare temporaneamente l'interazione. La variante **`:active-view-transition-type(<type>)`** restringe il match a un tipo dichiarato (i type passati a `startViewTransition()`, o con `@view-transition { types: … }` nel caso cross-document), così si differenziano gli stili in base al tipo di navigazione:
 
 ```css
 /* stili attivi solo mentre una view transition è in corso */
@@ -304,12 +304,12 @@ Mentre una transizione same-document è in corso, la radice del documento si pu�
 
 ## Moderno emergente: scroll-driven animations
 
-Di norma un'animazione avanza col **tempo**. Le *scroll-driven animations* la legano invece a un'altra "timeline": la **posizione dello scroll** o la **visibilità** di un elemento nel viewport. Il progresso non dipende più dai secondi ma da quanto si è scrollato — senza JavaScript e senza listener sullo `scroll`.
+Di norma un'animazione avanza col **tempo**. Le *scroll-driven animations* la legano invece a un'altra "timeline": la **posizione dello scroll** o la **visibilità** di un elemento nel viewport. Il progresso non dipende più dai secondi ma da quanto si è scrollato, e tutto avviene senza JavaScript e senza listener sullo `scroll`.
 
 Si usa la proprietà **`animation-timeline`** con due funzioni anonime:
 
-- **`scroll()`** — lega l'animazione all'avanzamento di un contenitore scrollabile.
-- **`view()`** — lega l'animazione alla porzione di viewport attraversata dall'elemento (progress bar, reveal all'ingresso, effetti parallasse).
+- **`scroll()`**: lega l'animazione all'avanzamento di un contenitore scrollabile.
+- **`view()`**: lega l'animazione alla porzione di viewport attraversata dall'elemento (progress bar, reveal all'ingresso, effetti parallasse).
 
 ```css
 @keyframes reveal {
@@ -352,7 +352,7 @@ Una **transizione** interpola tra due soli stati e ha bisogno di un **trigger** 
 <details>
 <summary>Perché per muovere o far comparire un elemento si preferiscono <code>transform</code> e <code>opacity</code>?</summary>
 
-Perché sono gestite dal **compositor** (spesso su GPU) senza ricalcolare il layout né ridipingere. Animare `width`, `top`, `margin` ecc. forza reflow e repaint a ogni fotogramma → animazioni a scatti. Dettagli in [[14-transforms]].
+Perché sono gestite dal **compositor** (spesso su GPU) senza ricalcolare il layout né ridipingere. Animare `width`, `top`, `margin` ecc. forza reflow e repaint a ogni fotogramma, con il risultato di animazioni a scatti. Dettagli in [[14-transforms]].
 
 </details>
 

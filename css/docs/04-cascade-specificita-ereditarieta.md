@@ -12,9 +12,9 @@ Più regole possono toccare lo stesso elemento e chiedere valori diversi per la 
 
 Quando due dichiarazioni assegnano valori diversi alla stessa proprietà dello stesso elemento, il browser applica l'[algoritmo della cascade](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Cascade), che confronta i candidati per passi successivi. Si passa al criterio dopo **solo in caso di parità**:
 
-1. **Origine e importanza** — da dove arriva la regola (browser, utente, autore) e se è marcata `!important`. Qui rientrano anche i **cascade layer** (`@layer`, vedi sotto).
-2. **Specificità** — quanto è "mirato" il selettore (sezione dedicata).
-3. **Ordine di apparizione** — a parità di tutto il resto, **vince l'ultima** dichiarazione nell'ordine del sorgente.
+1. **Origine e importanza**: da dove arriva la regola (browser, utente, autore) e se è marcata `!important`. Qui rientrano anche i **cascade layer** (`@layer`, vedi sotto).
+2. **Specificità**: quanto è "mirato" il selettore (sezione dedicata).
+3. **Ordine di apparizione**: a parità di tutto il resto, **vince l'ultima** dichiarazione nell'ordine del sorgente.
 
 ```mermaid
 flowchart TD
@@ -26,7 +26,7 @@ flowchart TD
 ```
 
 > [!tip]
-> L'ordine di apparizione è l'**ultima** spiaggia, non la prima. Se una regola non "prende", spesso non è questione di ordine ma di **specificità** o di **origine/layer** più forte a monte.
+> L'ordine di apparizione è l'**ultima** spiaggia: se una regola non "prende", spesso non è questione di ordine ma di **specificità** o di **origine/layer** più forte a monte.
 
 ### Origine e importanza
 
@@ -42,11 +42,11 @@ Ogni foglio di stile ha un'**origine**: `user-agent` (gli stili di default del b
 | ↓ | user | `!important` |
 | più forte | user-agent | `!important` |
 
-Il dettaglio controintuitivo: con `!important` l'ordine delle origini **si inverte**. Un `!important` dell'user-agent o dell'utente batte un `!important` dell'autore — è un meccanismo pensato per l'**accessibilità** (l'utente deve poter forzare i propri stili). Le transizioni CSS, poi, hanno priorità ancora superiore mentre sono in corso.
+Con `!important`, invece, l'ordine delle origini **si inverte**. Un `!important` dell'user-agent o dell'utente batte un `!important` dell'autore, perché il meccanismo è pensato per l'**accessibilità** (l'utente deve poter forzare i propri stili). Le transizioni CSS, poi, hanno priorità ancora superiore mentre sono in corso.
 
 ## Specificità
 
-Quando origine e importanza pari, vince il selettore più **specifico**. La specificità è un valore a tre "colonne" (si scrive **`a-b-c`**) che [MDN indica](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity) come **ID · CLASS · TYPE**:
+Quando origine e importanza sono pari, vince il selettore più **specifico**. La specificità è un valore a tre "colonne" (si scrive **`a-b-c`**) che [MDN indica](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascade/Specificity) come **ID · CLASS · TYPE**:
 
 | Colonna | Cosa la incrementa | Peso |
 |---|---|---|
@@ -73,19 +73,19 @@ Il confronto è **colonna per colonna, da sinistra a destra**: prima gli ID, poi
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 470 168" role="img" aria-label="Specificità a colonne ID-CLASS-TYPE: 1-0-0 batte 0-5-0 perché la colonna ID decide, senza riporto" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><text x="236.0" y="32" font-size="10" text-anchor="middle" font-weight="700" opacity=".8" fill="currentColor" font-family="system-ui,Arial,sans-serif">ID</text><text x="294.0" y="32" font-size="10" text-anchor="middle" font-weight="700" opacity=".8" fill="currentColor" font-family="system-ui,Arial,sans-serif">CLASS</text><text x="352.0" y="32" font-size="10" text-anchor="middle" font-weight="700" opacity=".8" fill="currentColor" font-family="system-ui,Arial,sans-serif">TYPE</text><text x="236.0" y="44" font-size="8" text-anchor="middle" font-weight="400" opacity=".55" fill="currentColor" font-family="system-ui,Arial,sans-serif">a</text><text x="294.0" y="44" font-size="8" text-anchor="middle" font-weight="400" opacity=".55" fill="currentColor" font-family="system-ui,Arial,sans-serif">b</text><text x="352.0" y="44" font-size="8" text-anchor="middle" font-weight="400" opacity=".55" fill="currentColor" font-family="system-ui,Arial,sans-serif">c</text><text x="196" y="78.0" font-size="11" text-anchor="end" font-weight="700" opacity="1" fill="currentColor" font-family="ui-monospace,Menlo,Consolas,monospace">#titolo</text><rect x="210" y="60" width="52" height="28" rx="4" fill="var(--link,#1572b6)" fill-opacity=".16" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><text x="236.0" y="78" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">1</text><rect x="268" y="60" width="52" height="28" rx="4" fill="var(--link,#1572b6)" fill-opacity=".16" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><text x="294.0" y="78" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">0</text><rect x="326" y="60" width="52" height="28" rx="4" fill="var(--link,#1572b6)" fill-opacity=".16" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><text x="352.0" y="78" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">0</text><text x="392" y="78.0" font-size="10" text-anchor="start" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">VINCE</text><text x="196" y="118.0" font-size="11" text-anchor="end" font-weight="600" opacity="1" fill="currentColor" font-family="ui-monospace,Menlo,Consolas,monospace">.a .b .c .d .e</text><rect x="210" y="100" width="52" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><text x="236.0" y="118" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">0</text><rect x="268" y="100" width="52" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><text x="294.0" y="118" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">5</text><rect x="326" y="100" width="52" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><text x="352.0" y="118" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor" font-family="system-ui,Arial,sans-serif">0</text><rect x="206" y="56" width="60" height="76" rx="6" fill="none" stroke="currentColor" stroke-width="1.3" opacity="1" stroke-dasharray="4 3"/><text x="236.0" y="150" font-size="9" text-anchor="middle" font-weight="600" opacity=".8" fill="currentColor" font-family="system-ui,Arial,sans-serif">la colonna ID decide: 1 > 0, senza riporto</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La specificità è a tre colonne <strong>ID · CLASS · TYPE</strong> e si confronta <strong>da sinistra</strong>, senza riporto: <code>#titolo</code> (<code>1-0-0</code>) batte <code>.a .b .c .d .e</code> (<code>0-5-0</code>) perché nella colonna ID <code>1 &gt; 0</code> — nessun numero di classi raggiunge un id.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">La specificità è a tre colonne <strong>ID · CLASS · TYPE</strong> e si confronta <strong>da sinistra</strong>, senza riporto: <code>#titolo</code> (<code>1-0-0</code>) batte <code>.a .b .c .d .e</code> (<code>0-5-0</code>) perché nella colonna ID <code>1 &gt; 0</code>: nessun numero di classi raggiunge un id.</figcaption>
 </figure>
 
 > [!warning]
-> È il grande equivoco della vecchia notazione "id = 100, classe = 10, tipo = 1": suggerisce un conteggio in base 10, dove 11 classi (`110`) supererebbero un id (`100`). **Falso.** Le colonne sono indipendenti: `0-11-0` perde comunque contro `1-0-0`. La notazione a colonne `a-b-c` rende l'errore impossibile.
+> È il grande equivoco della vecchia notazione "id = 100, classe = 10, tipo = 1": suggerisce un conteggio in base 10, dove 11 classi (`110`) supererebbero un id (`100`). Invece le colonne sono indipendenti, e `0-11-0` perde comunque contro `1-0-0`. La notazione a colonne `a-b-c` rende l'errore impossibile.
 
 ### Inline e `!important`: fuori scala
 
-- Lo **stile inline** (attributo `style="…"`) batte qualunque selettore: vale come una colonna ancora più a sinistra, di fatto `1-0-0-0`.
+- Lo **stile inline** (attributo `style="…"`) batte qualunque selettore: vale come una colonna ancora più a sinistra, cioè come `1-0-0-0`.
 - **`!important`** su una dichiarazione la sposta in una fascia di priorità superiore (vedi la tabella origine/importanza): scavalca la specificità di qualunque dichiarazione normale della stessa origine. Fra due `!important` della stessa origine/layer, vince poi quello a specificità maggiore.
 
 > [!warning]
-> `!important` va usato con **parsimonia**: spezza il ragionamento della cascade e l'unico modo per sovrascriverlo è un altro `!important` più specifico → spirale di escalation. Prima di ricorrervi, valutare un selettore più mirato o, meglio, i **cascade layer** (`@layer`).
+> `!important` va usato con **parsimonia**: spezza il ragionamento della cascade e l'unico modo per sovrascriverlo è un altro `!important` più specifico, e si innesca così una spirale di escalation. Prima di ricorrervi, valutare un selettore più mirato o, meglio, i **cascade layer** (`@layer`).
 
 ### `:where()`, `:is()`, `:has()`, `:not()`
 
@@ -109,7 +109,7 @@ Alcune proprietà, se non impostate, prendono il **valore calcolato del genitore
 - **Ereditano**: `color`, tutte le `font-*` (`font-family`, `font-size`, `font-weight`…), `line-height`, `text-align`, `letter-spacing`, `visibility`, `list-style`, `cursor`.
 - **Non ereditano**: `margin`, `padding`, `border`, `background`, `width`/`height`, `display`, `position`. Senza un valore proprio, usano il loro **valore iniziale**.
 
-La regola d'oro: eredita ciò che ha senso propagare al testo di tutta la pagina (imposti `color`/`font` sul `body` e vale ovunque), non eredita ciò che è specifico del singolo box (un `border` su un `<div>` non deve comparire su ogni figlio). Ogni proprietà su MDN riporta il campo **"Inherited: yes/no"**.
+In generale, eredita ciò che ha senso propagare al testo di tutta la pagina (si impostano `color`/`font` sul `body` e valgono ovunque), non eredita ciò che è specifico del singolo box (un `border` su un `<div>` non deve comparire su ogni figlio). Ogni proprietà su MDN riporta il campo **"Inherited: yes/no"**.
 
 ### Le parole chiave universali
 
@@ -133,9 +133,9 @@ Ogni proprietà accetta sei [valori di controllo dell'ereditarietà](https://dev
 }
 ```
 
-La proprietà scorciatoia **`all`** applica una di queste keyword a (quasi) tutte le proprietà in un colpo solo — utile per reset mirati.
+La proprietà scorciatoia **`all`** applica una di queste keyword a (quasi) tutte le proprietà in un colpo solo, ed è utile per reset mirati.
 
-Le tre keyword della famiglia `revert` fanno la stessa cosa — riportano indietro la cascata come se una parte delle dichiarazioni non esistesse — ma a **granularità diverse**. `revert` scarta l'intera **origine** (per un foglio d'autore, tutto il foglio, e si torna agli stili del browser); `revert-layer` scarta solo il **layer** corrente; **`revert-rule`** scarta soltanto la **regola** in cui compare, lasciando valide le altre regole dello stesso layer. È la più chirurgica delle tre: la cascata ricalcola il valore come se quella singola regola non ci fosse.
+Le tre keyword della famiglia `revert` fanno la stessa cosa (riportano indietro la cascata come se una parte delle dichiarazioni non esistesse), ma a **granularità diverse**. `revert` scarta l'intera **origine** (per un foglio d'autore, tutto il foglio, e si torna agli stili del browser); `revert-layer` scarta solo il **layer** corrente; **`revert-rule`** scarta soltanto la **regola** in cui compare, lasciando valide le altre regole dello stesso layer. È la più chirurgica delle tre: la cascata ricalcola il valore come se quella singola regola non ci fosse.
 
 ```css
 p {
@@ -164,7 +164,7 @@ Un uso tipico riguarda l'attributo `style`: scrivere `style="color: revert-rule"
 
 ## Modern — `@layer`: i cascade layer
 
-I **cascade layer** ([`@layer`](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer), Baseline dal 2022) sono la novità che cambia il modo di gestire i conflitti: introducono una priorità **fra gruppi di stili** che agisce **prima della specificità**. Si dichiara l'ordine dei layer una volta sola; **conta l'ordine di dichiarazione, non la specificità interna**:
+I **cascade layer** ([`@layer`](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer), Baseline dal 2022) cambiano il modo di gestire i conflitti: introducono una priorità **fra gruppi di stili** che agisce **prima della specificità**. Si dichiara l'ordine dei layer una volta sola; **conta l'ordine di dichiarazione, non la specificità interna**:
 
 ```css
 /* 1. Ordine: prima = priorità più bassa, ultimo = più alta */
@@ -203,7 +203,7 @@ Combinato coi layer (o da solo), `:where()` serve a pubblicare stili **base faci
 
 ## Emergente — `@scope`
 
-[`@scope`](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope) limita un blocco di regole a un sottoalbero del DOM, con un confine superiore (incluso) e uno inferiore opzionale (escluso — il "donut scope"):
+[`@scope`](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope) limita un blocco di regole a un sottoalbero del DOM, con un confine superiore (incluso) e uno inferiore opzionale (escluso: è il "donut scope"):
 
 ```css
 @scope (.card) to (.card__footer) {
@@ -211,7 +211,7 @@ Combinato coi layer (o da solo), `:where()` serve a pubblicare stili **base faci
 }
 ```
 
-Introduce anche un criterio di cascade in più — la **scoping proximity**: a parità di specificità, vince la regola il cui scope-root è **più vicino** (meno "salti" nel DOM) all'elemento. Nell'ordine dell'algoritmo si colloca **fra specificità e ordine di apparizione**.
+Introduce anche un criterio di cascade in più, la **scoping proximity**: a parità di specificità, vince la regola il cui scope-root è **più vicino** (meno "salti" nel DOM) all'elemento. Nell'ordine dell'algoritmo si colloca **fra specificità e ordine di apparizione**.
 
 > [!info|label:Baseline]
 > `@scope` è **Baseline "newly available" da fine 2025**: supportato nelle versioni recenti di Chrome, Edge, Firefox e Safari, ma **da verificare** su browser più datati ([Can I Use](https://caniuse.com/css-cascade-scope)). Per ora, in produzione con base utenti eterogenea, valutare un fallback. *(verificato: 2026-08-13)*

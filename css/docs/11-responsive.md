@@ -11,7 +11,7 @@ Il **responsive design** è la pratica di far adattare un'unica pagina a schermi
 
 ## Il meta tag viewport — indispensabile
 
-Su mobile il primo passo non è CSS ma HTML: senza questa riga nell'`<head>`, il layout responsive non funziona.
+Su mobile il primo passo sta nell'HTML: senza questa riga nell'`<head>`, il layout responsive non funziona.
 
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,8 +19,8 @@ Su mobile il primo passo non è CSS ma HTML: senza questa riga nell'`<head>`, il
 
 Il motivo è storico. I browser mobili nascono in un'epoca di siti pensati per il desktop: per non spaccarli, simulano un **viewport virtuale** largo circa `980px` e poi rimpiccioliscono tutto per farlo stare nello schermo. Il risultato è una pagina minuscola da ingrandire a pizzico. Con il meta tag si dice al browser di **non** fingere:
 
-- `width=device-width` — imposta la larghezza del viewport di layout alla larghezza reale del dispositivo in **CSS pixel** (non fisici). Così `100vw` e le media query corrispondono davvero allo schermo.
-- `initial-scale=1` — fissa lo zoom iniziale al 100%, senza rimpicciolimento di partenza.
+- `width=device-width`: imposta la larghezza del viewport di layout alla larghezza reale del dispositivo in **CSS pixel** (non fisici). Così `100vw` e le media query corrispondono davvero allo schermo.
+- `initial-scale=1`: fissa lo zoom iniziale al 100%, senza rimpicciolimento di partenza.
 
 Esistono anche `minimum-scale`, `maximum-scale` e `user-scalable`, ma toccarli è quasi sempre un errore.
 
@@ -52,7 +52,7 @@ Perché partire dal piccolo:
 - Il caso mobile è il più comune e il più fragile: parte già ottimizzato anche sui dispositivi che ignorano le media query.
 - Si evita di sovrascrivere: con `min-width` ogni breakpoint estende il precedente, in cascata naturale.
 
-L'approccio opposto, **desktop-first** (base per lo schermo grande, poi `max-width` per rimpicciolire), resta valido ma tende a produrre più sovrascritture. La scelta è coerenza: mescolare `min-width` e `max-width` a caso rende difficile capire quale regola vince.
+L'approccio opposto, **desktop-first** (base per lo schermo grande, poi `max-width` per rimpicciolire), resta valido ma tende a produrre più sovrascritture. Qualunque sia la scelta, va seguita con coerenza: mescolare `min-width` e `max-width` a caso rende difficile capire quale regola vince.
 
 ## Media query `@media`
 
@@ -96,7 +96,7 @@ Le equivalenze con la sintassi storica:
 | `(width <= 900px)` | `(max-width: 900px)` |
 | `(400px <= width <= 900px)` | `(min-width: 400px) and (max-width: 900px)` |
 
-Il vantaggio più netto è l'**intervallo chiuso** in una parentesi sola: niente più due condizioni in `and`. Un altro è la coerenza dei confini — con `min-`/`max-` a soglie adiacenti (`max-width: 600px` e `min-width: 600px`) si rischia la sovrapposizione a esattamente `600px`; con `<` e `>=` il confine è netto.
+Il vantaggio più netto è l'**intervallo chiuso** in una parentesi sola: niente più due condizioni in `and`. Un altro è la coerenza dei confini: con `min-`/`max-` a soglie adiacenti (`max-width: 600px` e `min-width: 600px`) si rischia la sovrapposizione a esattamente `600px`; con `<` e `>=` il confine è netto.
 
 > [!info|label:Baseline]
 > La **range syntax** è **Baseline: Widely available** (Chrome/Edge 104, Firefox 102, Safari 16.4; ampiamente disponibile da settembre 2025). La sintassi `min-`/`max-` resta valida e più prudente per browser molto vecchi. [MDN — Using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Using_media_queries) · [Can I Use](https://caniuse.com/mdn-css_at-rules_media_range_syntax)
@@ -154,7 +154,7 @@ Indipendentemente dalle media query, ogni elemento può auto-limitarsi con `min-
 Il pattern `width: 100%` + `max-width` è il più diffuso: un contenitore centrato che riempie i piccoli schermi e si ferma su quelli grandi, **senza media query**. In alternativa moderna, la stessa logica si esprime in una riga con `min()`: `width: min(100%, 70rem)` (le funzioni matematiche sono in [[06-unita-valori-funzioni]]).
 
 > [!tip]
-> Esistono anche gli equivalenti **logici** `min-inline-size`, `max-inline-size`, `min-block-size`, `max-block-size`, che ragionano per asse *inline*/*block* invece di larghezza/altezza fisiche — utili per il supporto multilingua (scritture verticali o da destra a sinistra).
+> Esistono anche gli equivalenti **logici** `min-inline-size`, `max-inline-size`, `min-block-size`, `max-block-size`, che ragionano per asse *inline*/*block* invece di larghezza/altezza fisiche, utili per il supporto multilingua (scritture verticali o da destra a sinistra).
 
 ## Container query `@container` — reattività al contenitore
 
@@ -162,7 +162,7 @@ Le media query hanno un limite di fondo: guardano **solo il viewport**. Ma un co
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 470 240" role="img" aria-label="Container query: la stessa card impilata in una sidebar stretta e in riga in un main largo, a parità di viewport" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><text x="235" y="20" font-size="12" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">stesso viewport, due contenitori</text><rect x="18" y="40" width="434" height="180" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" opacity="1"/><text x="30" y="54" font-size="9" text-anchor="start" font-weight="600" opacity=".6" fill="currentColor">viewport</text><rect x="34" y="66" width="120" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="1" stroke-dasharray="4 3"/><text x="94" y="80" font-size="9" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">sidebar (stretta)</text><text x="94" y="94" font-size="8" text-anchor="middle" font-weight="400" opacity=".6" fill="currentColor">&lt; 400px</text><rect x="46" y="104" width="96" height="44" rx="4" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.5" opacity="1"/><text x="94" y="130" font-size="8.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">immagine</text><path d="M46 160 L142 160" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M46 172 L142 172" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M46 184 L142 184" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><rect x="170" y="66" width="266" height="140" rx="6" fill="none" stroke="currentColor" stroke-width="1.5" opacity="1" stroke-dasharray="4 3"/><text x="303" y="80" font-size="9" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">main (larga)</text><text x="303" y="94" font-size="8" text-anchor="middle" font-weight="400" opacity=".6" fill="currentColor">≥ 400px</text><rect x="184" y="104" width="84" height="84" rx="4" fill="var(--link,#1572b6)" fill-opacity=".18" stroke="var(--link,#1572b6)" stroke-width="1.5" opacity="1"/><text x="226" y="150" font-size="8.5" text-anchor="middle" font-weight="600" opacity="1" fill="currentColor">immagine</text><path d="M282 112 L422 112" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 126 L422 126" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 140 L422 140" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 154 L422 154" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/><path d="M282 168 L422 168" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".35"/></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Con <code>@container</code> la <strong>stessa</strong> card reagisce alla larghezza del <strong>proprio contenitore</strong>: impilata nella sidebar stretta, in riga nel main largo — pur avendo lo <strong>stesso viewport</strong>. <code>@media</code> non potrebbe distinguerle, perché guarda solo la finestra.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Con <code>@container</code> la <strong>stessa</strong> card reagisce alla larghezza del <strong>proprio contenitore</strong>: impilata nella sidebar stretta, in riga nel main largo, pur avendo lo <strong>stesso viewport</strong>. <code>@media</code> non potrebbe distinguerle, perché guarda solo la finestra.</figcaption>
 </figure>
 
 Servono due pezzi. Primo, dichiarare un elemento come **contenitore di query**:
@@ -198,9 +198,9 @@ Secondo, scrivere la query con `@container`, che stila i **discendenti** in base
 
 I valori di `container-type`:
 
-- **`inline-size`** — il caso quasi sempre giusto: interroga la sola dimensione *inline* (la larghezza in scrittura orizzontale). Il contenitore resta libero di crescere in altezza col contenuto.
-- **`size`** — interroga entrambe le dimensioni, ma richiede un'**altezza esplicita** sul contenitore, altrimenti collassa; raro.
-- **`normal`** — nessuna query di dimensione (default).
+- **`inline-size`**, il caso quasi sempre giusto: interroga la sola dimensione *inline* (la larghezza in scrittura orizzontale). Il contenitore resta libero di crescere in altezza col contenuto.
+- **`size`**: interroga entrambe le dimensioni, ma richiede un'**altezza esplicita** sul contenitore, altrimenti collassa; raro.
+- **`normal`**: nessuna query di dimensione (default).
 
 ### Unità di container query
 
@@ -212,7 +212,7 @@ Dentro un `@container` (e non solo) si possono usare unità **relative al conten
 | `cqi` / `cqb` | 1% della dimensione *inline* / *block* |
 | `cqmin` / `cqmax` | la minore / maggiore fra `cqi` e `cqb` |
 
-`cqi` è la più utile: una tipografia che scala con la larghezza del **componente**, non della finestra — perfetta per un titolo di card che deve stare bene sia nella colonna stretta sia in quella larga.
+`cqi` è la più utile: dà una tipografia che scala con la larghezza del **componente**, non della finestra, ed è perfetta per un titolo di card che deve stare bene sia nella colonna stretta sia in quella larga.
 
 ```css
 .card__title {
@@ -221,7 +221,7 @@ Dentro un `@container` (e non solo) si possono usare unità **relative al conten
 ```
 
 > [!tip]
-> Non si può interrogare un elemento su sé stesso: `@container` guarda l'**antenato contenitore più vicino** e stila i discendenti. Per questo la card sta dentro un `.card-wrapper` che fa da contenitore — il wrapper si misura, la card si adatta. È il motivo per cui le container query superano le media query per i **componenti**: rendono un pezzo di UI davvero riutilizzabile, reattivo al posto in cui vive.
+> Non si può interrogare un elemento su sé stesso: `@container` guarda l'**antenato contenitore più vicino** e stila i discendenti. Per questo la card sta dentro un `.card-wrapper` che fa da contenitore: il wrapper si misura, la card si adatta. È il motivo per cui le container query superano le media query per i **componenti**: rendono un pezzo di UI riutilizzabile, reattivo al posto in cui vive.
 
 > [!info|label:Baseline]
 > Le container query **di dimensione** (con le unità `cq*`) sono **Baseline: Widely available** (Chrome 105/106, Safari 16, Firefox 110; ampiamente disponibili da agosto 2025). [MDN — Container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Containment/Container_size_and_style_queries)
@@ -307,12 +307,12 @@ h1 {
 
 ## Filosofia dei breakpoint
 
-Il breakpoint giusto **non** è la larghezza di un iPhone o di un iPad: i dispositivi cambiano ogni anno e inseguirli è una battaglia persa. Il breakpoint si mette **dove il contenuto si rompe** — quando una riga diventa troppo lunga per leggersi, quando due colonne si stringono troppo. Si allarga la finestra e si aggiunge un breakpoint solo nel punto in cui il layout comincia a stare male.
+Il breakpoint giusto **non** è la larghezza di un iPhone o di un iPad: i dispositivi cambiano ogni anno e inseguirli è una battaglia persa. Il breakpoint si mette **dove il contenuto si rompe**, cioè quando una riga diventa troppo lunga per leggersi, quando due colonne si stringono troppo. Si allarga la finestra e si aggiunge un breakpoint solo nel punto in cui il layout comincia a stare male.
 
 Alcune conseguenze pratiche:
 
 - Esprimere i breakpoint in `rem`/`em`, non in `px`: così rispondono allo zoom e alla dimensione del font di base scelta dall'utente.
-- Preferire, dove possibile, la reattività **intrinseca** che non richiede alcun breakpoint: `flex-wrap` che manda a capo gli item quando non ci stanno (→ [[12-flexbox]]) e la griglia `grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr))`, che crea da sé quante colonne servono (→ [[13-grid]]). Meno breakpoint da mantenere, layout più robusti.
+- Preferire, dove possibile, la reattività **intrinseca** che non richiede alcun breakpoint: `flex-wrap` che manda a capo gli item quando non ci stanno (→ [[12-flexbox]]) e la griglia `grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr))`, che crea da sé quante colonne servono (→ [[13-grid]]). Così i breakpoint da mantenere sono meno e i layout più robusti.
 - Usare le **container query** per i componenti e le **media query** per l'impostazione globale di pagina: sono complementari, non alternative.
 
 Collegamenti: [[06-unita-valori-funzioni]] · [[07-colori]] · [[12-flexbox]] · [[13-grid]] · [[15-transizioni-animazioni]]
@@ -336,14 +336,14 @@ Lo stile base (mobile) è il più semplice e le media query *aggiungono* comples
 <details>
 <summary>Come si riscrive <code>(min-width: 400px) and (max-width: 900px)</code> in range syntax?</summary>
 
-`@media (400px <= width <= 900px)` — un intervallo chiuso in una sola parentesi, senza `and`.
+`@media (400px <= width <= 900px)`: un intervallo chiuso in una sola parentesi, senza `and`.
 
 </details>
 
 <details>
 <summary>Qual è il limite delle media query che le container query superano, e come?</summary>
 
-Le media query reagiscono **solo al viewport**, quindi un componente non può adattarsi al posto in cui è inserito. Con `container-type: inline-size` sul contenitore e `@container (width >= …)` sui discendenti, il componente reagisce alla larghezza del **proprio contenitore** — diventa davvero riutilizzabile in sidebar strette o colonne larghe.
+Le media query reagiscono **solo al viewport**, quindi un componente non può adattarsi al posto in cui è inserito. Con `container-type: inline-size` sul contenitore e `@container (width >= …)` sui discendenti, il componente reagisce alla larghezza del **proprio contenitore** e così diventa riutilizzabile in sidebar strette o colonne larghe.
 
 </details>
 

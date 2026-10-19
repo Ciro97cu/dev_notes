@@ -6,12 +6,12 @@ tags: [tipo/modulo, transforms]
 # 14 · Transforms
 > modulo 14 — *CSS* · rif. MDN
 
-Le **transform** spostano, ruotano, scalano e inclinano un elemento agendo sul suo **sistema di coordinate visivo**. Il punto chiave: **non toccano il flusso del layout** — l'elemento continua a occupare lo spazio originale, cambia solo come viene *disegnato*. Questo le rende ideali per le animazioni performanti (vedi [[15-transizioni-animazioni]]).
+Le **transform** spostano, ruotano, scalano e inclinano un elemento agendo sul suo **sistema di coordinate visivo**, e **non toccano il flusso del layout**: l'elemento continua a occupare lo spazio originale, cambia solo come viene *disegnato*. Questo le rende ideali per le animazioni performanti (vedi [[15-transizioni-animazioni]]).
 
 Oggi le trasformazioni si scrivono in **due modi**:
 
-- le **proprietà individuali** `translate`, `rotate`, `scale` — il modo attuale, [Baseline dal 2022](https://developer.mozilla.org/en-US/docs/Web/CSS/translate);
-- la proprietà **`transform`** con le sue funzioni (`translate()`, `rotate()`, `scale()`, `skew()`, …) — la forma classica, ancora validissima e indispensabile per `skew`, le matrici e le combinazioni 3D.
+- le **proprietà individuali** `translate`, `rotate`, `scale`: il modo attuale, [Baseline dal 2022](https://developer.mozilla.org/en-US/docs/Web/CSS/translate);
+- la proprietà **`transform`** con le sue funzioni (`translate()`, `rotate()`, `scale()`, `skew()`, …): la forma classica, ancora validissima e indispensabile per `skew`, le matrici e le combinazioni 3D.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 580 168" role="img" aria-label="Le quattro trasformazioni: translate, rotate, scale, skew" style="width:100%;max-width:600px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="52" y="44" width="56" height="56" rx="4" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="70" y="60" width="56" height="56" rx="4" fill="var(--link,#1572b6)" fill-opacity=".22" stroke="var(--link,#1572b6)" stroke-width="1.6"/><text x="80" y="150" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">translate</text><rect x="192" y="44" width="56" height="56" rx="4" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/><g transform="rotate(24 220 72)"><rect x="192" y="44" width="56" height="56" rx="4" fill="var(--link,#1572b6)" fill-opacity=".22" stroke="var(--link,#1572b6)" stroke-width="1.6"/></g><circle cx="220" cy="72" r="3" fill="currentColor"/><text x="220" y="150" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">rotate</text><rect x="332" y="44" width="56" height="56" rx="4" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/><rect x="321" y="33" width="78" height="78" rx="5" fill="var(--link,#1572b6)" fill-opacity=".22" stroke="var(--link,#1572b6)" stroke-width="1.6"/><text x="360" y="150" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">scale</text><rect x="472" y="44" width="56" height="56" rx="4" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/><polygon points="483,44 539,44 517,100 461,100" fill="var(--link,#1572b6)" fill-opacity=".22" stroke="var(--link,#1572b6)" stroke-width="1.6"/><text x="500" y="150" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">skew</text></g></svg>
@@ -20,7 +20,7 @@ Oggi le trasformazioni si scrivono in **due modi**:
 
 ## `translate` — spostare
 
-Sposta l'elemento sull'asse X (orizzontale) e Y (verticale). Le percentuali sono **relative alla dimensione dell'elemento stesso**, non del genitore — comodo per centrare o spostare "di sé stesso".
+Sposta l'elemento sull'asse X (orizzontale) e Y (verticale). Le percentuali sono **relative alla dimensione dell'elemento stesso**, non del genitore, cosa comoda per centrare o spostare "di sé stesso".
 
 ```css
 /* moderno: proprietà individuale */
@@ -46,7 +46,7 @@ Ruota l'elemento attorno a un punto. L'angolo si esprime in `deg` (gradi), `turn
 .box { transform: rotate(0.25turn); }      /* = 90deg */
 ```
 
-Il perno di rotazione (e di scala) è definito da **`transform-origin`**, che di default vale `50% 50%` — il **centro** dell'elemento. Si sposta con keyword (`top`, `left`, `right`, `bottom`, `center`), lunghezze o percentuali.
+Il perno di rotazione (e di scala) è definito da **`transform-origin`**, che di default vale `50% 50%`, cioè il **centro** dell'elemento. Si sposta con keyword (`top`, `left`, `right`, `bottom`, `center`), lunghezze o percentuali.
 
 ```css
 .box {
@@ -99,8 +99,8 @@ Nel primo caso l'elemento finisce 100px a destra e ruotato sul posto; nel second
 
 Le `translate`/`rotate`/`scale` standalone risolvono i due limiti storici di `transform`:
 
-1. **Componibilità senza ordine da ricordare** — si impostano in dichiarazioni separate e non si sovrascrivono a vicenda. Con `transform` invece un secondo `transform` **azzera** il primo.
-2. **Animazione indipendente** — si può far transitare solo la rotazione mentre la scala resta ferma, cosa impossibile con un unico `transform`.
+1. **Componibilità senza ordine da ricordare**: si impostano in dichiarazioni separate e non si sovrascrivono a vicenda. Con `transform` invece un secondo `transform` **azzera** il primo.
+2. **Animazione indipendente**: si può far transitare solo la rotazione mentre la scala resta ferma, cosa impossibile con un unico `transform`.
 
 ```css
 .card {
@@ -121,7 +121,7 @@ Quando sono presenti tutte, l'ordine di applicazione è fisso: **`translate` →
 Una transform modifica solo la resa visiva: l'elemento **occupa ancora la sua posizione e dimensione originali** nel flusso, i vicini non si spostano. Due conseguenze pratiche, oltre alla performance:
 
 - un elemento con `transform` diverso da `none` crea uno **stacking context** (influisce sullo `z-index`, vedi [[09-display-posizionamento]]);
-- diventa **containing block** per i discendenti `position: fixed` e `position: absolute` — utile saperlo quando un `fixed` "smette" di essere ancorato al viewport.
+- diventa **containing block** per i discendenti `position: fixed` e `position: absolute` (utile saperlo quando un `fixed` "smette" di essere ancorato al viewport).
 
 ## Transform 3D
 
@@ -193,9 +193,9 @@ Per una scena 3D reale servono due proprietà:
 
 ## Performance: transform e opacity sono "gratis"
 
-Per disegnare un frame il browser attraversa una pipeline: **style → layout → paint → composite**. Animare proprietà geometriche (`width`, `height`, `top`, `left`, `margin`) fa ripartire da **layout** (reflow) a ogni frame — costoso.
+Per disegnare un frame il browser attraversa una pipeline: **style → layout → paint → composite**. Animare proprietà geometriche (`width`, `height`, `top`, `left`, `margin`) fa ripartire da **layout** (reflow) a ogni frame, un'operazione costosa.
 
-`transform` e `opacity` invece si fermano all'ultimo stadio: sono gestiti dal **compositor** sulla **GPU**, senza reflow né repaint ([MDN](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Animation_performance_and_frame_rate)). Per questo la regola è: **anima con `transform` e `opacity`**, non con proprietà di layout.
+`transform` e `opacity` invece si fermano all'ultimo stadio: sono gestiti dal **compositor** sulla **GPU**, senza reflow né repaint ([MDN](https://developer.mozilla.org/en-US/docs/Web/Performance/Guides/Animation_performance_and_frame_rate)). Per questo la regola è **animare con `transform` e `opacity`**, non con proprietà di layout.
 
 ```css
 /* ❌ lento: ogni frame ricalcola il layout */
@@ -257,7 +257,7 @@ Sul **genitore** che contiene gli elementi 3D. Un valore piccolo (es. `200px`) r
 </details>
 
 **In sintesi:**
-- Le transform cambiano solo l'aspetto: l'elemento **non lascia** il suo posto nel flusso → animazioni leggere.
+- Le transform cambiano solo l'aspetto: l'elemento **non lascia** il suo posto nel flusso, quindi le animazioni restano leggere.
 - Modo attuale = **proprietà individuali** `translate`/`rotate`/`scale` (Baseline 2022), componibili e animabili in modo indipendente; `transform` resta per `skew`, matrici, combo 3D (e lì **l'ordine conta**).
 - 3D: `perspective` sul genitore, `perspective()` sul singolo elemento, `transform-style: preserve-3d` e `backface-visibility: hidden` per scene reali (es. card che si gira).
-- Anima **`transform` e `opacity`**; usa `will-change` con parsimonia solo su problemi di fluidità reali.
+- Animare **`transform` e `opacity`**; usare `will-change` con parsimonia solo su problemi di fluidità reali.

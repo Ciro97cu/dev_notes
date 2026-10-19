@@ -7,7 +7,7 @@ tags: [tipo/modulo, selettori]
 
 > modulo 2 — *CSS* · rif. MDN
 
-Un **selettore** individua gli elementi HTML a cui applicare un blocco di dichiarazioni (vedi [[01-fondamenti]]). Saperli scegliere bene significa colpire *esattamente* ciò che serve, con la minima **specificità** possibile — così le regole restano facili da sovrascrivere (la specificità è il tema di [[04-cascade-specificita-ereditarieta]]). Questo modulo copre i selettori base, quelli di attributo, i **combinatori** che mettono in relazione più elementi e le funzioni moderne `:is()`/`:where()`, chiudendo con il **nesting nativo**.
+Un **selettore** individua gli elementi HTML a cui applicare un blocco di dichiarazioni (vedi [[01-fondamenti]]). Saperli scegliere bene significa colpire *esattamente* ciò che serve, con la minima **specificità** possibile, così le regole restano facili da sovrascrivere (la specificità è il tema di [[04-cascade-specificita-ereditarieta]]). Questo modulo copre i selettori base, quelli di attributo, i **combinatori** che mettono in relazione più elementi e le funzioni moderne `:is()`/`:where()`, chiudendo con il **nesting nativo**.
 
 ## Selettori base
 
@@ -21,7 +21,7 @@ p        { line-height: 1.5; }   /* di tipo: ogni <p> */
 ```
 
 - **Tipo** (`p`, `h1`, `ul`…): tutti gli elementi di quel tag.
-- **Classe** (`.card`): gli elementi con quella classe nell'attributo `class`. È il selettore di uso quotidiano — riutilizzabile su più elementi e con specificità contenuta.
+- **Classe** (`.card`): gli elementi con quella classe nell'attributo `class`. È il selettore di uso quotidiano: riutilizzabile su più elementi e con specificità contenuta.
 - **Id** (`#main`): l'elemento con quell'`id`. Un `id` è **unico** nel documento.
 - **Universale** (`*`): qualunque elemento. Utile nei reset o combinato con altri selettori (`.card *`).
 
@@ -68,7 +68,7 @@ Ogni selettore della lista è valutato per conto proprio: la regola qui sopra va
 
 ## Selettori di attributo
 
-Selezionano gli elementi in base alla presenza o al **valore** di un attributo. Sono potenti per gli attributi HTML (`type`, `href`, `lang`, `data-*`…) senza bisogno di aggiungere classi.
+Selezionano gli elementi in base alla presenza o al **valore** di un attributo. Servono a sfruttare gli attributi HTML (`type`, `href`, `lang`, `data-*`…) senza bisogno di aggiungere classi.
 
 | Selettore | Colpisce quando l'attributo `attr`… |
 |---|---|
@@ -144,7 +144,7 @@ header h1, main h1, article h1, aside h1 { font-size: 1.75rem; }
 :is(header, main, article, aside) h1 { font-size: 1.75rem; }
 ```
 
-`:where()` fa **la stessa selezione**, ma con una differenza cruciale di **specificità**:
+`:where()` fa **la stessa selezione**, ma differisce nella **specificità**:
 
 - `:is()` assume la specificità del suo argomento **più specifico**.
 - `:where()` ha sempre specificità **zero**: qualsiasi regola successiva la sovrascrive facilmente.
@@ -199,12 +199,12 @@ Il **nesting** permette di annidare le regole dentro il selettore genitore, tene
 }
 ```
 
-Il carattere `&` rappresenta il **selettore genitore**. Le regole d'oro:
+Il carattere `&` indica il **selettore genitore**. Le regole d'oro:
 
 - **Senza `&`**, un selettore annidato diventa **discendente**: dentro `.card`, la regola `h2 { … }` equivale a `.card h2`. Il browser inserisce implicitamente uno spazio.
-- **Con `&` attaccato** (nessuno spazio) si crea un **selettore combinato** sullo *stesso* elemento: `&:hover` → `.card:hover`, `&.featured` → `.card.featured`. Per pseudo-classi e classi concatenate `&` è **obbligatorio** — senza, `.featured` diventerebbe `.card .featured` (discendente).
+- **Con `&` attaccato** (nessuno spazio) si crea un **selettore combinato** sullo *stesso* elemento: `&:hover` → `.card:hover`, `&.featured` → `.card.featured`. Per pseudo-classi e classi concatenate `&` è **obbligatorio**: senza, `.featured` diventerebbe `.card .featured` (discendente).
 - **`&` con un combinatore** propaga la relazione: `& > img`, `& + .card`, `& ~ p`.
-- **`&` posposto** ribalta il contesto: dentro `h2`, la regola `.featured & { … }` diventa `.featured h2` — utile per variare uno stile in base a un antenato.
+- **`&` posposto** ribalta il contesto: dentro `h2`, la regola `.featured & { … }` diventa `.featured h2`. Serve a variare uno stile in base a un antenato.
 
 Si possono annidare anche le at-rule come `@media` e `@container`:
 
@@ -222,7 +222,7 @@ Si possono annidare anche le at-rule come `@media` e `@container`:
 > Il nesting nativo **non concatena stringhe** come faceva Sass: `&__title` (stile BEM) **non** è valido. Il `&` è un riferimento al genitore, non un frammento di testo. Per costruire nomi BEM si scrivono i selettori per intero. Inoltre la specificità del `&` è quella di `:is()` sull'insieme dei selettori genitori (rilevante quando la regola genitore ha più selettori separati da virgola).
 
 > [!info|label:Baseline]
-> Il **nesting nativo** è **Baseline** (Chrome/Edge 120, Firefox 117, Safari 17.2 — dal dicembre 2023). Ampiamente utilizzabile a metà 2026 senza preprocessore. [MDN — Using CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting)
+> Il **nesting nativo** è **Baseline** (Chrome/Edge 120, Firefox 117, Safari 17.2; dal dicembre 2023). Ampiamente utilizzabile a metà 2026 senza preprocessore. [MDN — Using CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting/Using_CSS_nesting)
 
 ## Cenno a `:scope`
 
@@ -287,5 +287,5 @@ Se un selettore nella lista è invalido o non supportato, viene **ignorato** e g
 **In sintesi:**
 - I mattoni base sono **tipo**, **classe** (uso quotidiano), **id** (evitare per lo stile, alta specificità) e **universale** `*`; concatenando classi senza spazio (`.a.b`) si combinano più condizioni sullo stesso elemento.
 - I **selettori di attributo** filtrano per presenza o valore, con le varianti `^=` `$=` `*=` (substring), `~=` (parola) e `|=` (lingua) e i flag `i`/`s`; i **combinatori** legano gli elementi: spazio (discendente), `>` (figlio), `+` (adiacente), `~` (generale).
-- `:is()`/`:where()` compattano selettori lunghi con liste *forgiving*: `:is()` conserva la specificità, **`:where()` la azzera** — ideale per i default.
+- `:is()`/`:where()` compattano selettori lunghi con liste *forgiving*: `:is()` conserva la specificità, **`:where()` la azzera**, quindi è ideale per i default.
 - Il **nesting nativo** con `&` (Baseline) annida le regole senza preprocessore: `&` = genitore, spazio implicito = discendente, `&`+combinatore = relazione esplicita.

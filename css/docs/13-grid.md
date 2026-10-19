@@ -17,9 +17,9 @@ La differenza sta nel numero di assi che si controllano contemporaneamente.
 - **Grid** è **bidimensionale**: definisce righe **e** colonne in un colpo solo, così ogni elemento si aggancia a una cella precisa e le tracce restano allineate su entrambi gli assi.
 
 > [!tip]
-> Regola pratica: se il layout è "una fila di cose" (una toolbar, un gruppo di bottoni, i tag di un articolo) → Flexbox. Se è "una griglia di cose" o l'impianto di pagina con più regioni su righe e colonne → Grid. I due sistemi convivono: è normale un contenitore Grid con dei figli che al loro interno usano Flexbox.
+> Regola pratica: se il layout è "una fila di cose" (una toolbar, un gruppo di bottoni, i tag di un articolo) si usa Flexbox; se è "una griglia di cose" o l'impianto di pagina con più regioni su righe e colonne, si usa Grid. I due sistemi convivono: è normale un contenitore Grid con dei figli che al loro interno usano Flexbox.
 
-Molte proprietà di allineamento (`justify-content`, `align-items`, `gap`, `place-*`) sono **condivise** dai due modelli — chi conosce Flexbox ritrova qui gli stessi nomi con semantica coerente. Dettagli in [[12-flexbox]].
+Molte proprietà di allineamento (`justify-content`, `align-items`, `gap`, `place-*`) sono **condivise** dai due modelli: chi conosce Flexbox ritrova qui gli stessi nomi con semantica coerente. Dettagli in [[12-flexbox]].
 
 ## Definire la griglia
 
@@ -41,7 +41,7 @@ Si attiva Grid con `display: grid` sul **contenitore** (i figli diretti diventan
 
 Le dimensioni delle tracce accettano lunghezze (`px`, `rem`…), percentuali, la keyword `auto` e l'unità speciale `fr`:
 
-- **`fr`** (*fraction*) rappresenta una **frazione dello spazio libero** rimasto dopo aver assegnato le tracce fisse. `1fr 1fr` divide lo spazio a metà; `2fr 1fr` lo divide in `2:1`. È il modo moderno per creare colonne fluide senza calcoli di percentuali.
+- **`fr`** (*fraction*) è una **frazione dello spazio libero** rimasto dopo aver assegnato le tracce fisse. `1fr 1fr` divide lo spazio a metà; `2fr 1fr` lo divide in `2:1`. È il modo moderno per creare colonne fluide senza calcoli di percentuali.
 - **`auto`** dimensiona la traccia in base al **contenuto** (si adatta a ciò che contiene). Combinata con `fr`, le tracce `auto` prendono lo spazio minimo necessario e le `fr` si spartiscono il resto.
 
 ### `repeat()` e `minmax()`
@@ -74,7 +74,7 @@ Le dimensioni delle tracce accettano lunghezze (`px`, `rem`…), percentuali, la
 ```
 
 > [!info|label:Baseline]
-> `gap` (e `row-gap`/`column-gap`) è **Baseline: widely available** — supportato in modo diffuso [dal 2017 circa](https://developer.mozilla.org/en-US/docs/Web/CSS/gap). È lo standard: rende superflui i margini sugli item per spaziarli.
+> `gap` (e `row-gap`/`column-gap`) è **Baseline: widely available**, supportato in modo diffuso [dal 2017 circa](https://developer.mozilla.org/en-US/docs/Web/CSS/gap). È lo standard: rende superflui i margini sugli item per spaziarli.
 
 > [!info|label:Legacy]
 > Le prime versioni della specifica chiamavano queste proprietà `grid-gap`, `grid-row-gap`, `grid-column-gap`. I browser le accettano ancora come **alias** di `gap`/`row-gap`/`column-gap` per compatibilità, ma nel codice nuovo si usano i nomi senza prefisso (validi anche in Flexbox). [Fonte MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/gap).
@@ -227,7 +227,7 @@ Se un item finisce **fuori** dalle tracce dichiarate (o ci sono più item che ce
 }
 ```
 
-`grid-auto-flow` accetta `row` (default), `column` (riempie per colonne) e la keyword `dense`, che **ricompatta i buchi** portando avanti item più piccoli per riempire spazi lasciati liberi (`grid-auto-flow: row dense`) — a costo di alterare l'ordine visivo rispetto al DOM.
+`grid-auto-flow` accetta `row` (default), `column` (riempie per colonne) e la keyword `dense`, che **ricompatta i buchi** portando avanti item più piccoli per riempire spazi lasciati liberi (`grid-auto-flow: row dense`), a costo di alterare l'ordine visivo rispetto al DOM.
 
 ### Pattern responsive: `auto-fill` / `auto-fit` + `minmax()`
 
@@ -256,7 +256,7 @@ Grid crea **quante più colonne** possibile larghe almeno `200px`, che per il re
 
 ## Moderno: subgrid
 
-Di norma la griglia di un item **annidato** è indipendente da quella del genitore: le tracce non si allineano tra livelli diversi. **`subgrid`** risolve proprio questo: assegnato a `grid-template-columns` e/o `grid-template-rows` di un item che è a sua volta contenitore grid, fa **ereditare le tracce del genitore** invece di crearne di nuove — comprese le **linee con nome** e i `gap`.
+Di norma la griglia di un item **annidato** è indipendente da quella del genitore: le tracce non si allineano tra livelli diversi. **`subgrid`** risolve proprio questo: assegnato a `grid-template-columns` e/o `grid-template-rows` di un item che è a sua volta contenitore grid, fa **ereditare le tracce del genitore**, comprese le **linee con nome** e i `gap`, invece di crearne di nuove.
 
 Caso tipico: allineare header, corpo e footer di più *card* affiancate anche se hanno contenuti di lunghezza diversa.
 
@@ -346,7 +346,7 @@ Il primo gruppo allinea **ogni item dentro la propria cella** (`start`/`center`/
 <details>
 <summary>Cosa fa <code>subgrid</code> e qual è il suo stato di supporto?</summary>
 
-Fa **ereditare a un grid annidato le tracce (e le linee con nome e i `gap`) del genitore**, invece di crearne di proprie — così i livelli restano allineati (es. header/corpo/footer di più card). È **Baseline** dal 2023, usabile in produzione.
+Fa **ereditare a un grid annidato le tracce (e le linee con nome e i `gap`) del genitore**, invece di crearne di proprie: così i livelli restano allineati (es. header/corpo/footer di più card). È **Baseline** dal 2023, usabile in produzione.
 
 </details>
 
@@ -354,4 +354,4 @@ Fa **ereditare a un grid annidato le tracce (e le linee con nome e i `gap`) del 
 - Grid è il layout **bidimensionale**: `display: grid` sul contenitore, tracce con `grid-template-columns`/`-rows`, unità `fr`, più `repeat()` e `minmax()`; spaziatura con `gap`.
 - Gli item si posizionano per **numero o nome di linea** (`grid-column`/`grid-row`, `span`) o per **area** (`grid-template-areas` + `grid-area`); possono sovrapporsi e impilarsi con `z-index`.
 - Allineamento a due livelli: `justify-items`/`align-items` (item nelle celle) e `justify-content`/`align-content` (griglia nel container); griglia implicita con `grid-auto-rows`/`-columns` e `grid-auto-flow`.
-- Pattern responsive senza media query: `repeat(auto-fit|auto-fill, minmax(200px, 1fr))`. **subgrid** è Baseline; **masonry** è ancora sperimentale (sintassi non definitiva) → dietro `@supports`.
+- Pattern responsive senza media query: `repeat(auto-fit|auto-fill, minmax(200px, 1fr))`. **subgrid** è Baseline; **masonry** è ancora sperimentale (sintassi non definitiva) e va messo dietro `@supports`.

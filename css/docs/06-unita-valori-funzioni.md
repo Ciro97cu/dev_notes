@@ -7,24 +7,24 @@ tags: [tipo/modulo, unita]
 
 > modulo 6 — *CSS* · rif. MDN
 
-Ogni dichiarazione CSS ha la forma `property: value`, e il **valore** ha un tipo: una keyword predefinita, un colore, una lunghezza, un numero, una percentuale, il risultato di una funzione. Questo modulo mette a fuoco le **unità di misura** (assolute e relative), le **funzioni matematiche** (`calc()`, `clamp()`, `min()`, `max()`) e le **custom properties** — lo strumento con cui il CSS moderno rende i valori dinamici e riutilizzabili.
+Ogni dichiarazione CSS ha la forma `property: value`, e il **valore** ha un tipo: una keyword predefinita, un colore, una lunghezza, un numero, una percentuale, il risultato di una funzione. Questo modulo mette a fuoco le **unità di misura** (assolute e relative), le **funzioni matematiche** (`calc()`, `clamp()`, `min()`, `max()`) e le **custom properties**, lo strumento con cui il CSS moderno rende i valori dinamici e riutilizzabili.
 
 ## Tipi di valore
 
 A seconda della proprietà, un valore può essere:
 
-- **keyword predefinite** — parole chiave che la proprietà accetta: `display: flex`, `position: absolute`, `color: red`. Sono l'insieme *chiuso* di valori validi per quella proprietà.
-- **lunghezze** (`<length>`) — una misura seguita da un'**unità**: `16px`, `1.5rem`, `50vh`. Il numero da solo non basta (tranne dove la proprietà lo prevede): `margin: 10` è invalido, serve `margin: 10px`.
-- **numeri** (`<number>` / `<integer>`) — valori *senza* unità dove la proprietà lo richiede: `opacity: 0.5`, `z-index: 10`, `line-height: 1.5`.
-- **percentuali** (`<percentage>`) — relative a una grandezza di riferimento che **dipende dalla proprietà** (vedi sotto).
-- **funzioni** — `calc()`, `var()`, `clamp()`, `linear-gradient()`, `rgb()`… restituiscono un valore calcolato.
+- **keyword predefinite**: parole chiave che la proprietà accetta, come `display: flex`, `position: absolute`, `color: red`. Sono l'insieme *chiuso* di valori validi per quella proprietà.
+- **lunghezze** (`<length>`): una misura seguita da un'**unità**, come `16px`, `1.5rem`, `50vh`. Il numero da solo non basta (tranne dove la proprietà lo prevede): `margin: 10` è invalido, serve `margin: 10px`.
+- **numeri** (`<number>` / `<integer>`): valori *senza* unità dove la proprietà lo richiede, come `opacity: 0.5`, `z-index: 10`, `line-height: 1.5`.
+- **percentuali** (`<percentage>`): relative a una grandezza di riferimento che **dipende dalla proprietà** (vedi sotto).
+- **funzioni**: `calc()`, `var()`, `clamp()`, `linear-gradient()`, `rgb()`… restituiscono un valore calcolato.
 
 > [!tip]
 > La distinzione **lunghezza vs numero** è la fonte di errori più comune all'inizio: `line-height: 1.5` (numero, si moltiplica per il font-size) è diverso da `line-height: 1.5rem` (lunghezza fissa). Il primo scala con la tipografia, il secondo no.
 
 ## Unità assolute
 
-Un'unità **assoluta** rappresenta una misura fissa, indipendente dal contesto. In pratica sul web se ne usa **una sola**: `px`.
+Un'unità **assoluta** è una misura fissa, indipendente dal contesto. In pratica sul web se ne usa **una sola**: `px`.
 
 | Unità | Cos'è | Conversione |
 |-------|-------|-------------|
@@ -35,10 +35,10 @@ Un'unità **assoluta** rappresenta una misura fissa, indipendente dal contesto. 
 | `cm`  | centimetro | `1cm = 96px / 2.54` |
 | `mm`  | millimetro | `1mm = 1cm / 10` |
 
-`pt`, `cm`, `mm`, `in`, `pc` hanno senso solo quando l'output ha dimensioni fisiche note — cioè nella **stampa** (fogli di stile `@media print`). Su schermo si usa `px`, perché è l'unità mappata sul sistema di rendering del browser.
+`pt`, `cm`, `mm`, `in`, `pc` hanno senso solo quando l'output ha dimensioni fisiche note, cioè nella **stampa** (fogli di stile `@media print`). Su schermo si usa `px`, perché è l'unità mappata sul sistema di rendering del browser.
 
 > [!warning]
-> Le unità assolute **non scalano** con le preferenze dell'utente. Se il font di base è fissato in `px`, chi ha impostato un testo più grande nel browser non viene rispettato. Per la tipografia si preferiscono le unità relative (`rem`) — vedi [Quando usare cosa](#quando-usare-cosa).
+> Le unità assolute **non scalano** con le preferenze dell'utente. Se il font di base è fissato in `px`, chi ha impostato un testo più grande nel browser non viene rispettato. Per la tipografia si preferiscono le unità relative (`rem`); vedi [Quando usare cosa](#quando-usare-cosa).
 
 ## Unità relative
 
@@ -83,7 +83,7 @@ h1   { font-size: 2rem; }   /* 32px, ma scala se l'utente ingrandisce */
 
 ### `ch` / `ex` — relative alla forma del carattere
 
-`1ch` è la larghezza del glifo `0` (zero) del font corrente; `1ex` è la **x-height** (altezza della `x` minuscola). `ch` è preziosa per limitare la **misura di riga**: `max-width: 65ch` produce righe lunghe circa 65 caratteri, la finestra di leggibilità consigliata.
+`1ch` è la larghezza del glifo `0` (zero) del font corrente; `1ex` è la **x-height** (altezza della `x` minuscola). `ch` serve a limitare la **misura di riga**: `max-width: 65ch` produce righe lunghe circa 65 caratteri, la finestra di leggibilità consigliata.
 
 ```css
 article { max-width: 70ch; }   /* righe leggibili senza dipendere dai px */
@@ -91,7 +91,7 @@ article { max-width: 70ch; }   /* righe leggibili senza dipendere dai px */
 
 ### `lh` / `rlh` — relative all'altezza di riga
 
-`1lh` è la **`line-height` calcolata dell'elemento corrente**; `1rlh` è la `line-height` dell'elemento **root** (`<html>`). Stanno a `line-height` come `em`/`rem` stanno a `font-size`: la prima segue il testo locale, la seconda un riferimento globale. Servono a dimensionare qualcosa in "numero di righe" invece che in pixel — l'altezza esatta di una riga per un badge o un'icona inline, o spaziature verticali agganciate al *ritmo* tipografico della pagina.
+`1lh` è la **`line-height` calcolata dell'elemento corrente**; `1rlh` è la `line-height` dell'elemento **root** (`<html>`). Stanno a `line-height` come `em`/`rem` stanno a `font-size`: la prima segue il testo locale, la seconda un riferimento globale. Servono a dimensionare qualcosa in "numero di righe" invece che in pixel: l'altezza esatta di una riga per un badge o un'icona inline, o spaziature verticali agganciate al *ritmo* tipografico della pagina.
 
 ```css
 .badge {
@@ -112,9 +112,9 @@ article { max-width: 70ch; }   /* righe leggibili senza dipendere dai px */
 
 Su mobile `100vh` ha un difetto storico: **non tiene conto della barra degli indirizzi** che appare e scompare durante lo scroll. Un `height: 100vh` risulta *più alto* dell'area realmente visibile quando la barra è presente, tagliando il contenuto in fondo. Per risolverlo il CSS definisce **tre misure** del viewport, ciascuna con la famiglia completa (`vh`/`vw`/`vmin`/`vmax`/`vi`/`vb`):
 
-- **`svh` / `svw` — small viewport**: il viewport **più piccolo**, cioè con le barre del browser *espanse*. Sicuro: il contenuto non viene mai coperto, ma può lasciare spazio vuoto quando le barre si ritraggono.
-- **`lvh` / `lvw` — large viewport**: il viewport **più grande**, con le barre *ritratte*. `vh` classico equivale oggi a `lvh`.
-- **`dvh` / `dvw` — dynamic viewport**: si **adatta in tempo reale** al comparire/sparire delle barre. Il valore cambia durante lo scroll, quindi è quello che tiene sempre l'elemento a filo dell'area visibile.
+- **`svh` / `svw` (small viewport)**: il viewport **più piccolo**, cioè con le barre del browser *espanse*. Sicuro: il contenuto non viene mai coperto, ma può lasciare spazio vuoto quando le barre si ritraggono.
+- **`lvh` / `lvw` (large viewport)**: il viewport **più grande**, con le barre *ritratte*. `vh` classico equivale oggi a `lvh`.
+- **`dvh` / `dvw` (dynamic viewport)**: si **adatta in tempo reale** al comparire/sparire delle barre. Il valore cambia durante lo scroll, quindi è quello che tiene sempre l'elemento a filo dell'area visibile.
 
 ```css
 .hero {
@@ -134,7 +134,7 @@ Su mobile `100vh` ha un difetto storico: **non tiene conto della barra degli ind
 
 ## Quando usare cosa
 
-Non esiste l'unità "giusta" in assoluto: si sceglie in base a *cosa deve scalare con cosa*.
+La scelta dell'unità dipende da *cosa deve scalare con cosa*.
 
 | Serve… | Unità consigliata | Perché |
 |--------|-------------------|--------|
@@ -155,15 +155,15 @@ Il rapporto tra i due è il **device pixel ratio** (DPR), leggibile in JavaScrip
 pixel fisici = pixel CSS × devicePixelRatio
 ```
 
-- **DPR 1** — schermo classico: 1 px CSS = 1 pixel fisico.
-- **DPR 2** — Retina/HiDPI: 1 px CSS = una griglia 2×2 di pixel fisici (4 in tutto), stessa dimensione visiva ma più nitido.
-- **DPR 3** — display di fascia alta: griglia 3×3.
+- **DPR 1**: schermo classico, 1 px CSS = 1 pixel fisico.
+- **DPR 2**: Retina/HiDPI, 1 px CSS = una griglia 2×2 di pixel fisici (4 in tutto), stessa dimensione visiva ma più nitido.
+- **DPR 3**: display di fascia alta, griglia 3×3.
 
-Grazie a questo meccanismo `width: 100px` occupa lo stesso spazio visivo su tutti i dispositivi, mentre lo schermo ad alta densità aggiunge nitidezza. La conseguenza pratica: le **immagini raster** vanno fornite a risoluzione maggiore (2×, 3×) per non apparire sfocate — questione ripresa in [[11-responsive]].
+Grazie a questo meccanismo `width: 100px` occupa lo stesso spazio visivo su tutti i dispositivi, mentre lo schermo ad alta densità aggiunge nitidezza. Ne consegue che le **immagini raster** vanno fornite a risoluzione maggiore (2×, 3×) per non apparire sfocate (questione ripresa in [[11-responsive]]).
 
 ## `calc()` — aritmetica tra unità
 
-`calc()` esegue calcoli nel valore, e soprattutto permette di **mischiare unità diverse** — cosa impossibile con un valore statico: "il 100% meno 2rem" si esprime solo così.
+`calc()` esegue calcoli nel valore, e soprattutto permette di **mischiare unità diverse**, cosa impossibile con un valore statico: "il 100% meno 2rem" si esprime solo così.
 
 ```css
 .sidebar {
@@ -211,7 +211,7 @@ h1 {
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 430 232" role="img" aria-label="clamp(2rem, 5vw, 4rem): il font-size segue 5vw ma resta tra 2rem e 4rem" style="width:100%;max-width:440px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><path d="M70 50 L70 180 L390 180" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/><path d="M70 143.6 L390 143.6" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".4" stroke-dasharray="4 3"/><text x="64" y="147.6" font-size="9" text-anchor="end" font-weight="600" opacity=".8" fill="currentColor">2rem</text><path d="M70 91.6 L390 91.6" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity=".4" stroke-dasharray="4 3"/><text x="64" y="95.6" font-size="9" text-anchor="end" font-weight="600" opacity=".8" fill="currentColor">4rem</text><path d="M70.0 143.6 L159.6 143.6 L287.6 91.6 L390.0 91.6" fill="none" stroke="var(--link,#1572b6)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><text x="114.80000000000001" y="195" font-size="8.5" text-anchor="middle" font-weight="600" opacity=".75" fill="currentColor">resta 2rem</text><text x="223.60000000000002" y="195" font-size="8.5" text-anchor="middle" font-weight="600" opacity=".75" fill="currentColor">= 5vw</text><text x="338.8" y="195" font-size="8.5" text-anchor="middle" font-weight="600" opacity=".75" fill="currentColor">resta 4rem</text><text x="390" y="210" font-size="9" text-anchor="end" font-weight="400" opacity=".7" fill="currentColor">larghezza viewport →</text><text x="30" y="52" font-size="9" text-anchor="start" font-weight="400" opacity=".7" fill="currentColor">font-size</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>clamp(2rem, 5vw, 4rem)</code>: il <code>font-size</code> segue il valore <strong>preferito</strong> (<code>5vw</code>, cresce col viewport) ma non scende sotto <strong>2rem</strong> né supera <strong>4rem</strong> — la curva si appiattisce ai due limiti.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>clamp(2rem, 5vw, 4rem)</code>: il <code>font-size</code> segue il valore <strong>preferito</strong> (<code>5vw</code>, cresce col viewport) ma non scende sotto <strong>2rem</strong> né supera <strong>4rem</strong>. La curva si appiattisce ai due limiti.</figcaption>
 </figure>
 
 > [!tip]
@@ -231,7 +231,7 @@ progress(300, 0, 1000)       /* 0.3 */
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>progress(50px, 0px, 100px)</code> misura la posizione del valore lungo l'intervallo: a metà strada fra inizio e fine restituisce <strong>0.5</strong>. Il risultato è un numero puro, pronto da usare come coefficiente in <code>calc()</code>.</figcaption>
 </figure>
 
-Il calcolo è `(valore − inizio) / (fine − inizio)`, e per impostazione predefinita il risultato viene **limitato** fra `0` e `1`: oltre la fine resta `1`, prima dell'inizio resta `0`. La keyword **`no-clamp`**, scritta davanti al primo argomento e senza virgola, toglie il limite e lascia proseguire il calcolo oltre i due estremi. I tre argomenti devono essere dello **stesso tipo** — tutti numeri, tutte lunghezze o tutte percentuali — anche se con unità diverse.
+Il calcolo è `(valore − inizio) / (fine − inizio)`, e per impostazione predefinita il risultato viene **limitato** fra `0` e `1`: oltre la fine resta `1`, prima dell'inizio resta `0`. La keyword **`no-clamp`**, scritta davanti al primo argomento e senza virgola, toglie il limite e lascia proseguire il calcolo oltre i due estremi. I tre argomenti devono essere dello **stesso tipo** (tutti numeri, tutte lunghezze o tutte percentuali), anche se con unità diverse.
 
 ```css
 scale: progress(15, 0, 10);            /* 1 — limitato */
@@ -252,7 +252,7 @@ Restituendo un numero puro, `progress()` diventa un **coefficiente** da moltipli
 
 ## Custom properties (`--nome` + `var()`)
 
-Le **custom properties** (dette anche *variabili CSS*) sono il cardine del CSS moderno: valori con un nome, che si dichiarano una volta e si riusano ovunque, si sovrascrivono nella cascade e si leggono/scrivono anche da JavaScript.
+Le **custom properties** (dette anche *variabili CSS*) sono valori con un nome, che si dichiarano una volta e si riusano ovunque, si sovrascrivono nella cascade e si leggono/scrivono anche da JavaScript.
 
 Si dichiarano con il prefisso `--` e si leggono con `var()`:
 
@@ -273,7 +273,7 @@ Si dichiarano con il prefisso `--` e si leggono con `var()`:
 Punti chiave:
 
 - **Scope ed ereditarietà**: una custom property è definita sull'elemento che la dichiara e viene **ereditata** dai discendenti. Dichiararla su `:root` (l'`<html>`) la rende globale; ridichiararla su un contenitore più interno la **ridefinisce** per quel sottoalbero.
-- **Override runtime**: cambiare una variabile su un contenitore aggiorna a cascata tutti i figli che la usano — base per temi, varianti e dark mode.
+- **Override runtime**: cambiare una variabile su un contenitore aggiorna a cascata tutti i figli che la usano, ed è la base per temi, varianti e dark mode.
 - **Fallback**: `var(--x, valore)` usa `valore` quando `--x` non è definita.
 - **Case-sensitive**: `--brand` e `--Brand` sono due proprietà distinte.
 
@@ -296,7 +296,7 @@ el.style.setProperty('--brand', '#e11');
 > Se un `var()` risolve a un valore non valido per quella proprietà, scatta il *guaranteed-invalid value*: si usa il fallback di `var()` se presente, altrimenti la proprietà torna al suo valore iniziale/ereditato. Utile per degradare con eleganza.
 
 > [!info|label:Legacy]
-> Prima delle custom properties, l'unico modo per avere "variabili" era un **preprocessore** (Sass/Less). Quelle però sono risolte *a build-time*: producono valori fissi, non cambiabili a runtime né da JS. Le custom properties CSS sono *vive* nel browser — un vantaggio che i preprocessori non hanno (cfr. [[16-future-proof]]).
+> Prima delle custom properties, l'unico modo per avere "variabili" era un **preprocessore** (Sass/Less). Quelle però sono risolte *a build-time*: producono valori fissi, non cambiabili a runtime né da JS. Le custom properties CSS sono *vive* nel browser, un vantaggio che i preprocessori non hanno (cfr. [[16-future-proof]]).
 
 ## `@property` — custom properties tipizzate
 
@@ -321,11 +321,11 @@ Una custom property "normale" è, per il browser, un semplice **flusso di testo*
 
 Descrittori:
 
-- **`syntax`** (obbligatorio) — il tipo, tra virgolette: `"<color>"`, `"<length>"`, `"<number>"`, `"<angle>"`, `"<percentage>"`… con combinatori (`"<length> | <percentage>"`) o `"*"` (qualsiasi valore).
-- **`inherits`** (obbligatorio) — `true`/`false`.
-- **`initial-value`** — **obbligatorio** salvo quando `syntax` è `"*"`; deve essere *computazionalmente indipendente* (es. `200px` va bene, `3em` no perché dipende dal font).
+- **`syntax`** (obbligatorio) indica il tipo, tra virgolette: `"<color>"`, `"<length>"`, `"<number>"`, `"<angle>"`, `"<percentage>"`… con combinatori (`"<length> | <percentage>"`) o `"*"` (qualsiasi valore).
+- **`inherits`** (obbligatorio) vale `true`/`false`.
+- **`initial-value`** è **obbligatorio** salvo quando `syntax` è `"*"`; deve essere *computazionalmente indipendente* (es. `200px` va bene, `3em` no perché dipende dal font).
 
-Senza `@property`, animare `--angle` da `0deg` a `360deg` produrrebbe uno **scatto** (interpolazione *discrete*); registrandola, il browser sa che è un `<angle>` e la interpola con continuità. Lo stesso vale per animare un `<color>` o una `<length>` dentro una variabile — utile per gradienti animati (cfr. [[10-sfondi-effetti]]).
+Senza `@property`, animare `--angle` da `0deg` a `360deg` produrrebbe uno **scatto** (interpolazione *discrete*); registrandola, il browser sa che è un `<angle>` e la interpola con continuità. Lo stesso vale per animare un `<color>` o una `<length>` dentro una variabile, cosa utile per i gradienti animati (cfr. [[10-sfondi-effetti]]).
 
 > [!info|label:Baseline]
 > `@property` è **Baseline "widely available" (2024)** ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@property)). L'equivalente JavaScript è `CSS.registerProperty({ name, syntax, inherits, initialValue })`.
@@ -390,7 +390,7 @@ No: è un pixel **di riferimento** (logico). Su schermi ad alta densità il **de
 <details>
 <summary>Cosa restituisce <code>progress(50px, 0px, 100px)</code> e a cosa serve?</summary>
 
-Restituisce **`0.5`**: un numero puro che dice a che punto si trova il primo valore fra l'inizio e la fine dell'intervallo, calcolato come `(valore − inizio) / (fine − inizio)` e limitato fra `0` e `1`, salvo la keyword `no-clamp`. Essendo un numero, si usa come **coefficiente** dentro `calc()`, per far variare in modo fluido una proprietà mentre un'altra grandezza — tipicamente la larghezza del viewport o del container — attraversa un intervallo.
+Restituisce **`0.5`**: un numero puro che dice a che punto si trova il primo valore fra l'inizio e la fine dell'intervallo, calcolato come `(valore − inizio) / (fine − inizio)` e limitato fra `0` e `1`, salvo la keyword `no-clamp`. Essendo un numero, si usa come **coefficiente** dentro `calc()`, per far variare in modo fluido una proprietà mentre un'altra grandezza (tipicamente la larghezza del viewport o del container) attraversa un intervallo.
 
 </details>
 

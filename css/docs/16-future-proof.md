@@ -6,16 +6,16 @@ tags: [tipo/modulo, future-proof]
 # 16 · Future-proof CSS
 > modulo 16 — *CSS* · rif. MDN
 
-Scrivere CSS **a prova di futuro** significa usare feature nuove senza rompere i browser che non le hanno ancora, e appoggiarsi a strumenti e convenzioni che invecchiano bene. Il tema non è tanto *quali* proprietà esistono, ma *come* decidere quando usarle, come degradare con eleganza e quali pratiche del passato (prefissi a mano, hack di specificità, framework monolitici) oggi non servono più. Questo modulo mette in fila gli strumenti attuali (`@supports`, **Baseline**, Autoprefixer) e inquadra il legacy per quello che è: contesto storico, non ricetta.
+Scrivere CSS **a prova di futuro** significa usare feature nuove senza rompere i browser che non le hanno ancora, e appoggiarsi a strumenti e convenzioni che invecchiano bene. Il tema è *come* decidere quando usarle, come degradare con eleganza e quali pratiche del passato (prefissi a mano, hack di specificità, framework monolitici) oggi non servono più. Questo modulo mette in fila gli strumenti attuali (`@supports`, **Baseline**, Autoprefixer) e inquadra il legacy come contesto storico.
 
 ## Il supporto browser non è un interruttore
 
-Una feature CSS non è "supportata" o "non supportata" in assoluto: lo è **per versione**, e i **motori del browser** — <a href="../glossario/#/docs/web-browser" target="_blank" rel="noopener">Blink (Chrome/Edge), WebKit (Safari), Gecko (Firefox)</a> — la implementano in tempi diversi. Il codice va quindi pensato per un **ventaglio** di browser, non per quello sul proprio schermo.
+Una feature CSS non è "supportata" o "non supportata" in assoluto: lo è **per versione**, e i **motori del browser**, cioè <a href="../glossario/#/docs/web-browser" target="_blank" rel="noopener">Blink (Chrome/Edge), WebKit (Safari), Gecko (Firefox)</a>, la implementano in tempi diversi. Il codice va quindi pensato per un **ventaglio** di browser, non per quello sul proprio schermo.
 
 Due strumenti rispondono alla domanda "posso usarlo?":
 
-- **[Can I Use](https://caniuse.com/)** — tabelle di supporto per singola feature, versione per versione, con percentuali d'uso reali. Utile per il dettaglio granulare.
-- **[Baseline](https://web.dev/baseline)** (web.dev) — sintetizza il supporto in **stadi** leggibili a colpo d'occhio, basati sul *core browser set*: Chrome, Edge, Firefox, Safari (desktop e mobile), gestito dalla WebDX Community Group.
+- **[Can I Use](https://caniuse.com/)**: tabelle di supporto per singola feature, versione per versione, con percentuali d'uso reali. Utile per il dettaglio granulare.
+- **[Baseline](https://web.dev/baseline)** (web.dev): sintetizza il supporto in **stadi** leggibili a colpo d'occhio, basati sul *core browser set*: Chrome, Edge, Firefox, Safari (desktop e mobile), gestito dalla WebDX Community Group.
 
 ```mermaid
 flowchart LR
@@ -29,8 +29,8 @@ Una feature diventa **Newly available** quando è interoperabile su tutti i core
 
 Sono due direzioni per gestire il divario di supporto:
 
-- **Progressive enhancement** — si parte da una base che funziona **ovunque** e si *aggiunge* il miglioramento dove il browser lo regge. È la direzione preferita: nessun utente resta senza contenuto.
-- **Graceful degradation** — si parte dalla versione ricca e si prevede un ripiego per chi non ce la fa. Ragionamento inverso, più fragile perché la base non è la più solida.
+- **Progressive enhancement**: si parte da una base che funziona **ovunque** e si *aggiunge* il miglioramento dove il browser lo regge. È la direzione preferita: nessun utente resta senza contenuto.
+- **Graceful degradation**: si parte dalla versione ricca e si prevede un ripiego per chi non ce la fa. Ragionamento inverso, più fragile perché la base non è la più solida.
 
 > [!tip]
 > In pratica si scrive prima la regola di fallback (senza condizioni), poi si *sovrascrive* con la versione avanzata dentro una feature query. Chi non supporta la feature semplicemente ignora il blocco e resta sul fallback.
@@ -74,9 +74,9 @@ Gli operatori logici compongono condizioni più fini:
 
 Oltre al test `property: value`, esistono forme funzionali:
 
-- **`selector(...)`** — verifica il supporto di una **sintassi di selettore**, non di una proprietà: `@supports selector(:has(a))`, `@supports selector(h2 > p)`.
-- **`font-tech(...)` / `font-format(...)`** — verificano tecnologie e formati di font (es. `font-format(woff2)`, `font-tech(color-COLRv1)`).
-- **`not`, `and`, `or`** — negazione e combinazione; mescolando `and` e `or` **le parentesi sono obbligatorie**, altrimenti la condizione è invalida.
+- **`selector(...)`**: verifica il supporto di una **sintassi di selettore**, non di una proprietà: `@supports selector(:has(a))`, `@supports selector(h2 > p)`.
+- **`font-tech(...)` / `font-format(...)`**: verificano tecnologie e formati di font (es. `font-format(woff2)`, `font-tech(color-COLRv1)`).
+- **`not`, `and`, `or`**: negazione e combinazione; mescolando `and` e `or` **le parentesi sono obbligatorie**, altrimenti la condizione è invalida.
 
 > [!warning]
 > `@supports` testa la **sintassi**, non la correttezza del rendering: un browser può "supportare" una dichiarazione e comunque renderla con bug. Per i selettori nuovi (`:has()`) usare la forma `selector(...)`, non `(property: value)`.
@@ -104,15 +104,15 @@ Nel 2026 i prefissi **non si scrivono a mano**. Quando servono ancora (poche pro
 
 Un **polyfill** è codice (di solito JavaScript) che *ricrea* una feature mancante in un browser che non ce l'ha nativamente, così l'API o il comportamento risultano disponibili anche lì. Sono nati per l'era in cui i browser divergevano molto: **[Modernizr](https://github.com/Modernizr/Modernizr)** rilevava le feature e permetteva di caricare i polyfill giusti.
 
-Oggi servono **raramente** per il CSS: la convergenza dei motori e Baseline hanno reso quasi tutto disponibile nativamente, e per il *feature detection* in CSS c'è già `@supports`. Restano un'opzione di nicchia per API JavaScript recenti su target datati — contesto di transizione, non pratica corrente.
+Oggi servono **raramente** per il CSS: la convergenza dei motori e Baseline hanno reso quasi tutto disponibile nativamente, e per il *feature detection* in CSS c'è già `@supports`. Restano un'opzione di nicchia, da fase di transizione, per API JavaScript recenti su target datati.
 
 ## Naming: BEM
 
 **BEM** (*Block, Element, Modifier*) è una convenzione di nomenclatura delle classi che nasce per rendere il CSS **prevedibile** e a bassa specificità: ogni classe è "piatta" (un solo livello), così non servono selettori annidati profondi e le regole non si sovrascrivono a sorpresa ([getbem.com](http://getbem.com/introduction/)).
 
-- **Block** — componente autonomo: `.card`.
-- **Element** — parte del block, con `__`: `.card__title`.
-- **Modifier** — variante di block o element, con `--`: `.card--featured`, `.card__button--disabled`.
+- **Block**: componente autonomo: `.card`.
+- **Element**: parte del block, con `__`: `.card__title`.
+- **Modifier**: variante di block o element, con `--`: `.card--featured`, `.card__button--disabled`.
 
 ```css
 .card { /* block */ }
@@ -125,19 +125,19 @@ BEM risolve un problema reale (collisioni di nomi e specificità che sfugge di m
 
 ## Come si standardizza ed evolve il CSS
 
-Per anni "il CSS" è stato **un solo documento**: l'ultima versione monolitica è **CSS 2.1**, completata come standard nel 2011, che in un unico testo definiva selettori, box model, testo, colori e tutto il resto. Un blocco così grande era però ingestibile — bastava una parte non ancora pronta a tenere ferma l'intera specifica. Da lì il **[CSS Working Group](https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group)** del W3C ha cambiato rotta e ha spezzato il CSS in **moduli** indipendenti (Selectors, Grid Layout, Color, Cascade & Inheritance…) ciascuno libero di avanzare per conto proprio. È per questo che "supporta CSS3" non vuol dire nulla di preciso: non c'è "il CSS3" come blocco unico, ci sono decine di moduli, ognuno a un punto diverso del suo cammino.
+Per anni "il CSS" è stato **un solo documento**: l'ultima versione monolitica è **CSS 2.1**, completata come standard nel 2011, che in un unico testo definiva selettori, box model, testo, colori e tutto il resto. Un blocco così grande era però ingestibile: bastava una parte non ancora pronta a tenere ferma l'intera specifica. Da lì il **[CSS Working Group](https://www.w3.org/TR/tr-groups-all#tr_Cascading_Style_Sheets__CSS__Working_Group)** del W3C ha cambiato rotta e ha spezzato il CSS in **moduli** indipendenti (Selectors, Grid Layout, Color, Cascade & Inheritance…) ciascuno libero di avanzare per conto proprio. È per questo che "supporta CSS3" non vuol dire nulla di preciso: non c'è "il CSS3" come blocco unico, ci sono decine di moduli, ognuno a un punto diverso del suo cammino.
 
 ### Due assi da non confondere: la versione (*Level*) e la maturità
 
-Di ogni modulo si leggono due etichette che raccontano cose diverse. La prima è il **livello** (*Level*): è, molto semplicemente, il **numero di versione** del modulo, come il "v3" o "v4" di un programma. *Selectors Level 4* è la versione successiva di *Selectors Level 3*, e nasce quando il gruppo apre una tornata per **aggiungere feature** a un modulo ormai maturo. È una decisione editoriale, non un contatore automatico: ecco perché a volte un numero viene saltato (si passa da *Cascading and Inheritance 3* direttamente al *5*). La seconda etichetta è lo **stadio**, che dice quanto quella versione è **matura**, cioè quanto è vicina a diventare uno standard definitivo.
+Di ogni modulo si leggono due etichette che raccontano cose diverse. La prima è il **livello** (*Level*): è il **numero di versione** del modulo, come il "v3" o "v4" di un programma. *Selectors Level 4* è la versione successiva di *Selectors Level 3*, e nasce quando il gruppo apre una tornata per **aggiungere feature** a un modulo ormai maturo. È una decisione editoriale, non un contatore automatico: ecco perché a volte un numero viene saltato (si passa da *Cascading and Inheritance 3* direttamente al *5*). La seconda etichetta è lo **stadio**, che dice quanto quella versione è **matura**, cioè quanto è vicina a diventare uno standard definitivo.
 
-Il punto da fissare è che **i due assi sono indipendenti**, ed è qui che l'intuito inganna. *Selectors Level 3* è uno standard già concluso (quello che i browser implementano oggi) mentre *Selectors Level 4*, la versione che aggiunge `:has()`, `:is()` e altro, è ancora una bozza. Quindi un numero di livello più alto **non** significa "più pronto": è semplicemente la versione dopo, di norma ancora acerba mentre la precedente è già stabile.
+**I due assi sono indipendenti**: *Selectors Level 3* è uno standard già concluso (quello che i browser implementano oggi), mentre *Selectors Level 4*, la versione che aggiunge `:has()`, `:is()` e altro, è ancora una bozza. Quindi un numero di livello più alto **non** significa "più pronto": è semplicemente la versione dopo, di norma ancora acerba mentre la precedente è già stabile.
 
 ### Il cammino di un modulo, dall'idea allo standard
 
-Lo stadio racconta questo viaggio. Una versione nasce come **First Public Working Draft** (FPWD), la prima bozza pubblica con cui il gruppo dichiara di volerci lavorare; resta poi a lungo un **Working Draft** (WD), che viene *iterato* — cioè riscritto e ripubblicato più volte, un giro dopo l'altro, mentre arrivano commenti e si sistemano i problemi. Quando il testo è considerato completo passa a **Candidate Recommendation** (CR), la prova sul campo: per superarla ogni feature deve avere **due implementazioni indipendenti**, cioè essere realizzata da almeno due browser diversi (ognuno partendo dalla sola specifica) che poi superano gli stessi test. È la garanzia che la regola sia davvero realizzabile e che due team, letta la stessa pagina, ottengano lo stesso risultato, invece di qualcosa che funziona solo sulla carta. Dopo la CR arriva la **Proposed Recommendation** (PR), un ultimo congelamento in attesa del via libera formale del W3C, e infine la **Recommendation** (REC), lo standard concluso. In pratica una feature resta *instabile* finché non tocca almeno la CR.
+Lo stadio racconta questo viaggio. Una versione nasce come **First Public Working Draft** (FPWD), la prima bozza pubblica con cui il gruppo dichiara di volerci lavorare; resta poi a lungo un **Working Draft** (WD), che viene *iterato*, cioè riscritto e ripubblicato più volte, un giro dopo l'altro, mentre arrivano commenti e si sistemano i problemi. Quando il testo è considerato completo passa a **Candidate Recommendation** (CR), la prova sul campo: per superarla ogni feature deve avere **due implementazioni indipendenti**, cioè essere realizzata da almeno due browser diversi (ognuno partendo dalla sola specifica) che poi superano gli stessi test. È la garanzia che la regola sia davvero realizzabile e che due team, letta la stessa pagina, ottengano lo stesso risultato, invece di qualcosa che funziona solo sulla carta. Dopo la CR arriva la **Proposed Recommendation** (PR), un ultimo congelamento in attesa del via libera formale del W3C, e infine la **Recommendation** (REC), lo standard concluso. In pratica una feature resta *instabile* finché non tocca almeno la CR.
 
-Sulla pagina ufficiale compaiono anche altre sigle, ma **non sono tappe nuove nel mezzo**: sono l'inizio, una sotto-forma o un capolinea dello stesso percorso. Ecco la legenda completa, così quella pagina diventa leggibile:
+Sulla pagina ufficiale compaiono anche altre sigle, ma **non sono tappe nuove nel mezzo**: sono l'inizio, una sotto-forma o un capolinea dello stesso percorso. Con la legenda completa quella pagina diventa leggibile:
 
 | Sigla | Nome | Cosa indica |
 |---|---|---|
@@ -147,14 +147,14 @@ Sulla pagina ufficiale compaiono anche altre sigle, ma **non sono tappe nuove ne
 | **CRD** | Candidate Recommendation Draft | un aggiornamento "di lavoro" della CR fra una pubblicazione formale e l'altra |
 | **PR** | Proposed Recommendation | versione congelata, in attesa dell'ok formale del W3C |
 | **REC** | Recommendation | lo standard concluso |
-| **SPSD** | Superseded Recommendation | una versione vecchia **rimpiazzata** da una più recente — per esempio *CSS Level 1* (1996), oggi soppiantato |
+| **SPSD** | Superseded Recommendation | una versione vecchia **rimpiazzata** da una più recente, per esempio *CSS Level 1* (1996), oggi soppiantato |
 | **NOTE** | Working Group Note | un documento **fuori dal percorso degli standard**: o solo informativo (i *CSS Snapshot* sono NOTE, vedi sotto), o un modulo il cui lavoro è stato **abbandonato** |
 
-Due chiavi finali per quella pagina: le colonne *Current* e *Upcoming* sono lo stadio di adesso e quello previsto; e i titoloni (*Refining*, *Revising*, *Completed*, *Abandoned*…) non sono stadi, ma i "cassetti" con cui il gruppo tiene in ordine il proprio lavoro.
+Per leggere quella pagina servono infine due indicazioni: le colonne *Current* e *Upcoming* sono lo stadio di adesso e quello previsto; e i titoloni (*Refining*, *Revising*, *Completed*, *Abandoned*…) non sono stadi, ma i "cassetti" con cui il gruppo tiene in ordine il proprio lavoro.
 
 ### Nessuna edizione annuale: il confronto con ECMAScript
 
-Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage 0–4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2026/)** (l'ultimo è *CSS Snapshot 2026*), ma non è una release di feature nuove: è solo la fotografia (pubblicata proprio come *Working Group Note*) di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
+Viene naturale il paragone con JavaScript, che ha un meccanismo simile ma organizzato diversamente. In JS un unico comitato, il **TC39**, fa avanzare le proposte lungo gli **Stage da 0 a 4** e ogni anno raccoglie quelle arrivate in fondo in un'**edizione ECMAScript** datata (ES2015, ES2026…). Il CSS **non ha** un'edizione annuale così: essendo modulare, ogni pezzo procede per conto suo e non esiste un "CSS 2026" che ne raccolga le novità dell'anno. Il documento che gli somiglia di più è il **[CSS Snapshot](https://www.w3.org/TR/css-2026/)** (l'ultimo è *CSS Snapshot 2026*), ma non è una release di feature nuove: è solo la fotografia (pubblicata proprio come *Working Group Note*) di *quali* moduli, a una certa data, compongano nel loro insieme "il CSS" stabile.
 
 | | JavaScript | CSS |
 |---|---|---|
@@ -167,7 +167,7 @@ Il processo TC39 è approfondito nel vault JavaScript, <a href="../javascript/#/
 
 ### Dove seguire le novità
 
-Senza un'edizione unica, restare aggiornati vuol dire sapere **quale canale guardare per ogni fase** della vita di una feature — dalla proposta ancora in discussione fino al "posso usarlo in produzione":
+Senza un'edizione unica, restare aggiornati vuol dire sapere **quale canale guardare per ogni fase** della vita di una feature, dalla proposta ancora in discussione fino al "posso usarlo in produzione":
 
 | Cosa si cerca | Dove guardare |
 |---|---|
@@ -177,7 +177,7 @@ Senza un'edizione unica, restare aggiornati vuol dire sapere **quale canale guar
 | "Posso già usarlo?" | **[Baseline](https://web.dev/baseline)** (con i *digest mensili*) e **[Can I Use](https://caniuse.com/)** |
 | Convergenza tra browser | **[Interop](https://web.dev/blog/interop-2026)** (test comuni, [dashboard](https://github.com/web-platform-tests/interop)) |
 
-Due punti di riferimento pratici, per non perdersi in mezzo a tutti questi. Per le **proposte** ancora acerbe il posto dove si discute davvero è **GitHub `w3c/csswg-drafts`**, l'esatto equivalente di `tc39/proposals` in JavaScript. Per il "cosa è appena diventato usabile", invece, il polso regolare sono i **digest mensili di Baseline** su web.dev — è da lì, per dire, che arrivano notizie come le style query diventate Baseline a maggio 2026. A ridurre le divergenze tra motori lavora infine **Interop**, l'iniziativa annuale in cui Apple, Google, Microsoft, Mozilla e Igalia concordano ogni anno un set di feature prioritarie e ne misurano l'interoperabilità con test comuni: è il motore per cui, anno dopo anno, "funziona in tutti i browser" diventa sempre più vero.
+Fra tutti questi canali, due fanno da riferimento pratico. Per le **proposte** ancora acerbe il posto dove si discute davvero è **GitHub `w3c/csswg-drafts`**, l'esatto equivalente di `tc39/proposals` in JavaScript. Per il "cosa è appena diventato usabile", invece, il polso regolare sono i **digest mensili di Baseline** su web.dev: da lì, per esempio, arrivano notizie come le style query diventate Baseline a maggio 2026. A ridurre le divergenze tra motori lavora infine **Interop**, l'iniziativa annuale in cui Apple, Google, Microsoft, Mozilla e Igalia concordano ogni anno un set di feature prioritarie e ne misurano l'interoperabilità con test comuni: è il motore per cui, anno dopo anno, "funziona in tutti i browser" diventa sempre più vero.
 
 ## Sass — cosa aggiunge ancora
 
@@ -185,10 +185,10 @@ Due punti di riferimento pratici, per non perdersi in mezzo a tutti questi. Per 
 
 Cosa aggiunge ancora rispetto al CSS nativo:
 
-- **Sistema a moduli** `@use` / `@forward` — importa mixin, funzioni e variabili con un namespace, senza inquinare lo scope globale (rimpiazza il vecchio `@import`, deprecato).
-- **Mixin** `@mixin` / `@include` — blocchi di dichiarazioni parametrici e riutilizzabili (più potenti di una custom property, che porta *un valore*, non *un blocco*).
+- **Sistema a moduli** `@use` / `@forward`: importa mixin, funzioni e variabili con un namespace, senza inquinare lo scope globale (rimpiazza il vecchio `@import`, deprecato).
+- **Mixin** `@mixin` / `@include`: blocchi di dichiarazioni parametrici e riutilizzabili (più potenti di una custom property, che porta *un valore*, non *un blocco*).
 - **Funzioni** `@function` e libreria matematica (`math.div()` per la divisione, al posto dell'ambiguo `/`).
-- **Cicli e logica** `@each`, `@for`, `@if` — per generare regole a ripetizione in compilazione.
+- **Cicli e logica** `@each`, `@for`, `@if`: servono a generare regole a ripetizione in compilazione.
 - **Commenti di riga `//`** (che il CSS non ha, [[01-fondamenti]]).
 
 ```scss
@@ -219,7 +219,7 @@ $radius: 0.5rem;
 L'approccio dominante oggi è **utility-first**: classi atomiche a singola responsabilità composte direttamente nel markup, come in **[Tailwind CSS](https://tailwindcss.com/)**. Sposta lo stile vicino al componente e riduce il CSS "morto".
 
 > [!info|label:Legacy]
-> **Bootstrap** — il framework a componenti pronti (griglia, bottoni, card) che ha dominato gli anni 2010 — resta utile su progetti che già lo usano, ma per un progetto **nuovo** è una scelta datata: le sue griglie e i suoi mixin risolvono problemi che oggi Grid, Flexbox e le custom properties native coprono senza dipendenze.
+> **Bootstrap**, il framework a componenti pronti (griglia, bottoni, card) che ha dominato gli anni 2010, resta utile su progetti che già lo usano, ma per un progetto **nuovo** è una scelta datata: le sue griglie e i suoi mixin risolvono problemi che oggi Grid, Flexbox e le custom properties native coprono senza dipendenze.
 
 Collegamenti: [[04-cascade-specificita-ereditarieta]] · [[06-unita-valori-funzioni]] · [[07-colori]]
 
@@ -277,6 +277,6 @@ Quando servono **logica di generazione** (`@each`/`@for`/`@function`) o organizz
 **In sintesi:**
 - Il supporto è **per versione**: si decide con **Can I Use** (dettaglio) e **Baseline** (stadi *Newly*/*Widely available*), preferendo il **progressive enhancement**.
 - **`@supports`** è lo strumento moderno per usare feature nuove con fallback; testa `property: value`, `selector(...)`, con `not`/`and`/`or`.
-- Legacy relegato a contesto: **prefissi a mano** → oggi Autoprefixer/Baseline; **Modernizr/polyfill** → raramente necessari; **Bootstrap** → datato per progetti nuovi.
-- **BEM** resta valido, ma custom properties e `@layer` coprono parte di ciò che risolveva; il CSS è **modulare** (CSS WG + Interop lo rendono sempre più uniforme), matura per stadi (WD → CR → PR → REC) e **non** ha un'edizione annuale come ECMAScript — il *CSS Snapshot* è solo una fotografia.
+- Legacy relegato a contesto: al posto dei **prefissi a mano** oggi ci sono Autoprefixer/Baseline; **Modernizr/polyfill** sono raramente necessari; **Bootstrap** è datato per progetti nuovi.
+- **BEM** resta valido, ma custom properties e `@layer` coprono parte di ciò che risolveva; il CSS è **modulare** (CSS WG + Interop lo rendono sempre più uniforme), matura per stadi (WD → CR → PR → REC) e **non** ha un'edizione annuale come ECMAScript (il *CSS Snapshot* è solo una fotografia).
 - **Sass** aggiunge ancora moduli, mixin, funzioni e loop, ma il CSS nativo moderno l'ha reso spesso superfluo.

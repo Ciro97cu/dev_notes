@@ -8,7 +8,7 @@ tags: [tipo/modulo, selettori]
 
 I selettori visti finora individuano elementi **così come stanno nel markup** (modulo [[02-selettori-combinatori]]). Due famiglie li estendono oltre il DOM statico:
 
-- una **pseudo-classe** (colon singolo, `:`) colpisce un elemento in un certo **stato** o **posizione** — al passaggio del mouse, se è il primo figlio, se un form è valido. L'elemento esiste già; si aggiunge una condizione.
+- una **pseudo-classe** (colon singolo, `:`) colpisce un elemento in un certo **stato** o **posizione**: al passaggio del mouse, se è il primo figlio, se un form è valido. L'elemento esiste già; si aggiunge una condizione.
 - uno **pseudo-elemento** (doppio colon, `::`) stilizza, o **crea**, una **sotto-parte** dell'elemento che non ha un nodo proprio nel markup: la prima riga di un paragrafo, il bullet di una lista, un box decorativo generato dal nulla.
 
 ## Pseudo-classi di stato (interazione)
@@ -21,11 +21,11 @@ button:active  { transform: scale(0.98); } /* mentre è premuto */
 input:focus    { outline: 2px solid teal; } /* ha il focus (tastiera o click) */
 ```
 
-Per gli anchor esiste un ordine che conta: quando più stati hanno la **stessa specificità**, vince l'ultimo dichiarato. La sequenza corretta è `:link`, `:visited`, `:hover`, `:active` — mnemonico **LoVe-HAte**. Scrivere `:hover` dopo `:active` renderebbe l'hover irraggiungibile sul link già premuto.
+Per gli anchor esiste un ordine che conta: quando più stati hanno la **stessa specificità**, vince l'ultimo dichiarato. La sequenza corretta è `:link`, `:visited`, `:hover`, `:active` (mnemonico **LoVe-HAte**). Scrivere `:hover` dopo `:active` renderebbe l'hover irraggiungibile sul link già premuto.
 
 ### `:focus-visible` — il focus ring intelligente
 
-`:focus` scatta **sempre** che l'elemento riceva il focus, anche con un click del mouse: da qui il classico anello che molti sviluppatori rimuovevano (peggiorando l'accessibilità). `:focus-visible` invece scatta solo quando il browser, tramite euristica, ritiene che l'utente **abbia bisogno** di vedere dov'è il focus — tipicamente durante la navigazione da **tastiera**, non al click.
+`:focus` scatta **sempre** che l'elemento riceva il focus, anche con un click del mouse: da qui il classico anello che molti sviluppatori rimuovevano (peggiorando l'accessibilità). `:focus-visible` invece scatta solo quando il browser, tramite euristica, ritiene che l'utente **abbia bisogno** di vedere dov'è il focus, tipicamente durante la navigazione da **tastiera** e non al click.
 
 ```css
 /* anello personalizzato solo quando serve davvero */
@@ -85,7 +85,7 @@ tr:nth-child(odd) { background: #f4f4f4; }
 ```
 
 > [!warning]
-> `:nth-child()` conta **tutti** i fratelli, poi verifica il tipo del selettore a sinistra. `p:nth-child(2)` significa *"il secondo figlio, purché sia un `p`"* — se il secondo figlio è un `div`, non matcha nulla. Per contare **solo** gli elementi di un certo tipo serve `:nth-of-type()`.
+> `:nth-child()` conta **tutti** i fratelli, poi verifica il tipo del selettore a sinistra. `p:nth-child(2)` significa *"il secondo figlio, purché sia un `p`"*: se il secondo figlio è un `div`, non matcha nulla. Per contare **solo** gli elementi di un certo tipo serve `:nth-of-type()`.
 
 ### `:nth-of-type()` e `:first-of-type`
 
@@ -97,7 +97,7 @@ img:nth-of-type(2n) { float: right; }  /* ogni seconda immagine */
 ```
 
 > [!info|label:Baseline]
-> La sintassi moderna `:nth-child(An+B of S)` filtra **prima** con un selettore, poi applica la formula: `tr:nth-child(even of :not([hidden]))` colora a zebra solo le righe visibili, cosa impossibile col conteggio classico. Recente (browser dal 2023 circa) ma già Baseline — utile verificarne il supporto sui target più datati ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-child)).
+> La sintassi moderna `:nth-child(An+B of S)` filtra **prima** con un selettore, poi applica la formula: `tr:nth-child(even of :not([hidden]))` colora a zebra solo le righe visibili, cosa impossibile col conteggio classico. Recente (browser dal 2023 circa) ma già Baseline; conviene verificarne il supporto sui target più datati ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-child)).
 
 ## Negazione: `:not()`
 
@@ -146,7 +146,7 @@ input:invalid { border-color: crimson; }   /* non li supera */
 
 ## `:has()` — il selettore relazionale
 
-Storicamente CSS poteva scendere (figli, discendenti) ma **mai risalire**: non si poteva stilizzare un genitore in base ai suoi figli. `:has()` colma la lacuna — è il tanto atteso **parent selector**. Matcha l'elemento se al suo interno (o relativamente ad esso) esiste qualcosa che soddisfa la lista di selettori.
+Storicamente CSS poteva scendere (figli, discendenti) ma **mai risalire**: non si poteva stilizzare un genitore in base ai suoi figli. `:has()` colma la lacuna: è il tanto atteso **parent selector**. Matcha l'elemento se al suo interno (o relativamente ad esso) esiste qualcosa che soddisfa la lista di selettori.
 
 ```css
 /* una card che CONTIENE un'immagine si dispone diversamente */
@@ -158,7 +158,7 @@ Storicamente CSS poteva scendere (figli, discendenti) ma **mai risalire**: non s
 figure:has(figcaption) { border-bottom: 1px solid #ccc; }
 ```
 
-Combinato con i combinatori diventa anche un selettore di **fratello precedente** — cosa altrimenti impossibile:
+Combinato con i combinatori diventa anche un selettore di **fratello precedente**, cosa altrimenti impossibile:
 
 ```css
 /* un'etichetta che PRECEDE un campo non valido diventa rossa */
@@ -178,7 +178,7 @@ Logica combinabile: `:has(a, b)` è un **OR** (contiene a *oppure* b), mentre co
 
 ## Pseudo-elementi: `::` non `:`
 
-Il doppio colon (`::`) distingue i pseudo-**elementi** dalle pseudo-**classi** (colon singolo). Non è un vezzo: rende esplicito che si sta stilizzando o generando una **porzione** dell'elemento, non l'elemento in un certo stato.
+Il doppio colon (`::`) distingue i pseudo-**elementi** dalle pseudo-**classi** (colon singolo) e rende esplicito che si sta stilizzando o generando una **porzione** dell'elemento, non l'elemento in un certo stato.
 
 > [!info|label:Legacy]
 > I quattro pseudo-elementi storici (`::before`, `::after`, `::first-letter`, `::first-line`) sono ancora accettati col colon singolo (`:before`…) per retrocompatibilità. Nel codice nuovo si usa **sempre** `::`; il colon singolo su un pseudo-elemento è solo un residuo da riconoscere nel codice esistente.
@@ -202,7 +202,7 @@ a.external::after {
 }
 ```
 
-`content: ""` (stringa vuota) è la chiave dei box decorativi: crea l'elemento senza aggiungere testo, poi lo si dimensiona e sfonda a piacere.
+Per i box decorativi si usa `content: ""` (stringa vuota): crea l'elemento senza aggiungere testo, poi lo si dimensiona e sfonda a piacere.
 
 > [!warning]
 > Il contenuto generato è **presentazione**: il supporto degli screen reader è incostante e non selezionabile/copiabile in modo affidabile. Non veicolare mai informazione essenziale via `content` (testo di senso, dati). Riservarlo a icone e decorazioni.

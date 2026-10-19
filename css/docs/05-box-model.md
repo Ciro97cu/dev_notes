@@ -23,10 +23,10 @@ graph TB
   end
 ```
 
-- **content** — il contenuto vero e proprio (testo, immagine, figli). Le sue misure si impostano con `width` e `height`.
-- **padding** — lo spazio *interno* tra il contenuto e il bordo. Eredita lo sfondo dell'elemento.
-- **border** — il bordo che circonda contenuto e padding.
-- **margin** — lo spazio *esterno*, trasparente, che separa la scatola da quelle vicine.
+- **content**: il contenuto (testo, immagine, figli). Le sue misure si impostano con `width` e `height`.
+- **padding**: lo spazio *interno* tra il contenuto e il bordo. Eredita lo sfondo dell'elemento.
+- **border**: il bordo che circonda contenuto e padding.
+- **margin**: lo spazio *esterno*, trasparente, che separa la scatola da quelle vicine.
 
 > [!tip]
 > Regola pratica per distinguerli: il **padding** spinge il bordo *lontano dal contenuto* (lo sfondo si estende con esso); il **margin** spinge le *altre scatole lontano dal bordo* (è sempre trasparente).
@@ -48,7 +48,7 @@ Il **margin**, invece, non entra mai nel conteggio della dimensione della scatol
 
 ## `padding`, `border`, `margin`: per lato e shorthand
 
-Ogni area ha quattro proprietà per lato — per esempio `margin-top`, `margin-right`, `margin-bottom`, `margin-left` (e analoghe per `padding-*` e `border-*`). Nella pratica si usa lo **shorthand**, che accetta da uno a quattro valori con la regola **TRBL** (*top, right, bottom, left* — in senso orario partendo dall'alto):
+Ogni area ha quattro proprietà per lato: per esempio `margin-top`, `margin-right`, `margin-bottom`, `margin-left` (e analoghe per `padding-*` e `border-*`). Nella pratica si usa lo **shorthand**, che accetta da uno a quattro valori con la regola **TRBL** (*top, right, bottom, left*, in senso orario partendo dall'alto):
 
 ```css
 margin: 10px;                 /* 1 valore  → tutti e quattro i lati */
@@ -108,7 +108,7 @@ I pseudo-elementi `::before`/`::after` vanno inclusi esplicitamente perché il s
 
 ## Margin collapsing
 
-Un comportamento controintuitivo: due margini **verticali** che si toccano non si sommano, ma **collassano** in un margine unico pari al **maggiore** dei due ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing)).
+Il *margin collapsing* è un comportamento controintuitivo: due margini **verticali** che si toccano non si sommano, ma **collassano** in un margine unico pari al **maggiore** dei due ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing)).
 
 ```css
 /* due paragrafi in colonna */
@@ -119,9 +119,9 @@ p + p    { margin-top: 20px; }
 
 Avviene **solo** tra scatole di tipo *block* nel normale flusso, e **solo** sull'asse verticale (block). I casi tipici sono tre:
 
-1. **Fratelli adiacenti** — il `margin-bottom` di uno e il `margin-top` del successivo collassano.
-2. **Genitore e primo/ultimo figlio** — se nulla li separa, il margine verticale del figlio "esce" e collassa con quello del genitore (l'effetto sorprendente: il margin-top del figlio finisce *sopra* il genitore).
-3. **Blocco vuoto** — senza contenuto, bordo, padding o altezza, il suo margin-top e margin-bottom collassano tra loro.
+1. **Fratelli adiacenti**: il `margin-bottom` di uno e il `margin-top` del successivo collassano.
+2. **Genitore e primo/ultimo figlio**: se nulla li separa, il margine verticale del figlio "esce" e collassa con quello del genitore (l'effetto sorprendente: il margin-top del figlio finisce *sopra* il genitore).
+3. **Blocco vuoto**: senza contenuto, bordo, padding o altezza, il suo margin-top e margin-bottom collassano tra loro.
 
 > [!warning]
 > Con margini di segno diverso non vince il maggiore in assoluto: si **sommano algebricamente** (il negativo si sottrae dal positivo). Con due negativi vince il più negativo (il valore più lontano da zero).
@@ -132,7 +132,7 @@ Avviene **solo** tra scatole di tipo *block* nel normale flusso, e **solo** sull
 - dare al contenitore un `overflow` diverso da `visible` (es. `overflow: hidden` o `auto`), crea un *block formatting context*, oppure `display: flow-root`;
 - usare un contenitore **flex o grid**: al loro interno i margini **non collassano mai**.
 
-Quest'ultimo punto è la vera ragione per cui il problema oggi si incontra di rado: nei layout moderni la spaziatura tra elementi si gestisce con `gap` in flex/grid (vedi sotto), non impilando margini.
+È soprattutto per quest'ultimo punto che il problema oggi si incontra di rado: nei layout moderni la spaziatura tra elementi si gestisce con `gap` in flex/grid (vedi sotto), non impilando margini.
 
 ## Logical properties: block e inline
 

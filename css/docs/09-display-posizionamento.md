@@ -6,16 +6,16 @@ tags: [tipo/modulo, layout, posizionamento]
 # 09 · Display & posizionamento
 > modulo 9 — *CSS* · rif. MDN
 
-Prima di impilare gli elementi con Flexbox o Grid serve capire due leve fondamentali del layout: `display` (**che tipo di scatola** genera un elemento) e `position` — **come e rispetto a cosa** quella scatola viene collocata. Da qui discendono lo *stacking* (`z-index`), la gestione del contenuto che trabocca (`overflow`) e la tecnica storica del `float`. Il *box model* di ogni scatola è il prerequisito: vedi [[05-box-model]].
+Prima di impilare gli elementi con Flexbox o Grid serve capire due leve fondamentali del layout: `display` (**che tipo di scatola** genera un elemento) e `position` (**come e rispetto a cosa** quella scatola viene collocata). Da qui discendono lo *stacking* (`z-index`), la gestione del contenuto che trabocca (`overflow`) e la tecnica storica del `float`. Il *box model* di ogni scatola è il prerequisito: vedi [[05-box-model]].
 
 ## `display`: il tipo di scatola
 
 Ogni elemento genera una scatola con un **tipo esterno** (come si comporta rispetto ai vicini) e uno **interno** (come dispone i figli). La proprietà `display` li governa ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/display)). I valori base:
 
-- **`block`** — scatola *block-level*: va a capo prima e dopo, occupa tutta la larghezza disponibile, rispetta `width`/`height` e tutti i margini/padding (anche verticali).
-- **`inline`** — scatola *inline-level*: scorre nel testo senza andare a capo, **ignora** `width` e `height`, e i **margini/padding verticali non spingono via** le righe vicine (in orizzontale invece agiscono).
-- **`inline-block`** — ibrido: scorre in linea come `inline`, ma rispetta `width`/`height` e **tutti** i margini/padding come `block`.
-- **`none`** — l'elemento (e i suoi discendenti) non viene generato affatto: vedi sotto.
+- **`block`**: scatola *block-level*, che va a capo prima e dopo, occupa tutta la larghezza disponibile, rispetta `width`/`height` e tutti i margini/padding (anche verticali).
+- **`inline`**: scatola *inline-level*, che scorre nel testo senza andare a capo, **ignora** `width` e `height`, e i **margini/padding verticali non spingono via** le righe vicine (in orizzontale invece agiscono).
+- **`inline-block`**: un ibrido, che scorre in linea come `inline` ma rispetta `width`/`height` e **tutti** i margini/padding come `block`.
+- **`none`**: l'elemento (e i suoi discendenti) non viene generato affatto (vedi sotto).
 
 ```css
 nav a {
@@ -55,7 +55,7 @@ Tre modi per "far sparire" qualcosa, con conseguenze molto diverse su spazio occ
 > Un elemento a `opacity: 0` cattura ancora i click e riceve il focus da tastiera: è una trappola di accessibilità e di UX (bottoni "invisibili" ma premibili). Per un pannello che deve sparire davvero, usare `display: none` o combinare `opacity` con `visibility`/`pointer-events`.
 
 > [!tip]
-> `opacity` è l'unica delle tre a essere **animabile in modo continuo** (fade graduale); `display` e `visibility` cambiano a scatti. Oggi si può comunque transizionare *da/verso* `display: none` abbinando `transition-behavior: allow-discrete` e `@starting-style` — supporto recente, da verificare su [Can I Use](https://caniuse.com/mdn-css_properties_transition-behavior). *(verificato: 2026-08-13)*
+> `opacity` è l'unica delle tre a essere **animabile in modo continuo** (fade graduale); `display` e `visibility` cambiano a scatti. Oggi si può comunque transizionare *da/verso* `display: none` abbinando `transition-behavior: allow-discrete` e `@starting-style`; il supporto è recente, da verificare su [Can I Use](https://caniuse.com/mdn-css_properties_transition-behavior). *(verificato: 2026-08-13)*
 
 ### `flex` e `grid`
 
@@ -65,11 +65,11 @@ Tre modi per "far sparire" qualcosa, con conseguenze molto diverse su spazio occ
 
 `position` decide rispetto a **cosa** un elemento viene posizionato e se resta nel normale flusso ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/position)). Gli offset si esprimono con `top`/`right`/`bottom`/`left` oppure (forma moderna e più compatta) con lo shorthand `inset`.
 
-- **`static`** (default) — l'elemento sta nel flusso normale; gli offset e `z-index` **non hanno effetto**.
-- **`relative`** — resta nel flusso (lo spazio originale è conservato), ma può essere spostato con gli offset **rispetto a sé stesso**. Usato spesso solo per fare da riferimento a un figlio `absolute`.
-- **`absolute`** — **estratto dal flusso** (non lascia spazio); posizionato rispetto all'**antenato posizionato più vicino** (il primo con `position` diverso da `static`), o all'*initial containing block* se non ce n'è.
-- **`fixed`** — estratto dal flusso e ancorato al **viewport**: resta fermo allo scroll. Crea sempre uno stacking context (vedi sotto).
-- **`sticky`** — ibrido: si comporta come `relative` finché lo scroll non raggiunge una soglia, poi "si incolla" come `fixed` dentro il suo contenitore di scorrimento.
+- **`static`** (default): l'elemento sta nel flusso normale; gli offset e `z-index` **non hanno effetto**.
+- **`relative`**: resta nel flusso (lo spazio originale è conservato), ma può essere spostato con gli offset **rispetto a sé stesso**. Usato spesso solo per fare da riferimento a un figlio `absolute`.
+- **`absolute`**: **estratto dal flusso** (non lascia spazio); posizionato rispetto all'**antenato posizionato più vicino** (il primo con `position` diverso da `static`), o all'*initial containing block* se non ce n'è.
+- **`fixed`**: estratto dal flusso e ancorato al **viewport**, resta fermo allo scroll. Crea sempre uno stacking context (vedi sotto).
+- **`sticky`**: un ibrido, che si comporta come `relative` finché lo scroll non raggiunge una soglia, poi "si incolla" come `fixed` dentro il suo contenitore di scorrimento.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 466 272" role="img" aria-label="I cinque valori di position: static, relative, absolute, fixed, sticky" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="8" y="20" width="124" height="86" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3" opacity=".8"/><rect x="20" y="32" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><rect x="20" y="52" width="100" height="15" rx="4" fill="var(--link,#1572b6)" fill-opacity=".2" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><rect x="20" y="72" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><text x="70.0" y="122" font-size="10" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">static</text><rect x="158" y="20" width="124" height="86" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3" opacity=".8"/><rect x="170" y="32" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><rect x="170" y="52" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1" stroke-dasharray="4 3"/><rect x="170" y="72" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><rect x="186" y="60" width="100" height="15" rx="4" fill="var(--link,#1572b6)" fill-opacity=".2" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><path d="M220 59 L228 63" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/><text x="220.0" y="122" font-size="10" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">relative</text><rect x="308" y="20" width="124" height="86" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3" opacity=".8"/><text x="370.0" y="31" font-size="7.5" text-anchor="middle" font-weight="600" opacity=".6" fill="currentColor">parent</text><rect x="320" y="50" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><rect x="320" y="70" width="100" height="15" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" opacity="1"/><rect x="386" y="38" width="34" height="18" rx="4" fill="var(--link,#1572b6)" fill-opacity=".2" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><text x="370.0" y="122" font-size="10" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">absolute</text><rect x="83" y="150" width="124" height="86" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3" opacity=".8"/><rect x="83" y="150" width="124" height="12" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/><circle cx="91" cy="156" r="1.6" fill="currentColor" opacity=".5"/><circle cx="98" cy="156" r="1.6" fill="currentColor" opacity=".5"/><circle cx="105" cy="156" r="1.6" fill="currentColor" opacity=".5"/><path d="M95 174 L195 174" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M95 186 L195 186" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M95 198 L195 198" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M95 210 L195 210" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M95 222 L195 222" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><rect x="161" y="206" width="34" height="18" rx="4" fill="var(--link,#1572b6)" fill-opacity=".2" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><path d="M101 208 L101 224" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="1"/><path d="M101 205 L98 210 L104 210 Z" fill="currentColor"/><path d="M101 227 L98 222 L104 222 Z" fill="currentColor"/><text x="145.0" y="252" font-size="10" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">fixed</text><rect x="233" y="150" width="124" height="86" rx="6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3" opacity=".8"/><path d="M245 190 L345 190" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M245 202 L345 202" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M245 214 L345 214" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><path d="M245 226 L345 226" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity=".18"/><rect x="245" y="164" width="100" height="17" rx="4" fill="var(--link,#1572b6)" fill-opacity=".2" stroke="var(--link,#1572b6)" stroke-width="1.4" opacity="1"/><path d="M343 185.0 L343 201.0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="1"/><path d="M343 182.0 L340 187.0 L346 187.0 Z" fill="currentColor"/><path d="M343 204.0 L340 199.0 L346 199.0 Z" fill="currentColor"/><text x="295.0" y="252" font-size="10" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">sticky</text></g></svg>
@@ -107,7 +107,7 @@ L'idioma `inset: 0` con `width`/`height` a `auto` **stira** l'elemento fino a ri
 
 ### Containing block: le tre regole sulla larghezza in %
 
-Quando la posizione o una `width`/`height` sono espresse in **percentuale**, il valore si calcola sul *containing block* — e quale sia dipende dal `position`:
+Quando la posizione o una `width`/`height` sono espresse in **percentuale**, il valore si calcola sul *containing block*, e quale sia dipende dal `position`:
 
 1. **`fixed`** → il **viewport** (la finestra). `width: 50%` = metà della larghezza visibile.
 2. **`absolute`** → l'**antenato posizionato più vicino**, misurato sul suo **padding box** (il padding dell'antenato è incluso nell'area di riferimento).
@@ -127,7 +127,7 @@ Quando la posizione o una `width`/`height` sono espresse in **percentuale**, il 
 
 ## `z-index` e stacking context
 
-Quando le scatole si sovrappongono, l'ordine sull'asse z è deciso dal **contesto di impilamento** (*stacking context*). `z-index` (un intero, anche negativo) ordina gli elementi **solo all'interno del proprio stacking context** — non a livello globale ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)).
+Quando le scatole si sovrappongono, l'ordine sull'asse z è deciso dal **contesto di impilamento** (*stacking context*). `z-index` (un intero, anche negativo) ordina gli elementi **solo all'interno del proprio stacking context**, non a livello globale ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)).
 
 Un nuovo stacking context nasce, tra gli altri casi, quando un elemento ha:
 
@@ -138,7 +138,7 @@ Un nuovo stacking context nasce, tra gli altri casi, quando un elemento ha:
 - `isolation: isolate`;
 - `mix-blend-mode` diverso da `normal`, oppure `will-change` su una di queste proprietà.
 
-Il punto chiave: **uno stacking context è atomico**. Una volta che un elemento ne crea uno, tutti i suoi discendenti sono impilati *dentro* di esso e non possono "scavalcare" un fratello del genitore, per quanto alto sia il loro `z-index`.
+**Uno stacking context è atomico**: una volta che un elemento ne crea uno, tutti i suoi discendenti sono impilati *dentro* di esso e non possono "scavalcare" un fratello del genitore, per quanto alto sia il loro `z-index`.
 
 ```css
 .a { position: relative; z-index: 1; opacity: 0.9; }  /* crea uno stacking context */
@@ -160,11 +160,11 @@ Il punto chiave: **uno stacking context è atomico**. Una volta che un elemento 
 
 `overflow` decide cosa succede quando il contenuto eccede la scatola ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/overflow)). È lo shorthand di `overflow-x` e `overflow-y`:
 
-- **`visible`** (default) — il contenuto **deborda** ed è visibile fuori dalla scatola.
-- **`hidden`** — il contenuto in eccesso è **tagliato**; niente scrollbar, ma resta scrollabile via script/tastiera (l'elemento è un *scroll container*).
-- **`scroll`** — sempre tagliato e con scrollbar **sempre presenti**, anche se non serve scorrere.
-- **`auto`** — tagliato, con scrollbar **solo quando servono**. È la scelta usuale per aree scrollabili.
-- **`clip`** — come `hidden` ma **non crea uno scroll container**: nessuno scorrimento possibile, nemmeno da script. Più leggero quando si vuole solo ritagliare. Baseline dal 2022 circa.
+- **`visible`** (default): il contenuto **deborda** ed è visibile fuori dalla scatola.
+- **`hidden`**: il contenuto in eccesso è **tagliato**; niente scrollbar, ma resta scrollabile via script/tastiera (l'elemento è un *scroll container*).
+- **`scroll`**: sempre tagliato e con scrollbar **sempre presenti**, anche se non serve scorrere.
+- **`auto`**: tagliato, con scrollbar **solo quando servono**. È la scelta usuale per aree scrollabili.
+- **`clip`**: come `hidden`, ma **non crea uno scroll container**, quindi nessuno scorrimento è possibile, nemmeno da script. Più leggero quando si vuole solo ritagliare. Baseline dal 2022 circa.
 
 ```css
 .card   { overflow: hidden; }           /* entrambi gli assi */
@@ -199,7 +199,7 @@ Il valore accetta una o due lunghezze (larghezza e altezza) e la keyword `auto`:
 ## Float
 
 > [!info|label:Legacy]
-> Il `float` nasce per un solo scopo tipografico: far **scorrere il testo attorno a un'immagine** (impaginazione stile rivista). Per anni è stato però piegato a costruire **layout a colonne**, in mancanza di alternative — con tutti i grattacapi del caso. Oggi per il layout si usano Flexbox e Grid ([[12-flexbox]], [[13-grid]]): il `float` resta valido solo per il suo uso originario e per capire codice datato.
+> Il `float` nasce per un solo scopo tipografico: far **scorrere il testo attorno a un'immagine** (impaginazione stile rivista). Per anni è stato però piegato a costruire **layout a colonne**, in mancanza di alternative, con tutti i grattacapi del caso. Oggi per il layout si usano Flexbox e Grid ([[12-flexbox]], [[13-grid]]): il `float` resta valido solo per il suo uso originario e per capire codice datato.
 
 I valori sono `float: left`, `float: right`, `float: none` (default) e le varianti logiche `inline-start`/`inline-end`. Un elemento *floated* viene spinto a lato del contenitore e **tolto dal flusso normale**, mentre il contenuto seguente gli scorre intorno:
 
@@ -270,7 +270,7 @@ L'elemento è confinato in uno **stacking context** creato da un suo antenato (s
 <details>
 <summary>Qual è la differenza tra <code>overflow: hidden</code> e <code>overflow: clip</code>?</summary>
 
-Entrambi tagliano il contenuto in eccesso, ma `hidden` crea uno *scroll container* (scorrimento possibile via script/tastiera), mentre `clip` no — è solo un ritaglio, più leggero e senza scorrimento.
+Entrambi tagliano il contenuto in eccesso, ma `hidden` crea uno *scroll container* (scorrimento possibile via script/tastiera), mentre `clip` no: è solo un ritaglio, più leggero e senza scorrimento.
 
 </details>
 
@@ -296,7 +296,7 @@ Con **`display: flow-root`** sul contenitore (Baseline): crea un block formattin
 </details>
 
 **In sintesi:**
-- `display` sceglie il tipo di scatola: **block** (va a capo, rispetta width/height), **inline** (scorre nel testo, ignora width/height e margini verticali), **inline-block** (ibrido), **none** (sparisce dal flusso). `flex`/`grid` → [[12-flexbox]]/[[13-grid]].
+- `display` sceglie il tipo di scatola: **block** (va a capo, rispetta width/height), **inline** (scorre nel testo, ignora width/height e margini verticali), **inline-block** (ibrido), **none** (sparisce dal flusso). `flex`/`grid`: vedi [[12-flexbox]]/[[13-grid]].
 - Nascondere: `display:none` toglie tutto, `visibility:hidden` lascia lo spazio, `opacity:0` lascia spazio **e** interattività (trappola di accessibilità).
 - `position`: `static` (default), `relative` (offset da sé, resta nel flusso), `absolute` (dall'antenato posizionato), `fixed` (viewport), `sticky` (con soglia). Offset moderni con `inset`; la larghezza % dipende dal **containing block** (le tre regole).
 - `z-index` ordina **solo dentro il proprio stacking context**: quando "non funziona", cercare dove nasce il contesto (spesso `opacity`/`transform`).
