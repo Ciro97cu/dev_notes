@@ -1,13 +1,13 @@
 # 06 · Database e caching: RDS, Aurora, DynamoDB, ElastiCache
 
-Scegliere un database su AWS significa far combaciare il **modello di accesso** dei dati con il servizio giusto, e poi renderlo **disponibile**, **scalabile** e **veloce**. La domanda d'esame quasi mai è «quale motore», ma «quale servizio soddisfa questo access pattern senza sprecare capacità»: interrogazioni relazionali complesse spingono verso RDS o Aurora, letture per chiave a grande scala verso DynamoDB, e in entrambi i casi una cache può togliere carico e latenza. È il cuore dei task su database ad alte prestazioni (D3T3) e a costo ottimizzato (D4T3).
+Scegliere un database su AWS significa far combaciare il **modello di accesso** dei dati con il servizio giusto, e poi renderlo **disponibile**, **scalabile** e **veloce**. La domanda d'esame chiede quasi sempre «quale servizio soddisfa questo access pattern senza sprecare capacità»: interrogazioni relazionali complesse spingono verso RDS o Aurora, letture per chiave a grande scala verso DynamoDB, e in entrambi i casi una cache può togliere carico e latenza. Su questo si concentrano i task su database ad alte prestazioni (D3T3) e a costo ottimizzato (D4T3).
 
 > [!info|label:SAA-C03 · D3T3 e D4T3, base D2T2]
 > Il modulo copre *Determine high-performing database solutions* (D3T3) e *Design cost-optimized database solutions* (D4T3): relazionale contro non relazionale, Amazon RDS e Aurora, Amazon DynamoDB, caching con ElastiCache e DAX, più la distinzione fra alta disponibilità e scalabilità delle letture (base D2T2).
 
 ## Relazionale o non relazionale?
 
-Un database **relazionale** organizza i dati in tabelle con uno schema fisso, permette interrogazioni ricche con join fra tabelle e garantisce transazioni **ACID**: è la scelta quando le relazioni fra i dati contano e servono query flessibili. Su AWS lo offrono **Amazon RDS** e **Amazon Aurora**. Un database **non relazionale** (NoSQL) rinuncia a schema rigido e join per **scalare orizzontalmente** e rispondere in **millisecondi a cifra singola** su enormi volumi, purché si acceda ai dati secondo pattern noti (tipicamente per chiave): è **Amazon DynamoDB**. La scelta non è «quale è migliore» ma «quale corrisponde a come i dati vengono letti e scritti».
+Un database **relazionale** organizza i dati in tabelle con uno schema fisso, permette interrogazioni ricche con join fra tabelle e garantisce transazioni **ACID**: è la scelta quando le relazioni fra i dati contano e servono query flessibili. Su AWS lo offrono **Amazon RDS** e **Amazon Aurora**. Un database **non relazionale** (NoSQL) rinuncia a schema rigido e join per **scalare orizzontalmente** e rispondere in **millisecondi a cifra singola** su enormi volumi, purché si acceda ai dati secondo pattern noti (tipicamente per chiave): è **Amazon DynamoDB**. La scelta dipende quindi da come i dati vengono letti e scritti.
 
 ## Amazon RDS: il relazionale gestito
 
@@ -59,11 +59,11 @@ Un database **relazionale** organizza i dati in tabelle con uno schema fisso, pe
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">Il <strong>Multi-AZ</strong> tiene uno standby sincrono che entra in gioco solo al failover, e non serve letture. La <strong>Read Replica</strong> è una copia asincrona pensata per assorbire traffico di lettura, e può stare in un'altra Region per il disaster recovery.</figcaption>
 </figure>
 
-In sintesi: il Multi-AZ replica in modo **sincrono** verso uno standby che **non** si legge, garantendo il failover automatico in caso di guasto dell'istanza o della zona; la Read Replica replica in modo **asincrono** verso una o più copie che **servono letture**, alleggerendo il primary, e può essere promossa a database autonomo o collocata in un'altra Region. Chiedere «alta disponibilità» significa Multi-AZ; chiedere «scalare le letture» significa Read Replica. RDS aggiunge backup automatici e snapshot per il ripristino.
+Il Multi-AZ replica in modo **sincrono** verso uno standby che **non** si legge, garantendo il failover automatico in caso di guasto dell'istanza o della zona; la Read Replica replica in modo **asincrono** verso una o più copie che **servono letture**, alleggerendo il primary, e può essere promossa a database autonomo o collocata in un'altra Region. Chiedere «alta disponibilità» significa Multi-AZ; chiedere «scalare le letture» significa Read Replica. RDS aggiunge backup automatici e snapshot per il ripristino.
 
 ## Amazon Aurora: il relazionale cloud-native
 
-**Amazon Aurora** è il database relazionale che AWS ha riprogettato per il cloud, compatibile con **MySQL e PostgreSQL** ma con uno storage distribuito che tiene **sei copie dei dati su tre Availability Zone** e cresce da solo fino a decine di terabyte. Supporta fino a **quindici read replica** con replica veloce, offre una variante **Aurora Serverless** che scala la capacità di calcolo in automatico con il carico, e un **Global Database** che replica su più Region per bassa latitudine globale e disaster recovery. Si sceglie Aurora quando serve il relazionale ma con prestazioni e disponibilità superiori a quelle di RDS standard, accettando di restare nei due motori compatibili.
+**Amazon Aurora** è il database relazionale che AWS ha riprogettato per il cloud, compatibile con **MySQL e PostgreSQL** ma con uno storage distribuito che tiene **sei copie dei dati su tre Availability Zone** e cresce da solo fino a decine di terabyte. Supporta fino a **quindici read replica** con replica veloce, offre una variante **Aurora Serverless** che scala la capacità di calcolo in automatico con il carico, e un **Global Database** che replica su più Region per bassa latenza globale e disaster recovery. Si sceglie Aurora quando serve il relazionale ma con prestazioni e disponibilità superiori a quelle di RDS standard, accettando di restare nei due motori compatibili.
 
 ## Amazon DynamoDB: il NoSQL serverless
 
@@ -126,7 +126,7 @@ La decisione parte dal modello di accesso. Se i dati sono **relazionali** e serv
 <details>
 <summary>Qual è la differenza fra RDS Multi-AZ e una Read Replica?</summary>
 
-Il **Multi-AZ** tiene uno standby **sincrono** in un'altra AZ, **non leggibile**, che serve al **failover automatico**: è alta disponibilità. La **Read Replica** è una copia **asincrona** che **serve letture** per alleggerire il primary, può stare in un'altra Region e va promossa a mano: è scalabilità delle letture. Una dà disponibilità, l'altra scala i read.
+Il **Multi-AZ** tiene uno standby **sincrono** in un'altra AZ, **non leggibile**, che serve al **failover automatico**: è alta disponibilità. La **Read Replica** è una copia **asincrona** che **serve letture** per alleggerire il primary, può stare in un'altra Region e va promossa a mano: è scalabilità delle letture.
 
 </details>
 

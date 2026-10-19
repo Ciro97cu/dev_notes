@@ -7,7 +7,7 @@ Trasformare dati grezzi in informazioni utili segue quasi sempre la stessa **cat
 
 ## La pipeline dei dati
 
-Prima dei singoli servizi conviene vedere il flusso nel suo insieme. I dati entrano da sorgenti diverse (applicazioni, dispositivi, file), si **conservano** grezzi in un magazzino unico e poco costoso, si **catalogano e trasformano** in un formato interrogabile, si **analizzano** con query o elaborazioni, e i risultati si **visualizzano** in dashboard. Ogni stadio è indipendente dagli altri: si può cambiare lo strumento di uno senza rifare gli altri.
+I dati entrano da sorgenti diverse (applicazioni, dispositivi, file), si **conservano** grezzi in un magazzino unico e poco costoso, si **catalogano e trasformano** in un formato interrogabile, si **analizzano** con query o elaborazioni, e i risultati si **visualizzano** in dashboard. Ogni stadio è indipendente dagli altri: si può cambiare lo strumento di uno senza rifare gli altri.
 
 <figure style="margin:1.3rem 0;text-align:center">
 <svg viewBox="0 0 720 170" role="img" aria-label="La pipeline dei dati: ingestione (Kinesis o batch), archiviazione nel data lake S3, catalogazione ed ETL con AWS Glue, analisi con Athena o Redshift, visualizzazione con QuickSight." style="width:100%;max-width:720px;height:auto;color:inherit">
@@ -112,21 +112,21 @@ Sullo stesso data lake si affacciano tre motori con profili diversi. **Amazon At
 - *catalogo centrale degli schemi ed ETL serverless*: **AWS Glue**.
 - *magazzino unico, economico, per dati di ogni formato*: **data lake su S3**.
 - *dashboard e visualizzazione*: **Amazon QuickSight**.
-- La trappola: Data Streams (costruisci i consumatori, real-time, replay) contro Firehose (consegna gestita, near-real-time, niente consumatori); Athena (interroga sul posto su S3) contro Redshift (carica in un warehouse).
+- La trappola: Data Streams (consumatori da costruire, real-time, replay) contro Firehose (consegna gestita, near-real-time, niente consumatori); Athena (interroga sul posto su S3) contro Redshift (carica in un warehouse).
 
 ## Ripasso lampo
 
 <details>
 <summary>Qual è la differenza fra Kinesis Data Streams e Data Firehose?</summary>
 
-**Data Streams** cattura lo stream in **tempo reale** e lo espone a **consumatori propri** che lo elaborano, con possibilità di **replay**: massimo controllo, bassissima latenza. **Data Firehose** **consegna** lo stream in modo **gestito** a destinazioni come S3 o Redshift in near-real-time, senza scrivere consumatori: massima semplicità. Uno dà controllo, l'altro toglie lavoro.
+**Data Streams** cattura lo stream in **tempo reale** e lo espone a **consumatori propri** che lo elaborano, con possibilità di **replay**: massimo controllo, bassissima latenza. **Data Firehose** **consegna** lo stream in modo **gestito** a destinazioni come S3 o Redshift in near-real-time, senza scrivere consumatori: massima semplicità.
 
 </details>
 
 <details>
 <summary>Quando si usa Athena e quando Redshift?</summary>
 
-**Athena** per analisi **ad-hoc** e occasionali con SQL **direttamente su S3**, serverless, pagando per i dati scansionati. **Redshift** quando servono query **complesse e ripetute su dati strutturati a grande scala**, caricati in un **data warehouse** con prestazioni elevate e continue. Athena interroga sul posto; Redshift carica e ottimizza.
+**Athena** per analisi **ad-hoc** e occasionali con SQL **direttamente su S3**, serverless, pagando per i dati scansionati. **Redshift** quando servono query **complesse e ripetute su dati strutturati a grande scala**, caricati in un **data warehouse** con prestazioni elevate e continue.
 
 </details>
 

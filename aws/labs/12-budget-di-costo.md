@@ -3,7 +3,7 @@
 Questo laboratorio conclusivo crea un **budget di costo** con **AWS Budgets**, lo strumento di governo della spesa del modulo [12](../docs/12-cost-optimization-architecture-review.md), e ne osserva la struttura. I budget sono **gratuiti**, quindi il costo è zero. Chiude il percorso pratico tornando al tema del [LAB 01](01-bootstrap-account.md): tenere la spesa sotto controllo.
 
 > [!info|label:SAA-C03 · D4T1-D4T4]
-> Esercita AWS Budgets, la definizione di una soglia di costo e la differenza fra un budget (avvisa) e Cost Explorer (analizza). È la governance del costo come dimensione di progetto.
+> Esercita AWS Budgets, la definizione di una soglia di costo e la differenza fra un budget (avvisa) e Cost Explorer (analizza). Serve a governare il costo come dimensione di progetto.
 
 ## Cost guardrail
 

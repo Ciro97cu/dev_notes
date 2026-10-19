@@ -1,6 +1,6 @@
 # 11 · Observability, governance e Infrastructure as Code
 
-Un'architettura non si progetta soltanto: si **gestisce**. Tre capacità trasversali rendono un sistema governabile e attraversano tutti i Domain dell'esame. La prima è **vedere cosa succede** (observability): metriche, log e tracce di chi ha fatto cosa. La seconda è **tenere l'account in regola** (governance): conformità, raccomandazioni, controlli. La terza è **definire l'infrastruttura come codice** (Infrastructure as Code), così da ricrearla e verificarla in modo deterministico. Non sono un Domain a sé, ma reggono sicurezza, resilienza, prestazioni e costo.
+Dopo la progettazione, un'architettura va anche **gestita**. Tre capacità trasversali rendono un sistema governabile e attraversano tutti i Domain dell'esame. La prima è **vedere cosa succede** (observability): metriche, log e tracce di chi ha fatto cosa. La seconda è **tenere l'account in regola** (governance): conformità, raccomandazioni, controlli. La terza è **definire l'infrastruttura come codice** (Infrastructure as Code), così da ricrearla e verificarla in modo deterministico. Non sono un Domain a sé, ma reggono sicurezza, resilienza, prestazioni e costo.
 
 > [!info|label:SAA-C03 · capacità trasversali]
 > Il modulo raccoglie strumenti che compaiono in tutti i Domain: CloudWatch, CloudTrail e AWS Config per l'observability e la conformità, Trusted Advisor per le raccomandazioni, CloudFormation per l'Infrastructure as Code. Sono la base operativa (Operational Excellence del Well-Architected) su cui poggiano le scelte architetturali.
@@ -39,7 +39,7 @@ Tre servizi rispondono a tre domande diverse, e l'esame gioca proprio sul non co
 
 ## Governare l'account: governance
 
-La governance mantiene l'account ordinato, sicuro e in regola man mano che cresce. Alcuni strumenti sono già comparsi: **AWS Organizations** e le **SCP** ([modulo 02](02-iam-identita-multi-account.md)) fissano i confini di ciò che gli account possono fare; **AWS Config** verifica che le risorse rispettino le regole. A questi si aggiunge **AWS Trusted Advisor**, che ispeziona l'account e produce **raccomandazioni** in cinque aree (costo, sicurezza, prestazioni, tolleranza ai guasti e limiti di servizio), segnalando per esempio istanze sottoutilizzate, porte aperte o quote vicine al tetto. Una disciplina di **tagging** coerente, infine, è ciò che rende governabili costi e risorse su larga scala.
+La governance mantiene l'account ordinato, sicuro e in regola man mano che cresce. Alcuni strumenti sono già comparsi: **AWS Organizations** e le **SCP** ([modulo 02](02-iam-identita-multi-account.md)) fissano i confini di ciò che gli account possono fare; **AWS Config** verifica che le risorse rispettino le regole. A questi si aggiunge **AWS Trusted Advisor**, che ispeziona l'account e produce **raccomandazioni** in cinque aree (costo, sicurezza, prestazioni, tolleranza ai guasti e limiti di servizio), segnalando per esempio istanze sottoutilizzate, porte aperte o quote vicine al tetto. Una disciplina di **tagging** coerente, infine, rende governabili costi e risorse su larga scala.
 
 ## Definire l'infrastruttura come codice: CloudFormation
 
@@ -74,7 +74,7 @@ Creare risorse a mano nella Console non è ripetibile né verificabile. L'**Infr
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">Il template è la fonte di verità dell'infrastruttura. Il <strong>drift detection</strong> confronta lo stato desiderato con quello reale e segnala quando una modifica fatta a mano ha allontanato le risorse dal template.</figcaption>
 </figure>
 
-I vantaggi sono quelli che rendono un'architettura professionale: la stessa infrastruttura si **ricrea identica** in un altro account o Region, le modifiche passano per revisione come il codice, e il **drift detection** scopre quando qualcuno ha cambiato una risorsa a mano, fuori dal template. Sopra CloudFormation, l'**AWS CDK** permette di scrivere l'infrastruttura in un linguaggio di programmazione, generando poi i template.
+Con l'IaC la stessa infrastruttura si **ricrea identica** in un altro account o Region, le modifiche passano per revisione come il codice, e il **drift detection** scopre quando qualcuno ha cambiato una risorsa a mano, fuori dal template. Sopra CloudFormation, l'**AWS CDK** permette di scrivere l'infrastruttura in un linguaggio di programmazione, generando poi i template.
 
 ## Exam lens
 
@@ -84,21 +84,21 @@ I vantaggi sono quelli che rendono un'architettura professionale: la stessa infr
 - *ricevere raccomandazioni su costo, sicurezza, prestazioni e limiti*: **Trusted Advisor**.
 - *infrastruttura ripetibile, versionabile e verificabile*: **CloudFormation** (IaC).
 - *scoprire modifiche manuali fuori dal template*: il **drift detection** di CloudFormation.
-- La trappola: CloudWatch guarda le **prestazioni** (metriche/log), CloudTrail l'**audit** delle API, Config la **conformità** della configurazione. Sono tre domande diverse.
+- La trappola: CloudWatch guarda le **prestazioni** (metriche/log), CloudTrail l'**audit** delle API, Config la **conformità** della configurazione.
 
 ## Ripasso lampo
 
 <details>
 <summary>Qual è la differenza fra CloudWatch, CloudTrail e AWS Config?</summary>
 
-**CloudWatch** raccoglie metriche e log e fa scattare allarmi (come va, cosa non funziona). **CloudTrail** registra le **chiamate API** dell'account (chi ha fatto cosa). **AWS Config** registra la **configurazione** delle risorse e la valuta rispetto a regole di conformità (com'è configurata, cosa è cambiato). Prestazioni, audit, conformità: tre domande distinte.
+**CloudWatch** raccoglie metriche e log e fa scattare allarmi (come va, cosa non funziona). **CloudTrail** registra le **chiamate API** dell'account (chi ha fatto cosa). **AWS Config** registra la **configurazione** delle risorse e la valuta rispetto a regole di conformità (com'è configurata, cosa è cambiato).
 
 </details>
 
 <details>
 <summary>A cosa serve AWS Trusted Advisor?</summary>
 
-A ispezionare l'account e produrre **raccomandazioni** in cinque aree: costo, sicurezza, prestazioni, tolleranza ai guasti e limiti di servizio. Segnala per esempio risorse sottoutilizzate, configurazioni rischiose o quote vicine al limite, senza applicare modifiche: suggerisce.
+A ispezionare l'account e produrre **raccomandazioni** in cinque aree: costo, sicurezza, prestazioni, tolleranza ai guasti e limiti di servizio. Segnala per esempio risorse sottoutilizzate, configurazioni rischiose o quote vicine al limite, senza applicare modifiche.
 
 </details>
 
@@ -119,7 +119,7 @@ Rileva le **modifiche manuali** fatte alle risorse fuori dal template: confronta
 <details>
 <summary>Un allarme di CloudWatch dice anche chi ha causato il problema?</summary>
 
-No. CloudWatch dice **che** qualcosa è fuori soglia (una metrica, un log). Per sapere **chi** ha fatto la chiamata API che ha causato il cambiamento si guarda **CloudTrail**, e per sapere **cosa** è cambiato nella configurazione si guarda **AWS Config**. I tre servizi si completano.
+No. CloudWatch dice **che** qualcosa è fuori soglia (una metrica, un log). Per sapere **chi** ha fatto la chiamata API che ha causato il cambiamento si guarda **CloudTrail**, e per sapere **cosa** è cambiato nella configurazione si guarda **AWS Config**.
 
 </details>
 

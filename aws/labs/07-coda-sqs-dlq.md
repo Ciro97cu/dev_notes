@@ -1,6 +1,6 @@
 # LAB 07 · Una coda SQS con dead-letter queue
 
-Questo laboratorio crea una coda **Amazon SQS** con una **dead-letter queue** collegata, come descritto nel modulo [07](../docs/07-integration-serverless-container.md), vi invia qualche messaggio e ne osserva il ciclo: invio, ricezione (con il *visibility timeout*) e cancellazione. SQS non ha costo fisso e le poche richieste di questo laboratorio valgono frazioni di centesimo, di fatto zero.
+Questo laboratorio crea una coda **Amazon SQS** con una **dead-letter queue** collegata, come descritto nel modulo [07](../docs/07-integration-serverless-container.md), vi invia qualche messaggio e ne osserva il ciclo: invio, ricezione (con il *visibility timeout*) e cancellazione. SQS non ha costo fisso e le poche richieste di questo laboratorio valgono frazioni di centesimo, una spesa trascurabile.
 
 > [!info|label:SAA-C03 · D2T1]
 > Esercita il disaccoppiamento con una coda, il visibility timeout, la dead-letter queue e la redrive policy: i mattoni di un'architettura a basso accoppiamento, dove produttore e consumatore non si bloccano a vicenda.

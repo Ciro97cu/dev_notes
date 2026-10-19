@@ -1,13 +1,13 @@
 # 12 · Cost optimization e architecture review
 
-Il costo su AWS non è un conto che arriva a fine mese: è una **dimensione di progetto**, presente in ogni scelta architetturale, e questo modulo conclusivo la mette a fuoco. Raccoglie gli strumenti per **vedere e governare la spesa**, le **leve** con cui la si riduce senza rinunciare ai requisiti, e il metodo con cui si **rivede un'architettura** nel suo insieme, il Well-Architected Framework. È anche la lente con cui l'esame stesso va letto: ogni domanda è, in fondo, una piccola revisione architetturale.
+Su AWS il costo è una **dimensione di progetto**, presente in ogni scelta architetturale, e questo modulo conclusivo la mette a fuoco. Raccoglie gli strumenti per **vedere e governare la spesa**, le **leve** con cui la si riduce senza rinunciare ai requisiti, e il metodo con cui si **rivede un'architettura** nel suo insieme, il Well-Architected Framework. È anche la lente con cui l'esame stesso va letto: ogni domanda è una piccola revisione architetturale.
 
 > [!info|label:SAA-C03 · D4T1-D4T4 e architecture review]
 > Il modulo chiude il Domain 4 (*Cost-Optimized Architectures*) raccogliendo gli strumenti di cost management (Cost Explorer, AWS Budgets, Cost and Usage Report, Compute Optimizer) e le leve del risparmio, e introduce il Well-Architected Framework come metodo di revisione trasversale ai sei pilastri.
 
 ## Le leve del costo ottimizzato
 
-Ridurre la spesa non significa spendere poco a ogni costo, ma **soddisfare i requisiti senza sprechi**. Le leve sono quelle incontrate lungo tutto il percorso, ora messe in fila. Scegliere il **servizio giusto** per l'access pattern (una classe S3 IA invece di Standard, DynamoDB on-demand invece di provisioned quando il traffico è imprevedibile). Dimensionare al punto giusto (*right-sizing*): né più né meno capacità del necessario. Scegliere la **modalità d'acquisto** adatta al profilo del carico (Spot per l'interrompibile, Savings Plans per lo stabile). Sfruttare l'**elasticità**: spegnere ciò che non serve, far scalare il resto. Ridurre il **trasferimento dati**: tenere il traffico nella stessa AZ, usare i gateway endpoint invece del NAT, mettere CloudFront davanti all'origine. E preferire i servizi **managed e serverless**, che tagliano il costo operativo oltre a quello infrastrutturale.
+Ridurre la spesa non significa spendere poco a ogni costo, ma **soddisfare i requisiti senza sprechi**. Le leve sono quelle già incontrate lungo il percorso. Scegliere il **servizio giusto** per l'access pattern (una classe S3 IA invece di Standard, DynamoDB on-demand invece di provisioned quando il traffico è imprevedibile). Dimensionare al punto giusto (*right-sizing*): né più né meno capacità del necessario. Scegliere la **modalità d'acquisto** adatta al profilo del carico (Spot per l'interrompibile, Savings Plans per lo stabile). Sfruttare l'**elasticità**: spegnere ciò che non serve, far scalare il resto. Ridurre il **trasferimento dati**: tenere il traffico nella stessa AZ, usare i gateway endpoint invece del NAT, mettere CloudFront davanti all'origine. E preferire i servizi **managed e serverless**, che tagliano il costo operativo oltre a quello infrastrutturale.
 
 ## Gli strumenti del cost management
 
@@ -42,7 +42,7 @@ Quattro servizi rispondono a quattro esigenze diverse, e l'esame chiede di disti
     </g>
   </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem"><strong>Cost Explorer</strong> per capire dove va la spesa, <strong>Budgets</strong> per essere avvisati, il <strong>CUR</strong> per il dettaglio, <strong>Compute Optimizer</strong> per sapere cosa ridimensionare. Sono complementari, non alternativi.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem"><strong>Cost Explorer</strong> per capire dove va la spesa, <strong>Budgets</strong> per essere avvisati, il <strong>CUR</strong> per il dettaglio, <strong>Compute Optimizer</strong> per sapere cosa ridimensionare. Sono strumenti complementari.</figcaption>
 </figure>
 
 ## Rivedere l'architettura: il Well-Architected Framework
@@ -83,7 +83,7 @@ Nessuna delle scelte fatte finora vive isolata: sicurezza, resilienza, prestazio
 
 ## L'esame è una revisione architetturale
 
-Vale la pena chiudere sul metodo, perché è ciò che l'esame misura davvero. Una domanda SAA-C03 descrive uno scenario con dei **requisiti** e propone più soluzioni realizzabili: il compito non è ricordare un servizio, ma **scegliere il compromesso migliore** dati quei requisiti. Il procedimento è sempre lo stesso: individuare il requisito **vincolante** (un RTO stretto, «minimo carico operativo», «il più economico»), **eliminare** le opzioni che lo violano, e solo allora confrontare le alternative rimaste sui pilastri in gioco. È la stessa disciplina del Well-Architected, applicata a una domanda per volta.
+Ciò che l'esame misura è il metodo. Una domanda SAA-C03 descrive uno scenario con dei **requisiti** e propone più soluzioni realizzabili: il compito non è ricordare un servizio, ma **scegliere il compromesso migliore** dati quei requisiti. Il procedimento è sempre lo stesso: individuare il requisito **vincolante** (un RTO stretto, «minimo carico operativo», «il più economico»), **eliminare** le opzioni che lo violano, e solo allora confrontare le alternative rimaste sui pilastri in gioco. È la stessa disciplina del Well-Architected, applicata a una domanda per volta.
 
 ## Exam lens
 
@@ -101,7 +101,7 @@ Vale la pena chiudere sul metodo, perché è ciò che l'esame misura davvero. Un
 <details>
 <summary>Qual è la differenza fra Cost Explorer e AWS Budgets?</summary>
 
-**Cost Explorer** **analizza** e **prevede** la spesa: si filtra e raggruppa per servizio, tag o Region, con proiezioni nel futuro. **AWS Budgets** **avvisa**: fissa una soglia di costo o utilizzo e notifica quando la si supera. Uno serve a capire dove va la spesa, l'altro a essere allertati.
+**Cost Explorer** **analizza** e **prevede** la spesa: si filtra e raggruppa per servizio, tag o Region, con proiezioni nel futuro. **AWS Budgets** **avvisa**: fissa una soglia di costo o utilizzo e notifica quando la si supera.
 
 </details>
 

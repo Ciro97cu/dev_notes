@@ -7,7 +7,7 @@ Rendere un'architettura resiliente significa rispondere a due domande diverse. L
 
 ## Alta disponibilità e disaster recovery non sono la stessa cosa
 
-L'**alta disponibilità (high availability)** è la capacità di un sistema di continuare a funzionare nonostante il guasto di una sua parte, con poco o nessun tempo di inattività. Si ottiene **dentro una Region** eliminando i single point of failure: istanze su più AZ dietro un load balancer, un Auto Scaling group che rimpiazza le istanze perse, un database RDS Multi-AZ che fa failover sullo standby. Il guasto avviene, ma l'utente non se ne accorge.
+L'**alta disponibilità (high availability)** è la capacità di un sistema di continuare a funzionare nonostante il guasto di una sua parte, con poco o nessun tempo di inattività. Si ottiene **dentro una Region** eliminando i single point of failure: istanze su più AZ dietro un load balancer, un Auto Scaling group che rimpiazza le istanze perse, un database RDS Multi-AZ che fa failover sullo standby.
 
 Il **disaster recovery** è invece il piano per **recuperare** dopo un evento che mette fuori uso l'intero ambiente, tipicamente una Region: si predispongono copie dei dati e la capacità di ricreare il sistema **altrove**. Non promette «nessuna interruzione», ma «ripristino entro obiettivi concordati». Un'architettura può essere altamente disponibile in una Region e, allo stesso tempo, avere un piano di DR verso un'altra Region: i due livelli si sommano.
 
@@ -85,7 +85,7 @@ AWS descrive quattro strategie, che formano uno **spettro**: da sinistra a destr
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem"><strong>Backup &amp; Restore</strong> ripristina da copie (economico, lento). <strong>Pilot Light</strong> tiene accesi i soli elementi core. <strong>Warm Standby</strong> mantiene un ambiente ridotto sempre attivo. <strong>Multi-Site</strong> serve traffico da più Region insieme (costoso, quasi istantaneo).</figcaption>
 </figure>
 
-Nel dettaglio: **Backup & Restore** conserva i dati (per esempio su S3 con AWS Backup) e ricrea l'ambiente solo al bisogno, con RTO nell'ordine delle ore o giorni; è il più economico. **Pilot Light** tiene sempre acceso il nucleo minimo (di solito i dati replicati e le configurazioni), e al disastro accende il resto: RTO in ore. **Warm Standby** mantiene una copia **ridotta ma funzionante** già in esecuzione nella Region di DR, che scala rapidamente al carico pieno: RTO in minuti. **Multi-Site active-active** distribuisce il carico su più Region che servono traffico contemporaneamente: RTO e RPO quasi nulli, ma è il più costoso e complesso.
+**Backup & Restore** conserva i dati (per esempio su S3 con AWS Backup) e ricrea l'ambiente solo al bisogno, con RTO nell'ordine delle ore o giorni; è il più economico. **Pilot Light** tiene sempre acceso il nucleo minimo (di solito i dati replicati e le configurazioni), e al disastro accende il resto: RTO in ore. **Warm Standby** mantiene una copia **ridotta ma funzionante** già in esecuzione nella Region di DR, che scala rapidamente al carico pieno: RTO in minuti. **Multi-Site active-active** distribuisce il carico su più Region che servono traffico contemporaneamente: RTO e RPO quasi nulli, ma è il più costoso e complesso.
 
 ## Gli strumenti della resilienza
 

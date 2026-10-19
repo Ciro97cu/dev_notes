@@ -103,7 +103,7 @@ A completare la connettività privata ci sono due servizi visti nel [modulo 03](
 <details>
 <summary>Qual è la differenza fra CloudFront e Global Accelerator?</summary>
 
-**CloudFront** è una CDN di **livello 7**: mette in **cache** contenuti HTTP negli edge e li serve dal punto più vicino, alleggerendo l'origine. **Global Accelerator** è di **livello 4**: **non fa cache**, ma instrada il traffico (anche TCP/UDP) sulla dorsale privata di AWS verso l'endpoint sano più vicino, con IP anycast statici. Uno mette in cache i contenuti, l'altro accelera la rete.
+**CloudFront** è una CDN di **livello 7**: mette in **cache** contenuti HTTP negli edge e li serve dal punto più vicino, alleggerendo l'origine. **Global Accelerator** è di **livello 4**: **non fa cache**, ma instrada il traffico (anche TCP/UDP) sulla dorsale privata di AWS verso l'endpoint sano più vicino, con IP anycast statici.
 
 </details>
 

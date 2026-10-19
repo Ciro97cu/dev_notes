@@ -1,6 +1,6 @@
 # 07 · Integrazione, serverless e container
 
-Quando due componenti si chiamano **direttamente**, il loro destino è legato: se quello a valle rallenta o si guasta, quello a monte resta bloccato ad aspettare, e i due non possono crescere separatamente. Il **disaccoppiamento** rompe questo legame inserendo un intermediario (una coda, un topic, un bus di eventi), così i componenti scalano e falliscono in modo indipendente. A questo si affiancano il **serverless** (Lambda) e i **container** (Fargate, ECS, EKS), forme di calcolo che tolgono lavoro operativo. È il cuore delle architetture scalabili e a basso accoppiamento (D2T1).
+Quando due componenti si chiamano **direttamente**, il loro destino è legato: se quello a valle rallenta o si guasta, quello a monte resta bloccato ad aspettare, e i due non possono crescere separatamente. Il **disaccoppiamento** rompe questo legame inserendo un intermediario (una coda, un topic, un bus di eventi), così i componenti scalano e falliscono in modo indipendente. A questo si affiancano il **serverless** (Lambda) e i **container** (Fargate, ECS, EKS), forme di calcolo che tolgono lavoro operativo. Su questi elementi si costruiscono le architetture scalabili e a basso accoppiamento (D2T1).
 
 > [!info|label:SAA-C03 · D2T1, base D3T2 e D4T2]
 > Il modulo copre *Design scalable and loosely coupled architectures* (D2T1): messaggistica con SQS, SNS ed EventBridge, calcolo serverless con Lambda, container con ECS/EKS/Fargate, orchestrazione con Step Functions e API Gateway. Tocca anche il compute serverless dei task D3T2 e D4T2.
@@ -132,7 +132,7 @@ Quando un processo si compone di **più passi** con condizioni, ritentativi e ra
 <details>
 <summary>Qual è la differenza fra SQS e SNS?</summary>
 
-**SQS** è una **coda** *pull*: i consumatori prelevano i messaggi, che restano in attesa finché qualcuno li ritira; serve a disaccoppiare produttore e consumatore. **SNS** è un **pub/sub** *push*: un messaggio pubblicato su un topic viene spinto a **tutti** i sottoscrittori insieme (fan-out). Una accoda per un consumatore, l'altra notifica molti.
+**SQS** è una **coda** *pull*: i consumatori prelevano i messaggi, che restano in attesa finché qualcuno li ritira; serve a disaccoppiare produttore e consumatore. **SNS** è un **pub/sub** *push*: un messaggio pubblicato su un topic viene spinto a **tutti** i sottoscrittori insieme (fan-out).
 
 </details>
 
@@ -146,7 +146,7 @@ Quando un consumatore preleva un messaggio, questo diventa **invisibile** agli a
 <details>
 <summary>Quando si sceglie EventBridge invece di SNS?</summary>
 
-**EventBridge** quando serve **instradare** eventi verso bersagli diversi in base al **contenuto** (regole che filtrano i campi dell'evento), o integrare sorgenti AWS/SaaS eterogenee. **SNS** quando basta **spingere lo stesso messaggio** a un insieme di sottoscrittori. EventBridge instrada e filtra; SNS fa broadcast.
+**EventBridge** quando serve **instradare** eventi verso bersagli diversi in base al **contenuto** (regole che filtrano i campi dell'evento), o integrare sorgenti AWS/SaaS eterogenee. **SNS** quando basta **spingere lo stesso messaggio** a un insieme di sottoscrittori.
 
 </details>
 
@@ -160,7 +160,7 @@ Un **container** (ECS/EKS, eventualmente su **Fargate** per non gestire istanze)
 <details>
 <summary>Come si ottiene un fan-out con code affidabili?</summary>
 
-Con il pattern **SNS + SQS**: SNS pubblica su un topic a cui sono iscritte più code SQS, così ogni consumatore riceve la propria copia in una coda, con cuscinetto, riprova e dead-letter queue. Si uniscono il broadcast di SNS e l'affidabilità di SQS.
+Con il pattern **SNS + SQS**: SNS pubblica su un topic a cui sono iscritte più code SQS, così ogni consumatore riceve la propria copia in una coda, con cuscinetto, riprova e dead-letter queue.
 
 </details>
 

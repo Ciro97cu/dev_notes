@@ -16,7 +16,7 @@ Una risposta omessa è errata, mentre una risposta sbagliata non comporta penali
 
 Questi numeri descrivono la prova, ma non consentono di trasformare una percentuale grezza di quiz nel punteggio AWS: lo *scaled score* normalizza forme d'esame con difficoltà leggermente diversa. Anche il [simulatore](../exam/simulatore.md) del vault produce quindi soltanto un punteggio didattico.
 
-AWS descrive il candidato di riferimento come una persona con almeno **un anno di esperienza pratica** nella progettazione di soluzioni cloud che usano servizi AWS. Il dato non si sostituisce con la sola lettura: per chi parte da zero, i laboratori e il progetto progressivo servono a costruire nel tempo una parte di quell'esperienza, senza promettere una scorciatoia artificiale.
+AWS descrive il candidato di riferimento come una persona con almeno **un anno di esperienza pratica** nella progettazione di soluzioni cloud che usano servizi AWS. Il dato non si sostituisce con la sola lettura: per chi parte da zero, i laboratori e il progetto progressivo servono a costruire nel tempo una parte di quell'esperienza.
 
 > [!info|label:Lingua dell'esame]
 > Il vault mantiene i termini tecnici in inglese e assume che l'esame venga sostenuto in inglese. AWS indica che la localizzazione italiana di SAA-C03 verrà ritirata dopo il **31 dicembre 2026**; la disponibilità effettiva va ricontrollata sulla pagina di prenotazione. *(verificato: 2026-09-04)*

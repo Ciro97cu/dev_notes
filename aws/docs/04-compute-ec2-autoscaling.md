@@ -1,6 +1,6 @@
 # 04 · Compute elastico: EC2, Auto Scaling e load balancing
 
-**Amazon EC2 (Elastic Compute Cloud)** fornisce server virtuali su richiesta: si accende una macchina, la si usa e la si spegne pagando la capacità effettivamente consumata. All'esame, però, la domanda quasi mai è «quale singolo server»: è come rendere il compute **elastico** (che cresce e cala con la domanda) e **resiliente** (che sopravvive al guasto di una Availability Zone). La risposta ricorrente combina tre elementi (un load balancer, un Auto Scaling group e più AZ) ed è il modello che questo modulo costruisce.
+**Amazon EC2 (Elastic Compute Cloud)** fornisce server virtuali su richiesta: si accende una macchina, la si usa e la si spegne pagando la capacità effettivamente consumata. All'esame, però, la domanda riguarda quasi sempre come rendere il compute **elastico** (che cresce e cala con la domanda) e **resiliente** (che sopravvive al guasto di una Availability Zone). La risposta ricorrente combina tre elementi: un load balancer, un Auto Scaling group e più AZ.
 
 > [!info|label:SAA-C03 · D3T2 e D4T2, base D2T1 e D2T2]
 > Il modulo copre *Design high-performing and elastic compute solutions* (D3T2) e *Design cost-optimized compute solutions* (D4T2): tipi di istanza, opzioni d'acquisto, Elastic Load Balancing e Auto Scaling. È anche la base delle architetture scalabili e ad alta disponibilità (D2T1, D2T2).

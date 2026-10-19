@@ -51,7 +51,7 @@ Questo laboratorio costruisce la rete descritta nel modulo [03](../docs/03-vpc-n
     <text x="300" y="74" font-size="9" fill-opacity=".75" text-anchor="middle">0.0.0.0/0</text>
   </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">La differenza fra le due subnet non è un'etichetta ma la <strong>route table</strong>: la pubblica ha una rotta <code>0.0.0.0/0</code> verso l'IGW, la privata no. Lo stack non crea né NAT né istanze.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">La differenza fra le due subnet sta nella <strong>route table</strong>: la pubblica ha una rotta <code>0.0.0.0/0</code> verso l'IGW, la privata no. Lo stack non crea né NAT né istanze.</figcaption>
 </figure>
 
 ## Prerequisiti
@@ -138,7 +138,7 @@ Outputs:
   PrivateSubnetId:  { Value: !Ref PrivateSubnet }
 ```
 
-La subnet privata **non** è associata ad alcuna route table: eredita quindi la **main route table** della VPC, che contiene solo la rotta locale e nessuna via verso internet. È privata proprio per questo. Distribuire lo stack (nessuna capability IAM richiesta, perché non crea identità):
+La subnet privata **non** è associata ad alcuna route table: eredita quindi la **main route table** della VPC, che contiene solo la rotta locale e nessuna via verso internet, e per questo la subnet è privata. Distribuire lo stack (nessuna capability IAM richiesta, perché non crea identità):
 
 ```bash
 aws cloudformation deploy \
@@ -168,7 +168,7 @@ La tabella deve mostrare `saa-lab-public` (10.20.1.0/24) e `saa-lab-private` (10
 
 ## 3 · Verificare la differenza pubblica / privata
 
-È qui che il concetto diventa concreto. La route table della subnet **pubblica** deve contenere una rotta verso l'IGW:
+La route table della subnet **pubblica** deve contenere una rotta verso l'IGW:
 
 ```bash
 PUBLIC_SUBNET_ID=$(aws cloudformation describe-stacks \
@@ -191,7 +191,7 @@ aws ec2 describe-route-tables \
   --output table --no-cli-pager
 ```
 
-Qui c'è **solo** la rotta locale (`10.20.0.0/16` con target `local`) e **nessun** `igw-…`: la subnet privata non ha una via verso internet. La differenza fra le due subnet è tutta in queste due tabelle.
+Qui c'è **solo** la rotta locale (`10.20.0.0/16` con target `local`) e **nessun** `igw-…`: la subnet privata non ha una via verso internet.
 
 ## 4 · Osservare il security group
 

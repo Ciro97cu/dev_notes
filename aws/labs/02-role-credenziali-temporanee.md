@@ -1,6 +1,6 @@
 # LAB 02 · Role a privilegi limitati e credenziali temporanee
 
-Questo laboratorio mette in pratica il cuore del modulo [02](../docs/02-iam-identita-multi-account.md): si crea una **IAM role** con permessi volutamente ristretti, la si **assume** da AWS CloudShell ottenendo credenziali temporanee, e si osserva dal vivo la differenza fra un'operazione **consentita** e una **negata**. Tutto avviene in un solo account Free Plan, a costo zero, senza creare access key e senza mai stampare credenziali sensibili.
+Questo laboratorio mette in pratica i concetti centrali del modulo [02](../docs/02-iam-identita-multi-account.md): si crea una **IAM role** con permessi volutamente ristretti, la si **assume** da AWS CloudShell ottenendo credenziali temporanee, e si osserva dal vivo la differenza fra un'operazione **consentita** e una **negata**. Tutto avviene in un solo account Free Plan, a costo zero, senza creare access key e senza mai stampare credenziali sensibili.
 
 > [!info|label:SAA-C03 · D1T1]
 > Esercita role assumption, `sts:AssumeRole`, credenziali temporanee, least privilege e l'effetto pratico della policy evaluation (un `AccessDenied` per assenza di allow). L'infrastruttura è descritta in CloudFormation per renderla ripetibile e cancellabile in modo pulito.
@@ -56,7 +56,7 @@ IAM e STS non hanno costo. L'unica operazione «consentita» che si esegue è `a
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">La role concede un solo permesso. La stessa sessione che la assume può fare <code>s3 ls</code> ma non <code>iam list-users</code>: il secondo comando ricade nel default deny e restituisce <code>AccessDenied</code>.</figcaption>
 </figure>
 
-Il dettaglio interessante è che `study-admin` possiede `AdministratorAccess` e da solo *potrebbe* elencare gli utenti IAM; assumendo la role, però, opera con i **soli** permessi della role, più stretti dei propri. È least privilege in azione: si scende di privilegio assumendo un'identità apposita.
+`study-admin` possiede `AdministratorAccess` e da solo *potrebbe* elencare gli utenti IAM; assumendo la role, però, opera con i **soli** permessi della role, più stretti dei propri. È least privilege in azione: si scende di privilegio assumendo un'identità apposita.
 
 ## Prerequisiti
 
@@ -159,7 +159,7 @@ Il comando restituisce l'elenco dei bucket (eventualmente vuoto, se non ne esist
 
 ## 5 · Failure drill · l'operazione negata (`AccessDenied`)
 
-Ora un'operazione che la role **non** concede. Elencare gli utenti IAM richiede `iam:ListUsers`, assente dalla permission policy:
+Si prova ora un'operazione che la role **non** concede. Elencare gli utenti IAM richiede `iam:ListUsers`, assente dalla permission policy:
 
 ```bash
 aws iam list-users --profile saa-lab --no-cli-pager
@@ -179,7 +179,7 @@ to perform: iam:ListUsers because no identity-based policy allows the iam:ListUs
 aws iam list-users --query 'Users[].UserName' --output table --no-cli-pager
 ```
 
-Senza `--profile`, il comando gira come `study-admin` (amministratore) e **riesce**. La stessa persona, attraverso la role, ha meno potere: è esattamente ciò che si vuole ottenere con il least privilege.
+Senza `--profile`, il comando gira come `study-admin` (amministratore) e **riesce**. La stessa persona, attraverso la role, ha meno potere, come richiede il least privilege.
 
 ## Teardown e verifica finale
 

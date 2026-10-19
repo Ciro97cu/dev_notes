@@ -1,13 +1,13 @@
 # 05 · Storage: S3, EBS, EFS e ciclo di vita dei dati
 
-Lo storage su AWS non è un servizio solo, ma **tre forme diverse** di conservare i dati, ciascuna adatta a un uso preciso: lo storage a **oggetti**, quello a **blocchi** e quello a **file**. Scegliere la forma giusta, e per gli oggetti anche la classe giusta, è ciò che decide prestazioni e costo di un'architettura: è il centro dei task su storage ad alte prestazioni (D3T1) e a costo ottimizzato (D4T1).
+Lo storage su AWS si presenta in **tre forme diverse** di conservare i dati, ciascuna adatta a un uso preciso: lo storage a **oggetti**, quello a **blocchi** e quello a **file**. La scelta della forma giusta, e per gli oggetti anche della classe giusta, decide prestazioni e costo di un'architettura ed è l'oggetto dei task su storage ad alte prestazioni (D3T1) e a costo ottimizzato (D4T1).
 
 > [!info|label:SAA-C03 · D3T1 e D4T1, base D1T3 e D2T2]
 > Il modulo copre *Determine high-performing and/or scalable storage solutions* (D3T1) e *Design cost-optimized storage solutions* (D4T1): Amazon S3 con le sue classi e il lifecycle, Amazon EBS, Amazon EFS. Tocca anche la protezione dei dati a riposo (D1T3) e la durabilità (D2T2).
 
 ## Tre forme di storage: object, block, file
 
-La differenza non è di qualità ma di **modello di accesso**. Lo storage a **oggetti** (Amazon S3) conserva ogni file come un *oggetto* opaco identificato da una chiave, con i suoi metadati, in un contenitore chiamato bucket; ci si accede via API su HTTP, la capacità è virtualmente illimitata ed è **regionale**. Lo storage a **blocchi** (Amazon EBS) espone un disco grezzo che il sistema operativo formatta e monta come farebbe con un disco locale: è legato a **una singola istanza** e vive in **una sola Availability Zone**. Lo storage a **file** (Amazon EFS) offre un file system di rete condiviso che **molte istanze** possono montare insieme, ed è **regionale**, quindi distribuito su più AZ.
+Le tre forme differiscono per **modello di accesso**. Lo storage a **oggetti** (Amazon S3) conserva ogni file come un *oggetto* opaco identificato da una chiave, con i suoi metadati, in un contenitore chiamato bucket; ci si accede via API su HTTP, la capacità è virtualmente illimitata ed è **regionale**. Lo storage a **blocchi** (Amazon EBS) espone un disco grezzo che il sistema operativo formatta e monta come farebbe con un disco locale: è legato a **una singola istanza** e vive in **una sola Availability Zone**. Lo storage a **file** (Amazon EFS) offre un file system di rete condiviso che **molte istanze** possono montare insieme, ed è **regionale**, quindi distribuito su più AZ.
 
 <figure style="margin:1.3rem 0;text-align:center">
 <svg viewBox="0 0 720 240" role="img" aria-label="Tre forme di storage: object (Amazon S3), un bucket regionale illimitato a cui si accede via API; block (Amazon EBS), un volume disco legato a una singola istanza in una AZ; file (Amazon EFS), un file system condiviso che più istanze montano attraverso più AZ." style="width:100%;max-width:720px;height:auto;color:inherit">
@@ -120,7 +120,7 @@ Il valore di un dato cala col tempo, e le **lifecycle rule** automatizzano il ri
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">Procedendo lungo il ciclo di vita il costo di storage scende e il tempo di recupero cresce. La regola sposta gli oggetti da sé e alla scadenza li elimina.</figcaption>
 </figure>
 
-Due controlli completano il quadro. Il **versioning** conserva ogni versione di un oggetto: una sovrascrittura o una cancellazione non distruggono il dato precedente, che resta recuperabile, ottima difesa contro l'errore umano. La **cifratura a riposo** è attiva di default (**SSE-S3**): ogni nuovo oggetto viene cifrato senza che si debba fare nulla; per un controllo più fine sulle chiavi si sceglie **SSE-KMS**. Infine, un bucket è **privato di default**, e il **Block Public Access** impedisce a policy o ACL di esporlo per errore: renderlo pubblico è una decisione esplicita, non un rischio di distrazione.
+Due controlli completano il quadro. Il **versioning** conserva ogni versione di un oggetto: una sovrascrittura o una cancellazione non distruggono il dato precedente, che resta recuperabile, ottima difesa contro l'errore umano. La **cifratura a riposo** è attiva di default (**SSE-S3**): ogni nuovo oggetto viene cifrato senza che si debba fare nulla; per un controllo più fine sulle chiavi si sceglie **SSE-KMS**. Infine, un bucket è **privato di default**, e il **Block Public Access** impedisce a policy o ACL di esporlo per errore: renderlo pubblico richiede una decisione esplicita.
 
 ## Amazon EBS: lo storage a blocchi per EC2
 
@@ -162,7 +162,7 @@ La decisione parte sempre dal modello di accesso, non dal servizio. Se più ista
 <details>
 <summary>Quando si sceglie EFS e quando EBS?</summary>
 
-**EFS** quando più istanze devono **condividere** lo stesso file system, anche su AZ diverse (è NFS, regionale). **EBS** quando serve un disco a blocchi per **una singola** istanza in una AZ (volume di avvio, disco di un database). EBS non è condiviso; EFS sì.
+**EFS** quando più istanze devono **condividere** lo stesso file system, anche su AZ diverse (è NFS, regionale). **EBS** quando serve un disco a blocchi per **una singola** istanza in una AZ (volume di avvio, disco di un database).
 
 </details>
 
@@ -176,7 +176,7 @@ Sì: tutte offrono l'**undici-nove** (99,999999999%) di durabilità. Cambiano la
 <details>
 <summary>Come si ottiene automaticamente un costo di storage più basso su S3 nel tempo?</summary>
 
-Con una **lifecycle rule**, che sposta gli oggetti verso classi più economiche (per esempio Standard → Standard-IA → Glacier) dopo un numero di giorni definito, e alla fine li elimina. Se l'access pattern è imprevedibile, **Intelligent-Tiering** fa lo stesso senza regole manuali.
+Con una **lifecycle rule**, che sposta gli oggetti verso classi più economiche (per esempio da Standard a Standard-IA e poi a Glacier) dopo un numero di giorni definito, e alla fine li elimina. Se l'access pattern è imprevedibile, **Intelligent-Tiering** fa lo stesso senza regole manuali.
 
 </details>
 

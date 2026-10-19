@@ -1,6 +1,6 @@
 # LAB 10 · Interrogare S3 con Amazon Athena
 
-Questo laboratorio mette in pratica la parte finale della pipeline del modulo [10](../docs/10-data-ingestion-analytics.md): un piccolo dataset su **S3**, una tabella nel **Glue Data Catalog** e una query SQL con **Amazon Athena**, tutto serverless. Athena costa per **dati scansionati** (5 USD/TB): qui si scansionano poche decine di byte, quindi una frazione di centesimo, di fatto zero.
+Questo laboratorio mette in pratica la parte finale della pipeline del modulo [10](../docs/10-data-ingestion-analytics.md): un piccolo dataset su **S3**, una tabella nel **Glue Data Catalog** e una query SQL con **Amazon Athena**, tutto serverless. Athena costa per **dati scansionati** (5 USD/TB): qui si scansionano poche decine di byte, quindi si spende una frazione di centesimo.
 
 > [!info|label:SAA-C03 · D3T5]
 > Esercita il data lake su S3, la definizione di una tabella nel catalogo e l'analisi ad-hoc con Athena, senza infrastruttura. Mostra il disaccoppiamento fra dati (su S3) e motore di query (Athena).

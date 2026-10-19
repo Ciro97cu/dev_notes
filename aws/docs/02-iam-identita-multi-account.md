@@ -1,13 +1,13 @@
 # 02 · IAM, credenziali temporanee e strategia multi-account
 
-**AWS Identity and Access Management (IAM)** è il servizio che decide *chi* può compiere *quali* azioni su *quali* risorse dell'account. Ogni chiamata ad AWS, dalla Console, dalla CLI o da un'applicazione, passa da IAM: se la richiesta non è autorizzata, il servizio la rifiuta prima ancora di eseguirla. Capire come IAM valuta una richiesta è il cuore del Domain 1 dell'esame e la base su cui poggiano rete, dati e workload dei moduli successivi. IAM è un servizio **globale**: le identità e le policy non appartengono a una Region.
+**AWS Identity and Access Management (IAM)** è il servizio che decide *chi* può compiere *quali* azioni su *quali* risorse dell'account. Ogni chiamata ad AWS, dalla Console, dalla CLI o da un'applicazione, passa da IAM: se la richiesta non è autorizzata, il servizio la rifiuta prima ancora di eseguirla. Il Domain 1 dell'esame ruota attorno al modo in cui IAM valuta una richiesta, che è anche la base su cui poggiano rete, dati e workload dei moduli successivi. IAM è un servizio **globale**: le identità e le policy non appartengono a una Region.
 
 > [!info|label:SAA-C03 · D1T1 e base D1T2/D1T3]
 > Il modulo copre l'intero task *Design secure access to AWS resources*: identità, policy, policy evaluation, credenziali temporanee, federation, IAM Identity Center, Organizations, SCP, Control Tower e permissions boundary. È anche il prerequisito d'identità per la protezione di workload e dati.
 
 ## Principal, authentication e authorization
 
-Tre parole ricorrono in ogni discorso su IAM e conviene fissarle subito. Un **principal** è chi effettua una richiesta: una persona, un'applicazione o un servizio AWS che agisce per conto di qualcuno. L'**authentication** (autenticazione) risponde alla domanda «chi sei?» e avviene tramite credenziali: una password con MFA per la Console, oppure una firma crittografica calcolata con delle chiavi per la CLI e le API. L'**authorization** (autorizzazione) risponde invece a «che cosa ti è permesso fare?» e la determinano le **policy**. Un principal autenticato non è ancora autorizzato: sono due controlli distinti e successivi.
+Tre parole ricorrono in ogni discorso su IAM e conviene fissarle subito. Un **principal** è chi effettua una richiesta: una persona, un'applicazione o un servizio AWS che agisce per conto di qualcuno. L'**authentication** (autenticazione) risponde alla domanda «chi sta facendo la richiesta?» e avviene tramite credenziali: una password con MFA per la Console, oppure una firma crittografica calcolata con delle chiavi per la CLI e le API. L'**authorization** (autorizzazione) risponde invece a «che cosa gli è permesso fare?» e la determinano le **policy**. Un principal autenticato non è ancora autorizzato: sono due controlli distinti e successivi.
 
 ## Le identità: root, IAM user, IAM group, IAM role
 
@@ -17,7 +17,7 @@ Il **root user** nasce con l'account, coincide con l'email di registrazione e po
 
 Un **IAM user** rappresenta una singola persona o applicazione a lungo termine dentro l'account. Possiede **credenziali di lunga durata**: una password per la Console e, se necessario, delle access key per la CLI. Proprio perché durano finché non vengono revocate, le access key sono la forma di credenziale più rischiosa e AWS ne scoraggia l'uso quando esiste un'alternativa temporanea.
 
-Un **IAM group** è un contenitore di IAM user che serve ad attaccare le policy una volta sola a un insieme di persone invece che a ciascuna. Non è a sua volta un principal: non lo si può «assumere» né annidare dentro un altro gruppo. È uno strumento di organizzazione, non un'identità che agisce.
+Un **IAM group** è un contenitore di IAM user che serve ad attaccare le policy una volta sola a un insieme di persone invece che a ciascuna. È uno strumento di organizzazione e non è a sua volta un principal: non lo si può «assumere» né annidare dentro un altro gruppo.
 
 Un **IAM role** è un'identità con delle policy ma **senza credenziali di lunga durata**. Non appartiene a una persona: viene **assunta** temporaneamente da un principal fidato, che in cambio riceve credenziali valide per una manciata di ore. È il meccanismo con cui AWS raccomanda di dare accesso a persone, applicazioni e servizi, perché sostituisce chiavi permanenti con credenziali che scadono da sole. Una role ha due policy che vanno tenute distinte: la **trust policy**, che stabilisce *chi* può assumerla, e la **permission policy**, che stabilisce *cosa* può fare una volta assunta.
 
@@ -48,7 +48,7 @@ I campi che contano: **`Effect`** vale `Allow` o `Deny`; **`Action`** elenca le 
 
 ## Come AWS decide: la policy evaluation
 
-Di fronte a una richiesta, IAM non «cerca un permesso» in modo ingenuo: applica un **ordine di valutazione** preciso, e conoscerlo spiega la maggior parte delle risposte del Domain 1. Il principio di partenza è il **default deny**: tutto ciò che non è esplicitamente consentito è negato. Su questo si innestano due regole. La prima è che un **explicit deny** (un `"Effect": "Deny"` che combacia) **vince su qualunque allow**, sempre e comunque. La seconda è che i controlli come SCP, permissions boundary e session policy **non concedono** permessi: fissano soltanto un tetto, e la permission effettiva è l'**intersezione** di ciò che ciascuno consente.
+Di fronte a una richiesta, IAM applica un **ordine di valutazione** preciso, e conoscerlo spiega la maggior parte delle risposte del Domain 1. Il principio di partenza è il **default deny**: tutto ciò che non è esplicitamente consentito è negato. Su questo si innestano due regole. La prima è che un **explicit deny** (un `"Effect": "Deny"` che combacia) **vince su qualunque allow**, sempre e comunque. La seconda è che i controlli come SCP, permissions boundary e session policy **non concedono** permessi: fissano soltanto un tetto, e la permission effettiva è l'**intersezione** di ciò che ciascuno consente.
 
 <figure style="margin:1.3rem 0;text-align:center">
 <svg viewBox="0 0 720 430" role="img" aria-label="Flusso di valutazione di una richiesta IAM: se esiste un deny esplicito la richiesta è negata; altrimenti deve stare entro i limiti di SCP, permissions boundary e session policy; poi serve un allow esplicito in una identity o resource policy; in mancanza di allow scatta il default deny." style="width:100%;max-width:720px;height:auto;color:inherit">
@@ -102,7 +102,7 @@ Riletto in parole: prima IAM cerca un deny esplicito in *tutte* le policy applic
 
 ## Least privilege
 
-Il **principle of least privilege** prescrive di concedere solo i permessi necessari a svolgere un compito, e solo per il tempo necessario. Non è uno stato che si raggiunge una volta, ma una direzione: si parte stretti e si allarga quando un requisito concreto lo giustifica, invece di partire da `AdministratorAccess` e sperare di restringere in seguito. Le credenziali temporanee sono l'alleato naturale di questo principio, perché aggiungono al «solo i permessi giusti» anche il «solo per il tempo giusto».
+Il **principle of least privilege** prescrive di concedere solo i permessi necessari a svolgere un compito, e solo per il tempo necessario. Si applica per gradi: si parte stretti e si allarga quando un requisito concreto lo giustifica, invece di partire da `AdministratorAccess` e sperare di restringere in seguito. Le credenziali temporanee sono l'alleato naturale di questo principio, perché aggiungono al «solo i permessi giusti» anche il «solo per il tempo giusto».
 
 ## Credenziali temporanee: AWS STS e role assumption
 
@@ -205,7 +205,7 @@ Sopra questa gerarchia agiscono le **Service Control Policy (SCP)**. Una SCP è 
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">La SCP applicata alla OU <em>Prod</em> vale come tetto per tutti gli account sotto di essa: nessuno di quegli account può superarla, anche con policy locali permissive. Il management account non è soggetto alle SCP.</figcaption>
 </figure>
 
-**AWS Control Tower** sta un gradino più in alto: automatizza la creazione e il governo di un ambiente multi-account (una *landing zone*) su fondamenta di Organizations, applicando **controls** (guardrail preconfezionati, in parte realizzati proprio con SCP) e fornendo un *account factory* per sfornare nuovi account già conformi. In breve, Organizations dà la struttura e le SCP, Control Tower dà l'impianto pronto e sorvegliato.
+**AWS Control Tower** sta un gradino più in alto: automatizza la creazione e il governo di un ambiente multi-account (una *landing zone*) su fondamenta di Organizations, applicando **controls** (guardrail preconfezionati, in parte realizzati proprio con SCP) e fornendo un *account factory* per sfornare nuovi account già conformi. Organizations dà quindi la struttura e le SCP, mentre Control Tower dà l'impianto pronto e sorvegliato.
 
 ## Non confondere: SCP, permissions boundary e session policy
 
@@ -222,7 +222,7 @@ La permission effettiva di una richiesta è l'**intersezione** di tutti i tetti 
 > [!warning|label:SCP e permissions boundary non concedono]
 > È l'errore classico del Domain 1. Se uno scenario chiede di *dare* un permesso, la risposta non è mai «una SCP» o «una permissions boundary»: quelle limitano soltanto. Il permesso lo concede una identity-based o resource-based policy, *dentro* i limiti che gli altri controlli impongono.
 
-*➕ Oltre il perimetro di base: dal 2024 esistono anche le **Resource Control Policy (RCP)**, il corrispettivo delle SCP sul lato risorsa (fissano il massimo accesso a risorse come bucket S3 in tutta l'organizzazione). Utile saperle nominate; il cuore dell'esame resta la coppia SCP + permissions boundary.*
+*➕ Oltre il perimetro di base: dal 2024 esistono anche le **Resource Control Policy (RCP)**, il corrispettivo delle SCP sul lato risorsa (fissano il massimo accesso a risorse come bucket S3 in tutta l'organizzazione). Utile saperle nominate; l'esame si concentra sulla coppia SCP + permissions boundary.*
 
 ## Il modello consigliato
 
@@ -253,7 +253,7 @@ La **trust policy** stabilisce *chi* può assumere la role (quali principal, con
 <details>
 <summary>Una Service Control Policy può concedere un permesso a un account?</summary>
 
-No. Una SCP fissa soltanto il **tetto** dei permessi disponibili per gli account di una OU o organizzazione. Un'azione, per essere consentita, deve comunque essere concessa da una IAM policy *dentro* l'account e non essere esclusa dalla SCP. La SCP limita, non concede. Inoltre non si applica al management account.
+No. Una SCP fissa soltanto il **tetto** dei permessi disponibili per gli account di una OU o organizzazione. Un'azione, per essere consentita, deve comunque essere concessa da una IAM policy *dentro* l'account e non essere esclusa dalla SCP. Inoltre la SCP non si applica al management account.
 
 </details>
 

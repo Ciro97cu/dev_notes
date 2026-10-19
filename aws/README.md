@@ -1,6 +1,6 @@
 # AWS Solutions Architect Associate
 
-Questo vault costruisce le conoscenze necessarie per progettare architetture AWS e preparare l'esame **AWS Certified Solutions Architect - Associate (SAA-C03)**. Il percorso parte da zero, ma non riduce lo studio a un catalogo di servizi: ogni servizio entra quando risolve un requisito di sicurezza, resilienza, prestazioni o costo.
+Questo vault costruisce le conoscenze necessarie per progettare architetture AWS e preparare l'esame **AWS Certified Solutions Architect - Associate (SAA-C03)**. Il percorso parte da zero e introduce ogni servizio quando risolve un requisito di sicurezza, resilienza, prestazioni o costo.
 
 > [!info|label:Percorso completo · moduli 00-12, lab 01-12, simulatore]
 > Sono disponibili **tutti i moduli (00-12), i laboratori (01-12)**, la matrice di copertura dei 14 Task Statement e il **[simulatore d'esame](exam/simulatore.md)** con domande originali scenario-based: dai fondamenti (account, identità, rete, compute, storage, database) a integrazione, resilienza, edge, dati, governance e cost optimization, ciascuno con un laboratorio pratico a costo zero. Le passate successive approfondiscono i task verso lo stato «Coperto».

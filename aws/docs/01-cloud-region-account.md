@@ -9,7 +9,7 @@ Il cloud computing permette di ottenere capacità informatica quando serve, attr
 
 In un data center tradizionale la capacità viene acquistata prima di conoscere con precisione il carico futuro. Se la stima è alta, parte dell'hardware resta inutilizzata; se è bassa, l'applicazione esaurisce capacità proprio quando la domanda cresce. Il cloud non elimina la pianificazione, ma consente di sostituire una parte dell'investimento anticipato con risorse create e rimosse a richiesta.
 
-La caratteristica decisiva non è che il server si trovi "su Internet". È il modello operativo: provisioning tramite API, capacità elastica, misurazione dell'uso e servizi managed che spostano parte del lavoro operativo sul provider. **Managed** significa che AWS assume attività definite, per esempio l'hardware e una parte della manutenzione del servizio; non significa che sicurezza, dati e configurazione diventino automaticamente responsabilità di AWS.
+La caratteristica decisiva del cloud è il modello operativo: provisioning tramite API, capacità elastica, misurazione dell'uso e servizi managed che spostano parte del lavoro operativo sul provider. **Managed** significa che AWS assume attività definite, per esempio l'hardware e una parte della manutenzione del servizio; non significa che sicurezza, dati e configurazione diventino automaticamente responsabilità di AWS.
 
 ## L'account è il primo confine
 
@@ -126,7 +126,7 @@ Il confine cambia con il livello di gestione. Su Amazon EC2 il cliente sceglie e
 
 ## Least privilege e accesso quotidiano
 
-Il **principle of least privilege** assegna soltanto le autorizzazioni necessarie per il compito e per il tempo necessario. È una direzione, non uno stato ottenuto una volta per tutte: durante il bootstrap può servire un amministratore, ma le identità dei workload e dei laboratori successivi devono ricevere policy più ristrette.
+Il **principle of least privilege** assegna soltanto le autorizzazioni necessarie per il compito e per il tempo necessario. Si raggiunge per gradi: durante il bootstrap può servire un amministratore, ma le identità dei workload e dei laboratori successivi devono ricevere policy più ristrette.
 
 AWS raccomanda credenziali temporanee per persone e workload. In un ambiente multi-account il percorso standard usa AWS Organizations e IAM Identity Center. Il Free Plan presenta però un vincolo concreto: entrare in Organizations provoca l'upgrade automatico al Paid Plan, mentre un'istanza IAM Identity Center di tipo *account* non supporta permission set né accesso all'account.
 

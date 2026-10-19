@@ -57,7 +57,7 @@ Questo laboratorio costruisce lo scheletro del compute elastico del modulo [04](
     </g>
   </g>
 </svg>
-<figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">Il gruppo conosce due AZ e sa lanciare fino a <code>max 2</code> istanze dal launch template, ma con <code>desired 0</code> non ne accende nessuna: la struttura esiste, la spesa no.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">Il gruppo conosce due AZ e sa lanciare fino a <code>max 2</code> istanze dal launch template, ma con <code>desired 0</code> non ne accende nessuna, quindi la struttura esiste senza generare spesa.</figcaption>
 </figure>
 
 ## Prerequisiti

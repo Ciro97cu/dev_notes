@@ -112,7 +112,7 @@ La tabella mostra il servizio `...s3`, il tipo `Gateway` e lo stato `available`.
 
 ## 3 · Verificare la rotta privata nella route table
 
-Il valore didattico è qui: l'endpoint ha aggiunto alla route table una rotta verso il **prefix list** di S3.
+L'endpoint ha aggiunto alla route table una rotta verso il **prefix list** di S3.
 
 ```bash
 RT_ID=$(aws cloudformation describe-stacks \

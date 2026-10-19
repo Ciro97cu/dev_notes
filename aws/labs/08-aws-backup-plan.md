@@ -1,6 +1,6 @@
 # LAB 08 · Un piano di backup con AWS Backup
 
-Questo laboratorio crea un **vault** e un **piano di backup** con **AWS Backup**, come descritto nel modulo [08](../docs/08-alta-disponibilita-disaster-recovery.md), e ne osserva la cadenza e la retention, cioè l'RPO e la finestra di conservazione. Il piano **non assegna alcuna risorsa**, quindi nessun backup viene eseguito e nessuno storage viene consumato: il costo è zero. Serve a leggere la struttura di un piano, non a produrre copie reali.
+Questo laboratorio crea un **vault** e un **piano di backup** con **AWS Backup**, come descritto nel modulo [08](../docs/08-alta-disponibilita-disaster-recovery.md), e ne osserva la cadenza e la retention, cioè l'RPO e la finestra di conservazione. Il piano **non assegna alcuna risorsa**, quindi nessun backup viene eseguito e nessuno storage viene consumato: il costo è zero. Serve a leggere la struttura di un piano.
 
 > [!info|label:SAA-C03 · D2T2]
 > Esercita AWS Backup, i piani (schedule, retention, lifecycle) e il legame fra cadenza dei backup e RPO. È lo strumento con cui si centralizza la strategia Backup & Restore.

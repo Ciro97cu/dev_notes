@@ -1,6 +1,6 @@
 # 03 · Amazon VPC e network security
 
-Una **Amazon Virtual Private Cloud (VPC)** è una **rete privata e isolata** che si ritaglia dentro AWS: si sceglie l'intervallo di indirizzi IP, si divide la rete in sottoreti, si decide cosa può uscire su internet e cosa resta interno. È il luogo dove vivono le risorse (istanze, database, load balancer) e il primo perimetro di sicurezza di un'architettura. Progettare bene la rete significa decidere *chi raggiunge cosa*, ed è il cuore della protezione dei workload nel Domain 1.
+Una **Amazon Virtual Private Cloud (VPC)** è una **rete privata e isolata** che si ritaglia dentro AWS: si sceglie l'intervallo di indirizzi IP, si divide la rete in sottoreti, si decide cosa può uscire su internet e cosa resta interno. È il luogo dove vivono le risorse (istanze, database, load balancer) e il primo perimetro di sicurezza di un'architettura. Progettare bene la rete significa decidere *chi raggiunge cosa*, e su questo si fonda la protezione dei workload nel Domain 1.
 
 > [!info|label:SAA-C03 · D1T2, base D3T4 e D4T4]
 > Il modulo copre *Design secure workloads and applications* per la parte di rete: VPC, subnet, routing, gateway, security group, network ACL, VPC endpoint e connettività fra reti. È anche la base per le scelte di prestazioni (D3T4) e di costo (D4T4) del networking.
@@ -125,7 +125,7 @@ Due VPC che devono comunicare si collegano con un **VPC peering**: un collegamen
 
 La sicurezza di rete su AWS si costruisce **a strati**: la network ACL filtra al confine della subnet, il security group al confine della risorsa, e i due controlli si sommano invece di sostituirsi. A completare il quadro, i **VPC Flow Log** registrano i metadati del traffico (chi ha parlato con chi, accettato o rifiutato), fornendo la visibilità necessaria per diagnosticare e per rispondere «quale guasto o quale accesso» quando qualcosa non torna.
 
-*➕ Oltre il perimetro di base: dal 2024 esiste **VPC Block Public Access**, un interruttore a livello di VPC o account che blocca in blocco il traffico internet, utile come rete di sicurezza contro esposizioni accidentali. Buono da conoscere; il cuore dell'esame resta la coppia security group + network ACL.*
+*➕ Oltre il perimetro di base: dal 2024 esiste **VPC Block Public Access**, un interruttore a livello di VPC o account che blocca in blocco il traffico internet, utile come rete di sicurezza contro esposizioni accidentali. Buono da conoscere; l'esame si concentra sulla coppia security group + network ACL.*
 
 ## Exam lens
 

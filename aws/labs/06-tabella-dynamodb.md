@@ -1,6 +1,6 @@
 # LAB 06 · Una tabella DynamoDB on-demand
 
-Questo laboratorio crea una tabella **Amazon DynamoDB** con chiave composta e capacità **on-demand**, come descritto nel modulo [06](../docs/06-database-caching.md), la popola di pochi elementi e mostra la differenza fra una **Query per partition key** e una **GetItem** per chiave completa. La modalità on-demand non ha costo orario o di capacità: si paga per richiesta, e qui le richieste sono una manciata su pochi byte, una frazione di centesimo, di fatto zero.
+Questo laboratorio crea una tabella **Amazon DynamoDB** con chiave composta e capacità **on-demand**, come descritto nel modulo [06](../docs/06-database-caching.md), la popola di pochi elementi e mostra la differenza fra una **Query per partition key** e una **GetItem** per chiave completa. La modalità on-demand non ha costo orario o di capacità: si paga per richiesta, e qui le richieste sono una manciata su pochi byte e costano una frazione di centesimo.
 
 > [!info|label:SAA-C03 · D3T3 e D4T3]
 > Esercita il modello key-value di DynamoDB, la chiave partition/sort, la modalità di capacità on-demand e la differenza pratica fra Query e GetItem. Sono i concetti su cui si decide quando e come usare un NoSQL serverless.

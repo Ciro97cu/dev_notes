@@ -3,7 +3,7 @@
 Questo laboratorio mostra il **drift detection** del modulo [11](../docs/11-observability-governance-iac.md): si crea uno stack, lo si verifica **allineato** al template, poi si cambia una risorsa **a mano** e si osserva CloudFormation segnalarla come **modificata**. Le risorse dello stack (un topic SNS e una coda SQS, a riposo) non hanno costo: il laboratorio è a zero.
 
 > [!info|label:SAA-C03 · capacità trasversali]
-> Esercita l'Infrastructure as Code, il concetto di stack come stato desiderato e il drift detection che scopre le modifiche manuali fuori dal template. È la governance della riproducibilità dell'infrastruttura.
+> Esercita l'Infrastructure as Code, il concetto di stack come stato desiderato e il drift detection che scopre le modifiche manuali fuori dal template. Serve a governare la riproducibilità dell'infrastruttura.
 
 ## Cost guardrail
 

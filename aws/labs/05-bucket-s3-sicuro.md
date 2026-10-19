@@ -1,6 +1,6 @@
 # LAB 05 · Un bucket S3 sicuro e versionato
 
-Questo laboratorio crea un bucket **Amazon S3** con le protezioni che il modulo [05](../docs/05-storage-s3-ebs-efs.md) descrive (**Block Public Access**, **versioning**, **cifratura di default** e una **lifecycle rule**), lo popola di due versioni di un oggetto, ne osserva il comportamento e infine lo smonta. La configurazione di un bucket non ha costo; l'unica spesa sarebbe lo storage degli oggetti, qui pochi byte per pochi minuti: una frazione di centesimo, di fatto zero e ampiamente coperta dai crediti.
+Questo laboratorio crea un bucket **Amazon S3** con le protezioni che il modulo [05](../docs/05-storage-s3-ebs-efs.md) descrive (**Block Public Access**, **versioning**, **cifratura di default** e una **lifecycle rule**), lo popola di due versioni di un oggetto, ne osserva il comportamento e infine lo smonta. La configurazione di un bucket non ha costo; l'unica spesa sarebbe lo storage degli oggetti, qui pochi byte per pochi minuti: una frazione di centesimo, trascurabile e ampiamente coperta dai crediti.
 
 > [!info|label:SAA-C03 · D3T1, D4T1 e base D1T3]
 > Esercita il versioning, la cifratura a riposo, il ciclo di vita e il Block Public Access di S3, e la creazione di un bucket in Infrastructure as Code. Sono i controlli su cui poggiano durabilità, costo e sicurezza dei dati a oggetti.
