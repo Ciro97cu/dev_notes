@@ -13,7 +13,7 @@ Su macOS e Linux tutti i file e le cartelle formano un **unico albero** che part
 
 ## Percorsi assoluti e relativi
 
-Per indicare una cartella o un file ci sono due modi, ed è cruciale non confonderli. Un percorso è **assoluto** quando parte dalla radice `/`: descrive la posizione in modo completo e non ambiguo, valido da qualunque punto ci si trovi — per esempio `/Users/ciro/progetti`. Un percorso è **relativo** quando parte dalla **cartella corrente**: è più corto ma il suo significato dipende da dove ci si trova in quel momento — per esempio `progetti/app` significa «la cartella `app` dentro `progetti`, a partire da qui».
+Per indicare una cartella o un file ci sono due modi, da non confondere fra loro. Un percorso è **assoluto** quando parte dalla radice `/`: descrive la posizione in modo completo e non ambiguo, valido da qualunque punto ci si trovi (per esempio `/Users/ciro/progetti`). Un percorso è **relativo** quando parte dalla **cartella corrente**: è più corto ma il suo significato dipende da dove ci si trova in quel momento. Per esempio `progetti/app` significa «la cartella `app` dentro `progetti`, a partire da qui».
 
 In questo gioco tornano utili tre simboli speciali, che sono scorciatoie per posizioni precise:
 
@@ -52,7 +52,7 @@ cd /opt/homebrew         # salto altrove con un percorso assoluto
 cd                       # torno dritto alla home
 ```
 
-I **file nascosti** sono quelli il cui nome inizia con un punto (`.zshrc`, `.git`, `.gitignore`): per convenzione contengono configurazioni e non compaiono in un `ls` normale, ma si vedono con `ls -a`. È il motivo per cui la cartella `.git` di un repository (vedi il <a href="../git/#/12-interni-git" target="_blank" rel="noopener">vault Git</a>) sembra «invisibile».
+I **file nascosti** sono quelli il cui nome inizia con un punto (`.zshrc`, `.git`, `.gitignore`): per convenzione contengono configurazioni e non compaiono in un `ls` normale, ma si vedono con `ls -a`. È il motivo per cui la cartella `.git` di un repository (si veda il <a href="../git/#/12-interni-git" target="_blank" rel="noopener">vault Git</a>) sembra «invisibile».
 
 > [!tip]
 > Non serve digitare i nomi per intero: scrivendo le prime lettere e premendo **Tab** la shell completa il percorso da sola (e con zsh mostra un menu se le possibilità sono più d'una). È il singolo trucco che fa risparmiare più tempo e più errori di battitura.
@@ -77,7 +77,7 @@ Le cartelle con il nome minuscolo sono l'eredità di Unix e hanno lo stesso sign
 | `/usr` | *user* (in origine) | la parte più grande del sistema: quasi tutti gli altri programmi (in `/usr/bin` stanno `git`, `ssh`, `python3`), le librerie, i manuali. Si articola nelle stesse sottocartelle viste [più sotto](03-navigare-filesystem.md?id=lo-schema-che-si-ripete-bin-lib-share) |
 | `/usr/local` | *local*, «di questa macchina» | i programmi installati **dall'utente o dall'amministratore**, non dal sistema operativo, che durante gli aggiornamenti non li tocca. Ci finiscono per esempio molti installer `.pkg` |
 | `/opt` | — | i pacchetti **aggiuntivi** di terze parti (il FHS li chiama [*add-on*](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch03s13.html)), ciascuno nella sua sottocartella: sui Mac con chip Apple ci sta **Homebrew**, in `/opt/homebrew` |
-| `/etc` | — | i **file di configurazione** del sistema, testi leggibili: `/etc/paths` (la base del PATH, vedi il [capitolo 5](05-variabili-ambiente-path.md?id=come-si-costruisce-il-path)), `/etc/hosts`, `/etc/shells` (le shell ammesse), `/etc/zprofile` |
+| `/etc` | — | i **file di configurazione** del sistema, testi leggibili: `/etc/paths` (la base del PATH, si veda il [capitolo 5](05-variabili-ambiente-path.md?id=come-si-costruisce-il-path)), `/etc/hosts`, `/etc/shells` (le shell ammesse), `/etc/zprofile` |
 | `/var` | *variable* | i dati che cambiano mentre il sistema lavora: i log (`/var/log`) e i file temporanei di ogni utente (`/var/folders`, la cartella a cui punta la variabile `$TMPDIR`) |
 | `/tmp` | *temporary* | file temporanei, che il sistema può cancellare in qualunque momento |
 | `/dev` | *devices* | i **dispositivi** visti come file: i dischi (`/dev/disk0`), il terminale stesso e `/dev/null`, il «buco nero» che inghiotte qualunque cosa vi si scriva |
@@ -133,7 +133,7 @@ Anche la home ospita, accanto alle cartelle visibili (Documenti, Scrivania…), 
 | `~/.local/share` | i dati dei programmi personali, per esempio le versioni a cui puntano i collegamenti di `~/.local/bin` |
 | `~/.config` | i file di configurazione dei programmi (`~/.config/gh`, `~/.config/git`) |
 | `~/.cache` | dati ricreabili, che si possono cancellare senza perdere nulla |
-| `~/.ssh` | chiavi e configurazione di SSH (vedi il <a href="../glossario/#/docs/ssh" target="_blank" rel="noopener">glossario</a>) |
+| `~/.ssh` | chiavi e configurazione di SSH (si veda il <a href="../glossario/#/docs/ssh" target="_blank" rel="noopener">glossario</a>) |
 | `~/.nvm` | le versioni di Node installate da nvm, ciascuna un prefisso completo |
 
 > [!info|label:Su Linux]

@@ -49,7 +49,7 @@ Un programma, quando parte, riceve una **copia** delle variabili d'ambiente di q
 
 ## Il PATH: come la shell trova un comando
 
-Quando si digita `node` e si preme Invio, la shell non cerca quel programma «ovunque»: consulta la variabile **`PATH`**, che è un **elenco ordinato di cartelle** separate dal carattere `:`. La shell scorre quelle cartelle **una dopo l'altra, da sinistra a destra**, e appena trova una che contiene un eseguibile di nome `node` lo lancia — **la prima che vince**, ignorando le successive. Se nessuna cartella del PATH contiene quel comando, si riceve il classico `command not found`.
+Quando si digita `node` e si preme Invio, la shell non cerca quel programma «ovunque»: consulta la variabile **`PATH`**, che è un **elenco ordinato di cartelle** separate dal carattere `:`. La shell scorre quelle cartelle **una dopo l'altra, da sinistra a destra**, e appena trova una che contiene un eseguibile di nome `node` lo lancia: **la prima che vince**, ignorando le successive. Se nessuna cartella del PATH contiene quel comando, si riceve il classico `command not found`.
 
 ```bash
 echo $PATH
@@ -59,7 +59,7 @@ echo $PATH
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 520 268" role="img" aria-label="Risoluzione lungo il PATH: digitando node la shell scorre le cartelle del PATH dall'alto in basso e si ferma alla prima che contiene node, la cartella di nvm" style="width:100%;max-width:470px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="235" y="22" font-size="13" text-anchor="middle"><tspan font-family="ui-monospace,Menlo,monospace" font-weight="700">node</tspan> — dove sta?</text><text x="20" y="52" font-size="9.5" opacity=".6">la shell scorre il PATH dall'alto…</text><rect x="60" y="60" width="330" height="30" rx="6" fill="var(--link,#78716c)" fill-opacity=".14" stroke="currentColor" stroke-width="1.8"/><text x="72" y="79" font-size="11.5" font-family="ui-monospace,Menlo,monospace">~/.nvm/.../v22.22.0/bin</text><text x="400" y="79" font-size="12" font-weight="700" fill="var(--link,#78716c)">✓ node</text><rect x="60" y="98" width="330" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3" opacity=".55"/><text x="72" y="117" font-size="11.5" font-family="ui-monospace,Menlo,monospace" opacity=".55">/opt/homebrew/bin</text><rect x="60" y="136" width="330" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3" opacity=".55"/><text x="72" y="155" font-size="11.5" font-family="ui-monospace,Menlo,monospace" opacity=".55">/usr/local/bin</text><rect x="60" y="174" width="330" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.3" opacity=".55"/><text x="72" y="193" font-size="11.5" font-family="ui-monospace,Menlo,monospace" opacity=".55">/usr/bin</text><path d="M40 66 L40 96" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M40 100 L35 90 L45 90 Z" fill="currentColor"/><text x="235" y="228" font-size="10" text-anchor="middle" opacity=".8">la prima cartella che contiene <tspan font-family="ui-monospace,Menlo,monospace">node</tspan> vince: le altre non vengono guardate</text><text x="235" y="248" font-size="10" text-anchor="middle" opacity=".8"><tspan font-family="ui-monospace,Menlo,monospace">which node</tspan> stampa proprio quale ha vinto</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">L'ordine del PATH conta: la prima cartella che contiene il comando vince. È così che il <code>node</code> gestito da nvm «copre» un eventuale <code>node</code> di sistema — la sua cartella viene prima nel PATH.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">L'ordine del PATH conta: la prima cartella che contiene il comando vince. È così che il <code>node</code> gestito da nvm «copre» un eventuale <code>node</code> di sistema: la sua cartella viene prima nel PATH.</figcaption>
 </figure>
 
 ### Non solo file: alias, funzioni e comandi integrati
@@ -113,7 +113,7 @@ export PATH="/opt/A/bin:$PATH"   # A va davanti
 export PATH="/opt/B/bin:$PATH"   # B va davanti ad A → ordine finale: B, poi A, poi il resto
 ```
 
-C'è però un dettaglio cruciale: questa riga vale **solo per la shell corrente** e si perde chiudendo la finestra. Perché una modifica al PATH (o un `export`, o un alias) sia **permanente**, va scritta in un file di configurazione che la shell legge a ogni avvio — l'argomento del [capitolo 6](06-file-configurazione-shell.md).
+Questa riga, però, vale **solo per la shell corrente** e si perde chiudendo la finestra. Perché una modifica al PATH (o un `export`, o un alias) sia **permanente**, va scritta in un file di configurazione che la shell legge a ogni avvio, argomento del [capitolo 6](06-file-configurazione-shell.md).
 
 > [!tip]
 > Se dopo aver installato un programma il terminale risponde `command not found`, il problema quasi sempre non è l'installazione ma il **PATH**: la cartella dove sta l'eseguibile non è (ancora) elencata nel PATH. Verificarlo con `echo $PATH` e cercare l'eseguibile con `which`/`type` è il primo passo di diagnosi.
@@ -153,14 +153,14 @@ Ne segue una conseguenza pratica: le cartelle che arrivano da `/etc/paths.d` fin
 <details>
 <summary>Che differenza c'è tra <code>NOME=valore</code> e <code>export NOME=valore</code>?</summary>
 
-`NOME=valore` crea una variabile visibile **solo alla shell corrente**; `export NOME=valore` la rende una variabile **d'ambiente**, ereditata anche dai programmi (processi figli) che la shell avvia. Se un valore serve a un programma esterno, va esportato — altrimenti quel programma non lo vedrà.
+`NOME=valore` crea una variabile visibile **solo alla shell corrente**; `export NOME=valore` la rende una variabile **d'ambiente**, ereditata anche dai programmi (processi figli) che la shell avvia. Se un valore serve a un programma esterno, va esportato, altrimenti quel programma non lo vedrà.
 
 </details>
 
 <details>
 <summary>Cos'è il PATH e come lo usa la shell?</summary>
 
-È una variabile che contiene un **elenco ordinato di cartelle**, separate da `:`. Quando si digita il nome di un comando, la shell scorre quelle cartelle **da sinistra a destra** e lancia il primo eseguibile con quel nome che trova — la prima che vince. Se nessuna lo contiene, risponde `command not found`.
+È una variabile che contiene un **elenco ordinato di cartelle**, separate da `:`. Quando si digita il nome di un comando, la shell scorre quelle cartelle **da sinistra a destra** e lancia il primo eseguibile con quel nome che trova: vince la prima cartella che lo contiene. Se nessuna lo contiene, risponde `command not found`.
 
 </details>
 

@@ -14,7 +14,7 @@ Per creare un file vuoto si usa `touch`; per creare una cartella `mkdir`. L'opzi
 
 ## Copiare, spostare, rinominare
 
-`cp` copia, `mv` sposta. La cosa da capire è che **`mv` fa due mestieri con lo stesso gesto**: se la destinazione è un'altra cartella, *sposta* il file; se è un nome nella stessa cartella, lo *rinomina*. Non esiste un comando `rename` separato: rinominare, per Unix, è semplicemente spostare un file su un nuovo nome. Per copiare o spostare una **cartella** con tutto il suo contenuto serve l'opzione `-r` (*recursive*).
+`cp` copia, `mv` sposta, e **`mv` fa due mestieri con lo stesso gesto**: se la destinazione è un'altra cartella, *sposta* il file; se è un nome nella stessa cartella, lo *rinomina*. Non esiste un comando `rename` separato: rinominare, per Unix, è semplicemente spostare un file su un nuovo nome. Per copiare o spostare una **cartella** con tutto il suo contenuto serve l'opzione `-r` (*recursive*).
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 520 200" role="img" aria-label="cp lascia l'originale e aggiunge una copia; mv fa sparire l'originale spostandolo o rinominandolo" style="width:100%;max-width:520px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><text x="150" y="24" font-size="9.5" text-anchor="middle" opacity=".6">prima</text><text x="380" y="24" font-size="9.5" text-anchor="middle" opacity=".6">dopo</text><text x="24" y="62" font-size="14" font-family="ui-monospace,Menlo,monospace" font-weight="700">cp</text><rect x="104" y="44" width="92" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="150" y="63" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">a.txt</text><path d="M210 59 L286 59" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M294 59 L284 54 L284 64 Z" fill="currentColor"/><rect x="300" y="38" width="92" height="26" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="346" y="55" font-size="11.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">a.txt</text><rect x="300" y="70" width="108" height="26" rx="6" fill="var(--link,#78716c)" fill-opacity=".14" stroke="currentColor" stroke-width="1.5"/><text x="354" y="87" font-size="11.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">copia.txt</text><text x="430" y="66" font-size="9.5" opacity=".7">originale</text><text x="430" y="79" font-size="9.5" opacity=".7">+ copia</text><text x="24" y="150" font-size="14" font-family="ui-monospace,Menlo,monospace" font-weight="700">mv</text><rect x="104" y="132" width="92" height="30" rx="6" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.5"/><text x="150" y="151" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">a.txt</text><path d="M210 147 L286 147" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M294 147 L284 142 L284 152 Z" fill="currentColor"/><rect x="300" y="132" width="92" height="30" rx="6" fill="var(--link,#78716c)" fill-opacity=".14" stroke="currentColor" stroke-width="1.5"/><text x="346" y="151" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">b.txt</text><text x="430" y="144" font-size="9.5" opacity=".7">l'originale</text><text x="430" y="157" font-size="9.5" opacity=".7">non c'è più</text></g></svg>
@@ -28,7 +28,7 @@ Per creare un file vuoto si usa `touch`; per creare una cartella `mkdir`. L'opzi
 | `mv <sorg> <dest>` | sposta un file in un'altra cartella |
 | `mv vecchio.txt nuovo.txt` | rinomina (è uno spostamento «sullo stesso posto») |
 
-Il modo più semplice per **fissare la differenza** è guardare cosa resta sul disco dopo il comando: `cp` lascia **due** file (l'originale e la copia), `mv` ne lascia sempre **uno** (il nome di partenza sparisce). Un `ls` prima e dopo lo rende evidente:
+La differenza si vede da cosa resta sul disco dopo il comando: `cp` lascia **due** file (l'originale e la copia), `mv` ne lascia sempre **uno** (il nome di partenza sparisce). Un `ls` prima e dopo lo rende evidente:
 
 ```bash
 # partenza: un solo file nella cartella
@@ -70,7 +70,7 @@ Il comando per cancellare è `rm`. Qui serve attenzione, perché nel terminale *
 
 ## Guardare e aprire
 
-Per sbirciare il contenuto di un file senza aprirlo in un editor ci sono comandi rapidi. `cat` stampa tutto il file di fila (ottimo per file corti); `less` lo apre in una vista scorribile pagina per pagina (`q` per uscire), utile per file lunghi. Su macOS `open` consegna il file all'**applicazione predefinita**, come un doppio clic nel Finder — e `open .` apre la cartella corrente nel Finder.
+Per sbirciare il contenuto di un file senza aprirlo in un editor ci sono comandi rapidi. `cat` stampa tutto il file di fila (ottimo per file corti); `less` lo apre in una vista scorribile pagina per pagina (`q` per uscire), utile per file lunghi. Su macOS `open` consegna il file all'**applicazione predefinita**, come un doppio clic nel Finder. Con `open .` si apre nel Finder la cartella corrente.
 
 | Comando | Cosa fa |
 |---------|---------|

@@ -1,16 +1,16 @@
 # 01 · Cos'è il terminale
 
-Il terminale è lo strumento con cui si comanda il computer **scrivendo** invece che cliccando: si digita un comando, si preme Invio e il sistema lo esegue, rispondendo con del testo. È il modo più diretto e potente di dare istruzioni alla macchina, ed è il terreno naturale di strumenti come Git, npm e i server di sviluppo, che nascono proprio lì. Prima di usarli conviene sapersi muovere in questo ambiente.
+Il terminale è lo strumento con cui si comanda il computer **scrivendo** invece che cliccando: si digita un comando, si preme Invio e il sistema lo esegue, rispondendo con del testo. È il modo più diretto di dare istruzioni alla macchina, ed è il terreno naturale di strumenti come Git, npm e i server di sviluppo, che nascono proprio lì. Prima di usarli conviene sapersi muovere in questo ambiente.
 
 ## Il mondo Unix
 
-Quasi tutto ciò che riguarda il terminale (i comandi, la shell, il modo in cui i file sono organizzati) nasce da **Unix**, un sistema operativo creato ai **Bell Labs** all'inizio degli anni '70 da Ken Thompson e Dennis Ritchie. La sua influenza è stata enorme: dai suoi principi e dal suo codice discendono, per via diretta o per imitazione, i sistemi che oggi si usano per sviluppare. **macOS** è letteralmente un Unix certificato: il suo cuore, **Darwin** (il nucleo open source su cui è costruito il sistema), deriva in buona parte da **BSD**, una storica versione di Unix nata all'Università di Berkeley e capostipite di diversi sistemi «Unix-like» (è la stessa BSD della licenza omonima). **Linux**, invece, non ne condivide il codice ma ne ricalca fedelmente il comportamento. Per questo si dice che sono sistemi **«Unix-like»**: parlano la stessa lingua di comandi, shell e filesystem. È anche il motivo per cui gli stessi comandi di base funzionano quasi identici su macOS e su Linux, mentre **Windows**, che Unix-like non è, ha storicamente shell e percorsi propri.
+Quasi tutto ciò che riguarda il terminale (i comandi, la shell, il modo in cui i file sono organizzati) nasce da **Unix**, un sistema operativo creato ai **Bell Labs** all'inizio degli anni '70 da Ken Thompson e Dennis Ritchie. La sua influenza è stata enorme: dai suoi principi e dal suo codice discendono, per via diretta o per imitazione, i sistemi che oggi si usano per sviluppare. **macOS** è un Unix certificato: il suo cuore, **Darwin** (il nucleo open source su cui è costruito il sistema), deriva in buona parte da **BSD**, una storica versione di Unix nata all'Università di Berkeley e capostipite di diversi sistemi «Unix-like» (è la stessa BSD della licenza omonima). **Linux**, invece, non ne condivide il codice ma ne ricalca fedelmente il comportamento. Per questo si dice che sono sistemi **«Unix-like»**: parlano la stessa lingua di comandi, shell e filesystem. È anche il motivo per cui gli stessi comandi di base funzionano quasi identici su macOS e su Linux, mentre **Windows**, che Unix-like non è, ha storicamente shell e percorsi propri.
 
 A tenere insieme questa famiglia c'è uno standard, **POSIX** (*Portable Operating System Interface*), un documento formale mantenuto da **IEEE** e **The Open Group**: codifica l'interfaccia comune (la shell e la sua sintassi, i comandi di utilità come `ls` e `grep`, le API di sistema) così che un sistema «Unix-like» si comporti in modo prevedibile e il codice resti portabile dall'uno all'altro. È proprio il grado di **conformità** a POSIX a segnare l'appartenenza alla famiglia: macOS la rispetta al punto da essere un Unix *certificato*, Linux la segue in larga parte pur aggiungendo estensioni proprie. Ed è il motivo per cui uno script che si attiene alla sola base POSIX gira ovunque, tema che torna con le shell nel [capitolo 2](02-shell-sh-bash-zsh.md).
 
 Sotto la superficie c'è anche una **filosofia** precisa, che tornerà utile capitolo dopo capitolo: costruire **tanti strumenti piccoli, ognuno bravo a fare una cosa sola**, e comporli fra loro passandosi il testo come materiale comune. È l'idea che si vedrà all'opera con le **pipe** nel [capitolo 8](08-comandi-di-tutti-i-giorni.md), e spiega perché nel terminale si ottiene molto **combinando** comandi semplici invece di affidarsi a un unico programma che fa tutto.
 
-Dietro la parola «terminale», usata di solito come sinonimo di tutto, si nascondono in realtà **tre cose diverse** che vale la pena distinguere subito, perché confonderle è la prima fonte di equivoci.
+Dietro la parola «terminale», usata di solito come sinonimo di tutto, si nascondono **tre cose diverse**, da distinguere subito perché confonderle è la prima fonte di equivoci.
 
 ## Emulatore di terminale, shell e prompt
 
@@ -18,7 +18,7 @@ L'**emulatore di terminale** è l'**applicazione con la finestra**: quella che m
 
 La **shell** è il **programma che gira dentro** quella finestra: legge il comando digitato, lo interpreta, avvia il programma giusto e ne restituisce l'output. È l'interprete della riga di comando, il vero interlocutore. Su macOS la shell predefinita è **zsh**; su molte distribuzioni Linux è **bash**. Emulatore e shell sono indipendenti: lo stesso emulatore può ospitare shell diverse, e la stessa shell può girare in emulatori diversi. Le shell sono il tema del [capitolo 2](02-shell-sh-bash-zsh.md).
 
-Il **prompt** è la **scritta che la shell stampa quando è pronta** a ricevere un comando: segnala «tocca a te». Tipicamente riporta qualche informazione utile (utente, nome della macchina, cartella corrente) e termina con un simbolo che, per convenzione, dice anche *chi* sei:
+Il **prompt** è la **scritta che la shell stampa quando è pronta** a ricevere un comando: segnala «tocca a te». Tipicamente riporta qualche informazione utile (utente, nome della macchina, cartella corrente) e termina con un simbolo che, per convenzione, dice anche *chi* sta lavorando:
 
 | Simbolo | Significato |
 |---------|-------------|
@@ -80,7 +80,7 @@ L'opzione **breve** è una singola lettera preceduta da un trattino (`-a`) e pi�
 <details>
 <summary>Cosa indica il simbolo finale del prompt (<code>%</code> contro <code>#</code>)?</summary>
 
-Segnala *chi* sei: `%` è il prompt di zsh per un utente normale (`$` per bash/sh), mentre `#` indica che stai operando come **root**, l'amministratore. Vedere `#` è un invito alla prudenza: come root si può modificare o cancellare qualsiasi cosa nel sistema.
+Segnala *chi* sta lavorando: `%` è il prompt di zsh per un utente normale (`$` per bash/sh), mentre `#` indica che si sta operando come **root**, l'amministratore. Vedere `#` è un invito alla prudenza: come root si può modificare o cancellare qualsiasi cosa nel sistema.
 
 </details>
 

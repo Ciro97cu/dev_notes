@@ -59,7 +59,7 @@ Ognuno di questi file personali ha poi un gemello di sistema in `/etc` (`/etc/zs
 
 ## E in bash? (la trappola classica)
 
-Con bash i file sono altri e nascondono l'inghippo che fa impazzire di più. Una shell di login legge `~/.bash_profile`; una shell interattiva *non* di login legge invece `~/.bashrc`. Siccome su macOS Terminal apre shell **di login**, viene letto `~/.bash_profile` e **non** `~/.bashrc` — così le personalizzazioni scritte in `~/.bashrc` sembrano ignorate. La soluzione usuale è far leggere l'uno dall'altro, aggiungendo in cima a `~/.bash_profile` una riga che «tira dentro» `~/.bashrc`:
+Con bash i file sono altri e nascondono l'inghippo che fa impazzire di più. Una shell di login legge `~/.bash_profile`; una shell interattiva *non* di login legge invece `~/.bashrc`. Siccome su macOS Terminal apre shell **di login**, viene letto `~/.bash_profile` e **non** `~/.bashrc`, quindi le personalizzazioni scritte in `~/.bashrc` sembrano ignorate. La soluzione usuale è far leggere l'uno dall'altro, aggiungendo in cima a `~/.bash_profile` una riga che «tira dentro» `~/.bashrc`:
 
 ```bash
 # in ~/.bash_profile: carica anche ~/.bashrc, se esiste
@@ -106,9 +106,9 @@ source ~/.zshrc     # rilegge il file nella shell corrente
 
 ## Hook: far girare codice in automatico
 
-Un **hook** (letteralmente «gancio») è una funzione che la shell chiama **da sola** in un certo momento, senza doverla invocare a mano: la si «aggancia» a un **evento**. zsh ne offre diversi; il più utile nella pratica è **`chpwd`**, che scatta **dopo ogni cambio di cartella** (`cd`). Registrandovi una propria funzione, si fa accadere qualcosa in automatico ogni volta che si entra in una cartella. Il meccanismo è tutto qui: una funzione scritta nel `~/.zshrc` e legata a un evento della shell.
+Un **hook** (letteralmente «gancio») è una funzione che la shell chiama **da sola** in un certo momento, senza doverla invocare a mano: la si «aggancia» a un **evento**. zsh ne offre diversi; il più utile nella pratica è **`chpwd`**, che scatta **dopo ogni cambio di cartella** (`cd`). Registrandovi una propria funzione, scritta nel `~/.zshrc`, si fa accadere qualcosa in automatico ogni volta che si entra in una cartella.
 
-L'esempio classico è cambiare **versione di Node** a seconda del progetto: se una cartella contiene un file `.nvmrc` (che dichiara la versione di Node voluta, vedi <a href="../glossario/#/docs/package-manager?id=nvm" target="_blank" rel="noopener">nvm nel glossario</a>), un hook su `chpwd` può eseguire `nvm use` da sé appena ci si entra, senza digitarlo ogni volta.
+L'esempio classico è cambiare **versione di Node** a seconda del progetto: se una cartella contiene un file `.nvmrc` (che dichiara la versione di Node voluta, si veda <a href="../glossario/#/docs/package-manager?id=nvm" target="_blank" rel="noopener">nvm nel glossario</a>), un hook su `chpwd` può eseguire `nvm use` da sé appena ci si entra, senza digitarlo ogni volta.
 
 ```bash
 # ~/.zshrc — attiva la versione di Node del progetto entrando nella cartella
@@ -201,7 +201,7 @@ Rileggendo il file nella shell corrente con `source ~/.zshrc` (o la forma breve 
 <details>
 <summary>Cos'è <code>Oh My Zsh</code> e quali sono le due manopole principali?</summary>
 
-È il framework di configurazione più diffuso per zsh: porta temi e plugin già pronti e si governa dal `~/.zshrc`. Le due impostazioni che fanno quasi tutto sono `ZSH_THEME` (il tema del prompt, es. `robbyrussell` o `powerlevel10k`) e `plugins=(...)` (i plugin attivi, es. `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting`). Attenzione al rovescio: più roba si carica, più l'avvio della shell rallenta.
+È il framework di configurazione più diffuso per zsh: porta temi e plugin già pronti e si governa dal `~/.zshrc`. Le due impostazioni che fanno quasi tutto sono `ZSH_THEME` (il tema del prompt, es. `robbyrussell` o `powerlevel10k`) e `plugins=(...)` (i plugin attivi, es. `git`, `zsh-autosuggestions`, `zsh-syntax-highlighting`). Più roba si carica, però, più l'avvio della shell rallenta.
 
 </details>
 
