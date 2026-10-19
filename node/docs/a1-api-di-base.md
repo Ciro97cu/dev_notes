@@ -150,7 +150,7 @@ const haEnv = existsSync('.env');
 
 ## Costruire percorsi: `node:path`
 
-Un percorso è soltanto una stringa, ma costruirlo incollando pezzi con `+` e `'/'` è fragile: si rischiano barre doppie, segmenti `..` da risolvere a mano e, su Windows, il separatore sbagliato. Il modulo `node:path` fa questo lavoro in modo corretto. Conviene chiarire subito che cosa **non** fa: lavora solo sulle stringhe, non tocca il disco e non controlla che un percorso esista, tanto che `path.join('non', 'esiste', 'davvero.txt')` restituisce tranquillamente `'non/esiste/davvero.txt'`. L'unica informazione esterna che può usare è la cartella di lavoro, nel caso di `resolve()`. I concetti di percorso assoluto e relativo sono nel <a href="../terminale/#/docs/03-navigare-filesystem?id=percorsi-assoluti-e-relativi" target="_blank" rel="noopener">vault terminale</a>.
+Un percorso è soltanto una stringa, ma costruirlo incollando pezzi con `+` e `'/'` è fragile: si rischiano barre doppie, segmenti `..` da risolvere a mano e, su Windows, il separatore sbagliato. Il modulo `node:path` fa questo lavoro in modo corretto, ma lavora solo sulle stringhe: non tocca il disco e non controlla che un percorso esista, tanto che `path.join('non', 'esiste', 'davvero.txt')` restituisce tranquillamente `'non/esiste/davvero.txt'`. L'unica informazione esterna che può usare è la cartella di lavoro, nel caso di `resolve()`. I concetti di percorso assoluto e relativo sono nel <a href="../terminale/#/docs/03-navigare-filesystem?id=percorsi-assoluti-e-relativi" target="_blank" rel="noopener">vault terminale</a>.
 
 ```js
 import path from 'node:path';   // oppure: import { join, resolve, dirname } from 'node:path'
@@ -317,7 +317,7 @@ Ogni processo nasce con tre canali di comunicazione standard, descritti dal punt
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Lanciato a mano in una finestra di terminale, il processo ha i tre canali collegati al TTY: legge dalla tastiera attraverso lo <strong>stdin</strong> e scrive sullo schermo attraverso <strong>stdout</strong> e <strong>stderr</strong>, che a schermo si mescolano ma restano due canali distinti (qui il tratteggio). Con <code>&gt; file</code> si dirotta solo lo stdout; con una pipe, o in una pipeline di integrazione continua, dall'altra parte non c'è più un terminale.</figcaption>
 </figure>
 
-La distinzione non è una formalità. Con `node report.mjs > report.txt` la redirezione cattura solo lo stdout, così il file contiene i dati puliti mentre avvisi ed errori restano visibili a schermo; in una pipe, allo stesso modo, passa al comando successivo soltanto lo stdout. La regola è quindi semplice: i risultati vanno su stdout con `console.log()`, tutto ciò che è rivolto alla persona (avvisi, errori, avanzamento) su stderr con `console.error()`. Quando serve scrivere senza andare a capo, per esempio un messaggio di attesa che verrà completato sulla stessa riga, si usa direttamente `process.stdout.write()`, che scrive il testo così com'è.
+Con `node report.mjs > report.txt` la redirezione cattura solo lo stdout, così il file contiene i dati puliti mentre avvisi ed errori restano visibili a schermo; in una pipe, allo stesso modo, passa al comando successivo soltanto lo stdout. Per questo i risultati vanno su stdout con `console.log()`, e tutto ciò che è rivolto alla persona (avvisi, errori, avanzamento) su stderr con `console.error()`. Quando serve scrivere senza andare a capo, per esempio un messaggio di attesa che verrà completato sulla stessa riga, si usa direttamente `process.stdout.write()`, che scrive il testo così com'è.
 
 ```js
 console.log('risultato');                  // stdout: finisce nel file con > report.txt
@@ -441,7 +441,7 @@ function ask(label, { hidden = false, env } = {}) {
   }
 ```
 
-Se il chiamante ha indicato una variabile d'ambiente (`SYNC_TOKEN`, `SYNC_GIST` o `SYNC_PASSPHRASE`) e questa è impostata, la risposta è già lì e non serve chiedere: è ciò che permette di usare lo script anche senza tastiera, con `SYNC_TOKEN=… node scripts/sync-setup.mjs`. Altrimenti serve un terminale, e se `process.stdin.isTTY` non è vero (input da una pipe, esecuzione automatica) lo script spiega il problema su stderr ed esce con codice `1`. Segue la lettura vera e propria, in modalità raw:
+Se il chiamante ha indicato una variabile d'ambiente (`SYNC_TOKEN`, `SYNC_GIST` o `SYNC_PASSPHRASE`) e questa è impostata, la risposta è già lì e non serve chiedere: è ciò che permette di usare lo script anche senza tastiera, con `SYNC_TOKEN=… node scripts/sync-setup.mjs`. Altrimenti serve un terminale, e se `process.stdin.isTTY` non è vero (input da una pipe, esecuzione automatica) lo script spiega il problema su stderr ed esce con codice `1`. Segue la lettura della risposta, in modalità raw:
 
 ```js
   return new Promise((done) => {
@@ -513,7 +513,7 @@ main().catch((e) => { console.error(e); process.exit(1); });
 
 `main()` è una funzione `async`, quindi restituisce una Promise, e qualunque errore al suo interno (la rete che cade durante `fetch()`, un permesso negato a `writeFile()`) la rifiuta. Il `catch()` stampa l'errore su stderr ed esce con codice `1`, così la shell sa che qualcosa è andato storto. Senza questa riga Node arriverebbe comunque al codice `1`, trattando la Promise rifiutata come un'eccezione non gestita, ma la gestione esplicita dichiara l'intenzione e decide che cosa stampare.
 
-Resta una scelta da commentare: lo script usa `process.exit(1)` in più punti invece di `process.exitCode`. In un piccolo programma interattivo, che deve fermarsi a metà flusso, è una scelta comprensibile: i messaggi sono brevi e, quando l'uscita va a un terminale, su macOS e Linux [le scritture sono sincrone](https://nodejs.org/api/process.html#a-note-on-process-io), quindi nulla va perso prima dell'uscita. In una libreria o in un server la strada raccomandata resta `process.exitCode`, oppure un'eccezione.
+Lo script usa `process.exit(1)` in più punti invece di `process.exitCode`. In un piccolo programma interattivo, che deve fermarsi a metà flusso, è una scelta comprensibile: i messaggi sono brevi e, quando l'uscita va a un terminale, su macOS e Linux [le scritture sono sincrone](https://nodejs.org/api/process.html#a-note-on-process-io), quindi nulla va perso prima dell'uscita. In una libreria o in un server la strada raccomandata resta `process.exitCode`, oppure un'eccezione.
 
 ## Riepilogo delle API
 

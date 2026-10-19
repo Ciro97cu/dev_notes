@@ -1,6 +1,6 @@
 # 01 · Dentro Node.js
 
-**Node.js** è un *runtime* JavaScript, cioè un programma che esegue codice JavaScript **fuori dal browser**: sul proprio computer, su un server, dentro uno script lanciato dal terminale. Nato nel 2009, è il motivo per cui oggi lo stesso linguaggio delle pagine web serve anche a scrivere programmi da riga di comando. Per chi fa frontend è una presenza costante anche quando non lo si nomina: il dev server, il bundler, i test, il linter e il package manager sono tutti programmi scritti in JavaScript che girano su Node, mentre il codice dell'applicazione finirà nel browser. Capire com'è fatto dentro spiega molti comportamenti che altrimenti sembrano magia, a partire dalla sua caratteristica più famosa: fare molte cose insieme con un solo thread.
+**Node.js** è un *runtime* JavaScript, cioè un programma che esegue codice JavaScript **fuori dal browser**: sul proprio computer, su un server, dentro uno script lanciato dal terminale. Nato nel 2009, è il motivo per cui oggi lo stesso linguaggio delle pagine web serve anche a scrivere programmi da riga di comando. Per chi fa frontend è una presenza costante anche quando non lo si nomina: il dev server, il bundler, i test, il linter e il package manager sono tutti programmi scritti in JavaScript che girano su Node, mentre il codice dell'applicazione finirà nel browser. Capire com'è fatto dentro spiega molti comportamenti che altrimenti restano oscuri, a partire dalla sua caratteristica più famosa: fare molte cose insieme con un solo thread.
 
 ## Stesso linguaggio, ambiente diverso
 
@@ -34,7 +34,7 @@ Fra i motori e il codice dell'utente stanno le **API di Node**: i moduli integra
 
 Un *thread* è una linea di esecuzione: una sequenza di istruzioni che il processore porta avanti una dopo l'altra. In Node **tutto il JavaScript gira su un unico thread**, il *thread principale*: mentre una funzione è in esecuzione, nessun'altra riga di JavaScript del programma può partire. È lo stesso modello del browser, ed è il motivo per cui un ciclo infinito blocca tutto.
 
-Eppure un server Node gestisce migliaia di richieste contemporaneamente. Il trucco è che il thread principale **non aspetta** le operazioni lente. Quando il codice chiede di leggere un file o di interrogare un database, Node passa la richiesta a libuv e prosegue subito con altro; quando il risultato è pronto, libuv lo segnala e Node esegue la funzione che doveva gestirlo, la *callback*. L'attesa c'è comunque, ma avviene fuori dal thread del JavaScript, che resta libero. Questo modello si chiama **I/O non bloccante**, e il meccanismo che decide quale callback eseguire e quando è l'event loop.
+Eppure un server Node gestisce migliaia di richieste contemporaneamente. Ci riesce perché il thread principale **non aspetta** le operazioni lente. Quando il codice chiede di leggere un file o di interrogare un database, Node passa la richiesta a libuv e prosegue subito con altro; quando il risultato è pronto, libuv lo segnala e Node esegue la funzione che doveva gestirlo, la *callback*. L'attesa c'è comunque, ma avviene fuori dal thread del JavaScript, che resta libero. Questo modello si chiama **I/O non bloccante**, e il meccanismo che decide quale callback eseguire e quando è l'event loop.
 
 ## L'event loop, giro per giro
 
@@ -85,7 +85,7 @@ La scelta dipende dal contesto. In un **server**, una chiamata sincrona dentro l
 > Lo script `scripts/sync-setup.mjs` di questo progetto è scritto tutto in forma asincrona: `await fetch()` per chiedere a GitHub se il token è valido e `await writeFile()` da `node:fs/promises` per salvare il risultato. Mentre aspetta la risposta di rete il thread principale resta libero, anche se in uno script così piccolo non ha altro da fare.
 
 > [!tip]
-> Il JavaScript di Node gira su un solo thread: le operazioni lente non vanno **aspettate** ma **delegate**. Le API asincrone affidano l'attesa a libuv (e, dove serve, al suo thread pool), e l'event loop riprende la callback o la Promise quando il risultato è pronto.
+> Il JavaScript di Node gira su un solo thread, quindi le operazioni lente si **delegano**: le API asincrone affidano l'attesa a libuv (e, dove serve, al suo thread pool), e l'event loop riprende la callback o la Promise quando il risultato è pronto.
 
 ## Ripasso lampo
 

@@ -25,7 +25,7 @@ def features(t):
     f['svg'] = re.findall(r'<svg[\s\S]*?</svg>', t)
     f['tag html'] = sorted(re.findall(r'<(/?[a-zA-Z][a-zA-Z0-9]*)\b', re.sub(r'<svg[\s\S]*?</svg>', '', nf)))
     f['callout (apertura)'] = re.findall(r'^\s*>\s*\[![^\]]*\]', t, re.M)
-    f['summary'] = re.findall(r'<summary>[\s\S]*?</summary>', t)
+    f['summary'] = re.findall(r'<summary>[\s\S]*?</summary>', re.sub(r'`[^`\n]*`', '``', nf))   # senza il codice inline: `<summary>` citato non conta
     rows = [l for l in t.split('\n') if re.match(r'^\s*\|.*\|\s*$', l)]
     f['tabelle (righe×colonne)'] = [len(re.findall(r'(?<!\\)\|', strip_code(r))) for r in rows]
     prose = strip_code(re.sub(r'<svg[\s\S]*?</svg>', ' ', t))
