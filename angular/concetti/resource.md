@@ -5,11 +5,11 @@ aliases: [resource, httpResource, rxResource]
 ---
 # resource()
 
-Le **resource** sono una famiglia di primitive per gestire i **dati asincroni in modo reattivo**. Una resource lega una richiesta ad alcuni signal sorgente: quando questi cambiano, la richiesta si **rilancia** da sola, e lo stato del caricamento è esposto come signal — `value()`, `status()`, `error()` e `isLoading()`. Ne esistono tre varianti, con la stessa interfaccia ma un "motore" diverso:
+Le **resource** sono una famiglia di primitive per gestire i **dati asincroni in modo reattivo**. Una resource lega una richiesta ad alcuni signal sorgente: quando questi cambiano, la richiesta si **rilancia** da sola, e lo stato del caricamento è esposto come signal (`value()`, `status()`, `error()` e `isLoading()`). Ne esistono tre varianti, con la stessa interfaccia ma un "motore" diverso:
 
-- **`httpResource`** — la più dichiarativa, basata su `HttpClient`: si passa una URL o una request reattiva.
-- **`rxResource`** — basata su un `loader` che restituisce un `Observable`.
-- **`resource`** — la più generica, con un `loader` basato su `Promise` (e un `abortSignal`).
+- **`httpResource`**: la più dichiarativa, basata su `HttpClient`, a cui si passa una URL o una request reattiva.
+- **`rxResource`**: basata su un `loader` che restituisce un `Observable`.
+- **`resource`**: la più generica, con un `loader` basato su `Promise` (e un `abortSignal`).
 
 ```ts
 const id = signal(1);

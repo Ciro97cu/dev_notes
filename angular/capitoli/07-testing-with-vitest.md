@@ -43,7 +43,7 @@ describe('Add', () => {
 });
 ```
 
-Il corpo del caso segue il pattern **AAA**: *Arrange* prepara l'esecuzione, *Act* esegue l'azione da testare, *Assert* verifica che il risultato atteso sia stato ottenuto. Attorno ai casi girano gli **hook del ciclo di vita**: `beforeEach` / `afterEach` prima/dopo **ogni** caso, mentre `beforeAll` / `afterAll` girano **una volta** per suite (prima del primo caso / dopo l'ultimo). Nella fase di Assert si usa `expect(...)`, concatenabile con numerosi metodi che verificano il risultato — i cosiddetti **matcher** (conviene esplorarli con l'autocompletamento dell'IDE):
+Il corpo del caso segue il pattern **AAA**: *Arrange* prepara l'esecuzione, *Act* esegue l'azione da testare, *Assert* verifica che il risultato atteso sia stato ottenuto. Attorno ai casi girano gli **hook del ciclo di vita**: `beforeEach` / `afterEach` prima/dopo **ogni** caso, mentre `beforeAll` / `afterAll` girano **una volta** per suite (prima del primo caso / dopo l'ultimo). Nella fase di Assert si usa `expect(...)`, concatenabile con numerosi metodi che verificano il risultato, i cosiddetti **matcher** (conviene esplorarli con l'autocompletamento dell'IDE):
 
 ```ts
 expect(c).not.toBe(4);
@@ -55,12 +55,12 @@ expect(str).toMatch(/Result/);
 ```
 
 > [!tip]
-> In ottica **BDD** (Behavior-Driven Development), il nome della suite e quello del caso, letti insieme, devono descrivere il comportamento atteso: `Add` + `correctly adds 1 and 2` → *"Add correctly adds 1 and 2"*. Le `describe` si annidano liberamente chiamando un'altra `describe` dentro un blocco `describe`.
+> In ottica **BDD** (Behavior-Driven Development), il nome della suite e quello del caso, letti insieme, devono descrivere il comportamento atteso: `Add` e `correctly adds 1 and 2` si leggono come *"Add correctly adds 1 and 2"*. Le `describe` si annidano liberamente chiamando un'altra `describe` dentro un blocco `describe`.
 
 ### Skipping Tests
 > p.194
 
-A volte si vuole saltare un singolo caso o un'intera suite — tipico un `app.spec.ts` generato e mai mantenuto, che nel frattempo ha smesso di passare. Si sostituisce `describe` con **`describe.skip`** (e `it` con **`it.skip`** per i singoli casi).
+A volte si vuole saltare un singolo caso o un'intera suite: tipico il caso di un `app.spec.ts` generato e mai mantenuto, che nel frattempo ha smesso di passare. Si sostituisce `describe` con **`describe.skip`** (e `it` con **`it.skip`** per i singoli casi).
 
 ```ts
 // src/app/app.spec.ts
@@ -106,7 +106,7 @@ ng test                      # esegue i test (watch mode di default)
 ng test --configuration=ci   # usa la configurazione "ci"
 ```
 
-La UI di Vitest si divide in tre aree. A sinistra c'è l'elenco dei test eseguiti (spunta verde = passato); a destra le informazioni su ogni run, con lo stack trace in caso di errore; al centro Vitest **monta** i componenti — di solito lo si vede solo per un lampo, ma in debug l'area riflette lo stato corrente. Vari IDE supportano il debug dei test; come ultima spiaggia si possono sempre debuggare nei dev tools del browser.
+La UI di Vitest si divide in tre aree. A sinistra c'è l'elenco dei test eseguiti (spunta verde = passato); a destra le informazioni su ogni run, con lo stack trace in caso di errore; al centro Vitest **monta** i componenti (di solito lo si vede solo per un lampo, ma in debug l'area riflette lo stato corrente). Vari IDE supportano il debug dei test; come ultima spiaggia si possono sempre debuggare nei dev tools del browser.
 
 ## Angular and Vitest
 > pp.196-202
@@ -149,9 +149,9 @@ describe('flight-search', () => {
 ```
 
 `createComponent` restituisce una **`ComponentFixture<T>`** che rappresenta i vari aspetti del componente. Tra i suoi membri:
-- `componentInstance` — l'istanza della classe componente (qui di tipo `FlightSearch`).
-- `nativeElement` — il nodo DOM del componente.
-- `debugElement` — accesso ad aspetti aggiuntivi (es. l'injector a livello componente, query su nodi DOM o servizi subordinati).
+- `componentInstance`: l'istanza della classe componente (qui di tipo `FlightSearch`).
+- `nativeElement`: il nodo DOM del componente.
+- `debugElement`: accesso ad aspetti aggiuntivi (es. l'injector a livello componente, query su nodi DOM o servizi subordinati).
 
 Collegamenti: [[inject]] · [[providers]] · [[04-router-navigation-lazy-loading]] (il `provideRouter`).
 
@@ -195,16 +195,16 @@ const headings = page.getByRole('heading', { name: 'Paris - London' });
 await expect.element(headings).toHaveLength(3);
 ```
 
-I locator **descrivono solo come trovare** gli elementi: il recupero effettivo avviene solo all'uso (`fill`, `click`, dentro `expect.element`), con **retry** fino a un timeout — tra un tentativo e l'altro si attende un intervallo per far completare i task asincroni. Si configurano con un secondo parametro opzionale (default `{ interval: 50, timeout: 100 }`):
+I locator **descrivono solo come trovare** gli elementi: il recupero effettivo avviene solo all'uso (`fill`, `click`, dentro `expect.element`), con **retry** fino a un timeout (tra un tentativo e l'altro si attende un intervallo per far completare i task asincroni). Si configurano con un secondo parametro opzionale (default `{ interval: 50, timeout: 100 }`):
 
 ```ts
 await expect.element(button, { interval: 50, timeout: 100 }).toBeDisabled();
 ```
 
-Per accedere subito al nodo DOM dietro un locator: `.element()` (o `.elements()` se rappresenta più nodi). Oltre a quelli visti, Vitest offre altri locator: il riferimento completo è nella [documentazione ufficiale](https://vitest.dev/api/browser/locators.html).
+Per accedere subito al nodo DOM dietro un locator si usa `.element()` (o `.elements()` se rappresenta più nodi). Oltre a quelli visti, Vitest offre altri locator: il riferimento completo è nella [documentazione ufficiale](https://vitest.dev/api/browser/locators.html).
 
 > [!warning]
-> I locator non offrono accesso per `id` o `name`: è **intenzionale**, per spingere verso i ruoli/attributi ARIA. Come ultima spiaggia `page.getByTestId(...)` legge un attributo `data-testid`, ma mina l'accessibilità → va usato con parsimonia.
+> I locator non offrono accesso per `id` o `name`: è **intenzionale**, per spingere verso i ruoli/attributi ARIA. Come ultima spiaggia `page.getByTestId(...)` legge un attributo `data-testid`, ma mina l'accessibilità, quindi va usato con parsimonia.
 
 ### Locating Elements via DebugElement
 > p.201
@@ -266,7 +266,7 @@ Poi si registra il file per il builder `unit-test` in `angular.json`:
 ### Mocking Services
 > pp.202-204
 
-I test isolano l'oggetto sotto test dalle sue dipendenze: così gli errori sono attribuibili con chiarezza e i test restano veloci e affidabili, senza dipendere da sistemi esterni. Si sostituiscono con **mock** (implementazioni semplificate); le **spy**, invece, monitorano le chiamate (con quali parametri e quante volte). Grazie alla [[glossario#dependency-injection-di|DI]] di Angular (il meccanismo con cui Angular fornisce le dipendenze a un componente) basta dire al `TestBed` di fornire un mock al posto del servizio reale — qui il `ConfigService`, che espone dati di configurazione come la base URL del backend.
+I test isolano l'oggetto sotto test dalle sue dipendenze: così gli errori sono attribuibili con chiarezza e i test restano veloci e affidabili, senza dipendere da sistemi esterni. Si sostituiscono con **mock** (implementazioni semplificate); le **spy**, invece, monitorano le chiamate (con quali parametri e quante volte). Grazie alla [[glossario#dependency-injection-di|DI]] di Angular (il meccanismo con cui Angular fornisce le dipendenze a un componente) basta dire al `TestBed` di fornire un mock al posto del servizio reale: qui il `ConfigService`, che espone dati di configurazione come la base URL del backend.
 
 ```ts
 import { ConfigService } from '../domains/shared/util-common/config-service';
@@ -403,7 +403,7 @@ const request = await vi.waitFor(
 
 Qui basta in genere un solo retry (si attende solo il microtask pendente che scatena la resource), quindi spesso è sufficiente `{ interval: 0 }` per attendere il tick successivo dell'event loop. `vi` è globale oppure va importato: `import { vi } from 'vitest';`.
 
-Test case completo (riempie i campi, cerca, risponde con 3 voli):
+Il test case completo riempie i campi, cerca e risponde con 3 voli:
 
 ```ts
 it('searches for flights when from and to are given', async () => {
@@ -544,7 +544,7 @@ export const appSettings: AppSettings = {
 ```
 
 > [!info|label:Angular 22+ · Signal Forms nel test]
-> Le **Signal Forms** (`form()`, `debounce()`) sono la nuova API form basata sui signal, introdotta in Angular 21+. Qui `ReactiveFlightSearch` le usa per fare il debounce dell'input prima di lanciare la ricerca. Vedi [[06-signal-forms]].
+> Le **Signal Forms** (`form()`, `debounce()`) sono la nuova API form basata sui signal, introdotta in Angular 21+. Qui `ReactiveFlightSearch` le usa per fare il debounce dell'input prima di lanciare la ricerca. Si veda [[06-signal-forms]].
 
 ```ts
 // versione con Signal Forms che debounce l'input (cap.6)
@@ -571,11 +571,11 @@ component = fixture.componentInstance;
 ### Fake Timers
 > pp.213-215
 
-Quando il mocking non è praticabile, i **fake timer** di Vitest controllano e simulano lo scorrere del tempo senza attendere davvero. Metodi principali su `vi`:
-- `vi.useFakeTimers()` — attiva la modalità fake timer: rimpiazza `setTimeout`/`setInterval` con mock.
-- `vi.advanceTimersByTime(ms)` — avanza i fake timer di `ms`, eseguendo i timer scaduti in quel lasso.
-- `vi.runAllTimersAsync()` — esegue subito tutti i timer pendenti.
-- `vi.useRealTimers()` — ripristina i timer reali (mettilo in `afterEach`, così i test non si influenzano a vicenda).
+Quando il mocking non è praticabile, i **fake timer** di Vitest controllano e simulano lo scorrere del tempo senza attendere davvero. I metodi principali su `vi` sono:
+- `vi.useFakeTimers()`: attiva la modalità fake timer: rimpiazza `setTimeout`/`setInterval` con mock.
+- `vi.advanceTimersByTime(ms)`: avanza i fake timer di `ms`, eseguendo i timer scaduti in quel lasso.
+- `vi.runAllTimersAsync()`: esegue subito tutti i timer pendenti.
+- `vi.useRealTimers()`: ripristina i timer reali (va messo in `afterEach`, così i test non si influenzano a vicenda).
 
 ```ts
 describe('reactive-flight-search with fake timers', () => {
@@ -639,7 +639,7 @@ describe('reactive-flight-search with fake timers', () => {
 ```
 
 > [!warning]
-> Con `httpResource` + fake timer serve `runAllTimersAsync()` **due volte**: *prima* di `expectOne` (il timer di debounce deve scadere e poi l'effect che lancia l'HTTP gira in un microtask successivo) e *dopo* il `flush` (alla risposta, l'`httpResource` risolve internamente una Promise → altro microtask). La complessità stessa di questo caso mostra perché spesso **il mocking è la scelta migliore**.
+> Con `httpResource` + fake timer serve `runAllTimersAsync()` **due volte**: *prima* di `expectOne` (il timer di debounce deve scadere e poi l'effect che lancia l'HTTP gira in un microtask successivo) e *dopo* il `flush` (alla risposta, l'`httpResource` risolve internamente una Promise, quindi c'è un altro microtask). Per questa complessità spesso **il mocking è la scelta migliore**.
 
 ## Testing Services
 > pp.215-216
@@ -715,7 +715,7 @@ Esegue i test e genera un sito statico in `coverage/<project-name>` (es. `covera
 <details>
 <summary>Cosa fa <code>provideHttpClientTesting()</code>, e a cosa servono <code>request.flush(...)</code> e <code>ctrl.verify()</code>?</summary>
 
-`provideHttpClientTesting()` sostituisce i servizi interni dell'`HttpClient` con mock che **intercettano** le richieste e restituiscono risposte fake (vale anche per `httpResource`). Ogni richiesta resta in pausa finché non la si risolve con `request.flush(...)` (la risposta fake). `ctrl.verify()` lancia un'eccezione se restano richieste **senza risposta** → tipicamente in `afterEach`.
+`provideHttpClientTesting()` sostituisce i servizi interni dell'`HttpClient` con mock che **intercettano** le richieste e restituiscono risposte fake (vale anche per `httpResource`). Ogni richiesta resta in pausa finché non la si risolve con `request.flush(...)` (la risposta fake). `ctrl.verify()` lancia un'eccezione se restano richieste **senza risposta**; tipicamente lo si chiama in `afterEach`.
 
 </details>
 
@@ -729,7 +729,7 @@ Perché l'`httpResource` **non** parte subito: usa un `effect` che osserva il re
 <details>
 <summary>Differenza tra mockare i ritardi (settings object) e usare i fake timer? Perché con <code>httpResource</code> + fake timer servono due <code>runAllTimersAsync()</code>?</summary>
 
-Mockare il ritardo significa azzerarlo alla fonte: si spia il getter `debounceTimeMs` e si forza `0` con `mockReturnValue(0)` (più semplice; va fatto **prima** di `createComponent`). I **fake timer** (`vi.useFakeTimers`) invece simulano lo scorrere del tempo e si fanno avanzare con `runAllTimersAsync`. Con `httpResource` ne servono due: uno **prima** di `expectOne` (scaduto il debounce, l'effect che lancia l'HTTP gira in un microtask) e uno **dopo** il `flush` (la resource risolve una Promise → altro microtask).
+Mockare il ritardo significa azzerarlo alla fonte: si spia il getter `debounceTimeMs` e si forza `0` con `mockReturnValue(0)` (più semplice; va fatto **prima** di `createComponent`). I **fake timer** (`vi.useFakeTimers`) invece simulano lo scorrere del tempo e si fanno avanzare con `runAllTimersAsync`. Con `httpResource` ne servono due: uno **prima** di `expectOne` (scaduto il debounce, l'effect che lancia l'HTTP gira in un microtask) e uno **dopo** il `flush` (la resource risolve una Promise, che richiede un altro microtask).
 
 </details>
 
@@ -742,6 +742,6 @@ Per il componente routed si usa il **`RouterTestingHarness`**: lo si crea con `R
 
 **In sintesi:**
 - **Vitest** è il test runner di default della CLI; la maggioranza dei test sono **component test** in **browser mode** (provider Playwright) che imitano l'utente via locator ARIA + `page` + `expect.element`.
-- Il **`TestBed`** monta i componenti e, grazie alla DI, sostituisce le dipendenze con **mock** (`useValue`, `overrideComponent` per i servizi a livello componente, stub per i figli → shallow testing).
+- Il **`TestBed`** monta i componenti e, grazie alla DI, sostituisce le dipendenze con **mock** (`useValue`, `overrideComponent` per i servizi a livello componente, stub per i figli nello shallow testing).
 - L'**`HttpTestingController`** (`provideHttpClientTesting`) risponde alle chiamate HTTP con dati fake; con `httpResource` bisogna tenere conto dei microtask di effect/Promise (`vi.waitFor`, `runAllTimersAsync`).
 - **Spy** (`vi.spyOn`) per i test gray-box, **fake timer** per debounce/delay (ma mockare i ritardi è spesso più semplice), e `ng test --coverage` per la copertura.

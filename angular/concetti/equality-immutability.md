@@ -5,7 +5,7 @@ aliases: [equality, immutability, glitch-free]
 ---
 # Equality & immutability
 
-Un [[signal]] avvisa chi dipende da lui **solo se il nuovo valore è diverso** dal precedente. Il confronto avviene di default con `Object.is`, ma si può personalizzare con l'opzione `equal`. È proprio per questo che lo stato va trattato in modo **immutabile**: invece di modificare un valore sul posto, se ne crea uno nuovo e si sostituisce il riferimento.
+Un [[signal]] avvisa chi dipende da lui **solo se il nuovo valore è diverso** dal precedente. Il confronto avviene di default con `Object.is`, ma si può personalizzare con l'opzione `equal`. Per questo lo stato va trattato in modo **immutabile**: invece di modificare un valore sul posto, se ne crea uno nuovo e si sostituisce il riferimento.
 
 ```ts
 // ❌ non notifica: stesso riferimento

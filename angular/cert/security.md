@@ -4,17 +4,17 @@ tags: [tipo/cert, security, legacy]
 livello: [senior]
 ---
 # Security
-> Cert Angular · le difese *built-in* del framework (sanitizzazione, XSRF, CSP) — invariate tra Angular classico e moderno
+> Cert Angular · le difese *built-in* del framework (sanitizzazione, XSRF, CSP), invariate tra Angular classico e moderno
 
 Angular tratta **ogni valore come non fidato** finché non lo dimostra sicuro per il contesto del DOM in cui finisce. La cert Senior chiede di conoscere queste difese (**sanitizzazione contestuale**, escaping dell'interpolation, `DomSanitizer`, protezione **XSRF** di `HttpClient`, **CSP** e Trusted Types) perché sono il modello di sicurezza che regge sia l'app module-based che quella standalone. La minaccia principale è l'**XSS** (*Cross-Site Scripting*: iniezione di codice eseguibile nella pagina attraverso dati non fidati).
 
 ## Sanitizzazione contestuale automatica
 Quando un valore entra nel DOM da un template, Angular lo **sanitizza** in base al **contesto di sicurezza** (`SecurityContext`): ciò che è innocuo in CSS può essere pericoloso in un URL, quindi la difesa dipende da *dove* il valore viene inserito. I contesti sanitizzabili:
 
-- **HTML** — valore interpretato come markup (es. binding `[innerHTML]`): Angular rimuove `<script>`, attributi `on*` e tag pericolosi.
-- **Style** — valore inserito in una proprietà CSS/`style`.
-- **URL** — URL usato come navigazione/link (es. `[href]`, `[src]` di immagini): blocca schemi pericolosi come `javascript:`.
-- **Resource URL** — URL **caricato ed eseguito come codice** (es. `[src]` di `<script>`/`<iframe>`): **non è sanitizzabile**, perché il contenuto è arbitrario, e Angular lo rifiuta a meno di un bypass esplicito.
+- **HTML**: valore interpretato come markup (es. binding `[innerHTML]`); Angular rimuove `<script>`, attributi `on*` e tag pericolosi.
+- **Style**: valore inserito in una proprietà CSS/`style`.
+- **URL**: URL usato come navigazione/link (es. `[href]`, `[src]` di immagini); Angular blocca schemi pericolosi come `javascript:`.
+- **Resource URL**: URL **caricato ed eseguito come codice** (es. `[src]` di `<script>`/`<iframe>`), che **non è sanitizzabile** perché il contenuto è arbitrario, e Angular lo rifiuta a meno di un bypass esplicito.
 
 Non esiste sanitizzazione per il contesto *script*: Angular non consente di bindare codice eseguibile.
 
@@ -66,7 +66,7 @@ export class VideoComponent {
 I cinque metodi, uno per contesto: `bypassSecurityTrustHtml`, `bypassSecurityTrustStyle`, `bypassSecurityTrustScript`, `bypassSecurityTrustUrl`, `bypassSecurityTrustResourceUrl`. Esiste anche `sanitize(context, value)` per sanitizzare a mano.
 
 > [!warning]
-> **Mai** passare **input dell'utente** (o dati che ne derivano) a un `bypassSecurityTrust…`: significa disabilitare l'unica barriera anti-XSS del framework. Usarli **solo** su valori costanti o di cui ci si fida al 100%, e chiamarli il **più vicino possibile alla sorgente** del valore (così è evidente in review che quel dato è fidato). Se non serve un bypass, non usarlo.
+> **Mai** passare **input dell'utente** (o dati che ne derivano) a un `bypassSecurityTrust…`: significa disabilitare l'unica barriera anti-XSS del framework. Usarli **solo** su valori costanti o di cui ci si fida al 100%, e chiamarli il **più vicino possibile alla sorgente** del valore (così è evidente in review che quel dato è fidato). Se un bypass non serve, non va usato.
 
 ## Protezione XSRF/CSRF con `HttpClient`
 L'**XSRF** (*Cross-Site Request Forgery*: un sito ostile forza il browser a inviare richieste autenticate al backend sfruttando i cookie di sessione) si contrasta con lo schema **cookie-to-header**. `HttpClient` include un interceptor che legge un token da un **cookie** e lo rispedisce come **header**: solo il codice same-origin può leggere il cookie, quindi un sito terzo non può replicare l'header.
@@ -112,7 +112,7 @@ Il nonce si passa via token `CSP_NONCE` in DI, oppure via attributo **`ngCspNonc
 I **Trusted Types** (feature della piattaforma web che vincola le *sink* pericolose del DOM ad accettare solo valori "fidati") sono l'ulteriore raccomandazione per irrigidire la difesa, abilitati via header CSP `require-trusted-types-for 'script'`. Angular è compatibile con i Trusted Types.
 
 ## Template injection
-Il modello di sicurezza vale per i **dati**, non per i **template**: costruire un template concatenando input dell'utente e compilarlo a runtime apre a *template injection*. La compilazione **AOT** (*Ahead-of-Time*, a build time) è la difesa strutturale — non spedisce il compilatore al browser, quindi un template ostile non può essere compilato lato client. La regola resta: **mai** generare template da dati dell'utente.
+Il modello di sicurezza vale per i **dati**, non per i **template**: costruire un template concatenando input dell'utente e compilarlo a runtime apre a *template injection*. La compilazione **AOT** (*Ahead-of-Time*, a build time) è la difesa strutturale: non spedisce il compilatore al browser, quindi un template ostile non può essere compilato lato client. La regola resta: **mai** generare template da dati dell'utente.
 
 > [!info|label:vs Modern]
 > Il modello di sicurezza (sanitizzazione contestuale, `DomSanitizer`, XSRF, CSP, Trusted Types) è **identico** nell'Angular moderno: cambia solo la configurazione dell'HTTP, da `HttpClientXsrfModule` a `provideHttpClient(withXsrfConfiguration(...))`. I temi di **autenticazione/autorizzazione** (login, token, guard) sono trattati nel vault, in [[16-authentication-authorization]]; qui non si ripetono.
@@ -165,4 +165,4 @@ Un interceptor legge un token dal cookie `XSRF-TOKEN` (default) e lo rispedisce 
 - Autenticazione/autorizzazione: si veda [[16-authentication-authorization]].
 
 ---
-Fonti: [Security](https://angular.dev/best-practices/security) · [`DomSanitizer`](https://angular.dev/api/platform-browser/DomSanitizer) · [`SecurityContext`](https://angular.dev/api/core/SecurityContext) · [`withXsrfConfiguration`](https://angular.dev/api/common/http/withXsrfConfiguration) · [`CSP_NONCE`](https://angular.dev/api/core/CSP_NONCE) — angular.dev.
+Fonti: [Security](https://angular.dev/best-practices/security) · [`DomSanitizer`](https://angular.dev/api/platform-browser/DomSanitizer) · [`SecurityContext`](https://angular.dev/api/core/SecurityContext) · [`withXsrfConfiguration`](https://angular.dev/api/common/http/withXsrfConfiguration) · [`CSP_NONCE`](https://angular.dev/api/core/CSP_NONCE), tutte su angular.dev.

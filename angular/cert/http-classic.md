@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 export class AppModule {}
 ```
 
-L'equivalente moderno è la provider function `provideHttpClient()` nei provider di bootstrap (vedi *Stato attuale*).
+L'equivalente moderno è la provider function `provideHttpClient()` nei provider di bootstrap (si veda *Stato attuale*).
 
 ## Verbi e risposte tipizzate
 `HttpClient` espone un metodo per verbo HTTP (`get`, `post`, `put`, `patch`, `delete`, `head`, `options`), più il generico `request`. Ogni metodo è **generico**: il tipo passato tipizza il corpo della risposta.
@@ -51,10 +51,10 @@ export class FlightService {
 ## Opzioni della richiesta
 L'ultimo argomento di ogni metodo è un oggetto di **opzioni** che regola i dettagli della richiesta e la forma della risposta. Le voci che ricorrono più spesso sono quattro.
 
-- **`params`** — un `HttpParams` (o un oggetto semplice) per la query string. `HttpParams` è **immutabile**: `set`/`append` restituiscono una **nuova** istanza.
-- **`headers`** — un `HttpHeaders` (anch'esso immutabile) per gli header.
-- **`observe`** — cosa emette l'Observable: `'body'` (default, il solo corpo `T`), `'response'` (l'intera `HttpResponse<T>` con status e header), `'events'` (stream di `HttpEvent`, per il progress di upload/download).
-- **`responseType`** — `'json'` (default) | `'text'` | `'blob'` | `'arraybuffer'`.
+- **`params`**: un `HttpParams` (o un oggetto semplice) per la query string. `HttpParams` è **immutabile**: `set`/`append` restituiscono una **nuova** istanza.
+- **`headers`**: un `HttpHeaders` (anch'esso immutabile) per gli header.
+- **`observe`**: cosa emette l'Observable, ossia `'body'` (default, il solo corpo `T`), `'response'` (l'intera `HttpResponse<T>` con status e header) o `'events'` (stream di `HttpEvent`, per il progress di upload/download).
+- **`responseType`**: `'json'` (default) | `'text'` | `'blob'` | `'arraybuffer'`.
 
 ```ts
 // observe: 'response' → si accede a status e header, non solo al body
@@ -154,7 +154,7 @@ find(): Observable<Flight[]> {
 > - `throwError(() => new Error(...))` va nella forma con **factory** (la vecchia `throwError(error)` è deprecata).
 
 > [!info|label:vs Modern]
-> Nel moderno `HttpClient` si registra con `provideHttpClient(...)` (feature: `withInterceptors`, `withFetch`, `withInterceptorsFromDi` per ri-usare gli interceptor class-based) invece di importare `HttpClientModule`. Gli interceptor preferiti sono **funzionali** (`HttpInterceptorFn` con [[inject]], `next(req)` invece di `next.handle(req)`), trattati in [[12-initialization-route-changes]]. Per il fetch di dati **reattivo** il vault usa `httpResource()` / `resource()`, che avvolgono `HttpClient` esponendo stato/valore/errore come **signal**, come spiegato in [[02-signal-based-components]]. Verbi, opzioni (`HttpParams`/`HttpHeaders`/`observe`/`responseType`), risposte tipizzate ed error handling RxJS restano **identici**. Qui non ripetuti.
+> Nel moderno `HttpClient` si registra con `provideHttpClient(...)` (feature: `withInterceptors`, `withFetch`, `withInterceptorsFromDi` per ri-usare gli interceptor class-based) invece di importare `HttpClientModule`. Gli interceptor preferiti sono **funzionali** (`HttpInterceptorFn` con [[inject]], `next(req)` invece di `next.handle(req)`), trattati in [[12-initialization-route-changes]]. Per il fetch di dati **reattivo** il vault usa `httpResource()` / `resource()`, che avvolgono `HttpClient` esponendo stato/valore/errore come **signal**, come spiegato in [[02-signal-based-components]]. Verbi, opzioni (`HttpParams`/`HttpHeaders`/`observe`/`responseType`), risposte tipizzate ed error handling RxJS restano **identici** e qui non sono ripetuti.
 
 > [!info|label:Stato attuale]
 > `HttpClientModule` (con `HttpClientJsonpModule` e `HttpClientTestingModule`) è **deprecato dalla v18** in favore di `provideHttpClient()` / `provideHttpClientTesting()`: non offre nulla in più ed è meno tree-shakable. `HttpClient`, i suoi verbi, `HttpParams`/`HttpHeaders`, l'interfaccia `HttpInterceptor` e `HttpErrorResponse` **non** sono deprecati; gli interceptor class-based restano usabili col moderno via `withInterceptorsFromDi()`. Fonte: [angular.dev/guide/http](https://angular.dev/guide/http).

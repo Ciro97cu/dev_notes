@@ -7,10 +7,10 @@ tags: [tipo/capitolo, routing, di, performance, angular-22]
 # 04 · Navigation & Lazy Loading with the Router
 > cap.4 · pp.87-119 — *Modern Angular* v3.0.0
 
-In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non basta: perché back button, bookmark e history del browser funzionino, ogni cambio di stato deve riflettersi nell'**URL**. Il **Router** di Angular automatizza tutto questo: mappa **path** → **componenti** e li attiva in un **placeholder** (`<router-outlet>`), tenendo l'URL sincronizzato con la vista corrente. Il capitolo copre: configurazione del routing, navigazione (link e programmatica), route parametrizzate, child routes, [[glossario#lazy-loading|lazy loading]] e preloading, query string e hash fragment, e le due strategie di location (path vs hash).
+In una SPA le "pagine" si simulano mostrando e nascondendo componenti, ma non basta: perché back button, bookmark e history del browser funzionino, ogni cambio di stato deve riflettersi nell'**URL**. Il **Router** di Angular automatizza tutto questo: associa i **path** ai **componenti** e li attiva in un **placeholder** (`<router-outlet>`), tenendo l'URL sincronizzato con la vista corrente. Il capitolo copre: configurazione del routing, navigazione (link e programmatica), route parametrizzate, child routes, [[glossario#lazy-loading|lazy loading]] e preloading, query string e hash fragment, e le due strategie di location (path vs hash).
 
 > [!tip]
-> In un'app Angular convivono più configurazioni di routing: `app.routes.ts` contiene le route necessarie fin dall'avvio; altre config vengono caricate **on demand** per singola feature o dominio (vedi lazy loading).
+> In un'app Angular convivono più configurazioni di routing: `app.routes.ts` contiene le route necessarie fin dall'avvio; altre config vengono caricate **on demand** per singola feature o dominio, con il lazy loading.
 
 ## Setting up Routing Configuration
 > pp.89-91
@@ -43,7 +43,7 @@ export const routes: Routes = [
 ```
 
 > [!warning]
-> Di default Angular fa **prefix matching**: `path: 'myRoute'` matcha anche `/myRoute/something-else`. Poiché in JavaScript la stringa vuota è prefisso di qualsiasi altra stringa, la default route `path: ''` matcherebbe sempre → serve `pathMatch: 'full'` perché Angular confronti l'URL per intero.
+> Di default Angular fa **prefix matching**: `path: 'myRoute'` matcha anche `/myRoute/something-else`. Poiché in JavaScript la stringa vuota è prefisso di qualsiasi altra stringa, la default route `path: ''` matcherebbe sempre: serve quindi `pathMatch: 'full'` perché Angular confronti l'URL per intero.
 
 > [!warning]
 > Le route si valutano **dall'alto verso il basso** e vince la **prima** che matcha. Le route specifiche vanno quindi **prima** di quelle generiche, e il catch-all `**` va sempre **ultimo**: funge da rete di sicurezza per ogni path sconosciuto.
@@ -141,7 +141,7 @@ export class Sidebar {}
 >   // un signal per voce di menu → [class.active]="homeActive()"
 > }
 > ```
-> Il terzo argomento opzionale di `isActive` accetta un `IsActiveMatchOptions` e regola la rigidità del match: di default vale `paths: 'subset'` (la route è attiva quando è prefisso dell'URL corrente); con `{ paths: 'exact' }` serve un match esatto — utile per route il cui stato altrimenti "trasborderebbe" sui sibling. Opzioni analoghe esistono per `matrixParams`, `queryParams` e `fragment`.
+> Il terzo argomento opzionale di `isActive` accetta un `IsActiveMatchOptions` e regola la rigidità del match: di default vale `paths: 'subset'` (la route è attiva quando è prefisso dell'URL corrente); con `{ paths: 'exact' }` serve un match esatto, utile per route il cui stato altrimenti "trasborderebbe" sui sibling. Opzioni analoghe esistono per `matrixParams`, `queryParams` e `fragment`.
 
 Collegamenti: [[02-signal-based-components]] (struttura componenti e `imports`).
 
@@ -196,7 +196,7 @@ Qui `showDetails` si riferisce al segmento `flight-edit/17`, mentre `orderBy` si
 
 ### Reading Parameters with ActivatedRoute
 
-Approccio classico: [[inject]] di `ActivatedRoute` e subscribe a `paramMap` (un Observable). I parametri sono **sempre stringhe** → vanno convertiti a mano.
+L'approccio classico è l'[[inject]] di `ActivatedRoute` con un subscribe a `paramMap` (un Observable). I parametri sono **sempre stringhe**, quindi vanno convertiti a mano.
 
 ```ts
 // src/app/domains/ticketing/feature-booking/flight-edit/flight-edit.ts
@@ -228,7 +228,7 @@ export class FlightEdit {
 
 ### Using withComponentInputBinding() for Reading Parameters
 
-Feature di `provideRouter`: lega automaticamente parametri di segmento e matrix a **input del componente** con lo stesso nome.
+È una feature di `provideRouter` che lega automaticamente parametri di segmento e matrix a **input del componente** con lo stesso nome.
 
 ```ts
 // src/app/app.config.ts
@@ -366,7 +366,7 @@ Le child route vanno nell'array `children` del nodo padre, con una default route
 `booking/flight-search` attiva `FlightSearch` dentro il placeholder di `BookingNavigation`, che a sua volta sta dentro `App`. La child route a path vuoto è la default route di `booking`: chiamare solo `booking` redirige a `booking/flight-search`.
 
 > [!warning]
-> Path relativi in `routerLink`: `./x` appende alla route corrente (è il default, quindi omettibile). `../x` punta a un **sibling** — es. da `./booking/flight-search` a `./booking/passenger-search` con `../passenger-search`.
+> Path relativi in `routerLink`: `./x` appende alla route corrente (è il default, quindi omettibile). `../x` punta a un **sibling**: es. da `./booking/flight-search` a `./booking/passenger-search` con `../passenger-search`.
 
 ## Lazy Loading of Routes
 > pp.108-112
@@ -420,7 +420,7 @@ export default ticketingRoutes;
 ```
 
 > [!warning]
-> Il segmento del path (`ticketing`) viene **prefissato a tutte** le child route del file lazy. Con `path: 'ticketing'` + `booking/flight-search` interno → l'URL completo è `ticketing/booking/flight-search`. Vanno aggiornati i `routerLink` di conseguenza (es. nel `Sidebar`).
+> Il segmento del path (`ticketing`) viene **prefissato a tutte** le child route del file lazy. Con `path: 'ticketing'` e `booking/flight-search` interno, l'URL completo è `ticketing/booking/flight-search`. Vanno aggiornati i `routerLink` di conseguenza (es. nel `Sidebar`).
 
 ### Lazy Loading Individual Components with the Router
 
@@ -437,7 +437,7 @@ Oltre alle intere config di route, si può caricare lazy un **singolo componente
 Lo si verifica nel browser: nell'output di `ng serve` compare un **bundle separato**; nel tab **Network** di Chrome DevTools si vede che viene scaricato solo al bisogno. In dev mode Angular carica diversi file extra (il dev server compila on demand per velocizzare lo startup); in produzione vengono caricati solo i lazy bundle effettivamente richiesti.
 
 > [!tip]
-> `loadChildren` → config di route lazy; `loadComponent` → singolo componente lazy. Entrambi passano per un dynamic `import()`; con un `default export` si può omettere il `.then`.
+> `loadChildren` carica lazy una config di route, `loadComponent` un singolo componente. Entrambi passano per un dynamic `import()`; con un `default export` si può omettere il `.then`.
 
 ### Preloading
 > pp.113-114
@@ -463,9 +463,9 @@ provideRouter(
 ## Working with Query Strings and Hash Fragments
 > pp.114-115
 
-Oltre a segmenti e matrix, il Router supporta la classica **query string** (`url?param1=value1&param2=value2`) e l'**hash fragment** (`url#info-in-hash-fragment`) — poco usati in Angular, ma utili per impostazioni applicative globali.
+Oltre a segmenti e matrix, il Router supporta la classica **query string** (`url?param1=value1&param2=value2`) e l'**hash fragment** (`url#info-in-hash-fragment`). Sono poco usati in Angular, ma utili per impostazioni applicative globali.
 
-Programmaticamente via il 2° argomento di `navigate`, un oggetto `NavigationExtras`:
+Programmaticamente si passano col 2° argomento di `navigate`, un oggetto `NavigationExtras`:
 
 ```ts
 this.router.navigate(['/next-flights'], {
@@ -475,7 +475,7 @@ this.router.navigate(['/next-flights'], {
 
 Opzioni utili dell'oggetto: `queryParamsHandling` (`'preserve'` mantiene la query string corrente durante il route change, `'merge'` la estende con quanto specificato in `queryParams`), `hash` (definisce il fragment) e `preserveHash` (mantiene il fragment corrente).
 
-Dichiarativamente via `routerLink` + data binding:
+Dichiarativamente si passano con `routerLink` e il data binding:
 
 ```html
 <button
@@ -527,7 +527,7 @@ import { APP_BASE_HREF } from '@angular/common';
 
 ### HashLocationStrategy
 
-Hash routing: `http://localhost:4200#/booking/flight-search`. La route sta nell'hash fragment. Si attiva con la feature `withHashLocation`:
+È la strategia dell'hash routing: `http://localhost:4200#/booking/flight-search`, con la route nell'hash fragment. Si attiva con la feature `withHashLocation`:
 
 ```ts
 import { provideRouter, withComponentInputBinding, withHashLocation } from '@angular/router';
@@ -540,7 +540,7 @@ provideRouter(
 );
 ```
 
-Vantaggio: niente redirect server-side né `<base>` da configurare — la separazione tra parte server-side e route client-side è data direttamente dall'hash nell'URL.
+Il vantaggio è che non ci sono redirect server-side né `<base>` da configurare: la separazione tra parte server-side e route client-side è data direttamente dall'hash nell'URL.
 
 > [!warning]
 > Con `HashLocationStrategy` l'URL appare meno "naturale" all'utente e **non funziona il [[glossario#ssr-server-side-rendering|server-side rendering]]** delle singole route ([[17-defer-ssr-hydration|cap.17]]): l'hash fragment non viene inviato al server.
@@ -566,7 +566,7 @@ Con `ActivatedRoute` si fa `inject(ActivatedRoute)` e ci si **subscribe** a `par
 <details>
 <summary>Come si configura un parametro di segmento nelle route, e cosa diventa un oggetto passato nell'array di <code>routerLink</code>?</summary>
 
-Nella config si dichiarano solo i parametri di **segmento**, prefissati con i due punti: `{ path: 'flight-edit/:id', component: FlightEdit }`. Matrix e query non si dichiarano (riconosciuti a runtime). In `routerLink` un **oggetto** dentro l'array diventa un insieme di **matrix parameter**: `['../flight-edit', 3, { showDetails: true }]` → `../flight-edit/3;showDetails=true`.
+Nella config si dichiarano solo i parametri di **segmento**, prefissati con i due punti: `{ path: 'flight-edit/:id', component: FlightEdit }`. Matrix e query non si dichiarano (riconosciuti a runtime). In `routerLink` un **oggetto** dentro l'array diventa un insieme di **matrix parameter**: `['../flight-edit', 3, { showDetails: true }]` produce `../flight-edit/3;showDetails=true`.
 
 </details>
 

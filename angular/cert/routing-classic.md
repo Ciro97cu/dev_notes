@@ -4,7 +4,7 @@ tags: [tipo/cert, routing, legacy]
 livello: [mid]
 ---
 # Routing classico
-> Cert Angular · il Router in forma *module-based* — `RouterModule.forRoot`, guard/resolver class-based, `snapshot`; il setup moderno è nel vault ([[04-router-navigation-lazy-loading]])
+> Cert Angular · il Router in forma *module-based*: `RouterModule.forRoot`, guard/resolver class-based, `snapshot`; il setup moderno è nel vault ([[04-router-navigation-lazy-loading]])
 
 Nel Router classico la configurazione si registra con `RouterModule.forRoot`/`forChild` dentro gli `@NgModule`, guard e resolver sono **classi** `@Injectable` che implementano un'interfaccia, e i parametri si leggono spesso via `ActivatedRoute.snapshot`. La cert lo richiede perché è così che è cablata la maggior parte delle app esistenti, e perché il ciclo di navigazione (prima i guard, poi il resolve dei dati, infine l'attivazione) è materia d'esame.
 
@@ -109,7 +109,7 @@ Nel classico il lazy loading carica un **NgModule** (non una route/component): `
 ```
 
 > [!warning]
-> La vecchia sintassi a **stringa** `loadChildren: './booking/booking.module#BookingModule'` è stata **rimossa** con Ivy (Angular v9): oggi vale solo la forma con dynamic `import()`. Ricorda inoltre che il segmento del path (`booking`) viene **prefissato** a tutte le route del modulo lazy.
+> La vecchia sintassi a **stringa** `loadChildren: './booking/booking.module#BookingModule'` è stata **rimossa** con Ivy (Angular v9): oggi vale solo la forma con dynamic `import()`. Inoltre il segmento del path (`booking`) viene **prefissato** a tutte le route del modulo lazy.
 
 ## Guard class-based
 Un guard classico è una classe `@Injectable` che implementa una delle interfacce del Router. Un guard può restituire `boolean`, un `UrlTree` (per **redirigere**), o un `Observable`/`Promise` di questi.
@@ -165,7 +165,7 @@ export class FeatureFlagGuard implements CanMatch {
 }
 ```
 
-Registrazione nelle route (array, perché più guard possono concorrere):
+I guard si registrano nelle route come array, perché più guard possono concorrere:
 
 ```ts
 {
@@ -183,7 +183,7 @@ Registrazione nelle route (array, perché più guard possono concorrere):
 ```
 
 > [!warning]
-> `CanLoad` (deprecato) impediva solo il **caricamento del bundle** ma non faceva ri-valutare la route: con più route sullo stesso path non permetteva un fallback. `CanMatch`, valutato nel matching, se `false` fa **provare la route successiva**: è quindi più potente e va preferito.
+> `CanLoad` (deprecato) impediva solo il **caricamento del bundle** ma non faceva ri-valutare la route: con più route sullo stesso path non permetteva un fallback. `CanMatch`, valutato nel matching, se `false` fa **provare la route successiva**: è quindi più flessibile e va preferito.
 
 ## Resolver class-based
 Un **resolver** (`Resolve<T>`) sposta il caricamento dei dati *prima* dell'attivazione della route: il Router attende che il dato sia risolto e solo allora monta il componente, che così lo trova già pronto invece di dover gestire da sé uno stato di caricamento iniziale.

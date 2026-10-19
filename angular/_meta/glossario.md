@@ -4,12 +4,12 @@ tags: [tipo/glossario]
 ---
 # Glossario
 
-Termini tecnici ricorrenti del libro, spiegati in parole semplici. I capitoli linkano qui alla prima occorrenza di un termine; i nomi di API e keyword restano in inglese (non si traducono), ma qui trovi cosa significano davvero.
+Termini tecnici ricorrenti del libro, spiegati in parole semplici. I capitoli linkano qui alla prima occorrenza di un termine; i nomi di API e keyword restano in inglese (non si traducono), ma qui se ne trova il significato.
 
 ## Reattività e change detection
 
 ### change detection
-Il meccanismo con cui Angular **controlla se qualcosa è cambiato** nei dati e, se sì, **aggiorna il DOM** di conseguenza. In pratica: ricalcola cosa mostrare quando lo stato cambia. Con i signal questo controllo diventa mirato (solo ciò che dipende dal valore cambiato).
+Il meccanismo con cui Angular **controlla se qualcosa è cambiato** nei dati e, se sì, **aggiorna il DOM** di conseguenza. In pratica, ricalcola cosa mostrare quando lo stato cambia. Con i signal questo controllo diventa mirato (solo ciò che dipende dal valore cambiato).
 
 ### reactive context
 La "zona" di codice in cui Angular **tiene traccia di quali signal vengono letti**, così sa cosa ricalcolare quando cambiano. Dentro un `computed`/`effect`/template si è in reactive context (le letture vengono tracciate); in una funzione normale no.
@@ -18,27 +18,27 @@ La "zona" di codice in cui Angular **tiene traccia di quali signal vengono letti
 Il **grafo delle dipendenze** tra signal: chi legge chi. Un `computed` che legge due signal ne "dipende"; quando uno cambia, Angular sa esattamente quali nodi del grafo ricalcolare. Pensare in termini di grafo = progettare il flusso dei dati come catene di dipendenze.
 
 ### glitch-free
-Garanzia che i consumatori di un signal vedono **solo valori coerenti e già stabilizzati**, mai stati intermedi incoerenti durante un aggiornamento. Niente "sfarfallii" di valori a metà.
+Garanzia che i consumatori di un signal vedono **solo valori coerenti e già stabilizzati**, mai stati intermedi incoerenti ("sfarfallii" di valori a metà) durante un aggiornamento.
 
 ### immutability (immutabilità)
-Trattare lo stato **senza modificarlo sul posto**: invece di cambiare un oggetto/array esistente, ne crei uno nuovo. Serve perché i signal notificano un cambiamento solo se il **riferimento** cambia (`Object.is`): `arr.push(x)` non notifica, `[...arr, x]` sì.
+Trattare lo stato **senza modificarlo sul posto**: invece di cambiare un oggetto/array esistente, se ne crea uno nuovo. Serve perché i signal notificano un cambiamento solo se il **riferimento** cambia (`Object.is`): `arr.push(x)` non notifica, `[...arr, x]` sì.
 
 ### race condition
 Quando **due operazioni asincrone** (es. due chiamate HTTP) finiscono in ordine imprevedibile e l'ultima a rispondere "vince", magari sovrascrivendo dati più recenti con dati vecchi. `httpResource` la gestisce annullando le richieste superate.
 
 ### debounce (debouncing)
-**Aspettare che l'utente smetta** di digitare/agire prima di reagire: invece di lanciare un'azione a ogni tasto, attendi un attimo di pausa. Evita raffiche di chiamate inutili.
+**Aspettare che l'utente smetta** di digitare/agire prima di reagire: invece di lanciare un'azione a ogni tasto, si attende un attimo di pausa, così si evitano raffiche di chiamate inutili.
 
 ## Componenti, template e direttive
 
 ### content projection
-Quando un componente **riceve del markup dal chiamante** e lo mostra dentro di sé, nel punto segnato da `<ng-content>`. È il "buco" dove infili il contenuto passato dall'esterno.
+Quando un componente **riceve del markup dal chiamante** e lo mostra dentro di sé, nel punto segnato da `<ng-content>`. È il "buco" in cui si infila il contenuto passato dall'esterno.
 
 ### View e Content
 Due cose distinte di un componente: la **View** è ciò che il componente definisce nel **proprio template**; il **Content** è il markup che il **chiamante** gli passa (e che finisce in `<ng-content>`). Si interrogano con query diverse (`viewChild` vs `contentChild`).
 
 ### attribute directive
-Una direttiva che **aggiunge comportamento a un elemento esistente** senza avere un proprio template (es. un tooltip su un bottone). Si chiama "attribute" perché di solito la applichi come un attributo HTML.
+Una direttiva che **aggiunge comportamento a un elemento esistente** senza avere un proprio template (es. un tooltip su un bottone). Si chiama "attribute" perché di solito si applica come un attributo HTML.
 
 ### structural directive
 Una direttiva che **aggiunge o rimuove elementi dal DOM** (cambia la "struttura" della pagina), come facevano `*ngIf`/`*ngFor`. Oggi per il control flow si usano i blocchi nativi `@if`/`@for`.
@@ -55,16 +55,16 @@ Una variabile dichiarata nel template con `#nome`, che dà un **riferimento** a 
 ## Dependency Injection e servizi
 
 ### dependency injection (DI)
-Il pattern per cui un oggetto **non crea le proprie dipendenze ma se le fa "consegnare"** da Angular. Tu chiedi un servizio con `inject(X)` e Angular ti passa l'istanza giusta, senza che tu sappia come è costruita.
+Il pattern per cui un oggetto **non crea le proprie dipendenze ma se le fa "consegnare"** da Angular. Si chiede un servizio con `inject(X)` e Angular passa l'istanza giusta, senza che chi la chiede sappia come è costruita.
 
 ### injection context
 Il **momento/luogo in cui Angular sa risolvere le dipendenze**: dentro il costruttore, gli initializer di campo, o le factory dei provider. Funzioni come `inject()` funzionano solo qui; fuori da questo contesto danno errore.
 
 ### provider
-La **ricetta** che dice ad Angular *come ottenere* il valore per un certo token: con quale classe (`useClass`), valore (`useValue`), factory (`useFactory`) o alias (`useExisting`). Lo configuri nell'array `providers`.
+La **ricetta** che dice ad Angular *come ottenere* il valore per un certo token: con quale classe (`useClass`), valore (`useValue`), factory (`useFactory`) o alias (`useExisting`). Si configura nell'array `providers`.
 
 ### injection token
-La **chiave** con cui chiedi una dipendenza. Spesso è una classe, ma può essere un token esplicito (`InjectionToken`) per iniettare valori che non sono classi (config, URL, costanti).
+La **chiave** con cui si chiede una dipendenza. Spesso è una classe, ma può essere un token esplicito (`InjectionToken`) per iniettare valori che non sono classi (config, URL, costanti).
 
 ### standalone
 Un componente/direttiva/pipe che **non ha bisogno di un NgModule**: dichiara da solo cosa importa. Dalla v17+ è il default; scrivere `standalone: true` è ormai ridondante.
@@ -72,10 +72,10 @@ Un componente/direttiva/pipe che **non ha bisogno di un NgModule**: dichiara da 
 ## Routing e ciclo di vita
 
 ### lazy loading
-Caricare il codice di una parte dell'app **solo quando serve** (es. quando navighi su quella rotta), invece che tutto all'avvio. Riduce il peso iniziale e velocizza il primo caricamento.
+Caricare il codice di una parte dell'app **solo quando serve** (es. quando si naviga su quella rotta), invece che tutto all'avvio. Riduce il peso iniziale e velocizza il primo caricamento.
 
 ### guard
-Una funzione che **decide se una navigazione può avvenire** (attivare o lasciare una rotta), es. un redirect al login se non sei autenticato. Nelle SPA è una questione di *usabilità*: la sicurezza vera la fa il backend.
+Una funzione che **decide se una navigazione può avvenire** (attivare o lasciare una rotta), es. un redirect al login se l'utente non è autenticato. Nelle SPA è una questione di *usabilità*: la sicurezza vera la fa il backend.
 
 ### resolver
 Una funzione che **carica i dati prima** che la rotta venga attivata, così il componente parte già con i dati pronti invece di mostrare uno stato vuoto.
@@ -86,10 +86,10 @@ Un "filtro" che **intercetta tutte le richieste/risposte HTTP** per modificarle 
 ## Performance, rendering e SSR
 
 ### tree-shaking
-L'eliminazione automatica, in fase di build, del **codice mai usato**, così il bundle finale è più leggero. "Scuoti l'albero" e cade ciò che non è agganciato.
+L'eliminazione automatica, in fase di build, del **codice mai usato**, così il bundle finale è più leggero. Si "scuote l'albero" e cade ciò che non è agganciato.
 
 ### zoneless / Zone.js
-**Zone.js** è la vecchia libreria che faceva scattare la change detection "magicamente" a ogni evento. **Zoneless** = farne a meno, lasciando che siano i **signal** a dire ad Angular cosa aggiornare: più prevedibile e leggero.
+**Zone.js** è la vecchia libreria che faceva scattare la change detection in automatico a ogni evento. **Zoneless** = farne a meno, lasciando che siano i **signal** a dire ad Angular cosa aggiornare: più prevedibile e leggero.
 
 ### deferrable view (`@defer`)
 Un blocco di template che viene **caricato e renderizzato in ritardo**, su un trigger (quando entra nel viewport, al click, in idle…). Serve a non pagare subito il costo di parti pesanti o secondarie.
@@ -138,13 +138,13 @@ Un contenitore **centralizzato dello stato** di una parte dell'app, con un modo 
 Una funzione **pura** che, dato lo stato attuale e un evento, **restituisce il nuovo stato** (senza modificare il vecchio). È il punto unico dove lo stato cambia.
 
 ### dispatch
-**Inviare un evento** allo store ("è successa questa cosa"), che poi i reducer/handler trasformano in un cambiamento di stato. Tu annunci l'intenzione, lo store decide come reagire.
+**Inviare un evento** allo store ("è successa questa cosa"), che poi i reducer/handler trasformano in un cambiamento di stato. Chi fa il dispatch annuncia l'intenzione, lo store decide come reagire.
 
 ### entity / normalization
 Una **entity** è un singolo oggetto con un id (un volo, un utente). La **normalization** è tenerle in una mappa `id → entity` invece che in liste annidate, per evitare duplicati e aggiornamenti incoerenti.
 
 ### optimistic update
-Aggiornare subito la UI **come se l'operazione fosse già riuscita**, prima della risposta del server, e fare rollback solo se fallisce. La UI sembra istantanea.
+Aggiornare subito la UI **come se l'operazione fosse già riuscita**, prima della risposta del server, e fare rollback solo se fallisce, così la UI sembra istantanea.
 
 ## Sicurezza (auth)
 
@@ -158,7 +158,7 @@ Un **token firmato** che contiene informazioni sull'utente (claims) in formato J
 Un'estensione di OAuth 2 che **lega la richiesta di login al client** che l'ha iniziata (con una coppia `code_verifier`/`code_challenge`), così un token intercettato non è riutilizzabile da un attaccante.
 
 ### XSRF / CSRF
-Attacco in cui un sito malevolo **fa partire richieste a tua insaputa** sfruttando i cookie già presenti nel browser. Si mitiga con token anti-XSRF e attributi sui cookie (`SameSite`).
+Attacco in cui un sito malevolo **fa partire richieste all'insaputa dell'utente** sfruttando i cookie già presenti nel browser. Si mitiga con token anti-XSRF e attributi sui cookie (`SameSite`).
 
 ### Bearer token
 Un token di accesso che il client **allega a ogni richiesta** nell'header `Authorization: Bearer <token>` per dimostrare di essere autorizzato. "Bearer" = "al portatore": chi lo possiede può usarlo, quindi va protetto.
@@ -178,7 +178,7 @@ Un **alias di import** definito in `tsconfig.json` che fa corrispondere un nome 
 Quando un provider in uno **scope più interno oscura** quello esterno con lo stesso token: chi sta dentro riceve la versione più vicina nella gerarchia DI, non quella di livello app.
 
 ### environment provider
-Un provider registrato a livello di **"ambiente"** (root o rotta), valido per intere porzioni dell'app e non per un singolo componente — usato ad esempio dal router per i servizi route-local.
+Un provider registrato a livello di **"ambiente"** (root o rotta), valido per intere porzioni dell'app e non per un singolo componente; lo usa ad esempio il router per i servizi route-local.
 
 ### auto-provided
-Un service **registrato automaticamente** nel root injector grazie a `@Service()` (cioè `providedIn: 'root'`), senza bisogno di inserirlo a mano in un array `providers`. Con `@Service({ autoProvided: false })` lo escludi, per fornirlo tu dove serve.
+Un service **registrato automaticamente** nel root injector grazie a `@Service()` (cioè `providedIn: 'root'`), senza bisogno di inserirlo a mano in un array `providers`. Con `@Service({ autoProvided: false })` lo si esclude, per fornirlo a mano dove serve.

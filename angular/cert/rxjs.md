@@ -29,7 +29,7 @@ const sub = clock$.subscribe({
 sub.unsubscribe(); // ferma lo stream ed esegue il teardown
 ```
 
-Un `Observable` emette zero o più valori con `next`, e termina con **`complete`** (successo) **o** `error` — mai entrambi; dopo la terminazione non emette più nulla. `next`/`error`/`complete` sono i tre metodi dell'`Observer`.
+Un `Observable` emette zero o più valori con `next`, e termina con **`complete`** (successo) **o** `error`, mai entrambi; dopo la terminazione non emette più nulla. `next`/`error`/`complete` sono i tre metodi dell'`Observer`.
 
 ## Creazione
 Nella pratica un `Observable` si costruisce di rado a mano con `new`: la libreria offre una serie di **funzioni factory** che coprono i casi ricorrenti (partire da valori noti, da un array o una Promise, da eventi del DOM, oppure dal tempo) restituendo lo stream già pronto all'uso.
@@ -137,8 +137,8 @@ this.searchTerm$.pipe(
 ## Hot vs cold
 La differenza sta in **dove vive il produttore** dei valori, e di conseguenza se ogni sottoscrizione ottiene una propria esecuzione oppure ne condivide una sola.
 
-- **Cold** — il produttore è creato *dentro* l'Observable, così ogni `subscribe` ne avvia uno nuovo e indipendente. È il default della gran parte delle factory (`of`, `from`, `interval`, `http.get`): due iscritti a `http.get` sono due richieste HTTP separate, ciascuna col proprio flusso dall'inizio.
-- **Hot** — il produttore è *esterno* e preesistente, e i subscriber si limitano ad agganciarsi a un flusso già in corso, perdendo ciò che è passato prima della loro iscrizione. Un `Subject` è hot perché non ha una sorgente propria: ritrasmette solo ciò che gli si spinge dentro. `fromEvent(document, 'click')` è intrinsecamente hot perché i click del DOM avvengono comunque, a prescindere dalle sottoscrizioni, e l'Observable è soltanto una finestra su una sorgente che esiste già.
+- **Cold**: il produttore è creato *dentro* l'Observable, così ogni `subscribe` ne avvia uno nuovo e indipendente. È il default della gran parte delle factory (`of`, `from`, `interval`, `http.get`): due iscritti a `http.get` sono due richieste HTTP separate, ciascuna col proprio flusso dall'inizio.
+- **Hot**: il produttore è *esterno* e preesistente, e i subscriber si limitano ad agganciarsi a un flusso già in corso, perdendo ciò che è passato prima della loro iscrizione. Un `Subject` è hot perché non ha una sorgente propria: ritrasmette solo ciò che gli si spinge dentro. `fromEvent(document, 'click')` è intrinsecamente hot perché i click del DOM avvengono comunque, a prescindere dalle sottoscrizioni, e l'Observable è soltanto una finestra su una sorgente che esiste già.
 
 Un cold si **condivide** (multicast) fra più iscritti con `share()`, che interpone un `Subject` e trasforma N esecuzioni in una sola. `shareReplay` fa lo stesso ma **rigioca** gli ultimi valori ai subscriber tardivi, utile come cache di una risposta HTTP consumata in più punti della UI:
 
@@ -153,12 +153,12 @@ const config$ = this.http.get<Config>('/api/config').pipe(
 > [!warning]
 > `shareReplay(1)` **senza** `refCount: true` tiene viva la sottoscrizione alla sorgente anche quando gli iscritti scendono a zero: su uno stream che non completa è un memory leak. Per flussi infiniti si usa `shareReplay({ bufferSize: 1, refCount: true })`, così la sorgente si chiude quando l'ultimo consumatore si disiscrive.
 
-Sotto, il multicasting nasce sempre da un `Subject` condiviso. La primitiva a basso livello è [`connectable(source)`](https://rxjs.dev/api/index/function/connectable), un Observable multicast che **non parte** finché non si chiama `.connect()` — uno stato "warm" (condiviso ma inerte fino al via), utile per iscrivere tutti i consumatori *prima* di avviare la sorgente. Gli operator storici `multicast`/`publish`/`refCount` fanno la stessa cosa ma sono **deprecati** in RxJS 7, a favore di `connectable` e di `share`/`shareReplay`.
+Sotto, il multicasting nasce sempre da un `Subject` condiviso. La primitiva a basso livello è [`connectable(source)`](https://rxjs.dev/api/index/function/connectable), un Observable multicast che **non parte** finché non si chiama `.connect()`. È uno stato "warm" (condiviso ma inerte fino al via), utile per iscrivere tutti i consumatori *prima* di avviare la sorgente. Gli operator storici `multicast`/`publish`/`refCount` fanno la stessa cosa ma sono **deprecati** in RxJS 7, a favore di `connectable` e di `share`/`shareReplay`.
 
 ## Pattern di unsubscribe
 Una sottoscrizione non chiusa su uno stream che non completa (`interval`, `valueChanges`, un `Subject`) è un **memory leak**: il callback resta appeso al componente distrutto. Tre pattern corretti:
 
-**1. `takeUntilDestroyed()`** — il modo idiomatico odierno. Completa lo stream quando il contesto (component/directive/service) viene distrutto; va chiamato in un **injection context** (es. nei field initializer) o con un `DestroyRef` esplicito.
+**1. `takeUntilDestroyed()`**. È il modo idiomatico odierno. Completa lo stream quando il contesto (component/directive/service) viene distrutto; va chiamato in un **injection context** (es. nei field initializer) o con un `DestroyRef` esplicito.
 
 ```ts
 import { inject, DestroyRef } from '@angular/core';
@@ -183,7 +183,7 @@ export class Search {
 }
 ```
 
-**2. `takeUntil()` + subject di destroy** — il pattern classico pre-`takeUntilDestroyed`, ancora frequentissimo nelle codebase e chiesto all'esame:
+**2. `takeUntil()` + subject di destroy**. È il pattern classico pre-`takeUntilDestroyed`, ancora frequentissimo nelle codebase e chiesto all'esame:
 
 ```ts
 import { Subject, takeUntil } from 'rxjs';
@@ -204,7 +204,7 @@ export class Legacy implements OnInit, OnDestroy {
 }
 ```
 
-**3. `async` pipe** — la sottoscrizione la gestisce il template: si iscrive al mount, **si disiscrive da solo** alla distruzione. Zero gestione manuale.
+**3. `async` pipe**. La sottoscrizione la gestisce il template, che si iscrive al mount e **si disiscrive da solo** alla distruzione, senza alcuna gestione manuale.
 
 ```html
 @if (results$ | async; as results) {

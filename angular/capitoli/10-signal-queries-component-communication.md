@@ -135,7 +135,7 @@ export class TabbedPane {
 `current` è un [[model-signal|model()]] con l'indice del tab attivo, mentre `currentTab` è un [[computed]] che restituisce l'**istanza** del tab corrente, leggendo `tabs()[current()]`. Nel template il `@for` disegna un bottone per ogni tab (`track tab` traccia l'**istanza**) e `<ng-content>` proietta i contenuti, ma a renderizzare il proprio contenuto è solo il tab il cui `visible()` vale `true`. Ogni `Tab` si aggancia passando `this` (la propria istanza) a `registerTab` dal costruttore.
 
 > [!warning]
-> Per far funzionare il `Tab` **anche senza** un `TabbedPane` padre, inietta con `{ optional: true }`: se Angular non trova un'implementazione per il token (la chiave con cui si chiede una dipendenza, qui la classe `TabbedPane`) restituisce `undefined` invece di lanciare un errore. Poi proteggi la chiamata con l'optional chaining (`?.`, l'operatore che evita l'errore se prima del punto c'è `null`/`undefined`).
+> Per far funzionare il `Tab` **anche senza** un `TabbedPane` padre, si inietta con `{ optional: true }`: se Angular non trova un'implementazione per il token (la chiave con cui si chiede una dipendenza, qui la classe `TabbedPane`) restituisce `undefined` invece di lanciare un errore. Poi si protegge la chiamata con l'optional chaining (`?.`, l'operatore che evita l'errore se prima del punto c'è `null`/`undefined`).
 
 ```ts
 private pane = inject(TabbedPane, { optional: true });
@@ -149,9 +149,9 @@ Collegamenti: [[inject]] · [[glossario#dependency-injection-di|DI]] approfondit
 ## View and Content
 > pp.290-291
 
-Ogni componente non ha solo una **View**, ma anche un **Content**:
+Ogni componente ha una **View** e un **Content**:
 
-- **View** = ciò che il componente definisce nel **proprio template** → determina la presentazione a runtime.
+- **View** = ciò che il componente definisce nel **proprio template**, e determina la presentazione a runtime.
 - **Content** = il **markup passato dal chiamante**, che Angular inserisce nell'elemento `<ng-content>` del template tramite Content Projection.
 
 ```mermaid
@@ -246,7 +246,7 @@ export class Tab {
 
 Il confronto `this._pane?.currentTab() === this` è di nuovo un controllo d'identità con la keyword `this` (l'istanza del `Tab`); qui serve l'optional chaining (`?.`) perché `_pane` viene popolato solo **dopo** che l'`effect` del pane ha assegnato sé stesso, quindi all'inizio può essere `undefined`.
 
-Oltre a `contentChildren` (molti elementi) esiste `contentChild` (esattamente uno). Entrambi accettano due tipi di filtro — il **tipo** di componente o una **template reference** (l'etichetta `#nome` messa nel markup, usata qui come stringa per identificare gli elementi da prendere):
+Oltre a `contentChildren` (molti elementi) esiste `contentChild` (esattamente uno). Entrambi accettano due tipi di filtro, cioè il **tipo** di componente o una **template reference** (l'etichetta `#nome` messa nel markup, usata qui come stringa per identificare gli elementi da prendere):
 
 ```ts
 readonly firstTab = contentChild(Tab);          // per tipo, singolo
@@ -314,7 +314,7 @@ Si usa `afterRenderEffect` per essere certi che la view sia pronta e il canvas g
 > p.295
 
 > [!warning]
-> Interagire direttamente con la View **rimpiazza il data binding dichiarativo** (la via normale di Angular: dichiari nel template cosa mostrare e ci pensa lui ad aggiornarlo) con codice imperativo tuo (l'aggiorni a mano, passo passo): più difficile da seguire e mantenere, e gli update diretti delle proprietà possono innescare cicli di [[glossario#change-detection|change detection]] (il giro che Angular fa per rilevare i cambiamenti e riaggiornare la UI). Gli autori mettono in discussione **ogni** `viewChild`/`viewChildren` in code review.
+> Interagire direttamente con la View **rimpiazza il data binding dichiarativo** (la via normale di Angular: si dichiara nel template cosa mostrare e ci pensa il framework ad aggiornarlo) con codice imperativo (la UI si aggiorna a mano, passo passo): più difficile da seguire e mantenere, e gli update diretti delle proprietà possono innescare cicli di [[glossario#change-detection|change detection]] (il giro che Angular fa per rilevare i cambiamenti e riaggiornare la UI). Gli autori mettono in discussione **ogni** `viewChild`/`viewChildren` in code review.
 
 L'uso si considera giustificato **solo** quando:
 - un controllo di terze parti non permette il data binding per certe proprietà;
@@ -364,7 +364,7 @@ Con `#pane` il padre può invocare `pane.activate(1)`, ad esempio in un click ha
 Qui un `TabRegistry` tiene l'indice corrente e la lista dei tab. **Non** è registrato in root: è fornito a livello del `TabbedPane`, così ogni pane ha la propria istanza.
 
 > [!info|label:Angular 22+ · @Service({ autoProvided: false })]
-> `@Service({ autoProvided: false })` dichiara un service **iniettabile ma non registrato automaticamente** nello scope root: lo fornisci tu dove serve (qui nei `providers` del `TabbedPane`). Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
+> `@Service({ autoProvided: false })` dichiara un service **iniettabile ma non registrato automaticamente** nello scope root: va fornito esplicitamente dove serve (qui nei `providers` del `TabbedPane`). Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Si veda [[service]].
 
 ```ts
 // src/app/domains/shared/ui-common/service-tabbed-pane/tab-registry.ts
@@ -467,8 +467,8 @@ export class Tab implements TabInfo {
 ```
 
 > [!tip]
-> **Vantaggio:** accoppiamento lasco (le parti si conoscono il meno possibile, così cambiarne una non costringe a toccare le altre) — pane e tab dipendono solo dall'API condivisa di `TabRegistry`, non l'uno dall'altro; la comunicazione attraversa più livelli di gerarchia senza fatica.
-> **Svantaggio:** comunicazione **implicita** — a prima vista non si capisce chi parla con chi. Data binding e template reference sono più espliciti.
+> **Vantaggio:** accoppiamento lasco (le parti si conoscono il meno possibile, così cambiarne una non costringe a toccare le altre), perché pane e tab dipendono solo dall'API condivisa di `TabRegistry`, non l'uno dall'altro; inoltre la comunicazione attraversa più livelli di gerarchia senza fatica.
+> **Svantaggio:** comunicazione **implicita**, perché a prima vista non si capisce chi parla con chi. Data binding e template reference sono più espliciti.
 
 Collegamenti: [[providers]] · [[inject]] · pattern di store condiviso in [[lightweight-store]] e [[05-state-management-services-signals]] · uso delle query nelle direttive in [[11-directives-templates-containers]].
 
@@ -484,7 +484,7 @@ Collegamenti: [[providers]] · [[inject]] · pattern di store condiviso in [[lig
 <details>
 <summary>Nella variante *injection* come fa un <code>Tab</code> a registrarsi nel padre, e come lo rendi tollerante all'assenza di un <code>TabbedPane</code>?</summary>
 
-Il `Tab` **inietta** il padre con `inject(TabbedPane)` e nel costruttore chiama `this.pane.registerTab(this)`, passando `this` (la propria istanza). Per renderlo tollerante: `inject(TabbedPane, { optional: true })` → se il token non si risolve Angular restituisce `undefined`; poi proteggi la chiamata con l'optional chaining: `this.pane?.registerTab(this)`.
+Il `Tab` **inietta** il padre con `inject(TabbedPane)` e nel costruttore chiama `this.pane.registerTab(this)`, passando `this` (la propria istanza). Per renderlo tollerante: `inject(TabbedPane, { optional: true })`, così se il token non si risolve Angular restituisce `undefined`; poi si protegge la chiamata con l'optional chaining: `this.pane?.registerTab(this)`.
 
 </details>
 
@@ -498,7 +498,7 @@ Il `Tab` **inietta** il padre con `inject(TabbedPane)` e nel costruttore chiama 
 <details>
 <summary>Perché gli autori sconsigliano <code>viewChild</code>/<code>viewChildren</code>? In quali tre casi lo ritengono giustificato?</summary>
 
-Perché sostituisce il **data binding dichiarativo** (feature centrale di Angular) con codice imperativo: più difficile da leggere/mantenere, e gli update diretti delle proprietà possono innescare cicli di change detection. Giustificato solo quando: (1) un controllo di terze parti non espone data binding per certe proprietà; (2) ti serve il **DOM** (es. Chart.js); (3) un padre deve **chiamare un metodo** di un figlio.
+Perché sostituisce il **data binding dichiarativo** (feature centrale di Angular) con codice imperativo: più difficile da leggere/mantenere, e gli update diretti delle proprietà possono innescare cicli di change detection. Giustificato solo quando: (1) un controllo di terze parti non espone data binding per certe proprietà; (2) serve accedere al **DOM** (es. Chart.js); (3) un padre deve **chiamare un metodo** di un figlio.
 
 </details>
 
@@ -519,6 +519,6 @@ Perché sostituisce il **data binding dichiarativo** (feature centrale di Angula
 **In sintesi:**
 - La **Content Projection** (`<ng-content>`) mostra il markup passato dal chiamante; **View** = template del componente, **Content** = markup proiettato.
 - **Signal queries**: `viewChild`/`viewChildren` per la View, `contentChild`/`contentChildren` per il Content; opzioni `read` e `static`; tempi di disponibilità gestiti con `afterRenderEffect`/`afterNextRender`.
-- Coordinamento padre-figlio in **tre modi**: *injection* (i figli iniettano e registrano), *content query* (il padre interroga), *service condiviso* (`TabRegistry` a livello di componente) → quest'ultimo dà accoppiamento lasco ma comunicazione implicita.
+- Coordinamento padre-figlio in **tre modi**: *injection* (i figli iniettano e registrano), *content query* (il padre interroga), *service condiviso* (`TabRegistry` a livello di componente); quest'ultimo dà accoppiamento lasco ma comunicazione implicita.
 - Le **template variable** danno accesso esterno esplicito all'istanza (`#pane` → `pane.activate(1)`).
-- Preferisci il **data binding dichiarativo**: `viewChild`/`viewChildren` solo per DOM/terze parti o per chiamare metodi di un figlio.
+- Va preferito il **data binding dichiarativo**: `viewChild`/`viewChildren` solo per DOM/terze parti o per chiamare metodi di un figlio.

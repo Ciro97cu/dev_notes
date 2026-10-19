@@ -9,7 +9,7 @@ livello: [junior, mid]
 Nelle **template-driven forms** la form è pilotata dal **template**: si annotano i controlli con direttive (`ngModel`, `ngForm`, `ngModelGroup`) e Angular costruisce **implicitamente** il modello dei dati e lo stato di validazione dietro le quinte. Non esiste una struttura dati dichiarata nella classe: il "grafo" della form vive nel markup. È l'approccio più rapido per form semplici; l'esame lo chiede perché è ancora diffusissimo e perché espone i concetti di stato del controllo e validazione via attributi.
 
 ## `FormsModule`
-Tutte le direttive template-driven (`ngModel`, `ngForm`, `ngModelGroup`) vivono in **`FormsModule`**, che va importato dove serve — nel componente standalone via `imports`, o in un NgModule (vedi [[ngmodules]]).
+Tutte le direttive template-driven (`ngModel`, `ngForm`, `ngModelGroup`) vivono in **`FormsModule`**, che va importato dove serve: nel componente standalone via `imports` o in un NgModule (si veda [[ngmodules]]).
 
 ```ts
 // src/app/flight-search/flight-search.ts
@@ -33,11 +33,11 @@ export class FlightSearch {
 ```
 
 ## `[(ngModel)]` e l'obbligo dell'attributo `name`
-La direttiva `ngModel` è il cuore delle template-driven forms: applicata a un controllo, lo registra nella form e ne collega il valore alla classe. La si può usare in tre forme, che si distinguono per la direzione del legame fra controllo e proprietà.
+La direttiva centrale delle template-driven forms è `ngModel`: applicata a un controllo, lo registra nella form e ne collega il valore alla classe. La si può usare in tre forme, che si distinguono per la direzione del legame fra controllo e proprietà.
 
-- **`[(ngModel)]="prop"`** — two-way binding (banana in a box): sincronizza il valore del controllo con la proprietà della classe in entrambe le direzioni.
-- **`[ngModel]="prop"`** — one-way: imposta il valore iniziale ma non ri-scrive sulla proprietà.
-- **`ngModel`** (senza binding) — registra il controllo nella form (per validazione/stato) senza legarlo a una proprietà.
+- **`[(ngModel)]="prop"`**: two-way binding (banana in a box), che sincronizza il valore del controllo con la proprietà della classe in entrambe le direzioni.
+- **`[ngModel]="prop"`**: one-way, imposta il valore iniziale ma non ri-scrive sulla proprietà.
+- **`ngModel`** (senza binding): registra il controllo nella form (per validazione/stato) senza legarlo a una proprietà.
 
 Dentro un `<form>`, ogni controllo con `ngModel` **deve** avere un attributo **`name`**: è la chiave con cui Angular lo registra nel `NgForm` e con cui compare in `f.value`.
 
@@ -71,7 +71,7 @@ Qui `f` è un `NgForm` (con `f.value`, `f.valid`, `f.controls`…) e `fromCtrl` 
 `(ngSubmit)` è l'evento emesso da `NgForm` al submit: va preferito a un `(click)` sul bottone perché intercetta anche l'invio da tastiera e **previene** il reload di default del browser. Il bottone di submit non richiede `type="submit"` esplicito se è l'unico bottone nel form, ma dichiararlo è buona pratica.
 
 ## Validatori come attributi
-In template-driven i validatori sono **attributi HTML** che Angular mappa sulle relative `Validators` (vedi le stesse in [[forms-reactive]]):
+In template-driven i validatori sono **attributi HTML** che Angular mappa sulle relative `Validators` (le stesse di [[forms-reactive]]):
 
 | Attributo | Effetto |
 | --- | --- |
@@ -136,7 +136,7 @@ input.ng-invalid.ng-touched {
 > La sincronizzazione del modello in template-driven è **asincrona**: `[(ngModel)]` aggiorna la proprietà dopo un tick, non nello stesso event handler. Impostare `from` da codice e leggere subito `f.value` può dare il valore vecchio. La reattività "immediata" è invece un tratto delle reactive forms.
 
 > [!warning]
-> Mostrare gli errori subito (`invalid`) è sgradevole: l'utente li vede prima ancora di digitare. Si combina sempre con `touched` (o `dirty`) — es. `ctrl.invalid && ctrl.touched` — per rivelarli solo dopo l'interazione.
+> Mostrare gli errori subito (`invalid`) è sgradevole: l'utente li vede prima ancora di digitare. Si combina sempre con `touched` (o `dirty`), es. `ctrl.invalid && ctrl.touched`, per rivelarli solo dopo l'interazione.
 
 > [!info|label:vs Modern]
 > Il vault non usa `ngModel`: adotta i **Signal Forms** (`@angular/forms/signals`), dove `form()` genera un albero di field reattivi e i validatori si dichiarano in uno schema (`required`, `minLength`, custom). Two-way binding, stato (`dirty`/`invalid`/`touched`) e submit diventano signal. Tutto in [[06-signal-forms]] (qui non ripetuto).

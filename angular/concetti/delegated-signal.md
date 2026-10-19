@@ -6,9 +6,9 @@ aliases: [delegatedSignal, delegated signal, signal delegato]
 # delegatedSignal() — nota storica
 
 > [!warning]
-> **Superato da Angular 22.1.** `delegatedSignal` era un **helper custom** dell'example project del libro, non parte di Angular. Da **Angular 22.1** la stessa cosa si ottiene con il [[linked-signal]] nativo passando un'opzione **`set`** → l'helper non serve più. Questa nota resta come **memoria storica**; per il modo attuale vedi **[[linked-signal]]**.
+> **Superato da Angular 22.1.** `delegatedSignal` era un **helper custom** dell'example project del libro, non parte di Angular. Da **Angular 22.1** la stessa cosa si ottiene con il [[linked-signal]] nativo passando un'opzione **`set`**, quindi l'helper non serve più. Questa nota resta come **memoria storica**; per il modo attuale vedi **[[linked-signal]]**.
 
-Signal **scrivibile** che non teneva il valore al proprio interno ma **delegava** (affidava ad altri) sia la lettura sia la scrittura — tipicamente a uno store. Risolveva la perdita di reattività del [[linked-signal]] "semplice": con un linked signal l'override tocca solo la copia locale, quindi serve un'azione esplicita (es. un bottone *Search*) per propagare il valore; il `delegatedSignal` invece riscriveva **subito** alla sorgente a ogni update.
+Era un signal **scrivibile** che non teneva il valore al proprio interno ma **delegava** (affidava ad altri) sia la lettura sia la scrittura, tipicamente a uno store. Risolveva la perdita di reattività del [[linked-signal]] "semplice": con un linked signal l'override tocca solo la copia locale, quindi serve un'azione esplicita (es. un bottone *Search*) per propagare il valore; il `delegatedSignal` invece riscriveva **subito** alla sorgente a ogni update.
 
 Accettava due parametri: una funzione di **lettura** (come `linkedSignal`) e una funzione di **scrittura**, invocata a ogni update per riscrivere il nuovo valore nello store.
 

@@ -119,7 +119,7 @@ protected readonly flightsResource = rxResource({
 });
 ```
 
-Come per `httpResource`, `params` diventa un computed: quando cambia un signal letto lì, il loader si ri-triggera (e parte alla creazione; ritornando `undefined` da `params` lo si disattiva). Al loader i parametri arrivano come **dati ordinari**, non come signal. È l'ideale quando si ha già un servizio basato su Observable o serve la potenza di RxJS per comporre stream complessi. Dal punto di vista del consumer resta una resource come `httpResource`; internamente, però, delega a uno stream Observable.
+Come per `httpResource`, `params` diventa un computed: quando cambia un signal letto lì, il loader si ri-triggera (e parte alla creazione; ritornando `undefined` da `params` lo si disattiva). Al loader i parametri arrivano come **dati ordinari**, non come signal. È l'ideale quando si ha già un servizio basato su Observable o serve RxJS per comporre stream complessi. Dal punto di vista del consumer resta una resource come `httpResource`; internamente, però, delega a uno stream Observable.
 
 ```ts
 // il loader delega a un metodo che usa HttpClient
@@ -135,7 +135,7 @@ find(from: string, to: string, urgent = false): Observable<Flight[]> {
 > `rxResource` vive in `@angular/core/rxjs-interop`, il package per fare da ponte tra RxJS e signal: `toSignal` (Observable → Signal) e `toObservable` (il contrario).
 
 #### resource (Promise-based)
-È l'implementazione base che sta sotto sia a `httpResource` sia a `rxResource`. Si usa raramente in modo diretto. Differenza: un `loader` che ritorna una **Promise** invece di uno `stream` che ritorna un Observable. API e semantica, dal punto di vista del chiamante, restano identiche.
+È l'implementazione base che sta sotto sia a `httpResource` sia a `rxResource`. Si usa raramente in modo diretto. La differenza sta nel `loader`, che ritorna una **Promise** invece di uno `stream` che ritorna un Observable. API e semantica, dal punto di vista del chiamante, restano identiche.
 
 ```ts
 import { Component, resource, signal } from '@angular/core';
@@ -272,7 +272,7 @@ constructor() {
 
 Gli effect vanno creati in un **injection context** ([[injection-context|cap.5]]): il costruttore e i field initializer (l'assegnazione del valore iniziale a una proprietà di classe) del componente lo sono sempre. Il costruttore è il posto giusto, un po' come cablare una casa quando la si costruisce per poi limitarsi a usarla. Vanno però usati con **parsimonia**: una catena di effect che si attivano a vicenda è un incubo da debuggare, quindi dove possibile si preferiscono i computed.
 
-Regola pratica: gli effect si usano per il **rendering** non esprimibile via data binding — toast, disegno su canvas, librerie ignare dei signal. Esempio reale: mostrare un toast d'errore con `MatSnackBar` di Angular Material.
+Regola pratica: gli effect si usano per il **rendering** non esprimibile via data binding (toast, disegno su canvas, librerie ignare dei signal). Esempio reale: mostrare un toast d'errore con `MatSnackBar` di Angular Material.
 
 ```ts
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -305,7 +305,7 @@ afterEveryRender(()  => { /* dopo OGNI ciclo, indipendente dai signal */ });
 `afterRenderEffect` per misurare dimensioni, scrollare a una posizione, integrare librerie di charting; `afterNextRender`/`afterEveryRender` per logica DOM dopo i cicli di rendering a prescindere dai cambi di signal.
 
 > [!tip]
-> «Rendering», qui, va inteso in senso ampio: non solo «disegnare sullo schermo», ma il **passo finale** in cui un valore calcolato **esce** dalla logica dell'app e va dove diventa osservabile o viene conservato. Di norma è la **UI** (lo si mostra), ma può essere anche la **console** (`console.log`) o il **`localStorage`** (lo si salva) — in ogni caso un <a href="../glossario/#/docs/concetti-programmazione?id=side-effect" target="_blank" rel="noopener">side effect</a>, il momento in cui il dato lascia l'app.
+> «Rendering», qui, va inteso in senso ampio: non solo «disegnare sullo schermo», ma il **passo finale** in cui un valore calcolato **esce** dalla logica dell'app e va dove diventa osservabile o viene conservato. Di norma è la **UI** (lo si mostra), ma può essere anche la **console** (`console.log`) o il **`localStorage`** (lo si salva). In ogni caso si tratta di un <a href="../glossario/#/docs/concetti-programmazione?id=side-effect" target="_blank" rel="noopener">side effect</a>, il momento in cui il dato lascia l'app.
 
 Collegamenti: [[effect]] · [[injection-context]]
 
@@ -370,7 +370,7 @@ Quando l'effect serve davvero per il rendering (es. ridisegnare un diagramma su 
 >   this.businessService.executeLogic(criteria);  // ❌
 > });
 > ```
-> Se `executeLogic` legge altri signal internamente (`isLoading`, `userId`...), anche quelli vengono tracciati → re-run inattesi (es. cancella altri record a ogni cambio di `isLoading`/`userId`). Inoltre, a differenza della Resource API, **l'effect non gestisce le race condition**: chiamate sovrapposte possono sovrascriversi.
+> Se `executeLogic` legge altri signal internamente (`isLoading`, `userId`...), anche quelli vengono tracciati, con re-run inattesi (es. cancella altri record a ogni cambio di `isLoading`/`userId`). Inoltre, a differenza della Resource API, **l'effect non gestisce le race condition**: chiamate sovrapposte possono sovrascriversi.
 
 ### Discussing Explicit Effects
 Con [[untracked]] dentro un effect si traccia *solo* ciò che si vuole esplicitamente:
@@ -385,7 +385,7 @@ effect(() => {
 });
 ```
 
-Risolve il problema sopra ma rende il codice meno trasparente, non è nello spirito reattivo (dove i valori derivano l'uno dall'altro), può creare catene e cicli difficili da debuggare e **non** affronta le race condition. Pattern molto dibattuto nella community.
+Risolve il problema sopra ma rende il codice meno trasparente, non è nello spirito reattivo (dove i valori derivano l'uno dall'altro), può creare catene e cicli difficili da debuggare e **non** affronta le race condition. È un pattern molto dibattuto nella community.
 
 ### Untracking
 Per evitare memory leak (perdite di memoria: oggetti che restano agganciati e non vengono mai liberati) Angular smette di tracciare quando il mattone sottostante (es. il componente) è distrutto, **e** quando un signal non viene più letto durante un run:
@@ -398,7 +398,7 @@ effect(() => {
 });
 ```
 
-Se `isDelayed` diventa `false`, `delay` non è più letto → non più tracciato → i suoi cambi non ri-triggerano l'effect. Per tracciarlo **sempre**, lo si legge fuori dalla condizione (di solito all'inizio):
+Se `isDelayed` diventa `false`, `delay` non è più letto, quindi non è più tracciato e i suoi cambi non ri-triggerano l'effect. Per tracciarlo **sempre**, lo si legge fuori dalla condizione (di solito all'inizio):
 
 ```ts
 effect(() => {
@@ -444,7 +444,7 @@ constructor() {
 }
 ```
 
-Dopo 2 secondi l'effect gira **una volta** e stampa `New York` / `London`. Vantaggio: niente stati incoerenti né rendering inutili.
+Dopo 2 secondi l'effect gira **una volta** e stampa `New York` / `London`. Così si evitano stati incoerenti e rendering inutili.
 
 > [!warning]
 > Proprio perché glitch-free, i signal **non** servono a rappresentare eventi o stream temporali: i messaggi rapidamente seguiti da altri vanno persi. Per quegli scenari si usano RxJS/Observable.
@@ -473,7 +473,7 @@ L'istanza risultante è nuova, quindi Angular rileva il cambio e aggiorna signal
 > La stessa logica vale per la strategia **OnPush** del [[glossario#change-detection|change detection]]: nel `@for ... track flight.id`, Angular confronta con `===` il vecchio e il nuovo oggetto `flight` per decidere quale `FlightCard` ridisegnare. Se il riferimento non cambia, la card non viene toccata.
 
 > [!warning]
-> Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento → `===` dà `true` → Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.
+> Aggiornare un oggetto/array **mutandolo** (push, assegnazione di proprietà) lascia lo stesso riferimento: `===` dà `true`, quindi Angular **non** rileva il cambio e la UI non si aggiorna. Creare sempre nuove istanze.
 
 Si può passare una **equality function** custom: il secondo parametro di `signal` è un oggetto di opzioni con la chiave `equal`, una funzione `(a, b) => boolean` che riceve valore precedente e nuovo e ritorna `true` quando li considera **uguali**, nel qual caso il signal **non** notifica i dipendenti.
 
@@ -497,7 +497,7 @@ Collegamenti: [[reactive-context]] · [[untracked]] · [[equality-immutability]]
 > pp.82-86
 
 ### Thinking in Terms of the Signal Graph
-Angular mantiene in background un [[glossario#signal-graph|signal graph]]: la struttura che dice come signal, computed e consumer (effect, template) dipendono tra loro — cioè come i dati fluiscono nell'app. Ragionare per grafo rende naturale costruire il flusso. Esempio: oltre ai `flights` c'è un `delayInMin` (valore client-side, cioè calcolato nel browser, che simula un ritardo sul primo volo); il flow parte da `filter`, è proiettato asincronamente in `flights` via `flightsResource`, poi `flights` si combina con `delayInMin` in un computed `flightsWithDelays`, che è ciò che il template mostra.
+Angular mantiene in background un [[glossario#signal-graph|signal graph]]: la struttura che dice come signal, computed e consumer (effect, template) dipendono tra loro, cioè come i dati fluiscono nell'app. Ragionare per grafo rende naturale costruire il flusso. Esempio: oltre ai `flights` c'è un `delayInMin` (valore client-side, cioè calcolato nel browser, che simula un ritardo sul primo volo); il flow parte da `filter`, è proiettato asincronamente in `flights` via `flightsResource`, poi `flights` si combina con `delayInMin` in un computed `flightsWithDelays`, che è ciò che il template mostra.
 
 ```mermaid
 graph LR
@@ -578,9 +578,9 @@ function toFlightsWithDelays(flights: Flight[], delay: number): Flight[] {
 ```
 
 > [!tip]
-> Funzioni pure fuori dalla classe > metodi: non accedono allo stato dell'istanza (più facili da ragionare) e, non prendendo signal come argomenti, **obbligano** a leggere i signal *prima* di chiamarle, es. direttamente dentro il `computed` → si vede a colpo d'occhio quali signal influenzano il valore derivato.
+> Le funzioni pure fuori dalla classe sono preferibili ai metodi: non accedono allo stato dell'istanza (più facili da ragionare) e, non prendendo signal come argomenti, **obbligano** a leggere i signal *prima* di chiamarle, es. direttamente dentro il `computed`, così si vede a colpo d'occhio quali signal influenzano il valore derivato.
 
-Il punto chiave del design: `delay()` aggiorna **solo** `delayInMin`, non l'array `flights`. Nell'approccio classico si dovrebbe ricordare *quando e dove* aggiornare l'array, perdendo la visione d'insieme e rendendo difficile capire come si è arrivati a un certo stato. Il template lega `flightsWithDelays` invece di `flights`:
+In questo design `delay()` aggiorna **solo** `delayInMin`, non l'array `flights`. Nell'approccio classico si dovrebbe ricordare *quando e dove* aggiornare l'array, perdendo la visione d'insieme e rendendo difficile capire come si è arrivati a un certo stato. Il template lega `flightsWithDelays` invece di `flights`:
 
 ```html
 <!-- .../ticketing/feature-booking/flight-search/flight-search.html -->
@@ -619,7 +619,7 @@ Un `computed` è **dichiarativo** (descrive *da cosa* deriva il valore), traccia
 <details>
 <summary>Quali sono i due *reactive context* dal punto di vista dello sviluppatore? Cos'è il tracking transitivo e perché rende rischioso chiamare business logic in un effect?</summary>
 
-I due contesti reattivi sono il **template** e l'**effect** (i `computed` usano il contesto di chi li legge). Il tracking è **transitivo**: vengono tracciati anche i signal letti in metodi/funzioni chiamati dentro il contesto. Chiamare business logic in un `effect` è rischioso perché se quella logica legge altri signal internamente (`isLoading`, `userId`...) anche quelli vengono tracciati → re-run inattesi; per giunta l'effect, a differenza della Resource API, **non gestisce le race condition**.
+I due contesti reattivi sono il **template** e l'**effect** (i `computed` usano il contesto di chi li legge). Il tracking è **transitivo**: vengono tracciati anche i signal letti in metodi/funzioni chiamati dentro il contesto. Chiamare business logic in un `effect` è rischioso perché se quella logica legge altri signal internamente (`isLoading`, `userId`...) anche quelli vengono tracciati, con re-run inattesi; per giunta l'effect, a differenza della Resource API, **non gestisce le race condition**.
 
 </details>
 
@@ -633,19 +633,19 @@ I due contesti reattivi sono il **template** e l'**effect** (i `computed` usano 
 <details>
 <summary>Perché aggiornando un oggetto/array bound occorre creare una nuova istanza? Che relazione c'è con <code>===</code> e con OnPush?</summary>
 
-Sull'aggiornamento Angular confronta col precedente usando `===`. Su oggetti/array `===` confronta il **riferimento**, non il contenuto: se lo si muta in place (push, assegnazione di proprietà) il riferimento resta lo stesso → `===` dà `true` → Angular non rileva il cambio e la UI non si aggiorna. Creando una **nuova istanza** (spread) il riferimento cambia e il cambio viene rilevato. Lo stesso `===` è usato da **OnPush** nel `@for ... track flight.id` per decidere quale `FlightCard` ridisegnare.
+Sull'aggiornamento Angular confronta col precedente usando `===`. Su oggetti/array `===` confronta il **riferimento**, non il contenuto: se lo si muta in place (push, assegnazione di proprietà) il riferimento resta lo stesso: `===` dà `true`, quindi Angular non rileva il cambio e la UI non si aggiorna. Creando una **nuova istanza** (spread) il riferimento cambia e il cambio viene rilevato. Lo stesso `===` è usato da **OnPush** nel `@for ... track flight.id` per decidere quale `FlightCard` ridisegnare.
 
 </details>
 
 <details>
 <summary>Cosa permettono di fare gli **Snapshot** delle resource (Angular 21.2+) e quale problema risolvono?</summary>
 
-Prima si potevano derivare solo singole proprietà di una resource (`value`/`error`/`isLoading`), non lo stato intero. Da Angular 21.2 ogni resource espone `snapshot()` (`status` + `value` in un unico oggetto signal-aware): lo si trasforma con un [[linked-signal]] e lo si ri-converte in resource con `resourceFromSnapshots`. Permette di **comporre** resource in helper riutilizzabili — es. filtrare i risultati (`withMinWeight`) o mantenere visibile l'ultimo valore caricato durante un reload (`withPreviousValue`) invece di mostrare `undefined`.
+Prima si potevano derivare solo singole proprietà di una resource (`value`/`error`/`isLoading`), non lo stato intero. Da Angular 21.2 ogni resource espone `snapshot()` (`status` + `value` in un unico oggetto signal-aware): lo si trasforma con un [[linked-signal]] e lo si ri-converte in resource con `resourceFromSnapshots`. Permette di **comporre** resource in helper riutilizzabili: es. filtrare i risultati (`withMinWeight`) o mantenere visibile l'ultimo valore caricato durante un reload (`withPreviousValue`) invece di mostrare `undefined`.
 
 </details>
 
 **In sintesi:**
 - Design reattivo = **dichiarativo**: si descrivono le relazioni tra valori (computed/resource), Angular propaga i cambi. I `computed` derivano valori sincroni e lazy; le `resource` proiettano async input → output gestendo le race condition (stabili da Angular 22).
-- Gli `effect` solo per i side effect dell'"ultimo miglio" (toast, canvas, logging), creati nell'injection context (costruttore), con parsimonia. Per il DOM post-render: `afterRenderEffect`/`afterNextRender`/`afterEveryRender`.
-- Semantica: auto-tracking (transitivo) nei reactive context; `untracked` per escludere; glitch-free (un run coi valori finali); equality `===` → **immutabilità obbligatoria** per oggetti/array (anche per OnPush).
+- Gli `effect` solo per i side effect del passo finale, in cui il valore esce dall'app (toast, canvas, logging), creati nell'injection context (costruttore), con parsimonia. Per il DOM post-render: `afterRenderEffect`/`afterNextRender`/`afterEveryRender`.
+- Semantica: auto-tracking (transitivo) nei reactive context; `untracked` per escludere; glitch-free (un run coi valori finali); equality `===`, da cui l'**immutabilità obbligatoria** per oggetti/array (anche per OnPush).
 - Si ragiona per **signal graph** e si delega ai computed (con funzioni pure esterne): lo stato sorgente si aggiorna in un punto solo, i valori derivati seguono.

@@ -7,14 +7,14 @@ tags: [tipo/capitolo, directives, templates, angular-22]
 # 11 · Directives, Templates, and Containers
 > cap.11 · pp.300-329 — *Modern Angular* v3.0.0
 
-Le librerie di componenti (Angular Material & co.) non spediscono solo UI pronte: poggiano su una manciata di mattoni che rendono i componenti flessibili e riusabili. Tra questi ci sono le [[glossario#attribute-directive|**attribute directive**]] (directive senza template, che aggiungono comportamento a un elemento esistente) usate per potenziare altri componenti, le [[glossario#structural-directive|**structural directive**]] (directive che aggiungono/rimuovono elementi dal DOM, come `*ngIf`), i template e i componenti dinamici, e le manipolazioni DOM controllate. Il capitolo attraversa questi meccanismi con un insieme minimo di costrutti riusabili: una **tooltip directive** (in due versioni), una **DataTable** e un **DialogService**.
+Dietro le UI pronte delle librerie di componenti (Angular Material & co.) c'è una manciata di mattoni che rendono i componenti flessibili e riusabili. Tra questi ci sono le [[glossario#attribute-directive|**attribute directive**]] (directive senza template, che aggiungono comportamento a un elemento esistente) usate per potenziare altri componenti, le [[glossario#structural-directive|**structural directive**]] (directive che aggiungono/rimuovono elementi dal DOM, come `*ngIf`), i template e i componenti dinamici, e le manipolazioni DOM controllate. Il capitolo attraversa questi meccanismi con un insieme minimo di costrutti riusabili: una **tooltip directive** (in due versioni), una **DataTable** e un **DialogService**.
 
 Idea cardine: un **componente è solo una directive con un template**. La `@Directive` ha quasi tutte le proprietà di `@Component`, mancano solo quelle legate al template (`template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`).
 
 ## Attribute Directives
 > pp.300-306
 
-Le **attribute directive** aggiungono comportamento a elementi esistenti senza portare una propria view: non hanno un template, si "agganciano" a un elemento già presente nel template. Il nome riflette una convenzione: di solito il selector (il pattern CSS che dice a Angular su quali elementi applicarsi) punta a elementi con un certo **attributo**, ma resta appunto una convenzione, non un obbligo.
+Le **attribute directive** aggiungono comportamento a elementi esistenti senza portare una propria view: non hanno un template, si "agganciano" a un elemento già presente nel template. Il nome riflette una convenzione: di solito il selector (il pattern CSS che dice a Angular su quali elementi applicarsi) punta a elementi con un certo **attributo**, ma non è un obbligo.
 
 ### Defining Directives
 > pp.300-303
@@ -112,7 +112,7 @@ Una directive si referenzia anche con una [[glossario#template-variable|**templa
 private host = inject(ElementRef<HTMLElement>);
 ```
 
-La proprietà `nativeElement` espone l'oggetto DOM grezzo — lo stesso che otterresti con `document.querySelector`:
+La proprietà `nativeElement` espone l'oggetto DOM grezzo, lo stesso che si otterrebbe con `document.querySelector`:
 
 ```ts
 this.host.nativeElement           // HTMLElement
@@ -123,12 +123,12 @@ this.host.nativeElement.getBoundingClientRect() // posizione/dimensioni
 Il parametro di tipo (`<HTMLElement>`, `<HTMLCanvasElement>`, ecc.) è solo un'annotazione TypeScript (dice al compilatore che tipo di elemento aspettarsi), non cambia il comportamento a runtime.
 
 > [!warning]
-> Manipolare `nativeElement` direttamente rompe in SSR (Node.js non ha DOM). Per modificare stili e attributi in modo cross-platform usa `Renderer2`; riserva `nativeElement` ai casi in cui una libreria esterna (Chart.js, canvas API, ResizeObserver…) richiede l'elemento grezzo.
+> Manipolare `nativeElement` direttamente rompe in SSR (Node.js non ha DOM). Per modificare stili e attributi in modo cross-platform si usa `Renderer2`, e `nativeElement` va riservato ai casi in cui una libreria esterna (Chart.js, canvas API, ResizeObserver…) richiede l'elemento grezzo.
 
 ### Controlled DOM-Manipulations
 > pp.304-306
 
-A volte una directive deve creare/gestire elementi DOM **fuori dal template** (overlay, tooltip, popover che devono sfuggire a `overflow`/posizionamento dei genitori). È una manipolazione di basso livello (tocchi il DOM a mano, con codice, invece di lasciar fare ad Angular): usarla solo se non c'è un'astrazione di più alto livello, e **ripulire sempre** gli elementi creati alla distruzione, pena memory leak (memoria occupata e mai liberata) e nodi orfani (elementi rimasti nella pagina senza più nessuno che li gestisce).
+A volte una directive deve creare/gestire elementi DOM **fuori dal template** (overlay, tooltip, popover che devono sfuggire a `overflow`/posizionamento dei genitori). È una manipolazione di basso livello (si tocca il DOM a mano, con codice, invece di lasciar fare ad Angular): usarla solo se non c'è un'astrazione di più alto livello, e **ripulire sempre** gli elementi creati alla distruzione, pena memory leak (memoria occupata e mai liberata) e nodi orfani (elementi rimasti nella pagina senza più nessuno che li gestisce).
 
 ```ts
 // src/app/domains/shared/ui-common/simple-tooltip.directive.ts
@@ -213,13 +213,13 @@ Uso:
 </button>
 ```
 
-`appSimpleTooltip` fa doppio gioco: marca l'elemento da potenziare e fa da **nome dell'input** (via `alias`, cioè un nome esterno diverso dal nome della proprietà nella classe). Allineare il nome di un input al selector è l'unica eccezione lecita all'uso degli alias (di norma sconsigliati dal linter perché introducono indirezione: il nome che scrivi nel template non coincide con quello nel codice, e questo rende più difficile seguirne le tracce).
+`appSimpleTooltip` fa doppio gioco: marca l'elemento da potenziare e fa da **nome dell'input** (via `alias`, cioè un nome esterno diverso dal nome della proprietà nella classe). Allineare il nome di un input al selector è l'unica eccezione lecita all'uso degli alias (di norma sconsigliati dal linter perché introducono indirezione: il nome scritto nel template non coincide con quello nel codice, e questo rende più difficile seguirne le tracce).
 
 > [!warning]
 > Qui serve `afterRenderEffect`, non un `effect` normale: con un `effect` la logica girerebbe **troppo presto**, prima che l'host sia posizionato, e il tooltip finirebbe nel posto sbagliato.
 
 > [!tip]
-> `DestroyRef.onDestroy(...)` è il mattone generale di cleanup (componenti, directive, servizi). Angular lo usa internamente per distruggere gli `effect` insieme al loro owner: ecco perché `effect` e affini si possono creare solo in un [[injection-context]] (il `DestroyRef` arriva via DI).
+> `DestroyRef.onDestroy(...)` è il mattone generale di cleanup (componenti, directive, servizi). Angular lo usa internamente per distruggere gli `effect` insieme al loro owner: per questo `effect` e affini si possono creare solo in un [[injection-context]] (il `DestroyRef` arriva via DI).
 
 Collegamenti: [[inject]] · [[injection-context]] · [[signal-input]].
 
@@ -230,7 +230,7 @@ Oltre alla [[content-projection]] dichiarativa (`<ng-content>`), si può renderi
 
 ### Templates and Containers
 
-Un **template** (`<ng-template>`) definisce markup che Angular **non renderizza subito**: resta "in attesa" e lo si istanzia quando serve. Un **container** è invece il punto dove quel template può essere istanziato — la "presa" del DOM in cui infilare le view generate: Angular mette ogni componente e ogni markup statico in un container invisibile, che si recupera (es. via [[glossario#dependency-injection-di|DI]] come `ViewContainerRef`) per aggiungervi elementi.
+Un **template** (`<ng-template>`) definisce markup che Angular **non renderizza subito**: resta "in attesa" e lo si istanzia quando serve. Un **container** è invece il punto dove quel template può essere istanziato, la "presa" del DOM in cui infilare le view generate: Angular mette ogni componente e ogni markup statico in un container invisibile, che si recupera (es. via [[glossario#dependency-injection-di|DI]] come `ViewContainerRef`) per aggiungervi elementi.
 
 Il `Tooltip` riceve un `TemplateRef` e lo renderizza nel view container, invece di creare DOM a mano:
 
@@ -413,7 +413,7 @@ Esempio `appTableField` (cella formattata di tabella). Questa scrittura:
 </div>
 ```
 
-è solo zucchero per concetti già visti — fa desugaring in:
+è solo zucchero per concetti già visti, e fa desugaring in:
 
 ```html
 <ng-template
@@ -446,7 +446,7 @@ I separatori (`;`) sono ignorati; i nomi della microsyntax vengono **prefissati 
 Internamente una structural directive di solito **prende il container corrente e istanzia il template** dentro di esso.
 
 > [!warning]
-> `let data` cattura `$implicit`; `let link=details` cattura il parametro **nominato** `details`. Sono cose diverse: il primo è il valore implicito, il secondo va richiesto per nome. In Angular moderno il control flow (`@if`/`@for`) sostituisce le vecchie `*ngIf`/`*ngFor` — le structural directive custom restano utili per costrutti riusabili come questa DataTable.
+> `let data` cattura `$implicit`; `let link=details` cattura il parametro **nominato** `details`. Sono cose diverse: il primo è il valore implicito, il secondo va richiesto per nome. In Angular moderno il control flow (`@if`/`@for`) sostituisce le vecchie `*ngIf`/`*ngFor`, ma le structural directive custom restano utili per costrutti riusabili come questa DataTable.
 
 ### Implementing a Simple DataTable
 > pp.314-318
@@ -464,7 +464,7 @@ DataTable generica: riceve un array di oggetti, e per ogni colonna si passa un t
 </app-data-table>
 ```
 
-La directive inietta il proprio `TemplateRef` e lo espone come proprietà pubblica; gli `input()` con **alias** sono la chiave della microsyntax:
+La directive inietta il proprio `TemplateRef` e lo espone come proprietà pubblica; gli `input()` con **alias** fanno da aggancio per la microsyntax:
 
 ```ts
 // src/app/domains/shared/ui-common/data-table/table-field.directive.ts
@@ -527,7 +527,7 @@ Collegamenti: [[signal-queries]] (la query `contentChildren`) · [[10-signal-que
 ### Using ViewContainerRef Directly to Display Templates
 > pp.318-320
 
-`ngTemplateOutlet` usa internamente un `ViewContainerRef` per rappresentare la sezione in cui inserisce un template (o un intero componente). Per scenari più complessi lo si usa **direttamente**. Ecco una reimplementazione di `ngTemplateOutlet`:
+`ngTemplateOutlet` usa internamente un `ViewContainerRef` per rappresentare la sezione in cui inserisce un template (o un intero componente). Per scenari più complessi lo si usa **direttamente**; per esempio, `ngTemplateOutlet` si può reimplementare così:
 
 ```ts
 // src/app/domains/shared/ui-common/custom-template-outlet.directive.ts
@@ -589,7 +589,7 @@ Collegamenti: [[signal-queries]].
 ## Dynamic Components
 > pp.320-326
 
-Aggiungere dinamicamente un componente via codice serve quando il componente da mostrare è noto solo a runtime e può cambiare — caso tipico: un **modal dialog** con contenuto contestuale. Angular offre `ngComponentOutlet`:
+Aggiungere dinamicamente un componente via codice serve quando il componente da mostrare è noto solo a runtime e può cambiare; il caso tipico è un **modal dialog** con contenuto contestuale. Angular offre `ngComponentOutlet`:
 
 ```html
 <ng-container *ngComponentOutlet="comp; injector: injector"></ng-container>
@@ -615,7 +615,7 @@ export class About {
 }
 ```
 
-Costrutti di supporto — un evento e un [[glossario#injection-token|`InjectionToken`]] (una "chiave" per registrare e recuperare un valore via DI quando non c'è una classe da iniettare) per passare i dati:
+Servono due costrutti di supporto, un evento e un [[glossario#injection-token|`InjectionToken`]] (una "chiave" per registrare e recuperare un valore via DI quando non c'è una classe da iniettare), per passare i dati:
 
 ```ts
 // src/app/domains/shared/ui-common/dialog/dialog-event.ts
@@ -657,7 +657,7 @@ export class DialogService {
 }
 ```
 
-Il `DialogOutlet` riceve gli eventi e crea un **injector figlio** (un injector locale, che eredita dal padre ma aggiunge i propri provider — qui i dati del dialog), che espone `DIALOG_DATA`, poi passa tipo e injector a `ngComponentOutlet`:
+Il `DialogOutlet` riceve gli eventi e crea un **injector figlio** (un injector locale, che eredita dal padre ma aggiunge i propri provider, qui i dati del dialog), che espone `DIALOG_DATA`, poi passa tipo e injector a `ngComponentOutlet`:
 
 ```ts
 // src/app/domains/shared/ui-common/dialog/dialog-outlet.ts
@@ -763,7 +763,7 @@ Collegamenti: [[inject]] · [[providers]].
 ### Instantiating Component via Code
 > pp.327-329
 
-Le librerie (es. Angular Material) mostrano i dialog **senza** che noi aggiungiamo l'outlet a un template: lo aggiungono **via codice**. Lo fa il `DialogOutletService` con la funzione `createComponent`, attaccando la view all'`ApplicationRef` e inserendone l'elemento nel `<body>`:
+Le librerie (es. Angular Material) mostrano i dialog **senza** che l'outlet venga aggiunto a mano a un template: lo aggiungono **via codice**. Lo fa il `DialogOutletService` con la funzione `createComponent`, attaccando la view all'`ApplicationRef` e inserendone l'elemento nel `<body>`:
 
 ```ts
 // src/app/domains/shared/ui-common/dialog/dialog-outlet-service.ts
@@ -848,14 +848,14 @@ Collegamenti: [[inject]] · [[injection-context]] · [[providers]].
 <details>
 <summary>Perché si dice che "un componente è solo una directive con un template"? Cosa manca alla <code>@Directive</code> rispetto a <code>@Component</code>?</summary>
 
-Un componente è una directive che, in più, **aggiunge una view** agli elementi a cui si applica (definita dal `template`). Per questo la `@Directive` ha quasi tutte le proprietà di `@Component`: mancano solo quelle legate al template — `template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`.
+Un componente è una directive che, in più, **aggiunge una view** agli elementi a cui si applica (definita dal `template`). Per questo la `@Directive` ha quasi tutte le proprietà di `@Component`: mancano solo quelle legate al template: `template`/`templateUrl`, `styles`/`styleUrls`, `viewProviders`.
 
 </details>
 
 <details>
 <summary>A cosa serve <code>exportAs</code> e come lo si usa con una template variable?</summary>
 
-`exportAs` assegna un **nome univoco** alla directive, così la si può referenziare con una template variable quando dietro un elemento ci sono più directive. Con `exportAs: 'clickWithWarning'` scrivi `#cww="clickWithWarning"` e poi chiami i metodi pubblici dell'istanza, es. `cww.handleClick(true)`. Sui componenti di solito è superfluo: Angular assegna già l'istanza alla template variable senza valore esplicito.
+`exportAs` assegna un **nome univoco** alla directive, così la si può referenziare con una template variable quando dietro un elemento ci sono più directive. Con `exportAs: 'clickWithWarning'` si scrive `#cww="clickWithWarning"` e poi si chiamano i metodi pubblici dell'istanza, es. `cww.handleClick(true)`. Sui componenti di solito è superfluo: Angular assegna già l'istanza alla template variable senza valore esplicito.
 
 </details>
 
@@ -890,7 +890,7 @@ Diventa un `<ng-template>` con la directive applicata in forma di attributo: `<n
 <details>
 <summary>Nel <code>DialogService</code>, come arrivano i dati al componente-dialog e perché serve un injector figlio? Come viene aggiunto l'outlet senza metterlo nel template?</summary>
 
-I dati arrivano **per DI**: il `DialogOutlet` crea con `Injector.create` un **injector figlio** che fornisce `DIALOG_DATA = event.data` (con `parent` l'injector dell'outlet), e il dialog li legge con `inject(DIALOG_DATA)` — non come `@Input`. L'outlet ricrea e distrugge l'injector ad ogni evento. Senza metterlo nel template, lo si aggiunge via codice con `createComponent(DialogOutlet, ...)` + `appRef.attachView(...)` + `document.body.appendChild(...)`, fatto da `DialogOutletService.ensureOutlet()` (idempotente).
+I dati arrivano **per DI**: il `DialogOutlet` crea con `Injector.create` un **injector figlio** che fornisce `DIALOG_DATA = event.data` (con `parent` l'injector dell'outlet), e il dialog li legge con `inject(DIALOG_DATA)`, non come `@Input`. L'outlet ricrea e distrugge l'injector ad ogni evento. Senza metterlo nel template, lo si aggiunge via codice con `createComponent(DialogOutlet, ...)` + `appRef.attachView(...)` + `document.body.appendChild(...)`, fatto da `DialogOutletService.ensureOutlet()` (idempotente).
 
 </details>
 

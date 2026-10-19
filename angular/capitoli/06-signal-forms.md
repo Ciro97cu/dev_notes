@@ -42,7 +42,7 @@ export class FlightEdit {
 
 `form(signal, schema)` riceve il `linkedSignal` e uno **schema** con le regole di validazione; i validatori built-in disponibili sono `required`, `minLength`, `maxLength`, `min`, `max` e `pattern` (che valida contro una regex). Il parametro `path` (tipo `SchemaPathTree`) referenzia le singole proprietà da validare (`path.from`, `path.to`, ...), mentre `form()` ritorna un **FieldTree**, da legare ai controlli del template.
 
-`normalizeFlight` converte la data nel formato richiesto da `<input type="datetime-local">`: una stringa ISO **senza** designatore di timezone (cioè senza il suffisso che indica il fuso orario, come la `Z` finale o `+02:00`) — es. `2030-12-24T17:30:00.000`.
+`normalizeFlight` converte la data nel formato richiesto da `<input type="datetime-local">`: una stringa ISO **senza** designatore di timezone (cioè senza il suffisso che indica il fuso orario, come la `Z` finale o `+02:00`), es. `2030-12-24T17:30:00.000`.
 
 ```ts
 function normalizeFlight(flight: Flight): Flight {
@@ -109,7 +109,7 @@ Si importa la direttiva **`FormField`** (e `JsonPipe` per mostrare gli errori ne
 ## Working with Schemas
 > pp.151-158
 
-Lo schema non definisce solo le regole di validazione, ma anche altri aspetti del comportamento della form: [[glossario#debounce-debouncing|debouncing]], campi disabilitati/read-only/hidden in certe condizioni, validazione contro schemi esterni.
+Oltre alle regole di validazione, lo schema definisce anche altri aspetti del comportamento della form: [[glossario#debounce-debouncing|debouncing]], campi disabilitati/read-only/hidden in certe condizioni, validazione contro schemi esterni.
 
 ### Using Separate Schemas
 > pp.151-152
@@ -163,7 +163,7 @@ disabled(path.delay, {
 ```
 
 > [!info|label:Angular 22+ · La proprietà when (disabled/readonly/hidden)]
-> Fino ad Angular 21 la condizione era il **secondo argomento posizionale** — `disabled(path.delay, (ctx) => ...)`. Da Angular 22 si usa la **proprietà `when`** in un oggetto opzioni: forma più coerente fra `disabled`, `readonly` e `hidden`, e (per `disabled`) rende più scopribile la variante stringa-come-reason.
+> Fino ad Angular 21 la condizione era il **secondo argomento posizionale** (`disabled(path.delay, (ctx) => ...)`). Da Angular 22 si usa la **proprietà `when`** in un oggetto opzioni: forma più coerente fra `disabled`, `readonly` e `hidden`, e (per `disabled`) rende più scopribile la variante stringa-come-reason.
 
 Le "reason" raccolte dalle lambda finiscono nel signal `disabledReasons()` del campo:
 
@@ -219,7 +219,7 @@ debounce(path, (ctx, _abortSignal) => {
 ### Validating Against Zod and Standard Schema
 > pp.155-157
 
-`validateStandardSchema` valida la form contro uno schema **Zod** (o Valibot, o qualsiasi libreria conforme allo **Standard Schema** — uno standard comune che diverse librerie di validazione adottano, così Angular può lavorare con tutte allo stesso modo). Spesso queste regole esistono già lato server o sono generate da un JSON Schema/OpenAPI.
+`validateStandardSchema` valida la form contro uno schema **Zod** (o Valibot, o qualsiasi libreria conforme allo **Standard Schema**, uno standard comune che diverse librerie di validazione adottano, così Angular può lavorare con tutte allo stesso modo). Spesso queste regole esistono già lato server o sono generate da un JSON Schema/OpenAPI.
 
 ```ts
 // data/flight-schema.ts
@@ -359,7 +359,7 @@ protected async requestApproval(): Promise<void> {
 ```
 
 > [!tip]
-> L'interazione fra errori di validazione **client-side** e quelli ricevuti **durante il submit** dal backend (l'`action` ritorna un `ValidationError`) è una novità chiave: con le form precedenti era difficile da realizzare.
+> L'interazione fra errori di validazione **client-side** e quelli ricevuti **durante il submit** dal backend (l'`action` ritorna un `ValidationError`) è una novità di Signal Forms: con le form precedenti era difficile da realizzare.
 
 ## Custom Validators
 > pp.162-173
@@ -469,7 +469,7 @@ export function validateRoundTrip(path: SchemaPathTree<Flight>) {
 ```
 
 > [!warning]
-> Gli errori restano associati al **livello validato** del FieldTree: qui è il flight intero, non `from`/`to`. Per mostrarli servono `flightForm().errors()` (livello corrente) oppure `flightForm().errorSummary()` (include i livelli inferiori — qui conviene `[showFieldNames]="true"`). Gli errori dei livelli più bassi **non** compaiono in `errors`.
+> Gli errori restano associati al **livello validato** del FieldTree: qui è il flight intero, non `from`/`to`. Per mostrarli servono `flightForm().errors()` (livello corrente) oppure `flightForm().errorSummary()` (include i livelli inferiori; qui conviene `[showFieldNames]="true"`). Gli errori dei livelli più bassi **non** compaiono in `errors`.
 
 ### Accessing Sibling Fields
 
@@ -505,7 +505,7 @@ Poiché ogni validatore può restituire un array, un tree validator può anche p
 
 ### Asynchronous Validators
 
-I validatori asincroni fanno una chiamata asincrona (tipicamente al server) prima di dare il verdetto. `validateAsync` si configura con quattro funzioni: `params` (dallo stato del campo ricava i parametri della chiamata), `factory` (crea la resource, cioè l'oggetto che esegue la chiamata e ne segue il risultato), `onSuccess` (dal risultato → `ValidationError | null`), `onError` (dall'errore → `ValidationError | null`):
+I validatori asincroni fanno una chiamata asincrona (tipicamente al server) prima di dare il verdetto. `validateAsync` si configura con quattro funzioni: `params` (dallo stato del campo ricava i parametri della chiamata), `factory` (crea la resource, cioè l'oggetto che esegue la chiamata e ne segue il risultato), `onSuccess` (dal risultato ricava un `ValidationError | null`), `onError` (dall'errore ricava un `ValidationError | null`):
 
 ```ts
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -613,7 +613,7 @@ addPrice(): void {
 
 ### Validating Form Arrays
 
-Anche gli array sono nodi del grafo; un validatore può iterare gli elementi (es. duplicati). Nota il tipo `SchemaPath<Price[]>`:
+Anche gli array sono nodi del grafo; un validatore può iterare gli elementi (es. duplicati). Si noti il tipo `SchemaPath<Price[]>`:
 
 ```ts
 import { SchemaPath, validate } from '@angular/forms/signals';
@@ -747,7 +747,7 @@ protected save(): void {
 }
 ```
 
-Per convertire subito dopo la digitazione si può usare un [[linked-signal|linkedSignal]] con `set` (vedi [[05-state-management-services-signals|cap.5]]). La stessa strategia vale per i campi condizionali: dal punto di vista della form esistono sempre, anche se nascosti nell'UI.
+Per convertire subito dopo la digitazione si può usare un [[linked-signal|linkedSignal]] con `set` (si veda il [[05-state-management-services-signals|cap.5]]). La stessa strategia vale per i campi condizionali: dal punto di vista della form esistono sempre, anche se nascosti nell'UI.
 
 ## Custom Fields
 > pp.189-191
@@ -791,7 +791,7 @@ Lo store pubblica dati **read-only** per garantire la consistenza, ma la form de
 <details>
 <summary>Cos'è un FieldTree e come accedi a <code>value</code>/<code>dirty</code>/<code>invalid</code>/<code>errors</code> di un campo annidato?</summary>
 
-Un **FieldTree** è come un signal profondamente annidato: ogni proprietà del dato è un signal che invocato (`flightForm.date()`) restituisce il field state, a sua volta fatto di signal. Es.: `flightForm.date().value()`, `.dirty()`, `.invalid()`, `.errors()`. Per i livelli annidati segui la struttura del dato: `flightForm.aircraft.type().value()`, `flightForm.prices[0].amount().value()`.
+Un **FieldTree** è come un signal profondamente annidato: ogni proprietà del dato è un signal che invocato (`flightForm.date()`) restituisce il field state, a sua volta fatto di signal. Es.: `flightForm.date().value()`, `.dirty()`, `.invalid()`, `.errors()`. Per i livelli annidati si segue la struttura del dato: `flightForm.aircraft.type().value()`, `flightForm.prices[0].amount().value()`.
 
 </details>
 
@@ -836,4 +836,4 @@ Perché `undefined` significa semanticamente "il campo non esiste": `form()` non
 - Comportamenti di campo (`disabled`/`readonly`/`hidden`) si dichiarano nello schema con la proprietà **`when`** (Angular 22+); `hidden` è solo un hint, `readonly` blocca davvero la scrittura.
 - Submit ripensato: `submission`/`formRoot`/`submit()`, con interazione fra errori client-side ed errori dal backend.
 - Form complesse = oggetti annidati (`apply`), array (`applyEach`) e **subform** (input `FieldTree<T>`); separare **domain model** e **form model** evita i problemi con `undefined`.
-- I **custom control** si integrano con la sola interfaccia `FormValueControl<T>` (un `model()` chiamato `value`), addio Control Value Accessor.
+- I **custom control** si integrano con la sola interfaccia `FormValueControl<T>` (un `model()` chiamato `value`), che sostituisce il Control Value Accessor.

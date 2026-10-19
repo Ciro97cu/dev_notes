@@ -41,7 +41,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-L'initializer gira in un [[injection-context]], quindi può usare [[inject]] direttamente invece della constructor injection. La logica asincrona vera vive nel servizio, che espone i valori caricati:
+L'initializer gira in un [[injection-context]], quindi può usare [[inject]] direttamente invece della constructor injection. La logica asincrona sta nel servizio, che espone i valori caricati:
 
 > [!info|label:Angular 22+ · Il decoratore @Service()]
 > Da Angular 22 un service si annota con `@Service()` (in Listing 12-2 importato da `@angular/core`), che corrisponde al vecchio `@Injectable({ providedIn: 'root' })`. Dettagli in [[service]].
@@ -79,12 +79,12 @@ export class ConfigService {
 ```
 
 > [!warning]
-> Un application initializer **ritarda il primo render** e può far sembrare lo startup lento. Se ti servono dati solo per una feature specifica, caricali in modo [[glossario#lazy-loading|lazy]] (solo quando servono davvero, es. all'attivazione della rotta, via [[#Resolver]]) invece di bloccare l'intera app.
+> Un application initializer **ritarda il primo render** e può far sembrare lo startup lento. Se i dati servono solo a una feature specifica, conviene caricarli in modo [[glossario#lazy-loading|lazy]] (solo quando servono davvero, es. all'attivazione della rotta, via [[#Resolver]]) invece di bloccare l'intera app.
 
 ### Environment Initializers
 > p.332
 
-Mentre `provideAppInitializer` è **globale** (gira col root injector, l'injector radice condiviso da tutta l'app), un **environment initializer** gira quando viene creato un **environment injector** (un injector locale, ad es. quello di una rotta) — utile per setup *feature-* o *route-scoped*, cioè limitati a una singola feature o rotta, quando usi provider a livello di rotta (vedi [[04-router-navigation-lazy-loading]]). Nel demo, la feature route `bookingRoutes` lo registra nel proprio array `providers`.
+Mentre `provideAppInitializer` è **globale** (gira col root injector, l'injector radice condiviso da tutta l'app), un **environment initializer** gira quando viene creato un **environment injector** (un injector locale, ad es. quello di una rotta): è utile per setup *feature-* o *route-scoped*, cioè limitati a una singola feature o rotta, quando si usano provider a livello di rotta (si veda [[04-router-navigation-lazy-loading]]). Nel demo, la feature route `bookingRoutes` lo registra nel proprio array `providers`.
 
 ```ts
 // src/app/domains/ticketing/ticketing.routes.ts
@@ -128,7 +128,7 @@ Funzioni guard tipizzate (nomi funzionali moderni):
 ### Preventing Route Activation (CanActivateFn)
 > pp.333-335
 
-Esempio: un auth guard che redirige al login gli utenti non autenticati. Non è una questione di sicurezza — nelle SPA browser-based (le single-page application, dove il codice gira nel browser dell'utente) la **sicurezza va sempre imposta sul backend** — ma di *usability* (comodità d'uso): l'app può reindirizzare l'utente alla pagina di login quando serve (vedi [[16-authentication-authorization]]).
+Esempio: un auth guard che redirige al login gli utenti non autenticati. Non è una questione di sicurezza, perché nelle SPA browser-based (le single-page application, dove il codice gira nel browser dell'utente) la **sicurezza va sempre imposta sul backend**; è una questione di *usability* (comodità d'uso): l'app può reindirizzare l'utente alla pagina di login quando serve (si veda [[16-authentication-authorization]]).
 
 ```ts
 // src/app/domains/shared/util-auth/auth.guard.ts
@@ -312,7 +312,7 @@ graph TD
     FASE -.->|eccezione| ERR(["NavigationError"])
 ```
 
-> Le forme distinguono gli **eventi** su `router.events` (arrotondati) dalle **fasi** interne (rettangoli) e dai **guard** (rombi). I guard girano **prima** dei resolver, e `canDeactivate` (uscita dalla rotta corrente) precede `canActivate` (ingresso nella nuova). Un `false`/`UrlTree` da un guard → `NavigationCancel`; un'eccezione in guard o resolver → `NavigationError`.
+> Le forme distinguono gli **eventi** su `router.events` (arrotondati) dalle **fasi** interne (rettangoli) e dai **guard** (rombi). I guard girano **prima** dei resolver, e `canDeactivate` (uscita dalla rotta corrente) precede `canActivate` (ingresso nella nuova). Un `false`/`UrlTree` da un guard produce `NavigationCancel`; un'eccezione in guard o resolver produce `NavigationError`.
 
 Uso classico: mostrare un **loading indicator** durante i cambi rotta. Il root `App` inietta il `Router` e si sottoscrive all'observable degli eventi:
 
@@ -362,7 +362,7 @@ export class App {
 
 ### `withDebugTracing()`
 
-➕ *(Fuori dal libro Modern Angular — feature standard di Angular, aggiunta qui perché utile per il debug del routing.)*
+➕ *(Fuori dal libro Modern Angular: feature standard di Angular, aggiunta qui perché utile per il debug del routing.)*
 
 In fase di sviluppo è possibile loggare **tutti** gli eventi del router in console (inclusi quelli intermedi che `router.events` non espone esplicitamente, come `GuardsCheckStart`, `ResolveStart`, `ActivationEnd`) con una sola riga nella configurazione:
 
@@ -500,10 +500,10 @@ export const appConfig: ApplicationConfig = {
 ```
 
 > [!warning]
-> `HttpRequest` e `HttpHeaders` sono **[[equality-immutability|immutabili]]** (non si possono cambiare una volta creati): per modificarli devi `req.clone({ ... })`, cioè crearne una copia modificata, non cambiarli sul posto. E l'**ordine** dell'array in `withInterceptors([...])` determina l'ordine della catena: ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa al successivo.
+> `HttpRequest` e `HttpHeaders` sono **[[equality-immutability|immutabili]]** (non si possono cambiare una volta creati): per modificarli si usa `req.clone({ ... })`, cioè se ne crea una copia modificata invece di cambiarli sul posto. E l'**ordine** dell'array in `withInterceptors([...])` determina l'ordine della catena: ogni interceptor riceve la richiesta eventualmente già modificata dai precedenti e la passa al successivo.
 
 ### Ordine della catena: richiesta vs risposta
-➕ *Fuori dal libro Modern Angular — chiarimento sull'ordine.*
+➕ *Fuori dal libro Modern Angular: chiarimento sull'ordine.*
 
 La catena è **bidirezionale** (modello a cipolla): la **richiesta** attraversa gli interceptor nell'ordine dell'array, la **risposta** li riattraversa in ordine **inverso**. Due interceptor minimi che si limitano a loggare lo rendono evidente:
 
@@ -548,7 +548,7 @@ Un application initializer (`provideAppInitializer`) gira durante `bootstrapAppl
 <details>
 <summary>Differenza tra <code>provideAppInitializer</code>, <code>provideEnvironmentInitializer</code> e <code>providePlatformInitializer</code>: scope e momento di esecuzione?</summary>
 
-`provideAppInitializer` è **globale** (root injector), durante il bootstrap dell'app. `provideEnvironmentInitializer` gira quando viene creato un **environment injector** → setup *feature-/route-scoped* (provider a livello di rotta). `providePlatformInitializer` gira alla creazione della **platform**, *prima* del bootstrap; serve soprattutto ad Angular stesso e a librerie infrastrutturali di basso livello.
+`provideAppInitializer` è **globale** (root injector), durante il bootstrap dell'app. `provideEnvironmentInitializer` gira quando viene creato un **environment injector**, quindi serve per setup *feature-/route-scoped* (provider a livello di rotta). `providePlatformInitializer` gira alla creazione della **platform**, *prima* del bootstrap; serve soprattutto ad Angular stesso e a librerie infrastrutturali di basso livello.
 
 </details>
 
@@ -569,7 +569,7 @@ Riceve come **primo parametro l'istanza del componente** che si sta per lasciare
 <details>
 <summary>Quali router events vanno gestiti, oltre a <code>NavigationStart</code>/<code>NavigationEnd</code>, per spegnere correttamente uno spinner?</summary>
 
-Anche `NavigationCancel` (un guard ha bloccato la navigazione) e `NavigationError` (eccezione durante il cambio). Se spegni lo spinner solo su `NavigationEnd`, l'overlay resta appeso quando la navigazione viene annullata o fallisce.
+Anche `NavigationCancel` (un guard ha bloccato la navigazione) e `NavigationError` (eccezione durante il cambio). Se lo spinner si spegne solo su `NavigationEnd`, l'overlay resta appeso quando la navigazione viene annullata o fallisce.
 
 </details>
 

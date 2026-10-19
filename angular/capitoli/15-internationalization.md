@@ -7,9 +7,9 @@ tags: [tipo/capitolo, i18n]
 # 15 · Internationalization
 > cap.15 · pp.388-399 — *Modern Angular* v3.0.0
 
-Adattare un'app a regioni e lingue diverse va previsto **in fase di implementazione**, per esempio rendendo intercambiabili i testi — e lo stesso vale per i formati di data e numero. Questo è l'obiettivo dell'**internationalization** (abbreviata **I18N**). L'adattamento alle singole lingue/regioni che ne consegue si chiama **localization** (**L10N**). La combinazione di regione + lingua è il **locale**: `de-DE` (tedesco standard, Germania), `de-AT` (tedesco austriaco); i **locale generici** ignorano la regione (es. `de`).
+Adattare un'app a regioni e lingue diverse va previsto **in fase di implementazione**, per esempio rendendo intercambiabili i testi, e lo stesso vale per i formati di data e numero. Questo è l'obiettivo dell'**internationalization** (abbreviata **I18N**). L'adattamento alle singole lingue/regioni che ne consegue si chiama **localization** (**L10N**). La combinazione di regione + lingua è il **locale**: `de-DE` (tedesco standard, Germania), `de-AT` (tedesco austriaco); i **locale generici** ignorano la regione (es. `de`).
 
-La soluzione I18N integrata in Angular è in primo luogo una soluzione **compile-time**: il compiler estrae i testi, li sostituisce con le traduzioni e produce **un set di bundle per ogni lingua**. Vantaggio: nessun costo a runtime per caricare o mostrare i testi (sono parte integrante del bundle). Prezzo: devi distribuire più versioni linguistiche e cambiare lingua significa **caricare una nuova app** via hyperlink, perdendo lo stato di quella precedente.
+La soluzione I18N integrata in Angular è in primo luogo una soluzione **compile-time**: il compiler estrae i testi, li sostituisce con le traduzioni e produce **un set di bundle per ogni lingua**. Vantaggio: nessun costo a runtime per caricare o mostrare i testi (sono parte integrante del bundle). Prezzo: bisogna distribuire più versioni linguistiche e cambiare lingua significa **caricare una nuova app** via hyperlink, perdendo lo stato di quella precedente.
 
 ## Overview
 > pp.388-389
@@ -17,7 +17,7 @@ La soluzione I18N integrata in Angular è in primo luogo una soluzione **compile
 Il compiler genera file in uno dei formati standard usati dai software degli studi di traduzione: **XLIFF** (XML Localization Interchange File Format) v1 e v2, **XMB** (XML Message Bundles) e, ora, anche i formati basati su JSON come **ARB** (Application Resource Bundle). Dopo la traduzione di questi file, il compiler ne integra i testi nei bundle generati.
 
 > [!tip]
-> Originariamente la CLI rieseguiva l'intero processo di build per ogni lingua → build lentissimi. Dalla v9 è più "smart": fa **un solo build** inserendo dei placeholder per tutti i testi da sostituire, poi **copia il set di bundle per ogni lingua** e rimpiazza i placeholder con le rispettive traduzioni.
+> Originariamente la CLI rieseguiva l'intero processo di build per ogni lingua, con build lentissimi. Dalla v9 è più "smart": fa **un solo build** inserendo dei placeholder per tutti i testi da sostituire, poi **copia il set di bundle per ogni lingua** e rimpiazza i placeholder con le rispettive traduzioni.
 
 ## Installing @angular/localize
 > p.389
@@ -38,7 +38,7 @@ Per far sapere al compiler quali testi estrarre, si marcano nei template con l'a
 <h1 i18n="meaning|description@@flightSearch-title">Flight Search</h1>
 ```
 
-Il valore di `i18n` ha **tre parti opzionali**, con `|` e `@@` come separatori. **meaning** e **description** danno contesto allo studio di traduzione, utili quando una parola ha più traduzioni possibili. L'**ID** (dopo `@@`) serve al compiler per ricordare dove ricollocare ogni testo: se non lo si specifica viene generato, ma l'ID auto-generato **può cambiare quando il template cambia** — conviene quindi assegnarlo sempre a mano.
+Il valore di `i18n` ha **tre parti opzionali**, con `|` e `@@` come separatori. **meaning** e **description** danno contesto allo studio di traduzione, utili quando una parola ha più traduzioni possibili. L'**ID** (dopo `@@`) serve al compiler per ricordare dove ricollocare ogni testo: se non lo si specifica viene generato, ma l'ID auto-generato **può cambiare quando il template cambia**. Conviene quindi assegnarlo sempre a mano.
 
 Essendo tutte e tre opzionali, sono lecite varie combinazioni:
 
@@ -88,7 +88,7 @@ export class FlightSearchComponent {
 ## Extracting Texts (extract-i18n)
 > pp.391-393
 
-Marcati i testi, li estrai col compiler. Di default la CLI genera un file `messages.xlf` in formato XLIFF; con `--format` ne richiedi un altro tra quelli supportati:
+Marcati i testi, li si estrae col compiler. Di default la CLI genera un file `messages.xlf` in formato XLIFF; con `--format` se ne richiede un altro tra quelli supportati:
 
 ```bash
 ng extract-i18n                 # default: messages.xlf (XLIFF)
@@ -136,7 +136,7 @@ I file finiscono nella **root del progetto**. Per ordine si crea una sottocartel
 </xliff>
 ```
 
-Oltre ai metadati (ID/description/meaning) c'è il testo originale nel nodo `<source>`: basta aggiungere a ciascuna `trans-unit` un nodo `<target>` con la traduzione. Qui lo facciamo a mano; in pratica lo fanno gli studi di traduzione coi loro tool.
+Oltre ai metadati (ID/description/meaning) c'è il testo originale nel nodo `<source>`: basta aggiungere a ciascuna `trans-unit` un nodo `<target>` con la traduzione. Qui lo si fa a mano; in pratica lo fanno gli studi di traduzione coi loro tool.
 
 ## Integrating Translated Texts into Builds (angular.json)
 > pp.393-394
@@ -227,7 +227,7 @@ ng serve --configuration de
 ## Specifying Translation Texts at Runtime (loadTranslations)
 > p.396
 
-Anche se la I18N del compiler integra i testi a compile-time, si possono impostare via codice con `loadTranslations` — ma **prima del primo uso** di ciascun testo. Non essendoci data binding per questi testi, cambiarli dopo il primo uso è impossibile senza un reload dell'app nel browser.
+Anche se la I18N del compiler integra i testi a compile-time, si possono impostare via codice con `loadTranslations`, ma **prima del primo uso** di ciascun testo. Non essendoci data binding per questi testi, cambiarli dopo il primo uso è impossibile senza un reload dell'app nel browser.
 
 ```ts
 // src/main.ts
@@ -254,7 +254,7 @@ ng extract-i18n --format json   # genera messages.json con le espressioni
 
 Scambiare i testi è solo uno dei compiti dell'internazionalizzazione: vanno gestite anche le **forme grammaticali** come il genere e la distinzione singolare/plurale (lingue diverse hanno numeri diversi di generi e di forme plurali). Il compiler I18N offre una grammatica dedicata nel template: la sintassi ICU (*International Components for Unicode*, lo standard per esprimere plurali e generi nei messaggi tradotti).
 
-Il costrutto `plural` copre la distinzione singolare/plurale — "1 flight" vs "3 flights":
+Il costrutto `plural` copre la distinzione singolare/plurale ("1 flight" vs "3 flights"):
 
 ```html
 <!-- src/app/flight-search/flight-search.html -->
@@ -315,7 +315,7 @@ Collegamenti: pipe `date`/`number` locale-aware viste in [[02-signal-based-compo
 ## Outlook: Community Solutions (ngx-translate, Transloco)
 > p.399
 
-La I18N del compiler eccelle in **performance** (testi intessuti nei bundle, zero costo runtime per load e data binding), ma paga in **flessibilità**: la rinuncia deliberata al data binding significa **niente cambio lingua a runtime**, solo hyperlink ad altre versioni di lingua. Qui si perdono i vantaggi delle SPA (Single Page Application — l'app gira in un'unica pagina senza ricaricarsi a ogni navigazione, mantenendo lo stato).
+La I18N del compiler eccelle in **performance** (testi intessuti nei bundle, zero costo runtime per load e data binding), ma paga in **flessibilità**: la rinuncia deliberata al data binding significa **niente cambio lingua a runtime**, solo hyperlink ad altre versioni di lingua. Qui si perdono i vantaggi delle SPA (Single Page Application: l'app gira in un'unica pagina senza ricaricarsi a ogni navigazione, mantenendo lo stato).
 
 Le soluzioni community **ngx-translate** e **Transloco** **invertono** vantaggi e svantaggi: permettono load e switch di lingua **a runtime**, ma si appoggiano al data binding, che (teoricamente) può incidere sulla performance.
 
@@ -327,7 +327,7 @@ Le soluzioni community **ngx-translate** e **Transloco** **invertono** vantaggi 
 <details>
 <summary>Perché la I18N del compiler genera un set di bundle separato per ogni lingua, e che prezzo si paga a runtime?</summary>
 
-Perché il compiler sostituisce i testi tradotti **direttamente nei bundle a compile-time**: ogni lingua ottiene il proprio set completo. Vantaggio: a runtime **nessun costo** per caricare o mostrare i testi (sono parte del bundle). Prezzo: devi distribuire più versioni e il cambio lingua avviene caricando **una nuova app** via hyperlink → si perde lo stato della SPA precedente.
+Perché il compiler sostituisce i testi tradotti **direttamente nei bundle a compile-time**: ogni lingua ottiene il proprio set completo. Vantaggio: a runtime **nessun costo** per caricare o mostrare i testi (sono parte del bundle). Prezzo: bisogna distribuire più versioni e il cambio lingua avviene caricando **una nuova app** via hyperlink, quindi si perde lo stato della SPA precedente.
 
 </details>
 
@@ -369,12 +369,12 @@ Sono la grammatica ICU per le **forme grammaticali**. `plural` distingue singola
 <details>
 <summary>Differenza chiave tra compiler I18N e soluzioni come ngx-translate/Transloco?</summary>
 
-**Compiler I18N**: massima performance (testi tessuti nei bundle, niente data binding), ma niente cambio lingua a runtime → solo hyperlink ad altre versioni. **ngx-translate/Transloco**: invertono il trade-off → load e switch di lingua a runtime grazie al data binding, al costo di un possibile impatto sulla performance.
+**Compiler I18N**: massima performance (testi tessuti nei bundle, niente data binding), ma niente cambio lingua a runtime, solo hyperlink ad altre versioni. **ngx-translate/Transloco**: invertono il trade-off: load e switch di lingua a runtime grazie al data binding, al costo di un possibile impatto sulla performance.
 
 </details>
 
 **In sintesi:**
-- La I18N integrata è **compile-time**: marca i testi con `i18n` (template) o `$localize` (classe), estrai con `ng extract-i18n`, traduci i `<target>`, registra i locale in `angular.json` e builda con `ng build --localize`.
+- La I18N integrata è **compile-time**: si marcano i testi con `i18n` (template) o `$localize` (classe), si estraggono con `ng extract-i18n`, si traducono i `<target>`, si registrano i locale in `angular.json` e si builda con `ng build --localize`.
 - In dev si seleziona la lingua con una coppia di configurazioni build+serve (`buildTarget`); a runtime si possono iniettare testi con `loadTranslations`, ma solo prima del primo uso.
-- Forme grammaticali via ICU (`plural`, `select`); numeri/date via pipe locale-aware (CLDR) — solo per l'output, non per l'input.
+- Forme grammaticali via ICU (`plural`, `select`); numeri/date via pipe locale-aware (CLDR), solo per l'output e non per l'input.
 - Trade-off: ottima performance ma niente switch lingua a runtime; per quello servono **ngx-translate** o **Transloco**.

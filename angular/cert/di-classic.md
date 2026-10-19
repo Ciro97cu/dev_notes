@@ -4,7 +4,7 @@ tags: [tipo/cert, di, services, legacy]
 livello: [mid, senior]
 ---
 # Dependency Injection classica
-> Cert Angular · l'API DI *senza* `inject()` — decoratori, provider espliciti e injector gerarchici; nel vault la DI è coperta in forma moderna ([[05-state-management-services-signals]])
+> Cert Angular · l'API DI *senza* `inject()`: decoratori, provider espliciti e injector gerarchici; nel vault la DI è coperta in forma moderna ([[05-state-management-services-signals]])
 
 La **dependency injection** (DI: una classe non costruisce le proprie dipendenze ma le riceve da un *injector*) in Angular classico ruota attorno a `@Injectable`, ai **provider** dichiarati negli array `providers`, e all'**injection via costruttore**. La cert la chiede perché ogni codebase pre-`inject()` (e gran parte di quelle attuali) configura la DI così, e perché injector gerarchici e resolution modifier sono un tema d'esame ricorrente.
 
@@ -19,12 +19,12 @@ export class FlightService {}
 ```
 
 I valori di `providedIn`:
-- **`'root'`** — un singolo singleton condiviso da tutta l'app (il caso quasi sempre corretto).
-- **`'platform'`** — un singleton dell'injector *platform*, condiviso da **più applicazioni** Angular sulla stessa pagina (scenario raro: micro-frontend, più `bootstrap` nella stessa pagina).
-- **`'any'`** — un'istanza **distinta per ogni injector** che lo richiede: singleton per il codice eager, ma ogni modulo lazy ne riceve una copia propria.
+- **`'root'`**: un singolo singleton condiviso da tutta l'app (il caso quasi sempre corretto).
+- **`'platform'`**: un singleton dell'injector *platform*, condiviso da **più applicazioni** Angular sulla stessa pagina (scenario raro: micro-frontend, più `bootstrap` nella stessa pagina).
+- **`'any'`**: un'istanza **distinta per ogni injector** che lo richiede (singleton per il codice eager, ma ogni modulo lazy ne riceve una copia propria).
 
 ## Provider: token e recipe
-Un provider dice all'injector **come** ottenere il valore per un dato **token** (la chiave di ricerca). I provider si dichiarano in un array `providers` — su `@NgModule`, su `@Component`/`@Directive`, o (moderno) a livello di route/applicazione.
+Un provider dice all'injector **come** ottenere il valore per un dato **token** (la chiave di ricerca). I provider si dichiarano in un array `providers`: su `@NgModule`, su `@Component`/`@Directive`, o (moderno) a livello di route/applicazione.
 
 Due tipi di token:
 
@@ -100,10 +100,10 @@ providers: [
 Senza `multi: true` il secondo provider **sovrascriverebbe** il primo, restituendo un solo valore. `multi: true` va messo su **tutti** i provider dello stesso token.
 
 ## Injector gerarchici: `ModuleInjector` vs `ElementInjector`
-Angular non ha un solo injector, ma **due gerarchie parallele**:
+Angular ha **due gerarchie parallele** di injector:
 
-- **`ModuleInjector`** (o *environment injector*) — popolato da `providedIn`, dagli array `providers` degli `@NgModule` e dalle provider function. La sua gerarchia va da `platform` a `root`, fino all'injector dei **moduli lazy**.
-- **`ElementInjector`** — creato per ogni elemento del DOM che ospita un componente/direttiva con un proprio `providers` (o `viewProviders`). Segue l'albero dei componenti.
+- **`ModuleInjector`** (o *environment injector*): popolato da `providedIn`, dagli array `providers` degli `@NgModule` e dalle provider function. La sua gerarchia va da `platform` a `root`, fino all'injector dei **moduli lazy**.
+- **`ElementInjector`**: creato per ogni elemento del DOM che ospita un componente/direttiva con un proprio `providers` (o `viewProviders`). Segue l'albero dei componenti.
 
 ```mermaid
 graph TD
@@ -137,10 +137,10 @@ export class FlightCard {
 }
 ```
 
-- **`@Optional()`** — se il token manca, inietta `null` invece di lanciare `NullInjectorError`.
-- **`@Self()`** — cerca solo nell'`ElementInjector` corrente, senza risalire.
-- **`@SkipSelf()`** — ignora l'injector corrente e comincia dal padre (utile per raggiungere un servizio del contenitore, non la propria istanza locale).
-- **`@Host()`** — pone il **limite superiore** della ricerca all'`ElementInjector` del componente host; utile per direttive che devono agganciarsi solo al proprio host.
+- **`@Optional()`**: se il token manca, inietta `null` invece di lanciare `NullInjectorError`.
+- **`@Self()`**: cerca solo nell'`ElementInjector` corrente, senza risalire.
+- **`@SkipSelf()`**: ignora l'injector corrente e comincia dal padre (utile per raggiungere un servizio del contenitore, non la propria istanza locale).
+- **`@Host()`**: pone il **limite superiore** della ricerca all'`ElementInjector` del componente host; utile per direttive che devono agganciarsi solo al proprio host.
 
 > [!warning]
 > Insidie da esame:

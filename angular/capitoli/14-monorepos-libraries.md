@@ -7,9 +7,9 @@ tags: [tipo/capitolo, monorepo, architecture, angular-22]
 # 14 · Monorepos & Reusable Libraries
 > cap.14 · pp.372-387 — *Modern Angular* v3.0.0
 
-Un singolo progetto Angular basta finché il codice è piccolo: appena cresce, i team raggiungono i propri limiti. La risposta sono i [[glossario#monorepo|monorepo]], un'unica repo che raggruppa più applicazioni e **librerie riutilizzabili**. Le librerie servono a sotto-strutturare un sistema grande (vedi i moduliths del [[08-sustainable-architectures|cap.8]]) e, quando servono in altri progetti, si **pubblicano via npm**.
+Un singolo progetto Angular basta finché il codice è piccolo: appena cresce, i team raggiungono i propri limiti. La risposta sono i [[glossario#monorepo|monorepo]], un'unica repo che raggruppa più applicazioni e **librerie riutilizzabili**. Le librerie servono a sotto-strutturare un sistema grande (come i moduliths del [[08-sustainable-architectures|cap.8]]) e, quando servono in altri progetti, si **pubblicano via npm**.
 
-Il capitolo parte dalla **Angular CLI** (monorepo manuale, build e publish) e poi passa a **Nx**, più potente: build incrementali, module boundaries, cache distribuita e parallelizzazione.
+Il capitolo parte dalla **Angular CLI** (monorepo manuale, build e publish) e poi passa a **Nx**, che offre di più: build incrementali, module boundaries, cache distribuita e parallelizzazione.
 
 > [!info|label:Monorepo ≠ solo pubblicazione]
 > I monorepo non servono solo a creare librerie da pubblicare. Nei progetti molto grandi suddividono la soluzione complessiva in app e librerie più piccole, più facili da governare e mantenere. In questo scenario le librerie **non vanno pubblicate su npm**: sono consumate localmente dalle app del monorepo stesso. Termine alternativo a monorepo: **workspace**.
@@ -20,7 +20,7 @@ Il capitolo parte dalla **Angular CLI** (monorepo manuale, build e publish) e po
 ### Creating a Monorepo
 > pp.372-373
 
-Dal punto di vista della CLI un monorepo è un normale progetto Angular. La differenza è che **non vogliamo la cartella `src` centrale**: di norma `ng new` la genera per ospitare tutto il codice dell'app, ma qui vogliamo dividere il progetto in app e librerie separate, quindi la disattiviamo con `--create-application false`. App e librerie si aggiungono poi dentro `projects/`.
+Dal punto di vista della CLI un monorepo è un normale progetto Angular. La differenza è che **la cartella `src` centrale non serve**: di norma `ng new` la genera per ospitare tutto il codice dell'app, ma qui il progetto va diviso in app e librerie separate, quindi la si disattiva con `--create-application false`. App e librerie si aggiungono poi dentro `projects/`.
 
 ```bash
 # Crea il monorepo senza la cartella src centrale
@@ -56,7 +56,7 @@ graph TD
 ### Structure of Libraries
 > pp.374-376
 
-Come le app, le librerie sono file TypeScript (componenti, servizi, ...) e vivono sotto `src/lib`. Una lib contiene anche `ng-package.json`, `package.json` e i `tsconfig.lib*.json` (Listing 14-3). Generiamo un servizio `Logger` (da non confondere con l'`UtilLoggerService` che la CLI crea quando genera la libreria omonima):
+Come le app, le librerie sono file TypeScript (componenti, servizi, ...) e vivono sotto `src/lib`. Una lib contiene anche `ng-package.json`, `package.json` e i `tsconfig.lib*.json` (Listing 14-3). Si genera un servizio `Logger` (da non confondere con l'`UtilLoggerService` che la CLI crea quando genera la libreria omonima):
 
 ```bash
 ng g service logger --project util-logger
@@ -114,10 +114,10 @@ Prima di pubblicare si cura il `package.json` della libreria (Listing 14-7):
 }
 ```
 
-- **`name`** — nome con cui il pacchetto è pubblicato e installato. Può avere uno **scope** introdotto con `@` (es. `@my`): mette ordine indicando da quale area arriva il pacchetto (spesso nome azienda o progetto) e fa sì che solo chi ha i diritti possa pubblicare sotto quello scope.
-- **`version`** — a ogni pubblicazione serve un numero **ancora disponibile** (non già usato).
-- **`peerDependencies`** — dipendenze che il consumer (chi usa la libreria) deve installare a parte per usare il pacchetto; supportano range di versioni con espressioni booleane (es. `>= 11.0.0`, "qualsiasi versione dalla 11 in su"). Di regola **da preferire** alle `dependencies` perché non impongono una versione precisa al consumer.
-- **`dependencies`** — installate insieme al pacchetto.
+- **`name`**: nome con cui il pacchetto è pubblicato e installato. Può avere uno **scope** introdotto con `@` (es. `@my`): mette ordine indicando da quale area arriva il pacchetto (spesso nome azienda o progetto) e fa sì che solo chi ha i diritti possa pubblicare sotto quello scope.
+- **`version`**: a ogni pubblicazione serve un numero **ancora disponibile** (non già usato).
+- **`peerDependencies`**: dipendenze che il consumer (chi usa la libreria) deve installare a parte per usare il pacchetto; supportano range di versioni con espressioni booleane (es. `>= 11.0.0`, "qualsiasi versione dalla 11 in su"). Di regola **da preferire** alle `dependencies` perché non impongono una versione precisa al consumer.
+- **`dependencies`**: installate insieme al pacchetto.
 
 > [!warning]
 > A parte `tslib` (richiesto da TypeScript), l'uso di una `dependency` "convenzionale" va **autorizzato esplicitamente** in `ng-package.json` con `allowedNonPeerDependencies`, altrimenti la CLI non la consente (protezione da uso accidentale):
@@ -130,13 +130,13 @@ Prima di pubblicare si cura il `package.json` della libreria (Listing 14-7):
 ### Trying Out the Library in the Monorepo
 > pp.377-378
 
-I building block delle librerie si testano come tutti gli altri (vedi [[07-testing-with-vitest|cap.7]]), indicando il nome della lib:
+I building block delle librerie si testano come tutti gli altri (si veda il [[07-testing-with-vitest|cap.7]]), indicando il nome della lib:
 
 ```bash
 ng test util-logger
 ```
 
-Per dare agli altri subproject del monorepo accesso alle librerie, la CLI imposta dei **path mapping** in `tsconfig.json` (root del monorepo). Di default puntano alla cartella `dist/` (Listing 14-10), il che obbligherebbe a **ricompilare la lib dopo ogni modifica** — noioso e facile da sbagliare (ti dimentichi di ricompilare e usi codice vecchio). Meglio farli puntare al **sorgente** (al `public-api`), riusando se possibile lo scope di `package.json` (Listing 14-11):
+Per dare agli altri subproject del monorepo accesso alle librerie, la CLI imposta dei **path mapping** in `tsconfig.json` (root del monorepo). Di default puntano alla cartella `dist/` (Listing 14-10), il che obbligherebbe a **ricompilare la lib dopo ogni modifica**: è noioso e facile da sbagliare (basta dimenticare di ricompilare per usare codice vecchio). Meglio farli puntare al **sorgente** (al `public-api`), riusando se possibile lo scope di `package.json` (Listing 14-11):
 
 ```jsonc
 // tsconfig.json (root) — meglio puntare al sorgente, non a dist/
@@ -147,14 +147,14 @@ Per dare agli altri subproject del monorepo accesso alle librerie, la CLI impost
 }
 ```
 
-Tutto ciò che il `public-api` esporta diventa importabile dagli altri subproject tramite il nome mappato — niente più path relativi lunghi e illeggibili:
+Tutto ciò che il `public-api` esporta diventa importabile dagli altri subproject tramite il nome mappato, senza più path relativi lunghi e illeggibili:
 
 ```ts
 import { Logger } from '@my/util-logger';
 ```
 
 > [!warning]
-> **Dentro la libreria stessa** non usare il proprio path mapping, né importare dal proprio `public-api`: crea **riferimenti circolari** (il file A importa B che a sua volta importa A, un cerchio che il compilatore non sa sciogliere). Dopo aver cambiato i path mapping, **riavvia l'IDE**.
+> **Dentro la libreria stessa** non usare il proprio path mapping, né importare dal proprio `public-api`: crea **riferimenti circolari** (il file A importa B che a sua volta importa A, un cerchio che il compilatore non sa sciogliere). Dopo aver cambiato i path mapping, **va riavviato l'IDE**.
 
 Prova: si inietta `Logger` nell'`App` di `playground-app` (qui in stile costruttore classico):
 
@@ -181,7 +181,7 @@ Lanciando `ng serve playground-app -o`, il messaggio di test compare nella conso
 ### Building and Publishing the npm Package
 > pp.378-380
 
-Prima di pubblicare, assicurati che il `package.json` della lib (es. `projects/util-logger/package.json`) abbia un **numero di versione univoco**, altrimenti la pubblicazione fallisce. Poi build e publish:
+Prima di pubblicare, occorre verificare che il `package.json` della lib (es. `projects/util-logger/package.json`) abbia un **numero di versione univoco**, altrimenti la pubblicazione fallisce. Poi build e publish:
 
 ```bash
 # Build di produzione → il pacchetto finisce in dist/util-logger
@@ -208,7 +208,7 @@ npm publish dist/util-logger --registry http://localhost:4873
 Aprendo Verdaccio nel browser si dovrebbe vedere il pacchetto pubblicato (Figure 14-1).
 
 > [!tip]
-> Per non ripetere `--registry` a ogni `npm publish`, crea un `.npmrc` (formato .ini) nella root del progetto. Lo puoi mettere **sotto version control**, così vale per tutto il team:
+> Per non ripetere `--registry` a ogni `npm publish`, si crea un `.npmrc` (formato .ini) nella root del progetto. Lo si può mettere **sotto version control**, così vale per tutto il team:
 > ```ini
 > registry=http://localhost:4873
 > # oppure un registry per singolo scope:
@@ -231,7 +231,7 @@ npm install @my/util-logger --registry http://localhost:4873
 ## Faster Builds and More Convenience with Nx
 > pp.381-387
 
-Il limite della soluzione CLI: gli sviluppatori devono **sapere quali app sono cambiate** e lanciare a mano la build giusta; e il build server, per sicurezza, finisce comunque per ricostruire e testare tutto. Meglio lasciare che sia il **tooling** (gli strumenti di build) a capire cosa è cambiato — per esempio calcolando un **hash** dei file sorgente che confluiscono in ogni app. L'hash è una specie di "impronta digitale": un codice breve calcolato dai file, che cambia appena cambia anche un solo file. Se l'hash cambia, quell'app va ricostruita o ritestata.
+Il limite della soluzione CLI: gli sviluppatori devono **sapere quali app sono cambiate** e lanciare a mano la build giusta; e il build server, per sicurezza, finisce comunque per ricostruire e testare tutto. Meglio lasciare che sia il **tooling** (gli strumenti di build) a capire cosa è cambiato, per esempio calcolando un **hash** dei file sorgente che confluiscono in ogni app. L'hash è una specie di "impronta digitale": un codice breve calcolato dai file, che cambia appena cambia anche un solo file. Se l'hash cambia, quell'app va ricostruita o ritestata.
 
 **Nx** implementa questa idea e aggiunge molto altro. Oltre ad Angular supporta React e backend Node.js, e integra senza setup manuale i tool comuni dello sviluppo web: i testing tool Jest, Cypress e Playwright, il server npm Verdaccio e Storybook per la documentazione interattiva dei componenti. Per gli sviluppatori Angular è naturale: la **Nx CLI** si usa come la Angular CLI, basta sostituire `ng` con `nx` e gli argomenti restano in gran parte gli stessi (`nx build`, `nx serve`, `nx g app`, `nx g lib`, ...).
 
@@ -248,7 +248,7 @@ npx create-nx-workspace@latest my-project
 > [!info|label:Migrare o ricreare?]
 > Esistono script per **migrare** workspace CLI a Nx, ma potrebbero non attivare tutte le feature di Nx. L'autore consiglia di **creare un nuovo workspace Nx** e, se serve, copiarci dentro il sorgente esistente.
 
-Convenzione Nx: app in `apps/`, lib in `libs/`. Al prompt del generator scegli `@nx/angular:application` per le app e `@nx/angular:library` per le lib:
+Convenzione Nx: app in `apps/`, lib in `libs/`. Al prompt del generator si sceglie `@nx/angular:application` per le app e `@nx/angular:library` per le lib:
 
 ```bash
 nx g app apps/appName
@@ -277,7 +277,7 @@ Il comando `nx graph` mostra il **grafo delle dipendenze** tra app e librerie (F
 ### Module Boundaries
 > pp.383-384
 
-Come Sheriff (vedi [[08-sustainable-architectures]]), anche Nx permette di definire regole su **chi può dipendere da cosa** (i cosiddetti **module boundaries**), ma in Nx sono sempre definiti **a livello di libreria e applicazione** (non per cartella). Si configura la regola ESLint `@nx/enforce-module-boundaries` in `eslint.config.js`, dichiarando i `depConstraints` per `sourceTag` (Listing 14-13):
+Come Sheriff (si veda [[08-sustainable-architectures]]), anche Nx permette di definire regole su **chi può dipendere da cosa** (i cosiddetti **module boundaries**), ma in Nx sono sempre definiti **a livello di libreria e applicazione** (non per cartella). Si configura la regola ESLint `@nx/enforce-module-boundaries` in `eslint.config.js`, dichiarando i `depConstraints` per `sourceTag` (Listing 14-13):
 
 ```js
 // eslint.config.js
@@ -385,7 +385,7 @@ nx generate @nx/workspace:ci-workflow --ci github
 Gli script specificano il numero di worker node e di processi paralleli per worker, e dividono i comandi in tre gruppi: comandi sequenziali di **inizializzazione**, comandi paralleli sul **main node**, comandi paralleli sugli **agent**. Si attivano quando cambia il branch `main` della repo, per push diretto o per merge di una PR (Figure 14-3).
 
 > [!tip]
-> Lo stesso **dependency graph** che disegna `nx graph` è il motore di tutto Nx: module boundaries, build/test/lint **incrementali** con cache, cache **distribuita** e **parallelizzazione**. Più spezzi in librerie ben confinate, più ne guadagni.
+> Lo stesso **dependency graph** che disegna `nx graph` sta alla base di tutto Nx: module boundaries, build/test/lint **incrementali** con cache, cache **distribuita** e **parallelizzazione**. Più si spezza in librerie ben confinate, più si guadagna.
 
 ## Ripasso lampo
 

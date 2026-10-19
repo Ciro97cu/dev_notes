@@ -61,7 +61,7 @@ export class FlightCardComponent {
 ```
 
 ## Query: `@ViewChild` / `@ContentChild`
-Le **query** servono a ottenere, da dentro la classe, un riferimento programmatico a un elemento del DOM, a una direttiva o a un componente del template — per esempio per dare il focus a un input o invocare un metodo di un figlio. La distinzione che conta è *dove* Angular cerca: una query **view** (`@ViewChild`/`@ViewChildren`) guarda il template del componente stesso, mentre una query **content** (`@ContentChild`/`@ContentChildren`) guarda il contenuto *proiettato* dall'esterno attraverso `<ng-content>`. Al singolare la query restituisce il primo match, al plurale una `QueryList` osservabile tramite `.changes`.
+Le **query** servono a ottenere, da dentro la classe, un riferimento programmatico a un elemento del DOM, a una direttiva o a un componente del template, per esempio per dare il focus a un input o invocare un metodo di un figlio. Le query si distinguono per *dove* Angular cerca: una query **view** (`@ViewChild`/`@ViewChildren`) guarda il template del componente stesso, mentre una query **content** (`@ContentChild`/`@ContentChildren`) guarda il contenuto *proiettato* dall'esterno attraverso `<ng-content>`. Al singolare la query restituisce il primo match, al plurale una `QueryList` osservabile tramite `.changes`.
 
 ```ts
 import {
@@ -99,8 +99,8 @@ export class PanelComponent implements AfterViewInit, AfterContentInit {
 ### L'opzione `{ static }`
 L'opzione `static` di una `@ViewChild` decide **quando** Angular risolve la query, e quindi in quale lifecycle hook il riferimento è già disponibile.
 
-- `{ static: true }` — la query è risolta **prima** della prima change detection, quindi è già disponibile in `ngOnInit`. Funziona **solo** se il target è sempre presente nel template (non dietro `*ngIf`/`*ngFor`).
-- `{ static: false }` — **default** da Angular 9; la query è risolta **dopo** l'inizializzazione della view, disponibile in `ngAfterViewInit`. Obbligatoria se il target è condizionale o dinamico.
+- `{ static: true }`: la query è risolta **prima** della prima change detection, quindi è già disponibile in `ngOnInit`. Funziona **solo** se il target è sempre presente nel template (non dietro `*ngIf`/`*ngFor`).
+- `{ static: false }`: **default** da Angular 9; la query è risolta **dopo** l'inizializzazione della view, disponibile in `ngAfterViewInit`. Obbligatoria se il target è condizionale o dinamico.
 
 ## Template reference variables
 Una **template reference variable** `#nome` dà un nome a un elemento direttamente nel markup, così lo si può riferire altrove *nello stesso template* senza passare dalla classe. Su un elemento HTML la variabile punta al nodo DOM nativo, mentre su un componente o una direttiva punta all'istanza della relativa classe, di cui si possono leggere proprietà e invocare metodi.
@@ -133,18 +133,18 @@ export class GreetingComponent implements OnChanges {
 
 Ordine al primo render (poi i `…Checked` si ripetono a ogni ciclo di CD):
 
-1. **`ngOnChanges(changes)`** — prima di `ngOnInit` e a ogni cambio di un `@Input` bound dal template.
-2. **`ngOnInit()`** — una volta, dopo il primo `ngOnChanges`. Init della logica, fetch dati.
-3. **`ngDoCheck()`** — a ogni ciclo di CD; change detection custom oltre a quella di default.
-4. **`ngAfterContentInit()`** — una volta, dopo la proiezione del contenuto; qui i `@ContentChild` sono risolti.
-5. **`ngAfterContentChecked()`** — dopo ogni check del contenuto proiettato.
-6. **`ngAfterViewInit()`** — una volta, dopo l'init della view del componente e delle view figlie; qui i `@ViewChild` (static:false) sono risolti.
-7. **`ngAfterViewChecked()`** — dopo ogni check della view del componente.
-8. **`ngOnDestroy()`** — subito prima della distruzione; cleanup (unsubscribe, timer, listener).
+1. **`ngOnChanges(changes)`**: prima di `ngOnInit` e a ogni cambio di un `@Input` bound dal template.
+2. **`ngOnInit()`**: una volta, dopo il primo `ngOnChanges`. Init della logica, fetch dati.
+3. **`ngDoCheck()`**: a ogni ciclo di CD; change detection custom oltre a quella di default.
+4. **`ngAfterContentInit()`**: una volta, dopo la proiezione del contenuto; qui i `@ContentChild` sono risolti.
+5. **`ngAfterContentChecked()`**: dopo ogni check del contenuto proiettato.
+6. **`ngAfterViewInit()`**: una volta, dopo l'init della view del componente e delle view figlie; qui i `@ViewChild` (static:false) sono risolti.
+7. **`ngAfterViewChecked()`**: dopo ogni check della view del componente.
+8. **`ngOnDestroy()`**: subito prima della distruzione; cleanup (unsubscribe, timer, listener).
 
 > [!warning]
 > Insidie d'esame:
-> - `ngOnChanges` scatta **solo** se il componente ha `@Input` bound dal template. Se muti un oggetto/array in-place (`this.data.push(x)`) senza cambiarne il riferimento, `ngOnChanges` **non** lo rileva: cambia solo il riferimento (`this.data = [...]`) a farlo scattare.
+> - `ngOnChanges` scatta **solo** se il componente ha `@Input` bound dal template. Se si muta un oggetto/array in-place (`this.data.push(x)`) senza cambiarne il riferimento, `ngOnChanges` **non** lo rileva: lo fa scattare solo un nuovo riferimento (`this.data = [...]`).
 > - Confondere `@ViewChild` e `@ContentChild`: un `@ViewChild` **non** vede il contenuto proiettato via `<ng-content>` (quello è `@ContentChild`), e viceversa.
 > - `{ static: true }` su un target dietro `*ngIf`/`*ngFor`: il riferimento resta `undefined`.
 > - Dimenticare l'`unsubscribe` in `ngOnDestroy` per gli `Observable` non gestiti dalla `async` pipe è un classico memory leak.

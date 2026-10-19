@@ -90,14 +90,14 @@ describe('FlightSearchComponent', () => {
 ```
 
 `createComponent` ritorna una **`ComponentFixture<T>`** che espone i vari aspetti del componente:
-- `componentInstance` — l'istanza della classe.
-- `nativeElement` — il nodo DOM radice del componente.
-- `debugElement` — wrapper con query DOM e accesso all'injector del componente.
-- `detectChanges()` — esegue la **change detection** (aggiorna il DOM dai dati).
-- `whenStable()` — `Promise` che si risolve quando i task async pendenti nella zona della fixture si sono conclusi.
+- `componentInstance`: l'istanza della classe.
+- `nativeElement`: il nodo DOM radice del componente.
+- `debugElement`: wrapper con query DOM e accesso all'injector del componente.
+- `detectChanges()`: esegue la **change detection** (aggiorna il DOM dai dati).
+- `whenStable()`: `Promise` che si risolve quando i task async pendenti nella zona della fixture si sono conclusi.
 
 > [!warning]
-> Nei test la change detection **non** è automatica: va chiamata a mano con **`fixture.detectChanges()`**. La **prima** chiamata scatena `ngOnInit` e il primo data binding; senza, il template resta vuoto e i lifecycle hook non partono. (In produzione ci pensa Zone.js — vedi [[change-detection]].)
+> Nei test la change detection **non** è automatica: va chiamata a mano con **`fixture.detectChanges()`**. La **prima** chiamata scatena `ngOnInit` e il primo data binding; senza, il template resta vuoto e i lifecycle hook non partono. (In produzione ci pensa Zone.js: si veda [[change-detection]].)
 
 ## Query sul DOM: `DebugElement` + `By.css`
 Per verificare cosa il componente ha davvero renderizzato si interroga il suo `debugElement`, il wrapper con cui Angular avvolge il DOM della fixture. Le sue query accettano un **selettore CSS** tramite `By.css`, oppure il tipo di una direttiva o di un componente tramite `By.directive`, e restituiscono altri `DebugElement` da cui si raggiunge il nodo nativo e l'injector locale.
@@ -213,9 +213,9 @@ describe('FlightService', () => {
 });
 ```
 
-- `expectOne(url | predicate)` — si aspetta **esattamente una** richiesta corrispondente e la restituisce (esistono `expectNone` e `match`).
-- `req.flush(body, opts)` — invia la risposta fake; per gli errori si passa uno `status` >= 400 o si usa `req.error(new ProgressEvent('error'))`.
-- `verify()` — lancia se restano richieste **senza risposta** (tipicamente in `afterEach`).
+- `expectOne(url | predicate)`: si aspetta **esattamente una** richiesta corrispondente e la restituisce (esistono `expectNone` e `match`).
+- `req.flush(body, opts)`: invia la risposta fake; per gli errori si passa uno `status` >= 400 o si usa `req.error(new ProgressEvent('error'))`.
+- `verify()`: lancia se restano richieste **senza risposta** (tipicamente in `afterEach`).
 
 > [!info|label:Modo classico]
 > Prima delle API funzionali si importava il modulo **`HttpClientTestingModule`** in `imports`. È **deprecato** da Angular v18 a favore di `provideHttpClient()` + `provideHttpClientTesting()` ([angular.dev](https://angular.dev/guide/http/testing)). Il resto dell'API (`HttpTestingController`, `expectOne`/`flush`/`verify`) è invariato.
@@ -223,8 +223,8 @@ describe('FlightService', () => {
 ## Mock di service e di componenti figli
 Per testare un componente in isolamento occorre rimpiazzarne le dipendenze reali con sostituti controllabili, e i casi tipici sono due: i service da cui dipende e i componenti figli che compaiono nel suo template.
 
-- **Service** — si sostituisce via provider: `{ provide: X, useValue: mock }` (oggetto/spia), `{ provide: X, useClass: FakeX }`, oppure `jasmine.createSpyObj`.
-- **Componenti figli** — per isolare il componente sotto test (*shallow testing*) si sostituisce il figlio con uno **stub** che ha **stesso selector, stessi `@Input`/`@Output`**. In alternativa si aggiunge `NO_ERRORS_SCHEMA` (o `CUSTOM_ELEMENTS_SCHEMA`) allo `schemas` del `TestBed`, che fa ignorare gli elementi/attributi sconosciuti nel template.
+- **Service**: si sostituisce via provider, con `{ provide: X, useValue: mock }` (oggetto/spia), `{ provide: X, useClass: FakeX }`, oppure `jasmine.createSpyObj`.
+- **Componenti figli**: per isolare il componente sotto test (*shallow testing*) si sostituisce il figlio con uno **stub** che ha **stesso selector, stessi `@Input`/`@Output`**. In alternativa si aggiunge `NO_ERRORS_SCHEMA` (o `CUSTOM_ELEMENTS_SCHEMA`) allo `schemas` del `TestBed`, che fa ignorare gli elementi/attributi sconosciuti nel template.
 
 ```ts
 import { Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -273,7 +273,7 @@ Espone `componentInstance` (l'istanza della classe), `nativeElement` (nodo DOM),
 <details>
 <summary>Quando si usa <code>fakeAsync</code>/<code>tick</code> e quando <code>waitForAsync</code>/<code>whenStable</code>? Qual è il limite di <code>fakeAsync</code>?</summary>
 
-`fakeAsync` esegue il test a **tempo virtuale**: si fanno avanzare i timer con `tick(ms)`/`flush()` — ideale per debounce e `setTimeout`, in modo deterministico. `waitForAsync` + `fixture.whenStable()` attende invece i task async **reali** (Promise). Limite: `fakeAsync` **non** funziona con una vera richiesta XHR, quindi va usato con dati mockati (es. `HttpTestingController`, sincrono).
+`fakeAsync` esegue il test a **tempo virtuale**: si fanno avanzare i timer con `tick(ms)`/`flush()`. È l'ideale per testare debounce e `setTimeout` in modo deterministico. `waitForAsync` + `fixture.whenStable()` attende invece i task async **reali** (Promise). Limite: `fakeAsync` **non** funziona con una vera richiesta XHR, quindi va usato con dati mockati (es. `HttpTestingController`, sincrono).
 
 </details>
 

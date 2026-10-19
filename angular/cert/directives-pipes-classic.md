@@ -173,7 +173,7 @@ Ogni pipe è **pura** per default: Angular assume che il suo output dipenda solo
 - **Impura** (`pure: false`): richiamata a **ogni** ciclo di change detection, anche senza cambio di riferimento. Necessaria per input mutati in-place, ma costosa. `async` e `keyvalue` sono impure.
 
 ### `async` pipe
-La pipe `async` collega direttamente uno stream al template: si sottoscrive a un `Observable` (o a una `Promise`), ne restituisce di volta in volta l'ultimo valore emesso e, soprattutto, **si disiscrive da sola** quando il componente viene distrutto. Il risultato è che non serve alcun `unsubscribe` manuale e si elimina alla radice una delle fonti più comuni di memory leak.
+La pipe `async` collega direttamente uno stream al template: si sottoscrive a un `Observable` (o a una `Promise`), ne restituisce di volta in volta l'ultimo valore emesso e, soprattutto, **si disiscrive da sola** quando il componente viene distrutto. Così non serve alcun `unsubscribe` manuale e si elimina alla radice una delle fonti più comuni di memory leak.
 
 ```html
 <div>{{ time$ | async }}</div>

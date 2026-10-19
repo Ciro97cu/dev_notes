@@ -114,11 +114,11 @@ export class FlightSearch {
 }
 ```
 
-Tutto ciò che il template usa è esposto come **proprietà** o **metodo** della classe, e lo stato si modella con i [[signal]]: legati al template, notificano ad Angular ogni cambio di valore, così il framework aggiorna i binding. Un signal si crea con `signal()` (da `@angular/core`) passando un valore iniziale, e da lì in poi **ha sempre un valore**; il tipo di norma si inferisce da quel valore iniziale e va dichiarato solo quando l'inferenza non basta, come in `signal<Flight[]>([])` — un array vuoto non porta alcuna informazione sul tipo dei suoi elementi.
+Tutto ciò che il template usa è esposto come **proprietà** o **metodo** della classe, e lo stato si modella con i [[signal]]: legati al template, notificano ad Angular ogni cambio di valore, così il framework aggiorna i binding. Un signal si crea con `signal()` (da `@angular/core`) passando un valore iniziale, e da lì in poi **ha sempre un valore**; il tipo di norma si inferisce da quel valore iniziale e va dichiarato solo quando l'inferenza non basta, come in `signal<Flight[]>([])`, perché un array vuoto non porta alcuna informazione sul tipo dei suoi elementi.
 
-Il `filter` rappresenta i criteri di ricerca: da esso `form(this.filter)` costruisce il `filterForm` (Signal Forms), il form a cui si legano gli `<input>`, e a ogni modifica dei controlli si aggiornano insieme sia `filterForm` sia `filter`. `flights` contiene i voli trovati e `selectedFlight` il volo selezionato — all'inizio nessuno è selezionato, quindi il tipo è `Flight | null` inizializzato a `null`; `search()` recupera i voli, `select(f)` aggiorna `selectedFlight` con il volo scelto.
+Il `filter` contiene i criteri di ricerca: da esso `form(this.filter)` costruisce il `filterForm` (Signal Forms), il form a cui si legano gli `<input>`, e a ogni modifica dei controlli si aggiornano insieme sia `filterForm` sia `filter`. `flights` contiene i voli trovati e `selectedFlight` il volo selezionato. All'inizio nessuno è selezionato, quindi il tipo è `Flight | null` inizializzato a `null`; `search()` recupera i voli, `select(f)` aggiorna `selectedFlight` con il volo scelto.
 
-Un signal si **legge** chiamandone il getter — cioè usandolo come funzione, es. `this.filter().from`. Si **scrive** con `.set(value)`, oppure con `.update(prev => next)` quando il nuovo valore dipende dal precedente.
+Un signal si **legge** chiamandone il getter, cioè usandolo come funzione, es. `this.filter().from`. Si **scrive** con `.set(value)`, oppure con `.update(prev => next)` quando il nuovo valore dipende dal precedente.
 
 ```ts
 const counter = signal(0);
@@ -232,7 +232,7 @@ Un **property binding** imposta una proprietà (del DOM o di un sotto-componente
 > [!warning]
 > **Evitare di legare metodi o getter nei binding.** Un'espressione come `[value]="calcolaTotale()"` o `{{ getNome() }}` viene rivalutata a **ogni ciclo di change detection**, non solo quando i dati cambiano: con molte espressioni, o con metodi costosi, degrada le performance. In un componente signal-based la soluzione idiomatica è esporre un `computed()` (rivalutato solo quando cambiano i signal da cui dipende) e legare quello: `[value]="totale()"`.
 >
-> ➕ *(Fuori dal libro Modern Angular — buona pratica standard di Angular.)*
+> ➕ *(Fuori dal libro Modern Angular: buona pratica standard di Angular.)*
 
 ### Interpolation & Pipes
 
@@ -276,14 +276,14 @@ Il control flow è **built-in** nel template (`@if`, `@for`, `@switch`, prefisso
 > Nel `@for` il `track` è **obbligatorio**: punta a un identificatore univoco (es. `track flight.id`; in mancanza, `track $index` o l'oggetto stesso `track flight`). Permette ad Angular di **spostare** i nodi DOM esistenti quando cambia l'ordine, invece di ri-renderizzare tutta la lista.
 
 > [!warning]
-> Usa `<button type="button">`: il default è `submit`, che farebbe il submit del form e un reload completo della pagina. La direttiva `formRoot` del [[06-signal-forms|cap.6]] disabilita questo comportamento di default del browser.
+> Usare `<button type="button">`: il default è `submit`, che farebbe il submit del form e un reload completo della pagina. La direttiva `formRoot` del [[06-signal-forms|cap.6]] disabilita questo comportamento di default del browser.
 
 ### Exhaustive @switch with @default never
 > pp.31-33 (Listing 2-12/2-14)
 
-Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto al tipo in un secondo momento: il template compila lo stesso, ma quel caso resta scoperto a runtime. Da **Angular 21.2** il ramo `@default` può chiedere al compilatore un **exhaustiveness check** — un controllo che verifica di aver coperto *tutti* i casi possibili e fa fallire la build se ne manca uno.
+Un'insidia tipica dello `@switch` è dimenticare di gestire un valore aggiunto al tipo in un secondo momento: il template compila lo stesso, ma quel caso resta scoperto a runtime. Da **Angular 21.2** il ramo `@default` può chiedere al compilatore un **exhaustiveness check**, cioè un controllo che verifica di aver coperto *tutti* i casi possibili e fa fallire la build se ne manca uno.
 
-Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito, quindi si restringe `passengerStatus` da `string` a una **literal union** `'A' | 'B' | 'C'` (un tipo che ammette solo questi tre valori esatti, non una stringa qualsiasi). Quando l'espressione dello `@switch` **è** proprio la union, basta la forma breve `@default never;`. Il meccanismo: gestendo i `@case` uno dopo l'altro, TypeScript "consuma" i valori ancora possibili finché non ne resta nessuno, cioè finché il tipo di `passengerStatus` non si riduce a `never` (l'insieme vuoto, nessun valore possibile).
+Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito, quindi si restringe `passengerStatus` da `string` a una **literal union** `'A' | 'B' | 'C'` (un tipo che ammette solo questi tre valori esatti, non una stringa qualsiasi). Quando l'espressione dello `@switch` **è** proprio la union, basta la forma breve `@default never;`. Gestendo i `@case` uno dopo l'altro, TypeScript "consuma" i valori ancora possibili finché non ne resta nessuno, cioè finché il tipo di `passengerStatus` non si riduce a `never` (l'insieme vuoto, nessun valore possibile).
 
 > [!info|label:Angular 22+ · @default never (exhaustive check)]
 > ```html
@@ -296,7 +296,7 @@ Perché il controllo abbia senso il tipo su cui si fa switch deve essere finito,
 > ```
 > Se in seguito si aggiunge `'D'` alla union senza il relativo `@case`, il template **non compila** più.
 
-C'è però un caso più frequente in cui la forma breve non basta: quando lo switch è su una **proprietà** di una *discriminated union* (una union di oggetti distinti dal valore di un campo comune — il *discriminatore*, qui `kind`), e non sull'intera union. TypeScript sa restringere quella singola proprietà, ma non sa dedurre se l'intera union è stata coperta. Serve allora la forma `never(<expression>)` (**Angular 22**), che indica esplicitamente al compilatore quale espressione controllare per la copertura completa.
+C'è però un caso più frequente in cui la forma breve non basta: quando lo switch è su una **proprietà** di una *discriminated union* (una union di oggetti distinti dal valore di un campo comune: il *discriminatore*, qui `kind`), e non sull'intera union. TypeScript sa restringere quella singola proprietà, ma non sa dedurre se l'intera union è stata coperta. Serve allora la forma `never(<expression>)` (**Angular 22**), che indica esplicitamente al compilatore quale espressione controllare per la copertura completa.
 
 > [!info|label:Angular 22+ · never(expression) su discriminated union]
 > ```ts
@@ -356,7 +356,7 @@ Il prefisso del selector (`app-`, inserito dalla CLI per evitare collisioni con 
 
 ## View Encapsulation
 
-*➕ Fuori dal libro — come Angular isola gli stili di un componente.*
+*➕ Fuori dal libro: come Angular isola gli stili di un componente.*
 
 Gli stili dichiarati in `styleUrl`/`styles` di un componente sono, per impostazione predefinita, **scoped**: valgono solo per quel componente e non "sporcano" il resto dell'app. Angular lo ottiene **senza** Shadow DOM, con la *view encapsulation* emulata: aggiunge agli elementi del componente un attributo univoco (es. `_ngcontent-abc`) e riscrive di conseguenza i selettori CSS, così una regola come `h2 { … }` colpisce solo gli `h2` di quel componente.
 
@@ -374,9 +374,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
 export class Badge {}
 ```
 
-- **`Emulated`** (default) — scoping emulato via attributi: gli stili del componente **non escono**, ma quelli globali **entrano** ancora. È il compromesso adatto alla quasi totalità dei componenti.
-- **`None`** — nessuno scoping: gli stili del componente diventano **globali** e si applicano a tutta l'app. Ha senso solo per stili di tema/reset dichiarati di proposito a livello globale; da evitare nei componenti normali, perché i selettori generici finiscono per collidere.
-- **`ShadowDom`** — isolamento **reale** tramite lo Shadow DOM del browser: gli stili sono completamente incapsulati e quelli globali **non entrano**. Adatto a componenti davvero autonomi (o esposti come web component), al prezzo di rinunciare all'ereditarietà degli stili globali.
+- **`Emulated`** (default): scoping emulato via attributi, per cui gli stili del componente **non escono**, ma quelli globali **entrano** ancora. È il compromesso adatto alla quasi totalità dei componenti.
+- **`None`**: nessuno scoping, quindi gli stili del componente diventano **globali** e si applicano a tutta l'app. Ha senso solo per stili di tema/reset dichiarati di proposito a livello globale; da evitare nei componenti normali, perché i selettori generici finiscono per collidere.
+- **`ShadowDom`**: isolamento **reale** tramite lo Shadow DOM del browser, con gli stili completamente incapsulati e quelli globali che **non entrano**. Adatto a componenti davvero autonomi (o esposti come web component), al prezzo di rinunciare all'ereditarietà degli stili globali.
 
 > [!tip]
 > Con l'incapsulamento emulato, il pseudo-selettore **`:host`** stila l'elemento-host del componente stesso: è il modo corretto per dare stili al "contenitore" senza sconfinare fuori dal componente.
@@ -435,7 +435,7 @@ export class FlightSearch {
 | `delete<T>(url, options)` | elimina una risorsa |
 | `request<T>(method, url, options)` | generico: il verbo è un parametro |
 
-I metodi che inviano dati hanno un parametro `body`; l'`options` configura `params`, `headers`, ecc. Attenzione: non ogni Web API supporta tutti i verbi, e la semantica implementata può discostarsi da quella HTTP (es. una POST che in realtà aggiorna) → consultare la documentazione della Web API.
+I metodi che inviano dati hanno un parametro `body`; l'`options` configura `params`, `headers`, ecc. Non ogni Web API supporta tutti i verbi, e la semantica implementata può discostarsi da quella HTTP (es. una POST che in realtà aggiorna): per questo va consultata la documentazione della Web API.
 
 A titolo d'esempio, una POST che crea un nuovo volo: il `body` è l'oggetto da inviare (l'`HttpClient` lo serializza in JSON) e si assume che il server risponda col volo creato, ID incluso.
 
@@ -508,7 +508,7 @@ protected readonly flightsResource = httpResource<Flight[]>(
 Di default esegue una **GET**; è possibile specificare un altro metodo e persino un `body`, ma è pensata per il **fetch (read)**: per save/delete si usa `HttpClient`. Il secondo argomento `{ defaultValue: [] }` dà un valore iniziale prima che la richiesta completi, evitando `undefined` nel template. Lo stato è esposto via signal: `value` (i dati), `error` (info sull'errore), `isLoading` (richiesta in corso).
 
 > [!info|label:Angular 22+ · Il value della resource è scrivibile]
-> Il `value` di una resource è **scrivibile**: si possono modificare i dati caricati localmente (utile per editarli con un form in two-way binding sul `value`). Resta però una **copia di lavoro locale** — per persistere sul server serve comunque `HttpClient`.
+> Il `value` di una resource è **scrivibile**: si possono modificare i dati caricati localmente (utile per editarli con un form in two-way binding sul `value`). Resta però una **copia di lavoro locale**: per persistere sul server serve comunque `HttpClient`.
 
 ```html
 <!-- .../flight-search/flight-search.html -->
@@ -524,16 +524,16 @@ Di default esegue una **GET**; è possibile specificare un altro metodo e persin
 ```
 
 > [!warning]
-> In stato di errore **non leggere `value()`**: lancia un'eccezione. Controlla prima `error()` e leggi `value` solo se è `undefined` — nel template `@if (!error() && flights().length > 0)`.
+> In stato di errore **non leggere `value()`**: lancia un'eccezione. Controllare prima `error()` e leggere `value` solo se è `undefined`, come nel template `@if (!error() && flights().length > 0)`.
 
 In alternativa a `error()` si può guardare il signal `status()`, che vale uno tra: `idle` (niente caricato) · `loading` · `reloading` · `error` · `resolved` (caricamento riuscito) · `local` (valore cambiato localmente via `set`/`update`).
 
 > [!tip]
 > `httpResource` gestisce da sola le [[glossario#race-condition|race condition]], la situazione in cui più richieste partite in rapida successione si "sorpassano", col rischio di mostrare la risposta sbagliata invece di quella dell'ultima ricerca.
 >
-> L'esempio classico: l'utente cerca i voli per Berlino e, prima che la risposta arrivi, cambia destinazione in Londra. Vince l'**ultima** richiesta — solo il risultato per Londra aggiorna `value`, mentre quello per Berlino viene annullato se ancora in corso, o scartato se nel frattempo è già tornato. Chi conosce RxJS lo riconosce come il comportamento di `switchMap` (l'operatore che annulla la richiesta in corso quando ne parte una nuova).
+> L'esempio classico: l'utente cerca i voli per Berlino e, prima che la risposta arrivi, cambia destinazione in Londra. Vince l'**ultima** richiesta: solo il risultato per Londra aggiorna `value`, mentre quello per Berlino viene annullato se ancora in corso, o scartato se nel frattempo è già tornato. Chi conosce RxJS lo riconosce come il comportamento di `switchMap` (l'operatore che annulla la richiesta in corso quando ne parte una nuova).
 >
-> `reload()` segue invece la regola opposta: chiamato mentre una richiesta è già in corso, **viene ignorato** — come `exhaustMap`, che scarta le nuove chiamate finché quella attiva non è finita.
+> `reload()` segue invece la regola opposta: chiamato mentre una richiesta è già in corso, **viene ignorato** (come `exhaustMap`, che scarta le nuove chiamate finché quella attiva non è finita).
 >
 > Sono le semantiche ideali per il fetch, ma non per update/delete: un altro motivo per cui `HttpClient` resta rilevante in quei casi.
 

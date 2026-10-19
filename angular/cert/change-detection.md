@@ -41,14 +41,14 @@ export class ItemComponent {
 }
 ```
 
-- **`Default`** — a ogni ciclo Angular ricontrolla il componente, sempre.
-- **`OnPush`** — Angular **salta** il componente e il suo sottoalbero, controllandolo **solo** quando si verifica una di queste condizioni:
+- **`Default`**: a ogni ciclo Angular ricontrolla il componente, sempre.
+- **`OnPush`**: Angular **salta** il componente e il suo sottoalbero, controllandolo **solo** quando si verifica una di queste condizioni:
   1. cambia il **riferimento** di un `@Input` (non la mutazione in-place di un oggetto/array);
   2. parte un **evento dal template** del componente (o di un suo figlio);
   3. una **`async` pipe** presente nel template emette un nuovo valore;
   4. si chiama esplicitamente **`markForCheck()`** sul suo `ChangeDetectorRef`.
 
-`OnPush` di fatto impone di lavorare con input **immutabili**: cambiare un dato significa creare un nuovo riferimento invece di mutare l'oggetto esistente. Il vincolo ripaga, perché Angular esegue molti meno controlli e il flusso dei dati diventa più prevedibile, oltre che più veloce.
+`OnPush` in pratica impone di lavorare con input **immutabili**: cambiare un dato significa creare un nuovo riferimento invece di mutare l'oggetto esistente. Il vincolo ripaga, perché Angular esegue molti meno controlli e il flusso dei dati diventa più prevedibile, oltre che più veloce.
 
 ## `ChangeDetectorRef`
 Quando la change detection automatica non basta (tipicamente con `OnPush`, dopo un aggiornamento che Angular non ha modo di intercettare da solo) si interviene a mano tramite `ChangeDetectorRef`, il servizio che dà a ogni componente il controllo esplicito sul proprio ciclo di detection. Lo si inietta nel costruttore e da lì si può marcare il componente come "da controllare", forzare subito un controllo, oppure staccarlo del tutto dall'albero.
@@ -59,10 +59,10 @@ import { ChangeDetectorRef } from '@angular/core';
 constructor(private cdr: ChangeDetectorRef) {}
 ```
 
-- **`markForCheck()`** — marca il componente e i suoi **antenati** come da controllare al **prossimo** ciclo. È ciò che si usa con `OnPush` dopo un aggiornamento asincrono.
-- **`detectChanges()`** — esegue **subito** la CD su questo componente e i suoi figli.
-- **`detach()`** — stacca il componente dall'albero di CD: non verrà più controllato automaticamente (utile per aggiornamenti ad altissima frequenza gestiti a mano).
-- **`reattach()`** — lo riattacca all'albero.
+- **`markForCheck()`**: marca il componente e i suoi **antenati** come da controllare al **prossimo** ciclo. È ciò che si usa con `OnPush` dopo un aggiornamento asincrono.
+- **`detectChanges()`**: esegue **subito** la CD su questo componente e i suoi figli.
+- **`detach()`**: stacca il componente dall'albero di CD: non verrà più controllato automaticamente (utile per aggiornamenti ad altissima frequenza gestiti a mano).
+- **`reattach()`**: lo riattacca all'albero.
 
 ## `NgZone`
 `NgZone` è il servizio che rappresenta la zone di Angular, cioè il contesto di esecuzione dentro cui Zone.js intercetta l'async e fa scattare la CD. Iniettandolo si può deliberatamente **uscire** da quel contesto per eseguire codice che non deve innescare la detection, e poi **rientrarvi** solo nei momenti in cui serve davvero aggiornare la view.
@@ -84,8 +84,8 @@ startPolling() {
 }
 ```
 
-- **`runOutsideAngular(fn)`** — esegue `fn` **fuori** dalla zone: i callback async al suo interno non scatenano la CD (ideale per animazioni/polling ad alta frequenza).
-- **`run(fn)`** — **rientra** nella zone e riattiva la CD, per aggiornare la view da codice partito fuori-zone.
+- **`runOutsideAngular(fn)`**: esegue `fn` **fuori** dalla zone: i callback async al suo interno non scatenano la CD (ideale per animazioni/polling ad alta frequenza).
+- **`run(fn)`**: **rientra** nella zone e riattiva la CD, per aggiornare la view da codice partito fuori-zone.
 
 ## `ExpressionChangedAfterItHasBeenCheckedError`
 In modalità **dev** Angular esegue un secondo giro di CD subito dopo il primo per verificare la stabilità delle espressioni. Se un valore letto nel template cambia fra i due giri (tipicamente perché un hook come `ngAfterViewInit` modifica una proprietà già controllata) lancia `ExpressionChangedAfterItHasBeenCheckedError` (**NG0100**). Compare solo in dev; in produzione il secondo giro non viene eseguito.
@@ -102,7 +102,7 @@ Rimedi: spostare l'aggiornamento a un momento precedente (es. `ngOnInit`), forza
 > Il moderno combina **signal + `OnPush` + zoneless**: i signal notificano puntualmente i soli componenti che li leggono, quindi la CD diventa granulare e non serve più né Zone.js né, spesso, il `markForCheck()` manuale. Il modello reattivo signal-based è già spiegato nel vault, in [[03-reactive-design-with-signals]] e [[02-signal-based-components]] (qui non ripetuto).
 
 > [!info|label:Stato attuale]
-> Da Angular **v20.2** l'API zoneless è **stabile** (`provideZonelessChangeDetection()`) e da **v21** le nuove app sono **zoneless di default** (Zone.js non più incluso). Senza Zone.js la CD è guidata dalle notifiche dei signal, da `markForCheck()`, dagli eventi del template e dalla `async` pipe — di fatto le stesse condizioni di `OnPush`. Il modello Zone.js resta pienamente supportato per le app esistenti (vedi [angular.dev/guide/zoneless](https://angular.dev/guide/zoneless)).
+> Da Angular **v20.2** l'API zoneless è **stabile** (`provideZonelessChangeDetection()`) e da **v21** le nuove app sono **zoneless di default** (Zone.js non più incluso). Senza Zone.js la CD è guidata dalle notifiche dei signal, da `markForCheck()`, dagli eventi del template e dalla `async` pipe: in pratica, le stesse condizioni di `OnPush`. Il modello Zone.js resta pienamente supportato per le app esistenti (si veda [angular.dev/guide/zoneless](https://angular.dev/guide/zoneless)).
 
 ## Ripasso lampo
 

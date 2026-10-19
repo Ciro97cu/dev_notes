@@ -10,9 +10,9 @@ livello: [senior]
 
 ## Principi Redux
 Tre regole fondamentali, valide anche in NgRx:
-- **Single source of truth** — un solo store, un solo albero di stato immutabile per tutta l'app.
-- **Lo stato è read-only** — non si muta mai direttamente; si **dispatcha** un'action che descrive l'intenzione.
-- **I cambiamenti avvengono con funzioni pure** — i reducer, dato `(stato, action)`, ritornano un **nuovo** stato senza side effect.
+- **Single source of truth**: un solo store, un solo albero di stato immutabile per tutta l'app.
+- **Lo stato è read-only**: non si muta mai direttamente; si **dispatcha** un'action che descrive l'intenzione.
+- **I cambiamenti avvengono con funzioni pure**: i reducer, dato `(stato, action)`, ritornano un **nuovo** stato senza side effect.
 
 Ne deriva un **flusso unidirezionale**: l'intenzione entra come action, il reducer calcola il nuovo stato, i componenti leggono via selector. I side effect (HTTP, timer) stanno fuori dai reducer, negli **Effects**.
 
@@ -178,7 +178,7 @@ export class FlightEffects {
 > Il `catchError` va messo **sull'inner observable** (dentro `switchMap`), non sull'outer: se lo stream esterno (`actions$`) emette un errore, l'Effect **muore** e smette di reagire per sempre. Gestendo l'errore nell'inner e ritornando un `of(...failure())`, l'outer resta vivo. È una domanda-trabocchetto classica.
 
 ## Wiring: `StoreModule` / `EffectsModule`
-Nel mondo classico (NgModule) lo store e gli effect si registrano con la convenzione `forRoot`/`forFeature` (vedi [[ngmodules]]).
+Nel mondo classico (NgModule) lo store e gli effect si registrano con la convenzione `forRoot`/`forFeature` (si veda [[ngmodules]]).
 
 ```ts
 // app.module.ts — root
@@ -290,7 +290,7 @@ Perché deve essere **deterministico** (`(stato, action) → nuovo stato`) e sen
 <details>
 <summary>Cosa fa <code>createFeatureSelector</code> e perché <code>createSelector</code> è importante per le performance?</summary>
 
-`createFeatureSelector<T>('chiave')` estrae lo slice di stato di una feature dalla sua chiave nello store (deve coincidere con quella di `forFeature`). `createSelector` compone selector e **memoizza**: ricalcola solo quando uno degli input cambia per riferimento, altrimenti ritorna il valore cachato — così la logica derivata non gira a ogni change detection.
+`createFeatureSelector<T>('chiave')` estrae lo slice di stato di una feature dalla sua chiave nello store (deve coincidere con quella di `forFeature`). `createSelector` compone selector e **memoizza**: ricalcola solo quando uno degli input cambia per riferimento, altrimenti ritorna il valore cachato, così la logica derivata non gira a ogni change detection.
 
 </details>
 

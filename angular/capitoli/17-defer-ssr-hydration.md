@@ -7,7 +7,7 @@ tags: [tipo/capitolo, ssr, performance, angular-22]
 # 17 · Defer, SSR & Hydration
 > cap.17 · pp.410-422 — *Modern Angular* v3.0.0
 
-Le SPA hanno ottime performance a runtime, ma il **primo caricamento** è spesso più lento di qualche secondo rispetto a un sito classico server-rendered: il browser non riceve solo l'HTML, ma deve anche scaricare ed eseguire una quantità significativa di JavaScript prima di poter renderizzare l'applicazione. Il *First Meaningful Paint* (FMP) arriva quindi tardi. Per app aziendali interne il ritardo può essere accettabile; per soluzioni pubbliche come web shop e landing page diventa un problema (più secondi di attesa = più bounce).
+Le SPA hanno ottime performance a runtime, ma il **primo caricamento** è spesso più lento di qualche secondo rispetto a un sito classico server-rendered: il browser, oltre all'HTML, deve scaricare ed eseguire una quantità significativa di JavaScript prima di poter renderizzare l'applicazione. Il *First Meaningful Paint* (FMP) arriva quindi tardi. Per app aziendali interne il ritardo può essere accettabile; per soluzioni pubbliche come web shop e landing page diventa un problema (più secondi di attesa = più bounce).
 
 Il capitolo presenta tre meccanismi complementari:
 - **[[glossario#deferrable-view-defer|Deferrable views]]** (`@defer`): rimandano le regioni non critiche (le caricano dopo, non subito).
@@ -33,8 +33,8 @@ Non tutte le aree di una pagina contano allo stesso modo. Sulla pagina di ricerc
 Nella demo i pannelli opzionali mostrano prima dei ghost element (sagome grigie segnaposto che imitano la forma del contenuto in arrivo); appena il bundle è caricato, `@defer` scambia il placeholder col contenuto reale.
 
 Oltre a `@placeholder`, `@defer` supporta `@loading` (mostrato mentre si scarica il bundle) e `@error` (se il caricamento fallisce). Per evitare flicker (lo sfarfallio di elementi che appaiono e spariscono troppo in fretta):
-- `minimum` su `@placeholder`/`@loading` → durata minima di visualizzazione.
-- `after` su `@loading` → ritarda lo spinner finché il caricamento non supera la soglia indicata.
+- `minimum` su `@placeholder`/`@loading`: impone una durata minima di visualizzazione.
+- `after` su `@loading`: ritarda lo spinner finché il caricamento non supera la soglia indicata.
 
 ```html
 @defer (on viewport) {
@@ -49,12 +49,12 @@ Oltre a `@placeholder`, `@defer` supporta `@loading` (mostrato mentre si scarica
 ```
 
 > [!tip]
-> Usa `@defer` per UI che chiaramente **non** serve alla prima interazione utile. Differire (rimandare) la navigazione core o le azioni primarie costringe l'utente a uno stato di loading proprio quando ha bisogno di quella funzionalità: danneggia la *perceived performance* (la velocità che l'utente percepisce, a prescindere dai tempi reali).
+> `@defer` va usato per UI che chiaramente **non** serve alla prima interazione utile. Differire (rimandare) la navigazione core o le azioni primarie costringe l'utente a uno stato di loading proprio quando ha bisogno di quella funzionalità: danneggia la *perceived performance* (la velocità che l'utente percepisce, a prescindere dai tempi reali).
 
 ### Triggers
 > pp.411-412
 
-Insieme fisso di trigger su `@defer`:
+`@defer` prevede un insieme fisso di trigger:
 
 | Trigger | Quando scatta |
 |---|---|
@@ -83,7 +83,7 @@ Collegamenti: il code-splitting/[[glossario#lazy-loading|lazy loading]] (caricar
 ## SSR & Hydration
 > pp.412-413
 
-Per migliorare il primo paint delle soluzioni pubbliche si rende la SPA **sul server**, che consegna una pagina HTML completa: il chiamante vede il contenuto prima. Una volta caricati i bundle JS, la pagina diventa interattiva — questo processo si chiama **hydration**.
+Per migliorare il primo paint delle soluzioni pubbliche si rende la SPA **sul server**, che consegna una pagina HTML completa: il chiamante vede il contenuto prima. Una volta caricati i bundle JS, la pagina diventa interattiva. Questo processo si chiama **hydration**.
 
 ### Adding Server-Side Rendering
 > p.412
@@ -119,8 +119,8 @@ export const appConfig: ApplicationConfig = {
 ```
 
 > [!info|label:Angular 22+ · FetchBackend di default]
-> Da **Angular 22** `HttpClient` usa il **`FetchBackend`** di default: il vecchio opt-in `withFetch()` non serve più ed è deprecato — basta `provideHttpClient()`. La fetch API è ora disponibile in tutti i browser e runtime rilevanti, offre un'API Promise-based più moderna e funziona ugualmente bene nel browser e durante l'SSR.
-> L'unica feature che la fetch **non** offre è l'**upload progress**: se dipendi da `reportUploadProgress`, torna a XHR con `provideHttpClient(withXhr())`. Preferisci comunque le opzioni dedicate `reportDownloadProgress` e `reportUploadProgress` al vecchio `reportProgress`, ora deprecato.
+> Da **Angular 22** `HttpClient` usa il **`FetchBackend`** di default: il vecchio opt-in `withFetch()` non serve più ed è deprecato. Basta `provideHttpClient()`. La fetch API è ora disponibile in tutti i browser e runtime rilevanti, offre un'API Promise-based più moderna e funziona ugualmente bene nel browser e durante l'SSR.
+> L'unica feature che la fetch **non** offre è l'**upload progress**: se si dipende da `reportUploadProgress`, si torna a XHR con `provideHttpClient(withXhr())`. Conviene comunque preferire le opzioni dedicate `reportDownloadProgress` e `reportUploadProgress` al vecchio `reportProgress`, ora deprecato.
 > **Prima della 22** (fino ad Angular 21) il default era `XhrBackend` e il comportamento fetch si attivava con `provideHttpClient(withFetch())` (importante in SSR e hydration). Al bump, `ng update` inserisce automaticamente `withXhr()` dove serviva il vecchio comportamento.
 
 > [!tip]
@@ -131,11 +131,11 @@ Collegamenti: [[providers]] · le provider function (`provide*`/`with*`).
 ### Incremental Hydration
 > pp.413-414
 
-L'[[glossario#incremental-hydration|hydration incrementale]] vuol dire che l'hydration **non deve avvenire tutta in una volta**. I bundle si richiedono solo quando servono — il più tardi possibile, idealmente mai per le regioni che l'utente non tocca. Le parti più importanti diventano interattive prima; le meno importanti dopo. Si abbina naturalmente a `@defer`: le regioni da idratare on-demand (su richiesta, solo al bisogno) si marcano con `@defer` e la clausola **`hydrate`** dice *quando* idratare.
+L'[[glossario#incremental-hydration|hydration incrementale]] vuol dire che l'hydration **non deve avvenire tutta in una volta**. I bundle si richiedono solo quando servono, il più tardi possibile e, idealmente, mai per le regioni che l'utente non tocca. Le parti più importanti diventano interattive prima; le meno importanti dopo. Si abbina naturalmente a `@defer`: le regioni da idratare on-demand (su richiesta, solo al bisogno) si marcano con `@defer` e la clausola **`hydrate`** dice *quando* idratare.
 
 > [!info|label:Angular 22+ · Hydration incrementale di default]
-> Da **Angular 22** `provideClientHydration()` attiva l'hydration incrementale da sola: la feature esplicita `withIncrementalHydration()` non serve più ed è tenuta solo per gli scenari di opt-out. Per disattivarla usa la nuova feature **`withNoIncrementalHydration()`**.
-> **Prima della 22** (Angular 19–21) era opt-in, da attivare con `provideClientHydration(withIncrementalHydration())`. Al bump, `ng update` aggiunge `withNoIncrementalHydration()` dove la feature non era richiesta, così il comportamento non cambia.
+> Da **Angular 22** `provideClientHydration()` attiva l'hydration incrementale da sola: la feature esplicita `withIncrementalHydration()` non serve più ed è tenuta solo per gli scenari di opt-out. Per disattivarla si usa la nuova feature **`withNoIncrementalHydration()`**.
+> **Prima della 22** (da Angular 19 ad Angular 21) era opt-in, da attivare con `provideClientHydration(withIncrementalHydration())`. Al bump, `ng update` aggiunge `withNoIncrementalHydration()` dove la feature non era richiesta, così il comportamento non cambia.
 
 ```html
 <!-- .../ticketing/feature-booking/flight-search/flight-search.html -->
@@ -162,7 +162,7 @@ Trigger di hydration disponibili:
 | `hydrate never` | nessuna hydration; anche i `@defer` annidati restano statici |
 
 > [!warning]
-> Per l'hydration *non distruttiva* (che riusa il markup del server senza buttarlo via e ricostruirlo) il markup server-rendered deve **combaciare** con quello che Angular renderizzerebbe sul client. Componenti o librerie di terze parti che manipolano il DOM direttamente possono violare questo vincolo. Per escluderli usa l'attributo `ngSkipHydration` sull'[[glossario#host-elemento-host|host element]] (l'elemento DOM su cui vive il componente): Angular **non** ammette data binding su questo attributo (deve essere assente o impostato a `'true'`). Per escludere un componente per default, mettilo nei `host` metadata: `host: { 'ngSkipHydration': 'true' }`. Se più app Angular convivono sulla stessa pagina, vanno distinte via token `APP_ID` perché l'hydration colpisca l'app giusta.
+> Per l'hydration *non distruttiva* (che riusa il markup del server senza buttarlo via e ricostruirlo) il markup server-rendered deve **combaciare** con quello che Angular renderizzerebbe sul client. Componenti o librerie di terze parti che manipolano il DOM direttamente possono violare questo vincolo. Per escluderli si usa l'attributo `ngSkipHydration` sull'[[glossario#host-elemento-host|host element]] (l'elemento DOM su cui vive il componente): Angular **non** ammette data binding su questo attributo (deve essere assente o impostato a `'true'`). Per escludere un componente per default, lo si mette nei `host` metadata: `host: { 'ngSkipHydration': 'true' }`. Se più app Angular convivono sulla stessa pagina, vanno distinte via token `APP_ID` perché l'hydration colpisca l'app giusta.
 
 ### Event Replay
 > p.416
@@ -181,7 +181,7 @@ SSR e hydration fanno girare lo **stesso codice Angular in due ambienti molto di
 
 #### Different Implementations via DI
 
-Quando un servizio ha responsabilità diverse su server e client, si forniscono **implementazioni diverse** via [[glossario#dependency-injection-di|DI]] (dependency injection: Angular fornisce le dipendenze al posto tuo). Es. un `LanguageDetector` che rileva la lingua dell'utente: sul server legge l'header `Accept-Language` dalla richiesta HTTP, sul client legge `navigator.language`.
+Quando un servizio ha responsabilità diverse su server e client, si forniscono **implementazioni diverse** via [[glossario#dependency-injection-di|DI]] (dependency injection: è Angular a fornire le dipendenze). Es. un `LanguageDetector` che rileva la lingua dell'utente: sul server legge l'header `Accept-Language` dalla richiesta HTTP, sul client legge `navigator.language`.
 
 ```ts
 // src/app/domains/shared/util-common/language.ts
@@ -207,10 +207,10 @@ export class ClientLanguageDetector implements LanguageDetector {
 }
 ```
 
-Entrambe le implementazioni sono decorate con `@Service({ autoProvided: false })`: sono **iniettabili ma non registrate** globalmente (Angular sa costruirle, ma non le rende disponibili ovunque da solo: le fornisci tu dove servono). È la configurazione applicativa platform-specific (diversa a seconda dell'ambiente, server o browser) a decidere quale usare. L'implementazione server si registra in `app.config.server.ts` (eseguito solo lato server); quella client in `app.config.ts`.
+Entrambe le implementazioni sono decorate con `@Service({ autoProvided: false })`: sono **iniettabili ma non registrate** globalmente (Angular sa costruirle, ma non le rende disponibili ovunque da solo: vanno fornite esplicitamente dove servono). È la configurazione applicativa platform-specific (diversa a seconda dell'ambiente, server o browser) a decidere quale usare. L'implementazione server si registra in `app.config.server.ts` (eseguito solo lato server); quella client in `app.config.ts`.
 
 > [!info|label:Angular 22+ · @Service({ autoProvided: false })]
-> `@Service({ autoProvided: false })` dichiara un service iniettabile ma **non** auto-registrato nello scope root: lo fornisci tu dove serve. Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
+> `@Service({ autoProvided: false })` dichiara un service iniettabile ma **non** auto-registrato nello scope root: va fornito esplicitamente dove serve. Equivale al vecchio `@Injectable()` *senza* `providedIn: 'root'`. Vedi [[service]].
 
 ```ts
 // src/app/app.config.server.ts — usato SOLO lato server
@@ -267,7 +267,7 @@ export class App {
 ```
 
 > [!warning]
-> Toccare `window`, `document` o `navigator` senza guardia fa crashare il render **lato server**. Isola sempre quel codice dietro DI (implementazioni server/client distinte) o dietro `isPlatformBrowser` / `isPlatformServer`.
+> Toccare `window`, `document` o `navigator` senza guardia fa crashare il render **lato server**. Quel codice va sempre isolato dietro DI (implementazioni server/client distinte) o dietro `isPlatformBrowser` / `isPlatformServer`.
 
 Collegamenti: [[inject]] · [[providers]] · l'[[injection-context]] e i provider con `useClass`.
 
@@ -311,9 +311,9 @@ export const serverRoutes: ServerRoute[] = [
 ```
 
 I tre render mode:
-- **`RenderMode.Client`** — niente SSR sulla richiesta iniziale; SPA classica.
-- **`RenderMode.Prerender`** — HTML statico generato a **build time**.
-- **`RenderMode.Server`** — renderizzato sul server a **ogni richiesta**.
+- **`RenderMode.Client`**: niente SSR sulla richiesta iniziale; SPA classica.
+- **`RenderMode.Prerender`**: HTML statico generato a **build time**.
+- **`RenderMode.Server`**: renderizzato sul server a **ogni richiesta**.
 
 Server e prerender valgono solo per il render **iniziale**; dopo, Angular gira sul client.
 
@@ -351,11 +351,11 @@ Collegamenti: route parametrizzate e configurazione in [[04-router-navigation-la
 > pp.420-421
 
 Per le route server-rendered l'app può **leggere la richiesta HTTP in entrata** e **influenzare la risposta**. Angular fornisce i token:
-- **`REQUEST`** — l'oggetto request standard di Node/fetch.
-- **`REQUEST_CONTEXT`** — oggetto opzionale fornito dal server con contesto (es. la sessione utente corrente).
-- **`RESPONSE_INIT`** — per impostare status code e header della risposta.
+- **`REQUEST`**: l'oggetto request standard di Node/fetch.
+- **`REQUEST_CONTEXT`**: oggetto opzionale fornito dal server con contesto (es. la sessione utente corrente).
+- **`RESPONSE_INIT`**: per impostare status code e header della risposta.
 
-`REQUEST` e `REQUEST_CONTEXT` sono disponibili **solo lato server**: controlla `null` prima di usarli. Nell'esempio, `ServerLanguageDetector` inietta `REQUEST` e legge l'header `Accept-Language`; il client usa l'implementazione che si appoggia a `navigator.language`.
+`REQUEST` e `REQUEST_CONTEXT` sono disponibili **solo lato server**: prima di usarli occorre controllare se valgono `null`. Nell'esempio, `ServerLanguageDetector` inietta `REQUEST` e legge l'header `Accept-Language`; il client usa l'implementazione che si appoggia a `navigator.language`.
 
 ```ts
 // src/app/domains/shared/util-common/language.ts
@@ -381,7 +381,7 @@ export class ClientLanguageDetector implements LanguageDetector {
 }
 ```
 
-Per la **response** si possono impostare header e status **dichiarativamente** nella server route config, oppure iniettare **`RESPONSE_INIT`** in un componente/servizio e settare `status`, `statusText` e `headers` **programmaticamente** — utile quando status o header dipendono dal risultato della logica server.
+Per la **response** si possono impostare header e status **dichiarativamente** nella server route config, oppure iniettare **`RESPONSE_INIT`** in un componente/servizio e settare `status`, `statusText` e `headers` **programmaticamente**, cosa utile quando status o header dipendono dal risultato della logica server.
 
 > [!tip]
 > L'hybrid routing dà il meglio combinato con `@defer` + incremental hydration: anche su route server-rendered le regioni non critiche restano fuori dal bundle iniziale e diventano interattive solo quando l'utente le richiede.
@@ -421,7 +421,7 @@ La **Uncanny Valley** è il periodo tra *First Meaningful Paint* e *Time to Inte
 <details>
 <summary>Due modi per avere implementazioni diverse server/client: quando usare la DI (<code>useClass</code>) e quando <code>isPlatformBrowser</code>/<code>isPlatformServer</code>?</summary>
 
-**DI con `useClass`**: quando un intero servizio ha responsabilità diverse sui due ambienti — definisci una classe astratta come token e fornisci la classe server in `app.config.server.ts` e quella client in `app.config.ts`. **`isPlatformBrowser`/`isPlatformServer`** (sul token `PLATFORM_ID`): quando solo una piccola parte di un componente/servizio è platform-specific, conviene ramificare a runtime senza creare due classi.
+**DI con `useClass`**: quando un intero servizio ha responsabilità diverse sui due ambienti; si definisce una classe astratta come token e si fornisce la classe server in `app.config.server.ts` e quella client in `app.config.ts`. **`isPlatformBrowser`/`isPlatformServer`** (sul token `PLATFORM_ID`): quando solo una piccola parte di un componente/servizio è platform-specific, conviene ramificare a runtime senza creare due classi.
 
 </details>
 

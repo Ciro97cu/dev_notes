@@ -6,10 +6,10 @@ livello: [mid]
 # Reactive Forms
 > Cert Angular · non coperto dal *Modern Angular* (il vault usa i Signal Forms)
 
-Nelle **reactive forms** (dette anche *model-driven*) la struttura della form è dichiarata **esplicitamente nella classe** come albero di oggetti `FormControl`/`FormGroup`/`FormArray`; il template si limita a legarsi a quel modello con delle direttive. Il modello è **immutabile e sincrono**: leggerlo dà sempre il valore corrente, e lo stato/valore sono esposti anche come `Observable`. È l'approccio scelto per form complesse, dinamiche o fortemente validate — ed è ciò che l'esame verifica per la parte forms "avanzata".
+Nelle **reactive forms** (dette anche *model-driven*) la struttura della form è dichiarata **esplicitamente nella classe** come albero di oggetti `FormControl`/`FormGroup`/`FormArray`; il template si limita a legarsi a quel modello con delle direttive. Il modello è **immutabile e sincrono**: leggerlo dà sempre il valore corrente, e lo stato/valore sono esposti anche come `Observable`. È l'approccio scelto per form complesse, dinamiche o fortemente validate, ed è ciò che l'esame verifica per la parte forms "avanzata".
 
 ## `ReactiveFormsModule`
-Le direttive (`formGroup`, `formControlName`, …) vivono in **`ReactiveFormsModule`**, da importare dove servono (componente standalone o NgModule — vedi [[ngmodules]]). È mutualmente alternativo a `FormsModule`: non si usano `ngModel` e reactive insieme sullo stesso controllo.
+Le direttive (`formGroup`, `formControlName`, …) vivono in **`ReactiveFormsModule`**, da importare dove servono (componente standalone o NgModule, si veda [[ngmodules]]). È mutualmente alternativo a `FormsModule`: non si usano `ngModel` e reactive insieme sullo stesso controllo.
 
 ```ts
 import { ReactiveFormsModule } from '@angular/forms';
@@ -58,7 +58,7 @@ form.controls.to.valid;     // accesso tipizzato ai figli
 ```
 
 ## `FormArray`
-Un `FormArray` è il fratello dinamico del `FormGroup`: aggrega i figli non per chiave ma per **indice**, come una lista. È la struttura giusta quando il numero di controlli non è noto in anticipo e cambia a runtime — si aggiungono e si rimuovono con `push`, `removeAt`, `insert` e `clear`, e il suo valore è l'array dei valori dei figli.
+Un `FormArray` è il fratello dinamico del `FormGroup`: aggrega i figli non per chiave ma per **indice**, come una lista. È la struttura giusta quando il numero di controlli non è noto in anticipo e cambia a runtime: si aggiungono e si rimuovono con `push`, `removeAt`, `insert` e `clear`, e il suo valore è l'array dei valori dei figli.
 
 ```ts
 import { FormArray, FormControl } from '@angular/forms';
@@ -125,13 +125,13 @@ export function uniqueCodeValidator(api: FlightApi): AsyncValidatorFn {
 }
 ```
 
-Gli async validator si passano nel **terzo** slot (o come `asyncValidators` nelle opzioni). Vedi [[rxjs]] per gli operatori usati.
+Gli async validator si passano nel **terzo** slot (o come `asyncValidators` nelle opzioni). Per gli operatori usati si veda [[rxjs]].
 
 ## `setValue` vs `patchValue`
 Entrambi i metodi scrivono programmaticamente il valore di un controllo o di un gruppo, ma differiscono per quanto sono esigenti sull'oggetto che ricevono.
 
-- **`setValue(v)`** — richiede un oggetto **completo**, con **tutte** le chiavi del gruppo; una chiave mancante o in più è un errore. Utile per garantire coerenza.
-- **`patchValue(v)`** — aggiorna solo le chiavi presenti, ignora il resto. Comodo per aggiornamenti parziali.
+- **`setValue(v)`**: richiede un oggetto **completo**, con **tutte** le chiavi del gruppo; una chiave mancante o in più è un errore. Utile per garantire coerenza.
+- **`patchValue(v)`**: aggiorna solo le chiavi presenti, ignora il resto. Comodo per aggiornamenti parziali.
 
 ```ts
 form.setValue({ from: 'Hamburg', to: 'Graz', passengers: ['Alice'] }); // tutte le chiavi
@@ -141,8 +141,8 @@ form.patchValue({ to: 'Vienna' });                                     // solo '
 ## `valueChanges` / `statusChanges`
 Oltre allo stato leggibile in modo sincrono, ogni `AbstractControl` (un singolo controllo o un intero gruppo) espone il proprio andamento nel tempo come due `Observable`, il punto di aggancio naturale per la programmazione reattiva sui form.
 
-- **`valueChanges`** — emette il nuovo valore a ogni cambiamento (rispettando `updateOn`).
-- **`statusChanges`** — emette lo stato di validità (`'VALID' | 'INVALID' | 'PENDING' | 'DISABLED'`).
+- **`valueChanges`**: emette il nuovo valore a ogni cambiamento (rispettando `updateOn`).
+- **`statusChanges`**: emette lo stato di validità (`'VALID' | 'INVALID' | 'PENDING' | 'DISABLED'`).
 
 ```ts
 this.form.controls.from.valueChanges
@@ -155,10 +155,10 @@ this.form.controls.from.valueChanges
 ## Direttive di binding nel template
 Una volta costruito l'albero nella classe, lo si collega al markup con un insieme di direttive di `ReactiveFormsModule`, ognuna delle quali aggancia un pezzo del modello all'elemento HTML corrispondente.
 
-- **`[formGroup]="form"`** — lega il `FormGroup` radice all'elemento (di solito `<form>`).
-- **`formControlName="from"`** — lega un input al figlio `from` del gruppo corrente.
-- **`formGroupName="passenger"`** — apre un sotto-`FormGroup` annidato.
-- **`formArrayName="passengers"`** — apre un `FormArray`, iterandone i controlli.
+- **`[formGroup]="form"`**: lega il `FormGroup` radice all'elemento (di solito `<form>`).
+- **`formControlName="from"`**: lega un input al figlio `from` del gruppo corrente.
+- **`formGroupName="passenger"`**: apre un sotto-`FormGroup` annidato.
+- **`formArrayName="passengers"`**: apre un `FormArray`, iterandone i controlli.
 
 ```html
 <form [formGroup]="form" (ngSubmit)="save()">
@@ -230,6 +230,6 @@ Perché `formControlName` vuole il **nome** (stringa) del figlio nel `[formGroup
 **In sintesi:**
 - Reactive forms = modello **esplicito** nella classe (`FormControl`/`FormGroup`/`FormArray`), sincrono e immutabile; serve `ReactiveFormsModule`.
 - `FormBuilder` (`fb.group`/`control`/`array`, `nonNullable`) riduce il boilerplate; `Validators` built-in + validator custom `ValidatorFn` (sync) e `AsyncValidatorFn` (async, stato `pending`).
-- `setValue` (oggetto completo) vs `patchValue` (parziale); stato e valore osservabili via `valueChanges`/`statusChanges` (innesto per RxJS, vedi [[rxjs]]).
+- `setValue` (oggetto completo) vs `patchValue` (parziale); stato e valore osservabili via `valueChanges`/`statusChanges` (innesto per RxJS, si veda [[rxjs]]).
 - Binding col template via `[formGroup]` + `formControlName`/`formGroupName`/`formArrayName` (o `[formControl]` per controlli isolati).
 - Equivalente moderno = **Signal Forms**, in [[06-signal-forms]]; il classico resta lo standard stabile (non deprecato), i Signal Forms sono ancora sperimentali.

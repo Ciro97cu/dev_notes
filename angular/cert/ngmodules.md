@@ -29,11 +29,11 @@ import { FlightSearchComponent } from './flight-search/flight-search.component';
 export class AppModule {}
 ```
 
-- **`declarations`** — le classi *dichiarabili* (component, directive, pipe) che appartengono al modulo. Una dichiarabile sta in **un solo** NgModule.
-- **`imports`** — altri **NgModule** (non componenti) dei cui `exports` si vuole usare il contenuto.
-- **`exports`** — il sottoinsieme di dichiarabili/moduli che i moduli importatori possono usare. Senza export, ciò che è dichiarato resta privato al modulo.
-- **`providers`** — i service registrati per la DI (vedi [[di-classic]]).
-- **`bootstrap`** — il/i componente/i radice istanziati all'avvio; presente **solo** nel root module.
+- **`declarations`**: le classi *dichiarabili* (component, directive, pipe) che appartengono al modulo. Una dichiarabile sta in **un solo** NgModule.
+- **`imports`**: altri **NgModule** (non componenti) dei cui `exports` si vuole usare il contenuto.
+- **`exports`**: il sottoinsieme di dichiarabili/moduli che i moduli importatori possono usare. Senza export, ciò che è dichiarato resta privato al modulo.
+- **`providers`**: i service registrati per la DI (vedi [[di-classic]]).
+- **`bootstrap`**: il/i componente/i radice istanziati all'avvio; presente **solo** nel root module.
 
 ## Bootstrap classico
 Nel mondo module-based l'avvio dell'applicazione non passa da `bootstrapApplication`, ma dall'istanziazione del **root module**: si sceglie una *platform* e le si chiede di fare il bootstrap del modulo radice, che a sua volta, tramite il campo `bootstrap`, indica quale componente montare nella pagina.
@@ -53,9 +53,9 @@ platformBrowserDynamic()
 ## Root module, feature module, shared module
 Nelle app module-based i moduli si organizzano per ruolo, secondo una convenzione consolidata che ne distingue tre tipi, ciascuno con responsabilità e regole d'import proprie.
 
-- **Root module** (`AppModule`) — importa **`BrowserModule`** (una volta sola in tutta l'app) e ha il `bootstrap`.
-- **Feature module** — raggruppa una funzionalità (es. `BookingModule`); importa **`CommonModule`** (non `BrowserModule`) per avere `ngIf`/`ngFor`/pipe comuni.
-- **Shared module** — raccoglie dichiarabili riusabili e le **ri-esporta**, così i feature module importano un solo modulo invece di molti.
+- **Root module** (`AppModule`): importa **`BrowserModule`** (una volta sola in tutta l'app) e ha il `bootstrap`.
+- **Feature module**: raggruppa una funzionalità (es. `BookingModule`); importa **`CommonModule`** (non `BrowserModule`) per avere `ngIf`/`ngFor`/pipe comuni.
+- **Shared module**: raccoglie dichiarabili riusabili e le **ri-esporta**, così i feature module importano un solo modulo invece di molti.
 
 ```ts
 // booking.module.ts
@@ -77,7 +77,7 @@ export class BookingModule {}
 > - Usare un componente di un altro modulo **senza** che quel modulo lo `exports`: il template non lo riconosce.
 
 ## `forRoot()` / `forChild()`
-Convenzione per i moduli che offrono **provider globali** (tipicamente librerie e il router): `forRoot()` registra i singleton e va chiamato **una sola volta** nel root; `forChild()` aggiunge solo configurazione (es. rotte figlie) senza ri-registrare i service.
+È una convenzione per i moduli che offrono **provider globali** (tipicamente librerie e il router): `forRoot()` registra i singleton e va chiamato **una sola volta** nel root; `forChild()` aggiunge solo configurazione (es. rotte figlie) senza ri-registrare i service.
 
 ```ts
 @NgModule({

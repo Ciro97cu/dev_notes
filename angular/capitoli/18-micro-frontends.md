@@ -19,14 +19,14 @@ Il capitolo spiega cosa sono i Micro Frontends e le loro conseguenze, come imple
 
 Come i Microservices, offrono vantaggi sia tecnici sia organizzativi: app più piccole rendono più facili test, performance tuning e isolamento dei guasti in una singola parte del sistema. Ma nei casi reali seguiti dall'autore come consulente, il motivo principale è stato la **team autonomy**: i team non si bloccano a vicenda e possono **deployare indipendentemente** in qualsiasi momento. In progetti multi-team in ambienti corporate, con catene di comunicazione e processi decisionali lunghi, questo aspetto diventa rapidamente vitale per il successo del progetto.
 
-Al di là dell'autonomia, ogni team può prendere le decisioni (di **architettura e di stack**) più adatte ai propri obiettivi. Mischiare più framework client-side nella stessa applicazione è un **anti-pattern** da evitare, ma può abilitare un **percorso di migrazione** verso un nuovo stack: nelle aziende le soluzioni software sopravvivono allo stack tecnologico medio. Le build separate, inoltre, hanno un ottimo potenziale per gli **incremental builds** (si ri-builda solo ciò che è cambiato; es. il build system **Nx**); curiosamente questa ottimizzazione si può sfruttare anche **senza** allineare i team a singole app o adottare deploy separati — e c'è dibattito se ciò porti già "automaticamente" a un'architettura micro frontend. Infine, un sistema fatto di tante app più piccole porta anche vantaggi organizzativi: è più facile fare l'onboarding di nuovi membri e scalare aggiungendo micro frontend, e la team autonomy porta a cicli di rilascio più rapidi.
+Al di là dell'autonomia, ogni team può prendere le decisioni (di **architettura e di stack**) più adatte ai propri obiettivi. Mischiare più framework client-side nella stessa applicazione è un **anti-pattern** da evitare, ma può abilitare un **percorso di migrazione** verso un nuovo stack: nelle aziende le soluzioni software sopravvivono allo stack tecnologico medio. Le build separate, inoltre, hanno un ottimo potenziale per gli **incremental builds** (si ri-builda solo ciò che è cambiato; es. il build system **Nx**); curiosamente questa ottimizzazione si può sfruttare anche **senza** allineare i team a singole app o adottare deploy separati, e c'è dibattito sul fatto che ciò porti già "automaticamente" a un'architettura micro frontend. Infine, un sistema fatto di tante app più piccole porta anche vantaggi organizzativi: è più facile fare l'onboarding di nuovi membri e scalare aggiungendo micro frontend, e la team autonomy porta a cicli di rilascio più rapidi.
 
 ### Challenges to Keep in Mind
 > pp.424-425
 
 Ogni decisione architetturale ha conseguenze, anche negative. I micro frontend sviluppati separatamente possono divergere nell'aspetto (**UI/UX incoerente**), e ogni micro frontend aggiunge **bundle da scaricare** (un bundle è il file JS impacchettato che il browser scarica), con tempi di caricamento peggiori e maggiore pressione sulla memoria. Definire confini verticali netti, e implementarli come app separate, è inoltre **difficile**: mentre tante piccole app a prima vista semplificano l'implementazione, integrarle in una soluzione unica aggiunge complessità.
 
-La sfida più grande osservata in pratica è però un'altra: si passa da una **compile-time integration** (le parti vengono messe insieme e verificate dal compiler quando costruisci l'app) a una **runtime integration** (le parti si incontrano solo nel browser, mentre l'app gira). Non si prevedono facilmente i problemi che nascono quando app sviluppate e deployate separatamente iniziano a interagire a runtime. L'attuale generazione di framework SPA (Angular in primis) è pensata per **ottimizzazioni a compile-time**: il compiler usa i type check (controlli sui tipi) per individuare i conflitti ed emette codice ottimizzato per il [[glossario#tree-shaking|**tree-shaking**]] (rimuovere a build il codice non usato), e la CLI fornisce una build altamente ottimizzata. L'uso "off-label" (cioè in un modo diverso da quello per cui questi strumenti sono nati) necessario ai micro frontend mina alcuni di questi vantaggi.
+La sfida più grande osservata in pratica è però il passaggio da una **compile-time integration** (le parti vengono messe insieme e verificate dal compiler quando si costruisce l'app) a una **runtime integration** (le parti si incontrano solo nel browser, mentre l'app gira). Non si prevedono facilmente i problemi che nascono quando app sviluppate e deployate separatamente iniziano a interagire a runtime. L'attuale generazione di framework SPA (Angular in primis) è pensata per **ottimizzazioni a compile-time**: il compiler usa i type check (controlli sui tipi) per individuare i conflitti ed emette codice ottimizzato per il [[glossario#tree-shaking|**tree-shaking**]] (rimuovere a build il codice non usato), e la CLI fornisce una build altamente ottimizzata. L'uso "off-label" (cioè in un modo diverso da quello per cui questi strumenti sono nati) necessario ai micro frontend mina alcuni di questi vantaggi.
 
 > [!tip]
 > Le controindicazioni si possono compensare: un **design system** (libreria condivisa di componenti e regole grafiche) per la coerenza UI/UX, il [[glossario#lazy-loading|lazy-loading]] (caricare le parti del sistema solo quando servono) delle singole parti del sistema. Per approfondire le strategie di compensazione: il [survey su 150+ practitioner](https://www.angulararchitects.io/blog/consequences-of-micro-frontends-survey-results/).
@@ -34,22 +34,22 @@ La sfida più grande osservata in pratica è però un'altra: si passa da una **c
 ### Micro Frontends and Self-Contained Systems
 > p.425
 
-L'approccio **Self-Contained System** separa la funzionalità di un sistema più grande in tanti sistemi indipendenti e collaboranti. Buoni candidati: Domain / Bounded Context in ottica **DDD** (Domain-Driven Design — il metodo che ritaglia il software intorno alle aree di business e ai loro confini netti). Ogni SCS può avere un backend e un frontend ed è **molto debolmente accoppiato** (le parti dipendono il meno possibile l'una dall'altra).
+L'approccio **Self-Contained System** separa la funzionalità di un sistema più grande in tanti sistemi indipendenti e collaboranti. Buoni candidati: Domain / Bounded Context in ottica **DDD** (Domain-Driven Design, il metodo che ritaglia il software intorno alle aree di business e ai loro confini netti). Ogni SCS può avere un backend e un frontend ed è **molto debolmente accoppiato** (le parti dipendono il meno possibile l'una dall'altra).
 
 - Backend: comunicazione preferita via **REST/HTTP** o messaging.
 - Frontend: integrazione gestita **unicamente via hyperlink**.
 
-Un SCS si può vedere come una combinazione speciale di microservice + micro frontend (o di un piccolo gruppo di microservice e micro frontend correlati). L'approccio a hyperlink è allettante perché **davvero semplice** da realizzare e integra senza problemi anche tecnologie diverse: lo si vede spesso nelle product suite, dove si resta a lungo su un'applicazione prima di passare a un'altra (esempio noto: Office 365). **Svantaggio**: si perdono i benefici della SPA — seguire un link carica un'intera nuova app e scarica la precedente, con tutto il suo stato. Per un'integrazione più fine si usa Native Federation.
+Un SCS si può vedere come una combinazione speciale di microservice + micro frontend (o di un piccolo gruppo di microservice e micro frontend correlati). L'approccio a hyperlink è allettante perché **davvero semplice** da realizzare e integra senza problemi anche tecnologie diverse: lo si vede spesso nelle product suite, dove si resta a lungo su un'applicazione prima di passare a un'altra (esempio noto: Office 365). **Svantaggio**: si perdono i benefici della SPA, perché seguire un link carica un'intera nuova app e scarica la precedente, con tutto il suo stato. Per un'integrazione più fine si usa Native Federation.
 
 > [!tip]
-> Prima di scegliere Native Federation, valuta se basta il banale **hyperlink-based SCS**: zero infrastruttura, integra anche stack diversi. Lo paghi solo perdendo la continuità della SPA.
+> Prima di scegliere Native Federation conviene valutare se basta il banale **hyperlink-based SCS**: zero infrastruttura, integra anche stack diversi, e l'unico prezzo è la perdita della continuità della SPA.
 
 ## Native Federation
 > pp.426-428
 
 **Module Federation** (in webpack dalla v5) è spesso visto come un punto di svolta per i micro frontend: permette di caricare **on-demand** (solo al momento del bisogno) parti di app compilate e pubblicate separatamente. Il modello prevede una **shell** (ufficialmente *host*) che definisce segmenti URL che puntano ai Micro Frontends (ufficialmente *remotes*); i remote **pubblicano** parti di programma (componenti, moduli Angular) che la shell carica **a runtime**, e le **dipendenze sono condivise** a runtime, così Angular viene caricato **una sola volta** anche se più micro frontend lo usano.
 
-**Native Federation** (`@angular-architects/native-federation`) porta lo stesso mental model (modo di ragionare, stessi concetti) **fuori da webpack**: stesse opzioni e configurazione di Module Federation, ma funziona con qualsiasi build tool e usa tecnologie **browser-native** (già parte degli standard del browser, senza strumenti extra): ECMAScript modules (i moduli JS standard, con `import`/`export`) + **Import Maps** (una mappa che dice al browser dove trovare ogni modulo da importare). Così garantisce supporto a lungo termine dai browser e abilita implementazioni alternative. Gira **prima e dopo** il bundler vero e proprio nella build → indipendente dal bundler usato (esbuild, ecc.): dovendo anch'esso creare qualche bundle, delega al bundler scelto, collegato via **adapter** intercambiabili. A runtime piazza remote e librerie condivise in **bundle ECMAScript** dedicati e conformi agli standard; le info su questi bundle stanno in **file di metadati** (`remoteEntry.json`) che formano la base di un **Import Map** standard, dicendo al browser quali bundle caricare e da dove.
+**Native Federation** (`@angular-architects/native-federation`) porta lo stesso mental model (modo di ragionare, stessi concetti) **fuori da webpack**: stesse opzioni e configurazione di Module Federation, ma funziona con qualsiasi build tool e usa tecnologie **browser-native** (già parte degli standard del browser, senza strumenti extra): ECMAScript modules (i moduli JS standard, con `import`/`export`) + **Import Maps** (una mappa che dice al browser dove trovare ogni modulo da importare). Così garantisce supporto a lungo termine dai browser e abilita implementazioni alternative. Gira **prima e dopo** il bundler nella build, quindi è indipendente dal bundler usato (esbuild, ecc.): dovendo anch'esso creare qualche bundle, delega al bundler scelto, collegato via **adapter** intercambiabili. A runtime piazza remote e librerie condivise in **bundle ECMAScript** dedicati e conformi agli standard; le info su questi bundle stanno in **file di metadati** (`remoteEntry.json`) che formano la base di un **Import Map** standard, dicendo al browser quali bundle caricare e da dove.
 
 ```mermaid
 graph TD
@@ -61,7 +61,7 @@ graph TD
   Shell -. shared .-> Shared
 ```
 
-Il progetto demo è `flights42`: una shell (`flights`) e remote come `miles` (Angular) e `svelte-app` ([[glossario#web-component-custom-element|Web Component]] basato su Svelte — un elemento HTML personalizzato, standard del browser, che incapsula un componente di un altro framework).
+Il progetto demo è `flights42`: una shell (`flights`) e remote come `miles` (Angular) e `svelte-app` ([[glossario#web-component-custom-element|Web Component]] basato su Svelte, cioè un elemento HTML personalizzato, standard del browser, che incapsula un componente di un altro framework).
 
 ## Using Native Federation
 > pp.429-436
@@ -69,7 +69,7 @@ Il progetto demo è `flights42`: una shell (`flights`) e remote come `miles` (An
 ### Native Federation: Setting up a Micro Frontend
 > pp.429-430
 
-Per Angular e la CLI, Native Federation offre uno schematic `ng add` (uno schematic è uno script della CLI che genera/modifica i file del progetto per te). Questo comando aggiunge Native Federation al progetto `miles` e lo configura come **remote** che funge da Micro Frontend:
+Per Angular e la CLI, Native Federation offre uno schematic `ng add` (uno schematic è uno script della CLI che genera/modifica i file del progetto in automatico). Questo comando aggiunge Native Federation al progetto `miles` e lo configura come **remote** che funge da Micro Frontend:
 
 ```bash
 ng add @angular-architects/native-federation --project miles --port 4201 --type remote
@@ -133,7 +133,7 @@ ng add @angular-architects/native-federation --project flights --port 4200 --typ
 
 Il manifest viene generato di default nella cartella `public/` dell'host. Trattandolo come **asset**, può essere scambiato in fase di deploy per adattare l'app all'ambiente. Mappa i nomi dei remote ai loro metadati (il `remoteEntry.json` che Native Federation aggiunge in build). Anche se `ng add` lo genera, **va controllato** per sistemare le porte o rimuovere voci che non sono remote.
 
-`ng add` genera anche un `federation.config.js` per l'host. Manca l'entry `exposes`, dato che un host di norma non pubblica file ad altri host — ma nulla vieta di aggiungerlo se l'host fa anche da remote. La feature opzionale `ignoreUnusedDeps`, attivata dallo schematic per tutti i nuovi progetti, fa ignorare a Native Federation le librerie presenti in `package.json` ma non usate dall'app (es. usate solo da altre app dello stesso [[glossario#monorepo|monorepo]] — un unico repository che contiene più progetti).
+`ng add` genera anche un `federation.config.js` per l'host. Manca l'entry `exposes`, dato che un host di norma non pubblica file ad altri host; nulla vieta però di aggiungerla se l'host fa anche da remote. La feature opzionale `ignoreUnusedDeps`, attivata dallo schematic per tutti i nuovi progetti, fa ignorare a Native Federation le librerie presenti in `package.json` ma non usate dall'app (es. usate solo da altre app dello stesso [[glossario#monorepo|monorepo]], cioè di un unico repository che contiene più progetti).
 
 Il `main.ts`, anch'esso modificato da `ng add`, **inizializza** Native Federation col manifest:
 
@@ -168,7 +168,7 @@ export const routes: Routes = [
 `loadRemoteModule(remoteName, exposedName)` prende il nome dal manifest (`miles`) e il nome corto sotto cui il remote pubblica il file desiderato (`./Component`).
 
 > [!warning]
-> `loadRemoteModule` ritorna l'**intero modulo ECMAScript** ("file"): il componente da caricare deve quindi essere il **default export** (`export default MilesOverview;`). In alternativa, punta all'export con una clausola `then`:
+> `loadRemoteModule` ritorna l'**intero modulo ECMAScript** ("file"): il componente da caricare deve quindi essere il **default export** (`export default MilesOverview;`). In alternativa si punta all'export con una clausola `then`:
 > ```ts
 > loadComponent: () => loadRemoteModule('miles', './Component')
 >   .then(m => m.MilesOverview),
@@ -245,7 +245,7 @@ La navigazione della shell linka alle route del remote tramite il **prefisso di 
 
 Si può abilitare via **librerie condivise**, ma **con cautela**: i micro frontend nascono per disaccoppiare i frontend tra loro; se un frontend si aspetta informazioni da un altro, succede l'opposto. Nella pratica si condivide solo qualche **informazione contestuale** (username corrente, client corrente, qualche filtro globale).
 
-Serve prima una shared library: un npm package sviluppato a parte oppure una libreria interna al progetto Angular (generabile con `ng g lib util-auth` — vedi [[14-monorepos-libraries]]). Nel demo, `util-auth` espone un service stateful — cioè un servizio che conserva uno stato, qui lo username corrente. Internamente usa un RxJS `BehaviorSubject` (un contenitore osservabile che tiene l'ultimo valore e lo "trasmette" a chi è in ascolto) per un meccanismo publish/subscribe: uno pubblica i cambi, gli altri si iscrivono e vengono notificati. Così le parti interessate restano aggiornate sui cambi di valore:
+Serve prima una shared library: un npm package sviluppato a parte oppure una libreria interna al progetto Angular (generabile con `ng g lib util-auth`, vedi [[14-monorepos-libraries]]). Nel demo, `util-auth` espone un service stateful, cioè un servizio che conserva uno stato (qui lo username corrente). Internamente usa un RxJS `BehaviorSubject` (un contenitore osservabile che tiene l'ultimo valore e lo "trasmette" a chi è in ascolto) per un meccanismo publish/subscribe: uno pubblica i cambi, gli altri si iscrivono e vengono notificati. Così le parti interessate restano aggiornate sui cambi di valore:
 
 > [!info|label:Angular 22+ · Il decoratore @Service()]
 > `@Service()` (senza argomenti) è il nuovo equivalente del vecchio `@Injectable({ providedIn: 'root' })`: dichiara un service iniettabile e registrato nello scope root. Qui la fonte usa proprio `@Service()`. Dettagli in [[service]].
@@ -287,9 +287,9 @@ Finora si è assunto che shell e remote usino **stesso framework e versione**. P
 ### Abstracting Micro Frontends with Web Components
 > pp.437-438
 
-Primo passo: **astrarre** i diversi framework e versioni (nasconderne le differenze dietro un'interfaccia comune, così la shell li tratta tutti allo stesso modo). Approccio diffuso: usare **Web Components** che incapsulano interi Micro Frontends — non i Web Components ideali nel senso di widget riutilizzabili, ma web component **a grana grossa** (grossi, non piccoli widget) che rappresentano interi domini (es. un'app Svelte caricata in una shell Angular).
+Primo passo: **astrarre** i diversi framework e versioni (nasconderne le differenze dietro un'interfaccia comune, così la shell li tratta tutti allo stesso modo). Un approccio diffuso è usare **Web Components** che incapsulano interi Micro Frontends: non i Web Components ideali nel senso di widget riutilizzabili, ma web component **a grana grossa** che rappresentano interi domini (es. un'app Svelte caricata in una shell Angular).
 
-Scrivere un Web Component che delega a un framework (gli passa il lavoro di disegnare la UI), invece di scrivere direttamente sul DOM, non è difficile. Angular lo semplifica con **`@angular/elements`** (`npm i @angular/elements`), che converte un componente Angular in Web Component — tecnicamente lo *wrappa* (lo avvolge) in un Web Component creato al volo. Con gli Standalone Components:
+Scrivere un Web Component che delega a un framework (gli passa il lavoro di disegnare la UI), invece di scrivere direttamente sul DOM, non è difficile. Angular lo semplifica con **`@angular/elements`** (`npm i @angular/elements`), che converte un componente Angular in Web Component: tecnicamente lo *wrappa* (lo avvolge) in un Web Component creato al volo. Con gli Standalone Components:
 
 ```ts
 // projects/mfe2/src/bootstrap.ts
@@ -313,12 +313,12 @@ Queste righe **sostituiscono il bootstrap** dell'app (l'avvio normale di Angular
 > [!warning]
 > Il nome del custom element **deve contenere un trattino** (es. `mfe2-root`): è una regola degli Web Components per evitare conflitti con gli elementi HTML esistenti.
 
-Per condividere il Web Component via Native Federation, il file che lo definisce va in `exposes` nel `federation.config.js`. Nel demo il remote Svelte espone `./web-components`; un remote Angular esporrebbe analogamente il suo file di bootstrap. Così si ha il meglio dei due mondi: Native Federation **condivide** framework e librerie quando le versioni coincidono; i Web Components **astraggono** le differenze quando framework/versioni divergono.
+Per condividere il Web Component via Native Federation, il file che lo definisce va in `exposes` nel `federation.config.js`. Nel demo il remote Svelte espone `./web-components`; un remote Angular esporrebbe analogamente il suo file di bootstrap. Così Native Federation **condivide** framework e librerie quando le versioni coincidono, e i Web Components **astraggono** le differenze quando framework/versioni divergono.
 
 ### Loading Web Components in a Shell
 > pp.438-441
 
-Pubblicare il Web Component è solo un lato della medaglia: va anche **caricato** nella shell. Poiché l'Angular Router lavora **solo con Angular Components**, conviene **wrappare** il Web Component in un componente Angular. Nel demo lo fa il componente `Wrapper`:
+Oltre che pubblicato, il Web Component va anche **caricato** nella shell. Poiché l'Angular Router lavora **solo con Angular Components**, conviene **wrappare** il Web Component in un componente Angular. Nel demo lo fa il componente `Wrapper`:
 
 ```ts
 // src/app/domains/shared/ui-federation/wrapper.ts
@@ -362,7 +362,7 @@ export class Wrapper {
 
 Il `Wrapper` carica il Web Component via Native Federation e crea l'elemento HTML in cui il browser lo renderizza. La config (`remoteName`, `exposedModule`, `elementName`) arriva via l'`input` `config`, rendendo il componente **riutilizzabile** su più remote Web Component.
 
-Dato che ci aspettiamo che `config` venga assegnato dal router, serve attivare la feature `withComponentInputBinding`:
+Dato che `config` deve essere assegnato dal router, serve attivare la feature `withComponentInputBinding`:
 
 ```ts
 // src/app/app.config.ts
@@ -456,17 +456,17 @@ export class AppComponent implements OnInit {
 
 Tutti i progetti Micro Frontend di successo visti dall'autore in 10+ anni hanno una cosa in comune: un **platform team** che fornisce supporto via **guideline, esempi e librerie interne**. È necessario perché un'architettura Micro Frontend **non si ottiene premendo un pulsante** o chiamando `ng new`: qualcuno deve sviluppare le soluzioni viste sopra (es. combinare più router in una singola shell).
 
-Il platform team **non deve essere grande**: l'autore ha visto **3 persone supportare 80+ feature team** distribuiti nel mondo — ovviamente non lavorando con tutti, ma offrendo servizi come guideline, esempi e librerie. Ai suoi membri serve una solida comprensione dei framework usati **e** dei concetti JavaScript sottostanti; tipicamente partono da shell + primo micro frontend prima di scalare a più team.
+Il platform team **non deve essere grande**: l'autore ha visto **3 persone supportare 80+ feature team** distribuiti nel mondo (ovviamente non lavorando con tutti, ma offrendo servizi come guideline, esempi e librerie). Ai suoi membri serve una solida comprensione dei framework usati **e** dei concetti JavaScript sottostanti; tipicamente partono da shell + primo micro frontend prima di scalare a più team.
 
 > [!tip]
-> I Micro Frontends non sono gratis: la spesa nascosta è **organizzativa** (un platform team), non solo tecnica. Senza quel supporto l'architettura non regge allo scaling.
+> Il costo nascosto dei Micro Frontends, oltre che tecnico, è **organizzativo** (un platform team): senza quel supporto l'architettura non regge allo scaling.
 
 ## Ripasso lampo
 
 <details>
 <summary>Qual è la motivazione *principale* dietro i Micro Frontends nella pratica, oltre ai benefici tecnici? Perché mischiare più framework è di norma un anti-pattern ma a volte utile?</summary>
 
-La motivazione principale è la **team autonomy**: i team non si bloccano a vicenda e possono **deployare indipendentemente** in qualsiasi momento — vitale nei progetti multi-team con catene di comunicazione lunghe. Mischiare più framework client-side nella stessa app è un anti-pattern (incoerenza, overhead), ma può abilitare un **percorso di migrazione** verso un nuovo stack, dato che in azienda le soluzioni software sopravvivono allo stack tecnologico medio.
+La motivazione principale è la **team autonomy**: i team non si bloccano a vicenda e possono **deployare indipendentemente** in qualsiasi momento, cosa vitale nei progetti multi-team con catene di comunicazione lunghe. Mischiare più framework client-side nella stessa app è un anti-pattern (incoerenza, overhead), ma può abilitare un **percorso di migrazione** verso un nuovo stack, dato che in azienda le soluzioni software sopravvivono allo stack tecnologico medio.
 
 </details>
 
@@ -480,7 +480,7 @@ Significa che app sviluppate e deployate **separatamente** non vengono più inte
 <details>
 <summary>Cos'è un Self-Contained System e come integra i frontend? Pro e contro rispetto a Native Federation?</summary>
 
-Un **SCS** separa il sistema in tanti sistemi indipendenti, molto debolmente accoppiati, ciascuno con backend + frontend (buoni candidati: Domain/Bounded Context DDD). I frontend si integrano **unicamente via hyperlink**. **Pro**: semplicissimo, zero infrastruttura, integra anche stack diversi. **Contro**: si perdono i benefici della SPA — seguire un link carica un'intera nuova app e scarica la precedente con tutto il suo stato. Native Federation costa più infrastruttura ma dà un'integrazione fine mantenendo la continuità della SPA.
+Un **SCS** separa il sistema in tanti sistemi indipendenti, molto debolmente accoppiati, ciascuno con backend + frontend (buoni candidati: Domain/Bounded Context DDD). I frontend si integrano **unicamente via hyperlink**. **Pro**: semplicissimo, zero infrastruttura, integra anche stack diversi. **Contro**: si perdono i benefici della SPA, perché seguire un link carica un'intera nuova app e scarica la precedente con tutto il suo stato. Native Federation costa più infrastruttura ma dà un'integrazione fine mantenendo la continuità della SPA.
 
 </details>
 
@@ -508,19 +508,19 @@ Si **astrae** il micro frontend dentro un **Web Component** a grana grossa. Con 
 <details>
 <summary>Quando un Web Component ha route proprie, come si evita che i due router litighino? Cosa fanno <code>UrlMatcher</code>/<code>startsWith</code> e <code>connectRouter</code>?</summary>
 
-Si dà a ogni route del micro frontend un **prefisso univoco** e si dice alla shell di guardare **solo il primo segmento**: in base a quello carica il micro frontend, che decide il routing sui segmenti restanti. Un **`UrlMatcher`** (es. `startsWith`) dice al router se attivare la route in base al prefisso. **`connectRouter`** sincronizza il router del micro frontend con l'URL del browser, così non vanno fuori sync. Attenzione: `startsWith` e `connectRouter` sono helper di esempio (`module-federation-plugin-example`), non API ufficiali.
+Si dà a ogni route del micro frontend un **prefisso univoco** e si dice alla shell di guardare **solo il primo segmento**: in base a quello carica il micro frontend, che decide il routing sui segmenti restanti. Un **`UrlMatcher`** (es. `startsWith`) dice al router se attivare la route in base al prefisso. **`connectRouter`** sincronizza il router del micro frontend con l'URL del browser, così non vanno fuori sync. `startsWith` e `connectRouter` sono però helper di esempio (`module-federation-plugin-example`), non API ufficiali.
 
 </details>
 
 <details>
 <summary>Perché un platform team è il vero costo dei Micro Frontends?</summary>
 
-Perché l'architettura Micro Frontend **non arriva premendo un pulsante** né con `ng new`: qualcuno deve sviluppare le soluzioni (combinare più router in una shell, ecc.) e offrire **guideline, esempi e librerie interne**. Il costo è prevalentemente **organizzativo**, non solo tecnico — anche se il team può essere piccolo (3 persone per 80+ feature team). Senza quel supporto l'architettura non regge allo scaling.
+Perché l'architettura Micro Frontend **non arriva premendo un pulsante** né con `ng new`: qualcuno deve sviluppare le soluzioni (combinare più router in una shell, ecc.) e offrire **guideline, esempi e librerie interne**. Il costo, oltre che tecnico, è prevalentemente **organizzativo**, anche se il team può essere piccolo (3 persone per 80+ feature team). Senza quel supporto l'architettura non regge allo scaling.
 
 </details>
 
 **In sintesi:**
-- I Micro Frontends spezzano il sistema in app **deployabili separatamente** → autonomia dei team e rilasci più rapidi, ma al prezzo della **runtime integration** e di confini verticali difficili da definire.
+- I Micro Frontends spezzano il sistema in app **deployabili separatamente**, così i team guadagnano autonomia e rilasci più rapidi, ma al prezzo della **runtime integration** e di confini verticali difficili da definire.
 - **Native Federation** (`@angular-architects/native-federation`) porta il mental model di Module Federation in Angular **fuori da webpack**, usando **Import Maps + ESM** per caricare i remote on-demand e condividere Angular **una sola volta**. Setup via `ng add` (`--type remote` / `--type dynamic-host`), `exposes` + `shareAll`, manifest, `initFederation`, `loadRemoteModule`.
 - Esporre una **routing config** (`./Routes` + `loadChildren`) è più pratico che esporre singoli componenti.
 - La comunicazione tra micro frontend si fa con **librerie condivise** (es. un `BehaviorSubject` in `@Service()`), ma va limitata a poche info contestuali per non ri-accoppiare i frontend.

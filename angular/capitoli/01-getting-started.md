@@ -22,7 +22,7 @@ Tutto il tooling di sviluppo, build e test poggia su **Node.js**. Si consiglia d
 
 ### Angular CLI
 
-Tool ufficiale del team Angular per generare, buildare e testare, aggiornato a ogni nuova versione di Angular. Si installa globalmente — `-g` la rende disponibile ovunque sulla macchina, mentre senza `-g` npm installerebbe solo nel progetto locale:
+Tool ufficiale del team Angular per generare, buildare e testare, aggiornato a ogni nuova versione di Angular. Si installa globalmente (`-g` la rende disponibile ovunque sulla macchina, mentre senza `-g` npm installerebbe solo nel progetto locale):
 
 ```bash
 npm install -g @angular/cli
@@ -40,7 +40,7 @@ ng serve -o   # -o apre il browser
 ```
 
 > [!tip]
-> Il repo di esempio ha **branch per capitolo** (vedi `readme.md`): utili per seguire il libro passo-passo.
+> Il repo di esempio ha **branch per capitolo** (si veda `readme.md`): utili per seguire il libro passo-passo.
 
 ## Getting Started with the Angular CLI
 > pp.8-19
@@ -57,7 +57,7 @@ ng serve -o          # dev server, default http://localhost:4200
 ng serve -o --port 4242   # porta custom con --port
 ```
 
-`ng serve` non solo serve l'app, ma **monitora i sorgenti** e li ricompila a ogni modifica, aggiornando poi la finestra del browser (live reload). Se la porta `4200` è occupata, la CLI ne propone un'altra. Per provare il meccanismo si apre `src/app/app.ts` e si cambia il valore del `title` in `World!`:
+`ng serve` serve l'app e intanto **monitora i sorgenti**: li ricompila a ogni modifica e aggiorna poi la finestra del browser (live reload). Se la porta `4200` è occupata, la CLI ne propone un'altra. Per provare il meccanismo si apre `src/app/app.ts` e si cambia il valore del `title` in `World!`:
 
 ```ts
 protected readonly title = signal('World!');
@@ -66,7 +66,7 @@ protected readonly title = signal('World!');
 Al salvataggio il browser si aggiorna da solo; conviene poi riportare il valore a `flights42` per restare allineati con le spiegazioni del capitolo.
 
 > [!warning]
-> Va aperta nell'IDE la **cartella root del progetto** (quella che contiene `angular.json`), altrimenti l'autocompletamento fallisce e compaiono numerosi errori. La ricompilazione automatica funziona bene, ma occasionalmente la CLI "perde" una modifica o si desincronizza — capita con salvataggi rapidi in sequenza o con la rinomina di file. Il rimedio è risalvare i file interessati o, in ultima istanza, riavviare `ng serve`.
+> Va aperta nell'IDE la **cartella root del progetto** (quella che contiene `angular.json`), altrimenti l'autocompletamento fallisce e compaiono numerosi errori. La ricompilazione automatica funziona bene, ma occasionalmente la CLI "perde" una modifica o si desincronizza: capita con salvataggi rapidi in sequenza o con la rinomina di file. Il rimedio è risalvare i file interessati o, in ultima istanza, riavviare `ng serve`.
 
 ### Project Structure of CLI Projects
 > pp.10-11
@@ -116,7 +116,7 @@ export class App {
 }
 ```
 
-`title` è un [[signal]]: un contenitore per un valore che, ogni volta che cambia, **avvisa** le parti del sistema interessate — ed è proprio questa notifica che Angular sfrutta per aggiornare la UI e mostrare sempre lo stato più recente. Lo si **legge chiamandolo come una funzione** (`this.title()`) e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, che Angular deduce dal valore di default, quindi non serve dichiararlo a mano.
+`title` è un [[signal]]: un contenitore per un valore che, ogni volta che cambia, **avvisa** le parti del sistema interessate. Angular sfrutta questa notifica per aggiornare la UI e mostrare sempre lo stato più recente. Lo si **legge chiamandolo come una funzione** (`this.title()`) e lo si aggiorna con `.set()`. Il tipo è `WritableSignal<string>`, che Angular deduce dal valore di default, quindi non serve dichiararlo a mano.
 
 Secondo la Angular style guide le proprietà usate **solo nel template** si dichiarano `protected`, per evitare modifiche accidentali dall'esterno della classe, e i signal si marcano `readonly`: non si **rimpiazzano**, si aggiornano.
 
@@ -183,7 +183,7 @@ I servizi globali si registrano in `providers` tramite [[providers|provider func
 
 ### Installing Additional Packages
 
-Ci sono due modi per aggiungere una libreria. `npm i <pkg>` (alias di `npm install <pkg>`) si limita a **installarla** — es. `npm install @ngrx/signals`, usata più avanti per la gestione dello stato. `ng add <pkg>` invece la installa **e la configura**: `ng add @angular/material` (la component library del team Angular) imposta theming e tipografia di Material — il libro ne usa parti selezionate per dialog e toast; alle domande del setup si risponde Enter per accettare i default.
+Ci sono due modi per aggiungere una libreria. `npm i <pkg>` (alias di `npm install <pkg>`) si limita a **installarla** (es. `npm install @ngrx/signals`, usata più avanti per la gestione dello stato). `ng add <pkg>` invece la installa **e la configura**: `ng add @angular/material` (la component library del team Angular) imposta theming e tipografia di Material, di cui il libro usa parti selezionate per dialog e toast; alle domande del setup si risponde Enter per accettare i default.
 
 ### Adding Components and Styles
 
@@ -213,7 +213,7 @@ Gli **schematics** (le "ricette" che la CLI usa quando genera file con `ng gener
 }
 ```
 
-`skipTests: true` evita di generare i file di test per componenti, direttive, pipe e service — non perché lo scaffolding sia sbagliato (lo *scaffolding* è la generazione automatica dei file di partenza da parte della CLI), ma perché in [[07-testing-with-vitest]] questi file si scrivono a mano per mostrarne i concetti.
+`skipTests: true` evita di generare i file di test per componenti, direttive, pipe e service, non perché lo scaffolding sia sbagliato (lo *scaffolding* è la generazione automatica dei file di partenza da parte della CLI), ma perché in [[07-testing-with-vitest]] questi file si scrivono a mano per mostrarne i concetti.
 
 > [!info|label:Angular 22+ · OnPush di default]
 > **OnPush** è la strategia di [[glossario#change-detection|change detection]] raccomandata (la change detection è il meccanismo con cui Angular controlla cos'è cambiato e ridisegna la UI di conseguenza): Angular aggiorna un componente **solo quando i suoi dati cambiano** (es. quando un signal fornisce un nuovo valore) invece di ricontrollare tutta l'app. I signal la rendono naturale. **Da Angular 22 è il default.**
@@ -223,11 +223,11 @@ Gli **schematics** (le "ricette" che la CLI usa quando genera file con `ng gener
 
 ### Initializing the Linter
 
-`ng lint` esegue **ESLint**. Un *linter* è uno strumento che analizza il codice e segnala errori comuni e violazioni degli standard di scrittura. La CLI lo **configura alla prima esecuzione** (Enter per i default → set di regole Angular + TypeScript); le regole si personalizzano in `eslint.config.js`. In VS Code gli errori compaiono man mano che si scrive, se è installata l'estensione ESLint (inclusa nell'Angular Essentials pack).
+`ng lint` esegue **ESLint**. Un *linter* è uno strumento che analizza il codice e segnala errori comuni e violazioni degli standard di scrittura. La CLI lo **configura alla prima esecuzione** (con Enter si accettano i default, cioè il set di regole Angular + TypeScript); le regole si personalizzano in `eslint.config.js`. In VS Code gli errori compaiono man mano che si scrive, se è installata l'estensione ESLint (inclusa nell'Angular Essentials pack).
 
 ### Building the Application
 
-`ng build` produce la **build di produzione**: compila TS → JS, bundla (raggruppa tutto in pochi file) e ottimizza i bundle per la performance con due tecniche, la **minify** (comprime il codice togliendo spazi e accorciando i nomi) e il [[glossario#tree-shaking|tree-shaking]] (rimuove il codice inutilizzato). L'output finisce in `dist/<app>/browser`, es. `dist/flights42/browser`: per il deploy basta copiarlo su un web server.
+`ng build` produce la **build di produzione**: compila TS in JS, bundla (raggruppa tutto in pochi file) e ottimizza i bundle per la performance con due tecniche, la **minify** (comprime il codice togliendo spazi e accorciando i nomi) e il [[glossario#tree-shaking|tree-shaking]] (rimuove il codice inutilizzato). L'output finisce in `dist/<app>/browser`, es. `dist/flights42/browser`: per il deploy basta copiarlo su un web server.
 
 Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal-store]] · testing in [[07-testing-with-vitest]].
 
@@ -236,7 +236,7 @@ Collegamenti: [[providers]] · gestione dello stato con NgRx in [[09-ngrx-signal
 <details>
 <summary>Che differenza c'è tra <code>npm i <pkg></code> e <code>ng add <pkg></code>?</summary>
 
-`npm i <pkg>` (alias di `npm install`) si limita a **installare** la libreria. `ng add <pkg>` la installa **e esegue passi di setup aggiuntivi** — es. `ng add @angular/material` configura theming e tipografia di Material nel progetto.
+`npm i <pkg>` (alias di `npm install`) si limita a **installare** la libreria. `ng add <pkg>` la installa **e esegue passi di setup aggiuntivi**: es. `ng add @angular/material` configura theming e tipografia di Material nel progetto.
 
 </details>
 
@@ -257,7 +257,7 @@ In `main.ts`, `bootstrapApplication(App, appConfig)` fa il **bootstrap** del roo
 <details>
 <summary>A cosa serve <code>OnPush</code> e perché i signal lo rendono conveniente?</summary>
 
-`OnPush` aggiorna un componente **solo quando i suoi dati cambiano**, invece di ricontrollare l'intera app a ogni ciclo → change detection più efficiente. I signal notificano esplicitamente i cambi di valore, quindi calzano perfettamente con OnPush. Da **Angular 22** è la strategia di default.
+`OnPush` aggiorna un componente **solo quando i suoi dati cambiano**, invece di ricontrollare l'intera app a ogni ciclo, quindi la change detection è più efficiente. I signal notificano esplicitamente i cambi di valore, quindi calzano perfettamente con OnPush. Da **Angular 22** è la strategia di default.
 
 </details>
 
@@ -271,7 +271,7 @@ Root component: `src/app/app.ts` (logica) e `src/app/app.html` (template). Boots
 <details>
 <summary>Perché il libro scrive <code>changeDetection: ChangeDetectionStrategy.OnPush</code> esplicitamente se da Angular 22 è già il default?</summary>
 
-Per due ragioni: rende la scelta **visibile a colpo d'occhio** in ogni componente (codice auto-documentante) e resta **retrocompatibile** con versioni di Angular precedenti alla 22, dove il default non era OnPush — così chi copia gli snippet in un progetto più vecchio ottiene lo stesso comportamento.
+Per due ragioni: rende la scelta **visibile a colpo d'occhio** in ogni componente (codice auto-documentante) e resta **retrocompatibile** con versioni di Angular precedenti alla 22, dove il default non era OnPush, così chi copia gli snippet in un progetto più vecchio ottiene lo stesso comportamento.
 
 </details>
 

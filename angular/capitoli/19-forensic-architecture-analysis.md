@@ -43,9 +43,9 @@ domain    → tipi che rappresentano gli oggetti ricevuti + servizi che parlano 
 util      → funzioni ausiliarie (authentication, logging, ...)
 ```
 
-Questi layer si allineano alle idee del team **Nx** e si sono dimostrati validi nei progetti degli autori, soprattutto perché bilanciano bene beneficio e overhead (il costo aggiuntivo in complessità e lavoro che la struttura ti impone). Sono anche adattabili al singolo progetto: alcuni clienti splittano il layer `data` in due (un layer fa data access (cioè legge/scrive i dati dal backend), l'altro fornisce i tipi associati), così i dumb component vedono solo i tipi, dato che non devono parlare autonomamente col backend.
+Questi layer si allineano alle idee del team **Nx** e si sono dimostrati validi nei progetti degli autori, soprattutto perché bilanciano bene beneficio e overhead (il costo aggiuntivo in complessità e lavoro che la struttura impone). Sono anche adattabili al singolo progetto: alcuni clienti splittano il layer `data` in due (un layer fa data access (cioè legge/scrive i dati dal backend), l'altro fornisce i tipi associati), così i dumb component vedono solo i tipi, dato che non devono parlare autonomamente col backend.
 
-La funzionalità che `feature-my-tickets` vuole condividere con `feature-next-flights` può essere gestita in vari modi: spostando dumb component e servizi nei layer `ui` e `data`; oppure **ammorbidendo un po' il layering**, lasciando che i feature component dei domini accedano ai feature component in `shared` — dato che la comunicazione va in una sola direzione, non si creano cicli; o ancora introducendo un ulteriore layer, es. `sub-feature`, fra `feature` e `ui`.
+La funzionalità che `feature-my-tickets` vuole condividere con `feature-next-flights` può essere gestita in vari modi: spostando dumb component e servizi nei layer `ui` e `data`; oppure **ammorbidendo un po' il layering**, lasciando che i feature component dei domini accedano ai feature component in `shared` (dato che la comunicazione va in una sola direzione, non si creano cicli); o ancora introducendo un ulteriore layer, es. `sub-feature`, fra `feature` e `ui`.
 
 > [!tip]
 > Le scoperte dell'analisi della struttura non danno una risposta automatica: portano a **discussioni** e quindi a **decisioni deliberate** sull'evoluzione del progetto. I metodi forensi delle sezioni seguenti aggiungono informazioni e basi di discussione che vanno ben oltre il semplice grafo delle dipendenze.
@@ -77,7 +77,7 @@ Collegamenti: Detective compare già in [[08-sustainable-architectures]] (visual
 ## Change Coupling
 > p.448
 
-Il coupling visto finora nasce direttamente dalle dipendenze fra moduli ECMAScript, e si deduce dagli statement `import`/`export` del codice. Il **change coupling** è un coupling meno ovvio: identifica i **file cambiati frequentemente insieme**. Questi file sono logicamente accoppiati e possono evidenziare problemi nei domain boundary — per esempio mina l'obiettivo, visto sopra, per cui la maggior parte dei cambiamenti dovrebbe restare in un solo dominio.
+Il coupling visto finora nasce direttamente dalle dipendenze fra moduli ECMAScript, e si deduce dagli statement `import`/`export` del codice. Il **change coupling** è un coupling meno ovvio: identifica i **file cambiati frequentemente insieme**. Questi file sono logicamente accoppiati e possono evidenziare problemi nei domain boundary: un accoppiamento del genere mina, per esempio, l'obiettivo visto sopra per cui la maggior parte dei cambiamenti dovrebbe restare in un solo dominio.
 
 ```mermaid
 graph LR
@@ -102,30 +102,30 @@ Se lo **stesso file** viene modificato molto spesso può esserci un problema di 
 
 Ovviamente conta se il file è semplice o complesso: un file con la lista delle voci di menu, che cresce di poche righe a ogni nuova feature, ha churn alto ma **non è critico**, perché la sua struttura non è complessa. Per questo Tornhill raccomanda di pesare il **churn** contro la **complessità**.
 
-Sulla scelta della metrica di complessità Tornhill nota che, in fondo, conta poco quale si sceglie. Cita uno studio sull'attività cerebrale degli sviluppatori mentre leggono codice, la cui conclusione è che le metriche di complessità **non predicono granché bene** la difficoltà di comprensione del codice. Ciò che incide di più è la **dimensione del vocabolario** usato (numero di variabili, funzioni, classi, ...) e, parzialmente correlata, la **lunghezza del codice** esaminato. Per questo nel libro Tornhill usa le **Lines of Code** come misura di complessità, mentre nel suo prodotto **Code Scene** usa la **cyclomatic complexity di McCabe** (conta il numero di percorsi nel codice). **Detective supporta entrambe le metriche.**
+Sulla scelta della metrica di complessità Tornhill nota che conta poco quale si sceglie. Cita uno studio sull'attività cerebrale degli sviluppatori mentre leggono codice, la cui conclusione è che le metriche di complessità **non predicono granché bene** la difficoltà di comprensione del codice. Ciò che incide di più è la **dimensione del vocabolario** usato (numero di variabili, funzioni, classi, ...) e, parzialmente correlata, la **lunghezza del codice** esaminato. Per questo nel libro Tornhill usa le **Lines of Code** come misura di complessità, mentre nel suo prodotto **Code Scene** usa la **cyclomatic complexity di McCabe** (conta il numero di percorsi nel codice). **Detective supporta entrambe le metriche.**
 
 Moltiplicando il tasso di churn per una misura di complessità, l'analisi degli hotspot dà contesto in più per individuare le sezioni problematiche. La metrica risultante è l'**Hotspot Score**: più alto = area potenzialmente più rischiosa.
 
 > [!warning]
 > Non esiste una soglia universale che dica quale score indica un problema serio: l'hotspot score è una **proposta di prioritizzazione**, non un giudizio assoluto. Le aree con valori più alti vanno guardate più da vicino.
 
-Per il suo taglio architetturale, Detective **aggrega gli hotspot a livello di modulo**: a colpo d'occhio vedi quale dominio/modulo contiene quanti file sopra una certa soglia (cliccando il modulo compaiono i file). Le **medie sono omesse di proposito**, per evitare che tanti file non critici nascondano i pochi critici.
+Per il suo taglio architetturale, Detective **aggrega gli hotspot a livello di modulo**: a colpo d'occhio si vede quale dominio/modulo contiene quanti file sopra una certa soglia (cliccando il modulo compaiono i file). Le **medie sono omesse di proposito**, per evitare che tanti file non critici nascondano i pochi critici.
 
 Nella demo gli hotspot non preoccupano: due-tre cambiamenti totali e una cyclomatic complexity ≤ 6 a livello di file non giustificano nessun allarme.
 
 ## Team Alignment and Conway's Law
 > pp.450-451
 
-Già nel 1968 l'informatico americano **Melvin Conway** osservò che la struttura delle applicazioni riflette le strutture di comunicazione degli sviluppatori (**Conway's Law**). La spiegazione classica e vivida: se tre team costruiscono insieme un compilatore, finisci con un compilatore a tre fasi.
+Già nel 1968 l'informatico americano **Melvin Conway** osservò che la struttura delle applicazioni riflette le strutture di comunicazione degli sviluppatori (**Conway's Law**). La spiegazione classica: se tre team costruiscono insieme un compilatore, si ottiene un compilatore a tre fasi.
 
-Conviene quindi allineare la struttura dei team all'architettura software desiderata — il cosiddetto **Inverse Conway Maneuver**. Se un team è responsabile di un intero dominio, ciò promuove il low coupling fra domini; concentrarsi su un solo dominio riduce anche il carico cognitivo.
+Conviene quindi allineare la struttura dei team all'architettura software desiderata: è il cosiddetto **Inverse Conway Maneuver**. Se un team è responsabile di un intero dominio, ciò promuove il low coupling fra domini; concentrarsi su un solo dominio riduce anche il carico cognitivo.
 
 Ma l'allineamento *ufficiale* fra team e domini non garantisce che sia *praticato*. Per individuare la discrepanza si analizzano i **commit**: si verifica se i team riescono davvero a concentrarsi sui propri domini.
 
 > [!warning]
 > Prima serve **mappare gli username del version control ai team**. Con Detective si adatta un apposito file di configurazione (i dettagli sono nel Readme del progetto).
 
-Nella demo non c'è un allineamento chiaro fra team e domini: sembra piuttosto che i team Alpha e Beta supportino il team Gamma. La situazione va indagata: forse serve un'altra struttura di team che correli meglio con i domain boundary, oppure sono i domain boundary a dover essere aggiustati. Altre cause possibili: aderenza a vecchie strutture organizzative, distribuzione dei task fra team per ragioni tecniche, fattori storici — es. Gamma ha iniziato a sviluppare prima degli altri team, poi Alpha ha preso in carico `ticketing`. Ipotesi del genere si testano in fretta **limitando il periodo di analisi**.
+Nella demo non c'è un allineamento chiaro fra team e domini: sembra piuttosto che i team Alpha e Beta supportino il team Gamma. La situazione va indagata: forse serve un'altra struttura di team che correli meglio con i domain boundary, oppure sono i domain boundary a dover essere aggiustati. Altre cause possibili: aderenza a vecchie strutture organizzative, distribuzione dei task fra team per ragioni tecniche, fattori storici (es. Gamma ha iniziato a sviluppare prima degli altri team, poi Alpha ha preso in carico `ticketing`). Ipotesi del genere si testano in fretta **limitando il periodo di analisi**.
 
 Poiché `shared` non è un'unità omogenea ma una collezione eterogenea di moduli riusabili, l'analisi va **ripetuta a livello di modulo**, per vedere se ci sono dei lead author (gli autori principali: chi ha scritto la maggior parte di quel modulo). Per i moduli tecnici riusabili, però, contano più le **responsabilità chiare** dell'allineamento stretto team/codice: tra l'altro evitano che contributi di team diversi causino breaking change (modifiche che rompono il codice di chi usa quel modulo).
 
@@ -160,21 +160,21 @@ Il coupling da `import`/`export` deriva dalle dipendenze statiche fra moduli ECM
 <details>
 <summary>Perché un alto **code churn** non è di per sé critico? Come si pesa contro la complessità e quale metrica usa Detective (vs. Code Scene)?</summary>
 
-Un file semplice (es. la lista delle voci di menu) può avere churn alto senza essere problematico, perché la sua struttura non è complessa. Per questo Tornhill pesa il **churn × complessità** → **Hotspot Score**. Detective supporta **entrambe** le metriche di complessità: **Lines of Code** (usata da Tornhill nel libro) e **cyclomatic complexity di McCabe** (usata nel prodotto Code Scene).
+Un file semplice (es. la lista delle voci di menu) può avere churn alto senza essere problematico, perché la sua struttura non è complessa. Per questo Tornhill pesa il **churn × complessità**, da cui l'**Hotspot Score**. Detective supporta **entrambe** le metriche di complessità: **Lines of Code** (usata da Tornhill nel libro) e **cyclomatic complexity di McCabe** (usata nel prodotto Code Scene).
 
 </details>
 
 <details>
 <summary>Cos'è l'**Hotspot Score** e perché non esiste una soglia universale? Perché Detective aggrega a livello di modulo e omette le medie?</summary>
 
-È churn × complessità: più alto = area potenzialmente più rischiosa. Non c'è una soglia assoluta che indichi un problema serio; lo score è solo una **proposta di prioritizzazione**. Detective aggrega **per modulo** per il suo taglio architetturale (vedi a colpo d'occhio quanti file sopra soglia ha ogni dominio), e **omette le medie** così che tanti file non critici non nascondano i pochi critici.
+È churn × complessità: più alto = area potenzialmente più rischiosa. Non c'è una soglia assoluta che indichi un problema serio; lo score è solo una **proposta di prioritizzazione**. Detective aggrega **per modulo** per il suo taglio architetturale (si vede a colpo d'occhio quanti file sopra soglia ha ogni dominio), e **omette le medie** così che tanti file non critici non nascondano i pochi critici.
 
 </details>
 
 <details>
 <summary>Cosa afferma **Conway's Law** e cos'è l'**Inverse Conway Maneuver**? Come si verifica se l'allineamento team/dominio è davvero praticato?</summary>
 
-Conway's Law: la struttura del software riflette le strutture di comunicazione di chi lo costruisce (tre team → compilatore a tre fasi). L'**Inverse Conway Maneuver** ribalta la cosa: si allinea volutamente la struttura dei team all'architettura desiderata (un team per dominio → low coupling, meno carico cognitivo). Per verificare se è praticato si **analizzano i commit** (dopo aver mappato gli username ai team), controllando se ciascun team si concentra davvero sul proprio dominio.
+Conway's Law: la struttura del software riflette le strutture di comunicazione di chi lo costruisce (tre team producono un compilatore a tre fasi). L'**Inverse Conway Maneuver** ribalta la cosa: si allinea volutamente la struttura dei team all'architettura desiderata (un team per dominio favorisce low coupling e meno carico cognitivo). Per verificare se è praticato si **analizzano i commit** (dopo aver mappato gli username ai team), controllando se ciascun team si concentra davvero sul proprio dominio.
 
 </details>
 
@@ -188,12 +188,12 @@ Conway's Law: la struttura del software riflette le strutture di comunicazione d
 <details>
 <summary>Perché la forensic analysis NON sostituisce una valutazione qualitativa dell'architettura?</summary>
 
-È solo un pezzo del puzzle: i valori non sono target, ma indicatori di aree da esaminare. Restano da valutare qualitativamente cose che i dati storici non dicono — se l'architettura supporta gli obiettivi (performance, security, usability), se le decisioni sui temi chiave sono deliberate, se i pattern hanno ancora senso, se i trade-off iniziali reggono. E non sostituisce le **interviste agli stakeholder**, che spesso hanno una forte intuizione delle aree critiche.
+È solo un pezzo del puzzle: i valori non sono target, ma indicatori di aree da esaminare. Restano da valutare qualitativamente cose che i dati storici non dicono: se l'architettura supporta gli obiettivi (performance, security, usability), se le decisioni sui temi chiave sono deliberate, se i pattern hanno ancora senso, se i trade-off iniziali reggono. E non sostituisce le **interviste agli stakeholder**, che spesso hanno una forte intuizione delle aree critiche.
 
 </details>
 
 **In sintesi:**
-- La **forensic analysis** guarda non solo al codice attuale ma alla sua **storia nel version control**, scoprendo pattern non ovvi; richiede una repo **Git**.
+- La **forensic analysis** guarda, oltre al codice attuale, alla sua **storia nel version control**, scoprendo pattern non ovvi; richiede una repo **Git**.
 - **Change coupling** (file cambiati insieme) e **hotspot** (churn × complessità, con LoC o cyclomatic complexity) segnalano boundary deboli e aree rischiose da prioritizzare, non verdetti assoluti.
 - Analizzando i commit si verifica il **team alignment** con i domini (Conway's Law / Inverse Conway Maneuver) e si scoprono lead author e perdita di conoscenza.
 - **Detective** (open-source) implementa parte di queste idee; **Code Scene** (commerciale) le estende. Restano un complemento, non un sostituto, della valutazione qualitativa e delle interviste agli stakeholder.
