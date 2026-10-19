@@ -16,7 +16,7 @@ Un'**import map** dice al browser dove trovare ogni modulo importato per nome, s
 </script>
 ```
 
-In un progetto "normale" (es. con Webpack/Vite) la risoluzione avviene a **build time**: il bundler sa dove trovare `react` in `node_modules` e lo include nel bundle. In un'architettura micro frontend, invece, ogni app può avere dipendenze e versioni diverse ed essere servita da un server distinto: l'import map permette al browser di sapere, **a runtime**, da dove caricare ciascun modulo — così ogni micro frontend usa la sua versione di una libreria senza interferenze.
+In un progetto "normale" (es. con Webpack/Vite) la risoluzione avviene a **build time**: il bundler sa dove trovare `react` in `node_modules` e lo include nel bundle. In un'architettura micro frontend, invece, ogni app può avere dipendenze e versioni diverse ed essere servita da un server distinto: l'import map permette al browser di sapere, **a runtime**, da dove caricare ciascun modulo, così ogni micro frontend usa la sua versione di una libreria senza interferenze.
 
 > [!warning]
 > Le import map **non** sono più una proposta sperimentale: sono uno standard supportato dai browser moderni (Chrome/Edge 89+, Firefox 108+, Safari 16.4+). Vanno però dichiarate **prima** di qualsiasi `<script type="module">`.

@@ -15,18 +15,18 @@ var somma = function (a, b) { return a + b; };
 ```
 
 Concetti chiave:
-- **Transpilazione** — traduce da un linguaggio di alto livello a un altro (qui: da JS moderno a JS più vecchio ma equivalente). Diverso dalla **compilazione**, che traduce verso il linguaggio macchina.
-- **Plugin e preset** — un *plugin* trasforma una singola funzionalità (es. le arrow function); un *preset* è un insieme di plugin (es. `preset-env` per lo standard più recente).
-- **Configurabilità** — si sceglie con precisione cosa trasformare, ottimizzando l'output per il progetto.
+- **Transpilazione**: traduce da un linguaggio di alto livello a un altro (qui: da JS moderno a JS più vecchio ma equivalente). Diverso dalla **compilazione**, che traduce verso il linguaggio macchina.
+- **Plugin e preset**: un *plugin* trasforma una singola funzionalità (es. le arrow function); un *preset* è un insieme di plugin (es. `preset-env` per lo standard più recente).
+- **Configurabilità**: si sceglie con precisione cosa trasformare, ottimizzando l'output per il progetto.
 
 > [!info|label:Legacy]
 > Fino a Babel 7, in assenza di target espliciti, Babel trasformava tutto fino a ES5 (`targets: ">= 0%"`, cioè ogni browser esistente): da qui l'immagine classica di Babel come traduttore «da ES2015+ a ES5». Con **Babel 8**, stabile da giugno 2026, il default è diventato la query `defaults` di browserslist, così senza configurazione si compila per i browser moderni ([guida alla migrazione](https://babeljs.io/docs/v8-migration)). *(Aggiornato a ottobre 2026.)*
 
 ## SWC
 
-SWC (*Speedy Web Compiler*) è un transpiler/compilatore per JavaScript e TypeScript, nato come alternativa **più veloce** a Babel. La differenza chiave: è scritto in **Rust** (non in JavaScript), il che gli permette di sfruttare più core della CPU ed essere molto più performante.
+SWC (*Speedy Web Compiler*) è un transpiler/compilatore per JavaScript e TypeScript, nato come alternativa **più veloce** a Babel. È scritto in **Rust** anziché in JavaScript, e questo gli permette di sfruttare più core della CPU ed essere molto più performante.
 
-Funzioni: transpilazione verso versioni precedenti di JavaScript, rimozione dei tipi da TypeScript e minificazione. Offre anche un bundling, ma sperimentale e destinato a sparire nella [versione 2](https://swc.rs/docs/configuration/bundling) a favore dei bundler costruiti su SWC, come Rspack e Turbopack. Il suo parser TypeScript, compilato in WebAssembly, è inoltre quello che [Node usa](https://github.com/nodejs/amaro) per eseguire direttamente i file `.ts` (il *type stripping*, vedi <a href="../node/#/docs/04-varianti-di-javascript?id=typescript-in-node-il-type-stripping" target="_blank" rel="noopener">vault Node, capitolo 04</a>).
+Funzioni: transpilazione verso versioni precedenti di JavaScript, rimozione dei tipi da TypeScript e minificazione. Offre anche un bundling, ma sperimentale e destinato a sparire nella [versione 2](https://swc.rs/docs/configuration/bundling) a favore dei bundler costruiti su SWC, come Rspack e Turbopack. Il suo parser TypeScript, compilato in WebAssembly, è inoltre quello che [Node usa](https://github.com/nodejs/amaro) per eseguire direttamente i file `.ts` (il *type stripping*, si veda <a href="../node/#/docs/04-varianti-di-javascript?id=typescript-in-node-il-type-stripping" target="_blank" rel="noopener">vault Node, capitolo 04</a>).
 
 **SWC vs Babel:**
 - **SWC** quando la priorità è la **velocità** di build (progetti grandi). Adottato come compilatore predefinito da Next.js, Parcel, Deno.
@@ -34,4 +34,4 @@ Funzioni: transpilazione verso versioni precedenti di JavaScript, rimozione dei 
 
 ## Oxc
 
-[Oxc](https://oxc.rs/) (*JavaScript Oxidation Compiler*) è una raccolta di strumenti per JavaScript e TypeScript scritti in **Rust**: parser, trasformatore e minificatore, più un linter (Oxlint) e un formatter (Oxfmt). Come trasformatore fa lo stesso mestiere di Babel e SWC, cioè togliere i tipi di TypeScript, tradurre JSX e abbassare la sintassi, ed è quello che [Vite usa per TypeScript e JSX](https://vite.dev/guide/features#typescript) dalla versione 8, accanto a Rolldown per il bundling (vedi [Vite](docs/bundler.md?id=vite)). Di solito non lo si installa a mano: arriva dentro Vite.
+[Oxc](https://oxc.rs/) (*JavaScript Oxidation Compiler*) è una raccolta di strumenti per JavaScript e TypeScript scritti in **Rust**: parser, trasformatore e minificatore, più un linter (Oxlint) e un formatter (Oxfmt). Come trasformatore fa lo stesso mestiere di Babel e SWC, cioè togliere i tipi di TypeScript, tradurre JSX e abbassare la sintassi, ed è quello che [Vite usa per TypeScript e JSX](https://vite.dev/guide/features#typescript) dalla versione 8, accanto a Rolldown per il bundling (si veda [Vite](docs/bundler.md?id=vite)). Di solito non lo si installa a mano: arriva dentro Vite.

@@ -65,10 +65,10 @@ Ogni file JSON è a sua volta YAML valido (YAML ne è un **soprainsieme**), ma d
 
 Alla base di ogni operazione di un computer c'è il **sistema binario**: due soli simboli, `0` e `1`.
 
-- **Bit** — l'unità di informazione più piccola. Assume due stati (`0`/`1`, spento/acceso, falso/vero). Analogia: un singolo interruttore.
-- **Byte** — un gruppo di **8 bit**. È l'unità con cui si misurano dimensioni dei file e capacità di memoria (kilobyte, megabyte, …). Analogia: una fila di 8 interruttori indipendenti.
+- **Bit**: l'unità di informazione più piccola. Assume due stati (`0`/`1`, spento/acceso, falso/vero). Analogia: un singolo interruttore.
+- **Byte**: un gruppo di **8 bit**. È l'unità con cui si misurano dimensioni dei file e capacità di memoria (kilobyte, megabyte, …). Analogia: una fila di 8 interruttori indipendenti.
 
-**Combinazioni — la regola 2ⁿ.** Con `n` bit si ottengono `2ⁿ` combinazioni distinte:
+**Combinazioni: la regola 2ⁿ.** Con `n` bit si ottengono `2ⁿ` combinazioni distinte:
 
 | Bit | Combinazioni (2ⁿ) |
 |---|---|
@@ -78,7 +78,7 @@ Alla base di ogni operazione di un computer c'è il **sistema binario**: due sol
 
 Con 256 combinazioni un byte rappresenta tutti i caratteri di uno standard come ASCII.
 
-**Valore massimo — la regola (2ⁿ) − 1.** Rappresentando numeri interi da zero, una combinazione è occupata dallo `0`, quindi il valore più alto è il numero di combinazioni **meno uno**:
+**Valore massimo: la regola (2ⁿ) − 1.** Rappresentando numeri interi da zero, una combinazione è occupata dallo `0`, quindi il valore più alto è il numero di combinazioni **meno uno**:
 
 - Con 3 bit si hanno 2³ = 8 combinazioni, quindi il valore massimo è `7` (da 0 a 7).
 - Con 8 bit si hanno 2⁸ = 256 combinazioni, quindi il valore massimo è `255` (da 0 a 255).
@@ -106,15 +106,15 @@ I nomi sono controintuitivi: `btoa` **codifica**, `atob` **decodifica**.
 
 Un **font** è l'insieme delle forme di lettere, cifre e simboli di un carattere tipografico; un **file di font** le contiene, così il computer o il browser sa come disegnarle. I formati principali sono nati uno dopo l'altro, e conoscerne la piccola storia aiuta a orientarsi.
 
-All'inizio c'erano i formati "da scrivania": **TrueType** (`.ttf`, ideato da Apple e Microsoft) e **OpenType** (`.otf`, arrivato dopo grazie a Microsoft e Adobe). Sono quelli che si installano sul sistema operativo e che usano programmi come Word o Photoshop. OpenType è in pratica un'estensione di TrueType — stessa idea di base, ma con in più funzioni tipografiche avanzate (legature, varianti stilistiche, set di caratteri più ricchi). Entrambi, però, nascono per il **desktop**, non per la rete: **non sono compressi**, quindi come file da scaricare a ogni visita di una pagina risultano pesanti. Per dare un'idea concreta: un singolo peso (per esempio il *regular*) di un tipico font latino sta sui **150–250 KB** circa in TTF/OTF; le controparti compresse scendono a circa **80–120 KB** in WOFF e **50–80 KB** in WOFF2, a parità di identico disegno — cambia solo la compressione. (Le cifre variano molto con il font: un carattere ricchissimo di glifi, come quelli per cinese/giapponese/coreano, pesa svariati MB.)
+All'inizio c'erano i formati "da scrivania": **TrueType** (`.ttf`, ideato da Apple e Microsoft) e **OpenType** (`.otf`, arrivato dopo grazie a Microsoft e Adobe). Sono quelli che si installano sul sistema operativo e che usano programmi come Word o Photoshop. OpenType è in pratica un'estensione di TrueType: stessa idea di base, ma con in più funzioni tipografiche avanzate (legature, varianti stilistiche, set di caratteri più ricchi). Entrambi, però, nascono per il **desktop**, non per la rete: **non sono compressi**, quindi come file da scaricare a ogni visita di una pagina risultano pesanti. Un singolo peso (per esempio il *regular*) di un tipico font latino sta sui **150-250 KB** circa in TTF/OTF; le controparti compresse scendono a circa **80-120 KB** in WOFF e **50-80 KB** in WOFF2, a parità di disegno: cambia solo la compressione. (Le cifre variano molto con il font: un carattere ricchissimo di glifi, come quelli per cinese/giapponese/coreano, pesa svariati MB.)
 
-Per il web è nato **WOFF** (*Web Open Font Format*): non è un nuovo disegno di carattere, ma semplicemente un `.ttf`/`.otf` **incartato e compresso** — dove "comprimere" vuol dire rendere il file più piccolo (come si fa con uno zip), così si scarica prima. Poi è arrivato **WOFF2**, la sua seconda versione: usa una compressione ancora più efficiente, un algoritmo chiamato **Brotli**, e ottiene file più leggeri (circa il 30% in meno di un WOFF). Oggi **WOFF2 è lo standard**: lo supportano tutti i browser moderni ed è il formato che servizi come Google Fonts distribuiscono. Un WOFF si tiene al più come **ripiego** (*fallback*, cioè l'alternativa usata quando il preferito non è disponibile) per browser molto datati, mentre TTF e OTF restano per l'uso sul computer.
+Per il web è nato **WOFF** (*Web Open Font Format*): lo stesso disegno di un `.ttf`/`.otf`, **incartato e compresso**, dove "comprimere" vuol dire rendere il file più piccolo (come si fa con uno zip), così si scarica prima. Poi è arrivato **WOFF2**, la sua seconda versione: usa una compressione ancora più efficiente, un algoritmo chiamato **Brotli**, e ottiene file più leggeri (circa il 30% in meno di un WOFF). Oggi **WOFF2 è lo standard**: lo supportano tutti i browser moderni ed è il formato che servizi come Google Fonts distribuiscono. Un WOFF si tiene al più come **ripiego** (*fallback*, cioè l'alternativa usata quando il preferito non è disponibile) per browser molto datati, mentre TTF e OTF restano per l'uso sul computer.
 
 Il riepilogo, a colpo d'occhio:
 
 | Formato | Cos'è | Peso sul web |
 | --- | --- | --- |
-| **TTF / OTF** | i font "da scrivania", installati sul sistema | non compressi → pesanti |
+| **TTF / OTF** | i font "da scrivania", installati sul sistema | non compressi, quindi pesanti |
 | **WOFF** | un TTF/OTF compresso per il web (versione 1) | leggero |
 | **WOFF2** | come WOFF, ma con compressione **Brotli** (versione 2) | il più leggero, **standard di oggi** |
 

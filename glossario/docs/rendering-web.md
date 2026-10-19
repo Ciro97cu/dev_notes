@@ -7,7 +7,7 @@ Con "rendering" si intende **dove e quando** viene prodotto l'HTML che il browse
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Dove nasce l'HTML: nel <strong>browser</strong> a runtime (CSR), su un <strong>server</strong> a ogni richiesta (SSR), o in fase di <strong>build</strong> una volta sola e poi servito da <strong>CDN</strong> (SSG). Il riquadro evidenziato è dove la pagina viene generata.</figcaption>
 </figure>
 
-Due termini tornano in tutte e tre le strategie, quindi conviene chiarirli subito:
+Due termini tornano in tutte e tre le strategie:
 
 - **Prima pittura** (*first paint*): l'istante in cui l'utente vede *qualcosa* sullo schermo invece di una pagina bianca. "Prima pittura veloce" significa che il contenuto appare quasi subito.
 - **SEO** (*Search Engine Optimization*): quanto bene una pagina si fa **trovare e catalogare dai motori di ricerca** come Google. I motori mandano in giro dei programmi automatici, i **crawler**, che visitano le pagine e ne leggono il contenuto per indicizzarle; se un crawler non riesce a leggere il testo, la pagina viene indicizzata male. "SEO piena" vuol dire che il crawler trova subito tutto il contenuto.
@@ -16,7 +16,7 @@ Due termini tornano in tutte e tre le strategie, quindi conviene chiarirli subit
 
 Nel Client-Side Rendering il server invia un HTML quasi **vuoto** insieme a un file JavaScript, ed è il **browser a costruire il contenuto a runtime**, cioè mentre la pagina è già aperta. Al primo accesso l'utente vede una pagina spoglia finché il JavaScript non è stato scaricato ed eseguito; da quel momento, però, spostarsi tra le pagine è istantaneo, perché avviene tutto nel browser senza ricaricare (è il modello delle **SPA**, *Single Page Application*: una sola pagina che si riscrive da sé invece di scaricarne una nuova a ogni click).
 
-Il pregio è la semplicità: bastano file statici, non serve un server che elabori nulla, e tutta la logica vive in un posto solo. I difetti sono il rovescio della medaglia: la **prima pittura** è più lenta (schermata vuota finché parte il JS), la **SEO** è più debole perché il crawler deve eseguire il JavaScript per vedere il contenuto (Google lo fa, ma più lentamente e in modo meno affidabile, e molti altri crawler non lo fanno affatto), e senza JavaScript non si vede nulla.
+Il pregio è la semplicità: bastano file statici, non serve un server che elabori nulla, e tutta la logica vive in un posto solo. Tra i difetti, la **prima pittura** è più lenta (schermata vuota finché parte il JS), la **SEO** è più debole perché il crawler deve eseguire il JavaScript per vedere il contenuto (Google lo fa, ma più lentamente e in modo meno affidabile, e molti altri crawler non lo fanno affatto), e senza JavaScript non si vede nulla.
 
 Conviene quando SEO e prima pittura non contano: applicazioni **dietro login** come dashboard, gestionali e strumenti interni, oppure siti piccoli e personali dove la semplicità vale più dell'ottimizzazione. docsify (il motore di questo hub) è CSR.
 
@@ -32,7 +32,7 @@ Conviene quando il contenuto è **dinamico e personalizzato** ma deve comunque e
 
 Nella Static Site Generation l'HTML di **ogni** pagina viene pre-generato **una volta sola, quando si pubblica il sito** (la cosiddetta fase di *build*), e il risultato è un insieme di **file statici** già pronti. Spesso il JavaScript idrata comunque le pagine come nell'SSR, così dopo il primo caricamento la navigazione diventa fluida come in una SPA.
 
-Questi file statici si servono da una **CDN** (*Content Delivery Network*): una rete di server sparsi per il mondo il cui unico compito è **consegnare file** (HTML, immagini, CSS, font…) dalla copia più vicina all'utente, in fretta e su larga scala. È diversa da un **server applicativo**, che invece *esegue codice* per costruire la risposta a ogni richiesta, come richiede l'SSR: una CDN non esegue nulla, spedisce e basta, e per questo è più economica, più veloce e più semplice, ma può servire solo contenuto **già pronto**. L'SSG produce esattamente quello, quindi non ha bisogno di alcun server applicativo — bastano dei file su una CDN.
+Questi file statici si servono da una **CDN** (*Content Delivery Network*): una rete di server sparsi per il mondo il cui unico compito è **consegnare file** (HTML, immagini, CSS, font…) dalla copia più vicina all'utente, in fretta e su larga scala. È diversa da un **server applicativo**, che invece *esegue codice* per costruire la risposta a ogni richiesta, come richiede l'SSR: una CDN non esegue nulla, spedisce e basta, e per questo è più economica, più veloce e più semplice, ma può servire solo contenuto **già pronto**. L'SSG produce esattamente quello, quindi non ha bisogno di alcun server applicativo: bastano dei file su una CDN.
 
 I pregi rendono l'SSG lo standard per la documentazione: prima pittura immediata perché l'HTML è già lì, SEO piena perché il crawler legge il testo senza eseguire nulla, pagine leggibili anche senza JavaScript e distribuzione su CDN economica e scalabile. Il limite è che ogni modifica al contenuto richiede una **nuova build**, e che il modello non si adatta a contenuto che cambia per singolo utente o a ogni richiesta, che resta compito dell'SSR.
 

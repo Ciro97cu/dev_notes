@@ -18,7 +18,7 @@ Molti pacchetti hanno un nome **con scope**: un prefisso `@qualcosa/` che li rag
 
 ## NPX
 
-NPX è uno strumento fornito con NPM (dalla versione 5.2.0) per **eseguire** pacchetti. La differenza rispetto a NPM: può eseguire un pacchetto **senza installarlo prima**, utile per strumenti usati una tantum.
+NPX è uno strumento fornito con NPM (dalla versione 5.2.0) per **eseguire** pacchetti. Rispetto a NPM può eseguire un pacchetto **senza installarlo prima**, cosa utile per strumenti usati una tantum.
 
 ```bash
 npx create-vite@latest my-app   # scarica ed esegue create-vite senza installarlo globalmente
@@ -107,12 +107,12 @@ Aggiornare React per tutto il monorepo diventa così **una riga sola** da cambia
 
 Nella stessa `pnpm-workspace.yaml` compaiono spesso altre due voci:
 
-- **`overrides`** — forza una versione precisa in **tutto** l'albero, comprese le dipendenze indirette. Serve quando una libreria annidata trascina una versione che si vuole scavalcare, per esempio per chiudere una falla di sicurezza. La sintassi `genitore>figlio` mira in profondità:
+- **`overrides`**: forza una versione precisa in **tutto** l'albero, comprese le dipendenze indirette. Serve quando una libreria annidata trascina una versione che si vuole scavalcare, per esempio per chiudere una falla di sicurezza. La sintassi `genitore>figlio` mira in profondità:
   ```yaml
   overrides:
     'sonarqube-scanner>axios': '1.11.0'   # axios, ma solo dentro sonarqube-scanner, forzato a 1.11.0
   ```
-- **`allowBuilds`** — decide **quali pacchetti possono eseguire script durante l'installazione**. Alcuni pacchetti hanno script (`postinstall`) che partono appena installati, ad esempio per compilare parti native: comodi, ma anche una porta per codice ostile, perché un pacchetto compromesso potrebbe far girare qualsiasi cosa sulla macchina. Per questo, [dalla versione 10](https://github.com/pnpm/pnpm/releases/tag/v10.0.0), pnpm di default **non li esegue** e pretende una lista esplicita di chi è autorizzato (la voce `allowBuilds` è arrivata con la [10.26](https://github.com/pnpm/pnpm/releases/tag/v10.26.0) e da pnpm 11 sostituisce le vecchie `onlyBuiltDependencies`/`ignoredBuiltDependencies`):
+- **`allowBuilds`**: decide **quali pacchetti possono eseguire script durante l'installazione**. Alcuni pacchetti hanno script (`postinstall`) che partono appena installati, ad esempio per compilare parti native: comodi, ma anche una porta per codice ostile, perché un pacchetto compromesso potrebbe far girare qualsiasi cosa sulla macchina. Per questo, [dalla versione 10](https://github.com/pnpm/pnpm/releases/tag/v10.0.0), pnpm di default **non li esegue** e pretende una lista esplicita di chi è autorizzato (la voce `allowBuilds` è arrivata con la [10.26](https://github.com/pnpm/pnpm/releases/tag/v10.26.0) e da pnpm 11 sostituisce le vecchie `onlyBuiltDependencies`/`ignoredBuiltDependencies`):
   ```yaml
   allowBuilds:
     esbuild: true
@@ -122,9 +122,9 @@ Nella stessa `pnpm-workspace.yaml` compaiono spesso altre due voci:
 
 ## Il registry
 
-Il **registry** è il magazzino online da cui i gestori scaricano i pacchetti e su cui li pubblicano: un archivio di tarball (`.tgz`, vedi sotto) interrogabile per nome e versione. Dietro `npm install react` c'è proprio questo: il gestore chiede al registry il pacchetto `react`, riceve il `.tgz` della versione risolta e lo scompatta in `node_modules`.
+Il **registry** è il magazzino online da cui i gestori scaricano i pacchetti e su cui li pubblicano: un archivio di tarball (`.tgz`, si veda sotto) interrogabile per nome e versione. Dietro `npm install react` c'è proprio questo: il gestore chiede al registry il pacchetto `react`, riceve il `.tgz` della versione risolta e lo scompatta in `node_modules`.
 
-Il punto che spesso sfugge è che **il registry è un servizio a sé, separato dal gestore**. Quello pubblico e predefinito è il **registry npm** (`registry.npmjs.org`), che però non «appartiene» al comando npm: è l'infrastruttura condivisa da cui attingono **tutti** i gestori dell'ecosistema. NPM, Yarn e pnpm sono tre programmi diversi che, di default, scaricano dallo **stesso** magazzino; cambiare gestore non cambia la fonte dei pacchetti. Da qui due strade che nella pratica si incontrano spesso: i registry privati e le alternative al registry pubblico.
+**Il registry è un servizio a sé, separato dal gestore.** Quello pubblico e predefinito è il **registry npm** (`registry.npmjs.org`), che però non «appartiene» al comando npm: è l'infrastruttura condivisa da cui attingono **tutti** i gestori dell'ecosistema. NPM, Yarn e pnpm sono tre programmi diversi che, di default, scaricano dallo **stesso** magazzino; cambiare gestore non cambia la fonte dei pacchetti. Da qui due strade che nella pratica si incontrano spesso: i registry privati e le alternative al registry pubblico.
 
 ### Registry privati e repository manager
 
@@ -138,7 +138,7 @@ Un'azienda ospita di norma un **registry interno** per due bisogni distinti: ten
 
 Qui la scelta è **mirata per scope**: solo i pacchetti `@azienda/*` vanno al registry privato, tutto il resto continua a scaricare da `npmjs.org` come prima. Scrivere invece una riga secca `registry=https://…` cambierebbe la destinazione di **default per ogni** pacchetto, mandando l'intero traffico al privato (che a quel punto fa da unico varco verso l'esterno). Poiché il privato richiede identità, si aggiunge un **token di autenticazione**, anch'esso in `.npmrc` e di solito letto da una variabile d'ambiente per non finire committato in chiaro.
 
-Strumenti come **Nexus** (per esteso *Sonatype Nexus*), **Artifactory** (JFrog) e **Azure Artifacts** appartengono a una stessa categoria, il **repository manager**: un server che fa da hub centrale dei pacchetti dell'organizzazione. Ne assolve tre compiti insieme: **ospita** i pacchetti interni che non devono uscire; fa da **proxy con cache** verso il registry pubblico (alla prima richiesta di una libreria la scarica da `npmjs.org` e ne conserva una copia, così le richieste successive partono dalla rete interna, più veloci e ancora disponibili se il pubblico è irraggiungibile o un pacchetto viene ritirato); e copre **più ecosistemi** con lo stesso strumento (non solo npm, ma anche Maven per Java, immagini Docker, pacchetti Python…).
+Strumenti come **Nexus** (per esteso *Sonatype Nexus*), **Artifactory** (JFrog) e **Azure Artifacts** appartengono a una stessa categoria, il **repository manager**: un server che fa da hub centrale dei pacchetti dell'organizzazione. Ne assolve tre compiti insieme: **ospita** i pacchetti interni che non devono uscire; fa da **proxy con cache** verso il registry pubblico (alla prima richiesta di una libreria la scarica da `npmjs.org` e ne conserva una copia, così le richieste successive partono dalla rete interna, più veloci e ancora disponibili se il pubblico è irraggiungibile o un pacchetto viene ritirato); e copre **più ecosistemi** con lo stesso strumento (oltre a npm, anche Maven per Java, immagini Docker, pacchetti Python…).
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 700 250" role="img" aria-label="Un registry privato (Nexus) sta tra chi installa e il registry pubblico: riceve le richieste indirizzate dal file .npmrc, serve i pacchetti interni dell'azienda che ospita direttamente, e per tutti gli altri fa da proxy con cache verso il registry npm pubblico." style="width:100%;max-width:680px;height:auto;color:inherit">
@@ -170,7 +170,7 @@ Il registry pubblico non è immune da problemi (pacchetti compromessi, versioni 
 
 ## NVM
 
-**nvm** (*Node Version Manager*) è uno strumento per installare e gestire **più versioni di Node.js** sulla stessa macchina, passando dall'una all'altra secondo il progetto. Il problema che risolve è concreto: Node evolve con major version che portano breaking change (Node 18, 20, 22 hanno API diverse) e un progetto avviato anni fa può essere incompatibile con le versioni più recenti, mentre i progetti nuovi vogliono le ultime funzionalità. Con nvm si installa ciascuna versione in modo isolato e si sceglie quale è attiva, senza che le versioni si calpestino tra loro.
+**nvm** (*Node Version Manager*) è uno strumento per installare e gestire **più versioni di Node.js** sulla stessa macchina, passando dall'una all'altra secondo il progetto. Serve perché Node evolve con major version che portano breaking change (Node 18, 20, 22 hanno API diverse) e un progetto avviato anni fa può essere incompatibile con le versioni più recenti, mentre i progetti nuovi vogliono le ultime funzionalità. Con nvm si installa ciascuna versione in modo isolato e si sceglie quale è attiva, senza che le versioni si calpestino tra loro.
 
 A differenza di un programma normale, nvm **non è un eseguibile**: è una **funzione di shell** caricata nel profilo (`.zshrc` o `.bashrc`) che, quando invocata, modifica `$PATH` nella shell corrente per puntare alla cartella `~/.nvm/versions/node/<versione>/bin` della versione scelta. Questo ha una conseguenza pratica: `nvm use` vale **solo per la shell in cui lo si invoca**; aprire un nuovo terminale riporta alla versione di *default*. Inoltre, siccome Node è installato nella home dell'utente e non in una cartella di sistema, `npm install -g` funziona **senza `sudo`**, ed è una delle ragioni per cui nvm è raccomandato come setup di base.
 
@@ -223,5 +223,5 @@ npm install ./util-auth-1.0.0.tgz
 ```
 
 > [!tip]
-> Cosa c'è **dentro** (`tar -tzf file.tgz` per sbirciare senza estrarre): l'**output di build** (JavaScript già transpilato, spesso *bundlato*, con i tipi `.d.ts`), **non** il sorgente originale del developer. E di norma **non** è minificato: la minificazione è compito del bundler dell'*applicazione* finale (vedi [Minificazione e ottimizzazione](docs/react.md?id=minificazione-e-ottimizzazione)), non della libreria. A volte un pacchetto include anche i *source map* per risalire al sorgente, a volte no.
+> Cosa c'è **dentro** (`tar -tzf file.tgz` per sbirciare senza estrarre): l'**output di build** (JavaScript già transpilato, spesso *bundlato*, con i tipi `.d.ts`), **non** il sorgente originale del developer. E di norma **non** è minificato: la minificazione è compito del bundler dell'*applicazione* finale (si veda [Minificazione e ottimizzazione](docs/react.md?id=minificazione-e-ottimizzazione)), non della libreria. A volte un pacchetto include anche i *source map* per risalire al sorgente, a volte no.
 

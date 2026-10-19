@@ -3,20 +3,20 @@
 
 Un **design pattern** è una soluzione collaudata a un problema **ricorrente** di progettazione del software: non un pezzo di codice da copiare, ma uno *schema* riutilizzabile che descrive come organizzare classi e oggetti per risolvere quel problema. Il riferimento storico è il libro della **Gang of Four** (GoF, 1994), che ne cataloga 23 in tre famiglie:
 
-- **Creazionali** — riguardano *come si creano* gli oggetti (Singleton, Factory Method, Builder…).
-- **Strutturali** — *come si compongono* in strutture più grandi (Adapter, Decorator, Facade…).
-- **Comportamentali** — *come collaborano e si distribuiscono le responsabilità* (Observer, Strategy…).
+- **Creazionali**: riguardano *come si creano* gli oggetti (Singleton, Factory Method, Builder…).
+- **Strutturali**: *come si compongono* in strutture più grandi (Adapter, Decorator, Facade…).
+- **Comportamentali**: *come collaborano e si distribuiscono le responsabilità* (Observer, Strategy…).
 
 > [!tip]
-> Molti pattern GoF oggi sono "invisibili" perché **incorporati** nel linguaggio o nel framework: l'Iterator è il `for...of`, l'Observer sono gli event listener e i signal, la Strategy è spesso solo una funzione passata come argomento. Conoscerli serve comunque a **dare un nome** a soluzioni che già si usano — e a comunicarle con una parola sola.
+> Molti pattern GoF oggi sono "invisibili" perché **incorporati** nel linguaggio o nel framework: l'Iterator è il `for...of`, l'Observer sono gli event listener e i signal, la Strategy è spesso solo una funzione passata come argomento. Conoscerli serve comunque a **dare un nome** a soluzioni che già si usano, e a comunicarle con una parola sola.
 
-Di seguito i pattern più comuni. Per ciascuno: l'idea in breve, un'analogia, il **problema** concreto che affronta (con il codice *prima*) e la **soluzione** che il pattern introduce (il codice *dopo*). Per il catalogo completo, con diagrammi ed esempi in più linguaggi, il riferimento è [refactoring.guru](https://refactoring.guru/design-patterns/catalog).
+Per ciascuno dei pattern più comuni si riportano l'idea in breve, un'analogia, il **problema** concreto che affronta (con il codice *prima*) e la **soluzione** che il pattern introduce (il codice *dopo*). Per il catalogo completo, con diagrammi ed esempi in più linguaggi, il riferimento è [refactoring.guru](https://refactoring.guru/design-patterns/catalog).
 
 ### Singleton *(creazionale)*
 
 Garantisce che di una classe esista **una sola istanza** condivisa in tutta l'applicazione, con un punto di accesso unico a essa.
 
-**Analogia**: il governo di uno Stato — ce n'è uno solo, e tutti sanno come raggiungerlo.
+**Analogia**: il governo di uno Stato, che è uno solo e che tutti sanno come raggiungere.
 
 ❗ **Il problema**: serve una singola configurazione condivisa, ma se ogni modulo fa `new Config()` si ottengono **copie scollegate**: una modifica su una non si riflette sulle altre.
 
@@ -42,7 +42,7 @@ Config.get().tema = "scuro";
 Config.get().tema; // "scuro" — è sempre lo stesso identico oggetto
 ```
 
-⚠️ Oggi è spesso considerato un **anti-pattern**: è stato globale mascherato, accoppia tutto a `Config.get()` e complica i test (non si può sostituire con una versione finta). I framework moderni preferiscono la **dependency injection** — un servizio registrato una volta sola e **iniettato** dove serve (cioè la *Dependency Inversion* di SOLID). Esempio completo nel vault TypeScript: <a href="../typescript/#/docs/16-oop" target="_blank" rel="noopener">Programmazione a oggetti</a>.
+⚠️ Oggi è spesso considerato un **anti-pattern**: è stato globale mascherato, accoppia tutto a `Config.get()` e complica i test (non si può sostituire con una versione finta). I framework moderni preferiscono la **dependency injection**: un servizio registrato una volta sola e **iniettato** dove serve (cioè la *Dependency Inversion* di SOLID). Esempio completo nel vault TypeScript: <a href="../typescript/#/docs/16-oop" target="_blank" rel="noopener">Programmazione a oggetti</a>.
 
 ### Factory Method *(creazionale)*
 
@@ -80,7 +80,7 @@ Costruisce un oggetto complesso **un pezzo alla volta**, con metodi che si conca
 
 **Analogia**: comporre un panino da asporto scegliendo un ingrediente per volta, invece di elencarli tutti in un'unica ordinazione.
 
-❗ **Il problema**: un costruttore con molti parametri (spesso facoltativi) diventa illeggibile e fragile — non si capisce cosa sia cosa, e i valori "vuoti" vanno passati comunque, nell'ordine giusto.
+❗ **Il problema**: un costruttore con molti parametri (spesso facoltativi) diventa illeggibile e fragile, perché non si capisce cosa sia cosa, e i valori "vuoti" vanno passati comunque, nell'ordine giusto.
 
 ```ts
 // prima ❌ — cosa sono null, true, 30? e per saltarne uno bisogna comunque metterlo
@@ -132,9 +132,9 @@ pagamenti.paga(19.9); // per cambiare fornitore basta scrivere un altro adapter
 
 Aggiunge funzionalità a un oggetto **avvolgendolo** in un altro che espone la **stessa interfaccia**: ogni strato aggiunge qualcosa e delega il resto all'oggetto che avvolge.
 
-**Analogia**: vestirsi a strati — maglietta, poi maglione, poi giacca: ognuno aggiunge qualcosa e si può togliere in modo indipendente.
+**Analogia**: vestirsi a strati (maglietta, poi maglione, poi giacca): ognuno aggiunge qualcosa e si può togliere in modo indipendente.
 
-❗ **Il problema**: servono combinazioni di funzionalità opzionali — un flusso di dati che può essere compresso, cifrato, entrambi, in qualunque ordine. Con la sola ereditarietà servirebbe una sottoclasse per ogni combinazione: un'esplosione.
+❗ **Il problema**: servono combinazioni di funzionalità opzionali, come un flusso di dati che può essere compresso, cifrato o entrambi, in qualunque ordine. Con la sola ereditarietà servirebbe una sottoclasse per ogni combinazione, e il loro numero esploderebbe.
 
 ```ts
 // prima ❌ — una sottoclasse per ogni combinazione possibile, ingestibile
@@ -155,13 +155,13 @@ flusso.scrivi(dati);               // cifra → comprime → scrive su file
 È *composition over inheritance* in azione: capacità assemblate a strati invece di gerarchie rigide.
 
 > [!warning]
-> Da non confondere con i **decorator del linguaggio** (`@log`) di TypeScript/JavaScript: sono ispirati a questa idea ma sono una feature sintattica a sé. Vedi <a href="../typescript/#/docs/29-decorators" target="_blank" rel="noopener">Decorators</a> nel vault TypeScript.
+> Da non confondere con i **decorator del linguaggio** (`@log`) di TypeScript/JavaScript: sono ispirati a questa idea ma sono una feature sintattica a sé. Sono trattati in <a href="../typescript/#/docs/29-decorators" target="_blank" rel="noopener">Decorators</a> nel vault TypeScript.
 
 ### Facade *(strutturale)*
 
 Offre un'**interfaccia unica e semplice** verso un sottosistema complesso, nascondendone le parti interne al **cliente**.
 
-**Analogia**: il pulsante "avvia" di un'automobile — dietro c'è un sistema complicato, ma si preme un solo bottone.
+**Analogia**: il pulsante "avvia" di un'automobile, che nasconde un sistema complicato dietro un solo bottone da premere.
 
 ❗ **Il problema**: per convertire un video il cliente dovrebbe conoscere e coordinare a mano decine di classi (codec, tracce audio, bitrate…), nell'ordine esatto. Troppa complessità esposta, e ogni cliente la ripete.
 
@@ -188,7 +188,7 @@ new VideoConverter().converti(file, "mp4"); // il cliente vede soltanto questo
 
 ### Observer *(comportamentale)*
 
-Prima il gergo: il **subject** (il "soggetto osservato") è l'oggetto il cui stato cambia; gli **observer** (osservatori) sono gli oggetti interessati a quei cambiamenti. Il pattern: il subject tiene una lista di observer e, quando cambia, li **notifica** tutti — senza sapere chi siano né cosa faranno.
+Il **subject** (il "soggetto osservato") è l'oggetto il cui stato cambia; gli **observer** (osservatori) sono gli oggetti interessati a quei cambiamenti. Nel pattern, il subject tiene una lista di observer e, quando cambia, li **notifica** tutti, senza sapere chi siano né cosa faranno.
 
 **Analogia**: un canale YouTube (il *subject*) e i suoi iscritti (gli *observer*). A ogni nuovo video tutti gli iscritti ricevono la notifica; il canale non conosce i singoli iscritti, si limita a "pubblicare".
 

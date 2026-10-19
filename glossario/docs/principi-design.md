@@ -6,13 +6,13 @@ Linee guida per scrivere codice manutenibile: gli acronimi che riassumono le buo
 
 Cinque principi di design per il codice **object-oriented** (raccolti da Robert C. Martin) per renderlo più manutenibile, estensibile e testabile:
 
-- **S — Single Responsibility**: una classe ha **una sola responsabilità**, cioè un solo motivo per cambiare. Invece di accorpare tutto in `class User { save() {} sendEmail() {} }`, si separano le responsabilità in `User`, `UserRepository` (persistenza) e `Mailer` (invio).
-- **O — Open/Closed**: aperta all'**estensione**, chiusa alla **modifica**, cioè si aggiunge comportamento senza riscrivere quello esistente. Invece di uno switch come `if (s.tipo === 'cerchio') … else if (s.tipo === 'quadrato') …`, conviene che ogni forma implementi `area()`, così una forma nuova si aggiunge senza toccare il codice esistente.
-- **L — Liskov Substitution**: un sottotipo deve poter **sostituire** il tipo base senza rompere la correttezza del programma. Un `class Penguin extends Bird { fly() { throw } }` viola il principio, perché conviene non ereditare `fly()` quando il pinguino non vola.
-- **I — Interface Segregation**: meglio interfacce **piccole e mirate** che una grande e generica, perché un client non deve dipendere da metodi che non usa. Invece di un'unica `interface Machine { print(); scan(); fax(); }`, si separano `Printer`, `Scanner` e `Fax`.
-- **D — Dependency Inversion**: dipendere da **astrazioni**, non da implementazioni concrete, con alto e basso livello che dipendono entrambi da un'interfaccia. È il principio dietro la **dependency injection**: invece di istanziare `new EmailSender()` dentro la classe, si inietta il servizio con un `constructor(sender: MessageSender)`.
+- **S (Single Responsibility)**: una classe ha **una sola responsabilità**, cioè un solo motivo per cambiare. Invece di accorpare tutto in `class User { save() {} sendEmail() {} }`, si separano le responsabilità in `User`, `UserRepository` (persistenza) e `Mailer` (invio).
+- **O (Open/Closed)**: aperta all'**estensione**, chiusa alla **modifica**, cioè si aggiunge comportamento senza riscrivere quello esistente. Invece di uno switch come `if (s.tipo === 'cerchio') … else if (s.tipo === 'quadrato') …`, conviene che ogni forma implementi `area()`, così una forma nuova si aggiunge senza toccare il codice esistente.
+- **L (Liskov Substitution)**: un sottotipo deve poter **sostituire** il tipo base senza rompere la correttezza del programma. Un `class Penguin extends Bird { fly() { throw } }` viola il principio, perché conviene non ereditare `fly()` quando il pinguino non vola.
+- **I (Interface Segregation)**: meglio interfacce **piccole e mirate** che una grande e generica, perché un client non deve dipendere da metodi che non usa. Invece di un'unica `interface Machine { print(); scan(); fax(); }`, si separano `Printer`, `Scanner` e `Fax`.
+- **D (Dependency Inversion)**: dipendere da **astrazioni**, non da implementazioni concrete, con alto e basso livello che dipendono entrambi da un'interfaccia. È il principio dietro la **dependency injection**: invece di istanziare `new EmailSender()` dentro la classe, si inietta il servizio con un `constructor(sender: MessageSender)`.
 
-Sono linee guida, non dogmi: si applicano dove riducono davvero la complessità.
+Sono linee guida da applicare dove riducono davvero la complessità.
 
 ## DRY (Don't Repeat Yourself)
 

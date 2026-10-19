@@ -21,7 +21,7 @@ La **cifratura**, infine, rende il dato illeggibile **in modo reversibile, ma so
 
 La **cifratura simmetrica** usa **una sola chiave** sia per chiudere sia per aprire: chi cifra e chi decifra devono condividere lo stesso segreto. Lo standard di riferimento è **AES** (*Advanced Encryption Standard*), adottato dal NIST con lo standard [FIPS 197](https://csrc.nist.gov/pubs/fips/197/final): lavora su blocchi di 128 bit con chiavi da 128, 192 o 256 bit (AES-128, AES-192, AES-256). È veloce, spesso accelerato direttamente dal processore, e per questo cifra quasi tutto: dischi, file, e il traffico HTTPS una volta aperta la connessione.
 
-Il suo limite storico non è la robustezza ma la **distribuzione della chiave**: per comunicare con qualcuno bisogna fargli arrivare la chiave senza che nessuno la intercetti. È il problema che risolve la cifratura asimmetrica, più avanti. Inoltre AES da solo trasforma un blocco di 16 byte alla volta; per cifrare un messaggio intero si usa una *modalità di funzionamento* (*mode of operation*), e la più usata oggi è GCM.
+Il limite storico di AES, che pure è robusto, è la **distribuzione della chiave**: per comunicare con qualcuno bisogna fargli arrivare la chiave senza che nessuno la intercetti. È il problema che risolve la cifratura asimmetrica, più avanti. Inoltre AES da solo trasforma un blocco di 16 byte alla volta; per cifrare un messaggio intero si usa una *modalità di funzionamento* (*mode of operation*), e la più usata oggi è GCM.
 
 ## AES-GCM: IV e tag di autenticazione
 

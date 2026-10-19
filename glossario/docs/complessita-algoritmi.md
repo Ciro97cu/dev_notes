@@ -6,14 +6,14 @@ Come si misura il **costo** di un algoritmo al crescere dei dati, e la forma di 
 
 La **Big O notation** è il modo standard per descrivere **come cresce** il costo di un algoritmo (il tempo di esecuzione o la memoria) al crescere della dimensione dell'input *n*. Non misura i secondi (che dipendono dalla macchina), ma l'**ordine di grandezza** con cui il lavoro aumenta: risponde alla domanda "**come scala** quando i dati diventano tanti?".
 
-Per farlo ignora i dettagli che non contano sui grandi numeri — le costanti moltiplicative e i termini di ordine inferiore. Un algoritmo che compie `3n + 10` passi è semplicemente **O(n)**: per *n* grande, il `3` e il `+ 10` non ne cambiano la sostanza. Di norma la notazione esprime il **caso peggiore**, cioè un limite superiore garantito.
+Per farlo ignora i dettagli che non contano sui grandi numeri: le costanti moltiplicative e i termini di ordine inferiore. Un algoritmo che compie `3n + 10` passi è semplicemente **O(n)**: per *n* grande, il `3` e il `+ 10` non ne cambiano la sostanza. Di norma la notazione esprime il **caso peggiore**, cioè un limite superiore garantito.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 480 290" role="img" aria-label="Curve di crescita delle classi di complessità Big O, dalla costante O(1) all'esponenziale O(2 alla n)" style="width:100%;max-width:480px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif" fill="currentColor"><path d="M56 250 L56 40" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M56 37 L52 47 L60 47 Z" fill="currentColor"/><path d="M56 250 L398 250" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M401 250 L393 245 L393 255 Z" fill="currentColor"/><text x="46" y="32" font-size="9.5" opacity=".7">operazioni</text><text x="226" y="276" font-size="9.5" text-anchor="middle" opacity=".7">n (dimensione dell'input)</text><path d="M56 240 L392 240" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="243" font-size="10">O(1)</text><path d="M56 250 C 110 205, 240 180, 392 170" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="173" font-size="10">O(log n)</text><path d="M56 250 L392 132" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="135" font-size="10">O(n)</text><path d="M56 250 C 190 195, 300 145, 392 100" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="103" font-size="10">O(n log n)</text><path d="M56 250 C 230 245, 330 155, 392 66" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="400" y="69" font-size="10">O(n²)</text><path d="M56 250 C 95 250, 122 130, 150 46" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="150" y="40" font-size="10" text-anchor="middle">O(2ⁿ)</text></g></svg>
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Come cresce il numero di operazioni al crescere di <em>n</em>: più la curva sale ripida, peggio "scala" l'algoritmo. <strong>O(1)</strong> resta piatta, mentre <strong>O(n²)</strong> e soprattutto <strong>O(2ⁿ)</strong> esplodono. Contano la <em>forma</em> della crescita, non le costanti.</figcaption>
 </figure>
 
-Le classi che si incontrano più spesso, dalla più efficiente alla peggiore — e che aspetto hanno nel codice:
+Le classi che si incontrano più spesso, dalla più efficiente alla peggiore, hanno nel codice questo aspetto:
 
 ```js
 // O(1) — costante: il costo non dipende da n
@@ -40,7 +40,7 @@ La differenza è enorme: con *n* = 1000, un algoritmo O(n) fa mille passi, uno O
 
 ### Nel frontend
 
-Non è teoria astratta: la differenza tra O(n) e O(n²) è quella tra una lista che scorre liscia e una che "impunta". Il caso più comune è cercare dati correlati *dentro* un ciclo — un `find` (o `includes`) annidato in un `map`:
+La differenza tra O(n) e O(n²) è quella tra una lista che scorre liscia e una che "impunta". Il caso più comune è cercare dati correlati *dentro* un ciclo, come un `find` (o `includes`) annidato in un `map`:
 
 ```js
 // O(n²): per ogni item ri-scorre TUTTI gli utenti
@@ -59,29 +59,29 @@ items.map(i => byId.get(i.userId));
 Due altri punti dove Big O guida le scelte del frontend:
 
 - **I framework confrontano il DOM in O(n), non alla lettera.** Un confronto esatto tra due alberi sarebbe O(n³); React e Angular usano euristiche **O(n)**, e le `key` nelle liste servono proprio a rendere lineare quel confronto.
-- **Liste molto lunghe → virtualizzazione.** Rendere *N* nodi nel DOM costa O(n) in tempo e memoria: oltre un certo *N* si rende solo la porzione visibile (*windowing*), tenendo il costo quasi costante a schermo.
+- **Le liste molto lunghe vanno virtualizzate.** Rendere *N* nodi nel DOM costa O(n) in tempo e memoria: oltre un certo *N* si rende solo la porzione visibile (*windowing*), tenendo il costo quasi costante a schermo.
 
 ### O, Ω e Θ: la famiglia completa
 
-Big O non è però sola: fa parte di una famiglia di tre notazioni asintotiche, che limitano la crescita da lati diversi.
+Big O fa parte di una famiglia di tre notazioni asintotiche, che limitano la crescita da lati diversi.
 
 | Notazione | Limita | In parole |
 |---|---|---|
-| **O** (Big O) | **dall'alto** | "non cresce più di…" — il caso peggiore |
-| **Ω** (Big Omega) | **dal basso** | "non cresce meno di…" — il caso migliore |
-| **Θ** (Big Theta) | **da entrambi** | "cresce esattamente come…" — quando O e Ω coincidono |
+| **O** (Big O) | **dall'alto** | "non cresce più di…" (il caso peggiore) |
+| **Ω** (Big Omega) | **dal basso** | "non cresce meno di…" (il caso migliore) |
+| **Θ** (Big Theta) | **da entrambi** | "cresce esattamente come…" (quando O e Ω coincidono) |
 
 Nella pratica si cita quasi sempre solo **Big O**, perché di un algoritmo interessa soprattutto la garanzia sul **caso peggiore**.
 
 > [!tip]
-> Piccolo abuso diffuso: spesso si scrive "O(n)" intendendo che l'algoritmo cresce *esattamente* come *n* — che formalmente è **Θ(n)**. Big O è solo il tetto (per dire, `n log n` è comunque O(n²), pur crescendo molto meno); ma nell'uso quotidiano "Big O" ha finito per significare, più liberamente, "l'ordine di crescita" e basta.
+> Piccolo abuso diffuso: spesso si scrive "O(n)" intendendo che l'algoritmo cresce *esattamente* come *n*, cosa che formalmente si indica con **Θ(n)**. Big O è solo il tetto (per dire, `n log n` è comunque O(n²), pur crescendo molto meno); ma nell'uso quotidiano "Big O" ha finito per significare, più liberamente, "l'ordine di crescita" e basta.
 
 ## Ricorsione
 
 Una funzione **ricorsiva** è una funzione che, per risolvere un problema, **chiama sé stessa** su una versione più piccola dello stesso problema, fino ad arrivare a un caso abbastanza semplice da risolvere direttamente. Ogni funzione ricorsiva ha perciò due parti obbligatorie:
 
-- il **caso base** — la condizione che ferma la ricorsione (senza, la funzione si richiamerebbe all'infinito fino a esaurire la memoria: *stack overflow*);
-- il **caso ricorsivo** — la chiamata a sé stessa su un input ridotto, che avvicina al caso base.
+- il **caso base**, cioè la condizione che ferma la ricorsione (senza, la funzione si richiamerebbe all'infinito fino a esaurire la memoria: *stack overflow*);
+- il **caso ricorsivo**, cioè la chiamata a sé stessa su un input ridotto, che avvicina al caso base.
 
 ```js
 const fact = (n) => n <= 1 ? 1 : n * fact(n - 1);
@@ -97,4 +97,4 @@ fact(3); // 3 * fact(2) → 3 * 2 * fact(1) → 3 * 2 * 1 = 6
 La ricorsione è spesso il modo più naturale di descrivere problemi e strutture *auto-simili* (alberi, file system, algoritmi divide-et-impera). Non è però gratis: ogni chiamata occupa spazio sullo stack, e se una chiamata ne genera più d'una il costo può esplodere.
 
 > [!tip]
-> Quando ogni chiamata ne fa **più di una**, le chiamate formano un *albero* che si allarga: è il caso del Fibonacci ingenuo (`fib(n-1) + fib(n-2)`), la cui ricorsione ramificata costa **O(2ⁿ)** — vedi [Big O notation](docs/complessita-algoritmi.md?id=big-o-notation). Molte ricorsioni si possono riscrivere in forma **iterativa** (con un ciclo) quando lo stack o le prestazioni diventano un problema.
+> Quando ogni chiamata ne fa **più di una**, le chiamate formano un *albero* che si allarga: è il caso del Fibonacci ingenuo (`fib(n-1) + fib(n-2)`), la cui ricorsione ramificata costa **O(2ⁿ)** (si veda [Big O notation](docs/complessita-algoritmi.md?id=big-o-notation)). Molte ricorsioni si possono riscrivere in forma **iterativa** (con un ciclo) quando lo stack o le prestazioni diventano un problema.

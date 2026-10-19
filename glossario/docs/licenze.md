@@ -2,7 +2,7 @@
 
 Una **licenza software** è il testo legale che stabilisce **cosa si può fare** con un pezzo di codice: usarlo, modificarlo, ridistribuirlo, incorporarlo in un prodotto commerciale, e a quali condizioni. È il documento che trasforma del codice pubblicato in codice *utilizzabile* da altri, perché senza una licenza esplicita vale la regola di default del diritto d'autore: **«tutti i diritti riservati»**. Codice messo online senza licenza non è «libero»: nessuno può legalmente copiarlo, modificarlo o ridistribuirlo, anche se il sorgente è visibile su GitHub.
 
-La distinzione che conta più di ogni altra non è tra le singole licenze, ma tra due **famiglie** con filosofie opposte: le licenze **permissive** e quelle **copyleft**.
+La distinzione che conta più di ogni altra separa due **famiglie** con filosofie opposte: le licenze **permissive** e quelle **copyleft**.
 
 ## Permissive vs copyleft
 
@@ -21,7 +21,7 @@ Le permissive si assomigliano molto: cambiano i dettagli, non la sostanza («fai
 
 - **MIT** è la più diffusa in assoluto, adottata da React, Angular, Vue, Node.js e dalla grande maggioranza dei pacchetti npm. È lunga una decina di righe: concede uso, copia, modifica e vendita, a patto di riprodurre l'avviso di copyright, e declina ogni garanzia. La sua brevità e chiarezza sono il motivo del suo successo.
 - **ISC** è funzionalmente equivalente a MIT, con un testo ancora più asciutto (rimuove due clausole ritenute ridondanti). È la licenza di default che npm propone quando si crea un pacchetto con `npm init`.
-- **BSD** esiste in due varianti comuni: la **2-clause** (di fatto come MIT) e la **3-clause**, che aggiunge il divieto di usare il nome degli autori per promuovere prodotti derivati senza permesso (clausola *no-endorsement*).
+- **BSD** esiste in due varianti comuni: la **2-clause** (in pratica come MIT) e la **3-clause**, che aggiunge il divieto di usare il nome degli autori per promuovere prodotti derivati senza permesso (clausola *no-endorsement*).
 - **Apache 2.0** è permissiva ma più strutturata e pensata per l'uso aziendale: include una **concessione esplicita di brevetto** (chi contribuisce non può poi far causa agli utenti per i brevetti sul codice donato) e obbliga a segnalare le modifiche. La usano progetti come Kubernetes, Android e TypeScript.
 
 ## Il copyleft: la famiglia GPL
@@ -29,7 +29,7 @@ Le permissive si assomigliano molto: cambiano i dettagli, non la sostanza («fai
 La **GPL** (*GNU General Public License*), nata nel progetto GNU di Richard Stallman, è la licenza copyleft per eccellenza. Le sue varianti si distinguono per **quanto forte** è l'obbligo di reciprocità.
 
 - **GPLv2** è la versione storica, del 1991: chi ridistribuisce un derivato deve rilasciarlo a sua volta sotto GPL, con il sorgente disponibile. Il **kernel Linux** è (e resta) su GPLv2.
-- **GPLv3** (2007) rafforza la GPLv2 su tre fronti: chiude la *tivoizzazione* (hardware che gira software GPL ma ne impedisce tecnicamente la modifica), aggiunge tutele esplicite sui **brevetti** e migliora la compatibilità con altre licenze. Proprio il passaggio a GPLv3 spiega un fatto concreto: Apple ha **congelato bash** alla versione 3.2.57 (l'ultima GPLv2) e ha scelto **zsh** come shell predefinita di macOS, perché non voleva distribuire software GPLv3 col sistema. La storia per esteso è in <a href="../terminale/#/docs/02-shell-sh-bash-zsh" target="_blank" rel="noopener">Terminale · Le shell</a>.
+- **GPLv3** (2007) rafforza la GPLv2 su tre fronti: chiude la *tivoizzazione* (hardware che gira software GPL ma ne impedisce tecnicamente la modifica), aggiunge tutele esplicite sui **brevetti** e migliora la compatibilità con altre licenze. Il passaggio a GPLv3 spiega anche perché Apple ha **congelato bash** alla versione 3.2.57 (l'ultima GPLv2) e ha scelto **zsh** come shell predefinita di macOS: non voleva distribuire software GPLv3 col sistema. La storia per esteso è in <a href="../terminale/#/docs/02-shell-sh-bash-zsh" target="_blank" rel="noopener">Terminale · Le shell</a>.
 - **LGPL** (*Lesser* GPL) è un copyleft **debole** pensato per le **librerie**: si può **collegare** (linkare) una libreria LGPL da un programma proprietario senza che l'intero programma diventi GPL; l'obbligo di condividere riguarda solo le modifiche **alla libreria** stessa.
 - **AGPL** (*Affero* GPL) chiude quella che viene chiamata la «scappatoia SaaS»: la GPL scatta sulla **ridistribuzione**, ma un servizio web non distribuisce nulla, gira sui server di chi lo offre. L'AGPL estende l'obbligo anche all'**uso in rete**: se si offre come servizio un software AGPL modificato, si devono rendere disponibili le proprie modifiche agli utenti. Per questo molte aziende la vietano nelle dipendenze. La usava, storicamente, MongoDB.
 

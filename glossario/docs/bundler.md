@@ -4,17 +4,17 @@ Strumenti che raccolgono i moduli di un progetto e le sue dipendenze e ne produc
 
 ## Cos'è un bundler
 
-Un **bundler** è lo strumento che prende il codice sorgente di un progetto — decine o migliaia di file, più le librerie installate in `node_modules` — e ne ricava **pochi file ottimizzati** da mandare al browser. Parte da uno o più **entry point**, segue tutti gli `import` per ricostruire il **grafo dei moduli** (quale file dipende da quale), risolve dove vive fisicamente ogni dipendenza e riscrive il tutto in output che un browser sa caricare.
+Un **bundler** è lo strumento che prende il codice sorgente di un progetto (decine o migliaia di file, più le librerie installate in `node_modules`) e ne ricava **pochi file ottimizzati** da mandare al browser. Parte da uno o più **entry point**, segue tutti gli `import` per ricostruire il **grafo dei moduli** (quale file dipende da quale), risolve dove vive fisicamente ogni dipendenza e riscrive il tutto in output che un browser sa caricare.
 
 È nato da una mancanza concreta: fino al 2015 il browser **non aveva un sistema di moduli**, quindi non c'era modo di dichiarare che un file dipende da un altro se non ordinando a mano i `<script>` nella pagina. In più le librerie pubblicate su npm erano scritte in [CommonJS](docs/moduli-e-bundling.md?id=commonjs), un formato che il browser non capisce. Il bundler risolveva entrambe le cose in un colpo: metteva le dipendenze nell'ordine giusto e le traduceva in qualcosa di eseguibile.
 
 Oggi i moduli nativi ci sono, ma il bundler resta, perché nel frattempo ha smesso di essere un semplice «incollatore di file». Le sue responsabilità tipiche sono:
 
-- **risoluzione** — stabilire a quale file corrisponde ogni `import`, incluse le regole con cui npm cerca dentro `node_modules`;
-- **trasformazione** — tradurre ciò che il browser non esegue (TypeScript, JSX, Sass), da sé o delegando a un [transpiler](docs/transpiler.md);
-- **ottimizzazione** — [tree-shaking](docs/moduli-e-bundling.md?id=tree-shaking), minificazione e [code-splitting](docs/moduli-e-bundling.md?id=lazy-loading);
-- **asset** — trattare immagini, font e CSS come moduli, aggiungendo al nome un hash del contenuto perché la cache del browser sappia quando il file è cambiato;
-- **dev server** — servire il progetto in sviluppo aggiornando la pagina a ogni modifica.
+- **risoluzione**: stabilire a quale file corrisponde ogni `import`, incluse le regole con cui npm cerca dentro `node_modules`;
+- **trasformazione**: tradurre ciò che il browser non esegue (TypeScript, JSX, Sass), da sé o delegando a un [transpiler](docs/transpiler.md);
+- **ottimizzazione**: [tree-shaking](docs/moduli-e-bundling.md?id=tree-shaking), minificazione e [code-splitting](docs/moduli-e-bundling.md?id=lazy-loading);
+- **asset**: trattare immagini, font e CSS come moduli, aggiungendo al nome un hash del contenuto perché la cache del browser sappia quando il file è cambiato;
+- **dev server**: servire il progetto in sviluppo aggiornando la pagina a ogni modifica.
 
 Da qui la differenza con un **transpiler**, che è la confusione più frequente. Il transpiler traduce **un file per volta** e non sa nulla di come i file si colleghino fra loro; il bundler ragiona sul **grafo dell'intero progetto** e decide cosa finisce in quale file. Sono compiti complementari, tanto che un bundler chiama spesso un transpiler al proprio interno, e diversi strumenti recenti fanno entrambe le cose.
 
@@ -45,11 +45,11 @@ Non è uno strumento che di solito si installa a mano: lo si incontra perché **
 
 [Vite](https://vite.dev/) è anzitutto un modo diverso di intendere lo sviluppo. In fase di *dev* non impacchetta quasi nulla: sfrutta i **moduli nativi** del browser e serve i file su richiesta, così l'avvio è immediato anche su progetti grandi e resta tale al crescere del codice. Per la produzione, invece, un bundle serve ancora, e lì fa il lavoro pieno.
 
-Il cambiamento importante è recente. Fino alla versione 7 Vite usava **due** strumenti — esbuild per pre-elaborare le dipendenze in sviluppo e Rollup per la build di produzione. Con **Vite 8, stabile dal 12 marzo 2026**, entrambi sono stati sostituiti da **Rolldown**, un unico bundler in Rust che copre sviluppo e produzione, con build dichiarate fino a 10-30 volte più rapide e compatibilità piena con i plugin esistenti. È l'evoluzione architetturale più profonda dai tempi di Vite 2. Come si usa Vite in un progetto (dev server, build di produzione, configurazione, variabili d'ambiente, plugin) è spiegato nel <a href="../node/#/docs/06-bundler" target="_blank" rel="noopener">vault Node, capitolo 06</a>.
+Il cambiamento importante è recente. Fino alla versione 7 Vite usava **due** strumenti: esbuild per pre-elaborare le dipendenze in sviluppo e Rollup per la build di produzione. Con **Vite 8, stabile dal 12 marzo 2026**, entrambi sono stati sostituiti da **Rolldown**, un unico bundler in Rust che copre sviluppo e produzione, con build dichiarate fino a 10-30 volte più rapide e compatibilità piena con i plugin esistenti. È l'evoluzione architetturale più profonda dai tempi di Vite 2. Come si usa Vite in un progetto (dev server, build di produzione, configurazione, variabili d'ambiente, plugin) è spiegato nel <a href="../node/#/docs/06-bundler" target="_blank" rel="noopener">vault Node, capitolo 06</a>.
 
 ## esbuild
 
-[esbuild](https://esbuild.github.io/) è scritto in **Go** e ha un solo obiettivo dichiarato: la velocità, con margini di uno o due ordini di grandezza sui bundler in JavaScript. Fa sia trasformazione (TypeScript, JSX) sia bundling, ma offre meno estensibilità e meno opzioni dei concorrenti storici — è un compromesso voluto.
+[esbuild](https://esbuild.github.io/) è scritto in **Go** e ha un solo obiettivo dichiarato: la velocità, con margini di uno o due ordini di grandezza sui bundler in JavaScript. Fa sia trasformazione (TypeScript, JSX) sia bundling, ma, per un compromesso voluto, offre meno estensibilità e meno opzioni dei concorrenti storici.
 
 Per questo lo si trova spesso **dentro** altri strumenti invece che usato da solo: chi costruisce una toolchain lo adotta come motore e ci mette sopra la propria interfaccia. È il caso della Angular CLI, come si vede più sotto.
 
@@ -59,7 +59,7 @@ Per questo lo si trova spesso **dentro** altri strumenti invece che usato da sol
 
 ## Parcel e Turbopack
 
-Due strumenti che si incontrano in contesti più delimitati. [Parcel](https://parceljs.org/) punta sulla configurazione **zero**: riconosce da sé i tipi di file e imposta una pipeline ragionevole senza che si scriva nulla, il che lo rende comodo per prototipi e progetti piccoli. [Turbopack](https://nextjs.org/docs/app/api-reference/turbopack) è il bundler in Rust sviluppato da Vercel per **Next.js**: dalla versione 16 è **stabile e predefinito sia per `next dev` sia per `next build`**, e webpack vi è rimasto solo come scelta esplicita — a tal punto che una configurazione webpack personalizzata fa fallire la build, per non lasciarla passare inosservata. Di fatto non lo si adotta: lo si usa perché si usa Next.js.
+Due strumenti che si incontrano in contesti più delimitati. [Parcel](https://parceljs.org/) punta sulla configurazione **zero**: riconosce da sé i tipi di file e imposta una pipeline ragionevole senza che si scriva nulla, il che lo rende comodo per prototipi e progetti piccoli. [Turbopack](https://nextjs.org/docs/app/api-reference/turbopack) è il bundler in Rust sviluppato da Vercel per **Next.js**: dalla versione 16 è **stabile e predefinito sia per `next dev` sia per `next build`**, e webpack vi è rimasto solo come scelta esplicita, a tal punto che una configurazione webpack personalizzata fa fallire la build, per non lasciarla passare inosservata. Lo si usa, quindi, perché si usa Next.js.
 
 ## Quale scegliere
 
@@ -78,11 +78,11 @@ Nella pratica la scelta è raramente libera, perché il bundler arriva insieme a
 
 ## Il bundler nel mondo Angular
 
-Angular non espone un bundler, lo incapsula in un **builder** della CLI, e negli ultimi anni lo ha cambiato. Il builder predefinito è `application` (nel pacchetto `@angular/build`, storicamente `@angular-devkit/build-angular`), e sotto usa **due strumenti con ruoli distinti**: **esbuild** per il build di produzione e **Vite** solo come **dev server** per `ng serve`. È una distinzione che vale la pena tenere a mente, perché si sente spesso dire che «Angular è passato a Vite»: in realtà chi impacchetta l'applicazione è esbuild, mentre Vite serve i file mentre si sviluppa.
+Angular non espone un bundler, lo incapsula in un **builder** della CLI, e negli ultimi anni lo ha cambiato. Il builder predefinito è `application` (nel pacchetto `@angular/build`, storicamente `@angular-devkit/build-angular`), e sotto usa **due strumenti con ruoli distinti**: **esbuild** per il build di produzione e **Vite** solo come **dev server** per `ng serve`. La distinzione conta perché si sente spesso dire che «Angular è passato a Vite», mentre chi impacchetta l'applicazione è esbuild e Vite serve i file durante lo sviluppo.
 
-Il vecchio builder `browser`, basato su **webpack**, è **deprecato** dalla v17 e sopravvive solo per non rompere i progetti non ancora migrati — con migrazione automatica proposta dalla v18. Le **librerie** seguono un percorso a parte: si impacchettano con **ng-packagr** secondo l'Angular Package Format, che per generare i bundle FESM si appoggiava a Rollup e nelle versioni recenti è passato a esbuild.
+Il vecchio builder `browser`, basato su **webpack**, è **deprecato** dalla v17 e sopravvive solo per non rompere i progetti non ancora migrati; dalla v18 viene proposta una migrazione automatica. Le **librerie** seguono un percorso a parte: si impacchettano con **ng-packagr** secondo l'Angular Package Format, che per generare i bundle FESM si appoggiava a Rollup e nelle versioni recenti è passato a esbuild.
 
-Sul [Module Federation](docs/moduli-e-bundling.md?id=module-federation) la strada di Angular è divergente: invece di dipendere da webpack, l'ecosistema ha adottato la **Native Federation**, che riproduce la stessa idea sugli standard del web per restare compatibile con la toolchain esbuild — il tema è trattato in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">ch18 · Micro Frontends</a>.
+Sul [Module Federation](docs/moduli-e-bundling.md?id=module-federation) la strada di Angular è divergente: invece di dipendere da webpack, l'ecosistema ha adottato la **Native Federation**, che riproduce la stessa idea sugli standard del web per restare compatibile con la toolchain esbuild. Il tema è trattato in <a href="../angular/#/capitoli/18-micro-frontends" target="_blank" rel="noopener">ch18 · Micro Frontends</a>.
 
 > [!tip]
 > Riferimenti: <a href="https://angular.dev/tools/cli/build-system-migration" target="_blank" rel="noopener">Angular · Build system migration</a>, <a href="https://angular.dev/tools/libraries/angular-package-format" target="_blank" rel="noopener">Angular Package Format</a>, <a href="https://vite.dev/blog/announcing-vite8" target="_blank" rel="noopener">Vite 8</a>, <a href="https://webpack.js.org/blog/2026-02-04-roadmap-2026/" target="_blank" rel="noopener">webpack · Roadmap 2026</a>, <a href="https://rspack.rs/" target="_blank" rel="noopener">Rspack</a>.

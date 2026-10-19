@@ -1,6 +1,6 @@
 # Privacy, cookie e consenso
 
-Sono quelle pagine e quei popup che compaiono su quasi ogni sito: il **banner dei cookie** ("Accetta / Rifiuta / Preferenze"), la **Privacy Policy** e la **Cookie Policy**. Non è una moda né una scelta di design: è **conformità legale alla privacy** (in inglese *privacy & cookie compliance*). In Unione Europea la materia è retta da due norme: il **GDPR** (*General Data Protection Regulation*, il regolamento generale sulla protezione dei dati) e la **direttiva ePrivacy**, nota come *cookie law*. In sintesi: prima di raccogliere dati personali o di installare cookie non indispensabili, il sito deve **informare** l'utente e, dove serve, **chiedere il consenso**.
+Sono quelle pagine e quei popup che compaiono su quasi ogni sito: il **banner dei cookie** ("Accetta / Rifiuta / Preferenze"), la **Privacy Policy** e la **Cookie Policy**. Servono alla **conformità legale alla privacy** (in inglese *privacy & cookie compliance*). In Unione Europea la materia è retta da due norme: il **GDPR** (*General Data Protection Regulation*, il regolamento generale sulla protezione dei dati) e la **direttiva ePrivacy**, nota come *cookie law*. Prima di raccogliere dati personali o di installare cookie non indispensabili, il sito deve **informare** l'utente e, dove serve, **chiedere il consenso**.
 
 Il popup di consenso lo gestisce di solito un **CMP** (*Consent Management Platform*, es. Cookiebot, Iubenda, OneTrust): un componente che mostra il banner, registra la scelta e blocca o sblocca gli script di conseguenza.
 
@@ -10,12 +10,12 @@ Un **cookie** è un piccolo file che il sito salva nel browser per ricordarsi qu
 
 | Categoria | A cosa servono | Serve il consenso? |
 | --- | --- | --- |
-| **Tecnici / necessari** | Far funzionare il sito: login, sessione, carrello, sicurezza | **No** — sono indispensabili |
+| **Tecnici / necessari** | Far funzionare il sito: login, sessione, carrello, sicurezza | **No**: sono indispensabili |
 | **Preferenze / funzionali** | Ricordare scelte non essenziali (lingua, tema) | Dipende (spesso sì) |
 | **Statistici / analytics** | Misurare le visite (es. Google Analytics) | **Sì** (salvo eccezioni per analytics anonimizzati) |
 | **Marketing / profilazione** | Pubblicità mirata, tracciamento tra siti | **Sì**, sempre |
 
-Regola pratica da ricordare: **i cookie tecnici non chiedono permesso; tutto ciò che profila o traccia, sì.**
+In pratica **i cookie tecnici non chiedono permesso; tutto ciò che profila o traccia, sì.**
 
 ## Il cookie banner
 
@@ -83,7 +83,7 @@ Il pulsante "Preferenze" apre un pannello dove l'utente sceglie **categoria per 
 
 ## La Privacy Policy (informativa privacy)
 
-È la pagina che spiega, in modo trasparente, **come il sito tratta i dati personali**. Il GDPR impone che contenga alcune informazioni obbligatorie: non è un testo libero, ma una sorta di "scheda tecnica" del trattamento dei dati.
+È la pagina che spiega, in modo trasparente, **come il sito tratta i dati personali**. Il GDPR impone che contenga alcune informazioni obbligatorie, quindi funziona come una sorta di "scheda tecnica" del trattamento dei dati.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 600 372" role="img" aria-label="Anatomia di una pagina di privacy policy" style="width:100%;max-width:520px;height:auto">
@@ -128,7 +128,7 @@ Le voci che non possono mancare:
 
 ## E i "Termini di servizio"?
 
-Da non confondere: i **Termini di servizio** (*Terms of Service* / *Termini e condizioni*) sono il **contratto d'uso** del sito — regole, responsabilità, cosa è permesso e cosa no. Riguardano l'uso del servizio, non i dati personali. Privacy Policy e Cookie Policy parlano di **dati**; i Termini parlano di **regole d'uso**.
+Da non confondere: i **Termini di servizio** (*Terms of Service* / *Termini e condizioni*) sono il **contratto d'uso** del sito (regole, responsabilità, cosa è permesso e cosa no). Riguardano le **regole d'uso** del servizio, mentre Privacy Policy e Cookie Policy parlano di **dati** personali.
 
 ## Lato sviluppatore: come si implementa
 
@@ -137,11 +137,11 @@ Qui il tema tocca chi scrive il codice, perché il consenso ha effetti tecnici c
 - gli script che installano cookie non necessari (Google Analytics, pixel di Meta, tag pubblicitari) **non vanno caricati subito**: si caricano **solo dopo** che l'utente ha acconsentito a quella categoria. Prima del consenso restano bloccati.
 - la scelta dell'utente va **memorizzata** (di solito in un cookie tecnico o in `localStorage`) così il banner non riappare a ogni pagina, e va offerto un modo per **revocarla**.
 - strumenti come **Google Consent Mode** fanno sì che i tag Google si adattino automaticamente allo stato del consenso; nel mondo pubblicitario lo standard di scambio del consenso è l'**IAB TCF** (*Transparency & Consent Framework*), che codifica le scelte in una stringa di consenso.
-- collegamento con la sicurezza: i cookie hanno attributi che li rendono più sicuri — `Secure` (solo su HTTPS), `HttpOnly` (non leggibili da JavaScript, contro l'XSS) e `SameSite` (contro il CSRF), quest'ultimo già incontrato nella nota su [CORS](docs/web-browser.md).
+- collegamento con la sicurezza: i cookie hanno attributi che li rendono più sicuri, cioè `Secure` (solo su HTTPS), `HttpOnly` (non leggibili da JavaScript, contro l'XSS) e `SameSite` (contro il CSRF), quest'ultimo già incontrato nella nota su [CORS](docs/web-browser.md).
 
 > [!tip]
-> Il filo da ricordare: **informare + consenso preventivo per ciò che non è necessario**. Il banner è la richiesta di consenso, la Privacy/Cookie Policy sono l'informativa; il consenso si può sempre **rifiutare** (facile come accettarlo) e **revocare**.
+> Il principio è **informare + consenso preventivo per ciò che non è necessario**. Il banner è la richiesta di consenso, la Privacy/Cookie Policy sono l'informativa; il consenso si può sempre **rifiutare** (facile come accettarlo) e **revocare**.
 
-Fonti: [Testo del GDPR](https://gdpr-info.eu/) · [Garante Privacy — linee guida cookie](https://www.garanteprivacy.it/cookie) · [MDN — HTTP cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies).
+Fonti: [Testo del GDPR](https://gdpr-info.eu/) · [Garante Privacy: linee guida cookie](https://www.garanteprivacy.it/cookie) · [MDN: HTTP cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies).
 
 Collegamenti: [Web, browser e rete](docs/web-browser.md) (cookie `SameSite`, CORS) · [HTTP: codici di stato](docs/http-status.md).
