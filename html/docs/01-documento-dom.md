@@ -8,7 +8,7 @@ tags: [tipo/modulo, fondamenti]
 
 HTML (*HyperText Markup Language*) è il linguaggio che dà **struttura e significato** al contenuto di una pagina web: non descrive come le cose *appaiono* (quello è compito del CSS) né cosa *fanno* (quello è JavaScript) ma **cos'è** ciascun pezzo di contenuto (un titolo, un paragrafo, un elenco, un'immagine). È il fondamento su cui gli altri due si appoggiano: senza una struttura chiara, stile e comportamento non hanno appigli solidi.
 
-La divisione dei ruoli è netta e conviene tenerla a mente da subito: **HTML** dà la struttura, **CSS** la presentazione ([si veda il vault CSS](../css/)), **JavaScript** il comportamento. Tenere separate le tre cose è ciò che rende una pagina manutenibile.
+La divisione dei ruoli è netta e conviene tenerla a mente da subito: **HTML** dà la struttura, **CSS** la presentazione (<a href="../css/" target="_blank" rel="noopener">si veda il vault CSS</a>), **JavaScript** il comportamento. Tenere separate le tre cose è ciò che rende una pagina manutenibile.
 
 ## Lo scheletro di una pagina
 

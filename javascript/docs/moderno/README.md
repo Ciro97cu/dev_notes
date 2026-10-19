@@ -7,23 +7,23 @@ Questa sezione è **distaccata** dalla guida al libro: raccoglie le funzionalit�
 > [!tip]
 > Il modello annuale ha reso l'etichetta di versione meno importante del **supporto effettivo** nell'ambiente target. In pratica si ragiona per singola feature: ogni pagina indica l'edizione in cui la feature è stata standardizzata, ma la maggior parte è disponibile da anni in tutti i motori evergreen (V8, SpiderMonkey, JavaScriptCore) e in Node.js recente.
 
-Se termini come **Stage 4**, *finished proposals* o **TC39** non sono familiari, la pagina [Il processo TC39 e gli stage](processo-tc39.md) spiega chi governa il linguaggio, cosa sono gli stage e come si segue una proposta sul web.
+Se termini come **Stage 4**, *finished proposals* o **TC39** non sono familiari, la pagina [Il processo TC39 e gli stage](/docs/moderno/processo-tc39.md) spiega chi governa il linguaggio, cosa sono gli stage e come si segue una proposta sul web.
 
 ## Le edizioni
 
 | Edizione | Anno | Temi principali |
 |---|---|---|
-| [ES2017](es2017.md) | ES8 | `async`/`await`, `Object.entries`/`values`, string padding, `SharedArrayBuffer`/`Atomics` |
-| [ES2018](es2018.md) | ES9 | async iteration, `Promise.finally`, spread/rest su oggetti, novità RegExp |
-| [ES2019](es2019.md) | ES10 | `Array.flat`/`flatMap`, `Object.fromEntries`, `trimStart`/`trimEnd`, sort stabile |
-| [ES2020](es2020.md) | ES11 | `BigInt`, optional chaining `?.`, nullish `??`, `Promise.allSettled`, dynamic `import()`, `globalThis` |
-| [ES2021](es2021.md) | ES12 | `Promise.any`, logical assignment, separatori numerici, `replaceAll`, `WeakRef` |
-| [ES2022](es2022.md) | ES13 | class fields e private `#`, static block, top-level `await`, `.at()`, `Object.hasOwn`, `Error.cause` |
-| [ES2023](es2023.md) | ES14 | `findLast`/`findLastIndex`, metodi *change-by-copy*, hashbang, Symbol come chiavi WeakMap |
-| [ES2024](es2024.md) | ES15 | `Object.groupBy`/`Map.groupBy`, `Promise.withResolvers`, RegExp flag `v`, resizable `ArrayBuffer` |
-| [ES2025](es2025.md) | ES16 | iterator helpers, metodi di `Set`, import attributes, `Promise.try`, `RegExp.escape`, `Float16Array` |
-| [ES2026](es2026.md) | ES17 | upsert (`getOrInsert`), `Iterator.concat`, `Array.fromAsync`, `Error.isError`, `Math.sumPrecise`, `JSON.rawJSON`, `Uint8Array` ↔ Base64 |
-| [ES2027](es2027.md) | ES18 | *in preparazione*: `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause`, `chunks`/`windows`/`includes`/`join` sugli iteratori |
+| [ES2017](/docs/moderno/es2017.md) | ES8 | `async`/`await`, `Object.entries`/`values`, string padding, `SharedArrayBuffer`/`Atomics` |
+| [ES2018](/docs/moderno/es2018.md) | ES9 | async iteration, `Promise.finally`, spread/rest su oggetti, novità RegExp |
+| [ES2019](/docs/moderno/es2019.md) | ES10 | `Array.flat`/`flatMap`, `Object.fromEntries`, `trimStart`/`trimEnd`, sort stabile |
+| [ES2020](/docs/moderno/es2020.md) | ES11 | `BigInt`, optional chaining `?.`, nullish `??`, `Promise.allSettled`, dynamic `import()`, `globalThis` |
+| [ES2021](/docs/moderno/es2021.md) | ES12 | `Promise.any`, logical assignment, separatori numerici, `replaceAll`, `WeakRef` |
+| [ES2022](/docs/moderno/es2022.md) | ES13 | class fields e private `#`, static block, top-level `await`, `.at()`, `Object.hasOwn`, `Error.cause` |
+| [ES2023](/docs/moderno/es2023.md) | ES14 | `findLast`/`findLastIndex`, metodi *change-by-copy*, hashbang, Symbol come chiavi WeakMap |
+| [ES2024](/docs/moderno/es2024.md) | ES15 | `Object.groupBy`/`Map.groupBy`, `Promise.withResolvers`, RegExp flag `v`, resizable `ArrayBuffer` |
+| [ES2025](/docs/moderno/es2025.md) | ES16 | iterator helpers, metodi di `Set`, import attributes, `Promise.try`, `RegExp.escape`, `Float16Array` |
+| [ES2026](/docs/moderno/es2026.md) | ES17 | upsert (`getOrInsert`), `Iterator.concat`, `Array.fromAsync`, `Error.isError`, `Math.sumPrecise`, `JSON.rawJSON`, `Uint8Array` ↔ Base64 |
+| [ES2027](/docs/moderno/es2027.md) | ES18 | *in preparazione*: `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause`, `chunks`/`windows`/`includes`/`join` sugli iteratori |
 
 ## Convenzioni
 

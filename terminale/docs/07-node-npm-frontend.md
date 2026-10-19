@@ -1,6 +1,6 @@
 # 07 · Node, npm e il frontend
 
-Per chi lavora nel frontend, il terminale serve soprattutto per **Node** e **npm**. La stragrande maggioranza dei comandi che si digitano ogni giorno (installare le dipendenze, avviare il server di sviluppo, fare la build) passa da qui. Il flusso di lavoro comprende cosa succede quando si installa un pacchetto, come si lanciano gli script del progetto e come si tengono in ordine le versioni di Node. Per la definizione dei singoli termini (npm, npx, nvm, yarn…) il riferimento resta il [glossario](../glossario/#/docs/package-manager); qui interessa il loro **uso da terminale**.
+Per chi lavora nel frontend, il terminale serve soprattutto per **Node** e **npm**. La stragrande maggioranza dei comandi che si digitano ogni giorno (installare le dipendenze, avviare il server di sviluppo, fare la build) passa da qui. Il flusso di lavoro comprende cosa succede quando si installa un pacchetto, come si lanciano gli script del progetto e come si tengono in ordine le versioni di Node. Per la definizione dei singoli termini (npm, npx, nvm, yarn…) il riferimento resta il <a href="../glossario/#/docs/package-manager" target="_blank" rel="noopener">glossario</a>; qui interessa il loro **uso da terminale**.
 
 **Node** è l'ambiente che esegue JavaScript fuori dal browser (è ciò che fa girare gli strumenti di sviluppo), e **npm** (*Node Package Manager*) è il suo gestore di pacchetti, quello che scarica le librerie e lancia gli script. Installando Node si ottiene automaticamente anche npm.
 
@@ -15,7 +15,7 @@ Un progetto frontend dichiara le librerie che usa in un file **`package.json`**,
 | `npm install -D <pkg>` | aggiunge una dipendenza di **sviluppo** (`devDependencies`: build, test, linter) |
 | `npm uninstall <pkg>` | rimuove una dipendenza |
 
-Il `package.json` distingue le **`dependencies`** (servono al codice quando gira) dalle **`devDependencies`** (servono solo in sviluppo o in build: bundler, linter, framework di test). La cartella `node_modules` può diventare enorme e **non si mette sotto versione**: la si ignora nel `.gitignore` (si veda il vault [Git](../git/#/05-gitignore)), perché è ricostruibile in ogni momento con `npm install` a partire da `package.json`.
+Il `package.json` distingue le **`dependencies`** (servono al codice quando gira) dalle **`devDependencies`** (servono solo in sviluppo o in build: bundler, linter, framework di test). La cartella `node_modules` può diventare enorme e **non si mette sotto versione**: la si ignora nel `.gitignore` (si veda il vault <a href="../git/#/05-gitignore" target="_blank" rel="noopener">Git</a>), perché è ricostruibile in ogni momento con `npm install` a partire da `package.json`.
 
 ## Gli script: il pane quotidiano
 

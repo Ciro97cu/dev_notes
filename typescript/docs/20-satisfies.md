@@ -93,7 +93,7 @@ Si può riassumere così: `: Tipo` fissa il tipo e allarga il valore, `as Tipo` 
 
 ## Combinazione con as const
 
-`satisfies` si combina spesso con `as const`, trattato nel capitolo sul [type casting](19-casting.md). Con `as const` il valore diventa profondamente `readonly` e i suoi tipi si restringono ai literal; aggiungendo `satisfies` si verifica al tempo stesso che quel valore rispetti un contratto, senza perdere la precisione dei literal.
+`satisfies` si combina spesso con `as const`, trattato nel capitolo sul [type casting](/docs/19-casting.md). Con `as const` il valore diventa profondamente `readonly` e i suoi tipi si restringono ai literal; aggiungendo `satisfies` si verifica al tempo stesso che quel valore rispetti un contratto, senza perdere la precisione dei literal.
 
 ```ts
 const rotte = {

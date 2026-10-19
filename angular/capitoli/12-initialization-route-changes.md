@@ -79,7 +79,7 @@ export class ConfigService {
 ```
 
 > [!warning]
-> Un application initializer **ritarda il primo render** e può far sembrare lo startup lento. Se i dati servono solo a una feature specifica, conviene caricarli in modo [[glossario#lazy-loading|lazy]] (solo quando servono davvero, es. all'attivazione della rotta, via [[#Resolver]]) invece di bloccare l'intera app.
+> Un application initializer **ritarda il primo render** e può far sembrare lo startup lento. Se i dati servono solo a una feature specifica, conviene caricarli in modo [[glossario#lazy-loading|lazy]] (solo quando servono davvero, es. all'attivazione della rotta, via [[12-initialization-route-changes#resolver|Resolver]]) invece di bloccare l'intera app.
 
 ### Environment Initializers
 > p.332

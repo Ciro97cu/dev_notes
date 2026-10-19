@@ -73,7 +73,7 @@ Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine
 - **Stage 3 (2021)**: la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo, circa **cinque anni**, per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai <a href="../glossario/#/docs/date-calendari-tempo" target="_blank" rel="noopener">calendari non gregoriani</a>).
 - **Stage 4 (11 marzo 2026)**: due implementazioni superano i test di conformità, la pull request alla specifica è approvata e `Temporal` è ufficialmente nello standard ([Igalia](https://www.igalia.com/2026/03/13/Temporal-Reaches-Stage-4.html)). La chiusura di ES2026 era però già passata, quindi la sua edizione è **ES2027**. Poco dopo, Node.js 26 lo abilita di default.
 
-**La soluzione.** Dall'idea allo standard sono passati nove anni, segno che lo Stage 4 è una garanzia seria. Il risultato è l'API descritta nella pagina di [ES2027](es2027.md): immutabile, con i mesi che partono da 1 e supporto nativo a fusi orari e calendari.
+**La soluzione.** Dall'idea allo standard sono passati nove anni, segno che lo Stage 4 è una garanzia seria. Il risultato è l'API descritta nella pagina di [ES2027](/docs/moderno/es2027.md): immutabile, con i mesi che partono da 1 e supporto nativo a fusi orari e calendari.
 
 ## Un secondo esempio: `RegExp.escape` e lo Stage 2.7
 
@@ -94,7 +94,7 @@ Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine
 - **Stage 3 (29 luglio 2024)**: scritti i test di conformità (Test262), i motori cominciano a implementarla.
 - **Stage 4 (18 febbraio 2025)**: con più implementazioni già distribuite, la proposta è **finita** ed entra in **ES2025** ([Igalia](https://blogs.igalia.com/compilers/2025/03/27/summary-of-the-february-2025-tc39-plenary/)).
 
-**La soluzione.** Oggi `RegExp.escape("a+b (c)")` restituisce la stringa con i metacaratteri già messi in escape, pronta da passare a `new RegExp(...)` perché cerchi il testo *letterale* (la specifica, per prudenza, mette in escape anche il primo carattere e gli spazi). Dettagli ed esempi nella pagina di [ES2025](es2025.md).
+**La soluzione.** Oggi `RegExp.escape("a+b (c)")` restituisce la stringa con i metacaratteri già messi in escape, pronta da passare a `new RegExp(...)` perché cerchi il testo *letterale* (la specifica, per prudenza, mette in escape anche il primo carattere e gli spazi). Dettagli ed esempi nella pagina di [ES2025](/docs/moderno/es2025.md).
 
 ## Cosa determina la durata: `Temporal` contro `RegExp.escape`
 
@@ -129,7 +129,7 @@ Il punto di partenza è un unico repository su GitHub: **`github.com/tc39/propos
 
 La pagina principale (il `README`) elenca in **tabelle** le proposte dallo Stage 2 in su, con colonne come *Proposal*, *Author* (chi l'ha proposta), *Champion* e i *Test262 flag*. Le proposte più acerbe (Stage 0 e 1) stanno in file separati; quelle **finite** sono in **`finished-proposals.md`**, con indicata l'**edizione** in cui sono entrate; quelle abbandonate in `inactive-proposals.md`. Inoltre **ogni** proposta ha un proprio repository, chiamato `tc39/proposal-‹nome›`, il cui `README` indica in alto lo stage corrente.
 
-Un esempio concreto, `Temporal` (la nuova API per le date vista nella pagina di [ES2027](es2027.md)): cercando "temporal" si arriva al repository `tc39/proposal-temporal`, il cui README dichiara **Stage 4**; e infatti la si ritrova in `finished-proposals.md`, con anno di pubblicazione **2027**. Quindi è ufficiale, fa parte dello standard, e si sa anche in quale edizione comparirà.
+Un esempio concreto, `Temporal` (la nuova API per le date vista nella pagina di [ES2027](/docs/moderno/es2027.md)): cercando "temporal" si arriva al repository `tc39/proposal-temporal`, il cui README dichiara **Stage 4**; e infatti la si ritrova in `finished-proposals.md`, con anno di pubblicazione **2027**. Quindi è ufficiale, fa parte dello standard, e si sa anche in quale edizione comparirà.
 
 ## Attenzione: lo stage non è il supporto nei browser
 

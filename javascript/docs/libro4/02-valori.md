@@ -341,7 +341,7 @@ Un array sparso ha slot "vuoti", cioè indici che non sono mai stati assegnati e
 <details>
 <summary>Perché non si può invertire una stringa con `Array.prototype.reverse.call(str)`?</summary>
 
-Perché le stringhe sono **immutabili**: non possono essere modificate in-place. `reverse()` è un metodo mutante che modifica il valore originale sul posto. Applicarlo a una stringa (tramite borrowing) non lancia un errore, ma non ha effetto sulla stringa originale: restituisce un oggetto `String` wrapper per la stringa originale non modificata. Il workaround standard (`split("").reverse().join("")`) funziona perché converte la stringa in un array di caratteri (mutable), inverte l'array, e ricrea la stringa. Non funziona però con caratteri Unicode multibyte.
+Perché le stringhe sono **immutabili**: non possono essere modificate in-place. `reverse()` è un metodo mutante che modifica il valore originale sul posto. Applicarlo a una stringa (tramite borrowing) oggi lancia un `TypeError`, perché le posizioni di una stringa sono di sola lettura e `reverse()` prova a riscriverle ([specifica ECMAScript](https://tc39.es/ecma262/#sec-array.prototype.reverse)); i motori dell'epoca del libro restituivano invece un oggetto `String` con la stringa intatta. Il workaround standard (`split("").reverse().join("")`) funziona perché converte la stringa in un array di caratteri (mutable), inverte l'array, e ricrea la stringa. Non funziona però con caratteri Unicode multibyte.
 
 </details>
 

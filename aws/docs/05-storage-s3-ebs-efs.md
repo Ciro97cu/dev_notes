@@ -120,7 +120,7 @@ Il valore di un dato cala col tempo, e le **lifecycle rule** automatizzano il ri
 <figcaption style="font-size:.82rem;opacity:.72;margin-top:.3rem">Procedendo lungo il ciclo di vita il costo di storage scende e il tempo di recupero cresce. La regola sposta gli oggetti da sé e alla scadenza li elimina.</figcaption>
 </figure>
 
-Due controlli completano il quadro. Il **versioning** conserva ogni versione di un oggetto: una sovrascrittura o una cancellazione non distruggono il dato precedente, che resta recuperabile, ottima difesa contro l'errore umano. La **cifratura a riposo** è attiva di default (**SSE-S3**): ogni nuovo oggetto viene cifrato senza che si debba fare nulla; per un controllo più fine sulle chiavi si sceglie **SSE-KMS**. Infine, un bucket è **privato di default**, e il **Block Public Access** impedisce a policy o ACL di esporlo per errore: renderlo pubblico richiede una decisione esplicita.
+Tre controlli completano il quadro. Il **versioning** conserva ogni versione di un oggetto: una sovrascrittura o una cancellazione non distruggono il dato precedente, che resta recuperabile, ottima difesa contro l'errore umano. La **cifratura a riposo** è attiva di default (**SSE-S3**): ogni nuovo oggetto viene cifrato senza che si debba fare nulla; per un controllo più fine sulle chiavi si sceglie **SSE-KMS**. Infine, un bucket è **privato di default**, e il **Block Public Access** impedisce a policy o ACL di esporlo per errore: renderlo pubblico richiede una decisione esplicita.
 
 ## Amazon EBS: lo storage a blocchi per EC2
 

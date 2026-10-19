@@ -123,7 +123,7 @@ Con un po' di aritmetica si intuisce quanto contano i byte: uno schermo Full HD 
 Come ogni base, anche l'esadecimale ha la sua **tavola dell'addizione**, e si somma con le normali regole del riporto: per esempio `8h + 9h = 11h`, perché otto più nove fa diciassette, cioè un sedici più uno. Farlo a mano richiede un po' di pratica; nella pratica quotidiana conviene la **modalità Programmatore** delle calcolatrici di Windows e macOS, che opera e converte tra binario, ottale, esadecimale e decimale. E per capire davvero cosa succede dentro, il **capitolo 14** costruirà un sommatore a 8 bit fatto di porte logiche.
 
 > [!tip]
-> L'esadecimale non è un sistema "nuovo": è il decimale con quattro cifre in più (A-F). Serve a **una cosa sola**, scrivere i byte in modo compatto: **1 byte = 2 cifre hex** (da `00h` a `FFh`), **2 byte = 4 cifre**, e così via. Ogni gruppo di **4 bit** ↔ **1 cifra hex**.
+> L'esadecimale non è un sistema "nuovo": è il decimale con sei cifre in più (da A a F). Serve a **una cosa sola**, scrivere i byte in modo compatto: **1 byte = 2 cifre hex** (da `00h` a `FFh`), **2 byte = 4 cifre**, e così via. Ogni gruppo di **4 bit** ↔ **1 cifra hex**.
 
 > [!warning]
 > Occhio all'ambiguità delle basi: `57` da solo può essere decimale (cinquantasette) o esadecimale (`57h` = 87 in decimale). Per questo serve un marcatore, qui la `h` finale (`57h`). Le singole cifre no: un `9` vale 9 in ogni base, e una `A` è per forza esadecimale.

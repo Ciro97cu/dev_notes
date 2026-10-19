@@ -10,20 +10,20 @@ Appunti di preparazione alla **certificazione Angular** di [certificates.dev](ht
 > Il vault principale segue *Modern Angular* (standalone, signals, Signal Forms). La cert però testa anche l'**Angular classico**. Qui si copre **solo il gap**: dove un tema è già spiegato nel moderno, non si riscrive ma si rimanda con un callout `> [!info|label:vs Modern]`.
 
 ## Note (Angular classico)
-- [[ngmodules]]: `@NgModule`, feature/shared module, `forRoot`/`forChild`, `CommonModule`/`BrowserModule`
-- [[components-classic]]: `@Input`/`@Output`+`EventEmitter`, `@ViewChild`/`@ContentChild`, lifecycle hooks
-- [[directives-pipes-classic]]: `*ngIf`/`*ngFor`/`*ngSwitch`, directive custom, pipe pure/impure, `async`
-- [[di-classic]]: `@Injectable`, `InjectionToken`, `useClass`/`useValue`/`useFactory`/`useExisting`, resolution modifier
-- [[routing-classic]]: `RouterModule.forRoot`/`forChild`, guard class-based, resolver, `loadChildren` di moduli
-- [[forms-template-driven]]: `FormsModule`, `ngModel`, validazione e stati
-- [[forms-reactive]]: `ReactiveFormsModule`, `FormControl`/`FormGroup`/`FormArray`, `FormBuilder`, validator
-- [[rxjs]]: `Observable`/`Subject`, operator, unsubscribe
-- [[http-classic]]: `HttpClientModule`, `HttpInterceptor` class-based, error handling
-- [[change-detection]]: Zone.js, default vs `OnPush`, `ChangeDetectorRef`
-- [[ngrx-classic]]: Store/Action/Reducer/Effect/Selector (Redux)
-- [[testing-classic]]: `TestBed`, Jasmine/Karma, `HttpTestingController`, spie
-- [[performance]]: `trackBy`, pure pipe, preloading, bundle
-- [[security]]: XSS/sanitization, `DomSanitizer`, XSRF, CSP
+- [[cert/ngmodules|ngmodules]]: `@NgModule`, feature/shared module, `forRoot`/`forChild`, `CommonModule`/`BrowserModule`
+- [[cert/components-classic|components-classic]]: `@Input`/`@Output`+`EventEmitter`, `@ViewChild`/`@ContentChild`, lifecycle hooks
+- [[cert/directives-pipes-classic|directives-pipes-classic]]: `*ngIf`/`*ngFor`/`*ngSwitch`, directive custom, pipe pure/impure, `async`
+- [[cert/di-classic|di-classic]]: `@Injectable`, `InjectionToken`, `useClass`/`useValue`/`useFactory`/`useExisting`, resolution modifier
+- [[cert/routing-classic|routing-classic]]: `RouterModule.forRoot`/`forChild`, guard class-based, resolver, `loadChildren` di moduli
+- [[cert/forms-template-driven|forms-template-driven]]: `FormsModule`, `ngModel`, validazione e stati
+- [[cert/forms-reactive|forms-reactive]]: `ReactiveFormsModule`, `FormControl`/`FormGroup`/`FormArray`, `FormBuilder`, validator
+- [[cert/rxjs|rxjs]]: `Observable`/`Subject`, operator, unsubscribe
+- [[cert/http-classic|http-classic]]: `HttpClientModule`, `HttpInterceptor` class-based, error handling
+- [[cert/change-detection|change-detection]]: Zone.js, default vs `OnPush`, `ChangeDetectorRef`
+- [[cert/ngrx-classic|ngrx-classic]]: Store/Action/Reducer/Effect/Selector (Redux)
+- [[cert/testing-classic|testing-classic]]: `TestBed`, Jasmine/Karma, `HttpTestingController`, spie
+- [[cert/performance|performance]]: `trackBy`, pure pipe, preloading, bundle
+- [[cert/security|security]]: XSS/sanitization, `DomSanitizer`, XSRF, CSP
 
 ## Già nel vault moderno (solo ripasso, non riscritto qui)
 Componenti e control flow, content projection, DI `inject()`, routing moderno e guard funzionali, signals e CD signal-based, interop `toSignal`/`toObservable`, `HttpClient`/`httpResource`, NgRx **Signal** Store, structural directive custom, testing con Vitest, defer/SSR, auth: per tutti questi temi si rimanda ai rispettivi capitoli nel vault ([[00-index]]).

@@ -92,7 +92,7 @@ type Rimasti = Escludi<"a" | "b" | "c", "b">;
 
 ## Ricostruire alcuni utility type
 
-I conditional type con `infer` rivelano la natura di diversi utility type della standard library, illustrati nel [capitolo dedicato](24-utility-types.md). Riscriverli è un esercizio utile per fissarne il meccanismo.
+I conditional type con `infer` rivelano la natura di diversi utility type della standard library, illustrati nel [capitolo dedicato](/docs/24-utility-types.md). Riscriverli è un esercizio utile per fissarne il meccanismo.
 
 ```ts
 // Rimuove null e undefined da un tipo

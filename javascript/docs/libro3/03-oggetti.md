@@ -21,7 +21,7 @@ Le due forme producono oggetti identici. La differenza è che nella forma letter
 
 ## Tipi
 
-JavaScript ha sei tipi primitivi: `string`, `number`, `boolean`, `null`, `undefined` e `object`. I primi cinque **non sono oggetti**: sono primitivi immutabili. `null` restituisce `"object"` da `typeof` per un bug storico del linguaggio, ma è un primitivo a sé stante.
+JavaScript ha sei tipi principali (*primary types*): `string`, `number`, `boolean`, `null`, `undefined` e `object`. I primi cinque **non sono oggetti**: sono primitivi immutabili. `null` restituisce `"object"` da `typeof` per un bug storico del linguaggio, ma è un primitivo a sé stante.
 
 L'affermazione "tutto in JavaScript è un oggetto" è falsa.
 
@@ -94,7 +94,7 @@ arr.length; // 4 — interpretato come indice!
 
 Non esiste un `copy()` built-in perché la semantica non è univoca: shallow copy o deep copy? Come gestire i riferimenti circolari?
 
-**Shallow copy JSON-safe** (solo per oggetti serializzabili):
+**Deep copy JSON-safe** (solo per oggetti serializzabili):
 
 ```js
 var newObj = JSON.parse(JSON.stringify(someObj));
@@ -289,7 +289,7 @@ for (var v of obj) { console.log(v); } // 2, 3
 <details>
 <summary>Perché "tutto in JavaScript è un oggetto" è un'affermazione falsa?</summary>
 
-Perché JavaScript ha sei tipi primitivi (`string`, `number`, `boolean`, `null`, `undefined` e `object`) e solo l'ultimo è un oggetto. I primitivi `string`, `number`, `boolean` hanno wrapper oggetto (`String`, `Number`, `Boolean`) e vengono automaticamente convertiti (autoboxing) quando si tenta di accedere a metodi o proprietà su di essi, ma i valori primitivi stessi non sono oggetti. `null` restituisce `"object"` da `typeof` a causa di un bug storico del linguaggio, ma è un primitivo a sé stante.
+Perché JavaScript ha sei tipi principali (`string`, `number`, `boolean`, `null`, `undefined` e `object`) e solo l'ultimo è un oggetto: gli altri cinque sono primitivi. I primitivi `string`, `number`, `boolean` hanno wrapper oggetto (`String`, `Number`, `Boolean`) e vengono automaticamente convertiti (autoboxing) quando si tenta di accedere a metodi o proprietà su di essi, ma i valori primitivi stessi non sono oggetti. `null` restituisce `"object"` da `typeof` a causa di un bug storico del linguaggio, ma è un primitivo a sé stante.
 
 </details>
 

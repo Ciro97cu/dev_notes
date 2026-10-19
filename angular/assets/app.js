@@ -7,7 +7,10 @@
 window.__VAULT = 'angular';   // chiave per "Riprendi" (angular-last-page)
 
 // Risolve i link Obsidian [[nome]] / [[nome|alias]] in link Docsify (a render-time).
-// [[NN-...]] -> /capitoli/ ; 00-index -> / (home = indice) ; glossario -> /_meta/ ; resto -> /concetti/
+// 00-index -> / (home = indice) ; glossario -> /_meta/ ; [[cartella/nome]] (es. cert/…) -> /cartella/nome ; pagine di cert/ -> /cert/ ;
+// [[NN-...]] -> /capitoli/ ; resto -> /concetti/. 00-index va controllato prima di NN-, che lo catturerebbe.
+// Pagine di cert/ (Angular classico): i loro [[nome]] puntano lì, non a concetti/.
+var CERT_PAGES = ["change-detection", "components-classic", "di-classic", "directives-pipes-classic", "forms-reactive", "forms-template-driven", "http-classic", "ngmodules", "ngrx-classic", "performance", "routing-classic", "rxjs", "security", "testing-classic"];
 function wikilinkPlugin(hook) {
   hook.beforeEach(function (content) {
     // rimuove il frontmatter YAML (--- ... ---) così non viene stampato come testo
@@ -21,8 +24,10 @@ function wikilinkPlugin(hook) {
       var q = anchor ? '?id=' + anchor : '';
       var path;
       if (target === 'glossario') path = '/_meta/glossario.md' + q;
-      else if (/^\d{2}-/.test(target)) path = '/capitoli/' + target + '.md' + q;
       else if (target === '00-index') path = '/';
+      else if (target.indexOf('/') >= 0) path = '/' + target.replace(/^\//, '') + '.md' + q;
+      else if (CERT_PAGES.indexOf(target) >= 0) path = '/cert/' + target + '.md' + q;
+      else if (/^\d{2}-/.test(target)) path = '/capitoli/' + target + '.md' + q;
       else path = '/concetti/' + target + '.md' + q;
       return '[' + text + '](' + path + ')';
     });

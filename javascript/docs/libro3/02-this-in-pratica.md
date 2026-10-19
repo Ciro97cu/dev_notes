@@ -221,7 +221,7 @@ o.foo(); // 3 — implicit binding su o
 
 ## Arrow function e lexical `this`
 
-Le arrow function (`=>`) ignorano completamente le quattro regole. Al posto del binding dinamico, adottano il `this` dello **scope lessicale in cui sono dichiarate**, e questa associazione è immutabile, anche con `new`.
+Le arrow function (`=>`) ignorano completamente le quattro regole. Al posto del binding dinamico, adottano il `this` dello **scope lessicale in cui sono dichiarate**, e questa associazione è immutabile: né `call()`, né `apply()`, né `bind()` la cambiano.
 
 ```js
 function foo() {
@@ -235,6 +235,9 @@ var obj2 = { a: 3 };
 var bar = foo.call(obj1);
 bar.call(obj2); // 2 — non 3! this è fisso su obj1
 ```
+
+> [!info|label:Oggi]
+> YDKJS aggiunge che il legame resta immutabile «anche con `new`». Nella versione definitiva di ES6 le arrow function non sono costruttori: chiamarle con `new` lancia un `TypeError` (`f is not a constructor`), quindi la domanda non si pone ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#cannot_be_used_as_constructors)).
 
 Il caso d'uso tipico è nei callback asincroni, dove si vuole mantenere il `this` del contesto circostante:
 
@@ -312,6 +315,6 @@ Perché `null` e `undefined` come `this` vengono trattati come se non ci fosse n
 <details>
 <summary>In cosa differisce il `this` nelle arrow function rispetto alle funzioni normali?</summary>
 
-Le arrow function non hanno un proprio `this` binding: ignorano completamente le quattro regole standard. Il loro `this` è quello dello **scope lessicale** in cui sono dichiarate, cioè il `this` della funzione (o del contesto globale) che le contiene al momento della loro definizione. Una volta stabilito, questo binding è immutabile: `call`, `apply`, `bind`, e persino `new` non possono sovrascriverlo. Questo le rende utili nei callback asincroni dove si vuole mantenere il `this` del contesto circostante, ma le rende inappropriate per metodi di oggetti o funzioni che richiedono un `this` dinamico.
+Le arrow function non hanno un proprio `this` binding: ignorano completamente le quattro regole standard. Il loro `this` è quello dello **scope lessicale** in cui sono dichiarate, cioè il `this` della funzione (o del contesto globale) che le contiene al momento della loro definizione. Una volta stabilito, questo binding è immutabile: `call`, `apply` e `bind` non possono sovrascriverlo, e `new` non si può nemmeno usare, perché le arrow function non sono costruttori. Questo le rende utili nei callback asincroni dove si vuole mantenere il `this` del contesto circostante, ma le rende inappropriate per metodi di oggetti o funzioni che richiedono un `this` dinamico.
 
 </details>

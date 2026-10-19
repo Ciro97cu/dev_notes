@@ -1,6 +1,6 @@
 # LAB 09 · Connettività privata a S3 con un gateway endpoint
 
-Questo laboratorio crea un **gateway endpoint** per Amazon S3 dentro una VPC, come accennato nel modulo [09](09-edge-networking-hybrid.md) e nel [modulo 03](../docs/03-vpc-network-security.md): un modo di raggiungere S3 **senza uscire su internet**, senza Internet Gateway né NAT. Il gateway endpoint per S3 è **gratuito**, quindi il costo resta zero. Si osserva la rotta privata che l'endpoint aggiunge alla route table.
+Questo laboratorio crea un **gateway endpoint** per Amazon S3 dentro una VPC, come accennato nel modulo [09](../docs/09-edge-networking-hybrid.md) e nel [modulo 03](../docs/03-vpc-network-security.md): un modo di raggiungere S3 **senza uscire su internet**, senza Internet Gateway né NAT. Il gateway endpoint per S3 è **gratuito**, quindi il costo resta zero. Si osserva la rotta privata che l'endpoint aggiunge alla route table.
 
 > [!info|label:SAA-C03 · D3T4 e base D1T2]
 > Esercita la connettività privata verso i servizi AWS con un gateway endpoint, la rotta verso il *prefix list* di S3 e il principio di tenere il traffico dentro la rete AWS. È la controparte «privata» dei collegamenti ibridi.

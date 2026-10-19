@@ -46,7 +46,7 @@ type Gestore = `on${Capitalize<Evento>}`;
 // "onClick" | "onFocus" | "onBlur"
 ```
 
-Come mostrato nel capitolo sui [mapped types](26-mapped-types.md), questa tecnica si combina con la rimappatura delle chiavi per derivare i nomi delle proprietà di un tipo da quelli di un altro.
+Come mostrato nel capitolo sui [mapped types](/docs/26-mapped-types.md), questa tecnica si combina con la rimappatura delle chiavi per derivare i nomi delle proprietà di un tipo da quelli di un altro.
 
 ## Estrarre porzioni con infer
 

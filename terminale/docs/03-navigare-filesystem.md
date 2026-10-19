@@ -15,7 +15,7 @@ Su macOS e Linux tutti i file e le cartelle formano un **unico albero** che part
 
 Per indicare una cartella o un file ci sono due modi, da non confondere fra loro. Un percorso è **assoluto** quando parte dalla radice `/`: descrive la posizione in modo completo e non ambiguo, valido da qualunque punto ci si trovi (per esempio `/Users/ciro/progetti`). Un percorso è **relativo** quando parte dalla **cartella corrente**: è più corto ma il suo significato dipende da dove ci si trova in quel momento. Per esempio `progetti/app` significa «la cartella `app` dentro `progetti`, a partire da qui».
 
-In questo gioco tornano utili tre simboli speciali, che sono scorciatoie per posizioni precise:
+In questo gioco tornano utili quattro simboli speciali, che sono scorciatoie per posizioni precise:
 
 | Simbolo | Significato |
 |---------|-------------|
