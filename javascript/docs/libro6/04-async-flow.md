@@ -1,22 +1,22 @@
 # Controllo del flusso asincrono
 
-L'asincronia è una realtà ineludibile in JavaScript. I callback sono stati il meccanismo storico, ma soffrono di problemi strutturali — inversione del controllo, difficoltà di composizione, gestione degli errori disomogenea. ES6 aggiunge le **Promise** come soluzione al problema della fiducia, e il pattern **generator + Promise** come soluzione al problema della leggibilità.
+L'asincronia è una realtà ineludibile in JavaScript. I callback sono stati il meccanismo storico, ma soffrono di problemi strutturali: inversione del controllo, difficoltà di composizione, gestione degli errori disomogenea. ES6 aggiunge le **Promise** come soluzione al problema della fiducia, e il pattern **generator + Promise** come soluzione al problema della leggibilità.
 
-> Per un'analisi approfondita di callback, Promise e generator asincroni si rimanda a [Async & Performance — Promise](/docs/libro5/03-promises.md) e [Generator](/docs/libro5/04-generators.md). Questo capitolo ne sintetizza l'essenziale e illustra la loro combinazione.
+> Per un'analisi approfondita di callback, Promise e generator asincroni si rimanda a [Async & Performance: Promise](/docs/libro5/03-promises.md) e [Generator](/docs/libro5/04-generators.md). Questo capitolo ne sintetizza l'essenziale e illustra la loro combinazione.
 
 ---
 
 ## Promise
 
-Una Promise **non sostituisce** i callback — li gestisce attraverso un intermediario affidabile. Si può pensare a una Promise in tre modi complementari:
+Una Promise **non sostituisce** i callback: li gestisce attraverso un intermediario affidabile. Si può pensare a una Promise in tre modi complementari:
 
-- **Event listener** che si attiva esattamente una volta, all'completamento di un task
-- **Valore futuro** — un contenitore indipendente dal tempo che, una volta risolto, non cambia più
+- **Event listener** che si attiva esattamente una volta, al completamento di un task
+- **Valore futuro**: un contenitore indipendente dal tempo che, una volta risolto, non cambia più
 - **Versione asincrona del valore di ritorno** di una funzione sincrona
 
 Una Promise si risolve in uno di due stati finali, ognuno con un singolo valore:
-- **fulfilled** (successo) → valore di fulfillment
-- **rejected** (errore) → reason (la motivazione del rifiuto)
+- **fulfilled** (successo), con un valore di fulfillment
+- **rejected** (errore), con una reason (la motivazione del rifiuto)
 
 Una volta risolta, la Promise è immutabile. Tentativi successivi di risolverla di nuovo vengono ignorati.
 
@@ -58,11 +58,11 @@ ajax("url1")
 });
 ```
 
-Un'eccezione nel handler `fulfilled` del primo `then` non viene catturata dall'handler `rejected` dello stesso `then` — viene propagata alla Promise restituita da quel `then`, e da lì al successivo `catch` o handler `rejected`.
+Un'eccezione nel handler `fulfilled` del primo `then` non viene catturata dall'handler `rejected` dello stesso `then`: viene propagata alla Promise restituita da quel `then`, e da lì al successivo `catch` o handler `rejected`.
 
 ### Thenable
 
-Qualsiasi oggetto o funzione con un metodo `then()` viene trattato come un **thenable** — una Promise-like che il sistema Promise tenta di adottare. Il problema: i thenable non sono necessariamente affidabili (possono chiamare il callback più volte, non seguire il contratto, ecc.).
+Qualsiasi oggetto o funzione con un metodo `then()` viene trattato come un **thenable**, cioè una Promise-like che il sistema Promise tenta di adottare. Il problema: i thenable non sono necessariamente affidabili (possono chiamare il callback più volte, non seguire il contratto, ecc.).
 
 La soluzione è passare qualsiasi valore sospetto attraverso `Promise.resolve()`:
 
@@ -185,7 +185,7 @@ async function main() {
 main().then(/* ... */);
 ```
 
-`async function` è fondamentalmente una versione specializzata di un generator controllato dal proprio runner integrato. `await` è `yield` che sa aspettare specificamente le Promise. Si veda il capitolo [ES6 & Beyond — oltre ES6](/docs/libro6/08-oltre-es6.md) per i dettagli.
+`async function` è una versione specializzata di un generator controllato dal proprio runner integrato. `await` è `yield` che sa aspettare specificamente le Promise. Si veda il capitolo [ES6 & Beyond: oltre ES6](/docs/libro6/08-oltre-es6.md) per i dettagli.
 
 ---
 
@@ -238,28 +238,28 @@ async function workflow() {
 <details>
 <summary>In cosa consiste il "problema della fiducia" dei callback che le Promise risolvono?</summary>
 
-Con i callback, si consegna una funzione a una libreria o sistema esterno e si spera che venga chiamata al momento giusto, una sola volta, con gli argomenti corretti. Non esiste un contratto formale che lo garantisca — la libreria potrebbe chiamare il callback più volte, mai, in modo sincrono invece che asincrono, o inghiottire gli errori. Le Promise invertono questo controllo: invece di consegnare un callback, si riceve una Promise che rappresenta il risultato futuro. Il consumatore decide quando e come osservare quel risultato tramite `.then()`. Le Promise garantiscono contrattualmente: risoluzione unica (fulfilled o rejected, mai entrambe), comportamento sempre asincrono (anche se il valore è immediato), propagazione degli errori. `Promise.resolve()` permette di normalizzare anche i thenable non fidati, avvolgendoli in una Promise genuina.
+Con i callback, si consegna una funzione a una libreria o sistema esterno e si spera che venga chiamata al momento giusto, una sola volta, con gli argomenti corretti. Non esiste un contratto formale che lo garantisca: la libreria potrebbe chiamare il callback più volte, mai, in modo sincrono invece che asincrono, o inghiottire gli errori. Le Promise invertono questo controllo: invece di consegnare un callback, si riceve una Promise che rappresenta il risultato futuro. Il consumatore decide quando e come osservare quel risultato tramite `.then()`. Le Promise garantiscono contrattualmente: risoluzione unica (fulfilled o rejected, mai entrambe), comportamento sempre asincrono (anche se il valore è immediato), propagazione degli errori. `Promise.resolve()` permette di normalizzare anche i thenable non fidati, avvolgendoli in una Promise genuina.
 
 </details>
 
 <details>
 <summary>Cosa succede se si lancia un'eccezione dentro il handler <code>fulfilled</code> di un <code>.then()</code>?</summary>
 
-L'eccezione non viene catturata dall'handler `rejected` dello *stesso* `then()` — quel handler risponde solo alla rejection della Promise precedente nella catena. L'eccezione viene invece catturata dalla Promise restituita da quel `then()`, e da lì propagata al successivo `catch()` o all'handler `rejected` del `then()` successivo. In pratica, ogni `then()` produce una nuova Promise che rappresenta il risultato del handler — se il handler lancia, quella Promise viene rigettata con l'eccezione come reason. Questo spiega perché è buona pratica aggiungere un `.catch()` alla fine di ogni catena di Promise: senza, i rejection non osservati vengono silenziosamente ignorati.
+L'eccezione non viene catturata dall'handler `rejected` dello *stesso* `then()`: quel handler risponde solo alla rejection della Promise precedente nella catena. L'eccezione viene invece catturata dalla Promise restituita da quel `then()`, e da lì propagata al successivo `catch()` o all'handler `rejected` del `then()` successivo. In pratica, ogni `then()` produce una nuova Promise che rappresenta il risultato del handler: se il handler lancia, quella Promise viene rigettata con l'eccezione come reason. Questo spiega perché è buona pratica aggiungere un `.catch()` alla fine di ogni catena di Promise: senza, i rejection non osservati vengono silenziosamente ignorati.
 
 </details>
 
 <details>
 <summary>Come funziona il runner che combina generator e Promise?</summary>
 
-Il runner esegue il generator chiamando `it.next()` in un ciclo. Ogni volta che il generator cede (`yield`) una Promise, il runner aspetta la risoluzione di quella Promise (tramite `.then()`). Se la Promise si fulfilla, il runner chiama `it.next(value)` con il valore di fulfillment, che diventa il risultato dell'espressione `yield` nel generator. Se si rigetta, il runner chiama `it.throw(err)`, iniettando l'eccezione nel generator nel punto esatto in cui era pausato — dove può essere catturata con un normale `try/catch`. Quando il generator completa (`done: true`), il runner fulfilla la propria Promise con il valore finale. Questo meccanismo è esattamente ciò che `async/await` automatizza nativamente: `async function` è un generator con runner integrato, e `await` è `yield` specializzato per le Promise.
+Il runner esegue il generator chiamando `it.next()` in un ciclo. Ogni volta che il generator cede (`yield`) una Promise, il runner aspetta la risoluzione di quella Promise (tramite `.then()`). Se la Promise si fulfilla, il runner chiama `it.next(value)` con il valore di fulfillment, che diventa il risultato dell'espressione `yield` nel generator. Se si rigetta, il runner chiama `it.throw(err)`, iniettando l'eccezione nel generator nel punto esatto in cui era pausato, dove può essere catturata con un normale `try/catch`. Quando il generator completa (`done: true`), il runner fulfilla la propria Promise con il valore finale. Questo meccanismo è esattamente ciò che `async/await` automatizza nativamente: `async function` è un generator con runner integrato, e `await` è `yield` specializzato per le Promise.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra <code>Promise.all()</code> e <code>Promise.race()</code>?</summary>
 
-`Promise.all([p1, p2, p3])` implementa un **gate**: aspetta che *tutte* le Promise nell'array si fulfillino, poi si fulfilla con un array dei valori nello stesso ordine. Se anche solo una si rigetta, l'intera `Promise.all` si rigetta immediatamente con quella reason, ignorando le restanti. È utile per operazioni parallele dove servono tutti i risultati. `Promise.race([p1, p2, p3])` implementa un **latch**: si fulfilla o si rigetta con il primo valore che completa, ignorando le restanti. È utile per timeout (race tra l'operazione reale e una Promise che si rigetta dopo N millisecondi). Attenzione: `Promise.race([])` con array vuoto non si risolve mai — a differenza di `Promise.all([])` che si fulfilla immediatamente con `[]`.
+`Promise.all([p1, p2, p3])` implementa un **gate**: aspetta che *tutte* le Promise nell'array si fulfillino, poi si fulfilla con un array dei valori nello stesso ordine. Se anche solo una si rigetta, l'intera `Promise.all` si rigetta immediatamente con quella reason, ignorando le restanti. È utile per operazioni parallele dove servono tutti i risultati. `Promise.race([p1, p2, p3])` implementa un **latch**: si fulfilla o si rigetta con il primo valore che completa, ignorando le restanti. È utile per timeout (race tra l'operazione reale e una Promise che si rigetta dopo N millisecondi). Attenzione: `Promise.race([])` con array vuoto non si risolve mai, a differenza di `Promise.all([])`, che si fulfilla immediatamente con `[]`.
 
 </details>
 

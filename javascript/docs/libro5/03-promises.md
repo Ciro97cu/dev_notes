@@ -1,18 +1,18 @@
 # Promise
 
-Le Promise risolvono i due problemi fondamentali dei callback: la difficoltà cognitiva del flusso non-lineare e l'inversion of control. Anziché passare la continuation a una terza parte sperando che la chiami correttamente, si riceve indietro un oggetto che rappresenta il completamento futuro dell'operazione — e si decide poi, autonomamente, cosa fare con quel risultato.
+Le Promise risolvono i due problemi fondamentali dei callback: la difficoltà cognitiva del flusso non-lineare e l'inversion of control. Anziché passare la continuation a una terza parte sperando che la chiami correttamente, si riceve indietro un oggetto che rappresenta il completamento futuro dell'operazione, e si decide poi, autonomamente, cosa fare con quel risultato.
 
 ---
 
 ## Cos'è una Promise
 
-Una Promise è un **future value** — un segnaposto per un valore che non è ancora disponibile ma lo sarà. Come lo scontrino al ristorante fast-food: non è il panino, ma rappresenta il panino futuro. Si può ragionare su quel valore, pianificare cosa fare quando arriva, e accettare che potrebbe non arrivare (panino esaurito = rejection).
+Una Promise è un **future value**: un segnaposto per un valore che non è ancora disponibile ma lo sarà. Come lo scontrino al ristorante fast-food: non è il panino, ma rappresenta il panino futuro. Si può ragionare su quel valore, pianificare cosa fare quando arriva, e accettare che potrebbe non arrivare (panino esaurito = rejection).
 
 Una Promise ha sempre uno e un solo esito finale:
 - **fulfilled** (risolta con un valore)
 - **rejected** (rifiutata con un motivo)
 
-Una volta risolta, una Promise è **immutabile** — il suo stato non cambia più.
+Una volta risolta, una Promise è **immutabile**: il suo stato non cambia più.
 
 ### Future value e time-independence
 
@@ -51,7 +51,7 @@ p.then(bar);    /* bar è notificato quando foo completa */
 p.then(baz);    /* baz è notificato indipendentemente */
 ```
 
-La stessa Promise può essere osservata da parti diverse del codice — senza che si interferiscano tra loro. Questo è l'**uninversion of control**: il controllo torna al chiamante.
+La stessa Promise può essere osservata da parti diverse del codice, senza che si interferiscano tra loro. Questo è l'**uninversion of control**: il controllo torna al chiamante.
 
 ### Il costruttore revealing constructor
 
@@ -70,7 +70,7 @@ p.then(
 );
 ```
 
-La funzione passata al costruttore viene eseguita **immediatamente** (non in modo async). `resolve()` e `reject()` sono le funzioni di risoluzione. La differenza: `reject()` rifiuta sempre; `resolve()` può fare entrambe — se gli si passa una Promise o thenable, ne adotta lo stato.
+La funzione passata al costruttore viene eseguita **immediatamente** (non in modo async). `resolve()` e `reject()` sono le funzioni di risoluzione. La differenza: `reject()` rifiuta sempre; `resolve()` può fare entrambe le cose: se gli si passa una Promise o thenable, ne adotta lo stato.
 
 ---
 
@@ -95,7 +95,7 @@ Le Promise risolvono per design i 5 problemi dell'inversion of control:
 
 ### 1. Mai chiamato troppo presto (no Zalgo)
 
-I callback registrati con `.then()` vengono **sempre** chiamati in modo asincrono — anche se la Promise è già risolta al momento della registrazione. Non esiste un `.then()` sincrono. Le Promise usano la Job queue (Cap. 1), quindi il callback parte al prossimo tick.
+I callback registrati con `.then()` vengono **sempre** chiamati in modo asincrono, anche se la Promise è già risolta al momento della registrazione. Non esiste un `.then()` sincrono. Le Promise usano la Job queue (Cap. 1), quindi il callback parte al prossimo tick.
 
 ```js
 var p = new Promise(function(resolve) { resolve(42); });
@@ -135,7 +135,7 @@ Promise.race([
 
 ### 4. Chiamato esattamente una volta
 
-Una Promise può essere risolta **una sola volta**. Se `resolve()` o `reject()` vengono chiamati più volte, solo la prima ha effetto — le successive vengono silenziosamente ignorate.
+Una Promise può essere risolta **una sola volta**. Se `resolve()` o `reject()` vengono chiamati più volte, solo la prima ha effetto: le successive vengono silenziosamente ignorate.
 
 ### 5. Errori non inghiottiti
 
@@ -153,7 +153,7 @@ p.then(
 );
 ```
 
-Se l'eccezione avviene in un fulfillment handler, non viene "persa" — finisce come rejection sulla Promise successiva della catena.
+Se l'eccezione avviene in un fulfillment handler, non viene "persa": finisce come rejection sulla Promise successiva della catena.
 
 ### Trustable Promise — `Promise.resolve()`
 
@@ -191,7 +191,7 @@ Promise.resolve(21)
     });
 ```
 
-Per introdurre asincronia in un passaggio della catena, si restituisce una Promise dal handler — essa viene **unwrappata** automaticamente, e la catena aspetta la sua risoluzione:
+Per introdurre asincronia in un passaggio della catena, si restituisce una Promise dal handler: viene **unwrappata** automaticamente, e la catena aspetta la sua risoluzione:
 
 ```js
 Promise.resolve(21)
@@ -290,7 +290,7 @@ somePromiseChain
     .catch(handleErrors); /* cattura qualsiasi errore lungo la catena */
 ```
 
-Il limite: se `handleErrors` lancia a sua volta, quell'errore non viene catchato. Non esiste una soluzione perfetta in ES6 — alcuni browser riportano le Promise rejected non osservate nella console tramite garbage collection.
+Il limite: se `handleErrors` lancia a sua volta, quell'errore non viene catchato. Non esiste una soluzione perfetta in ES6. Alcuni browser riportano le Promise rejected non osservate nella console tramite garbage collection.
 
 ---
 
@@ -313,11 +313,11 @@ Promise.all([p1, p2])
     .catch(handleErrors);
 ```
 
-Array vuoto → si fulfilla immediatamente.
+Con un array vuoto si fulfilla immediatamente.
 
 ### `Promise.race([..])` — latch
 
-La **prima** Promise che si risolve (fulfilled o rejected) determina l'esito. Le altre vengono ignorate (ma continuano a girare in background — le Promise non si cancellano).
+La **prima** Promise che si risolve (fulfilled o rejected) determina l'esito. Le altre vengono ignorate (ma continuano a girare in background, perché le Promise non si cancellano).
 
 ```js
 Promise.race([
@@ -326,7 +326,7 @@ Promise.race([
 ]).then(fulfilled, rejected);
 ```
 
-Array vuoto → non si risolve mai (footgun da evitare).
+Con un array vuoto non si risolve mai (footgun da evitare).
 
 ### Pattern aggiuntivi (non ES6 native)
 
@@ -369,9 +369,9 @@ Promise.race([p1, p2, p3]);      /* latch — primo che vince */
 
 **Single value**: ogni Promise porta un solo valore. Per più valori, si usa un array/oggetto, oppure si espongono più Promise separate + `Promise.all()`.
 
-**Single resolution**: una Promise si risolve una sola volta — non è adatta a eventi ripetuti (click, stream). Per eventi multipli si crea una nuova Promise chain per ogni evento.
+**Single resolution**: una Promise si risolve una sola volta, quindi non è adatta a eventi ripetuti (click, stream). Per eventi multipli si crea una nuova Promise chain per ogni evento.
 
-**Inertia — promisifying**: il codice legacy con callback deve essere avvolto:
+**Inertia (promisifying)**: il codice legacy con callback deve essere avvolto:
 
 ```js
 /* Promise.wrap = promisify helper */
@@ -393,9 +393,9 @@ var request = Promise.wrap(ajax); /* promisory di ajax */
 request("http://url.1/").then(handler);
 ```
 
-**Non cancellabili**: una Promise non può essere cancellata dall'esterno — per design, per preservare l'immutabilità. La cancellazione appartiene a un livello di astrazione superiore (es. sequenza di Promise).
+**Non cancellabili**: una Promise non può essere cancellata dall'esterno: è una scelta di design, per preservare l'immutabilità. La cancellazione appartiene a un livello di astrazione superiore (es. sequenza di Promise).
 
-**Performance**: le Promise sono leggermente più lente dei callback nudi (overhead della Job queue, dei trust check, dell'immutabilità). Il tradeoff è quasi sempre vantaggioso — ottimizzare via callback solo in hot path misurati.
+**Performance**: le Promise sono leggermente più lente dei callback nudi (overhead della Job queue, dei trust check, dell'immutabilità). Il tradeoff è quasi sempre vantaggioso: si ottimizza via callback solo in hot path misurati.
 
 ---
 
@@ -442,14 +442,14 @@ request("/api/data").then(handler);
 <details>
 <summary>Cos'è l'uninversion of control e perché le Promise la realizzano?</summary>
 
-Con i callback si cede il controllo sulla continuation del programma a una terza parte — quella terza parte decide quando e quante volte chiamare il callback. L'inversion of control è il problema di fiducia che ne deriva. Le Promise invertono questa relazione: invece di passare un callback, si riceve indietro un oggetto (la Promise) che rappresenta il completamento futuro. Il codice che reagisce al risultato (`.then()`, `.catch()`) viene registrato sulla Promise stessa, non ceduto all'operazione esterna. La terza parte risolve (o rifiuta) la Promise, ma è il chiamante a decidere cosa farne — e le garanzie built-in assicurano che avvenga in modo predictabile.
+Con i callback si cede il controllo sulla continuation del programma a una terza parte, che decide quando e quante volte chiamare il callback. L'inversion of control è il problema di fiducia che ne deriva. Le Promise invertono questa relazione: invece di passare un callback, si riceve indietro un oggetto (la Promise) che rappresenta il completamento futuro. Il codice che reagisce al risultato (`.then()`, `.catch()`) viene registrato sulla Promise stessa, non ceduto all'operazione esterna. La terza parte risolve (o rifiuta) la Promise, ma è il chiamante a decidere cosa farne, e le garanzie built-in assicurano che avvenga in modo prevedibile.
 
 </details>
 
 <details>
 <summary>Perché i callback registrati con `.then()` sono sempre asincroni, anche se la Promise è già risolta?</summary>
 
-È una garanzia fondamentale del design delle Promise per prevenire il problema Zalgo (comportamento sync-or-async nondeterministico, vedi Cap. 2). Anche se si chiama `.then()` su una Promise già fulfilled, il callback viene sempre messo nella Job queue e eseguito al prossimo tick — mai in modo sincrono. Questo rende il comportamento uniforme e prevedibile indipendentemente dallo stato corrente della Promise. Non servono più `setTimeout(fn, 0)` per forzare l'asincronia.
+È una garanzia del design delle Promise, pensata per prevenire il problema Zalgo (comportamento sync-or-async nondeterministico, si veda il Cap. 2). Anche se si chiama `.then()` su una Promise già fulfilled, il callback viene sempre messo nella Job queue e eseguito al prossimo tick, mai in modo sincrono. Questo rende il comportamento uniforme e prevedibile indipendentemente dallo stato corrente della Promise. Non servono più `setTimeout(fn, 0)` per forzare l'asincronia.
 
 </details>
 
@@ -463,13 +463,13 @@ Quando il fulfillment (o rejection) handler di un `.then()` restituisce una Prom
 <details>
 <summary>Qual è la differenza tra `Promise.all()` e `Promise.race()`?</summary>
 
-`Promise.all([..])` implementa il pattern **gate**: aspetta che **tutte** le Promise dell'array siano fulfilled prima di fulfillarsi a sua volta, con un array dei valori in ordine di posizione (non di arrivo). Se anche una sola viene rejected, la Promise principale viene subito rejected. `Promise.race([..])` implementa il **latch**: si fulfilla (o rifiuta) non appena la **prima** Promise dell'array si risolve in qualsiasi modo — le altre vengono ignorate. Attenzione: `race([])` con array vuoto non si risolve mai; `all([])` si fulfilla immediatamente.
+`Promise.all([..])` implementa il pattern **gate**: aspetta che **tutte** le Promise dell'array siano fulfilled prima di fulfillarsi a sua volta, con un array dei valori in ordine di posizione (non di arrivo). Se anche una sola viene rejected, la Promise principale viene subito rejected. `Promise.race([..])` implementa il **latch**: si fulfilla (o rifiuta) non appena la **prima** Promise dell'array si risolve in qualsiasi modo, e le altre vengono ignorate. Attenzione: `race([])` con array vuoto non si risolve mai; `all([])` si fulfilla immediatamente.
 
 </details>
 
 <details>
 <summary>Perché le Promise non si possono cancellare e perché è una scelta corretta?</summary>
 
-Le Promise sono progettate per essere **immutabili dall'esterno** una volta create: chiunque le osservi riceve lo stesso risultato, senza che nessun osservatore possa interferire con gli altri. Permettere la cancellazione esterna violerebbe questa garanzia — un consumatore potrebbe cancellare una Promise che un altro consumatore sta ancora aspettando, riproducendo i problemi di trust dei callback. La cancellazione è un concetto che appartiene al livello di **sequenza** di operazioni, non alla singola Promise. Librerie come `asynquence` offrono sequenze cancellabili costruite sopra le Promise, mantenendo l'immutabilità della singola Promise.
+Le Promise sono progettate per essere **immutabili dall'esterno** una volta create: chiunque le osservi riceve lo stesso risultato, senza che nessun osservatore possa interferire con gli altri. Permettere la cancellazione esterna violerebbe questa garanzia: un consumatore potrebbe cancellare una Promise che un altro consumatore sta ancora aspettando, riproducendo i problemi di trust dei callback. La cancellazione è un concetto che appartiene al livello di **sequenza** di operazioni, non alla singola Promise. Librerie come `asynquence` offrono sequenze cancellabili costruite sopra le Promise, mantenendo l'immutabilità della singola Promise.
 
 </details>

@@ -1,6 +1,6 @@
 # Oggetti
 
-Gli oggetti sono il meccanismo centrale di JavaScript: quasi tutto in JS ruota attorno a essi. Questo capitolo esplora la loro struttura interna, le proprietà, i descriptor, e i modi per iterare sui valori.
+Gli oggetti sono il meccanismo centrale di JavaScript: quasi tutto in JS ruota attorno a essi. Questo capitolo ne descrive la struttura interna, le proprietà, i descriptor e i modi per iterare sui valori.
 
 ## Sintassi
 
@@ -21,15 +21,15 @@ Le due forme producono oggetti identici. La differenza è che nella forma letter
 
 ## Tipi
 
-JavaScript ha sei tipi primitivi: `string`, `number`, `boolean`, `null`, `undefined` e `object`. I primi cinque **non sono oggetti** — sono primitivi immutabili. `null` restituisce `"object"` da `typeof` per un bug storico del linguaggio, ma è un primitivo a sé stante.
+JavaScript ha sei tipi primitivi: `string`, `number`, `boolean`, `null`, `undefined` e `object`. I primi cinque **non sono oggetti**: sono primitivi immutabili. `null` restituisce `"object"` da `typeof` per un bug storico del linguaggio, ma è un primitivo a sé stante.
 
 L'affermazione "tutto in JavaScript è un oggetto" è falsa.
 
-Esistono però dei **built-in objects** — funzioni costruttore che producono sottotipi di oggetto:
+Esistono però dei **built-in objects**, cioè funzioni costruttore che producono sottotipi di oggetto:
 
 `String`, `Number`, `Boolean`, `Object`, `Function`, `Array`, `Date`, `RegExp`, `Error`
 
-Il punto chiave è l'**autoboxing**: l'engine converte automaticamente un primitivo nel suo wrapper oggetto quando è necessario accedere a metodi o proprietà. Non serve mai creare esplicitamente `new String("...")`:
+Qui interviene l'**autoboxing**: l'engine converte automaticamente un primitivo nel suo wrapper oggetto quando è necessario accedere a metodi o proprietà. Non serve mai creare esplicitamente `new String("...")`:
 
 ```js
 var s = "sono una stringa";
@@ -100,7 +100,7 @@ Non esiste un `copy()` built-in perché la semantica non è univoca: shallow cop
 var newObj = JSON.parse(JSON.stringify(someObj));
 ```
 
-**Shallow copy con `Object.assign()`** (ES6) — copia le proprietà enumerabili proprie delle sorgenti nel target:
+**Shallow copy con `Object.assign()`** (ES6): copia le proprietà enumerabili proprie delle sorgenti nel target:
 
 ```js
 var newObj = Object.assign({}, myObj);
@@ -114,7 +114,7 @@ newObj.b === myObj.b; // true per gli oggetti (copia di riferimento)
 
 ## Property descriptor
 
-Ogni proprietà ha un **descriptor** — un oggetto che ne descrive le caratteristiche oltre al valore:
+Ogni proprietà ha un **descriptor**, cioè un oggetto che ne descrive le caratteristiche oltre al valore:
 
 ```js
 Object.getOwnPropertyDescriptor({ a: 2 }, "a");
@@ -133,11 +133,11 @@ Object.defineProperty(obj, "a", {
 });
 ```
 
-**`writable: false`** — il tentativo di assegnamento fallisce silenziosamente in non-strict mode; in strict mode lancia `TypeError`.
+**`writable: false`**: il tentativo di assegnamento fallisce silenziosamente in non-strict mode; in strict mode lancia `TypeError`.
 
-**`configurable: false`** — impedisce di modificare il descriptor con `defineProperty()` e impedisce il `delete` della proprietà. È un'operazione **irreversibile**: non si può tornare a `true`. Eccezione: `writable` può essere cambiato da `true` a `false` anche dopo che `configurable` è `false`, ma non il contrario.
+**`configurable: false`**: impedisce di modificare il descriptor con `defineProperty()` e impedisce il `delete` della proprietà. È un'operazione **irreversibile**: non si può tornare a `true`. Eccezione: `writable` può essere cambiato da `true` a `false` anche dopo che `configurable` è `false`, ma non il contrario.
 
-**`enumerable: false`** — la proprietà esiste e si può accedere, ma non appare nei loop `for..in` e non viene restituita da `Object.keys()`.
+**`enumerable: false`**: la proprietà esiste e si può accedere, ma non appare nei loop `for..in` e non viene restituita da `Object.keys()`.
 
 ### Livelli di immutabilità
 
@@ -153,7 +153,7 @@ Tutti e tre creano **shallow immutability**: i valori oggetto referenziati dalle
 
 ## `[[Get]]` e `[[Put]]`
 
-Accedere a `obj.a` non è un semplice lookup diretto: l'engine invoca l'operazione interna `[[Get]]`, che prima cerca la proprietà sull'oggetto e poi percorre la prototype chain (Cap 5). Se la proprietà non viene trovata da nessuna parte, restituisce `undefined` — non lancia `ReferenceError` come accade con le variabili non dichiarate.
+Accedere a `obj.a` non è un semplice lookup diretto: l'engine invoca l'operazione interna `[[Get]]`, che prima cerca la proprietà sull'oggetto e poi percorre la prototype chain (Cap 5). Se la proprietà non viene trovata da nessuna parte, restituisce `undefined`, senza lanciare `ReferenceError` come accade con le variabili non dichiarate.
 
 ```js
 var obj = { a: undefined };
@@ -161,7 +161,7 @@ obj.a; // undefined — proprietà esiste
 obj.b; // undefined — proprietà non esiste: [[Get]] fallisce silenziosamente
 ```
 
-I due casi sono indistinguibili dal valore; si usano `in` o `hasOwnProperty` per distinguerli (vedi sotto).
+I due casi sono indistinguibili dal valore; si usano `in` o `hasOwnProperty` per distinguerli (si veda più sotto).
 
 `[[Put]]` gestisce l'assegnamento: verifica se la proprietà è un accessor descriptor (chiama il setter), se è `writable: false` (fallisce o lancia TypeError), altrimenti assegna normalmente.
 
@@ -201,7 +201,7 @@ obj.hasOwnProperty("toString"); // false — non è propria
 
 `in` **non** verifica valori in un array: `4 in [2, 4, 6]` controlla se esiste l'indice `4`, non se `4` è un elemento.
 
-Per oggetti creati con `Object.create(null)` (senza prototype) `hasOwnProperty` non è disponibile — si usa `Object.prototype.hasOwnProperty.call(obj, "a")`.
+Per oggetti creati con `Object.create(null)` (senza prototype) `hasOwnProperty` non è disponibile, quindi si usa `Object.prototype.hasOwnProperty.call(obj, "a")`.
 
 ---
 
@@ -209,8 +209,8 @@ Per oggetti creati con `Object.create(null)` (senza prototype) `hasOwnProperty` 
 
 `for..in` itera sulle proprietà **enumerabili** dell'oggetto e della sua prototype chain. Per solo l'oggetto diretto:
 
-- `Object.keys(obj)` → array delle proprietà enumerabili proprie
-- `Object.getOwnPropertyNames(obj)` → array di tutte le proprietà proprie, enumerabili o meno
+- `Object.keys(obj)`: array delle proprietà enumerabili proprie
+- `Object.getOwnPropertyNames(obj)`: array di tutte le proprietà proprie, enumerabili o meno
 
 ```js
 var obj = {};
@@ -228,7 +228,7 @@ obj.propertyIsEnumerable("b");     // false
 
 `for..in` itera sui nomi delle proprietà (non sui valori). Per iterare direttamente sui valori:
 
-**Array** — `for..of` (ES6) usa il **Symbol.iterator** built-in:
+**Array**: `for..of` (ES6) usa il **Symbol.iterator** built-in:
 
 ```js
 var arr = [1, 2, 3];
@@ -247,7 +247,7 @@ it.next(); // { value: 3, done: false }
 it.next(); // { value: undefined, done: true }
 ```
 
-**Oggetti** — non hanno un `@@iterator` built-in. È possibile definirne uno custom:
+**Oggetti**: non hanno un `@@iterator` built-in. È possibile definirne uno custom:
 
 ```js
 var obj = { a: 2, b: 3 };
@@ -270,7 +270,7 @@ for (var v of obj) { console.log(v); } // 2, 3
 
 ## Ripasso veloce
 
-**Tipi**: 6 primitivi in JS, `object` è uno di essi — non "tutto è un oggetto". I primitivi vengono autoboxati quando si accede ai loro metodi.
+**Tipi**: 6 primitivi in JS, `object` è uno di essi, quindi non "tutto è un oggetto". I primitivi vengono autoboxati quando si accede ai loro metodi.
 
 **Property access**: `.prop` (identificatore valido) vs `["prop"]` (qualsiasi stringa, computed). I nomi di proprietà sono sempre stringhe.
 
@@ -278,7 +278,7 @@ for (var v of obj) { console.log(v); } // 2, 3
 
 **Immutabilità**: `preventExtensions` < `seal` < `freeze`, tutti shallow.
 
-**`[[Get]]`**: accesso a proprietà inesistente → `undefined` (non `ReferenceError`). Usare `"a" in obj` o `hasOwnProperty("a")` per verificare l'esistenza.
+**`[[Get]]`**: l'accesso a una proprietà inesistente restituisce `undefined` (non `ReferenceError`). Usare `"a" in obj` o `hasOwnProperty("a")` per verificare l'esistenza.
 
 **`for..of`** vs **`for..in`**: `for..of` itera sui valori tramite `Symbol.iterator`; `for..in` itera sui nomi delle proprietà enumerabili.
 
@@ -296,27 +296,27 @@ Perché JavaScript ha sei tipi primitivi (`string`, `number`, `boolean`, `null`,
 <details>
 <summary>Qual è la differenza tra `in` e `hasOwnProperty()` per verificare l'esistenza di una proprietà?</summary>
 
-`in` verifica se una proprietà esiste sull'oggetto o in qualsiasi punto della sua prototype chain — quindi troverà anche proprietà ereditate come `toString`. `hasOwnProperty()` verifica solo sull'oggetto diretto, senza risalire la prototype chain. Per la maggior parte dei casi pratici, quando si vuole sapere se una proprietà appartiene specificamente all'oggetto e non alla sua catena ereditaria, si usa `hasOwnProperty()`. È anche importante non usare `in` per verificare se un valore è presente in un array: `in` controlla gli indici (le chiavi), non i valori.
+`in` verifica se una proprietà esiste sull'oggetto o in qualsiasi punto della sua prototype chain, quindi troverà anche proprietà ereditate come `toString`. `hasOwnProperty()` verifica solo sull'oggetto diretto, senza risalire la prototype chain. Per la maggior parte dei casi pratici, quando si vuole sapere se una proprietà appartiene specificamente all'oggetto e non alla sua catena ereditaria, si usa `hasOwnProperty()`. È anche importante non usare `in` per verificare se un valore è presente in un array: `in` controlla gli indici (le chiavi), non i valori.
 
 </details>
 
 <details>
 <summary>Cosa significa `configurable: false` e perché è irreversibile?</summary>
 
-`configurable: false` impedisce di modificare il descriptor della proprietà tramite `Object.defineProperty()` e impedisce di eliminarla con `delete`. Una volta impostato a `false`, non è possibile tornare a `true` — qualsiasi tentativo di ridefinire il descriptor lancia `TypeError`. L'unica eccezione è che `writable` può essere cambiato da `true` a `false` anche con `configurable: false`, ma non il contrario. L'irreversibilità è intenzionale: serve per creare proprietà permanentemente "sigillate" in librerie e API.
+`configurable: false` impedisce di modificare il descriptor della proprietà tramite `Object.defineProperty()` e impedisce di eliminarla con `delete`. Una volta impostato a `false`, non è possibile tornare a `true`: qualsiasi tentativo di ridefinire il descriptor lancia `TypeError`. L'unica eccezione è che `writable` può essere cambiato da `true` a `false` anche con `configurable: false`, ma non il contrario. L'irreversibilità è intenzionale: serve per creare proprietà permanentemente "sigillate" in librerie e API.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra `for..in` e `for..of`?</summary>
 
-`for..in` itera sui **nomi** (chiavi) delle proprietà enumerabili di un oggetto, risalendo la prototype chain. Non itera direttamente sui valori. `for..of` itera sui **valori** attraverso il protocollo dell'iteratore (`Symbol.iterator` + metodo `next()`). Gli array hanno un iteratore built-in; gli oggetti semplici no — bisogna definirne uno custom con `Object.defineProperty()` e `Symbol.iterator`. `for..of` è la scelta corretta per iterare sugli elementi di un array senza preoccuparsi degli indici o delle proprietà non numeriche aggiunte all'array.
+`for..in` itera sui **nomi** (chiavi) delle proprietà enumerabili di un oggetto, risalendo la prototype chain. Non itera direttamente sui valori. `for..of` itera sui **valori** attraverso il protocollo dell'iteratore (`Symbol.iterator` + metodo `next()`). Gli array hanno un iteratore built-in; gli oggetti semplici no, e bisogna definirne uno custom con `Object.defineProperty()` e `Symbol.iterator`. `for..of` è la scelta corretta per iterare sugli elementi di un array senza preoccuparsi degli indici o delle proprietà non numeriche aggiunte all'array.
 
 </details>
 
 <details>
 <summary>Perché accedere a una proprietà inesistente restituisce `undefined` invece di lanciare un errore?</summary>
 
-Perché l'operazione `[[Get]]` (invocata internamente a ogni accesso di proprietà) percorre l'oggetto e la sua prototype chain cercando il nome richiesto. Se non lo trova da nessuna parte, restituisce `undefined` come valore di default, senza lanciare eccezioni. Questo comportamento differisce da quello delle variabili non dichiarate, per cui l'engine lancia un `ReferenceError`. La conseguenza pratica è che `obj.propInesistente` e `obj.propEsplicitamenteUndefined` producono lo stesso valore `undefined` — per distinguerli si deve usare `"prop" in obj` oppure `obj.hasOwnProperty("prop")`.
+Perché l'operazione `[[Get]]` (invocata internamente a ogni accesso di proprietà) percorre l'oggetto e la sua prototype chain cercando il nome richiesto. Se non lo trova da nessuna parte, restituisce `undefined` come valore di default, senza lanciare eccezioni. Questo comportamento differisce da quello delle variabili non dichiarate, per cui l'engine lancia un `ReferenceError`. La conseguenza pratica è che `obj.propInesistente` e `obj.propEsplicitamenteUndefined` producono lo stesso valore `undefined`: per distinguerli si deve usare `"prop" in obj` oppure `obj.hasOwnProperty("prop")`.
 
 </details>

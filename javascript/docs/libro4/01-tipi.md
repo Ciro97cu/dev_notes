@@ -1,6 +1,6 @@
 # Tipi
 
-Molti sviluppatori descrivono JavaScript come un linguaggio "senza tipi" perché le variabili non ne hanno uno fisso. Ma la specifica ES5.1 è chiara: i tipi esistono, sono associati ai **valori** — non alle variabili. Capire questa distinzione è il punto di partenza per comprendere la coercion (conversione di tipo), uno degli aspetti più fraintesi di JS.
+Molti sviluppatori descrivono JavaScript come un linguaggio "senza tipi" perché le variabili non ne hanno uno fisso. Ma la specifica ES5.1 è chiara: i tipi esistono e sono associati ai **valori**, non alle variabili. Capire questa distinzione è il punto di partenza per comprendere la coercion (conversione di tipo), uno degli aspetti più fraintesi di JS.
 
 ## I sette tipi built-in
 
@@ -27,7 +27,7 @@ typeof { life: 42 }  === "object";    // true
 typeof Symbol()      === "symbol";    // true
 ```
 
-**Eccezione storica — `null`**: `typeof null` restituisce `"object"`, non `"null"`. È un bug del linguaggio che esiste da quasi trent'anni e non verrà mai corretto perché troppo codice esistente dipende da questo comportamento. Per verificare se un valore è `null`:
+**L'eccezione storica di `null`**: `typeof null` restituisce `"object"`, non `"null"`. È un bug del linguaggio che esiste da quasi trent'anni e non verrà mai corretto perché troppo codice esistente dipende da questo comportamento. Per verificare se un valore è `null`:
 
 ```js
 var a = null;
@@ -36,9 +36,9 @@ var a = null;
 
 `null` è il solo valore primitivo **falsy** che produce `"object"` da `typeof`.
 
-**Funzioni**: `typeof function(){}` restituisce `"function"`, non `"object"`. Le funzioni sono però un sottotipo di `object` — oggetti "chiamabili" con una proprietà interna `[[Call]]`. Come tutti gli oggetti, possono avere proprietà; per esempio `a.length` è il numero di parametri formali dichiarati.
+**Funzioni**: `typeof function(){}` restituisce `"function"`, non `"object"`. Le funzioni sono però un sottotipo di `object`, cioè oggetti "chiamabili" con una proprietà interna `[[Call]]`. Come tutti gli oggetti, possono avere proprietà; per esempio `a.length` è il numero di parametri formali dichiarati.
 
-**Array**: `typeof [1,2,3]` restituisce `"object"`. Gli array sono anch'essi un sottotipo di `object` — oggetti con indici numerici e `.length` auto-aggiornato.
+**Array**: `typeof [1,2,3]` restituisce `"object"`. Gli array sono anch'essi un sottotipo di `object`, cioè oggetti con indici numerici e `.length` auto-aggiornato.
 
 ---
 
@@ -129,7 +129,7 @@ function doSomethingCool(FeatureXYZ) {
 }
 ```
 
-Nessun approccio è universalmente corretto — si sceglie in base al contesto.
+Nessun approccio è universalmente corretto: si sceglie in base al contesto.
 
 ---
 
@@ -141,7 +141,7 @@ Nessun approccio è universalmente corretto — si sceglie in base al contesto.
 
 **Variabili senza tipo, valori con tipo**: `typeof` ispeziona il valore corrente nel contenitore, non il contenitore stesso.
 
-**`undefined` ≠ undeclared**: `undefined` è un valore; "undeclared" è l'assenza di dichiarazione. `typeof` restituisce `"undefined"` per entrambi — safety guard intenzionale, confusione terminologica no.
+**`undefined` ≠ undeclared**: `undefined` è un valore; "undeclared" è l'assenza di dichiarazione. `typeof` restituisce `"undefined"` per entrambi: il safety guard è intenzionale, la confusione terminologica no.
 
 ```js
 /* safety guard pattern */
@@ -181,27 +181,27 @@ Perché le variabili JS sono contenitori non tipizzati: una stessa variabile pu�
 <details>
 <summary>Perché `typeof null` restituisce `"object"` e come si verifica correttamente un valore null?</summary>
 
-È un bug della prima implementazione di JavaScript, mai corretto per ragioni di retrocompatibilità: troppo codice esistente dipende da questo comportamento, e "correggerlo" romperebbe quei programmi. Per verificare se un valore è `null` si usa un confronto diretto (`val === null`) oppure, quando si deve anche usare `typeof`, la condizione composta `(!val && typeof val === "object")` — che sfrutta il fatto che `null` è falsy, mentre tutti gli oggetti veri sono truthy.
+È un bug della prima implementazione di JavaScript, mai corretto per ragioni di retrocompatibilità: troppo codice esistente dipende da questo comportamento, e "correggerlo" romperebbe quei programmi. Per verificare se un valore è `null` si usa un confronto diretto (`val === null`) oppure, quando si deve anche usare `typeof`, la condizione composta `(!val && typeof val === "object")`, che sfrutta il fatto che `null` è falsy, mentre tutti gli oggetti veri sono truthy.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra `undefined` e "undeclared", e perché `typeof` le tratta allo stesso modo?</summary>
 
-`undefined` è un valore valido che una variabile dichiarata può contenere: significa "dichiarata ma senza valore assegnato". Una variabile "undeclared" è una variabile che non è mai stata dichiarata nello scope accessibile — accedervi direttamente lancia `ReferenceError`. `typeof` restituisce `"undefined"` per entrambe i casi: è una scelta progettuale (o un difetto) che evita un errore nel caso undeclared, fornendo un "safety guard". La confusione è aggravata dai messaggi di errore dei browser ("b is not defined") che usano terminologia fuorviante.
+`undefined` è un valore valido che una variabile dichiarata può contenere: significa "dichiarata ma senza valore assegnato". Una variabile "undeclared" è una variabile che non è mai stata dichiarata nello scope accessibile, e accedervi direttamente lancia `ReferenceError`. `typeof` restituisce `"undefined"` per entrambi i casi: è una scelta progettuale (o un difetto) che evita un errore nel caso undeclared, fornendo un "safety guard". La confusione è aggravata dai messaggi di errore dei browser ("b is not defined") che usano terminologia fuorviante.
 
 </details>
 
 <details>
 <summary>Quando e perché usare il safety guard di `typeof` per verificare l'esistenza di una variabile?</summary>
 
-Si usa quando si vuole controllare se una variabile o feature esiste senza sapere se è stata dichiarata — tipicamente in: feature detection per polyfill (`if (typeof atob === "undefined")`), librerie da includere in contesti sconosciuti dove certe dipendenze potrebbero mancare, script browser che condividono il namespace globale. L'alternativa `window.varName` funziona solo in browser; il safety guard `typeof` è universale (funziona anche in Node.js e altri ambienti). La dependency injection (passare la dipendenza come parametro) è un'alternativa più esplicita e testabile.
+Si usa quando si vuole controllare se una variabile o feature esiste senza sapere se è stata dichiarata, tipicamente nei casi seguenti: feature detection per polyfill (`if (typeof atob === "undefined")`), librerie da includere in contesti sconosciuti dove certe dipendenze potrebbero mancare, script browser che condividono il namespace globale. L'alternativa `window.varName` funziona solo in browser; il safety guard `typeof` è universale (funziona anche in Node.js e altri ambienti). La dependency injection (passare la dipendenza come parametro) è un'alternativa più esplicita e testabile.
 
 </details>
 
 <details>
 <summary>Le funzioni e gli array sono tipi distinti in JavaScript?</summary>
 
-No. Sia le funzioni che gli array sono **sottotipi di `object`**: `typeof []` e `typeof function(){}` restituiscono rispettivamente `"object"` e `"function"` — ma le funzioni sono oggetti con la proprietà interna `[[Call]]` che le rende invocabili, e gli array sono oggetti con indici numerici e `.length` automatico. `typeof` restituisce `"function"` per le funzioni (non `"object"`) come convenienza, ma la specifica le classifica come sottotipo di object. Per verificare se qualcosa è un array si usa `Array.isArray(val)`, non `typeof`.
+No. Sia le funzioni che gli array sono **sottotipi di `object`**: `typeof []` e `typeof function(){}` restituiscono rispettivamente `"object"` e `"function"`, ma le funzioni sono oggetti con la proprietà interna `[[Call]]` che le rende invocabili, e gli array sono oggetti con indici numerici e `.length` automatico. `typeof` restituisce `"function"` per le funzioni (non `"object"`) come convenienza, ma la specifica le classifica come sottotipo di object. Per verificare se qualcosa è un array si usa `Array.isArray(val)`, non `typeof`.
 
 </details>

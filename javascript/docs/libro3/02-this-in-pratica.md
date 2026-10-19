@@ -4,7 +4,7 @@ Il capitolo precedente ha stabilito il principio: `this` è un binding creato al
 
 ## Il call-site e il call-stack
 
-Il **call-site** è il punto nel codice da cui una funzione viene chiamata — non dove è dichiarata. Per trovarlo si deve guardare il **call-stack** (la catena di funzioni invocate fino al momento corrente) e prendere la funzione immediatamente prima di quella in esecuzione.
+Il **call-site** è il punto nel codice da cui una funzione viene chiamata, non dove è dichiarata. Per trovarlo si deve guardare il **call-stack** (la catena di funzioni invocate fino al momento corrente) e prendere la funzione immediatamente prima di quella in esecuzione.
 
 ```js
 function baz() {
@@ -72,7 +72,7 @@ var obj1 = { a: 2, obj2: obj2 };
 obj1.obj2.foo(); // 42 — this è obj2, non obj1
 ```
 
-**Perdita dell'implicit binding.** È il problema più frequente. Quando un metodo viene estratto dall'oggetto e assegnato a una variabile, il call-site diventa una chiamata libera — e si applica il default binding:
+**Perdita dell'implicit binding.** È il problema più frequente. Quando un metodo viene estratto dall'oggetto e assegnato a una variabile, il call-site diventa una chiamata libera, e si applica il default binding:
 
 ```js
 var bar = obj.foo; // bar è solo un riferimento alla funzione
@@ -128,7 +128,7 @@ console.log(bar); // funzione hard-bound a obj
 
 `bind()` restituisce una nuova funzione con `this` permanentemente legato all'oggetto specificato.
 
-**API context parameter.** Molte funzioni native (come `forEach`, `map`, `filter`) accettano un secondo parametro opzionale che funge da `this` per il callback — equivalente a usare `bind()`:
+**API context parameter.** Molte funzioni native (come `forEach`, `map`, `filter`) accettano un secondo parametro opzionale che fa da `this` per il callback, con un effetto equivalente a usare `bind()`:
 
 ```js
 function foo(el) {
@@ -140,7 +140,7 @@ var obj = { id: "awesome" };
 
 ### Regola 4 — new binding
 
-In JavaScript, `new` non istanzia una classe — esegue una **constructor call**: qualsiasi funzione può essere chiamata con `new` davanti, e in quel caso si verificano quattro cose automaticamente:
+In JavaScript `new` non istanzia una classe, ma esegue una **constructor call**: qualsiasi funzione può essere chiamata con `new` davanti, e in quel caso si verificano quattro cose automaticamente:
 
 1. Viene creato un nuovo oggetto.
 2. Il nuovo oggetto viene collegato tramite `[[Prototype]]` (dettaglio approfondito nel Cap 5).
@@ -167,12 +167,12 @@ new binding  >  explicit binding  >  implicit binding  >  default binding
 
 Per determinare `this` si scorrono queste domande in ordine:
 
-1. La funzione è chiamata con `new`? → `this` è il nuovo oggetto.
-2. La funzione è chiamata con `call`, `apply`, o `bind`? → `this` è l'oggetto specificato.
-3. La funzione è chiamata come metodo di un oggetto contesto? → `this` è quell'oggetto.
-4. Nessuna delle precedenti → default: global object (o `undefined` in strict mode).
+1. La funzione è chiamata con `new`? Se sì, `this` è il nuovo oggetto.
+2. La funzione è chiamata con `call`, `apply`, o `bind`? Se sì, `this` è l'oggetto specificato.
+3. La funzione è chiamata come metodo di un oggetto contesto? Se sì, `this` è quell'oggetto.
+4. Nessuna delle precedenti: si applica il default, cioè global object (o `undefined` in strict mode).
 
-**`new` può sovrascrivere hard binding.** Il `bind()` nativo, a differenza di un'implementazione manuale, consente a `new` di sovrascrivere il binding fisso — utile per la partial application:
+**`new` può sovrascrivere hard binding.** Il `bind()` nativo, a differenza di un'implementazione manuale, consente a `new` di sovrascrivere il binding fisso, cosa utile per la partial application:
 
 ```js
 function foo(p1, p2) { this.val = p1 + p2; }
@@ -198,7 +198,7 @@ var bar = foo.bind(null, 2);
 bar(3); // a:2, b:3
 ```
 
-**Rischio**: se la funzione usa `this` internamente, passare `null` può causare modifiche accidentali al global object. La pratica più sicura è usare un oggetto vuoto come **DMZ** (De-Militarized Zone — oggetto completamente neutro):
+**Rischio**: se la funzione usa `this` internamente, passare `null` può causare modifiche accidentali al global object. La pratica più sicura è usare un oggetto vuoto come **DMZ** (De-Militarized Zone, cioè un oggetto completamente neutro):
 
 ```js
 var ø = Object.create(null); // più vuoto di {}, nessun prototype
@@ -208,7 +208,7 @@ var bar = foo.bind(ø, 2);
 
 ### Riferimenti indiretti
 
-Un assegnamento che sembra passare un metodo in realtà crea un riferimento diretto alla funzione — il contesto viene perso:
+Un assegnamento che sembra passare un metodo crea invece un riferimento diretto alla funzione, e il contesto viene perso:
 
 ```js
 var o = { a: 3, foo: foo };
@@ -221,7 +221,7 @@ o.foo(); // 3 — implicit binding su o
 
 ## Arrow function e lexical `this`
 
-Le arrow function (`=>`) ignorano completamente le quattro regole. Al posto del binding dinamico, adottano il `this` dello **scope lessicale in cui sono dichiarate** — e questa associazione è immutabile, anche con `new`.
+Le arrow function (`=>`) ignorano completamente le quattro regole. Al posto del binding dinamico, adottano il `this` dello **scope lessicale in cui sono dichiarate**, e questa associazione è immutabile, anche con `new`.
 
 ```js
 function foo() {
@@ -248,7 +248,7 @@ var obj = { a: 2 };
 foo.call(obj); // 2
 ```
 
-Il pattern pre-ES6 equivalente era `var self = this` — entrambi risolvono il problema aggirando il meccanismo di `this` invece di usarlo correttamente. Se si usa spesso `self = this` o arrow function per "correggere" il binding, è probabilmente il segnale di una scelta di design: conviene scegliere tra stile lessicale (scope + closure) e stile `this` in modo coerente, senza mischiarli nella stessa funzione.
+Il pattern pre-ES6 equivalente era `var self = this`: entrambi risolvono il problema aggirando il meccanismo di `this` invece di usarlo correttamente. Se si usa spesso `self = this` o arrow function per "correggere" il binding, è probabilmente il segnale di una scelta di design: conviene scegliere tra stile lessicale (scope + closure) e stile `this` in modo coerente, senza mischiarli nella stessa funzione.
 
 ---
 
@@ -275,7 +275,7 @@ var bar = new foo(); // costruisce un oggetto — new
 foo();              // "global" — default
 ```
 
-**Arrow function**: eredita `this` dal proprio scope lessicale — le 4 regole non si applicano.
+**Arrow function**: eredita `this` dal proprio scope lessicale, e le 4 regole non si applicano.
 
 ---
 
@@ -291,7 +291,7 @@ La precedenza, dalla più alta alla più bassa, è: new binding > explicit bindi
 <details>
 <summary>Cos'è la "perdita dell'implicit binding" e perché è un problema frequente?</summary>
 
-Avviene quando una funzione originariamente associata a un oggetto viene estratta da esso e invocata come funzione libera. L'estrazione — sia tramite assegnamento a variabile (`var bar = obj.foo`) sia tramite passaggio come callback (`doFoo(obj.foo)`, `setTimeout(obj.foo, 100)`) — crea un semplice riferimento alla funzione, senza il contesto dell'oggetto. Il call-site diventa una chiamata libera, e si applica il default binding. È un problema frequente perché l'intenzione del codice sembra preservare il contesto, ma il meccanismo di `this` segue il call-site, non l'origine del riferimento.
+Avviene quando una funzione originariamente associata a un oggetto viene estratta da esso e invocata come funzione libera. L'estrazione, sia tramite assegnamento a variabile (`var bar = obj.foo`) sia tramite passaggio come callback (`doFoo(obj.foo)`, `setTimeout(obj.foo, 100)`), crea un semplice riferimento alla funzione, senza il contesto dell'oggetto. Il call-site diventa una chiamata libera, e si applica il default binding. È un problema frequente perché l'intenzione del codice sembra preservare il contesto, ma il meccanismo di `this` segue il call-site, non l'origine del riferimento.
 
 </details>
 
@@ -312,6 +312,6 @@ Perché `null` e `undefined` come `this` vengono trattati come se non ci fosse n
 <details>
 <summary>In cosa differisce il `this` nelle arrow function rispetto alle funzioni normali?</summary>
 
-Le arrow function non hanno un proprio `this` binding: ignorano completamente le quattro regole standard. Il loro `this` è quello dello **scope lessicale** in cui sono dichiarate — cioè il `this` della funzione (o del contesto globale) che le contiene al momento della loro definizione. Una volta stabilito, questo binding è immutabile: `call`, `apply`, `bind`, e persino `new` non possono sovrascriverlo. Questo le rende utili nei callback asincroni dove si vuole mantenere il `this` del contesto circostante, ma le rende inappropriate per metodi di oggetti o funzioni che richiedono un `this` dinamico.
+Le arrow function non hanno un proprio `this` binding: ignorano completamente le quattro regole standard. Il loro `this` è quello dello **scope lessicale** in cui sono dichiarate, cioè il `this` della funzione (o del contesto globale) che le contiene al momento della loro definizione. Una volta stabilito, questo binding è immutabile: `call`, `apply`, `bind`, e persino `new` non possono sovrascriverlo. Questo le rende utili nei callback asincroni dove si vuole mantenere il `this` del contesto circostante, ma le rende inappropriate per metodi di oggetti o funzioni che richiedono un `this` dinamico.
 
 </details>

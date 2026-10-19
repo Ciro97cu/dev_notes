@@ -74,7 +74,7 @@ Boolean([]);        // true — oggetto (sempre truthy)
 Boolean(new Boolean(false)); // true — il wrapper è un oggetto
 ```
 
-**Falsy objects**: esistono valori che si comportano come falsy pur essendo oggetti — tipicamente un'eredità dei browser (come `document.all` in ambienti legacy). Non fanno parte dello standard JS ma della specifica host. Da non confondere con la regola generale.
+**Falsy objects**: esistono valori che si comportano come falsy pur essendo oggetti, tipicamente un'eredità dei browser (come `document.all` in ambienti legacy). Non fanno parte dello standard JS ma della specifica host. Da non confondere con la regola generale.
 
 ---
 
@@ -163,7 +163,7 @@ parseInt("08");     // 8 in ES5+ (base-10); prima di ES5 lo "0" iniziale poteva 
 parseInt("08", 10); // 8 — conviene comunque indicare sempre la base (radix)
 ```
 
-`parseInt()` opera su stringhe: se il primo argomento non è una stringa, viene prima convertito a stringa — quindi passargli un numero è un errore concettuale. Ne nascono curiosità: `parseInt(0.000008)` diventa `parseInt("0.000008")` → `0` (parsa lo `0` iniziale e si ferma al punto), mentre `parseInt(0.0000008)`, un solo zero in più, diventa `parseInt("8e-7")` → `8`, perché sotto `1e-6` JavaScript passa alla notazione esponenziale e `parseInt` parsa la cifra `8`.
+`parseInt()` opera su stringhe: se il primo argomento non è una stringa, viene prima convertito a stringa, quindi passargli un numero è un errore concettuale. Ne nascono curiosità: `parseInt(0.000008)` diventa `parseInt("0.000008")` → `0` (parsa lo `0` iniziale e si ferma al punto), mentre `parseInt(0.0000008)`, un solo zero in più, diventa `parseInt("8e-7")` → `8`, perché sotto `1e-6` JavaScript passa alla notazione esponenziale e `parseInt` parsa la cifra `8`.
 
 ### Da valore a booleano
 
@@ -223,7 +223,7 @@ Pattern per convertire stringa a numero: `a - 0` (o `a * 1`).
 
 ### `||` e `&&` come selettori di operandi
 
-In JavaScript, `||` e `&&` **non restituiscono un booleano** — restituiscono uno dei due operandi. Sono "selettori":
+In JavaScript, `||` e `&&` **non restituiscono un booleano**, ma uno dei due operandi. Sono "selettori":
 
 - `a || b`: se `a` è truthy, restituisce `a`; altrimenti restituisce `b`
 - `a && b`: se `a` è falsy, restituisce `a`; altrimenti restituisce `b`
@@ -333,7 +333,7 @@ false == [];   // true — UH OH
 0 == [];       // true — UH OH
 ```
 
-Quattro dei sette coinvolgono `== false` o `== true` — già esclusi dalla regola "non usare mai == con booleani". Rimangono tre casi problematici reali (`"" == 0`, `"" == []`, `0 == []`).
+Quattro dei sette coinvolgono `== false` o `== true`, già esclusi dalla regola "non usare mai == con booleani". Rimangono tre casi problematici reali (`"" == 0`, `"" == []`, `0 == []`).
 
 Altri casi apparentemente "pazzi" si spiegano facilmente:
 
@@ -346,10 +346,10 @@ Altri casi apparentemente "pazzi" si spiegano facilmente:
 
 ### Regole pratiche per usare `==` in sicurezza
 
-1. **Non usare mai `==` con `true` o `false`** — usare il test booleano diretto o `===`.
-2. **Fare attenzione con `[]`, `""`, `0` su entrambi i lati** — valutare se `===` è più chiaro.
-3. **`== null` è sicuro e idiomatico** — controlla sia `null` sia `undefined`.
-4. **`typeof x == "function"`** è 100% equivalente a `=== "function"` — `typeof` restituisce sempre una stringa non vuota tra 7 possibilità.
+1. **Non usare mai `==` con `true` o `false`**: usare il test booleano diretto o `===`.
+2. **Fare attenzione con `[]`, `""`, `0` su entrambi i lati**: valutare se `===` è più chiaro.
+3. **`== null` è sicuro e idiomatico**: controlla sia `null` sia `undefined`.
+4. **`typeof x == "function"`** è 100% equivalente a `=== "function"`, perché `typeof` restituisce sempre una stringa non vuota tra 7 possibilità.
 
 ```js
 /* check null/undefined in un colpo — idioma corretto */
@@ -414,17 +414,17 @@ Number(a) < Number(b);      // true  — confronto numerico esplicito
 
 **Coercion esplicita**: `String()`, `Number()`, `Boolean()`, `!!`, `+n`, `n - 0`.
 
-**Coercion implicita**: `+` con una stringa → concatenazione; `-`/`*`/`/` → sempre numero; `||`/`&&` restituiscono un operando (non un booleano); contesti booleani attivano `ToBoolean`.
+**Coercion implicita**: `+` con una stringa produce una concatenazione; `-`/`*`/`/` producono sempre un numero; `||`/`&&` restituiscono un operando (non un booleano); contesti booleani attivano `ToBoolean`.
 
 **`==` vs `===`**: la differenza è la coercion, non la verifica del tipo. Regole chiave:
-- Stringa == Numero → stringa coerced a numero
-- Booleano == qualsiasi → booleano coerced a numero PRIMA
-- Oggetto == primitivo → `ToPrimitive(oggetto)`
-- `null == undefined` → `true` (solo tra loro)
+- Stringa == Numero: stringa coerced a numero
+- Booleano == qualsiasi: booleano coerced a numero PRIMA
+- Oggetto == primitivo: `ToPrimitive(oggetto)`
+- `null == undefined`: `true` (solo tra loro)
 
 **I 7 gotcha** di `==` si evitano con due regole: mai `==` con booleani; attenzione a `[]`, `""`, `0`.
 
-**Confronto relazionale**: entrambe stringhe → lessicografico; altrimenti → numerico. `<=` e `>=` sono negazione del contrario, non "minore/maggiore o uguale".
+**Confronto relazionale**: se entrambi gli operandi sono stringhe il confronto è lessicografico, altrimenti è numerico. `<=` e `>=` sono negazione del contrario, non "minore/maggiore o uguale".
 
 ```js
 /* ToNumber curiosità */
@@ -453,7 +453,7 @@ Number([42]) < Number("043"); // true — numerico
 <details>
 <summary>Perché `[] == ![]` è `true` in JavaScript?</summary>
 
-L'espressione si valuta in due fasi. Prima, l'operatore `!` trasforma `[]` in `false` (perché `[]` è truthy, e `!truthy` → `false`), quindi l'espressione diventa `[] == false`. Poi si applicano le regole di abstract equality: `false` viene convertito a numero → `0`; l'array `[]` viene convertito via `ToPrimitive` → `""` → `0`. Infine `0 == 0` è `true`. Il risultato non è "magia": segue regole precise, ma la catena di conversioni è lunga e non intuitiva — per questo è tra i casi da evitare con `==`.
+L'espressione si valuta in due fasi. Prima, l'operatore `!` trasforma `[]` in `false` (perché `[]` è truthy, e `!truthy` → `false`), quindi l'espressione diventa `[] == false`. Poi si applicano le regole di abstract equality: `false` viene convertito nel numero `0`; l'array `[]` viene convertito via `ToPrimitive` in `""` e poi in `0`. Infine `0 == 0` è `true`. Il risultato non è "magia": segue regole precise, ma la catena di conversioni è lunga e non intuitiva, e per questo è tra i casi da evitare con `==`.
 
 </details>
 
@@ -473,20 +473,20 @@ String(a);    // "4"  — usa toString
 <details>
 <summary>Perché non si dovrebbe mai usare `== true` o `== false`?</summary>
 
-Perché la specifica converte prima il booleano a numero (`true` → `1`, `false` → `0`) prima di confrontarlo con l'altro operando. Il risultato è quasi sempre controintuitivo: `"true" == true` è `false` (perché `"true"` → `NaN` e `1 != NaN`); `"0" == false` è `true` (perché `"0"` → `0` e `false` → `0`). L'intento di chi scrive `if (x == true)` è quasi sempre verificare se `x` è truthy — il che si fa semplicemente con `if (x)`. Se si vuole verificare uguaglianza stretta con il booleano, si usa `=== true`.
+Perché la specifica converte prima il booleano a numero (`true` → `1`, `false` → `0`) prima di confrontarlo con l'altro operando. Il risultato è quasi sempre controintuitivo: `"true" == true` è `false` (perché `"true"` → `NaN` e `1 != NaN`); `"0" == false` è `true` (perché `"0"` → `0` e `false` → `0`). L'intento di chi scrive `if (x == true)` è quasi sempre verificare se `x` è truthy, il che si fa semplicemente con `if (x)`. Se si vuole verificare uguaglianza stretta con il booleano, si usa `=== true`.
 
 </details>
 
 <details>
 <summary>In cosa `null == undefined` è diverso da `null === undefined`, e perché il primo è utile?</summary>
 
-`null === undefined` è `false` — tipi diversi, nessuna coercion, `===` li distingue. `null == undefined` è `true` — è una delle poche regole speciali della abstract equality: questi due valori sono considerati "ugualmente vuoti" da `==`. La conseguenza pratica è un idioma compatto: `if (a == null)` è vero sia se `a` è `null` sia se è `undefined`, e falso per qualsiasi altro valore (inclusi `0`, `""`, `false`). Questo è uno dei rari casi in cui `==` è preferibile a `===` per la sua concisione senza ambiguità.
+`null === undefined` è `false`: i tipi sono diversi, non c'è coercion e `===` li distingue. `null == undefined` è `true` per una delle poche regole speciali della abstract equality: questi due valori sono considerati "ugualmente vuoti" da `==`. La conseguenza pratica è un idioma compatto: `if (a == null)` è vero sia se `a` è `null` sia se è `undefined`, e falso per qualsiasi altro valore (inclusi `0`, `""`, `false`). Questo è uno dei rari casi in cui `==` è preferibile a `===` per la sua concisione senza ambiguità.
 
 </details>
 
 <details>
 <summary>Perché `a <= b` può essere `true` anche quando `a < b`, `a == b` e `a > b` sono tutti `false`?</summary>
 
-La specifica definisce `a <= b` non come "minore o uguale" ma come `!(b < a)` — la negazione del "b è strettamente minore di a". Quando due oggetti producono la stessa stringa da `ToPrimitive` (per esempio entrambi `"[object Object]"`), `a < b` è `false` e `b < a` è anche `false`. Di conseguenza `!(b < a)` è `true`. Lo stesso ragionamento porta `a >= b` ad essere `true`. Il confronto `a == b` è `false` perché per gli oggetti `==` confronta i riferimenti (non i valori stringa), e i due oggetti sono istanze distinte. È un comportamento sorprendente ma logicamente consistente con le definizioni della specifica.
+La specifica definisce `a <= b` non come "minore o uguale" ma come `!(b < a)`, cioè la negazione di "b è strettamente minore di a". Quando due oggetti producono la stessa stringa da `ToPrimitive` (per esempio entrambi `"[object Object]"`), `a < b` è `false` e `b < a` è anche `false`. Di conseguenza `!(b < a)` è `true`. Lo stesso ragionamento porta `a >= b` ad essere `true`. Il confronto `a == b` è `false` perché per gli oggetti `==` confronta i riferimenti (non i valori stringa), e i due oggetti sono istanze distinte. È un comportamento sorprendente ma logicamente consistente con le definizioni della specifica.
 
 </details>

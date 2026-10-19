@@ -22,7 +22,7 @@ ajax("http://some.url.1", function(data) {
 
 ## Il problema cognitivo: il cervello è sequenziale
 
-Il cervello umano pianifica in modo **sequenziale e bloccante**: "prima A, poi B, poi C". I callback esprimono l'asincronia in modo non-lineare — il flusso salta tra funzioni diverse, spesso definite lontano l'una dall'altra nel codice.
+Il cervello umano pianifica in modo **sequenziale e bloccante**: "prima A, poi B, poi C". I callback esprimono l'asincronia in modo non-lineare: il flusso salta tra funzioni diverse, spesso definite lontano l'una dall'altra nel codice.
 
 Questa divergenza cognitiva è il primo problema fondamentale dei callback: il codice è difficile da leggere, ragionare, debuggare e mantenere non perché la nesting sia brutta in sé, ma perché il flusso esecutivo non corrisponde al modo in cui il cervello traccia la sequenza degli eventi.
 
@@ -57,7 +57,7 @@ function response(text) {
 }
 ```
 
-Il codice non è annidato, ma per capire il flusso bisogna ancora saltare da una funzione all'altra. La difficoltà è strutturale, non visiva.
+Il codice non è annidato, ma per capire il flusso bisogna ancora saltare da una funzione all'altra: la difficoltà è strutturale.
 
 Un ulteriore problema: se `doA` è async e `doD` è async, l'ordine di esecuzione è:
 
@@ -74,9 +74,9 @@ doB();
 /* Ordine reale: A → B → C → D → E → F */
 ```
 
-Ma se per qualche condizione `doA` diventasse sync, l'ordine cambierebbe — e il codice che sembrava corretto si rompe silenziosamente.
+Ma se per qualche condizione `doA` diventasse sync, l'ordine cambierebbe, e il codice che sembrava corretto si rompe silenziosamente.
 
-I callback hardcodano la sequenza: lo step 2 chiama lo step 3, lo step 3 chiama lo step 4. Non c'è spazio per retry, fork del flusso, gestione di errori diversificata — ogni eventualità va aggiunta manualmente, rendendo il codice fragile e non riutilizzabile.
+I callback hardcodano la sequenza: lo step 2 chiama lo step 3, lo step 3 chiama lo step 4. Non c'è spazio per retry, fork del flusso, gestione di errori diversificata: ogni eventualità va aggiunta manualmente, rendendo il codice fragile e non riutilizzabile.
 
 ---
 
@@ -92,7 +92,7 @@ ajax("..", function(..) {
 // B
 ```
 
-`A` e `B` sono sotto il controllo diretto del programma. `C` è ceduto ad `ajax()` — che potrebbe essere una libreria di terze parti. Esiste un contratto implicito: si assume che `ajax()` chiamerà il callback **esattamente una volta**, al momento giusto, con i parametri corretti.
+`A` e `B` sono sotto il controllo diretto del programma. `C` è ceduto ad `ajax()`, che potrebbe essere una libreria di terze parti. Esiste un contratto implicito: si assume che `ajax()` chiamerà il callback **esattamente una volta**, al momento giusto, con i parametri corretti.
 
 ### Un caso reale: cinque chiamate invece di una
 
@@ -126,7 +126,7 @@ Ma questo non risolve tutte le possibili misbehavior di un sistema di terze part
 - Callback chiamato senza i parametri necessari
 - Eccezioni interne silenziose che impediscono la chiamata
 
-E il problema non riguarda solo il codice di terze parti. Anche il proprio codice va difeso nello stesso modo — come si fa con gli input delle funzioni:
+Il problema riguarda anche il proprio codice, che va difeso nello stesso modo in cui si difendono gli input delle funzioni:
 
 ```js
 /* troppo fiduciosa */
@@ -142,7 +142,7 @@ function addNumbers(x, y) {
 }
 ```
 
-Lo stesso principio "trust, but verify" dovrebbe applicarsi a ogni callback — ma i callback non forniscono strumenti built-in per farlo. Tutto deve essere costruito manualmente, a ogni utilizzo.
+Lo stesso principio "trust, but verify" dovrebbe applicarsi a ogni callback, ma i callback non forniscono strumenti built-in per farlo. Tutto deve essere costruito manualmente, a ogni utilizzo.
 
 ---
 
@@ -212,7 +212,7 @@ a++;
 /* Se il callback è asincrono: stampa 1 */
 ```
 
-Il nome colloquiale per questo anti-pattern è **Zalgo**. La regola: un'API non deve mai essere sync in certi casi e async in altri — deve scegliere uno e rispettarlo sempre. La soluzione è avvolgere in un `asyncify`:
+Il nome colloquiale per questo anti-pattern è **Zalgo**. La regola: un'API non deve mai essere sync in certi casi e async in altri: deve scegliere uno e rispettarlo sempre. La soluzione è avvolgere in un `asyncify`:
 
 ```js
 function asyncify(fn) {
@@ -248,15 +248,15 @@ Ogni soluzione è possibile, ma richiede boilerplate costoso e specifico. I call
 
 **Due problemi fondamentali dei callback:**
 
-1. **Cognitive mismatch**: il cervello pianifica sequenzialmente; i callback esprimono flussi non-lineari. Il problema non è il nesting visivo — è la difficoltà di tracciare mentalmente il flusso async.
+1. **Cognitive mismatch**: il cervello pianifica sequenzialmente; i callback esprimono flussi non-lineari. Il problema non è il nesting visivo, ma la difficoltà di tracciare mentalmente il flusso async.
 
 2. **Inversion of control**: passare un callback a una terza parte significa cedere il controllo sulla continuazione del programma. Nessuna garanzia built-in su quante volte verrà chiamato, quando, con quali argomenti.
 
 **Pattern di mitigazione (tutti parziali):**
-- Split callback (success/error) — verboso, non previene invocazioni multiple
-- Error-first style (Node.js) — convenzione, non garanzia
-- `timeoutify` — protegge dal "mai chiamato"
-- `asyncify` — previene il nondeterminismo sync/async (Zalgo)
+- Split callback (success/error): verboso, non previene invocazioni multiple
+- Error-first style (Node.js): convenzione, non garanzia
+- `timeoutify`: protegge dal "mai chiamato"
+- `asyncify`: previene il nondeterminismo sync/async (Zalgo)
 
 ```js
 /* error-first style */
@@ -280,7 +280,7 @@ ajax("http://url.1", timeoutify(callback, 3000));
 ajax("http://url.1", asyncify(callback));
 ```
 
-La soluzione vera a questi problemi non è un'altra convenzione sui callback — sono le **Promise** (Cap. 3), che invertono l'inversione di controllo.
+La soluzione a questi problemi sono le **Promise** (Cap. 3), che invertono l'inversione di controllo invece di aggiungere un'altra convenzione sui callback.
 
 ---
 
@@ -303,20 +303,20 @@ L'inversion of control si verifica quando si passa un callback a una funzione es
 <details>
 <summary>Qual è il problema del pattern sync-or-async (Zalgo) e come si evita?</summary>
 
-Un'API che a volte chiama il callback in modo sincrono (es. cache hit) e a volte in modo asincrono (es. rete) introduce nondeterminismo: il comportamento del codice che segue il `ajax()` dipende da condizioni runtime invisibili. Il programma stampa valori diversi, esegue passi in ordine diverso, si comporta in modo non riproducibile. La regola è "mai Zalgo": un'API deve scegliere se essere sempre sincrona o sempre asincrona e rispettare questa scelta incondizionatamente. Per forzare l'asincronia si usa il pattern `asyncify`: si avvolge il callback in modo che, anche se l'utility lo chiama in modo sincrono, l'esecuzione effettiva viene posticipata con `setTimeout(fn, 0)`.
+Un'API che a volte chiama il callback in modo sincrono (es. cache hit) e a volte in modo asincrono (es. rete) introduce nondeterminismo: il comportamento del codice che segue il `ajax()` dipende da condizioni runtime invisibili. Il programma può stampare valori diversi o eseguire passi in ordine diverso, in modo non riproducibile. La regola è "mai Zalgo": un'API deve scegliere se essere sempre sincrona o sempre asincrona e rispettare questa scelta incondizionatamente. Per forzare l'asincronia si usa il pattern `asyncify`: si avvolge il callback in modo che, anche se l'utility lo chiama in modo sincrono, l'esecuzione effettiva viene posticipata con `setTimeout(fn, 0)`.
 
 </details>
 
 <details>
 <summary>Perché l'error-first style (Node.js) non risolve i trust issue dei callback?</summary>
 
-L'error-first style è una convenzione che standardizza il modo in cui gli errori vengono comunicati (`function(err, data)`), ma non fornisce garanzie sul comportamento dell'API chiamante. Non previene: callback mai chiamato (nessun errore, nessun dato — silenzio totale), callback chiamato più volte (l'`if (err)` viene eseguito ripetutamente), comportamento sync-or-async nondeterministico. È utile come convenzione per la leggibilità e l'uniformità del codice, ma rimane solo una convenzione — non un meccanismo di enforcement. I problemi strutturali dell'inversion of control rimangono intatti.
+L'error-first style è una convenzione che standardizza il modo in cui gli errori vengono comunicati (`function(err, data)`), ma non fornisce garanzie sul comportamento dell'API chiamante. Non previene: callback mai chiamato (nessun errore, nessun dato: silenzio totale), callback chiamato più volte (l'`if (err)` viene eseguito ripetutamente), comportamento sync-or-async nondeterministico. È utile come convenzione per la leggibilità e l'uniformità del codice, ma rimane solo una convenzione, non un meccanismo di enforcement. I problemi strutturali dell'inversion of control rimangono intatti.
 
 </details>
 
 <details>
 <summary>Perché le Promise sono una soluzione migliore ai problemi dei callback?</summary>
 
-Le Promise invertono l'inversione di controllo. Invece di passare il callback alla terza parte e aspettare che la chiami, si riceve indietro una Promise — un oggetto che rappresenta il completamento futuro (o il fallimento) dell'operazione. Il codice che reagisce al risultato (`.then()`, `.catch()`) viene registrato sulla Promise stessa, non ceduto alla terza parte. Questo sposta il controllo: è il programma che decide quando e come consumare il risultato, non la libreria esterna. Le Promise garantiscono: risoluzione una sola volta (immutable), notifica sempre asincrona (Job queue), propagazione degli errori, componibilità. Tutto ciò che con i callback richiedeva boilerplate manuale è built-in.
+Le Promise invertono l'inversione di controllo. Invece di passare il callback alla terza parte e aspettare che la chiami, si riceve indietro una Promise, cioè un oggetto che rappresenta il completamento futuro (o il fallimento) dell'operazione. Il codice che reagisce al risultato (`.then()`, `.catch()`) viene registrato sulla Promise stessa, non ceduto alla terza parte. Questo sposta il controllo: è il programma che decide quando e come consumare il risultato, non la libreria esterna. Le Promise garantiscono: risoluzione una sola volta (immutable), notifica sempre asincrona (Job queue), propagazione degli errori, componibilità. Tutto ciò che con i callback richiedeva boilerplate manuale è built-in.
 
 </details>

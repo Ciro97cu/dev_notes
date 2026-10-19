@@ -4,7 +4,7 @@ I **natives** sono le funzioni costruttore built-in di JavaScript: `String()`, `
 
 ## Object wrapper e autoboxing
 
-Chiamando `new String("abc")` non si ottiene una stringa — si ottiene un **oggetto** wrapper attorno alla stringa primitiva:
+Chiamando `new String("abc")` non si ottiene una stringa, ma un **oggetto** wrapper attorno alla stringa primitiva:
 
 ```js
 var a = new String("abc");
@@ -46,7 +46,7 @@ if (!a) {
 }
 ```
 
-L'oggetto wrapper `Boolean(false)` è un oggetto — e tutti gli oggetti sono **truthy**. Il valore primitivo che racchiude (`false`) è irrilevante per la valutazione booleana.
+L'oggetto wrapper `Boolean(false)` è un oggetto, e tutti gli oggetti sono **truthy**. Il valore primitivo che racchiude (`false`) è irrilevante per la valutazione booleana.
 
 ### Unboxing con `valueOf()`
 
@@ -79,7 +79,7 @@ var a = new Array(1, 2, 3); // [1, 2, 3] — uguale a [1,2,3]
 var b = new Array(3);       /* PERICOLO: non [3], ma array con length=3 e slot vuoti */
 ```
 
-`Array(3)` con un solo argomento numerico non crea un array con il valore `3` — crea uno **sparse array** con `length` 3 e nessuno slot reale. Il comportamento è inconsistente:
+`Array(3)` con un solo argomento numerico non crea un array con il valore `3`, ma uno **sparse array** con `length` 3 e nessuno slot reale. Il comportamento è inconsistente:
 
 ```js
 var a = new Array(3);
@@ -103,7 +103,7 @@ a; // [undefined, undefined, undefined]
 
 ### `Object()`, `Function()`, `RegExp()`
 
-Tutte preferire nella forma literal:
+Per tutte e tre è da preferire la forma literal:
 
 ```js
 /* preferire sempre il literal */
@@ -121,7 +121,7 @@ var pattern = new RegExp("\\b(?:" + name + ")+\\b", "ig");
 
 ### `Date()` e `Error()`
 
-Questi due **non hanno forma literal** — il costruttore è necessario:
+Questi due **non hanno forma literal**, quindi il costruttore è necessario:
 
 ```js
 /* timestamp Unix corrente */
@@ -135,9 +135,9 @@ function foo(x) {
 }
 ```
 
-`Date()` senza `new` restituisce una stringa con data/ora corrente — non un oggetto Date.
+`Date()` senza `new` restituisce una stringa con data/ora corrente, non un oggetto Date.
 
-Gli oggetti `Error` catturano il contesto dello stack di esecuzione nel momento della creazione (proprietà `.stack`). Oltre a `Error`, esistono sottotipi specifici: `TypeError`, `ReferenceError`, `SyntaxError`, ecc. — usati automaticamente dall'engine, raramente necessari manualmente.
+Gli oggetti `Error` catturano il contesto dello stack di esecuzione nel momento della creazione (proprietà `.stack`). Oltre a `Error`, esistono sottotipi specifici (`TypeError`, `ReferenceError`, `SyntaxError`, ecc.), usati automaticamente dall'engine e raramente necessari manualmente.
 
 ### `Symbol()`
 
@@ -153,7 +153,7 @@ obj[mysym] = "foobar";
 Object.getOwnPropertySymbols(obj); // [Symbol(my own symbol)]
 ```
 
-I symbol non sono privati (sono enumerabili con `getOwnPropertySymbols`), ma convenzionalmente segnalano proprietà interne/speciali — sostituendo il pattern del prefisso `_`. Non sono oggetti: sono scalari primitivi.
+I symbol non sono privati (sono enumerabili con `getOwnPropertySymbols`), ma convenzionalmente segnalano proprietà interne/speciali, sostituendo il pattern del prefisso `_`. Non sono oggetti: sono scalari primitivi.
 
 ---
 
@@ -161,10 +161,10 @@ I symbol non sono privati (sono enumerabili con `getOwnPropertySymbols`), ma con
 
 Ogni native costruttore ha il proprio `.prototype` con i metodi specifici del sottotipo:
 
-- `String.prototype` → `indexOf()`, `charAt()`, `slice()`, `toUpperCase()`, `trim()`, …
-- `Number.prototype` → `toFixed()`, `toPrecision()`, `toExponential()`, …
-- `Array.prototype` → `push()`, `pop()`, `map()`, `filter()`, `concat()`, …
-- `Function.prototype` → `call()`, `apply()`, `bind()`, …
+- `String.prototype`: `indexOf()`, `charAt()`, `slice()`, `toUpperCase()`, `trim()`, …
+- `Number.prototype`: `toFixed()`, `toPrecision()`, `toExponential()`, …
+- `Array.prototype`: `push()`, `pop()`, `map()`, `filter()`, `concat()`, …
+- `Function.prototype`: `call()`, `apply()`, `bind()`, …
 
 Tutti i valori del relativo tipo accedono a questi metodi tramite prototype delegation (autoboxing incluso).
 
@@ -191,7 +191,7 @@ function isThisCool(vals, fn, rx) {
 isThisCool(); // true — nessun errore
 ```
 
-I prototype sono già creati una volta sola al boot del runtime — nessuna allocazione aggiuntiva. **Attenzione**: usarli come default va bene solo se non vengono mai modificati; mutare `Array.prototype` ha effetti globali.
+I prototype sono già creati una volta sola al boot del runtime, quindi non serve alcuna allocazione aggiuntiva. Usarli come default va bene solo se non vengono mai modificati, perché mutare `Array.prototype` ha effetti globali.
 
 ---
 
@@ -235,14 +235,14 @@ typeof sym; // "symbol"
 <details>
 <summary>Cosa restituisce `new String("abc")` e perché non va usato direttamente?</summary>
 
-Restituisce un **oggetto** (`typeof` → `"object"`) che racchiude la stringa primitiva `"abc"`, non la stringa stessa. Questo causa comportamenti inaspettati: l'oggetto è sempre truthy (anche se wrappa `false` o `""` o `0`), i confronti con `===` falliscono (`new String("abc") === "abc"` → `false`), e il debug è più complesso. L'engine fa già l'autoboxing automaticamente quando serve accedere a metodi o proprietà — non è mai necessario creare wrapper manualmente. La forma corretta è sempre il literal primitivo: `"abc"`, `42`, `true`.
+Restituisce un **oggetto** (`typeof` → `"object"`) che racchiude la stringa primitiva `"abc"`, non la stringa stessa. Questo causa comportamenti inaspettati: l'oggetto è sempre truthy (anche se wrappa `false` o `""` o `0`), i confronti con `===` falliscono (`new String("abc") === "abc"` → `false`), e il debug è più complesso. L'engine fa già l'autoboxing automaticamente quando serve accedere a metodi o proprietà, quindi non è mai necessario creare wrapper manualmente. La forma corretta è sempre il literal primitivo: `"abc"`, `42`, `true`.
 
 </details>
 
 <details>
 <summary>Perché `new Array(3)` è pericoloso?</summary>
 
-Perché `Array()` con un singolo argomento numerico non crea un array contenente quel numero — crea un array con `length` impostato a quel numero ma senza slot reali (sparse array). Il comportamento è incoerente tra i metodi: `join()` funziona iterando su `length`, ma `map()`, `filter()`, `forEach()` saltano gli slot vuoti perché non esistono. Il risultato è codice che "funziona" in certi casi e fallisce silenziosamente in altri. Per creare un array di `undefined` reali: `Array.apply(null, { length: 3 })`.
+Perché `Array()` con un singolo argomento numerico non crea un array contenente quel numero, bensì un array con `length` impostato a quel numero e senza slot reali (sparse array). Il comportamento è incoerente tra i metodi: `join()` funziona iterando su `length`, ma `map()`, `filter()`, `forEach()` saltano gli slot vuoti perché non esistono. Il risultato è codice che "funziona" in certi casi e fallisce silenziosamente in altri. Per creare un array di `undefined` reali: `Array.apply(null, { length: 3 })`.
 
 </details>
 
@@ -256,13 +256,13 @@ Costruire pattern regex dinamicamente a runtime, quando il pattern non è noto i
 <details>
 <summary>Perché `Function.prototype` è una funzione vuota e come si può usare questo fatto?</summary>
 
-È una peculiarità dei native prototypes: il prototype di ogni costruttore ha il tipo "giusto" per quel costruttore. `Function.prototype` è una funzione vuota, `Array.prototype` è un array vuoto, `RegExp.prototype` è una regex vuota. Si può sfruttare questo come valore default "gratuito" per parametri opzionali: `fn = fn || Function.prototype` garantisce che `fn` sia sempre chiamabile anche se non fornito, senza creare una nuova funzione anonima ad ogni chiamata. **Attenzione**: non modificare mai questi prototypes — qualsiasi modifica ha effetti globali su tutti i valori di quel tipo.
+È una peculiarità dei native prototypes: il prototype di ogni costruttore ha il tipo "giusto" per quel costruttore. `Function.prototype` è una funzione vuota, `Array.prototype` è un array vuoto, `RegExp.prototype` è una regex vuota. Si può sfruttare questo come valore default "gratuito" per parametri opzionali: `fn = fn || Function.prototype` garantisce che `fn` sia sempre chiamabile anche se non fornito, senza creare una nuova funzione anonima ad ogni chiamata. Questi prototypes non vanno mai modificati, perché qualsiasi modifica ha effetti globali su tutti i valori di quel tipo.
 
 </details>
 
 <details>
 <summary>In cosa si differenziano `Symbol` dagli altri tipi primitivi?</summary>
 
-I `Symbol` sono primitivi scalari unici creati con `Symbol("descrizione")` — senza `new` (lancerebbe `TypeError`). Sono unici per design: due chiamate `Symbol("foo")` producono simboli diversi. Vengono usati come chiavi di proprietà per evitare collisioni accidentali — specialmente utili per proprietà "interne" o per i protocolli built-in di ES6 come `Symbol.iterator`. Non sono privati (`Object.getOwnPropertySymbols()` li rivela), ma segnalano convenzionalmente che una proprietà è speciale. A differenza degli altri primitivi, non hanno un native costruttore usabile con `new`.
+I `Symbol` sono primitivi scalari unici creati con `Symbol("descrizione")`, senza `new` (lancerebbe `TypeError`). Sono unici per design: due chiamate `Symbol("foo")` producono simboli diversi. Vengono usati come chiavi di proprietà per evitare collisioni accidentali, e sono utili specialmente per proprietà "interne" o per i protocolli built-in di ES6 come `Symbol.iterator`. Non sono privati (`Object.getOwnPropertySymbols()` li rivela), ma segnalano convenzionalmente che una proprietà è speciale. A differenza degli altri primitivi, non hanno un native costruttore usabile con `new`.
 
 </details>

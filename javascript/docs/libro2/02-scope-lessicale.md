@@ -4,9 +4,9 @@ Esistono due modelli principali per definire come funziona lo scope. Il primo, u
 
 ## Scope definito al momento della scrittura
 
-Il lexical scope è scope definito al momento del **lexing** — la prima fase del processo di compilazione in cui il codice sorgente viene analizzato e scomposto in token. In termini pratici, il lexical scope è determinato da **dove le funzioni vengono dichiarate nel codice**, non da dove vengono chiamate.
+Il lexical scope è scope definito al momento del **lexing**, la prima fase del processo di compilazione, in cui il codice sorgente viene analizzato e scomposto in token. In termini pratici, il lexical scope è determinato da **dove le funzioni vengono dichiarate nel codice**, non da dove vengono chiamate.
 
-Questa distinzione è fondamentale: nel momento in cui si scrive il codice (non quando viene eseguito) lo scope di ogni variabile è già fissato.
+Ne segue che, nel momento in cui si scrive il codice (non quando viene eseguito), lo scope di ogni variabile è già fissato.
 
 ```js
 function foo(a) {
@@ -26,21 +26,21 @@ In questo esempio esistono tre scope annidati, spesso visualizzati come **bolle*
 
 ![Scope Bubbles](../../assets/images/scope-bubbles.svg)
 
-- **Bolla ①** — Global scope: contiene solo `foo`
-- **Bolla ②** — Scope di `foo()`: contiene `a`, `b`, `bar`
-- **Bolla ③** — Scope di `bar()`: contiene solo `c`
+- **Bolla ①** (global scope): contiene solo `foo`
+- **Bolla ②** (scope di `foo()`): contiene `a`, `b`, `bar`
+- **Bolla ③** (scope di `bar()`): contiene solo `c`
 
-Le bolle sono definite da **dove** le funzioni vengono dichiarate nel codice — non da dove vengono chiamate. `bar` è dichiarata dentro `foo`, quindi la bolla ③ è interamente contenuta nella bolla ②, che è a sua volta contenuta nella bolla ①. Non esistono bolle parzialmente sovrapposte.
+Le bolle sono definite da **dove** le funzioni vengono dichiarate nel codice, non da dove vengono chiamate. `bar` è dichiarata dentro `foo`, quindi la bolla ③ è interamente contenuta nella bolla ②, che è a sua volta contenuta nella bolla ①. Non esistono bolle parzialmente sovrapposte.
 
 ### Lookup e shadowing
 
 Quando l'engine esegue `console.log(a, b, c)` dentro `bar`, cerca le tre variabili partendo dallo scope più interno:
 
-- `c` — trovata direttamente nello scope di `bar` (bolla ③). La ricerca si ferma.
-- `a` — non trovata in `bar`, si risale a `foo`. Trovata. La ricerca si ferma.
-- `b` — non trovata in `bar`, si risale a `foo`. Trovata. La ricerca si ferma.
+- `c`: trovata direttamente nello scope di `bar` (bolla ③). La ricerca si ferma.
+- `a`: non trovata in `bar`, si risale a `foo`. Trovata. La ricerca si ferma.
+- `b`: non trovata in `bar`, si risale a `foo`. Trovata. La ricerca si ferma.
 
-La ricerca nello scope si ferma al **primo risultato** trovato. Se una variabile con lo stesso nome esiste in più scope annidati, quella dello scope più interno "nasconde" (shadow) quella esterna — meccanismo chiamato **shadowing**.
+La ricerca nello scope si ferma al **primo risultato** trovato. Se una variabile con lo stesso nome esiste in più scope annidati, quella dello scope più interno "nasconde" (shadow) quella esterna: è il meccanismo chiamato **shadowing**.
 
 ```js
 var a = "globale";
@@ -56,13 +56,13 @@ console.log(a); // "globale"
 
 > Le variabili globali sono anche proprietà dell'oggetto globale (`window` nel browser). Una variabile globale oscurata da una locale rimane accessibile tramite `window.a`, ma le variabili locali oscurate non hanno questa via d'uscita.
 
-Una regola importante: lo scope lessicale di una funzione dipende esclusivamente da **dove è dichiarata**, non da dove viene chiamata. Questo principio vale sempre, anche quando una funzione viene passata come argomento o restituita da un'altra funzione.
+Lo scope lessicale di una funzione dipende esclusivamente da **dove è dichiarata**, non da dove viene chiamata. Questo principio vale sempre, anche quando una funzione viene passata come argomento o restituita da un'altra funzione.
 
 ---
 
 ## Aggirare il lexical scope
 
-Il lexical scope è un contratto stabilito al momento della scrittura del codice, prima dell'esecuzione. Esistono però due meccanismi in JavaScript che lo modificano a runtime. Entrambi sono **fortemente sconsigliati** — non solo per questioni di leggibilità, ma per un motivo tecnico preciso: degradano le prestazioni dell'engine.
+Il lexical scope è un contratto stabilito al momento della scrittura del codice, prima dell'esecuzione. Esistono però due meccanismi in JavaScript che lo modificano a runtime. Entrambi sono **fortemente sconsigliati**, per la leggibilità e anche per un motivo tecnico preciso: degradano le prestazioni dell'engine.
 
 ### `eval()`
 
@@ -125,11 +125,11 @@ console.log(o2.a); // undefined — o2 non ha `a`
 console.log(a);    // 2 — ATTENZIONE: variabile globale creata automaticamente!
 ```
 
-Quando `with` non trova la proprietà `a` nell'oggetto, il LHS lookup risale agli scope esterni. In non-strict mode, se non la trova da nessuna parte, la crea nel global scope — esattamente come accade con le variabili non dichiarate.
+Quando `with` non trova la proprietà `a` nell'oggetto, il LHS lookup risale agli scope esterni. In non-strict mode, se non la trova da nessuna parte, la crea nel global scope, esattamente come accade con le variabili non dichiarate.
 
 ### Perché degradano le prestazioni
 
-Il JavaScript engine ottimizza il lookup delle variabili durante la fase di compilazione, analizzando staticamente il codice per sapere in anticipo dove si trova ogni identificatore. Quando incontra un `eval()` o un `with`, deve abbandonare queste ottimizzazioni perché non può sapere a compile-time cosa conterrà la stringa di `eval()` o le proprietà dell'oggetto passato a `with`. Il risultato è che tutto il codice in quello scope viene eseguito senza ottimizzazioni — indipendentemente da quanto `eval()` o `with` siano "innocui" nel caso specifico.
+Il JavaScript engine ottimizza il lookup delle variabili durante la fase di compilazione, analizzando staticamente il codice per sapere in anticipo dove si trova ogni identificatore. Quando incontra un `eval()` o un `with`, deve abbandonare queste ottimizzazioni perché non può sapere a compile-time cosa conterrà la stringa di `eval()` o le proprietà dell'oggetto passato a `with`. Il risultato è che tutto il codice in quello scope viene eseguito senza ottimizzazioni, indipendentemente da quanto `eval()` o `with` siano "innocui" nel caso specifico.
 
 > Non usare `eval()` per eseguire codice generato dinamicamente, e non usare `with`. I casi d'uso legittimi sono praticamente inesistenti, e il costo in prestazioni è reale.
 
@@ -137,7 +137,7 @@ Il JavaScript engine ottimizza il lookup delle variabili durante la fase di comp
 
 ## Ripasso veloce
 
-**Lexical scope** = scope definito al momento della scrittura, da dove le funzioni sono dichiarate — non da dove vengono chiamate.
+**Lexical scope** = scope definito al momento della scrittura, da dove le funzioni sono dichiarate, non da dove vengono chiamate.
 
 **Scope bubbles**: ogni funzione crea una bolla di scope. Le bolle si annidano strettamente, mai parzialmente sovrapposte.
 
@@ -155,7 +155,7 @@ f();
 console.log(x); // 1 — lo scope esterno non è stato toccato
 ```
 
-**`eval()` e `with`** modificano lo scope lessicale a runtime → disabilitano le ottimizzazioni dell'engine → codice più lento. Non usarli.
+**`eval()` e `with`** modificano lo scope lessicale a runtime, quindi disabilitano le ottimizzazioni dell'engine e rendono il codice più lento. Non usarli.
 
 ---
 
@@ -171,14 +171,14 @@ Significa che la struttura dello scope di ogni funzione è determinata da dove q
 <details>
 <summary>Cos'è il shadowing e quali conseguenze ha?</summary>
 
-Il shadowing avviene quando una variabile dichiarata in uno scope interno ha lo stesso nome di una variabile in uno scope esterno. Il lookup si ferma alla prima occorrenza trovata, partendo dallo scope più interno — quindi la variabile interna "oscura" quella esterna, che diventa inaccessibile con quel nome all'interno dello scope interno. Le variabili globali oscurate restano accessibili tramite `window.nome` nel browser; le variabili locali oscurate non hanno questa via d'uscita.
+Il shadowing avviene quando una variabile dichiarata in uno scope interno ha lo stesso nome di una variabile in uno scope esterno. Il lookup si ferma alla prima occorrenza trovata, partendo dallo scope più interno, quindi la variabile interna "oscura" quella esterna, che diventa inaccessibile con quel nome all'interno dello scope interno. Le variabili globali oscurate restano accessibili tramite `window.nome` nel browser; le variabili locali oscurate non hanno questa via d'uscita.
 
 </details>
 
 <details>
 <summary>Perché `eval()` e `with` peggiorano le prestazioni anche quando non fanno nulla di "dannoso"?</summary>
 
-L'engine ottimizza il lookup delle variabili durante la compilazione, determinando in anticipo la posizione esatta di ogni identificatore. Quando vede `eval()` o `with`, non può più fare questa analisi statica — non sa cosa conterrà la stringa di `eval` né quali proprietà avrà l'oggetto di `with` a runtime. Per sicurezza, disattiva le ottimizzazioni per l'intero scope in cui appaiono. Il costo si applica a tutto il codice in quello scope, non solo alla riga con `eval` o `with`.
+L'engine ottimizza il lookup delle variabili durante la compilazione, determinando in anticipo la posizione esatta di ogni identificatore. Quando vede `eval()` o `with`, non può più fare questa analisi statica, perché non sa cosa conterrà la stringa di `eval` né quali proprietà avrà l'oggetto di `with` a runtime. Per sicurezza, disattiva le ottimizzazioni per l'intero scope in cui appaiono. Il costo si applica a tutto il codice in quello scope, non solo alla riga con `eval` o `with`.
 
 </details>
 
@@ -192,6 +192,6 @@ In non-strict mode, le dichiarazioni fatte dentro `eval()` modificano lo scope l
 <details>
 <summary>Perché `with` può creare variabili globali accidentalmente?</summary>
 
-Perché `with` tratta l'oggetto passato come uno scope lessicale temporaneo. Quando il codice dentro `with` fa un LHS lookup su un identificatore non presente come proprietà dell'oggetto, la ricerca risale agli scope esterni nel modo normale. Se non trova la variabile in nessuno scope e il programma è in non-strict mode, il global scope la crea automaticamente — esattamente come accade con le variabili non dichiarate. Questo comportamento silenzioso è una delle ragioni per cui `with` è proibito in strict mode e deprecato nel linguaggio.
+Perché `with` tratta l'oggetto passato come uno scope lessicale temporaneo. Quando il codice dentro `with` fa un LHS lookup su un identificatore non presente come proprietà dell'oggetto, la ricerca risale agli scope esterni nel modo normale. Se non trova la variabile in nessuno scope e il programma è in non-strict mode, il global scope la crea automaticamente, esattamente come accade con le variabili non dichiarate. Questo comportamento silenzioso è una delle ragioni per cui `with` è proibito in strict mode e deprecato nel linguaggio.
 
 </details>

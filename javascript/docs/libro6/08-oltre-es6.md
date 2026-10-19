@@ -2,13 +2,13 @@
 
 ES6 ha introdotto una quantità considerevole di novità, ma il TC39 non si è fermato lì: nel momento in cui ES6 veniva finalizzato, erano già in lavorazione numerose proposte per le versioni successive. Questo capitolo ne esamina alcune tra le più significative, alcune delle quali erano già supportate da transpiler come Babel o Traceur al momento della scrittura del libro.
 
-> **Nota:** Le funzionalità descritte qui erano in vari stadi di proposta al momento della pubblicazione (2015). La maggior parte ha poi raggiunto la specifica ufficiale — con la notevole eccezione di `Object.observe()`, ritirata dal processo TC39 nel dicembre 2015.
+> **Nota:** Le funzionalità descritte qui erano in vari stadi di proposta al momento della pubblicazione (2015). La maggior parte ha poi raggiunto la specifica ufficiale, con la notevole eccezione di `Object.observe()`, ritirata dal processo TC39 nel dicembre 2015.
 
 ---
 
 ## async functions
 
-Il pattern generator + Promise + runner visto nel capitolo 4 è potente, ma verboso. La proposta `async function` lo eleva a sintassi nativa, eliminando la necessità di un'utility esterna come `run()`.
+Il pattern generator + Promise + runner visto nel capitolo 4 è efficace, ma verboso. La proposta `async function` lo eleva a sintassi nativa, eliminando la necessità di un'utility esterna come `run()`.
 
 Si consideri il codice con generator:
 
@@ -54,7 +54,7 @@ main()
 .then(fulfilled, rejected);
 ```
 
-La simmetria con i generator è precisa: `function*` diventa `async function`, `yield` diventa `await`. L'engine sa autonomamente come attendere la risoluzione di una Promise prima di procedere. La chiamata a `main()` restituisce direttamente una Promise osservabile — equivalente a quella che `run(main)` avrebbe restituito.
+La simmetria con i generator è precisa: `function*` diventa `async function`, `yield` diventa `await`. L'engine sa autonomamente come attendere la risoluzione di una Promise prima di procedere. La chiamata a `main()` restituisce direttamente una Promise osservabile, equivalente a quella che `run(main)` avrebbe restituito.
 
 `async function` è zucchero sintattico (sugar, cioè una forma abbreviata che il compilatore espande nel pattern sottostante) per generators + promises + run(). Non aggiunge nuova semantica, ma rende il codice molto più leggibile.
 
@@ -109,7 +109,7 @@ obj.a = 42;   // { name: 'a', object: obj, type: 'update', oldValue: 1 }
 delete obj.b; // { name: 'b', object: obj, type: 'delete', oldValue: 2 }
 ```
 
-A differenza dei Proxy (capitolo 7), che intercettano le operazioni *prima* che avvengano, `Object.observe()` notificava *dopo* la modifica — alla fine del ciclo evento corrente.
+A differenza dei Proxy (capitolo 7), che intercettano le operazioni *prima* che avvengano, `Object.observe()` notificava *dopo* la modifica, alla fine del ciclo evento corrente.
 
 ### Custom change events
 
@@ -160,7 +160,7 @@ La sintassi è coerente con Python, Ruby e Perl. Supporta anche la forma di asse
 
 L'operatore `...` era già definito per array in ES6. La proposta post-ES6 lo estende agli oggetti.
 
-**Spread** — unire proprietà di più oggetti:
+Lo **spread** unisce le proprietà di più oggetti:
 
 ```js
 var o1 = { a: 1, b: 2 },
@@ -170,7 +170,7 @@ var o1 = { a: 1, b: 2 },
 console.log(o3.a, o3.b, o3.c, o3.d); // 1 2 3 4
 ```
 
-**Rest** — raccogliere le proprietà rimanenti dopo una destructuring:
+Il **rest** raccoglie le proprietà rimanenti dopo una destructuring:
 
 ```js
 var o1 = { b: 2, c: 3, d: 4 };
@@ -216,7 +216,7 @@ if (vals.includes(42)) { /* trovato */ }
 
 ## SIMD
 
-SIMD (Single Instruction, Multiple Data — un'istruzione su più dati contemporaneamente) espone istruzioni CPU di basso livello che operano su vettori di numeri in parallelo, anziché su un valore alla volta.
+SIMD (Single Instruction, Multiple Data, cioè un'istruzione su più dati contemporaneamente) espone istruzioni CPU di basso livello che operano su vettori di numeri in parallelo, anziché su un valore alla volta.
 
 ```js
 var v1 = SIMD.float32x4(3.14159, 21.0, 32.3, 55.55);
@@ -235,7 +235,7 @@ Oltre a `mul()`, l'API includeva `sub()`, `div()`, `abs()`, `neg()`, `sqrt()` e 
 
 ## WebAssembly (WASM)
 
-WebAssembly rappresenta forse la novità più significativa dell'era post-ES6: un formato binario che i motori JavaScript possono eseguire *senza* doverlo prima passare attraverso il parser JS.
+WebAssembly è forse la novità più significativa dell'era post-ES6: un formato binario che i motori JavaScript possono eseguire *senza* doverlo prima passare attraverso il parser JS.
 
 ### Il problema: tutti i percorsi passavano per JS
 
@@ -243,7 +243,7 @@ Fino all'annuncio di WASM, qualunque linguaggio volesse girare nel browser dovev
 
 ### Come funziona WASM
 
-WASM propone un formato di rappresentazione binaria di un AST (Abstract Syntax Tree — la struttura ad albero che descrive il codice) altamente compresso. L'engine riceve questo binario e lo esegue direttamente, saltando il parsing JS. Linguaggi come C, C++ o Rust possono essere compilati direttamente in WASM, guadagnando un ulteriore vantaggio in velocità rispetto alla via asm.js.
+WASM propone un formato di rappresentazione binaria di un AST (Abstract Syntax Tree, cioè la struttura ad albero che descrive il codice) altamente compresso. L'engine riceve questo binario e lo esegue direttamente, saltando il parsing JS. Linguaggi come C, C++ o Rust possono essere compilati direttamente in WASM, guadagnando un ulteriore vantaggio in velocità rispetto alla via asm.js.
 
 ```
 C/C++ → compilatore → .wasm (binario) → JS engine (esecuzione diretta)
@@ -252,7 +252,7 @@ C/C++ → compilatore → asm.js (testo)  → JS engine (parsing + esecuzione)
 
 ### WASM non sostituisce JS
 
-Il punto fondamentale è che WASM non è un sostituto di JavaScript. I due coesistono e si integrano:
+WASM non sostituisce JavaScript, ma coesiste e si integra con esso:
 
 - Il codice JS e il codice WASM possono chiamarsi reciprocamente come normali moduli.
 - JS rimarrà il linguaggio del web per tutto ciò che è già scritto in JS.
@@ -326,6 +326,6 @@ Un'`async function` restituisce una Promise ordinaria. Dal momento che le Promis
 <details>
 <summary>Come si usano spread e rest con gli oggetti, e in cosa differiscono dall'uso con gli array?</summary>
 
-Con gli array, `...` in spread copia gli elementi in una nuova struttura, mentre in rest raccoglie gli elementi rimanenti in un array. Con gli oggetti la semantica è analoga ma opera sulle proprietà enumerabili: `{ ...o1, ...o2, extra: 1 }` crea un nuovo oggetto con tutte le proprietà di `o1` e `o2` più `extra`. In rest, `var { a, ...resto } = obj` estrae `a` e raccoglie le proprietà rimanenti in `resto`. La differenza chiave rispetto agli array è che le proprietà duplicate vengono risolte con l'ultima che sovrascrive le precedenti, e l'ordine di enumerazione segue le regole degli oggetti.
+Con gli array, `...` in spread copia gli elementi in una nuova struttura, mentre in rest raccoglie gli elementi rimanenti in un array. Con gli oggetti la semantica è analoga ma opera sulle proprietà enumerabili: `{ ...o1, ...o2, extra: 1 }` crea un nuovo oggetto con tutte le proprietà di `o1` e `o2` più `extra`. In rest, `var { a, ...resto } = obj` estrae `a` e raccoglie le proprietà rimanenti in `resto`. La differenza rispetto agli array è che le proprietà duplicate vengono risolte con l'ultima che sovrascrive le precedenti, e l'ordine di enumerazione segue le regole degli oggetti.
 
 </details>

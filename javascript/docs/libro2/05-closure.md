@@ -1,6 +1,6 @@
 # Scope Closure
 
-Il closure è uno degli aspetti più fraintesi di JavaScript — e anche uno dei più potenti. Non si tratta di una funzionalità speciale da imparare separatamente: è una conseguenza naturale e quasi inevitabile del modo in cui si scrive codice in un linguaggio con lexical scope. Chi conosce bene lo scope arriva al closure quasi per inerzia.
+Il closure è uno degli aspetti più fraintesi di JavaScript, e anche uno dei più potenti. Non si tratta di una funzionalità speciale da imparare separatamente: è una conseguenza naturale e quasi inevitabile del modo in cui si scrive codice in un linguaggio con lexical scope. Chi conosce bene lo scope arriva al closure quasi per inerzia.
 
 ## Definizione
 
@@ -21,7 +21,7 @@ var baz = foo();
 baz(); // 2 — questo è il closure
 ```
 
-`bar` ha lexical scope access alla variabile `a` dentro `foo`. Quando `foo()` viene eseguita, restituisce la funzione `bar` come valore. Poi `foo()` termina — normalmente ci si aspetterebbe che il suo scope interno venga liberato dal garbage collector. Ma non è così: `bar` mantiene un **riferimento** a quello scope, e quel riferimento si chiama closure. Quando `baz()` viene invocata (settimane dopo, millisecondi dopo — non importa), ha ancora accesso a `a`.
+`bar` ha lexical scope access alla variabile `a` dentro `foo`. Quando `foo()` viene eseguita, restituisce la funzione `bar` come valore. Poi `foo()` termina, e normalmente ci si aspetterebbe che il suo scope interno venga liberato dal garbage collector. Invece `bar` mantiene un **riferimento** a quello scope, e quel riferimento si chiama closure. Quando `baz()` viene invocata (settimane dopo o millisecondi dopo, non importa), ha ancora accesso a `a`.
 
 ![Closure — il riferimento allo scope sopravvive alla funzione](../../assets/images/closure-scope.svg)
 
@@ -62,7 +62,7 @@ foo();
 bar();
 ```
 
-In tutti questi casi, la funzione interna porta con sé un riferimento vivo allo scope in cui è stata dichiarata — indipendentemente da dove viene eseguita.
+In tutti questi casi, la funzione interna porta con sé un riferimento vivo allo scope in cui è stata dichiarata, indipendentemente da dove viene eseguita.
 
 ---
 
@@ -80,17 +80,17 @@ function wait(message) {
 wait("Ciao, closure!");
 ```
 
-`timer` viene passata a `setTimeout` e verrà eseguita un secondo dopo che `wait()` ha già terminato la propria esecuzione. Eppure ha ancora accesso a `message` — perché ha un closure sullo scope di `wait`.
+`timer` viene passata a `setTimeout` e verrà eseguita un secondo dopo che `wait()` ha già terminato la propria esecuzione. Eppure ha ancora accesso a `message`, perché ha un closure sullo scope di `wait`.
 
 Lo stesso vale per event handler, chiamate Ajax, web worker, e qualsiasi altro pattern asincrono: ogni volta che si passa una funzione (callback) che accede a variabili del proprio scope circostante, il closure è in azione.
 
-> Un IIFE non è tecnicamente un esempio di closure *osservato*: la funzione viene eseguita nello stesso scope in cui è dichiarata, quindi `a` viene trovata tramite il normale lookup lessicale, non tramite un closure su uno scope esterno. Gli IIFE *creano* scope su cui si può formare un closure — ma non ne esercitano uno da soli.
+> Un IIFE non è tecnicamente un esempio di closure *osservato*: la funzione viene eseguita nello stesso scope in cui è dichiarata, quindi `a` viene trovata tramite il normale lookup lessicale, non tramite un closure su uno scope esterno. Gli IIFE *creano* scope su cui si può formare un closure, ma non ne esercitano uno da soli.
 
 ---
 
 ## Il problema classico: loop e closure
 
-Il loop `for` è l'esempio canonico che rivela come il closure funzioni davvero — e dove si nasconde il trabocchetto.
+Il loop `for` è l'esempio canonico che mostra come funziona il closure e dove si nasconde il trabocchetto.
 
 ```js
 for (var i = 1; i <= 5; i++) {
@@ -118,11 +118,11 @@ for (var i = 1; i <= 5; i++) {
 }
 ```
 
-L'IIFE crea un nuovo scope per ogni iterazione e riceve `i` come parametro `j`. Ogni callback forma un closure su una `j` distinta — il problema è risolto.
+L'IIFE crea un nuovo scope per ogni iterazione e riceve `i` come parametro `j`. Ogni callback forma un closure su una `j` distinta, e il problema è risolto.
 
 ### Soluzione con `let`
 
-`let` in un header `for` crea una nuova variabile per ogni iterazione del loop — esattamente ciò di cui si ha bisogno:
+`let` in un header `for` crea una nuova variabile per ogni iterazione del loop, cioè esattamente ciò di cui si ha bisogno:
 
 ```js
 for (let i = 1; i <= 5; i++) {
@@ -142,7 +142,7 @@ Block scope e closure cooperano: `let` garantisce che ogni iterazione abbia la p
 Il closure abilita un pattern architetturale fondamentale: il **module** (modulo). Un modulo è una funzione che:
 
 1. Mantiene variabili e funzioni "private" nel proprio scope.
-2. Restituisce un oggetto (la **public API**) con riferimenti alle funzioni interne — che hanno closure sullo stato privato.
+2. Restituisce un oggetto (la **public API**) con riferimenti alle funzioni interne, che hanno closure sullo stato privato.
 
 ```js
 function CoolModule() {
@@ -168,14 +168,14 @@ foo.doSomething(); // "cool"
 foo.doAnother();   // "1 ! 2 ! 3"
 ```
 
-`something` e `another` non sono accessibili dall'esterno — sono privati. `doSomething` e `doAnother` le raggiungono grazie al closure sullo scope di `CoolModule`. L'oggetto restituito è la surface pubblica del modulo. Questo pattern si chiama **revealing module** (modulo che rivela).
+`something` e `another` non sono accessibili dall'esterno: sono privati. `doSomething` e `doAnother` le raggiungono grazie al closure sullo scope di `CoolModule`. L'oggetto restituito è la surface pubblica del modulo. Questo pattern si chiama **revealing module** (modulo che rivela).
 
 **Due requisiti fondamentali** perché un modulo funzioni:
 
 - La funzione esterna deve essere **invocata almeno una volta** (ogni invocazione crea una nuova istanza del modulo con il proprio stato privato).
 - La funzione esterna deve **restituire almeno una funzione interna** con closure sullo stato privato.
 
-Un oggetto con sole proprietà dati non è un modulo — non c'è closure.
+Un oggetto con sole proprietà dati non è un modulo, perché non c'è closure.
 
 ### Singleton
 
@@ -238,13 +238,13 @@ var MyModules = (function Manager() {
 })();
 ```
 
-Non c'è nulla di magico: `define` invoca la funzione wrapper con le dipendenze risolte e salva il risultato (la public API) nella mappa interna.
+Il funzionamento è lineare: `define` invoca la funzione wrapper con le dipendenze risolte e salva il risultato (la public API) nella mappa interna.
 
 ---
 
 ## ES6 modules
 
-ES6 introduce supporto nativo per i moduli a livello di sintassi. Ogni file è trattato come un modulo separato con il proprio scope chiuso. Le parole chiave `import` ed `export` permettono di dichiarare cosa è pubblico e cosa è privato in modo statico — il compiler può verificare i riferimenti a compile-time anziché a runtime.
+ES6 introduce supporto nativo per i moduli a livello di sintassi. Ogni file è trattato come un modulo separato con il proprio scope chiuso. Le parole chiave `import` ed `export` permettono di dichiarare cosa è pubblico e cosa è privato in modo statico, così il compiler può verificare i riferimenti a compile-time anziché a runtime.
 
 ```js
 /* bar.js */
@@ -295,7 +295,7 @@ counter(); // 2
 counter(); // 3 — `count` vive grazie al closure
 ```
 
-**Loop + closure**: con `var` tutte le callback condividono la stessa variabile → usare `let` (o IIFE) per creare uno scope separato per iterazione.
+**Loop + closure**: con `var` tutte le callback condividono la stessa variabile, quindi occorre usare `let` (o IIFE) per creare uno scope separato per iterazione.
 
 **Module pattern**: funzione esterna invocata che restituisce una public API con closure sullo stato privato. Due requisiti: funzione esterna invocata + almeno una funzione interna restituita.
 
@@ -317,7 +317,7 @@ modulo.leggi(); // 42 — closure su `privato`
 <details>
 <summary>Cos'è esattamente il closure e quando si forma?</summary>
 
-Il closure si forma quando una funzione interna viene definita all'interno di un'altra funzione e mantiene un riferimento vivo allo scope della funzione esterna — anche dopo che la funzione esterna ha terminato la propria esecuzione. Non è un meccanismo separato: è una conseguenza diretta del lexical scope. Ogni volta che si crea una funzione che accede a variabili del proprio scope circostante e la si trasporta fuori da quello scope (passandola come callback, restituendola, assegnandola a una variabile esterna), si sta esercitando un closure.
+Il closure si forma quando una funzione interna viene definita all'interno di un'altra funzione e mantiene un riferimento vivo allo scope della funzione esterna, anche dopo che la funzione esterna ha terminato la propria esecuzione. Non è un meccanismo separato: è una conseguenza diretta del lexical scope. Ogni volta che si crea una funzione che accede a variabili del proprio scope circostante e la si trasporta fuori da quello scope (passandola come callback, restituendola, assegnandola a una variabile esterna), si sta esercitando un closure.
 
 </details>
 
@@ -331,20 +331,20 @@ Perché `var` non crea un nuovo scope per ogni iterazione del loop: dichiara una
 <details>
 <summary>Quali sono i due requisiti del module pattern?</summary>
 
-Il modulo richiede: 1) una funzione esterna che viene invocata almeno una volta — è questa invocazione a creare lo scope privato e il closure; 2) la funzione esterna deve restituire almeno una funzione interna che ha closure sullo scope privato. Senza il primo requisito non si crea lo scope; senza il secondo non si osserva il closure. Un oggetto con sole proprietà dati non costituisce un modulo nel senso closure-based del termine: serve almeno una funzione che chiuda sullo stato interno.
+Il modulo richiede: 1) una funzione esterna che viene invocata almeno una volta (è questa invocazione a creare lo scope privato e il closure); 2) la funzione esterna deve restituire almeno una funzione interna che ha closure sullo scope privato. Senza il primo requisito non si crea lo scope; senza il secondo non si osserva il closure. Un oggetto con sole proprietà dati non costituisce un modulo nel senso closure-based del termine: serve almeno una funzione che chiuda sullo stato interno.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra i function-based module e gli ES6 module?</summary>
 
-I function-based module sono pattern runtime: le loro API sono oggetti dinamici, modificabili durante l'esecuzione — è possibile aggiungere, rimuovere o cambiare metodi esposti a runtime. Gli ES6 module hanno API statiche: la struttura delle esportazioni è dichiarata esplicitamente con `export` ed è fissa al momento della compilazione. Questo permette all'engine di verificare i riferimenti a compile-time e lanciare errori precoci se si importa qualcosa che non esiste. Inoltre ogni file ES6 module ha implicitamente il proprio scope chiuso, senza bisogno di avvolgere il codice in una funzione.
+I function-based module sono pattern runtime: le loro API sono oggetti dinamici, modificabili durante l'esecuzione: è possibile aggiungere, rimuovere o cambiare metodi esposti a runtime. Gli ES6 module hanno API statiche: la struttura delle esportazioni è dichiarata esplicitamente con `export` ed è fissa al momento della compilazione. Questo permette all'engine di verificare i riferimenti a compile-time e lanciare errori precoci se si importa qualcosa che non esiste. Inoltre ogni file ES6 module ha implicitamente il proprio scope chiuso, senza bisogno di avvolgere il codice in una funzione.
 
 </details>
 
 <details>
 <summary>Un IIFE costituisce un esempio di closure?</summary>
 
-Non nel senso stretto della definizione. Il closure richiede che una funzione venga eseguita *fuori* dal proprio lexical scope. In un IIFE la funzione viene dichiarata e immediatamente invocata nello stesso scope — le variabili esterne sono raggiunte tramite il normale lookup lessicale, non tramite un closure su uno scope esterno. Detto questo, gli IIFE *creano* scope su cui è possibile formare closure — e sono spesso usati proprio per questo scopo (come nel pattern del loop con IIFE). Sono quindi strettamente correlati al closure, anche se non lo esercitano da soli.
+Non nel senso stretto della definizione. Il closure richiede che una funzione venga eseguita *fuori* dal proprio lexical scope. In un IIFE la funzione viene dichiarata e immediatamente invocata nello stesso scope, quindi le variabili esterne sono raggiunte tramite il normale lookup lessicale, non tramite un closure su uno scope esterno. Detto questo, gli IIFE *creano* scope su cui è possibile formare closure, e sono spesso usati proprio per questo scopo (come nel pattern del loop con IIFE). Sono quindi strettamente correlati al closure, anche se non lo esercitano da soli.
 
 </details>

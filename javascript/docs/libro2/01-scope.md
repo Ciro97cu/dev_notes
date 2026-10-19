@@ -6,33 +6,33 @@ Ma la presenza delle variabili apre subito domande più profonde: dove vivono qu
 
 ## Compiler Theory
 
-JavaScript viene spesso descritto come linguaggio interpretato, ma questa è una semplificazione imprecisa. JavaScript è di fatto un linguaggio **compilato** — non in anticipo come C o Java, e non in modo portabile tra sistemi diversi, ma compilato comunque: il JS engine compila il codice immediatamente prima (talvolta durante) l'esecuzione.
+JavaScript viene spesso descritto come linguaggio interpretato, ma questa è una semplificazione imprecisa. JavaScript è un linguaggio **compilato**: non in anticipo come C o Java, e non in modo portabile tra sistemi diversi, ma compilato comunque, perché il JS engine compila il codice immediatamente prima (talvolta durante) l'esecuzione.
 
 Un compiler tradizionale processa il codice sorgente attraverso tre fasi principali:
 
 ![Pipeline di compilazione](../../assets/images/compiler-pipeline.svg)
 
-**Tokenizing / Lexing** — il codice sorgente viene scomposto in unità atomiche di significato chiamate **token**. Ad esempio, `var a = 2;` diventa: `var`, `a`, `=`, `2`, `;`. La distinzione tra tokenizing e lexing riguarda se il parser mantiene o meno uno stato durante il riconoscimento dei token — differenza rilevante per la comprensione del lexical scope.
+**Tokenizing / Lexing**: il codice sorgente viene scomposto in unità atomiche di significato chiamate **token**. Ad esempio, `var a = 2;` diventa: `var`, `a`, `=`, `2`, `;`. La distinzione tra tokenizing e lexing riguarda se il parser mantiene o meno uno stato durante il riconoscimento dei token, una differenza rilevante per la comprensione del lexical scope.
 
-**Parsing** — lo stream di token viene trasformato in un albero di elementi annidati che rappresenta la struttura grammaticale del programma: l'**AST** (Abstract Syntax Tree, albero sintattico astratto). Per `var a = 2;`, il nodo radice potrebbe essere un `VariableDeclaration`, con un figlio `Identifier` (valore: `a`) e un figlio `AssignmentExpression` che contiene un `NumericLiteral` (valore: `2`).
+**Parsing**: lo stream di token viene trasformato in un albero di elementi annidati che rappresenta la struttura grammaticale del programma: l'**AST** (Abstract Syntax Tree, albero sintattico astratto). Per `var a = 2;`, il nodo radice potrebbe essere un `VariableDeclaration`, con un figlio `Identifier` (valore: `a`) e un figlio `AssignmentExpression` che contiene un `NumericLiteral` (valore: `2`).
 
-**Code-Generation** — l'AST viene convertito in istruzioni macchina eseguibili. Per `var a = 2;` questo significa: riservare memoria per una variabile denominata `a` e memorizzarvi il valore `2`.
+**Code-Generation**: l'AST viene convertito in istruzioni macchina eseguibili. Per `var a = 2;` questo significa: riservare memoria per una variabile denominata `a` e memorizzarvi il valore `2`.
 
-Il JavaScript engine non dispone del lusso di compilare in anticipo come i linguaggi tradizionali. La compilazione avviene pochi microsecondi prima dell'esecuzione, il che obbliga l'engine a usare tecniche aggressive come la **JIT compilation** (Just-In-Time compilation — compilazione al momento dell'esecuzione con ottimizzazioni progressive).
+Il JavaScript engine non dispone del lusso di compilare in anticipo come i linguaggi tradizionali. La compilazione avviene pochi microsecondi prima dell'esecuzione, il che obbliga l'engine a usare tecniche aggressive come la **JIT compilation** (Just-In-Time compilation, cioè compilazione al momento dell'esecuzione con ottimizzazioni progressive).
 
-La conclusione pratica è che qualsiasi frammento di JavaScript viene compilato prima di essere eseguito — e questo fatto ha conseguenze dirette su come lo scope funziona.
+La conclusione pratica è che qualsiasi frammento di JavaScript viene compilato prima di essere eseguito, e questo fatto ha conseguenze dirette su come funziona lo scope.
 
 ## Come funziona lo Scope
 
 Per capire lo scope è utile modellare il processo come una conversazione tra tre attori:
 
-- **Engine** — responsabile della compilazione end-to-end e dell'esecuzione del programma.
-- **Compiler** — uno dei collaboratori dell'Engine: gestisce il parsing e la code-generation.
-- **Scope** — un altro collaboratore: mantiene la lista di tutti gli identificatori dichiarati e applica le regole che governano la loro accessibilità.
+- **Engine**: responsabile della compilazione end-to-end e dell'esecuzione del programma.
+- **Compiler**: uno dei collaboratori dell'Engine, che gestisce il parsing e la code-generation.
+- **Scope**: un altro collaboratore, che mantiene la lista di tutti gli identificatori dichiarati e applica le regole che governano la loro accessibilità.
 
 ### Come viene processato `var a = 2;`
 
-Questo statement, che sembra un'unica operazione, viene in realtà trattato in due momenti distinti.
+Questo statement, che sembra un'unica operazione, viene trattato in due momenti distinti.
 
 **Durante la compilazione** (Compiler + Scope):
 1. Il Compiler incontra `var a` e chiede allo Scope se esiste già una variabile `a` in quello scope. Se sì, ignora la dichiarazione. Se no, chiede allo Scope di dichiararla.
@@ -40,14 +40,14 @@ Questo statement, che sembra un'unica operazione, viene in realtà trattato in d
 
 **Durante l'esecuzione** (Engine + Scope):
 1. L'Engine incontra il codice per `a = 2` e chiede allo Scope se esiste una variabile `a` accessibile nello scope corrente.
-2. Se trovata, l'Engine assegna `2` ad `a`. Se non trovata, risale agli scope esterni (vedi Scope annidato).
+2. Se trovata, l'Engine assegna `2` ad `a`. Se non trovata, risale agli scope esterni (si veda Scope annidato).
 
 ### LHS e RHS lookup
 
 Quando l'Engine cerca una variabile, il tipo di ricerca che esegue dipende dallo scopo:
 
-- **LHS lookup** (Left-Hand Side) — cerca il **contenitore** della variabile per poterci scrivere. Si attiva quando la variabile è il **target** di un assegnamento.
-- **RHS lookup** (Right-Hand Side) — cerca il **valore** corrente della variabile per leggerlo. Si attiva quando la variabile è la **sorgente** di un'operazione.
+- **LHS lookup** (Left-Hand Side): cerca il **contenitore** della variabile per poterci scrivere. Si attiva quando la variabile è il **target** di un assegnamento.
+- **RHS lookup** (Right-Hand Side): cerca il **valore** corrente della variabile per leggerlo. Si attiva quando la variabile è la **sorgente** di un'operazione.
 
 ![LHS vs RHS lookup](../../assets/images/lhs-rhs-lookup.svg)
 
@@ -58,7 +58,7 @@ console.log(a);  // RHS: cerca il valore corrente di `a` per passarlo a log
 
 La distinzione non è "letteralmente a sinistra o destra del `=`": è più preciso pensarla come "chi è il target?" (LHS) e "chi è la sorgente?" (RHS).
 
-Consideriamo un esempio più articolato:
+Si consideri un esempio più articolato:
 
 ```js
 function foo(a) {
@@ -69,10 +69,10 @@ foo(2);
 ```
 
 Qui avvengono più lookup in sequenza:
-- RHS su `foo` → trova la funzione, la esegue
-- LHS su `a` (parametro) → l'argomento `2` viene assegnato ad `a` (assegnamento implicito)
-- RHS su `console` → trova l'oggetto console
-- RHS su `a` → recupera il valore `2` da passare a `log`
+- RHS su `foo`: trova la funzione e la esegue
+- LHS su `a` (parametro): l'argomento `2` viene assegnato ad `a` (assegnamento implicito)
+- RHS su `console`: trova l'oggetto console
+- RHS su `a`: recupera il valore `2` da passare a `log`
 
 ### La "conversazione" tra Engine e Scope
 
@@ -90,7 +90,7 @@ Poi: "Hai un parametro `a` per `foo`?" → "Sì." → L'Engine assegna `2` ad `a
 Poi: "Hai `console`?" → "Sì, è built-in." → L'Engine cerca `log` su di esso.
 Poi: "Hai ancora `a`?" → "Stessa variabile di prima, valore `2`." → Passa `2` a `log`.
 
-> **Quiz** — nel seguente codice, quanti LHS e RHS lookup riesci a identificare?
+> **Quiz**: nel seguente codice, quanti LHS e RHS lookup si possono identificare?
 > ```js
 > function foo(a) {
 >     var b = a;
@@ -125,13 +125,13 @@ La regola di traversal è semplice: si parte dallo scope corrente e si sale di u
 
 Il tipo di lookup (LHS o RHS) determina il comportamento quando una variabile non viene trovata.
 
-**RHS lookup fallisce** → `ReferenceError` — la variabile non esiste in nessuno scope raggiungibile. L'Engine non può recuperare un valore che non esiste.
+**RHS lookup fallisce**: si ottiene un `ReferenceError`, perché la variabile non esiste in nessuno scope raggiungibile. L'Engine non può recuperare un valore che non esiste.
 
 **LHS lookup fallisce**:
-- In **non-strict mode** → il global scope crea automaticamente una variabile con quel nome e la restituisce all'Engine. Questo comportamento silenzioso è una delle fonti di bug più comuni in JavaScript.
-- In **strict mode** → `ReferenceError`, stesso comportamento dell'RHS.
+- In **non-strict mode**, il global scope crea automaticamente una variabile con quel nome e la restituisce all'Engine. Questo comportamento silenzioso è una delle fonti di bug più comuni in JavaScript.
+- In **strict mode** si ottiene un `ReferenceError`, lo stesso comportamento dell'RHS.
 
-**RHS lookup riesce, ma l'operazione è illegale** → `TypeError` — la variabile è stata trovata ma non può essere usata nel modo richiesto (es. chiamare come funzione un valore che non è una funzione, accedere a una proprietà di `null` o `undefined`).
+**RHS lookup riesce, ma l'operazione è illegale**: si ottiene un `TypeError`, perché la variabile è stata trovata ma non può essere usata nel modo richiesto (es. chiamare come funzione un valore che non è una funzione, accedere a una proprietà di `null` o `undefined`).
 
 ```js
 function foo(a) {
@@ -147,7 +147,7 @@ La distinzione tra `ReferenceError` e `TypeError` è significativa: il primo seg
 
 ## Ripasso veloce
 
-**JavaScript è compilato** — il codice viene tokenizzato, parsato in AST e compilato in bytecode prima di essere eseguito. La compilazione avviene JIT, pochi microsecondi prima dell'esecuzione.
+**JavaScript è compilato**: il codice viene tokenizzato, parsato in AST e compilato in bytecode prima di essere eseguito. La compilazione avviene JIT, pochi microsecondi prima dell'esecuzione.
 
 **Scope** = insieme di regole che governa dove e come una variabile può essere cercata e trovata.
 
@@ -161,10 +161,10 @@ console.log(a);  // RHS su `a`
 **Scope annidati**: la ricerca parte dallo scope corrente e risale verso l'esterno fino al global scope.
 
 **Errori**:
-- RHS fallisce → sempre `ReferenceError`
-- LHS fallisce in non-strict → variabile globale implicita (bug silenzioso)
-- LHS fallisce in strict → `ReferenceError`
-- Lookup OK, operazione illegale → `TypeError`
+- RHS fallisce: sempre `ReferenceError`
+- LHS fallisce in non-strict: variabile globale implicita (bug silenzioso)
+- LHS fallisce in strict: `ReferenceError`
+- Lookup OK, operazione illegale: `TypeError`
 
 ---
 
@@ -173,14 +173,14 @@ console.log(a);  // RHS su `a`
 <details>
 <summary>Perché JavaScript viene definito un linguaggio compilato se viene eseguito nel browser senza una fase di build esplicita?</summary>
 
-Perché compilazione non significa necessariamente "in anticipo" o "con un file binario separato". La compilazione è il processo di trasformazione del codice sorgente in istruzioni macchina, e il JavaScript engine la esegue ogni volta che incontra del codice da eseguire — spesso pochi microsecondi prima dell'esecuzione stessa (JIT compilation). Le tre fasi (tokenizing, parsing e code-generation) avvengono comunque. Capire questo è fondamentale per comprendere hoisting e scope.
+Perché compilazione non significa necessariamente "in anticipo" o "con un file binario separato". La compilazione è il processo di trasformazione del codice sorgente in istruzioni macchina, e il JavaScript engine la esegue ogni volta che incontra del codice da eseguire, spesso pochi microsecondi prima dell'esecuzione stessa (JIT compilation). Le tre fasi (tokenizing, parsing e code-generation) avvengono comunque. Capirlo è il presupposto per comprendere hoisting e scope.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra un LHS lookup e un RHS lookup?</summary>
 
-Un LHS lookup cerca il **contenitore** della variabile — il posto in cui scrivere un valore. Si attiva quando la variabile è il target di un assegnamento (`a = 2`). Un RHS lookup cerca il **valore** corrente della variabile — il dato da leggere e usare. Si attiva quando la variabile è la sorgente di un'operazione (`console.log(a)`). La distinzione è importante perché i due tipi di lookup hanno comportamenti diversi quando la variabile non viene trovata.
+Un LHS lookup cerca il **contenitore** della variabile, cioè il posto in cui scrivere un valore. Si attiva quando la variabile è il target di un assegnamento (`a = 2`). Un RHS lookup cerca il **valore** corrente della variabile, cioè il dato da leggere e usare. Si attiva quando la variabile è la sorgente di un'operazione (`console.log(a)`). La distinzione è importante perché i due tipi di lookup hanno comportamenti diversi quando la variabile non viene trovata.
 
 </details>
 
@@ -194,7 +194,7 @@ Il global scope crea automaticamente una nuova variabile con quel nome e la rest
 <details>
 <summary>Qual è la differenza tra ReferenceError e TypeError?</summary>
 
-Un `ReferenceError` segnala che il lookup nello scope è fallito — la variabile cercata non esiste in nessuno scope raggiungibile. Un `TypeError` invece indica che il lookup è riuscito, la variabile è stata trovata, ma l'operazione tentata sul valore recuperato è illegale o impossibile (es. chiamare come funzione un numero, accedere a una proprietà di `null`). Il `ReferenceError` è un problema di scope; il `TypeError` è un problema di tipo.
+Un `ReferenceError` segnala che il lookup nello scope è fallito: la variabile cercata non esiste in nessuno scope raggiungibile. Un `TypeError` invece indica che il lookup è riuscito, la variabile è stata trovata, ma l'operazione tentata sul valore recuperato è illegale o impossibile (es. chiamare come funzione un numero, accedere a una proprietà di `null`). Il `ReferenceError` è un problema di scope; il `TypeError` è un problema di tipo.
 
 </details>
 

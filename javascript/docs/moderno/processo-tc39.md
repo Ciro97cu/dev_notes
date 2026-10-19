@@ -1,8 +1,8 @@
 # Il processo TC39: come nasce (ed evolve) JavaScript
 
-*➕ Fuori dalla serie YDKJS — questa pagina della sezione «JavaScript moderno» spiega **come** il linguaggio evolve (chi decide, cos'è uno "stage", come seguire una novità), un argomento che i sei libri non trattano.*
+*➕ Fuori dalla serie YDKJS: questa pagina della sezione «JavaScript moderno» spiega **come** il linguaggio evolve (chi decide, cos'è uno "stage", come seguire una novità), un argomento che i sei libri non trattano.*
 
-Nelle altre pagine di questa sezione ricorrono espressioni come *«finished proposals di TC39»* o *«feature arrivata allo Stage 4»*. Se non è chiaro cosa significhino, questa pagina fa da guida: spiega **chi governa** JavaScript, con quale **processo** una nuova funzionalità entra nel linguaggio, cosa vogliono dire i vari **stage**, e come si fa a **trovare una proposta** sul web e capire a che punto è.
+Nelle altre pagine di questa sezione ricorrono espressioni come *«finished proposals di TC39»* o *«feature arrivata allo Stage 4»*. Per capirle occorre sapere **chi governa** JavaScript, con quale **processo** una nuova funzionalità entra nel linguaggio, cosa vogliono dire i vari **stage**, e come si fa a **trovare una proposta** sul web e capire a che punto è.
 
 ## Chi comanda su JavaScript: Ecma, TC39, ECMAScript
 
@@ -16,7 +16,7 @@ JavaScript non è di proprietà di una singola azienda: è uno **standard**, cio
 | **ECMAScript** | Il **nome ufficiale** del linguaggio definito da ECMA-262. |
 | **JavaScript** | Il **nome comune** con cui tutti chiamano lo stesso linguaggio (la differenza è storica e di marchio). In pratica, ECMAScript ≈ JavaScript. |
 
-Il **TC39** è composto da *delegati*: soprattutto i produttori dei browser (Google, Apple, Mozilla, Microsoft), più altre aziende e alcuni esperti invitati. Il comitato si riunisce circa **sei volte l'anno** e decide **per consenso** — cioè una proposta avanza solo se nessun membro si oppone con motivazioni serie. Perché serve una *specifica* così pignola? Perché JavaScript non gira su un solo programma: ogni browser ha il suo **motore** (*engine*) che esegue il codice — **V8** in Chrome e in Node.js, **SpiderMonkey** in Firefox, **JavaScriptCore** in Safari. Se ognuno interpretasse le regole a modo suo, lo stesso programma darebbe risultati diversi altrove. La specifica serve proprio a far sì che tutti i motori si comportino allo stesso modo.
+Il **TC39** è composto da *delegati*: soprattutto i produttori dei browser (Google, Apple, Mozilla, Microsoft), più altre aziende e alcuni esperti invitati. Il comitato si riunisce circa **sei volte l'anno** e decide **per consenso**, cioè una proposta avanza solo se nessun membro si oppone con motivazioni serie. Perché serve una *specifica* così pignola? Perché JavaScript non gira su un solo programma: ogni browser ha il suo **motore** (*engine*) che esegue il codice, come **V8** in Chrome e in Node.js, **SpiderMonkey** in Firefox, **JavaScriptCore** in Safari. Se ognuno interpretasse le regole a modo suo, lo stesso programma darebbe risultati diversi altrove. La specifica serve proprio a far sì che tutti i motori si comportino allo stesso modo.
 
 ## Il ciclo annuale: una nuova edizione ogni giugno
 
@@ -31,7 +31,7 @@ Una funzionalità non compare dall'oggi al domani: attraversa una **pipeline** d
 <figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem">Il percorso di una proposta. A ogni stadio i requisiti crescono; solo lo Stage 4 entra nello standard. Molte proposte si fermano lungo la strada o vengono ritirate.</figcaption>
 </figure>
 
-Prima di leggere lo schema, tre parole da conoscere: un **champion** è il membro del comitato che "adotta" una proposta e la porta avanti riunione dopo riunione; **Test262** è la **suite di test ufficiale**, migliaia di piccoli programmi che un motore deve superare per dimostrare di aver implementato la feature *esattamente* come dice la specifica; un'**implementazione** è appunto la feature realizzata dentro un motore reale (V8, SpiderMonkey…). Ecco cosa significa ciascuno stage e cosa serve per entrarci:
+Prima di leggere lo schema, tre parole da conoscere: un **champion** è il membro del comitato che "adotta" una proposta e la porta avanti riunione dopo riunione; **Test262** è la **suite di test ufficiale**, migliaia di piccoli programmi che un motore deve superare per dimostrare di aver implementato la feature *esattamente* come dice la specifica; un'**implementazione** è appunto la feature realizzata dentro un motore reale (V8, SpiderMonkey…). Ciascuno stage ha un significato preciso e requisiti propri per entrarci:
 
 | Stage | Nome | Cosa significa | Per entrarci serve |
 |:--:|:--|:--|:--|
@@ -57,7 +57,7 @@ Il confronto più istruttivo è fra le ultime due righe: a gennaio 2026 Upsert h
 
 ## Un esempio concreto: il ciclo di vita di `Temporal`
 
-Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine. **`Temporal`**, la nuova API per date e orari, è il caso perfetto, perché ha appena **completato l'intero ciclo**: è arrivato allo Stage 4 nel marzo 2026 ed entrerà nell'edizione ES2027.
+Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine. **`Temporal`**, la nuova API per date e orari, si presta bene, perché ha appena **completato l'intero ciclo**: è arrivato allo Stage 4 nel marzo 2026 ed entrerà nell'edizione ES2027.
 
 **Il problema.** L'oggetto `Date` di JavaScript è notoriamente difettoso: è **mutabile**, conta i **mesi da zero**, non gestisce davvero i **fusi orari** e ha un parsing inaffidabile. Per anni è stato uno dei principali punti dolenti di chi scrive JavaScript. L'idea era rimpiazzarlo con un'API moderna e immutabile: `Temporal`.
 
@@ -68,16 +68,16 @@ Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine
 
 **Il percorso, tappa per tappa:**
 
-- **Stage 1 (2017)** — Maggie Johnson-Pint presenta l'idea al comitato: c'è un problema chiaro (`Date`) e una direzione, così il TC39 accetta di studiarla.
-- **Stage 2 (2019)** — esce la prima **bozza di specifica** e prendono forma i tipi distinti (`PlainDate`, `ZonedDateTime`, `Duration`…): il comitato si aspetta ormai che entri nel linguaggio.
-- **Stage 3 (2021)** — la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo, circa **cinque anni**, per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai <a href="../glossario/#/docs/date-calendari-tempo" target="_blank" rel="noopener">calendari non gregoriani</a>).
-- **Stage 4 (11 marzo 2026)** — due implementazioni superano i test di conformità, la pull request alla specifica è approvata e `Temporal` è ufficialmente nello standard ([Igalia](https://www.igalia.com/2026/03/13/Temporal-Reaches-Stage-4.html)). La chiusura di ES2026 era però già passata, quindi la sua edizione è **ES2027**. Poco dopo, Node.js 26 lo abilita di default.
+- **Stage 1 (2017)**: Maggie Johnson-Pint presenta l'idea al comitato. C'è un problema chiaro (`Date`) e una direzione, così il TC39 accetta di studiarla.
+- **Stage 2 (2019)**: esce la prima **bozza di specifica** e prendono forma i tipi distinti (`PlainDate`, `ZonedDateTime`, `Duration`…), e il comitato si aspetta ormai che entri nel linguaggio.
+- **Stage 3 (2021)**: la specifica è **completa** e i motori iniziano a implementarla. Qui `Temporal` resta a lungo, circa **cinque anni**, per raccogliere esperienza sul campo e limare i dettagli (come il supporto ai <a href="../glossario/#/docs/date-calendari-tempo" target="_blank" rel="noopener">calendari non gregoriani</a>).
+- **Stage 4 (11 marzo 2026)**: due implementazioni superano i test di conformità, la pull request alla specifica è approvata e `Temporal` è ufficialmente nello standard ([Igalia](https://www.igalia.com/2026/03/13/Temporal-Reaches-Stage-4.html)). La chiusura di ES2026 era però già passata, quindi la sua edizione è **ES2027**. Poco dopo, Node.js 26 lo abilita di default.
 
-**La soluzione.** Nove anni dall'idea allo standard: un promemoria di quanto lo Stage 4 sia una garanzia, non una formalità. Il risultato è l'API descritta nella pagina di [ES2027](es2027.md) — immutabile, con i mesi che partono da 1 e supporto nativo a fusi orari e calendari.
+**La soluzione.** Dall'idea allo standard sono passati nove anni, segno che lo Stage 4 è una garanzia seria. Il risultato è l'API descritta nella pagina di [ES2027](es2027.md): immutabile, con i mesi che partono da 1 e supporto nativo a fusi orari e calendari.
 
 ## Un secondo esempio: `RegExp.escape` e lo Stage 2.7
 
-`Temporal` mostra bene l'intero ciclo, ma come esempio ha un limite: era già allo **Stage 3 nel 2021**, quando lo **Stage 2.7 non esisteva ancora** (è stato introdotto solo a fine 2023). Per vedere all'opera anche quella tappa serve una feature più recente, e **`RegExp.escape`** è il caso ideale: una piccola funzione che ha attraversato **tutti** gli stage, Stage 2.7 compreso, e, a differenza di `Temporal`, lo ha fatto in un lampo, circa **17 mesi**.
+`Temporal` mostra bene l'intero ciclo, ma come esempio ha un limite: era già allo **Stage 3 nel 2021**, quando lo **Stage 2.7 non esisteva ancora** (è stato introdotto solo a fine 2023). Per vedere all'opera anche quella tappa serve una feature più recente, e **`RegExp.escape`** è un buon esempio: una piccola funzione che ha attraversato **tutti** gli stage, Stage 2.7 compreso, e, a differenza di `Temporal`, lo ha fatto in un lampo, circa **17 mesi**.
 
 **Il problema.** Costruire un'espressione regolare a partire da testo *fornito dall'utente* è insidioso, perché caratteri come `.`, `*`, `+`, `(`, `[` hanno un significato speciale nelle regex. Cercare la stringa letterale `"a+b (c)"` con `new RegExp("a+b (c)")` non cerca affatto quel testo: `a+` diventa «una o più `a`», `(c)` un gruppo di cattura, e un input malformato come `"(ciao"` fa addirittura lanciare un `SyntaxError` per la parentesi non chiusa. Per anni si è rimediato copiando di progetto in progetto un helper fatto a mano (del tipo `str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')`). L'idea di `RegExp.escape` è offrire quell'operazione, una volta per tutte, dentro il linguaggio.
 
@@ -88,17 +88,17 @@ Il processo diventa più chiaro seguendo una feature reale dall'inizio alla fine
 
 **Il percorso, tappa per tappa** (date dal registro dei commit di `tc39/proposals`):
 
-- **Stage 1 (settembre 2023)** — l'idea circolava da tempo (già nel 2006 si chiedeva per JavaScript l'equivalente di `re.escape()` di Python) ed era rimasta ferma in una vecchia proposta; viene **ripresa** dai champion Jordan Harband e Kevin Gibbons, e il comitato accetta di studiarla.
-- **Stage 2 (2024)** — prende forma la **bozza di specifica**: la firma `RegExp.escape(stringa)` e l'esatto elenco dei caratteri da mettere in escape.
-- **Stage 2.7 (11 giugno 2024)** — è la tappa nuova, il cuore di questo esempio: la **specifica è completa** e ha l'ok degli editor, manca solo scrivere i test. È esattamente il gradino che `Temporal`, arrivato allo Stage 3 già nel 2021, non ha mai calcato.
-- **Stage 3 (29 luglio 2024)** — scritti i test di conformità (Test262), i motori cominciano a implementarla.
-- **Stage 4 (18 febbraio 2025)** — con più implementazioni già distribuite, la proposta è **finita** ed entra in **ES2025** ([Igalia](https://blogs.igalia.com/compilers/2025/03/27/summary-of-the-february-2025-tc39-plenary/)).
+- **Stage 1 (settembre 2023)**: l'idea circolava da tempo (già nel 2006 si chiedeva per JavaScript l'equivalente di `re.escape()` di Python) ed era rimasta ferma in una vecchia proposta; viene **ripresa** dai champion Jordan Harband e Kevin Gibbons, e il comitato accetta di studiarla.
+- **Stage 2 (2024)**: prende forma la **bozza di specifica**, con la firma `RegExp.escape(stringa)` e l'esatto elenco dei caratteri da mettere in escape.
+- **Stage 2.7 (11 giugno 2024)**: è la tappa nuova, quella che l'esempio vuole mostrare. La **specifica è completa** e ha l'ok degli editor, manca solo scrivere i test. È esattamente il gradino che `Temporal`, arrivato allo Stage 3 già nel 2021, non ha mai calcato.
+- **Stage 3 (29 luglio 2024)**: scritti i test di conformità (Test262), i motori cominciano a implementarla.
+- **Stage 4 (18 febbraio 2025)**: con più implementazioni già distribuite, la proposta è **finita** ed entra in **ES2025** ([Igalia](https://blogs.igalia.com/compilers/2025/03/27/summary-of-the-february-2025-tc39-plenary/)).
 
 **La soluzione.** Oggi `RegExp.escape("a+b (c)")` restituisce la stringa con i metacaratteri già messi in escape, pronta da passare a `new RegExp(...)` perché cerchi il testo *letterale* (la specifica, per prudenza, mette in escape anche il primo carattere e gli spazi). Dettagli ed esempi nella pagina di [ES2025](es2025.md).
 
 ## Cosa determina la durata: `Temporal` contro `RegExp.escape`
 
-A questo punto sorge spontanea una domanda: perché una feature impiega **nove anni** e un'altra appena **diciassette mesi**, se gli stage da attraversare sono gli stessi? Perché gli stage misurano il *percorso*, non il *peso* di ciò che ci passa dentro. Mettendo le due proposte fianco a fianco, i fattori che gonfiano, o sgonfiano, i tempi diventano evidenti.
+Perché una feature impiega **nove anni** e un'altra appena **diciassette mesi**, se gli stage da attraversare sono gli stessi? Perché gli stage misurano il *percorso*, non il *peso* di ciò che ci passa dentro. Mettendo le due proposte fianco a fianco, i fattori che gonfiano, o sgonfiano, i tempi diventano evidenti.
 
 | | `Temporal` | `RegExp.escape` |
 |---|---|---|
@@ -109,14 +109,14 @@ A questo punto sorge spontanea una domanda: perché una feature impiega **nove a
 | **Dipendenze esterne** | sì: i dati di CLDR/IANA per fusi e calendari, e un formato-stringa coordinato con l'IETF ([RFC 9557](https://www.rfc-editor.org/info/rfc9557/), apr 2024) | nessuna |
 | **Costo per i motori** | alto: molto codice più i dati di fuso/calendario; nel 2024 l'API è stata perfino **ridotta** perché gli implementatori la giudicavano troppo grande | banale: poche righe per motore |
 
-In sintesi, ad allungare il percorso sono soprattutto quattro elementi: la **dimensione** dell'API (più superficie significa più decisioni, più testo di specifica, più test), la **difficoltà intrinseca** dei problemi da risolvere, la quantità di **rodaggio allo Stage 3** necessaria prima che una proposta si possa dire "definitiva" (è lì che `Temporal` ha speso circa cinque anni, arrivando addirittura a *ridurre* l'API su richiesta dei motori) e le **dipendenze esterne** verso altri enti di standardizzazione o insiemi di dati. `RegExp.escape` non ha nulla di tutto ciò: è piccola, autoconclusa e senza dipendenze, e per questo vola. È anche il motivo per cui lo Stage 4 di una proposta enorme come `Temporal` va visto come una conquista, non come una formalità.
+Ad allungare il percorso sono soprattutto quattro elementi: la **dimensione** dell'API (più superficie significa più decisioni, più testo di specifica, più test), la **difficoltà intrinseca** dei problemi da risolvere, la quantità di **rodaggio allo Stage 3** necessaria prima che una proposta si possa dire "definitiva" (è lì che `Temporal` ha speso circa cinque anni, arrivando addirittura a *ridurre* l'API su richiesta dei motori) e le **dipendenze esterne** verso altri enti di standardizzazione o insiemi di dati. `RegExp.escape` non ha nulla di tutto ciò: è piccola, autoconclusa e senza dipendenze, e per questo vola. È anche il motivo per cui lo Stage 4 di una proposta enorme come `Temporal` va visto come una conquista.
 
 > [!info]
 > Due sigle citate nella tabella: **IANA** è l'ente che mantiene il *time zone database*, l'elenco standard dei fusi orari del mondo (`Europe/Rome`, `America/New_York`…) con le rispettive regole di ora legale; **CLDR** (*Common Locale Data Repository*) è il database di Unicode con i dati «locali» (formati di data e numero, nomi dei mesi, dati dei calendari) per ogni lingua e regione. `Temporal` si appoggia a entrambi per fusi orari e calendari.
 
 ## Perché documentiamo (di norma) solo lo Stage 4
 
-Ed ecco la risposta alla nota che compare nelle altre pagine. Lo **Stage 4** è l'unico livello in cui una feature è **definitiva**: è entrata nella specifica e comparirà nella prossima edizione annuale di ECMAScript, ha almeno due motori che la implementano correttamente, e non cambierà più. Tutto ciò che sta **sotto** lo Stage 4 è ancora in movimento: la sintassi o il comportamento possono cambiare, e una proposta può persino essere **abbandonata** (finisce tra le *inactive*, cioè ritirate o respinte). Documentare come "parte del linguaggio" qualcosa di Stage 2 o 3 rischierebbe quindi di insegnare una cosa che non arriverà mai, o che arriverà diversa. Le proposte di **Stage 3** sono un caso speciale: sono quasi certe e spesso già presenti in qualche browser, perciò vale la pena *tenerle d'occhio* e citarle come "in arrivo" — ma non darle per scontate.
+La nota che compare nelle altre pagine si spiega così. Lo **Stage 4** è l'unico livello in cui una feature è **definitiva**: è entrata nella specifica e comparirà nella prossima edizione annuale di ECMAScript, ha almeno due motori che la implementano correttamente, e non cambierà più. Tutto ciò che sta **sotto** lo Stage 4 è ancora in movimento: la sintassi o il comportamento possono cambiare, e una proposta può persino essere **abbandonata** (finisce tra le *inactive*, cioè ritirate o respinte). Documentare come "parte del linguaggio" qualcosa di Stage 2 o 3 rischierebbe quindi di insegnare una cosa che non arriverà mai, o che arriverà diversa. Le proposte di **Stage 3** sono un caso speciale: sono quasi certe e spesso già presenti in qualche browser, perciò conviene *tenerle d'occhio* e citarle come "in arrivo", senza però darle per scontate.
 
 ## Come trovare una proposta e capirne lo stage
 
@@ -129,11 +129,11 @@ Il punto di partenza è un unico repository su GitHub: **`github.com/tc39/propos
 
 La pagina principale (il `README`) elenca in **tabelle** le proposte dallo Stage 2 in su, con colonne come *Proposal*, *Author* (chi l'ha proposta), *Champion* e i *Test262 flag*. Le proposte più acerbe (Stage 0 e 1) stanno in file separati; quelle **finite** sono in **`finished-proposals.md`**, con indicata l'**edizione** in cui sono entrate; quelle abbandonate in `inactive-proposals.md`. Inoltre **ogni** proposta ha un proprio repository, chiamato `tc39/proposal-‹nome›`, il cui `README` indica in alto lo stage corrente.
 
-Un esempio concreto, `Temporal` (la nuova API per le date vista nella pagina di [ES2027](es2027.md)): cercando "temporal" si arriva al repository `tc39/proposal-temporal`, il cui README dichiara **Stage 4**; e infatti la si ritrova in `finished-proposals.md`, con anno di pubblicazione **2027**. Conclusione: è ufficiale, fa parte dello standard, e si sa anche in quale edizione comparirà.
+Un esempio concreto, `Temporal` (la nuova API per le date vista nella pagina di [ES2027](es2027.md)): cercando "temporal" si arriva al repository `tc39/proposal-temporal`, il cui README dichiara **Stage 4**; e infatti la si ritrova in `finished-proposals.md`, con anno di pubblicazione **2027**. Quindi è ufficiale, fa parte dello standard, e si sa anche in quale edizione comparirà.
 
 ## Attenzione: lo stage non è il supporto nei browser
 
-C'è un ultimo equivoco da sciogliere, ed è importante. Lo **stage** misura la maturità di una feature **nella specifica** (il processo di TC39). Il **supporto nei browser** è tutt'altra cosa: dice se i motori (V8, SpiderMonkey, JavaScriptCore) l'hanno *davvero* implementata e distribuita agli utenti. Sono **due assi indipendenti**:
+Resta un ultimo equivoco da sciogliere. Lo **stage** misura la maturità di una feature **nella specifica** (il processo di TC39). Il **supporto nei browser** è tutt'altra cosa: dice se i motori (V8, SpiderMonkey, JavaScriptCore) l'hanno *davvero* implementata e distribuita agli utenti. Sono **due assi indipendenti**:
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 410 226" role="img" aria-label="Lo stage nella specifica e il supporto nei browser sono due assi indipendenti" style="width:100%;max-width:440px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><line x1="100" y1="180" x2="392" y2="180" stroke="currentColor" stroke-width="1.4"/><line x1="100" y1="180" x2="100" y2="44" stroke="currentColor" stroke-width="1.4"/><path d="M392 180 l-6 -3 v6 z" fill="currentColor"/><path d="M100 44 l-3 6 h6 z" fill="currentColor"/><text x="140" y="194" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">0</text><text x="195" y="194" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">1</text><text x="250" y="194" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">2</text><text x="305" y="194" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">3</text><text x="360" y="194" text-anchor="middle" font-size="9" fill="currentColor" opacity=".7">4</text><line x1="97" y1="180" x2="103" y2="180" stroke="currentColor" stroke-width="1"/><text x="92" y="183" text-anchor="end" font-size="8.5" fill="currentColor" opacity=".7">nessuno</text><line x1="97" y1="118" x2="103" y2="118" stroke="currentColor" stroke-width="1"/><text x="92" y="121" text-anchor="end" font-size="8.5" fill="currentColor" opacity=".7">in diffusione</text><line x1="97" y1="56" x2="103" y2="56" stroke="currentColor" stroke-width="1"/><text x="92" y="59" text-anchor="end" font-size="8.5" fill="currentColor" opacity=".7">Baseline</text><text x="246" y="210" text-anchor="middle" font-size="9.5" fill="currentColor" opacity=".8">maturità nella spec (Stage)</text><text x="16" y="112" text-anchor="middle" font-size="9.5" fill="currentColor" opacity=".8" transform="rotate(-90 16 112)">supporto nei browser</text><circle cx="360" cy="56" r="4" fill="var(--link,#059669)"/><text x="352" y="50" text-anchor="end" font-size="9" fill="currentColor">Array.flat (ES2019)</text><circle cx="360" cy="118" r="4" fill="var(--link,#059669)"/><text x="352" y="133" text-anchor="end" font-size="9" fill="currentColor">Temporal (ES2027)</text><circle cx="305" cy="95" r="4" fill="var(--link,#059669)"/><text x="298" y="89" text-anchor="end" font-size="9" fill="currentColor">una Stage 3 già nei motori</text></g></svg>
@@ -143,7 +143,7 @@ C'è un ultimo equivoco da sciogliere, ed è importante. Lo **stage** misura la 
 Per sapere lo **stage** si guarda TC39 (i repository qui sopra); per sapere il **supporto reale** si guardano invece **[Can I Use](https://caniuse.com/)** e **[Baseline](https://web.dev/baseline)** (lo stato riportato anche su [MDN](https://developer.mozilla.org/)). È il motivo per cui, in queste note, l'edizione ES (lo stage) e la disponibilità nei browser (Baseline) vengono citate come **due informazioni separate**.
 
 > [!tip]
-> In una riga: **TC39** è il comitato che scrive lo standard **ECMAScript** (≈ JavaScript); una feature attraversa gli **stage 0→4**; solo lo **Stage 4** è definitivo ed entra nell'edizione annuale; lo si verifica su `github.com/tc39/proposals`; e lo stage è cosa **diversa** dal supporto nei browser (quello si controlla su Can I Use / Baseline).
+> **TC39** è il comitato che scrive lo standard **ECMAScript** (≈ JavaScript); una feature attraversa gli **stage 0→4**; solo lo **Stage 4** è definitivo ed entra nell'edizione annuale; lo si verifica su `github.com/tc39/proposals`; e lo stage è cosa **diversa** dal supporto nei browser (quello si controlla su Can I Use / Baseline).
 
 ## Domande
 
@@ -178,7 +178,7 @@ No. Ogni edizione viene **chiusa nei primi mesi dell'anno**, per dare tempo alla
 <details>
 <summary>Come si trova una proposta sul web e si capisce a che stage è (per esempio <code>Temporal</code>)?</summary>
 
-Si parte dal repository **`github.com/tc39/proposals`**: le proposte sono divise per stage (tabelle per Stage 2/2.7/3, file per Stage 0/1, `finished-proposals.md` per lo Stage 4 con l'edizione ES, `inactive-proposals.md` per le ritirate). Ogni proposta ha inoltre un proprio repository `tc39/proposal-‹nome›` il cui README dichiara lo stage. Per `Temporal`: il repo `tc39/proposal-temporal` indica **Stage 4**, e compare in `finished-proposals.md` con anno di pubblicazione **2027** — quindi è ufficiale, e destinato a ES2027.
+Si parte dal repository **`github.com/tc39/proposals`**: le proposte sono divise per stage (tabelle per Stage 2/2.7/3, file per Stage 0/1, `finished-proposals.md` per lo Stage 4 con l'edizione ES, `inactive-proposals.md` per le ritirate). Ogni proposta ha inoltre un proprio repository `tc39/proposal-‹nome›` il cui README dichiara lo stage. Per `Temporal`: il repo `tc39/proposal-temporal` indica **Stage 4**, e compare in `finished-proposals.md` con anno di pubblicazione **2027**: quindi è ufficiale, e destinato a ES2027.
 
 </details>
 

@@ -1,6 +1,6 @@
 # Function Scope e Block Scope
 
-Nel capitolo precedente si è visto che ogni scope forma una "bolla" di contenimento. La domanda naturale è: cosa esattamente crea una nuova bolla? Solo le funzioni? Esistono altri costrutti che generano il proprio scope?
+Nel capitolo precedente si è visto che ogni scope forma una "bolla" di contenimento. Resta da capire cosa crei esattamente una nuova bolla. Solo le funzioni? Esistono altri costrutti che generano il proprio scope?
 
 ## Scope dalle funzioni
 
@@ -18,11 +18,11 @@ function foo(a) {
 }
 ```
 
-Lo scope di `foo` contiene `a`, `b`, `c` e `bar`. Questi identificatori non sono accessibili dall'esterno: tentare di chiamare `bar()` o accedere a `a`, `b`, `c` fuori da `foo` produce `ReferenceError`. All'interno di `foo`, invece, tutti questi identificatori sono visibili — e lo sono anche all'interno di `bar`, salvo che `bar` non dichiari propri shadowing.
+Lo scope di `foo` contiene `a`, `b`, `c` e `bar`. Questi identificatori non sono accessibili dall'esterno: tentare di chiamare `bar()` o accedere a `a`, `b`, `c` fuori da `foo` produce `ReferenceError`. All'interno di `foo`, invece, tutti questi identificatori sono visibili, e lo sono anche all'interno di `bar`, salvo che `bar` non dichiari propri shadowing.
 
 ### Hiding in Plain Scope
 
-Il modo tradizionale di pensare alle funzioni è: si dichiara una funzione, poi si mette il codice dentro. Esiste però il modo inverso, altrettanto utile: si prende un blocco di codice già scritto e lo si avvolge in una funzione — operazione che "nasconde" quel codice dal resto del programma.
+Il modo tradizionale di pensare alle funzioni è: si dichiara una funzione, poi si mette il codice dentro. Esiste però il modo inverso, altrettanto utile: si prende un blocco di codice già scritto e lo si avvolge in una funzione, un'operazione che "nasconde" quel codice dal resto del programma.
 
 Questa tecnica ha radici nel principio di progettazione software noto come **Principle of Least Privilege** (o Least Exposure): un modulo o un'API dovrebbe esporre solo il minimo necessario, tenendo privato tutto il resto.
 
@@ -79,7 +79,7 @@ function foo() {
 
 `bar` sovrascrive la `i` del ciclo `for`, creando un loop infinito. La soluzione è dichiarare una variabile locale dentro `bar`: `var i = 3` o `var j = 3`.
 
-**Global namespaces.** Le librerie esterne spesso espongono un singolo oggetto globale (un **namespace**) che funge da contenitore per tutte le loro funzionalità, evitando di inquinare il global scope con decine di identificatori:
+**Global namespaces.** Le librerie esterne spesso espongono un singolo oggetto globale (un **namespace**) che fa da contenitore per tutte le loro funzionalità, evitando di inquinare il global scope con decine di identificatori:
 
 ```js
 var MyLibrary = {
@@ -95,7 +95,7 @@ var MyLibrary = {
 
 ## Funzioni come scope: IIFE
 
-Si è visto che avvolgere codice in una funzione lo nasconde. Problema: la funzione stessa aggiunge il proprio nome nello scope esterno, e va poi chiamata esplicitamente.
+Si è visto che avvolgere codice in una funzione lo nasconde, ma la funzione stessa aggiunge il proprio nome nello scope esterno, e va poi chiamata esplicitamente.
 
 ```js
 var a = 2;
@@ -118,7 +118,7 @@ var a = 2;
 console.log(a); // 2
 ```
 
-Qui `foo` esiste solo dentro la funzione stessa — non nello scope esterno. Le parentesi `()` finali invocano immediatamente la funzione. Questo pattern si chiama **IIFE** (Immediately Invoked Function Expression — espressione di funzione invocata immediatamente).
+Qui `foo` esiste solo dentro la funzione stessa, non nello scope esterno. Le parentesi `()` finali invocano immediatamente la funzione. Questo pattern si chiama **IIFE** (Immediately Invoked Function Expression, cioè espressione di funzione invocata immediatamente).
 
 ### Function expression anonima vs named
 
@@ -184,7 +184,7 @@ Il pattern **UMD** (Universal Module Definition) inverte l'ordine, passando la f
 
 ## Block scope
 
-Molti linguaggi supportano il **block scope**: le variabili dichiarate in un blocco `{ }` appartengono a quel blocco e non esistono fuori. JavaScript storicamente non aveva questa funzionalità nativa per `var` — e questo ha generato confusione:
+Molti linguaggi supportano il **block scope**: le variabili dichiarate in un blocco `{ }` appartengono a quel blocco e non esistono fuori. JavaScript storicamente non aveva questa funzionalità nativa per `var`, e questo ha generato confusione:
 
 ```js
 for (var i = 0; i < 10; i++) {
@@ -200,7 +200,7 @@ L'intenzione è usare `i` solo dentro il loop, ma `var` la lega allo scope della
 
 ### `with` (storico)
 
-Come visto nel capitolo precedente, `with` crea un nuovo scope temporaneo legato alla durata dello statement. È block scope in senso tecnico — ma è deprecato e da non usare.
+Come visto nel capitolo precedente, `with` crea un nuovo scope temporaneo legato alla durata dello statement. È block scope in senso tecnico, ma è deprecato e da non usare.
 
 ### `try/catch`
 
@@ -270,9 +270,9 @@ btn.addEventListener("click", function click(evt) {
 }, false);
 ```
 
-Senza il blocco esplicito, il closure del click handler tiene in vita l'intero scope — e con esso `someReallyBigData`.
+Senza il blocco esplicito, il closure del click handler tiene in vita l'intero scope e, con esso, `someReallyBigData`.
 
-**`let` nei loop.** `let` nell'header di un `for` non solo vincola `i` al corpo del loop, ma la **ricrea a ogni iterazione**, il che diventa fondamentale per il comportamento dei closure (approfondito nel Cap 5):
+**`let` nei loop.** `let` nell'header di un `for` vincola `i` al corpo del loop e in più la **ricrea a ogni iterazione**, cosa decisiva per il comportamento dei closure (approfondito nel Cap 5):
 
 ```js
 for (let i = 0; i < 10; i++) {
@@ -302,7 +302,7 @@ console.log(b); // ReferenceError — fuori dal blocco
 
 ## Ripasso veloce
 
-**Function scope** = ogni funzione crea una bolla di scope. Qualunque variabile o funzione dichiarata al suo interno è invisibile dall'esterno — utile per nascondere dettagli implementativi (Principle of Least Privilege).
+**Function scope** = ogni funzione crea una bolla di scope. Qualunque variabile o funzione dichiarata al suo interno è invisibile dall'esterno, il che è utile per nascondere dettagli implementativi (Principle of Least Privilege).
 
 **IIFE** = function expression invocata immediatamente. Evita di inquinare lo scope esterno con il nome della funzione.
 
@@ -321,9 +321,9 @@ for (let i = 0; i < 3; i++) {
 console.log(i); // ReferenceError
 ```
 
-**`var`** → function scope (o global).  
-**`let` / `const`** → block scope, non accessibili prima della dichiarazione (TDZ); `const` non è riassegnabile — è il **binding** a essere fisso, non il valore (un oggetto `const` resta mutabile).  
-**`try/catch`** → la variabile `err` in `catch` è block-scoped fin da ES3.
+**`var`**: function scope (o global).  
+**`let` / `const`**: block scope, non accessibili prima della dichiarazione (TDZ); `const` non è riassegnabile: è il **binding** a essere fisso, non il valore (un oggetto `const` resta mutabile).  
+**`try/catch`**: la variabile `err` in `catch` è block-scoped fin da ES3.
 
 ---
 
@@ -353,7 +353,7 @@ Le function expression anonime non hanno un nome associato, il che comporta tre 
 <details>
 <summary>Qual è la differenza tra `var` e `let` rispetto allo scope?</summary>
 
-`var` dichiara una variabile legata allo scope della funzione più vicina (o al global scope se non è dentro nessuna funzione): i blocchi `if`, `for`, `while` e simili non creano un nuovo scope per `var`. `let` dichiara invece una variabile legata allo scope del blocco `{ }` in cui si trova, anche se quel blocco è un `if` o il corpo di un `for`. Inoltre `let` non "hoista" la dichiarazione all'inizio del blocco: la variabile non è accessibile prima della riga in cui è dichiarata (TDZ — Temporal Dead Zone).
+`var` dichiara una variabile legata allo scope della funzione più vicina (o al global scope se non è dentro nessuna funzione): i blocchi `if`, `for`, `while` e simili non creano un nuovo scope per `var`. `let` dichiara invece una variabile legata allo scope del blocco `{ }` in cui si trova, anche se quel blocco è un `if` o il corpo di un `for`. Inoltre `let` non "hoista" la dichiarazione all'inizio del blocco: la variabile non è accessibile prima della riga in cui è dichiarata (TDZ, Temporal Dead Zone).
 
 </details>
 

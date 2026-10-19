@@ -23,7 +23,7 @@ Se termini come **Stage 4**, *finished proposals* o **TC39** non sono familiari,
 | [ES2024](es2024.md) | ES15 | `Object.groupBy`/`Map.groupBy`, `Promise.withResolvers`, RegExp flag `v`, resizable `ArrayBuffer` |
 | [ES2025](es2025.md) | ES16 | iterator helpers, metodi di `Set`, import attributes, `Promise.try`, `RegExp.escape`, `Float16Array` |
 | [ES2026](es2026.md) | ES17 | upsert (`getOrInsert`), `Iterator.concat`, `Array.fromAsync`, `Error.isError`, `Math.sumPrecise`, `JSON.rawJSON`, `Uint8Array` ↔ Base64 |
-| [ES2027](es2027.md) | ES18 | *in preparazione* — `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause`, `chunks`/`windows`/`includes`/`join` sugli iteratori |
+| [ES2027](es2027.md) | ES18 | *in preparazione*: `Temporal`, resource management (`using`/`await using`), `Iterator.zip`, `Atomics.pause`, `chunks`/`windows`/`includes`/`join` sugli iteratori |
 
 ## Convenzioni
 

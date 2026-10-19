@@ -6,7 +6,7 @@ I pattern asincroni trattati nei capitoli precedenti (callback, Promise, generat
 
 ## Web Workers
 
-JavaScript è single-threaded — ma il *runtime* non lo è necessariamente. I **Web Workers** sono una funzionalità del browser (non del linguaggio JS in sé) che permette di avviare thread separati, ognuno con la propria istanza del JS engine, in cui far girare codice indipendentemente dal thread UI principale. Si tratta di **task parallelism**: si suddivide il programma in pezzi che girano in parallelo.
+JavaScript è single-threaded, ma il *runtime* non lo è necessariamente. I **Web Workers** sono una funzionalità del browser (non del linguaggio JS in sé) che permette di avviare thread separati, ognuno con la propria istanza del JS engine, in cui far girare codice indipendentemente dal thread UI principale. Si tratta di **task parallelism**: si suddivide il programma in pezzi che girano in parallelo.
 
 ```js
 /* thread principale */
@@ -17,7 +17,7 @@ Il file JS puntato dall'URL viene caricato in un thread separato e gira come pro
 
 ### Comunicazione via messaggi
 
-I Worker non condividono scope, variabili globali né accesso al DOM con il thread principale — nessuno stato condiviso, nessun mutex. La comunicazione avviene esclusivamente tramite eventi di tipo "message":
+I Worker non condividono scope, variabili globali né accesso al DOM con il thread principale: nessuno stato condiviso, nessun mutex. La comunicazione avviene esclusivamente tramite eventi di tipo "message":
 
 ```js
 /* thread principale — invia e riceve */
@@ -33,7 +33,7 @@ addEventListener("message", function(evt) {
 });
 ```
 
-Per terminare un Worker immediatamente: `w1.terminate()`. Non viene dato al Worker alcun tempo per completare o fare cleanup — equivale a chiudere una scheda del browser.
+Per terminare un Worker immediatamente: `w1.terminate()`. Non viene dato al Worker alcun tempo per completare o fare cleanup: equivale a chiudere una scheda del browser.
 
 ### Ambiente del Worker
 
@@ -51,7 +51,7 @@ Un Worker può a sua volta creare sub-Worker (supporto variabile tra browser).
 
 Quando si passa un oggetto tramite `postMessage()`, il browser applica di default un **structured clone**: copia l'oggetto sull'altro lato (incluse strutture con riferimenti circolari). Funziona, ma duplica la memoria.
 
-Per dati di grandi dimensioni esiste l'opzione migliore dei **Transferable Objects**: il *possesso* dell'oggetto viene trasferito, non copiato — zero copia di memoria. L'oggetto originale diventa inaccessibile nel mittente.
+Per dati di grandi dimensioni esiste l'opzione migliore dei **Transferable Objects**: il *possesso* dell'oggetto viene trasferito, non copiato, e la copia di memoria è zero. L'oggetto originale diventa inaccessibile nel mittente.
 
 ```js
 /* trasferisce foo.buffer al Worker senza copia */
@@ -63,7 +63,7 @@ Tipici Transferable: `ArrayBuffer`, `MessagePort`, `ImageBitmap`. Browser senza 
 
 ### Shared Workers
 
-Se più tab della stessa pagina devono comunicare con lo stesso Worker, si usa un **SharedWorker** — un'istanza condivisa tra più connessioni:
+Se più tab della stessa pagina devono comunicare con lo stesso Worker, si usa un **SharedWorker**, un'istanza condivisa tra più connessioni:
 
 ```js
 var w1 = new SharedWorker("http://some.url.1/mycoolworker.js");
@@ -99,7 +99,7 @@ Se l'ambiente non supporta Worker, non è possibile simulare il parallelismo rea
 
 **SIMD** (*Single Instruction, Multiple Data*) è una forma di **data parallelism**: invece di parallelizzare pezzi di logica (come i Worker), si parallelizzano operazioni matematiche su più valori simultaneamente, sfruttando le istruzioni vettoriali delle CPU moderne.
 
-Un vettore SIMD tipico contiene 4 elementi da 32 bit (128 bit totali — la dimensione nativa delle unità SIMD in molte CPU):
+Un vettore SIMD tipico contiene 4 elementi da 32 bit (128 bit totali, la dimensione nativa delle unità SIMD in molte CPU):
 
 ```js
 var v1 = SIMD.float32x4(3.14159, 21.0, 32.3, 55.55);
@@ -183,7 +183,7 @@ I tre parametri del modulo:
 - **`foreign`**: riferimenti a funzioni JS esterne al modulo
 - **`heap`**: un `ArrayBuffer` pre-allocato che il modulo usa come memoria propria
 
-Il vantaggio dell'heap pre-allocato è eliminare allocazione dinamica e garbage collection all'interno del modulo — le due operazioni più costose in JS. Tutto il lavoro avviene su memoria già riservata.
+Il vantaggio dell'heap pre-allocato è eliminare allocazione dinamica e garbage collection all'interno del modulo, che sono le due operazioni più costose in JS. Tutto il lavoro avviene su memoria già riservata.
 
 asm.js è adatto a task intensivi e circoscritti (calcoli matematici pesanti, elaborazione grafica, fisica dei giochi). Non è uno strumento di ottimizzazione generale per qualsiasi codice JS.
 
@@ -221,7 +221,7 @@ var result = (a + b) | 0;
 
 **Regole pratiche:**
 - I Worker non condividono scope: comunicazione solo via `postMessage()`
-- `terminate()` è brutale — nessun cleanup
+- `terminate()` è brutale: nessun cleanup
 - Usare Transferable Objects per dati grandi (evitare la copia)
 - asm.js non si scrive a mano: è output di compilatori come Emscripten
 
@@ -260,6 +260,6 @@ L'operatore `|` (OR bitwise) con `0` come secondo operando non ha effetto sul va
 <details>
 <summary>Per quale motivo asm.js è pensato come target di compilazione e non per la scrittura manuale?</summary>
 
-Il codice asm.js è estremamente verboso e basso livello: ogni variabile deve avere type hint espliciti, tutta la memoria temporanea va allocata in anticipo su un heap pre-dichiarato, e qualsiasi operazione deve rispettare i vincoli del sottoinsieme ottimizzabile. Scrivere e mantenere manualmente del codice in questo stile è simile a scrivere assembly language a mano — noioso, error-prone e difficile da debuggare. Strumenti come Emscripten prendono codice C/C++ ad alte prestazioni, già scritto con gli strumenti e le astrazioni adatte a quel livello, e lo traducono automaticamente in JavaScript conforme asm.js. In questo modo si ottengono i benefici dell'ottimizzazione senza il costo della manutenzione manuale.
+Il codice asm.js è estremamente verboso e basso livello: ogni variabile deve avere type hint espliciti, tutta la memoria temporanea va allocata in anticipo su un heap pre-dichiarato, e qualsiasi operazione deve rispettare i vincoli del sottoinsieme ottimizzabile. Scrivere e mantenere manualmente del codice in questo stile è simile a scrivere assembly language a mano: noioso, error-prone e difficile da debuggare. Strumenti come Emscripten prendono codice C/C++ ad alte prestazioni, già scritto con gli strumenti e le astrazioni adatte a quel livello, e lo traducono automaticamente in JavaScript conforme asm.js. In questo modo si ottengono i benefici dell'ottimizzazione senza il costo della manutenzione manuale.
 
 </details>

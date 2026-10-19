@@ -1,6 +1,6 @@
 # Metaprogrammazione
 
-La metaprogrammazione è programmazione che ha come oggetto il comportamento del programma stesso: codice che ispeziona se stesso, si modifica, o altera i comportamenti predefiniti del linguaggio. ES6 aggiunge strumenti potenti in questa direzione: inferenza dei nomi di funzione, meta property, Well-Known Symbol, Proxy, Reflect, feature testing e TCO.
+La metaprogrammazione è programmazione che ha come oggetto il comportamento del programma stesso: codice che ispeziona se stesso, si modifica, o altera i comportamenti predefiniti del linguaggio. ES6 aggiunge diversi strumenti in questa direzione: inferenza dei nomi di funzione, meta property, Well-Known Symbol, Proxy, Reflect, feature testing e TCO.
 
 ---
 
@@ -129,7 +129,7 @@ Quattro WKS controllano i metodi di `String.prototype` che accettano regex:
 
 | Symbol | Usato da |
 |---|---|
-| `Symbol.match` | `String.prototype.match()` — anche per il check `isRegExp` |
+| `Symbol.match` | `String.prototype.match()`, anche per il check `isRegExp` |
 | `Symbol.replace` | `String.prototype.replace()` |
 | `Symbol.search` | `String.prototype.search()` |
 | `Symbol.split` | `String.prototype.split()` |
@@ -234,7 +234,7 @@ greeter.everyone();   // "hello everyone!" — non trovato, proxy intercetta
 
 ### Pattern: "no such property"
 
-Protezione contro accessi a proprietà non definite — in versione proxy-last:
+Protezione contro accessi a proprietà non definite, in versione proxy-last:
 
 ```js
 var pobj = new Proxy({}, {
@@ -257,7 +257,7 @@ Non tutte le operazioni sono trappable: `typeof`, `String()`, `+""`, `==`, `===`
 
 ## Reflect API
 
-`Reflect` è un plain object (come `Math`) che espone funzioni corrispondenti a tutte le operazioni interne JS — esattamente i metodi intercettabili dai Proxy:
+`Reflect` è un plain object (come `Math`) che espone funzioni corrispondenti a tutte le operazioni interne JS, cioè esattamente i metodi intercettabili dai Proxy:
 
 ```js
 Reflect.get(obj, "foo");           // come obj.foo
@@ -288,7 +288,7 @@ o.b = "ok"; o.a = "cool";
 Reflect.ownKeys(o); // [1, 2, "b", "a", Symbol(c)]
 ```
 
-`Object.keys()`, `for..in` e `JSON.stringify()` condividono un ordinamento implementation-dependent (non garantito dalla spec) — non fare affidamento su di esso.
+`Object.keys()`, `for..in` e `JSON.stringify()` condividono un ordinamento implementation-dependent (non garantito dalla spec), su cui non si deve fare affidamento.
 
 ---
 
@@ -304,7 +304,7 @@ if (!Number.isNaN) {
 }
 ```
 
-**Test di sintassi** — non si può usare `try/catch` perché il parser blocca prima dell'esecuzione. Si usa `new Function()` per compilare dinamicamente:
+**Test di sintassi**: non si può usare `try/catch` perché il parser blocca prima dell'esecuzione. Si usa `new Function()` per compilare dinamicamente:
 
 ```js
 try {
@@ -323,7 +323,7 @@ try {
 
 Ogni chiamata di funzione alloca un nuovo stack frame. Con la ricorsione profonda, la catena di stack frame può causare `RangeError: Maximum call stack size exceeded`.
 
-Una **tail call** è una chiamata di funzione che è l'ultima operazione di una funzione — il risultato viene restituito direttamente senza ulteriore elaborazione. In questo caso l'engine può *riutilizzare* il frame corrente invece di crearne uno nuovo.
+Una **tail call** è una chiamata di funzione che è l'ultima operazione di una funzione: il risultato viene restituito direttamente senza ulteriore elaborazione. In questo caso l'engine può *riutilizzare* il frame corrente invece di crearne uno nuovo.
 
 ```js
 "use strict";
@@ -342,7 +342,7 @@ function bar(x) {
 ES6 richiede che tutte le Proper Tail Call (PTC) vengano ottimizzate in strict mode. Il risultato: ricorsione illimitata senza crescita dello stack.
 
 > [!info|label:Oggi]
-> La specifica lo impone tuttora, ma **in pratica quasi nessun motore implementa le PTC**: a oggi solo **JavaScriptCore** (Safari) le offre; **V8** (Chrome/Node.js) e **SpiderMonkey** (Firefox) no. Gli "ambienti senza TCO" della sezione seguente non sono quindi un caso di nicchia — sono la norma: su Node e Chrome la ricorsione profonda esaurisce comunque lo stack, e il **trampolining** (o una riscrittura iterativa) è la strada da seguire di default, non un ripiego. Vedi la stessa nota in [Async & Performance — Benchmarking](/docs/libro5/06-benchmarking.md).
+> La specifica lo impone tuttora, ma **in pratica quasi nessun motore implementa le PTC**: a oggi solo **JavaScriptCore** (Safari) le offre; **V8** (Chrome/Node.js) e **SpiderMonkey** (Firefox) no. Gli "ambienti senza TCO" della sezione seguente non sono quindi un caso di nicchia, ma la norma: su Node e Chrome la ricorsione profonda esaurisce comunque lo stack, e il **trampolining** (o una riscrittura iterativa) è la strada da seguire di default, non un ripiego. Si veda la stessa nota in [Async & Performance: Benchmarking](/docs/libro5/06-benchmarking.md).
 
 ### Riscrivere per TCO — pattern accumulatore
 
@@ -386,7 +386,7 @@ var foo = (function() {
 foo(123456); // 3810376848.5  — nessuna crescita dello stack
 ```
 
-Il trampolining è riutilizzabile e non richiede TCO — funziona in qualsiasi engine.
+Il trampolining è riutilizzabile e non richiede TCO, quindi funziona in qualsiasi engine.
 
 ---
 
@@ -444,14 +444,14 @@ function _foo(acc, x) {
 <details>
 <summary>Cos'è un Proxy in ES6 e quali operazioni può intercettare?</summary>
 
-Un Proxy è un oggetto speciale che si interpone davanti a un altro oggetto (il *target*) intercettando le operazioni fondamentali eseguite su di esso tramite funzioni handler chiamate *trap*. Le operazioni intercettabili includono: lettura di proprietà (`get`), scrittura (`set`), cancellazione (`deleteProperty`), invocazione della funzione target (`apply`), costruzione con `new` (`construct`), enumerazione delle proprietà (`ownKeys`), verifica dell'esistenza (`has`), lettura/definizione di descriptor (`getOwnPropertyDescriptor`, `defineProperty`), lettura/impostazione del prototype, e controllo dell'estensibilità. Il proxy può modificare, bloccare, loggare o redirigere qualsiasi di queste operazioni. Ogni trap ha un corrispondente in `Reflect` che esegue il comportamento default — così il pattern tipico è intercettare, fare qualcosa di custom, poi delegare a `Reflect`.
+Un Proxy è un oggetto speciale che si interpone davanti a un altro oggetto (il *target*) intercettando le operazioni fondamentali eseguite su di esso tramite funzioni handler chiamate *trap*. Le operazioni intercettabili includono: lettura di proprietà (`get`), scrittura (`set`), cancellazione (`deleteProperty`), invocazione della funzione target (`apply`), costruzione con `new` (`construct`), enumerazione delle proprietà (`ownKeys`), verifica dell'esistenza (`has`), lettura/definizione di descriptor (`getOwnPropertyDescriptor`, `defineProperty`), lettura/impostazione del prototype, e controllo dell'estensibilità. Il proxy può modificare, bloccare, loggare o redirigere qualsiasi di queste operazioni. Ogni trap ha un corrispondente in `Reflect` che esegue il comportamento default, e così il pattern tipico è intercettare, fare qualcosa di custom, poi delegare a `Reflect`.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra il pattern "proxy-first" e "proxy-last"?</summary>
 
-Nel pattern **proxy-first**, il proxy è l'interfaccia principale con cui il codice interagisce — l'oggetto reale è nascosto. Tutti gli accessi passano prima dal proxy, che applica validazioni, trasformazioni o protezioni. Nel pattern **proxy-last**, l'oggetto reale è l'interfaccia principale, e il proxy è posizionato nel suo `[[Prototype]]` chain come fallback. Il codice usa l'oggetto direttamente; il proxy interviene solo quando una proprietà non viene trovata risalendo la catena. Il proxy-last è più semplice perché non deve distinguere se la proprietà esiste o meno — se l'operazione arriva al proxy, è già certo che non è stata trovata altrove.
+Nel pattern **proxy-first**, il proxy è l'interfaccia principale con cui il codice interagisce: l'oggetto reale è nascosto. Tutti gli accessi passano prima dal proxy, che applica validazioni, trasformazioni o protezioni. Nel pattern **proxy-last**, l'oggetto reale è l'interfaccia principale, e il proxy è posizionato nel suo `[[Prototype]]` chain come fallback. Il codice usa l'oggetto direttamente; il proxy interviene solo quando una proprietà non viene trovata risalendo la catena. Il proxy-last è più semplice perché non deve distinguere se la proprietà esiste o meno: se l'operazione arriva al proxy, è già certo che non è stata trovata altrove.
 
 </details>
 
@@ -465,13 +465,13 @@ I Well-Known Symbol (WKS) sono Symbol predefiniti da ES6 che l'engine usa intern
 <details>
 <summary>Cos'è una Proper Tail Call e perché ES6 introduce la TCO?</summary>
 
-Una Proper Tail Call (PTC) è una chiamata di funzione che si trova in posizione di "tail" — è l'ultima operazione della funzione, e il suo risultato viene restituito direttamente senza ulteriori elaborazioni. `return foo(x)` è una PTC; `return 1 + foo(x)` non lo è, perché c'è ancora una somma da fare dopo che `foo` ritorna. La Tail Call Optimization (TCO) è la tecnica per cui il JS engine, invece di allocare un nuovo stack frame per una PTC, riutilizza quello corrente — perché non c'è più nessun stato da preservare. Il risultato è che la ricorsione in tail position non consuma stack: si può ricorrere profondamente quanto necessario senza rischiare `RangeError`. ES6 richiede TCO in strict mode. Per le funzioni che non sono già in tail form, il pattern con accumulatore permette di ristrutturarle per renderle elegibili.
+Una Proper Tail Call (PTC) è una chiamata di funzione che si trova in posizione di "tail": è l'ultima operazione della funzione, e il suo risultato viene restituito direttamente senza ulteriori elaborazioni. `return foo(x)` è una PTC; `return 1 + foo(x)` non lo è, perché c'è ancora una somma da fare dopo che `foo` ritorna. La Tail Call Optimization (TCO) è la tecnica per cui il JS engine, invece di allocare un nuovo stack frame per una PTC, riutilizza quello corrente, perché non c'è più nessun stato da preservare. Il risultato è che la ricorsione in tail position non consuma stack: si può ricorrere profondamente quanto necessario senza rischiare `RangeError`. ES6 richiede TCO in strict mode. Per le funzioni che non sono già in tail form, il pattern con accumulatore permette di ristrutturarle per renderle elegibili.
 
 </details>
 
 <details>
 <summary>Perché il test di feature per la sintassi ES6 non funziona con <code>try/catch</code> normale, e qual è la soluzione?</summary>
 
-Il problema è che JS compila l'intero file prima di eseguirlo. Se il file contiene sintassi che l'engine non conosce (es. arrow function in un engine pre-ES6), il parser lancia un errore di sintassi prima ancora che il codice venga eseguito — quindi il `try/catch` non ha modo di catturarlo. La soluzione è usare `new Function()` che compila dinamicamente una stringa di codice solo quando viene chiamata, non al momento del parsing del file principale. Il test diventa: `try { new Function("(() => {})"); OK = true; } catch (e) { OK = false; }`. Questo permette di determinare a runtime se una feature sintattica è supportata. La tecnica più sofisticata che ne deriva è la *split delivery*: in base ai test, il bootstrapper carica la versione ES6 nativa del codice oppure quella transpilata, ottimizzando per ogni tipo di browser.
+Il problema è che JS compila l'intero file prima di eseguirlo. Se il file contiene sintassi che l'engine non conosce (es. arrow function in un engine pre-ES6), il parser lancia un errore di sintassi prima ancora che il codice venga eseguito, quindi il `try/catch` non ha modo di catturarlo. La soluzione è usare `new Function()` che compila dinamicamente una stringa di codice solo quando viene chiamata, non al momento del parsing del file principale. Il test diventa: `try { new Function("(() => {})"); OK = true; } catch (e) { OK = false; }`. Questo permette di determinare a runtime se una feature sintattica è supportata. La tecnica più sofisticata che ne deriva è la *split delivery*: in base ai test, il bootstrapper carica la versione ES6 nativa del codice oppure quella transpilata, ottimizzando per ogni tipo di browser.
 
 </details>

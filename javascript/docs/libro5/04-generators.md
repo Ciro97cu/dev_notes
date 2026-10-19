@@ -1,6 +1,6 @@
 # Generators
 
-I generator sono il terzo pilastro dell'asincronia in ES6, dopo callback e Promise. Il loro potere sta in una capacità apparentemente impossibile: una funzione che si mette in pausa a metà della sua esecuzione, cede il controllo all'esterno, e poi riprende da dove si era fermata — mantenendo intatto il proprio stato interno.
+I generator sono il terzo meccanismo dell'asincronia in ES6, dopo callback e Promise. Ciò che li distingue è una capacità apparentemente impossibile: una funzione che si mette in pausa a metà della sua esecuzione, cede il controllo all'esterno, e poi riprende da dove si era fermata, mantenendo intatto il proprio stato interno.
 
 ---
 
@@ -25,7 +25,7 @@ bar();              // x diventa 3
 it.next();          // riprende *foo() → stampa "x: 3"
 ```
 
-`foo()` non esegue il generator: restituisce un **iterator** (oggetto di controllo). Solo `it.next()` avvia e poi riprende l'esecuzione. La parola chiave `yield` segnala un punto di pausa cooperativa — il generator cede volontariamente il controllo.
+`foo()` non esegue il generator: restituisce un **iterator** (oggetto di controllo). Solo `it.next()` avvia e poi riprende l'esecuzione. La parola chiave `yield` segnala un punto di pausa cooperativa: il generator cede volontariamente il controllo.
 
 Un generator è una funzione speciale che può avviarsi e fermarsi una o più volte, senza necessariamente mai completarsi.
 
@@ -62,7 +62,7 @@ res = it.next(7);           // 7 è il risultato del yield sospeso
 res.value;                  // 42 (6 * 7)
 ```
 
-**Regola fondamentale**: il primo `next()` avvia il generator fino al primo `yield` — non c'è nessun `yield` in pausa a cui passare un valore, quindi qualsiasi argomento al primo `next()` viene silenziosamente ignorato. Si deve sempre avviare un generator con `next()` senza argomenti.
+**Regola fondamentale**: il primo `next()` avvia il generator fino al primo `yield`. Non c'è nessun `yield` in pausa a cui passare un valore, quindi qualsiasi argomento al primo `next()` viene silenziosamente ignorato. Si deve sempre avviare un generator con `next()` senza argomenti.
 
 Il motivo dello "sfasamento" (N yield → N+1 next) è che ogni `next()` risponde alla domanda posta dal `yield` precedente. L'ultimo `next()` riceve risposta dal `return` finale (o da un `return undefined` implicito).
 
@@ -184,13 +184,13 @@ for (var v of it) {
 // Hello World
 ```
 
-Il blocco `finally` viene sempre eseguito, sia per terminazione normale che per terminazione esterna — utile per cleanup di risorse (connessioni DB, file descriptor).
+Il blocco `finally` viene sempre eseguito, sia per terminazione normale che per terminazione esterna, ed è utile per il cleanup di risorse (connessioni DB, file descriptor).
 
 ---
 
 ## Generator e asincronia
 
-Il vero potere dei generator emerge quando si combina il meccanismo di pausa con il flusso async. Il classico approccio con callback:
+L'uso più importante dei generator nasce dalla combinazione del meccanismo di pausa con il flusso async. Il classico approccio con callback:
 
 ```js
 function foo(x, y, cb) {
@@ -227,9 +227,9 @@ var it = main();
 it.next();  // avvia il generator
 ```
 
-Il meccanismo: `yield foo(11,31)` chiama `foo()` (che avvia la richiesta Ajax), poi sospende il generator. Quando Ajax risponde, il callback chiama `it.next(data)` per riprendere il generator — e `data` diventa il valore assegnato a `text`. In caso di errore, `it.throw(err)` lo inietta nel generator come se fosse lanciato dal `yield`: il `try..catch` lo cattura normalmente.
+Il meccanismo: `yield foo(11,31)` chiama `foo()` (che avvia la richiesta Ajax), poi sospende il generator. Quando Ajax risponde, il callback chiama `it.next(data)` per riprendere il generator, e `data` diventa il valore assegnato a `text`. In caso di errore, `it.throw(err)` lo inietta nel generator come se fosse lanciato dal `yield`: il `try..catch` lo cattura normalmente.
 
-Risultato: **gestione degli errori sincrona (`try..catch`) su codice asincrono**. Questo è il salto qualitativo rispetto ai callback.
+Si ottiene così una **gestione degli errori sincrona (`try..catch`) su codice asincrono**, il salto qualitativo rispetto ai callback.
 
 ---
 
@@ -375,7 +375,7 @@ it.next().value;    // 4
 it.next().value;    // "*foo()* finished" → 5
 ```
 
-`yield *foo()` trasferisce il controllo dell'iterator a `*foo()`. L'iterator esterno (`it`) non si accorge della transizione — vede semplicemente una sequenza continua di valori. Quando `*foo()` termina, il controllo torna a `*bar()`.
+`yield *foo()` trasferisce il controllo dell'iterator a `*foo()`. L'iterator esterno (`it`) non si accorge della transizione: vede semplicemente una sequenza continua di valori. Quando `*foo()` termina, il controllo torna a `*bar()`.
 
 ### Messaggi e delegazione
 
@@ -409,7 +409,7 @@ run(bar);
 
 ## Thunk
 
-Un **thunk** è una funzione che, senza parametri, invoca un'altra funzione con i parametri già predisposti — rinviandone l'esecuzione al momento della chiamata del thunk stesso.
+Un **thunk** è una funzione che, senza parametri, invoca un'altra funzione con i parametri già predisposti, rinviandone l'esecuzione al momento della chiamata del thunk stesso.
 
 ```js
 function foo(x, y, cb) {
@@ -520,7 +520,7 @@ it.next(21).value;      // 42 — x=21, return 42, done:true
 - Sempre N+1 `next()` rispetto ai `yield`: il primo avvia, ogni successivo risponde al yield precedente, l'ultimo riceve risposta da `return`
 - `yield *iterable` delega l'iterazione a un altro generator o iterable
 - `it.throw(err)` inietta un'eccezione nel punto di yield; `it.return(val)` termina il generator
-- Combinazione con Promise: il generator `yield`a Promise, un runner le gestisce → codice async con aspetto sync + trustability Promise
+- Combinazione con Promise: il generator `yield`a Promise e un runner le gestisce, così il codice async ha aspetto sync e mantiene la trustability delle Promise
 - `async/await` (ES2017) è questa stessa combinazione nella sintassi del linguaggio
 
 ```js
@@ -561,14 +561,14 @@ Chiamare `foo()` su un generator non avvia l'esecuzione: restituisce un **iterat
 <details>
 <summary>Perché il canale <code>yield</code>/<code>next()</code> è "sfasato" di uno, e cosa risponde all'ultimo <code>next()</code>?</summary>
 
-Il primo `next()` avvia il generator e lo porta fino al primo `yield` — a quel punto non c'è ancora nessun `yield` in pausa a cui passare un valore, quindi qualsiasi argomento viene ignorato. Il secondo `next(val)` fornisce il valore che diventa il risultato dell'espressione `yield` correntemente in pausa, e avanza fino al prossimo `yield`. Quindi con N yield servono N+1 chiamate a `next()`. L'ultimo `next()` (quello senza un `yield` corrispondente) riceve risposta dall'istruzione `return` del generator (o da `return undefined` implicito).
+Il primo `next()` avvia il generator e lo porta fino al primo `yield`: a quel punto non c'è ancora nessun `yield` in pausa a cui passare un valore, quindi qualsiasi argomento viene ignorato. Il secondo `next(val)` fornisce il valore che diventa il risultato dell'espressione `yield` correntemente in pausa, e avanza fino al prossimo `yield`. Quindi con N yield servono N+1 chiamate a `next()`. L'ultimo `next()` (quello senza un `yield` corrispondente) riceve risposta dall'istruzione `return` del generator (o da `return undefined` implicito).
 
 </details>
 
 <details>
 <summary>Come si ottiene codice async con aspetto sincrono usando generator + Promise?</summary>
 
-Si fa in modo che il generator `yield`i una Promise invece di un valore diretto. Un runner esterno (come la funzione `run()`) riceve la Promise yieldata, aspetta che si risolva, e poi riprende il generator con il valore di fulfillment tramite `it.next(val)` — oppure inietta l'errore con `it.throw(err)`. Dal punto di vista del codice dentro il generator, tutto sembra sincrono: si scrive `var text = yield foo(11, 31)` e si ottiene il valore direttamente, senza callback. Il `try..catch` cattura sia errori sincroni che asincroni. Questo pattern è esattamente ciò che `async/await` implementa nativamente in ES2017.
+Si fa in modo che il generator `yield`i una Promise invece di un valore diretto. Un runner esterno (come la funzione `run()`) riceve la Promise yieldata, aspetta che si risolva, e poi riprende il generator con il valore di fulfillment tramite `it.next(val)`, oppure inietta l'errore con `it.throw(err)`. Dal punto di vista del codice dentro il generator, tutto sembra sincrono: si scrive `var text = yield foo(11, 31)` e si ottiene il valore direttamente, senza callback. Il `try..catch` cattura sia errori sincroni che asincroni. Questo pattern è esattamente ciò che `async/await` implementa nativamente in ES2017.
 
 </details>
 

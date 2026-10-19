@@ -19,7 +19,7 @@ var a = 2;
 console.log(a);     // 2
 ```
 
-Buona pratica: dichiarare tutte le variabili `let` in cima al blocco, per evitare il **TDZ (Temporal Dead Zone)** — l'intervallo tra l'inizio del blocco e la riga della dichiarazione, in cui la variabile esiste ma non è ancora inizializzata:
+Buona pratica: dichiarare tutte le variabili `let` in cima al blocco, per evitare il **TDZ (Temporal Dead Zone)**, cioè l'intervallo tra l'inizio del blocco e la riga della dichiarazione, in cui la variabile esiste ma non è ancora inizializzata:
 
 ```js
 {
@@ -39,7 +39,7 @@ let b;
 
 #### `let` nel `for`
 
-Il caso più importante di `let`: nella testata di un `for`, ogni iterazione ottiene la propria copia della variabile — risolve il classico problema di closure nei loop:
+Il caso più importante di `let`: nella testata di un `for`, ogni iterazione ottiene la propria copia della variabile, e questo risolve il classico problema di closure nei loop:
 
 ```js
 /* con var: tutte le closure chiudono sulla stessa i */
@@ -84,7 +84,7 @@ foo();                  // ReferenceError
 
 L'operatore `...` ha due comportamenti opposti a seconda del contesto.
 
-**Spread** — espande un iterable nei suoi valori individuali:
+Lo **spread** espande un iterable nei suoi valori individuali:
 
 ```js
 function foo(x, y, z) { console.log(x, y, z); }
@@ -95,7 +95,7 @@ var a = [2, 3, 4];
 var b = [1, ...a, 5];       // [1,2,3,4,5]  (sostituisce concat)
 ```
 
-**Rest/gather** — raccoglie i parametri rimanenti in un array reale (sostituisce `arguments`):
+Il **rest/gather** raccoglie i parametri rimanenti in un array reale (sostituisce `arguments`):
 
 ```js
 function foo(x, y, ...z) {
@@ -125,7 +125,7 @@ foo(5, undefined);      // 36  (undefined attiva il default)
 foo(5, null);           // 5   (null coerces a 0, non attiva il default)
 ```
 
-Il default scatta solo quando l'argomento è assente o `undefined` — non per `null`, `0`, `""`. Regola: `undefined` = mancante.
+Il default scatta solo quando l'argomento è assente o `undefined`, non per `null`, `0`, `""`. Regola: `undefined` = mancante.
 
 I default possono essere **espressioni** o chiamate di funzione, valutate *lazily* (solo se necessario):
 
@@ -141,7 +141,7 @@ foo();          // 8, 13
 foo(10);        // 10, 15
 ```
 
-I parametri default vivono in un proprio scope — un riferimento nel default expression cerca prima negli altri parametri, poi nel outer scope. Questo produce TDZ se un default fa riferimento a un parametro non ancora inizializzato.
+I parametri default vivono in un proprio scope: un riferimento nel default expression cerca prima negli altri parametri, poi nel outer scope. Questo produce TDZ se un default fa riferimento a un parametro non ancora inizializzato.
 
 ---
 
@@ -179,9 +179,9 @@ var { x: bam, y: baz } = { x: 4, y: 5 };
 console.log(bam, baz);  // 4 5 — x e y non esistono
 ```
 
-**Gotcha fondamentale** — la sintassi nell'object destructuring è invertita rispetto agli object literal:
-- Object literal: `target: source` → `{ a: valoreDiA }`
-- Object destructuring: `source: target` → `{ x: bam }` significa "prendi `x`, mettilo in `bam`"
+**Gotcha**: la sintassi nell'object destructuring è invertita rispetto agli object literal:
+- Object literal: `target: source`, come in `{ a: valoreDiA }`
+- Object destructuring: `source: target`, quindi `{ x: bam }` significa "prendi `x`, mettilo in `bam`"
 
 Senza var/let/const, il `{ }` va avvolto in `( )` per non essere interpretato come blocco:
 
@@ -250,7 +250,7 @@ var o = {
 };
 ```
 
-**Gotcha dei concise methods**: sono funzioni anonime — non hanno un self-reference lessicale. Non usarli se la funzione deve fare ricorsione o unbinding su eventi:
+**Gotcha dei concise methods**: sono funzioni anonime, senza un self-reference lessicale. Non usarli se la funzione deve fare ricorsione o unbinding su eventi:
 
 ```js
 /* ROTTO: something è anonima, return something(...) fallisce */
@@ -309,7 +309,7 @@ for all good men`;
 var out = `${upper("warm")} welcome to ${upper(`${who}s`)}!`;
 ```
 
-Lo scope delle espressioni `${}` è lessicale — risolto nel punto in cui compare il template literal.
+Lo scope delle espressioni `${}` è lessicale: viene risolto nel punto in cui compare il template literal.
 
 ### Tagged string literals
 
@@ -349,7 +349,7 @@ var f3 = (x, y) => {
 };
 ```
 
-Le arrow function sono sempre **function expression anonime** — nessuna forma declaration, nessun nome lessicale per la ricorsione.
+Le arrow function sono sempre **function expression anonime**: non esiste una forma declaration, né un nome lessicale per la ricorsione.
 
 ### Il vero scopo: `this` lessicale
 
@@ -385,9 +385,9 @@ Stesso principio per `arguments` e `super`: le arrow function li ereditano dallo
 
 ### Quando NON usare `=>`
 
-- Metodi di oggetto/classe che usano `this` — il `this` lessicale punta allo scope sbagliato
+- Metodi di oggetto/classe che usano `this`, perché il `this` lessicale punta allo scope sbagliato
 - Funzioni che hanno bisogno di nome lessicale (ricorsione, event unbinding)
-- Funzioni lunghe e multistatement — la brevità non compensa la perdita di chiarezza
+- Funzioni lunghe e multistatement, perché la brevità non compensa la perdita di chiarezza
 
 ---
 
@@ -420,7 +420,7 @@ Tratta i caratteri astral (oltre BMP, cioè oltre U+FFFF) come singola entità a
 
 ### Flag `y` (Sticky)
 
-Ancora il match esattamente alla posizione di `lastIndex` — nessun "move ahead":
+Ancora il match esattamente alla posizione di `lastIndex`, senza alcun "move ahead":
 
 ```js
 var re = /foo/y, str = "++foo++";
@@ -618,34 +618,34 @@ Symbol.for("id");   // registry globale
 <details>
 <summary>Qual è la differenza tra <code>var</code>, <code>let</code> e <code>const</code> in termini di scope e comportamento?</summary>
 
-`var` ha scope di funzione (o globale se al top level) e viene hoistata con valore `undefined`. `let` ha scope di blocco (`{ }`) e soffre di TDZ: è dichiarata alla creazione del blocco ma non inizializzata finché non si raggiunge la sua dichiarazione — accedervi prima è un ReferenceError. `const` è come `let` (block-scoped, TDZ) ma il binding è read-only dopo l'inizializzazione, che è obbligatoria. `const` non congela il valore: un oggetto o array dichiarato `const` è ancora mutabile al suo interno. La regola pratica: usare `const` come segnale di intento per valori che non verranno riassegnati, `let` per quelli che cambieranno, `var` solo in rari casi di backward compatibility.
+`var` ha scope di funzione (o globale se al top level) e viene hoistata con valore `undefined`. `let` ha scope di blocco (`{ }`) e soffre di TDZ: è dichiarata alla creazione del blocco ma non inizializzata finché non si raggiunge la sua dichiarazione, e accedervi prima è un ReferenceError. `const` è come `let` (block-scoped, TDZ) ma il binding è read-only dopo l'inizializzazione, che è obbligatoria. `const` non congela il valore: un oggetto o array dichiarato `const` è ancora mutabile al suo interno. La regola pratica: usare `const` come segnale di intento per valori che non verranno riassegnati, `let` per quelli che cambieranno, `var` solo in rari casi di backward compatibility.
 
 </details>
 
 <details>
 <summary>Perché le arrow function sono state introdotte e quando NON andrebbero usate?</summary>
 
-Il motivo principale dell'introduzione non è la brevità sintattica ma il **lexical `this`**: le arrow function non hanno un proprio `this` — ereditano il `this` dello scope circostante. Questo risolve il pattern `var self = this` o `.bind(this)` per callback e inner function che devono accedere al contesto del metodo esterno. Non andrebbero usate quando: (1) la funzione ha bisogno del proprio `this` dinamico (metodi di oggetto/classe invocati su `this` dell'oggetto), (2) la funzione ha bisogno di auto-riferimento lessicale per ricorsione o event unbinding (le arrow sono sempre anonime), (3) la funzione è lunga e multistatement (la brevità non migliora la leggibilità). Anche `arguments` e `super` sono lessicali nelle arrow — ereditati dall'esterno.
+Il motivo principale dell'introduzione non è la brevità sintattica ma il **lexical `this`**: le arrow function non hanno un proprio `this`: ereditano il `this` dello scope circostante. Questo risolve il pattern `var self = this` o `.bind(this)` per callback e inner function che devono accedere al contesto del metodo esterno. Non andrebbero usate quando: (1) la funzione ha bisogno del proprio `this` dinamico (metodi di oggetto/classe invocati su `this` dell'oggetto), (2) la funzione ha bisogno di auto-riferimento lessicale per ricorsione o event unbinding (le arrow sono sempre anonime), (3) la funzione è lunga e multistatement (la brevità non migliora la leggibilità). Anche `arguments` e `super` sono lessicali nelle arrow, cioè ereditati dall'esterno.
 
 </details>
 
 <details>
 <summary>Cosa significa che nel object destructuring la sintassi è "source: target" invece di "target: source"?</summary>
 
-Nei normali object literal, la sintassi è `target: source` — ad esempio `{ a: valoreDiA }` significa "la proprietà `a` riceve il valore di `valoreDiA`". Nell'object destructuring, l'ordine è invertito: `source: target` — `{ x: bam }` significa "prendi il valore della proprietà `x` (source) e assegnalo alla variabile `bam` (target)". Si può pensarlo così: nei literal il token sinistro `:` è il nome della proprietà nell'oggetto risultante; nel destructuring, il token sinistro `:` è il nome della proprietà nell'oggetto sorgente da cui leggere. La forma shorthand `{ x }` è valida in entrambi i contesti e omette sempre il token sinistro: il nome coincide con quello della proprietà.
+Nei normali object literal, la sintassi è `target: source`: ad esempio, `{ a: valoreDiA }` significa "la proprietà `a` riceve il valore di `valoreDiA`". Nell'object destructuring l'ordine è invertito, `source: target`: `{ x: bam }` significa "prendi il valore della proprietà `x` (source) e assegnalo alla variabile `bam` (target)". Si può pensarlo così: nei literal il token sinistro `:` è il nome della proprietà nell'oggetto risultante; nel destructuring, il token sinistro `:` è il nome della proprietà nell'oggetto sorgente da cui leggere. La forma shorthand `{ x }` è valida in entrambi i contesti e omette sempre il token sinistro: il nome coincide con quello della proprietà.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra il flag <code>y</code> (sticky) e il flag <code>g</code> (global) nelle regular expression?</summary>
 
-Entrambi usano `lastIndex` per le successive match, ma con comportamenti diversi. Con `g`, `exec()` aggiorna `lastIndex` dopo ogni match ma l'engine è libero di avanzare nel testo per trovare il prossimo match — non deve essere esattamente a `lastIndex`. Con `y`, il match deve trovarsi **esattamente** alla posizione indicata da `lastIndex`: nessun avanzamento libero. Se non c'è match a quella posizione, il test fallisce e `lastIndex` viene resettato a 0. Questo rende `y` adatto al parsing di stringhe con struttura prevedibile, dove dopo ogni match `lastIndex` viene automaticamente posizionato al punto giusto per il match successivo. Un'altra differenza: `str.match(re_g)` con flag `g` restituisce tutti i match in un array, mentre con `y` restituisce un match alla volta.
+Entrambi usano `lastIndex` per le successive match, ma con comportamenti diversi. Con `g`, `exec()` aggiorna `lastIndex` dopo ogni match ma l'engine è libero di avanzare nel testo per trovare il prossimo match, che non deve essere esattamente a `lastIndex`. Con `y`, il match deve trovarsi **esattamente** alla posizione indicata da `lastIndex`: nessun avanzamento libero. Se non c'è match a quella posizione, il test fallisce e `lastIndex` viene resettato a 0. Questo rende `y` adatto al parsing di stringhe con struttura prevedibile, dove dopo ogni match `lastIndex` viene automaticamente posizionato al punto giusto per il match successivo. Un'altra differenza: `str.match(re_g)` con flag `g` restituisce tutti i match in un array, mentre con `y` restituisce un match alla volta.
 
 </details>
 
 <details>
 <summary>Cosa sono i Symbol e perché sono stati aggiunti in ES6?</summary>
 
-I Symbol sono un nuovo tipo primitivo che produce valori **unici e non duplicabili**. Ogni chiamata a `Symbol()` produce un valore diverso da tutti gli altri, anche se creati con la stessa descrizione. Il problema che risolvono è quello delle "magic string": usare stringhe come chiavi speciali o event name rischia collisioni accidentali se qualcuno usa la stessa stringa per un altro scopo. Con Symbol, il valore è garantito unico — non può collidere. Come proprietà di oggetto, i Symbol non appaiono in `for..in`, `Object.keys()` o `JSON.stringify()`, ma sono visibili tramite `Object.getOwnPropertySymbols()`. `Symbol.for()` e `Symbol.keyFor()` gestiscono un registry globale per Symbol condivisi tra moduli. I Symbol built-in (`Symbol.iterator`, `Symbol.toStringTag`, ecc.) permettono di agganciare i comportamenti del JS engine a oggetti custom.
+I Symbol sono un nuovo tipo primitivo che produce valori **unici e non duplicabili**. Ogni chiamata a `Symbol()` produce un valore diverso da tutti gli altri, anche se creati con la stessa descrizione. Il problema che risolvono è quello delle "magic string": usare stringhe come chiavi speciali o event name rischia collisioni accidentali se qualcuno usa la stessa stringa per un altro scopo. Con Symbol, il valore è garantito unico e non può collidere. Come proprietà di oggetto, i Symbol non appaiono in `for..in`, `Object.keys()` o `JSON.stringify()`, ma sono visibili tramite `Object.getOwnPropertySymbols()`. `Symbol.for()` e `Symbol.keyFor()` gestiscono un registry globale per Symbol condivisi tra moduli. I Symbol built-in (`Symbol.iterator`, `Symbol.toStringTag`, ecc.) permettono di agganciare i comportamenti del JS engine a oggetti custom.
 
 </details>

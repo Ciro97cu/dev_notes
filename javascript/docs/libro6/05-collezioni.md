@@ -6,7 +6,7 @@ ES6 aggiunge al linguaggio strutture dati native che prima andavano simulate con
 
 ## TypedArray
 
-Un TypedArray non è un array di un "tipo di valori" nel senso dei tipi JS — è un'interfaccia indicizzata su un buffer di dati binari grezzi. Il "tipo" nel nome indica la *view* (interpretazione) da applicare ai bit sottostanti.
+Un TypedArray non è un array di un "tipo di valori" nel senso dei tipi JS: è un'interfaccia indicizzata su un buffer di dati binari grezzi. Il "tipo" nel nome indica la *view* (interpretazione) da applicare ai bit sottostanti.
 
 ### `ArrayBuffer` e view
 
@@ -43,7 +43,7 @@ var littleEndian = (function() {
 })();
 ```
 
-`DataView` permette accesso granulare con endianness esplicita — utile quando il producer e il consumer del buffer potrebbero differire.
+`DataView` permette accesso granulare con endianness esplicita, utile quando il producer e il consumer del buffer potrebbero differire.
 
 ### Costruttori disponibili
 
@@ -68,7 +68,7 @@ new Uint8Array(otherTypedArr);    // copia da un altro TypedArray
 
 I TypedArray supportano la maggior parte dei metodi di `Array.prototype` (`map`, `filter`, `forEach`, `join`, ecc.), ma **non** i metodi mutanti come `push`, `splice`, `concat`. La lunghezza è fissa.
 
-**Gotcha importante** — overflow silenzioso: se il valore eccede il range del tipo, viene troncato (wrap-around):
+**Gotcha importante**: l'overflow è silenzioso, e se il valore eccede il range del tipo viene troncato (wrap-around):
 
 ```js
 var a = new Uint8Array([10, 20, 30]);
@@ -148,7 +148,7 @@ L'ordine di iterazione è l'ordine di inserimento.
 
 ## WeakMap
 
-WeakMap è una variante di Map dove le **chiavi sono tenute debolmente** — se l'oggetto-chiave non ha più riferimenti nel codice, la voce nella WeakMap viene rimossa automaticamente dal garbage collector (GC).
+WeakMap è una variante di Map dove le **chiavi sono tenute debolmente**: se l'oggetto-chiave non ha più riferimenti nel codice, la voce nella WeakMap viene rimossa automaticamente dal garbage collector (GC).
 
 ```js
 var m = new WeakMap();
@@ -180,7 +180,7 @@ val = null; // val sarebbe comunque GC-eligible solo se key lo è già
 
 ## Set
 
-Un Set è una collezione di valori **unici** — i duplicati vengono ignorati silenziosamente.
+Un Set è una collezione di valori **unici**: i duplicati vengono ignorati silenziosamente.
 
 ```js
 var s = new Set();
@@ -207,7 +207,7 @@ var uniques = [...new Set(arr)];
 uniques; // [1, 2, 3, 4, "1", "5"]
 ```
 
-L'unicità usa un confronto simile a `Object.is()` — senza coercizione: `1` e `"1"` sono valori distinti.
+L'unicità usa un confronto simile a `Object.is()`, senza coercizione: `1` e `"1"` sono valori distinti.
 
 ### Iteratori
 
@@ -285,34 +285,34 @@ ws.add(obj);  ws.has(obj);      // no size, no iteratori
 <details>
 <summary>Cos'è un <code>ArrayBuffer</code> e qual è il suo rapporto con i TypedArray?</summary>
 
-Un `ArrayBuffer` è un blocco di memoria binaria grezza — semplicemente una sequenza di byte inizializzati a zero, senza alcuna struttura o tipo. Non è direttamente leggibile o scrivibile. Per interagire con i dati, si crea una *view* sopra il buffer tramite uno dei costruttori TypedArray (`Uint8Array`, `Int32Array`, `Float64Array`, ecc.). La view interpreta i bit del buffer come se fossero elementi di quel tipo (8-bit unsigned integers, 32-bit signed integers, ecc.). Lo stesso buffer può avere più view simultanee — modificando i dati tramite una view, le modifiche sono visibili attraverso tutte le altre view, perché condividono gli stessi bit sottostanti. Questa architettura permette di manipolare dati binari complessi (audio, video, WebGL, rete) in modo efficiente.
+Un `ArrayBuffer` è un blocco di memoria binaria grezza, cioè una sequenza di byte inizializzati a zero, senza alcuna struttura o tipo. Non è direttamente leggibile o scrivibile. Per interagire con i dati, si crea una *view* sopra il buffer tramite uno dei costruttori TypedArray (`Uint8Array`, `Int32Array`, `Float64Array`, ecc.). La view interpreta i bit del buffer come se fossero elementi di quel tipo (8-bit unsigned integers, 32-bit signed integers, ecc.). Lo stesso buffer può avere più view simultanee: modificando i dati tramite una view, le modifiche sono visibili attraverso tutte le altre view, perché condividono gli stessi bit sottostanti. Questa architettura permette di manipolare dati binari complessi (audio, video, WebGL, rete) in modo efficiente.
 
 </details>
 
 <details>
 <summary>Perché <code>Map</code> risolve un problema che gli oggetti normali non possono risolvere?</summary>
 
-Gli oggetti JS convertono automaticamente qualsiasi chiave in stringa tramite `toString()`. Questo significa che oggetti distinti come `{ id: 1 }` e `{ id: 2 }` stringificano entrambi a `"[object Object]"` e finiscono per essere la stessa chiave nell'oggetto — una sovrascrive l'altra. `Map` usa l'identità per riferimento come criterio per le chiavi oggetto: `x` e `y` sono chiavi distinte anche se hanno la stessa struttura, perché sono riferimenti a oggetti diversi in memoria. Questo rende `Map` la struttura corretta ogni volta che si ha bisogno di associare dati aggiuntivi a un oggetto senza modificare l'oggetto stesso — ad esempio per caching, metadata, o dati privati.
+Gli oggetti JS convertono automaticamente qualsiasi chiave in stringa tramite `toString()`. Questo significa che oggetti distinti come `{ id: 1 }` e `{ id: 2 }` stringificano entrambi a `"[object Object]"` e finiscono per essere la stessa chiave nell'oggetto, e una sovrascrive l'altra. `Map` usa l'identità per riferimento come criterio per le chiavi oggetto: `x` e `y` sono chiavi distinte anche se hanno la stessa struttura, perché sono riferimenti a oggetti diversi in memoria. Questo rende `Map` la struttura corretta ogni volta che si ha bisogno di associare dati aggiuntivi a un oggetto senza modificare l'oggetto stesso, ad esempio per caching, metadata, o dati privati.
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra <code>Map</code> e <code>WeakMap</code>, e quando si preferisce l'una all'altra?</summary>
 
-La differenza fondamentale è nel trattamento delle chiavi rispetto al garbage collector. In una `Map` normale, la chiave-oggetto è tenuta con un riferimento forte: anche se tutte le altre parti del codice hanno rimosso i riferimenti all'oggetto, la `Map` lo mantiene vivo in memoria. In una `WeakMap`, le chiavi sono tenute debolmente: se l'oggetto non ha altri riferimenti nel programma, il GC può rimuoverlo e la voce nella `WeakMap` scompare automaticamente. Si usa `WeakMap` quando la chiave è un oggetto che non si controlla direttamente (es. un DOM element) e si vuole che i dati associati vengano eliminati automaticamente quando l'oggetto viene distrutto. Il prezzo da pagare: `WeakMap` non è ispezionabile — non ha `size`, `clear()`, né iteratori.
+La differenza sta nel trattamento delle chiavi rispetto al garbage collector. In una `Map` normale, la chiave-oggetto è tenuta con un riferimento forte: anche se tutte le altre parti del codice hanno rimosso i riferimenti all'oggetto, la `Map` lo mantiene vivo in memoria. In una `WeakMap`, le chiavi sono tenute debolmente: se l'oggetto non ha altri riferimenti nel programma, il GC può rimuoverlo e la voce nella `WeakMap` scompare automaticamente. Si usa `WeakMap` quando la chiave è un oggetto che non si controlla direttamente (es. un DOM element) e si vuole che i dati associati vengano eliminati automaticamente quando l'oggetto viene distrutto. Il prezzo da pagare è che `WeakMap` non è ispezionabile: non ha `size`, `clear()`, né iteratori.
 
 </details>
 
 <details>
 <summary>Come funziona l'unicità in un <code>Set</code> e come si può sfruttare per deduplicare un array?</summary>
 
-Un `Set` considera due valori identici se e solo se sono uguali secondo un algoritmo simile a `Object.is()` — senza coercizione. Quindi `1` e `"1"` sono valori distinti, `-0` e `0` invece sono trattati come uguali. Aggiungere un valore già presente non ha effetto e non genera errori. Per deduplicare un array, si costruisce un `Set` con l'array come iterable e si espande di nuovo in array: `[...new Set(arr)]`. L'ordine di inserimento viene preservato. Attenzione: i valori oggetto sono uguali solo se sono lo stesso riferimento in memoria — due oggetti `{ id: 1 }` distinti sono considerati diversi anche se hanno la stessa struttura.
+Un `Set` considera due valori identici se e solo se sono uguali secondo un algoritmo simile a `Object.is()`, senza coercizione. Quindi `1` e `"1"` sono valori distinti, `-0` e `0` invece sono trattati come uguali. Aggiungere un valore già presente non ha effetto e non genera errori. Per deduplicare un array, si costruisce un `Set` con l'array come iterable e si espande di nuovo in array: `[...new Set(arr)]`. L'ordine di inserimento viene preservato. Attenzione: i valori oggetto sono uguali solo se sono lo stesso riferimento in memoria: due oggetti `{ id: 1 }` distinti sono considerati diversi anche se hanno la stessa struttura.
 
 </details>
 
 <details>
 <summary>Cosa distingue <code>WeakMap</code> da <code>WeakSet</code> e quali sono i rispettivi casi d'uso?</summary>
 
-`WeakMap` associa a ogni chiave-oggetto un valore arbitrario — è una mappa chiave→valore dove le chiavi sono tenute debolmente. `WeakSet` è invece una collezione di oggetti unici senza alcun valore associato — serve solo a rispondere alla domanda "questo oggetto è presente nel set?". Il caso d'uso tipico di `WeakMap` è associare dati privati o metadata a oggetti esterni (DOM elements, oggetti di librerie terze) senza modificarli, con cleanup automatico quando l'oggetto viene rimosso. Il caso d'uso tipico di `WeakSet` è tenere traccia degli oggetti già processati (ad esempio in un algoritmo di visita di grafi) senza impedire il loro GC quando non servono più. Entrambi accettano solo oggetti come chiavi/valori, e nessuno dei due è iterabile o ha `size`.
+`WeakMap` associa a ogni chiave-oggetto un valore arbitrario: è una mappa chiave→valore dove le chiavi sono tenute debolmente. `WeakSet` è invece una collezione di oggetti unici senza alcun valore associato, e serve solo a rispondere alla domanda "questo oggetto è presente nel set?". Il caso d'uso tipico di `WeakMap` è associare dati privati o metadata a oggetti esterni (DOM elements, oggetti di librerie terze) senza modificarli, con cleanup automatico quando l'oggetto viene rimosso. Il caso d'uso tipico di `WeakSet` è tenere traccia degli oggetti già processati (ad esempio in un algoritmo di visita di grafi) senza impedire il loro GC quando non servono più. Entrambi accettano solo oggetti come chiavi/valori, e nessuno dei due è iterabile o ha `size`.
 
 </details>

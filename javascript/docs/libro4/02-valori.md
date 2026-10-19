@@ -4,7 +4,7 @@ Array, stringhe e numeri sono i mattoni fondamentali di qualsiasi programma. Jav
 
 ## Array
 
-In JS gli array sono contenitori generici: possono tenere valori di qualsiasi tipo, compresi altri array. Non è necessario pre-dimensionarli — si dichiarano vuoti e si aggiungono valori liberamente:
+In JS gli array sono contenitori generici: possono tenere valori di qualsiasi tipo, compresi altri array. Non è necessario pre-dimensionarli, perché si possono dichiarare vuoti e aggiungere valori liberamente:
 
 ```js
 var a = [1, "2", [3]];
@@ -22,7 +22,7 @@ a[1];       // undefined — ma lo slot non esiste
 a.length;   // 3
 ```
 
-**Chiavi stringa**: gli array sono oggetti, quindi accettano proprietà stringa, ma queste non influenzano `length`. Attenzione: se la stringa-chiave è convertibile a numero intero, viene interpretata come indice:
+**Chiavi stringa**: gli array sono oggetti, quindi accettano proprietà stringa, ma queste non influenzano `length`. Se però la stringa-chiave è convertibile a numero intero, viene interpretata come indice:
 
 ```js
 var a = [];
@@ -46,7 +46,7 @@ var arr = Array.from(arguments);
 
 ## Stringhe
 
-Le stringhe assomigliano agli array di caratteri ma **non lo sono**. La differenza fondamentale: le stringhe sono **immutabili**, gli array no.
+Le stringhe assomigliano agli array di caratteri ma **non lo sono**. La differenza principale è che le stringhe sono **immutabili**, gli array no.
 
 ```js
 var a = "foo";
@@ -138,10 +138,10 @@ Number.isSafeInteger(Math.pow(2, 53));         // false
 ### `undefined` e `null`
 
 Sono i soli valori dei rispettivi tipi. Semantica comune:
-- `null` — valore vuoto, slot che aveva un valore e non ce l'ha più.
-- `undefined` — valore mancante, slot che non ha ancora avuto un valore.
+- `null`: valore vuoto, slot che aveva un valore e non ce l'ha più.
+- `undefined`: valore mancante, slot che non ha ancora avuto un valore.
 
-`null` è una keyword, non può essere riassegnato. `undefined` è (purtroppo) un identificatore: in non-strict mode è tecnicamente assegnabile — da non fare mai.
+`null` è una keyword, non può essere riassegnato. `undefined` è (purtroppo) un identificatore: in non-strict mode è tecnicamente assegnabile, ma non va fatto mai.
 
 **`void`**: produce `undefined` da qualsiasi espressione senza modificarla. Utile nei rari casi in cui si vuole scartare un valore di ritorno:
 
@@ -186,7 +186,7 @@ Number.isNaN = function(n) { return n !== n; };
 
 ### `Infinity` e `-Infinity`
 
-Divisione per zero non lancia eccezioni in JS — produce `Infinity`:
+In JS la divisione per zero non lancia eccezioni, ma produce `Infinity`:
 
 ```js
 1 / 0;   // Infinity
@@ -228,17 +228,17 @@ Object.is(-0, 0);    // false
 Object.is(-0, -0);   // true
 ```
 
-Da usare solo per questi casi edge — `===` rimane più efficiente e idiomatico negli altri contesti.
+Da usare solo per questi casi edge, perché `===` rimane più efficiente e idiomatico negli altri contesti.
 
 ---
 
 ## Value vs Reference
 
-In JS non esistono puntatori. Il tipo del **valore** determina se viene copiato o passato per riferimento — non la sintassi, non la dichiarazione.
+In JS non esistono puntatori. Il tipo del **valore**, e non la sintassi o la dichiarazione, determina se viene copiato o passato per riferimento.
 
 **Primitivi** (`null`, `undefined`, `string`, `number`, `boolean`, `symbol`): sempre **value-copy**. Ogni assegnamento o passaggio crea una copia indipendente.
 
-**Compound values** (oggetti, array, funzioni): sempre **reference-copy**. Il riferimento punta al valore condiviso — non a un'altra variabile.
+**Compound values** (oggetti, array, funzioni): sempre **reference-copy**. Il riferimento punta al valore condiviso, non a un'altra variabile.
 
 ```js
 /* primitivo: copia del valore */
@@ -295,7 +295,7 @@ foo(a.slice()); /* foo riceve un nuovo array — a è al sicuro */
 ```
 
 > [!tip]
-> **Modello di memoria (Stack e Heap).** Sotto il cofano il motore tiene i **primitivi** (dimensione fissa) e i **riferimenti** sullo *Stack* — memoria veloce, gestita in modo LIFO; gli oggetti, array e funzioni (dimensione dinamica) vivono invece nello *Heap*. Una variabile compound contiene sullo Stack l'**indirizzo** del valore nello Heap: è quell'indirizzo a essere copiato nel reference-copy. Copiare un indirizzo costa molto meno che duplicare un intero oggetto — da qui l'efficienza. È un modello mentale utile, ma resta sotto la superficie: JS non espone questi indirizzi, non esistono puntatori manipolabili come in C.
+> **Modello di memoria (Stack e Heap).** Sotto il cofano il motore tiene i **primitivi** (dimensione fissa) e i **riferimenti** sullo *Stack* (memoria veloce, gestita in modo LIFO); gli oggetti, array e funzioni (dimensione dinamica) vivono invece nello *Heap*. Una variabile compound contiene sullo Stack l'**indirizzo** del valore nello Heap: è quell'indirizzo a essere copiato nel reference-copy. Copiare un indirizzo costa molto meno che duplicare un intero oggetto, e da qui viene l'efficienza. È un modello mentale utile, ma resta sotto la superficie: JS non espone questi indirizzi, non esistono puntatori manipolabili come in C.
 
 ---
 
@@ -305,14 +305,14 @@ foo(a.slice()); /* foo riceve un nuovo array — a è al sicuro */
 
 **Stringhe**: immutabili. I metodi non modificano in-place. Si possono prendere in prestito metodi array non-mutanti.
 
-**Numeri**: IEEE 754 double precision. `0.1 + 0.2 !== 0.3` — usare `Number.EPSILON` per confronti decimali. Max safe integer: `Number.MAX_SAFE_INTEGER` (2⁵³ − 1).
+**Numeri**: IEEE 754 double precision. `0.1 + 0.2 !== 0.3`: usare `Number.EPSILON` per confronti decimali. Max safe integer: `Number.MAX_SAFE_INTEGER` (2⁵³ − 1).
 
 **Valori speciali**:
 - `NaN`: tipo `"number"`, mai uguale a se stesso. Usare `Number.isNaN()`, non `isNaN()`.
 - `-0`: uguale a `0` con `===`, ma rilevabile con `1/n === -Infinity`.
 - `Object.is()`: uguaglianza assoluta per i casi edge di `NaN` e `-0`.
 
-**Value vs Reference**: il tipo del valore decide. Primitivi → copia. Oggetti/array → riferimento condiviso.
+**Value vs Reference**: il tipo del valore decide. I primitivi vengono copiati, oggetti e array passano un riferimento condiviso.
 
 ```js
 /* NaN check corretto */
@@ -334,34 +334,34 @@ Object.is(-0, 0);    // false
 <details>
 <summary>Perché gli array sparsi sono problematici in JavaScript?</summary>
 
-Un array sparso ha slot "vuoti" — indici che non sono mai stati assegnati esplicitamente. Il valore letto da uno slot vuoto è `undefined`, ma non è lo stesso di uno slot a cui è stato assegnato `undefined`. La differenza emerge con metodi come `map()`, `forEach()` o `filter()`: questi iterano solo sugli slot che esistono effettivamente, saltando i vuoti. Il risultato è che `[1,,3].map(x => x * 2)` produce `[2, empty, 6]` — lo slot vuoto viene saltato silenziosamente. Gli array sparsi portano a comportamenti imprevedibili e vanno evitati.
+Un array sparso ha slot "vuoti", cioè indici che non sono mai stati assegnati esplicitamente. Il valore letto da uno slot vuoto è `undefined`, ma non è lo stesso di uno slot a cui è stato assegnato `undefined`. La differenza emerge con metodi come `map()`, `forEach()` o `filter()`: questi iterano solo sugli slot che esistono effettivamente, saltando i vuoti. Il risultato è che `[1,,3].map(x => x * 2)` produce `[2, empty, 6]`: lo slot vuoto viene saltato silenziosamente. Gli array sparsi portano a comportamenti imprevedibili e vanno evitati.
 
 </details>
 
 <details>
 <summary>Perché non si può invertire una stringa con `Array.prototype.reverse.call(str)`?</summary>
 
-Perché le stringhe sono **immutabili**: non possono essere modificate in-place. `reverse()` è un metodo mutante che modifica il valore originale sul posto. Applicarlo a una stringa (tramite borrowing) non lancia un errore, ma non ha effetto sulla stringa originale — restituisce un oggetto `String` wrapper per la stringa originale non modificata. Il workaround standard (`split("").reverse().join("")`) funziona perché converte la stringa in un array di caratteri (mutable), inverte l'array, e ricrea la stringa. Non funziona però con caratteri Unicode multibyte.
+Perché le stringhe sono **immutabili**: non possono essere modificate in-place. `reverse()` è un metodo mutante che modifica il valore originale sul posto. Applicarlo a una stringa (tramite borrowing) non lancia un errore, ma non ha effetto sulla stringa originale: restituisce un oggetto `String` wrapper per la stringa originale non modificata. Il workaround standard (`split("").reverse().join("")`) funziona perché converte la stringa in un array di caratteri (mutable), inverte l'array, e ricrea la stringa. Non funziona però con caratteri Unicode multibyte.
 
 </details>
 
 <details>
 <summary>Perché `isNaN("foo")` restituisce `true` ed è considerato un bug?</summary>
 
-Il global `isNaN()` interpreta il suo argomento troppo letteralmente: controlla se il valore "non è un numero" — includendo qualsiasi valore non numerico, non solo il valore speciale `NaN`. `"foo"` non è un numero, quindi `isNaN("foo")` restituisce `true`, anche se `"foo"` non è `NaN`. `Number.isNaN()` (ES6) è la versione corretta: verifica prima che il tipo sia `"number"`, e poi che il valore sia effettivamente `NaN`. In alternativa si può sfruttare la proprietà unica di `NaN` — è l'unico valore non uguale a se stesso: `function isNaN(n) { return n !== n; }`.
+Il global `isNaN()` interpreta il suo argomento troppo letteralmente: controlla se il valore "non è un numero", includendo qualsiasi valore non numerico, non solo il valore speciale `NaN`. `"foo"` non è un numero, quindi `isNaN("foo")` restituisce `true`, anche se `"foo"` non è `NaN`. `Number.isNaN()` (ES6) è la versione corretta: verifica prima che il tipo sia `"number"`, e poi che il valore sia effettivamente `NaN`. In alternativa si può sfruttare la proprietà unica di `NaN`, cioè essere l'unico valore non uguale a se stesso: `function isNaN(n) { return n !== n; }`.
 
 </details>
 
 <details>
 <summary>Perché `-0 === 0` è `true` in JavaScript, e quando è importante distinguerli?</summary>
 
-È una scelta della specifica: gli operatori di confronto (`==` e `===`) trattano `-0` come uguale a `0`. Anche `String(-0)` restituisce `"0"`. La distinzione è nascosta intenzionalmente nella maggior parte dei contesti. Diventa rilevante in applicazioni dove il segno di un valore numerico codifica informazioni aggiuntive — per esempio, in un'animazione dove `0` significa "fermo" e il segno indica l'ultima direzione di movimento. Se si perde il segno dello zero, si perde anche l'informazione sulla direzione. Per rilevare `-0` si usa `(n === 0) && (1/n === -Infinity)`, oppure `Object.is(n, -0)` (ES6).
+È una scelta della specifica: gli operatori di confronto (`==` e `===`) trattano `-0` come uguale a `0`. Anche `String(-0)` restituisce `"0"`. La distinzione è nascosta intenzionalmente nella maggior parte dei contesti. Diventa rilevante in applicazioni dove il segno di un valore numerico codifica informazioni aggiuntive, per esempio in un'animazione dove `0` significa "fermo" e il segno indica l'ultima direzione di movimento. Se si perde il segno dello zero, si perde anche l'informazione sulla direzione. Per rilevare `-0` si usa `(n === 0) && (1/n === -Infinity)`, oppure `Object.is(n, -0)` (ES6).
 
 </details>
 
 <details>
 <summary>Qual è la differenza tra passare per value-copy e passare per reference-copy, e come si controlla in JS?</summary>
 
-In JS non si controlla la modalità di passaggio con la sintassi — la decide il **tipo del valore**. I primitivi (`number`, `string`, `boolean`, `null`, `undefined`, `symbol`) vengono sempre copiati per valore: la funzione riceve una copia indipendente e non può modificare l'originale. Gli oggetti e gli array vengono passati per reference-copy: la funzione riceve una copia del riferimento allo stesso valore condiviso, può quindi mutare il contenuto dell'oggetto/array (visibile all'esterno), ma non può rimpiazzare l'originale riassegnando il parametro. Per "passare un array per valore" si copia esplicitamente prima: `foo(a.slice())`. Per "passare un primitivo per riferimento" si lo avvolge in un oggetto: `foo({ val: 42 })`.
+In JS la modalità di passaggio non si controlla con la sintassi: la decide il **tipo del valore**. I primitivi (`number`, `string`, `boolean`, `null`, `undefined`, `symbol`) vengono sempre copiati per valore: la funzione riceve una copia indipendente e non può modificare l'originale. Gli oggetti e gli array vengono passati per reference-copy: la funzione riceve una copia del riferimento allo stesso valore condiviso, può quindi mutare il contenuto dell'oggetto/array (visibile all'esterno), ma non può rimpiazzare l'originale riassegnando il parametro. Per "passare un array per valore" si copia esplicitamente prima: `foo(a.slice())`. Per "passare un primitivo per riferimento" lo si avvolge in un oggetto: `foo({ val: 42 })`.
 
 </details>

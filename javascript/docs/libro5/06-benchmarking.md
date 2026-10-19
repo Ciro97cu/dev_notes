@@ -15,13 +15,13 @@ var end = Date.now();
 console.log("Duration:", end - start);
 ```
 
-È fondamentalmente inaffidabile per diversi motivi.
+È inaffidabile per diversi motivi.
 
-**Precisione del timer**: su alcune piattaforme (es. vecchie versioni di Windows/IE) il timer si aggiorna ogni 15ms, non ogni 1ms. Se l'operazione dura meno di 15ms, si ottiene 0 — che non significa "istantaneo".
+**Precisione del timer**: su alcune piattaforme (es. vecchie versioni di Windows/IE) il timer si aggiorna ogni 15ms, non ogni 1ms. Se l'operazione dura meno di 15ms, si ottiene 0, che non significa "istantaneo".
 
 **Singolo campione**: anche se la durata è 4ms, non si sa se quella è la durata normale o se c'era un'interferenza del sistema (garbage collection, I/O, processo OS) proprio in quel momento. Un singolo campione ha confidenza vicina a zero.
 
-**Ottimizzazioni dell'engine**: il JS engine potrebbe ottimizzare il codice isolato del test in modi che non si verificherebbero in un programma reale — rendendo il risultato artificialmente ottimistico.
+**Ottimizzazioni dell'engine**: il JS engine potrebbe ottimizzare il codice isolato del test in modi che non si verificherebbero in un programma reale, rendendo il risultato artificialmente ottimistico.
 
 ### Ripetizione e statistica
 
@@ -55,13 +55,13 @@ bench.stats.moe;        // margin of error
 bench.stats.variance;   // varianza tra i campioni
 ```
 
-Per confrontare due approcci X e Y si definiscono due test in una *suite* — Benchmark.js li esegue in parallelo e compara le statistiche.
+Per confrontare due approcci X e Y si definiscono due test in una *suite*: Benchmark.js li esegue in parallelo e compara le statistiche.
 
 Benchmark.js può anche essere integrato nei pipeline CI/CD come test di regressione delle prestazioni: si confrontano le prestazioni attuali con quelle di una versione precedente su percorsi critici dell'applicazione.
 
 ### Setup e teardown: una trappola frequente
 
-Benchmark.js supporta funzioni `setup` e `teardown`. È fondamentale capire **quando** vengono eseguite: non a ogni iterazione del test, ma a ogni *ciclo* (la struttura esterna che raggruppa molte iterazioni).
+Benchmark.js supporta funzioni `setup` e `teardown`. Va capito bene **quando** vengono eseguite: non a ogni iterazione del test, ma a ogni *ciclo* (la struttura esterna che raggruppa molte iterazioni).
 
 ```js
 /* INTENZIONE: a inizia come "x" a ogni iterazione */
@@ -70,7 +70,7 @@ setup: function() { var a = "x"; }
 test:  function() { a = a + "w"; b = a.charAt(1); }
 ```
 
-Se il test concatena caratteri a `a`, dopo molte iterazioni `a` diventa una stringa molto lunga — non la stringa corta immaginata. Lo stesso vale per modifiche al DOM: se si aggiunge un elemento figlio a ogni iterazione, il genitore non è mai "pulito" tra un'iterazione e l'altra, solo tra un ciclo e l'altro.
+Se il test concatena caratteri a `a`, dopo molte iterazioni `a` diventa una stringa molto lunga, non la stringa corta immaginata. Lo stesso vale per modifiche al DOM: se si aggiunge un elemento figlio a ogni iterazione, il genitore non è mai "pulito" tra un'iterazione e l'altra, solo tra un ciclo e l'altro.
 
 ---
 
@@ -78,7 +78,7 @@ Se il test concatena caratteri a `a`, dopo molte iterazioni `a` diventa una stri
 
 Un benchmark che mostra "X è il 20% più veloce di Y" può essere statisticamente corretto e allo stesso tempo irrilevante.
 
-Si considerino X a 10.000.000 op/s e Y a 8.000.000 op/s: X impiega 100ns per operazione, Y 125ns — una differenza di 25ns. Il cervello umano non percepisce intervalli sotto i 100ms, che è un milione di volte più lento di quei 100ns. Per percepire la differenza cumulativa tra X e Y si dovrebbe eseguire l'operazione 4-5 milioni di volte in sequenza continua — un caso raro nella pratica.
+Si considerino X a 10.000.000 op/s e Y a 8.000.000 op/s: X impiega 100ns per operazione, Y 125ns: una differenza di 25ns. Il cervello umano non percepisce intervalli sotto i 100ms, che è un milione di volte più lento di quei 100ns. Per percepire la differenza cumulativa tra X e Y si dovrebbe eseguire l'operazione 4-5 milioni di volte in sequenza continua, un caso raro nella pratica.
 
 La conclusione: **la maggior parte dei micro-benchmark su operazioni rapide è irrilevante** per decisioni architetturali reali. I miti più persistenti (`++x` vs `x++`, `i < len` vs `i < x.length`) rientrano tutti in questa categoria.
 
@@ -115,25 +115,25 @@ factorial(5);   // l'engine potrebbe sostituire con la costante 120
 
 L'engine potrebbe calcolare il risultato a compile-time, o riscrivere la ricorsione come loop. Se si fa un benchmark per decidere se usare `n * factorial(n-1)` o `n *= factorial(--n)`, si misura qualcosa che l'engine potrebbe già non eseguire affatto.
 
-La regola: **il codice JS è un suggerimento all'engine, non un'istruzione letterale**. Ossessionarsi per `++i` vs `i++` o per cachare `x.length` è in quasi tutti i casi tempo sprecato — e in V8, cachare `x.length` può persino peggiorare le prestazioni.
+La regola: **il codice JS è un suggerimento all'engine, non un'istruzione letterale**. Ossessionarsi per `++i` vs `i++` o per cachare `x.length` è in quasi tutti i casi tempo sprecato, e in V8 cachare `x.length` può persino peggiorare le prestazioni.
 
 ---
 
 ## I motori non sono tutti uguali
 
-Ogni engine — V8 (Chrome/Node.js), SpiderMonkey (Firefox), JavaScriptCore (Safari) — è spec-compliant ma applica strategie di ottimizzazione diverse e talvolta opposte.
+Ogni engine, che sia V8 (Chrome/Node.js), SpiderMonkey (Firefox) o JavaScriptCore (Safari), è spec-compliant ma applica strategie di ottimizzazione diverse e talvolta opposte.
 
 Esempi di consigli specifici per V8 che circolano nella community:
-- Non passare l'oggetto `arguments` ad altre funzioni — causa de-ottimizzazione
-- Isolare `try..catch` in funzioni proprie — alcuni motori non ottimizzano funzioni che contengono `try..catch`
+- Non passare l'oggetto `arguments` ad altre funzioni, perché causa de-ottimizzazione
+- Isolare `try..catch` in funzioni proprie, perché alcuni motori non ottimizzano funzioni che contengono `try..catch`
 
 Questi consigli possono essere corretti per V8 in un certo momento, ma:
 - Potrebbero essere sbagliati in altri motori
 - V8 stesso potrebbe cambiare comportamento nelle versioni successive (è già successo con `join()` vs `+` per concatenazione di stringhe)
 
-La storia della concatenazione è istruttiva: per anni la best practice era usare `array.join("")` invece di `+` per motivi di prestazioni interni all'engine. Poi i motori ottimizzarono `+` (il pattern più diffuso) e tutto quel codice `join("")` divenne subottimale. È il rischio dell'ottimizzazione "cowpath" — seguire la strada battuta da un'ottimizzazione che poi scompare.
+La storia della concatenazione è istruttiva: per anni la best practice era usare `array.join("")` invece di `+` per motivi di prestazioni interni all'engine. Poi i motori ottimizzarono `+` (il pattern più diffuso) e tutto quel codice `join("")` divenne subottimale. È il rischio dell'ottimizzazione "cowpath": seguire la strada battuta da un'ottimizzazione che poi scompare.
 
-La posizione corretta: **non ottimizzare per un singolo engine**. Se si trova un bug di prestazioni in un browser specifico, segnalarlo agli sviluppatori del browser — i browser si aggiornano molto più frequentemente di quanto si faceva in passato.
+La posizione corretta: **non ottimizzare per un singolo engine**. Se si trova un bug di prestazioni in un browser specifico, segnalarlo agli sviluppatori del browser, perché i browser si aggiornano molto più frequentemente di quanto si faceva in passato.
 
 ---
 
@@ -149,7 +149,7 @@ Benchmark.js misura il codice nell'ambiente corrente. Per conclusioni generalizz
 
 **Setup che non resetta lo stato**: come visto sopra, il setup viene eseguito per ciclo, non per iterazione.
 
-**Confronto mele-arance — caso 1**: un comparatore di sort inline crea una nuova funzione a ogni iterazione, aggiungendo costi estranei:
+**Confronto mele-arance (caso 1)**: un comparatore di sort inline crea una nuova funzione a ogni iterazione, aggiungendo costi estranei:
 
 ```js
 /* SBAGLIATO: mySort viene ricreata a ogni iterazione */
@@ -159,7 +159,7 @@ x.sort(function mySort(a, b) { return a - b; });
 x.sort(mySort);
 ```
 
-**Confronto mele-arance — caso 2**: i due casi producono risultati diversi, invalidando il confronto:
+**Confronto mele-arance (caso 2)**: i due casi producono risultati diversi, invalidando il confronto:
 
 ```js
 /* Case 1: ordine lessicografico → [-14, 0, 0, 12, 18, 2.9, 3] */
@@ -205,7 +205,7 @@ var y = +x / 2;         // unario + — rapido, comune
 var y = (x | 0) / 2;   // bitwise OR — rapido, ma tronca i decimali
 ```
 
-`parseInt()` fa più lavoro (parsing carattere per carattere) ed è generalmente più lento — ma è l'unico adatto se la stringa può essere "42px". Le altre opzioni sono comparabili; la scelta va fatta su leggibilità, non su microottimizzazioni.
+`parseInt()` fa più lavoro (parsing carattere per carattere) ed è generalmente più lento, ma è l'unico adatto se la stringa può essere "42px". Le altre opzioni sono comparabili; la scelta va fatta su leggibilità, non su microottimizzazioni.
 
 ---
 
@@ -213,7 +213,7 @@ var y = (x | 0) / 2;   // bitwise OR — rapido, ma tronca i decimali
 
 ES6 introduce un requisito di ottimizzazione che il linguaggio **impone** ai motori: la **Tail Call Optimization** (ottimizzazione delle chiamate in coda).
 
-Una **tail call** (chiamata in coda) è una chiamata a funzione che si trova nell'ultima posizione di un'altra funzione — dopo la quale non c'è nient'altro da fare se non restituire il risultato:
+Una **tail call** (chiamata in coda) è una chiamata a funzione che si trova nell'ultima posizione di un'altra funzione, dopo la quale non c'è nient'altro da fare se non restituire il risultato:
 
 ```js
 function foo(x) { return x; }
@@ -229,7 +229,7 @@ function baz() {
 
 Normalmente ogni chiamata di funzione aggiunge uno **stack frame** (blocco di memoria per gestire il contesto della chiamata). Con chiamate ricorsive profonde, lo stack cresce fino a esaurire la memoria.
 
-Con TCO, un engine che riconosce una tail call **riusa il frame dello stack corrente** invece di crearne uno nuovo. Per la ricorsione questo è trasformativo: invece di stack frames proporzionali alla profondità, se ne usa sempre solo uno.
+Con TCO, un engine che riconosce una tail call **riusa il frame dello stack corrente** invece di crearne uno nuovo. Per la ricorsione questo significa che, invece di stack frames proporzionali alla profondità, se ne usa sempre solo uno.
 
 ```js
 /* ricorsione classica — non TCO-friendly */
@@ -252,33 +252,33 @@ factorial(5);   // 120
 
 La differenza: nella versione TCO-friendly il risultato parziale viene accumulato nel parametro `res` invece che nello stack, permettendo all'engine di riusare il frame. Algoritmi che prima erano impraticabili in JS per i limiti dello stack diventano fattibili.
 
-ES6 richiede TCO nei motori (non lo lascia opzionale) precisamente perché senza di essa certi algoritmi ricorsivi non sono praticamente implementabili — non è solo un'ottimizzazione di velocità, ma un'abilitazione di pattern altrimenti impossibili.
+ES6 richiede TCO nei motori (non lo lascia opzionale) precisamente perché senza di essa certi algoritmi ricorsivi non sono praticamente implementabili, quindi la TCO abilita pattern altrimenti impossibili oltre a dare un guadagno di velocità.
 
 > [!info|label:Oggi]
-> Il libro presenta la TCO come una garanzia della specifica: la si può quindi dare per acquisita. Nella specifica lo è tuttora (le *proper tail calls* sono normate da ES2015), ma **in pratica quasi nessun motore la implementa**. A oggi solo **JavaScriptCore** (il motore di Safari) offre le proper tail calls; **V8** (Chrome e Node.js) le ha avute solo dietro un flag sperimentale poi abbandonato, e **SpiderMonkey** (Firefox) non le ha mai spedite. La conseguenza pratica: non si può contare sulla TCO per la ricorsione profonda su Node.js o Chrome — lo stack esplode ugualmente. Per garantire spazio di stack costante conviene riscrivere l'algoritmo in forma iterativa (un loop con accumulatore esplicito) invece di affidarsi al riuso automatico del frame.
+> Il libro presenta la TCO come una garanzia della specifica: la si può quindi dare per acquisita. Nella specifica lo è tuttora (le *proper tail calls* sono normate da ES2015), ma **in pratica quasi nessun motore la implementa**. A oggi solo **JavaScriptCore** (il motore di Safari) offre le proper tail calls; **V8** (Chrome e Node.js) le ha avute solo dietro un flag sperimentale poi abbandonato, e **SpiderMonkey** (Firefox) non le ha mai spedite. La conseguenza pratica: non si può contare sulla TCO per la ricorsione profonda su Node.js o Chrome, perché lo stack esplode ugualmente. Per garantire spazio di stack costante conviene riscrivere l'algoritmo in forma iterativa (un loop con accumulatore esplicito) invece di affidarsi al riuso automatico del frame.
 
 ---
 
 ## Ripasso veloce
 
 **Benchmarking:**
-- `Date.now()` diff = metodo sbagliato — imprecisione del timer, campione singolo, ottimizzazioni artificiose
-- Usare **Benchmark.js** — statisticamente corretto: campioni multipli, margine d'errore, varianza
+- `Date.now()` diff = metodo sbagliato: imprecisione del timer, campione singolo, ottimizzazioni artificiose
+- Usare **Benchmark.js**, statisticamente corretto: campioni multipli, margine d'errore, varianza
 - `setup`/`teardown` si eseguono per **ciclo**, non per iterazione
 
 **jsPerf pitfalls:**
 - No loop innestati nel test (Benchmark.js già itera)
-- Casi che producono output diversi → confronto invalido
-- Funzioni inline nel test → costo aggiuntivo non voluto
+- Casi che producono output diversi rendono il confronto invalido
+- Funzioni inline nel test aggiungono un costo non voluto
 
 **Microperformance:**
 - L'engine riscrive il codice (inlining, dead-code removal, loop unrolling)
-- `++x` vs `x++`, cachare `x.length` → quasi sempre irrilevante
-- Non ottimizzare per un singolo engine — le ottimizzazioni cambiano
+- `++x` vs `x++` e cachare `x.length` sono quasi sempre irrilevanti
+- Non ottimizzare per un singolo engine: le ottimizzazioni cambiano
 
 **Big picture:**
 - Ottimizzare solo percorsi critici; leggibilità prima di tutto altrove
-- Knuth: prematura ottimizzazione è male sul 97% non-critico — ma il 3% critico va ottimizzato senza riserve
+- Knuth: prematura ottimizzazione è male sul 97% non-critico, ma il 3% critico va ottimizzato senza riserve
 
 **TCO:**
 ```js
@@ -302,14 +302,14 @@ function factorial(n) {
 <details>
 <summary>Perché misurare le prestazioni con <code>Date.now()</code> su un singolo run è inaffidabile?</summary>
 
-Ci sono tre problemi fondamentali. Il primo è la precisione del timer: alcune piattaforme aggiornano il timestamp ogni 15ms o più, quindi operazioni rapide risultano tutte con durata 0 o 15ms, indipendentemente dalla durata reale. Il secondo è il campionamento singolo: un singolo run può essere distorto da interferenze esterne (garbage collection, scheduling OS, I/O) che non riflettono il comportamento tipico. Il terzo è il rischio di ottimizzazioni artificiali: il JS engine può riconoscere che il codice isolato del test è banale e ottimizzarlo (inlining, eliminazione del codice morto) in modi che non si verificherebbero in un programma reale. La soluzione è usare Benchmark.js, che esegue molti cicli di molte iterazioni, calcola media, varianza e margine d'errore in modo statisticamente corretto.
+Ci sono tre problemi. Il primo è la precisione del timer: alcune piattaforme aggiornano il timestamp ogni 15ms o più, quindi operazioni rapide risultano tutte con durata 0 o 15ms, indipendentemente dalla durata reale. Il secondo è il campionamento singolo: un singolo run può essere distorto da interferenze esterne (garbage collection, scheduling OS, I/O) che non riflettono il comportamento tipico. Il terzo è il rischio di ottimizzazioni artificiali: il JS engine può riconoscere che il codice isolato del test è banale e ottimizzarlo (inlining, eliminazione del codice morto) in modi che non si verificherebbero in un programma reale. La soluzione è usare Benchmark.js, che esegue molti cicli di molte iterazioni, calcola media, varianza e margine d'errore in modo statisticamente corretto.
 
 </details>
 
 <details>
 <summary>Cosa significa che "il contesto è tutto" nella valutazione di un micro-benchmark?</summary>
 
-Significa che anche un risultato statisticamente corretto può essere irrilevante. Se X gira a 10 milioni di op/s e Y a 8 milioni, X impiega 100ns e Y 125ns — una differenza di 25ns. Il cervello umano non percepisce intervalli sotto i 100ms, cioè 4 milioni di volte più lento di quella differenza. Per far accumulare 100ms di differenza tra X e Y si dovrebbero eseguire consecutivamente circa 4 milioni di operazioni — uno scenario raro nella pratica. La domanda giusta non è "X è più veloce di Y?" ma "questa differenza ha impatto misurabile sull'esperienza utente nel contesto reale del mio programma?"
+Significa che anche un risultato statisticamente corretto può essere irrilevante. Se X gira a 10 milioni di op/s e Y a 8 milioni, X impiega 100ns e Y 125ns: una differenza di 25ns. Il cervello umano non percepisce intervalli sotto i 100ms, cioè 4 milioni di volte più lento di quella differenza. Per far accumulare 100ms di differenza tra X e Y si dovrebbero eseguire consecutivamente circa 4 milioni di operazioni, uno scenario raro nella pratica. La domanda giusta non è "X è più veloce di Y?" ma "questa differenza ha impatto misurabile sull'esperienza utente nel contesto reale del programma?"
 
 </details>
 
@@ -323,13 +323,13 @@ Perché i motori cambiano. La concatenazione di stringhe con `array.join("")` er
 <details>
 <summary>Cos'è una tail call e perché TCO è importante specialmente per la ricorsione?</summary>
 
-Una **tail call** è una chiamata a funzione che si trova nell'ultima posizione di un'altra funzione: dopo la sua esecuzione non c'è nient'altro da fare, solo restituire il risultato. Senza TCO, ogni chiamata ricorsiva aggiunge un nuovo stack frame, e la profondità massima della ricorsione è limitata dalla memoria disponibile. Con TCO, l'engine riconosce che il frame corrente non servirà più dopo la tail call e lo riusa invece di crearne uno nuovo — la ricorsione può essere quindi arbitrariamente profonda con un singolo frame. La rilevanza è che alcuni algoritmi naturalmente ricorsivi (ricorsione su strutture ad albero, certi pattern funzionali) diventavano impraticabili in JS senza TCO. ES6 la richiede esplicitamente perché non è solo un'ottimizzazione di velocità, ma un'abilitazione di pattern altrimenti impossibili.
+Una **tail call** è una chiamata a funzione che si trova nell'ultima posizione di un'altra funzione: dopo la sua esecuzione non c'è nient'altro da fare, solo restituire il risultato. Senza TCO, ogni chiamata ricorsiva aggiunge un nuovo stack frame, e la profondità massima della ricorsione è limitata dalla memoria disponibile. Con TCO, l'engine riconosce che il frame corrente non servirà più dopo la tail call e lo riusa invece di crearne uno nuovo, quindi la ricorsione può essere arbitrariamente profonda con un singolo frame. La rilevanza è che alcuni algoritmi naturalmente ricorsivi (ricorsione su strutture ad albero, certi pattern funzionali) diventavano impraticabili in JS senza TCO. ES6 la richiede esplicitamente perché, oltre a un'ottimizzazione di velocità, è ciò che abilita pattern altrimenti impossibili.
 
 </details>
 
 <details>
 <summary>Come si riscrive una funzione ricorsiva per renderla TCO-friendly?</summary>
 
-Il pattern generale è introdurre un **accumulatore** come parametro aggiuntivo, in modo che il valore parziale venga passato avanti invece di essere mantenuto sullo stack. La chiamata ricorsiva diventa così l'ultima operazione della funzione — nessuna operazione in sospeso che richiederebbe di mantenere il frame. Esempio con factorial: la versione classica `return n * factorial(n-1)` non è TCO perché dopo il ritorno di `factorial(n-1)` c'è ancora la moltiplicazione per `n`. La versione TCO-friendly `return fact(n-1, n * res)` calcola `n * res` prima di chiamare `fact`, passando il risultato parziale come argomento — dopo il ritorno non c'è nient'altro, il frame può essere riusato.
+Il pattern generale è introdurre un **accumulatore** come parametro aggiuntivo, in modo che il valore parziale venga passato avanti invece di essere mantenuto sullo stack. La chiamata ricorsiva diventa così l'ultima operazione della funzione, senza operazioni in sospeso che richiederebbero di mantenere il frame. Esempio con factorial: la versione classica `return n * factorial(n-1)` non è TCO perché dopo il ritorno di `factorial(n-1)` c'è ancora la moltiplicazione per `n`. La versione TCO-friendly `return fact(n-1, n * res)` calcola `n * res` prima di chiamare `fact`, passando il risultato parziale come argomento: dopo il ritorno non c'è nient'altro, e il frame può essere riusato.
 
 </details>

@@ -17,7 +17,7 @@ a;             /* expression statement: l'expression "a" vale 18 */
 
 ### Completion value degli statement
 
-Ogni statement ha un **completion value** — anche se è solo `undefined`. Il `var` statement restituisce `undefined` (per spec); un blocco `{ }` restituisce il completion value dell'ultimo statement contenuto:
+Ogni statement ha un **completion value**, anche se è solo `undefined`. Il `var` statement restituisce `undefined` (per spec); un blocco `{ }` restituisce il completion value dell'ultimo statement contenuto:
 
 ```js
 /* nella console del browser, digitare: */
@@ -26,7 +26,7 @@ if (true) { b = 4 + 38; }
 /* la console riporta 42 — il completion value del blocco if */
 ```
 
-Non esiste sintassi per assegnare il completion value di uno statement a una variabile. `eval()` lo permette, ma va evitato. Una proposta ES7 (`do { }` expression) formalizzerebbe questo pattern — al momento è solo curiosità.
+Non esiste sintassi per assegnare il completion value di uno statement a una variabile. `eval()` lo permette, ma va evitato. Una proposta ES7 (`do { }` expression) formalizzerebbe questo pattern, ma al momento è solo una curiosità.
 
 ### Side effect delle expression
 
@@ -87,7 +87,7 @@ Le stesse `{ }` significano cose diverse:
 | ES6 `var { a, b } = obj` | destructuring |
 | ES6 `function foo({ a, b })` | destructuring parametro |
 
-Un blocco autonomo `{ }` è valido JS — raro ma utile con `let` per scope limitato.
+Un blocco autonomo `{ }` è JS valido: raro, ma utile con `let` per limitare lo scope.
 
 ### Label
 
@@ -116,7 +116,7 @@ I labeled loop sono rari e spesso evitabili con funzioni. Se si usano, commentar
 
 ### JSON non è JS valido
 
-`{"a":42}` inserito come statement JS viene interpretato come blocco con un label `"a"` — ma le label non possono avere le virgolette, quindi è un errore. JSON è un sottoinsieme della **sintassi** JS, ma non della **grammatica** (non è un programma JS autonomo valido).
+`{"a":42}` inserito come statement JS viene interpretato come blocco con un label `"a"`, ma le label non possono avere le virgolette, quindi è un errore. JSON è un sottoinsieme della **sintassi** JS, ma non della **grammatica** (non è un programma JS autonomo valido).
 
 ### Il gotcha `[] + {}` vs `{} + []`
 
@@ -125,7 +125,7 @@ I labeled loop sono rari e spesso evitabili con funzioni. Se si usano, commentar
 {} + [];  // 0
 ```
 
-Nel primo caso, `{}` è nel contesto di un operand del `+` → è un object literal → stringa `"[object Object]"`. Nel secondo, `{}` è all'inizio dello statement → blocco vuoto (nessuna azione) → `+[]` coerce l'array a numero → `0`.
+Nel primo caso `{}` è un operando del `+`, quindi è un object literal e diventa la stringa `"[object Object]"`. Nel secondo `{}` è all'inizio dello statement, quindi è un blocco vuoto (nessuna azione), e resta `+[]`, che coerce l'array a numero: `0`.
 
 ### `else if` non esiste
 
@@ -144,7 +144,7 @@ else {
 }
 ```
 
-Il pattern `else if` è idiomatico e accettato — ma tecnicamente è un `else` con un singolo `if` come body.
+Il pattern `else if` è idiomatico e accettato, ma tecnicamente è un `else` con un singolo `if` come body.
 
 ---
 
@@ -216,12 +216,12 @@ Affidarsi alla precedenza va bene per espressioni comuni (`a && b && c`). Per es
 
 ## ASI — Automatic Semicolon Insertion
 
-JS inserisce automaticamente `;` in certi punti quando il parser incontrerebbe altrimenti un errore. L'ASI agisce solo **in presenza di newline** — mai in mezzo a una riga.
+JS inserisce automaticamente `;` in certi punti quando il parser incontrerebbe altrimenti un errore. L'ASI agisce solo **in presenza di newline**, mai in mezzo a una riga.
 
 I casi più rilevanti dove l'ASI interviene:
 
 - Fine di uno statement che non ha `;` ma la riga successiva non è una continuazione valida
-- Dopo `do { } while(cond)` — il `;` finale è richiesto dalla grammatica ma spesso dimenticato
+- Dopo `do { } while(cond)`: il `;` finale è richiesto dalla grammatica ma spesso dimenticato
 - Dopo `return`, `break`, `continue`, `yield` seguiti da newline: il parser inserisce `;` subito
 
 ```js
@@ -306,7 +306,7 @@ foo(2);   /* 42 */
 foo();    /* undefined — nessun linkaggio se omesso */
 ```
 
-In strict mode questo linkaggio non esiste — `arguments[0]` rimane il valore originale passato, non riflette le modifiche al parametro named.
+In strict mode questo linkaggio non esiste: `arguments[0]` rimane il valore originale passato e non riflette le modifiche al parametro named.
 
 Con i parametri default ES6, `arguments` riflette solo gli argomenti effettivamente passati (non i default applicati):
 
@@ -372,9 +372,9 @@ function baz() {
 baz(); /* "Hello" */
 ```
 
-Un `finally` senza `return` lascia stare il `return` di `try` — l'omissione di `return` in `finally` non equivale a `return undefined`.
+Un `finally` senza `return` lascia stare il `return` di `try`: l'omissione di `return` in `finally` non equivale a `return undefined`.
 
-`continue` e `break` si comportano analogamente a `return` — il `finally` si esegue prima che il salto si materializzi. Combinare `finally` con `labeled break` per cancellare un `return` è legale ma da non fare mai.
+`continue` e `break` si comportano analogamente a `return`: il `finally` si esegue prima che il salto si materializzi. Combinare `finally` con `labeled break` per cancellare un `return` è legale ma da non fare mai.
 
 ---
 
@@ -406,7 +406,7 @@ switch (true) {
 }
 ```
 
-Il `case` valuta l'espressione, e il risultato viene confrontato (con `===`) con `true`. Attenzione: se l'expression restituisce un valore truthy ma non `true`, il match fallisce:
+Il `case` valuta l'espressione, e il risultato viene confrontato (con `===`) con `true`. Se però l'expression restituisce un valore truthy ma non `true`, il match fallisce:
 
 ```js
 var a = "hello world";
@@ -422,7 +422,7 @@ switch (true) {
 
 **Fallthrough**: senza `break`, l'esecuzione continua nel `case` successivo. Utile per raggruppare casi, pericoloso se non intenzionale.
 
-**`default`**: opzionale e non deve necessariamente essere l'ultimo. Se non viene trovato nessun `case`, il `default` viene eseguito — e senza `break`, continua verso i `case` successivi anche se già "saltati" nella fase di matching.
+**`default`**: opzionale e non deve necessariamente essere l'ultimo. Se non viene trovato nessun `case`, il `default` viene eseguito e, senza `break`, continua verso i `case` successivi anche se già "saltati" nella fase di matching.
 
 ---
 
@@ -432,13 +432,13 @@ switch (true) {
 
 **Side effect**: `++`/`--`, `delete`, `=` hanno side effect oltre al valore restituito. `a++` restituisce il valore corrente, poi incrementa; `++a` incrementa prima.
 
-**Curly braces**: `{}` cambia significato in base al contesto (object literal, code block, destructuring). Lo stesso per `else if` — non è una clausola autonoma.
+**Curly braces**: `{}` cambia significato in base al contesto (object literal, code block, destructuring). Lo stesso vale per `else if`, che non è una clausola autonoma.
 
 **Precedenza**: `&&` > `||` > `? :` > `=` > `,`. `? :` e `=` sono right-associative; `&&` e `||` left-associative.
 
-**ASI**: inserimento automatico di `;` come correzione di errori del parser. Attenzione a `return`/`break`/`continue` seguiti da newline — il `;` viene inserito immediatamente.
+**ASI**: inserimento automatico di `;` come correzione di errori del parser. Attenzione a `return`/`break`/`continue` seguiti da newline: il `;` viene inserito immediatamente.
 
-**TDZ**: le variabili `let`/`const` non sono accessibili prima della loro dichiarazione nello scope — anche se `typeof` di solito è sicuro, non lo è in TDZ.
+**TDZ**: le variabili `let`/`const` non sono accessibili prima della loro dichiarazione nello scope, e `typeof`, di solito sicuro, in TDZ non lo è.
 
 **`finally`**: esegue sempre. Un `return`/`throw` in `finally` sovrascrive quello in `try`.
 
@@ -474,34 +474,34 @@ switch (true) {
 <details>
 <summary>Qual è la differenza tra `a++` e `++a`, e perché `(a++)` non cattura il valore incrementato?</summary>
 
-`a++` (postfisso) restituisce il valore corrente di `a` e poi esegue l'incremento come side effect. `++a` (prefisso) esegue prima l'incremento e poi restituisce il nuovo valore. `(a++)` **non** cambia il comportamento: le parentesi non definiscono un nuovo contesto di valutazione posticipato — racchiudono semplicemente l'expression `a++`, che si valuta comunque restituendo il valore pre-incremento. Per ottenere il valore post-incremento in un'assegnazione, si usa l'operatore virgola: `b = (a++, a)` — che prima esegue `a++` come side effect e poi legge il nuovo `a`.
+`a++` (postfisso) restituisce il valore corrente di `a` e poi esegue l'incremento come side effect. `++a` (prefisso) esegue prima l'incremento e poi restituisce il nuovo valore. `(a++)` **non** cambia il comportamento: le parentesi non definiscono un nuovo contesto di valutazione posticipato: racchiudono semplicemente l'expression `a++`, che si valuta comunque restituendo il valore pre-incremento. Per ottenere il valore post-incremento in un'assegnazione, si usa l'operatore virgola: `b = (a++, a)`, che prima esegue `a++` come side effect e poi legge il nuovo `a`.
 
 </details>
 
 <details>
 <summary>Perché `{} + []` dà `0` mentre `[] + {}` dà `"[object Object]"`?</summary>
 
-La differenza è come l'engine interpreta `{}`. Quando `{}` è il primo token di uno statement, viene interpretato come **blocco di codice vuoto** (non come object literal) — e i blocchi non producono valore, quindi non partecipano al `+`. Quello che resta è `+[]`, dove l'operatore `+` unario coerce `[]` a numero: `[]` → `""` → `0`. Nella forma `[] + {}`, invece, `{}` non è all'inizio dello statement, quindi viene interpretato come object literal; il `+` binario lo coerce a stringa `"[object Object]"` e concatena con `""` (da `[]`).
+La differenza è come l'engine interpreta `{}`. Quando `{}` è il primo token di uno statement, viene interpretato come **blocco di codice vuoto** (non come object literal), e i blocchi non producono valore, quindi non partecipano al `+`. Quello che resta è `+[]`, dove l'operatore `+` unario coerce `[]` a numero: `[]` → `""` → `0`. Nella forma `[] + {}`, invece, `{}` non è all'inizio dello statement, quindi viene interpretato come object literal; il `+` binario lo coerce a stringa `"[object Object]"` e concatena con `""` (da `[]`).
 
 </details>
 
 <details>
 <summary>Perché `typeof` è sicuro per variabili non dichiarate ma non per variabili in TDZ?</summary>
 
-La safety guard di `typeof` su variabili non dichiarate è un'eccezione storica della specifica: invece di lanciare `ReferenceError`, restituisce `"undefined"`. Questa eccezione però non si estende alle variabili in Temporal Dead Zone. Una variabile `let` o `const` in TDZ **esiste** nello scope (è stata rilevata in compilazione), ma non è ancora inizializzata — e la specifica definisce che qualsiasi accesso a essa (incluso `typeof`) deve lanciare `ReferenceError`. Quindi `typeof x` (non dichiarata) → `"undefined"` safe; `typeof b` con `let b` più in basso nello stesso blocco → `ReferenceError`.
+La safety guard di `typeof` su variabili non dichiarate è un'eccezione storica della specifica: invece di lanciare `ReferenceError`, restituisce `"undefined"`. Questa eccezione però non si estende alle variabili in Temporal Dead Zone. Una variabile `let` o `const` in TDZ **esiste** nello scope (è stata rilevata in compilazione), ma non è ancora inizializzata, e la specifica definisce che qualsiasi accesso a essa (incluso `typeof`) deve lanciare `ReferenceError`. Quindi `typeof x` (non dichiarata) restituisce `"undefined"` senza errori, mentre `typeof b` con `let b` più in basso nello stesso blocco lancia `ReferenceError`.
 
 </details>
 
 <details>
 <summary>Perché il blocco `finally` può essere problematico con `return`?</summary>
 
-`finally` garantisce l'esecuzione del proprio codice prima che il completion value di `try` (o `catch`) venga propagato. Se `finally` contiene un `return` esplicito, quel valore **sovrascrive** il `return` del blocco `try`. Se `finally` contiene un `throw`, quell'eccezione sovrascrive sia i `return` sia i `throw` precedenti. La sola omissione di `return` in `finally` non equivale a `return undefined` — lascia stare il valore del `try`. Questo crea comportamenti controintuitivi: il programmatore scrive `return 42` in `try`, ma il valore effettivo restituito dalla funzione può essere diverso se `finally` interferisce.
+`finally` garantisce l'esecuzione del proprio codice prima che il completion value di `try` (o `catch`) venga propagato. Se `finally` contiene un `return` esplicito, quel valore **sovrascrive** il `return` del blocco `try`. Se `finally` contiene un `throw`, quell'eccezione sovrascrive sia i `return` sia i `throw` precedenti. La sola omissione di `return` in `finally` non equivale a `return undefined`: lascia stare il valore del `try`. Questo crea comportamenti controintuitivi: il programmatore scrive `return 42` in `try`, ma il valore effettivo restituito dalla funzione può essere diverso se `finally` interferisce.
 
 </details>
 
 <details>
 <summary>Perché `switch` usa `===` e come si può usare `==` con lo switch?</summary>
 
-La specifica definisce che il confronto tra il valore del test (`switch(a)`) e ciascuna espressione `case` usa l'algoritmo di strict equality (`===`), quindi nessuna coercion. Per aggirarlo, si può scrivere `switch(true)` e mettere un'espressione con `==` (o qualsiasi altra condizione) nel `case`: l'engine confronta con `===` il risultato dell'espressione `case` con `true`. Attenzione: se l'espressione produce un valore truthy ma non esattamente `true` (per esempio `"hello world"`), il confronto con `===` fallisce. La soluzione è forzare il booleano: `case !!(expr):`.
+La specifica definisce che il confronto tra il valore del test (`switch(a)`) e ciascuna espressione `case` usa l'algoritmo di strict equality (`===`), quindi nessuna coercion. Per aggirarlo, si può scrivere `switch(true)` e mettere un'espressione con `==` (o qualsiasi altra condizione) nel `case`: l'engine confronta con `===` il risultato dell'espressione `case` con `true`. Se però l'espressione produce un valore truthy ma non esattamente `true` (per esempio `"hello world"`), il confronto con `===` fallisce. La soluzione è forzare il booleano: `case !!(expr):`.
 
 </details>

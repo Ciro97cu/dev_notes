@@ -1,6 +1,6 @@
 # Hoisting
 
-Si tende a pensare che JavaScript esegua il codice riga per riga, dall'alto verso il basso, nell'ordine in cui è scritto. Questa intuizione è sostanzialmente corretta — ma c'è un aspetto sottile nel modo in cui le dichiarazioni vengono gestite che la viola sistematicamente, con conseguenze che confondono chi non ne è consapevole.
+Si tende a pensare che JavaScript esegua il codice riga per riga, dall'alto verso il basso, nell'ordine in cui è scritto. Questa intuizione è sostanzialmente corretta, ma c'è un aspetto sottile nel modo in cui le dichiarazioni vengono gestite che la viola sistematicamente, con conseguenze che confondono chi non ne è consapevole.
 
 ## Il problema: uovo o gallina?
 
@@ -21,16 +21,14 @@ var a = 2;
 
 Qui ci si potrebbe aspettare `2` (per analogia con il caso precedente) o un `ReferenceError` (perché `a` sembra usata prima di essere dichiarata). L'output è `undefined`.
 
-Il comportamento apparentemente contraddittorio ha una spiegazione precisa.
-
 ## Come funziona: compilazione prima dell'esecuzione
 
-Come visto nel Cap 1, il JavaScript engine compila il codice prima di eseguirlo. Parte del processo di compilazione consiste nel trovare tutte le dichiarazioni e associarle ai rispettivi scope — questo è il cuore del lexical scope.
+Come visto nel Cap 1, il JavaScript engine compila il codice prima di eseguirlo. Parte del processo di compilazione consiste nel trovare tutte le dichiarazioni e associarle ai rispettivi scope: su questo si fonda il lexical scope.
 
 La conseguenza pratica è che `var a = 2;` non è una singola operazione: l'engine la vede come **due statement separati**:
 
-- `var a;` — dichiarazione, elaborata durante la **fase di compilazione**
-- `a = 2;` — assegnamento, lasciato in loco per la **fase di esecuzione**
+- `var a;`: dichiarazione, elaborata durante la **fase di compilazione**
+- `a = 2;`: assegnamento, lasciato in loco per la **fase di esecuzione**
 
 Il primo snippet viene quindi elaborato come:
 
@@ -56,7 +54,7 @@ a = 2;
 
 Il modo metaforico di descrivere questo comportamento è che le dichiarazioni vengono "spostate" in cima al loro scope prima che il codice venga eseguito. Questo meccanismo si chiama **hoisting** (sollevamento).
 
-> Solo le dichiarazioni vengono sollevate — non gli assegnamenti né qualsiasi altra logica eseguibile. L'hoisting non riordina il codice: è una conseguenza della separazione tra fase di compilazione e fase di esecuzione.
+> Solo le dichiarazioni vengono sollevate, non gli assegnamenti né qualsiasi altra logica eseguibile. L'hoisting non riordina il codice: è una conseguenza della separazione tra fase di compilazione e fase di esecuzione.
 
 ## Hoisting delle funzioni
 
@@ -83,7 +81,7 @@ function foo() {
 foo();
 ```
 
-Le **function expression**, al contrario, non vengono hoistate — nemmeno quelle con nome:
+Le **function expression**, al contrario, non vengono hoistate, nemmeno quelle con nome:
 
 ```js
 foo(); // TypeError — foo esiste ma è undefined in questo punto
@@ -136,7 +134,7 @@ Questo comportamento rende le dichiarazioni duplicate in uno stesso scope una fo
 
 ## Function declaration nei blocchi
 
-Le function declaration all'interno di blocchi condizionali (`if`, `else`) vengono hoistate all'inizio dello scope circostante — non restano confinate al blocco. Questo comportamento non è però garantito dalla specifica e cambia tra ambienti diversi:
+Le function declaration all'interno di blocchi condizionali (`if`, `else`) vengono hoistate all'inizio dello scope circostante, invece di restare confinate al blocco. Questo comportamento non è però garantito dalla specifica e cambia tra ambienti diversi:
 
 ```js
 foo(); // "b" — ma il comportamento non è affidabile
@@ -158,7 +156,7 @@ Dichiarare funzioni all'interno di blocchi è una pratica da evitare. Per questo
 
 ## Ripasso veloce
 
-**Hoisting** = le dichiarazioni (variabili e funzioni) vengono processate nella fase di compilazione, prima dell'esecuzione. Solo le dichiarazioni vengono sollevate — gli assegnamenti restano al loro posto.
+**Hoisting** = le dichiarazioni (variabili e funzioni) vengono processate nella fase di compilazione, prima dell'esecuzione. Solo le dichiarazioni vengono sollevate, mentre gli assegnamenti restano al loro posto.
 
 ```js
 console.log(a); // undefined — a esiste già, ma senza valore
@@ -166,9 +164,9 @@ var a = 2;
 console.log(a); // 2
 ```
 
-**Function declaration** → hoistata integralmente (nome + corpo) → chiamabile prima della definizione.
+**Function declaration**: hoistata integralmente (nome + corpo), quindi chiamabile prima della definizione.
 
-**Function expression** → solo il nome della variabile viene hoistato (come `undefined`) → l'assegnamento rimane al suo posto → invocarla prima dell'assegnamento produce `TypeError`.
+**Function expression**: solo il nome della variabile viene hoistato (come `undefined`), mentre l'assegnamento rimane al suo posto, quindi invocarla prima dell'assegnamento produce `TypeError`.
 
 ```js
 foo();            // OK — function declaration hoistata
@@ -187,7 +185,7 @@ var bar = function() { console.log("bar"); };
 <details>
 <summary>Perché `var a = 2;` produce `undefined` se si usa `a` prima di quella riga?</summary>
 
-Perché l'engine divide `var a = 2;` in due operazioni separate. Durante la compilazione viene elaborata solo la dichiarazione `var a`, che viene associata allo scope corrente — la variabile esiste già dall'inizio dell'esecuzione, ma il suo valore è `undefined`. L'assegnamento `a = 2` avviene solo quando quella specifica riga viene raggiunta durante l'esecuzione. Accedere a `a` prima di quella riga restituisce quindi `undefined`, non un `ReferenceError`.
+Perché l'engine divide `var a = 2;` in due operazioni separate. Durante la compilazione viene elaborata solo la dichiarazione `var a`, che viene associata allo scope corrente: la variabile esiste già dall'inizio dell'esecuzione, ma il suo valore è `undefined`. L'assegnamento `a = 2` avviene solo quando quella specifica riga viene raggiunta durante l'esecuzione. Accedere a `a` prima di quella riga restituisce quindi `undefined`, non un `ReferenceError`.
 
 </details>
 
@@ -208,7 +206,7 @@ La function declaration viene hoistata prima della dichiarazione `var`, che vien
 <details>
 <summary>L'hoisting "sposta" fisicamente il codice in cima al file?</summary>
 
-No. L'hoisting è una metafora utile ma non una descrizione letterale di ciò che accade. Il codice sorgente non viene riordinato. Quello che succede realmente è che durante la fase di compilazione l'engine analizza tutte le dichiarazioni nello scope e le registra nell'ambiente lessicale prima che inizi l'esecuzione. Quando l'engine inizia a eseguire il codice riga per riga, le variabili e le funzioni dichiarate nello scope esistono già — è questo che crea l'effetto del "sollevamento".
+No. L'hoisting è una metafora utile ma non una descrizione letterale di ciò che accade. Il codice sorgente non viene riordinato. Durante la fase di compilazione l'engine analizza tutte le dichiarazioni nello scope e le registra nell'ambiente lessicale prima che inizi l'esecuzione. Quando l'engine inizia a eseguire il codice riga per riga, le variabili e le funzioni dichiarate nello scope esistono già, ed è questo a creare l'effetto del "sollevamento".
 
 </details>
 

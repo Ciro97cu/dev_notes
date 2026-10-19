@@ -1,12 +1,12 @@
 # Prototipi
 
-Il meccanismo `[[Prototype]]` è il cuore di JavaScript: capirlo significa capire davvero il linguaggio. I capitoli 3 e 4 hanno menzionato la prototype chain più volte; qui viene esaminata in dettaglio.
+Il meccanismo `[[Prototype]]` sta alla base di JavaScript: capirlo è necessario per capire il linguaggio. I capitoli 3 e 4 hanno menzionato la prototype chain più volte; qui viene esaminata in dettaglio.
 
 ## `[[Prototype]]`
 
 Ogni oggetto in JavaScript ha una proprietà interna denominata `[[Prototype]]` dalla specifica, che è semplicemente un riferimento a un altro oggetto. Quasi tutti gli oggetti ricevono un valore non-null per questa proprietà al momento della creazione.
 
-L'operazione `[[Get]]` (vista nel capitolo precedente) la sfrutta immediatamente: quando si accede a `myObject.a`, l'engine cerca prima se `a` esiste direttamente su `myObject`. Se non la trova, segue il link `[[Prototype]]` verso l'oggetto collegato e cerca lì. Il processo si ripete lungo tutta la chain — se nessun oggetto la possiede, `[[Get]]` restituisce `undefined`.
+L'operazione `[[Get]]` (vista nel capitolo precedente) la sfrutta immediatamente: quando si accede a `myObject.a`, l'engine cerca prima se `a` esiste direttamente su `myObject`. Se non la trova, segue il link `[[Prototype]]` verso l'oggetto collegato e cerca lì. Il processo si ripete lungo tutta la chain, e se nessun oggetto la possiede `[[Get]]` restituisce `undefined`.
 
 ```js
 var anotherObject = { a: 2 };
@@ -36,13 +36,13 @@ L'assegnamento `myObject.foo = "bar"` sembra semplice, ma può comportarsi in mo
 
 Se `foo` non esiste da nessuna parte, viene creata direttamente su `myObject`. Se esiste già direttamente su `myObject`, il valore viene aggiornato. Ma se `foo` esiste *più in alto nella chain* e non esiste ancora su `myObject`, si aprono tre scenari:
 
-1. **`writable: true`** — viene creata una nuova proprietà `foo` direttamente su `myObject` che *oscura* (shadowing) quella superiore. L'assegnamento `=` è sufficiente.
+1. **`writable: true`**: viene creata una nuova proprietà `foo` direttamente su `myObject` che *oscura* (shadowing) quella superiore. L'assegnamento `=` è sufficiente.
 
-2. **`writable: false`** — l'assegnamento viene silenziosamente ignorato; in strict mode viene lanciato `TypeError`. Nessun shadowing avviene. L'unico modo per creare la proprietà è `Object.defineProperty()`.
+2. **`writable: false`**: l'assegnamento viene silenziosamente ignorato; in strict mode viene lanciato `TypeError`. Nessun shadowing avviene. L'unico modo per creare la proprietà è `Object.defineProperty()`.
 
-3. **Setter** — il setter definito più in alto nella chain viene invocato. Nessuna proprietà viene aggiunta a `myObject`. Anche qui, solo `Object.defineProperty()` permette di creare la proprietà sull'oggetto diretto.
+3. **Setter**: il setter definito più in alto nella chain viene invocato. Nessuna proprietà viene aggiunta a `myObject`. Anche qui, solo `Object.defineProperty()` permette di creare la proprietà sull'oggetto diretto.
 
-La maggior parte degli sviluppatori assume che `[[Put]]` produca sempre shadowing quando la proprietà esiste più in alto — in realtà solo nel caso 1.
+La maggior parte degli sviluppatori assume che `[[Put]]` produca sempre shadowing quando la proprietà esiste più in alto, ma questo accade solo nel caso 1.
 
 ### Shadowing implicito
 
@@ -62,7 +62,7 @@ myObject.a;      // 3 — shadowing implicito!
 myObject.hasOwnProperty("a"); // true
 ```
 
-`myObject.a++` è equivalente a `myObject.a = myObject.a + 1`: `[[Get]]` legge il valore `2` da `anotherObject`, lo incrementa, e `[[Put]]` lo assegna come nuova proprietà *su `myObject`* — non modifica `anotherObject`. Il risultato è shadowing involontario. Per incrementare il valore nel posto giusto: `anotherObject.a++`.
+`myObject.a++` è equivalente a `myObject.a = myObject.a + 1`: `[[Get]]` legge il valore `2` da `anotherObject`, lo incrementa, e `[[Put]]` lo assegna come nuova proprietà *su `myObject`*, senza modificare `anotherObject`. Il risultato è shadowing involontario. Per incrementare il valore nel posto giusto: `anotherObject.a++`.
 
 ---
 
@@ -77,14 +77,14 @@ function Foo() {}
 Foo.prototype; // { }
 ```
 
-Quando si usa `new Foo()`, tra le quattro operazioni eseguite (Cap 2), il nuovo oggetto creato ottiene un link `[[Prototype]]` verso quell'oggetto — verso "il-oggetto-puntato-da-Foo.prototype":
+Quando si usa `new Foo()`, tra le quattro operazioni eseguite (Cap 2), il nuovo oggetto creato ottiene un link `[[Prototype]]` verso quell'oggetto, cioè verso "il-oggetto-puntato-da-Foo.prototype":
 
 ```js
 var a = new Foo();
 Object.getPrototypeOf(a) === Foo.prototype; // true
 ```
 
-Nei linguaggi class-oriented, `new` copia il comportamento dalla classe all'istanza. In JavaScript non avviene nessuna copia: si creano due oggetti collegati tramite `[[Prototype]]`. Il link è la relazione — non una copia.
+Nei linguaggi class-oriented, `new` copia il comportamento dalla classe all'istanza. In JavaScript non avviene nessuna copia: si creano due oggetti collegati tramite `[[Prototype]]`, e la relazione tra loro è quel link.
 
 ### Il `.constructor` non è affidabile
 
@@ -101,7 +101,7 @@ a1.constructor === Foo;    // false!
 a1.constructor === Object; // true — risale fino a Object.prototype
 ```
 
-`a1` non ha `.constructor` propria, `Foo.prototype` non la ha (il nuovo oggetto non la ha di default), quindi la chain risale fino a `Object.prototype`, che la ha — puntando a `Object`. La conclusione: `.constructor` non significa "è stato costruito da". È un riferimento arbitrario e mutable, non affidabile come fonte di verità.
+`a1` non ha `.constructor` propria, `Foo.prototype` non la ha (il nuovo oggetto non la ha di default), quindi la chain risale fino a `Object.prototype`, dove la proprietà esiste e punta a `Object`. La conclusione: `.constructor` non significa "è stato costruito da". È un riferimento arbitrario e mutable, non affidabile come fonte di verità.
 
 ---
 
@@ -171,13 +171,13 @@ Object.getPrototypeOf(a) === Foo.prototype; // true
 a.__proto__ === Foo.prototype; // true
 ```
 
-`__proto__` non esiste sull'oggetto `a` — esiste su `Object.prototype` come accessor property. Non va usato per modificare la chain di un oggetto esistente; trattarlo come read-only è la pratica corretta.
+`__proto__` non esiste sull'oggetto `a`, ma su `Object.prototype` come accessor property. Non va usato per modificare la chain di un oggetto esistente; trattarlo come read-only è la pratica corretta.
 
 ---
 
 ## Object Links — `Object.create()`
 
-La vera potenza di `[[Prototype]]` non sta nel simulare le classi ma nel collegare oggetti direttamente:
+`[[Prototype]]` dà il meglio non nel simulare le classi ma nel collegare oggetti direttamente:
 
 ```js
 var foo = {
@@ -192,7 +192,7 @@ bar.something(); // Tell me something good...
 
 `Object.create(foo)` crea un nuovo oggetto la cui `[[Prototype]]` punta a `foo`. Si ottiene tutta la potenza della delegazione senza `new`, senza `.prototype`, senza confusione da `.constructor`.
 
-`Object.create(null)` crea un oggetto con `[[Prototype]]` null — nessuna chain, nessuna delegazione possibile. Questi oggetti (detti "dictionary") sono usati come puri contenitori di dati, privi degli effetti indesiderati ereditati da `Object.prototype`.
+`Object.create(null)` crea un oggetto con `[[Prototype]]` null, quindi senza chain e senza delegazione possibile. Questi oggetti (detti "dictionary") sono usati come puri contenitori di dati, privi degli effetti indesiderati ereditati da `Object.prototype`.
 
 ### Polyfill di `Object.create()`
 
@@ -208,7 +208,7 @@ if (!Object.create) {
 }
 ```
 
-Il polyfill crea una funzione temporanea `F`, ne imposta `.prototype`, e restituisce `new F()` — un oggetto collegato come specificato.
+Il polyfill crea una funzione temporanea `F`, ne imposta `.prototype`, e restituisce `new F()`, cioè un oggetto collegato come specificato.
 
 ### Link come fallback?
 
@@ -229,7 +229,7 @@ myObject.doCool = function() {
 myObject.doCool(); // "cool!"
 ```
 
-`myObject.doCool()` è un metodo che esiste su `myObject` — l'API è chiara. La delegazione a `anotherObject.cool()` è un dettaglio implementativo interno, non un comportamento invisibile esposto all'esterno.
+`myObject.doCool()` è un metodo che esiste su `myObject`, quindi l'API è chiara. La delegazione a `anotherObject.cool()` è un dettaglio implementativo interno, non un comportamento invisibile esposto all'esterno.
 
 ---
 
@@ -241,11 +241,11 @@ myObject.doCool(); // "cool!"
 
 **`myObject.a++` = shadowing implicito**: `[[Get]]` legge dalla chain, `[[Put]]` scrive sull'oggetto diretto. Non modifica mai l'oggetto superiore.
 
-**`new Foo()`**: non istanzia una classe, non copia nulla — collega il nuovo oggetto a `Foo.prototype` via `[[Prototype]]`.
+**`new Foo()`**: non istanzia una classe e non copia nulla: collega il nuovo oggetto a `Foo.prototype` via `[[Prototype]]`.
 
 **`.constructor` non affidabile**: è una proprietà delegata, non un indicatore certo di chi ha costruito l'oggetto.
 
-**`Object.create(target)`**: crea un oggetto con `[[Prototype]]` → `target`. Il modo più diretto e pulito per creare link tra oggetti.
+**`Object.create(target)`**: crea un oggetto il cui `[[Prototype]]` punta a `target`. Il modo più diretto e pulito per creare link tra oggetti.
 
 ```js
 /* pattern pulito: link diretto senza classi */
@@ -272,14 +272,14 @@ foo.isPrototypeOf(bar);             // true
 <details>
 <summary>Cosa succede quando si tenta di accedere a una proprietà che non esiste sull'oggetto?</summary>
 
-L'operazione `[[Get]]` segue il link `[[Prototype]]` dell'oggetto e cerca la proprietà sull'oggetto collegato. Se non la trova, segue il `[[Prototype]]` di quell'oggetto, e così via fino a `Object.prototype`. Se la proprietà non viene trovata da nessuna parte nella chain, `[[Get]]` restituisce `undefined`. Non viene lanciato nessun `ReferenceError` — a differenza dell'accesso a una variabile non dichiarata.
+L'operazione `[[Get]]` segue il link `[[Prototype]]` dell'oggetto e cerca la proprietà sull'oggetto collegato. Se non la trova, segue il `[[Prototype]]` di quell'oggetto, e così via fino a `Object.prototype`. Se la proprietà non viene trovata da nessuna parte nella chain, `[[Get]]` restituisce `undefined`. Non viene lanciato nessun `ReferenceError`, a differenza di quanto accade con l'accesso a una variabile non dichiarata.
 
 </details>
 
 <details>
 <summary>Perché `myObject.a++` può causare shadowing involontario?</summary>
 
-Perché `myObject.a++` è equivalente a `myObject.a = myObject.a + 1`. `[[Get]]` legge il valore di `a` risalendo la chain (trovandolo su `anotherObject`, per esempio), lo incrementa, e poi `[[Put]]` lo assegna come *nuova proprietà diretta* su `myObject` — non modifica `anotherObject`. Il risultato è che `myObject` acquisisce una proprietà `a` che oscura quella superiore, e `anotherObject.a` resta invariata. Per modificare il valore nell'oggetto superiore, l'unico modo corretto è accedervi direttamente: `anotherObject.a++`.
+Perché `myObject.a++` è equivalente a `myObject.a = myObject.a + 1`. `[[Get]]` legge il valore di `a` risalendo la chain (trovandolo su `anotherObject`, per esempio), lo incrementa, e poi `[[Put]]` lo assegna come *nuova proprietà diretta* su `myObject`, senza modificare `anotherObject`. Il risultato è che `myObject` acquisisce una proprietà `a` che oscura quella superiore, e `anotherObject.a` resta invariata. Per modificare il valore nell'oggetto superiore, l'unico modo corretto è accedervi direttamente: `anotherObject.a++`.
 
 </details>
 
@@ -293,7 +293,7 @@ Perché `a.constructor` non è una proprietà diretta di `a`: viene trovata risa
 <details>
 <summary>Qual è il problema di `Bar.prototype = Foo.prototype` e `Bar.prototype = new Foo()` come alternative a `Object.create()`?</summary>
 
-`Bar.prototype = Foo.prototype` non crea un nuovo oggetto: rende `Bar.prototype` un alias dello stesso oggetto di `Foo.prototype`. Qualsiasi proprietà aggiunta a `Bar.prototype` finisce su `Foo.prototype`, inquinando tutti gli oggetti collegati a esso. `Bar.prototype = new Foo()` crea un nuovo oggetto collegato correttamente a `Foo.prototype`, ma esegue la funzione `Foo()` come constructor call — con tutti i possibili side effect (logging, mutazioni di stato, registrazioni) che dovrebbero avvenire solo alla creazione delle istanze, non durante la configurazione della chain. `Object.create(Foo.prototype)` è la soluzione corretta: crea un nuovo oggetto collegato a `Foo.prototype` senza chiamare `Foo()`.
+`Bar.prototype = Foo.prototype` non crea un nuovo oggetto: rende `Bar.prototype` un alias dello stesso oggetto di `Foo.prototype`. Qualsiasi proprietà aggiunta a `Bar.prototype` finisce su `Foo.prototype`, inquinando tutti gli oggetti collegati a esso. `Bar.prototype = new Foo()` crea un nuovo oggetto collegato correttamente a `Foo.prototype`, ma esegue la funzione `Foo()` come constructor call, con tutti i possibili side effect (logging, mutazioni di stato, registrazioni) che dovrebbero avvenire solo alla creazione delle istanze, non durante la configurazione della chain. `Object.create(Foo.prototype)` è la soluzione corretta: crea un nuovo oggetto collegato a `Foo.prototype` senza chiamare `Foo()`.
 
 </details>
 

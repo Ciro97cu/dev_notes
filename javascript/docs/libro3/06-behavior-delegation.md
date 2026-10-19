@@ -1,16 +1,16 @@
 # Behavior Delegation
 
-Il capitolo 5 ha dimostrato che `[[Prototype]]` non è un sistema di classi. Questo capitolo propone la risposta pratica: smettere di simulare le classi e usare il meccanismo così com'è — come **delegazione tra oggetti**.
+Il capitolo 5 ha dimostrato che `[[Prototype]]` non è un sistema di classi. Questo capitolo propone la risposta pratica: smettere di simulare le classi e usare il meccanismo così com'è, cioè come **delegazione tra oggetti**.
 
 ## Toward Delegation-Oriented Design
 
-Il meccanismo `[[Prototype]]` è, nella sua essenza, una catena di link tra oggetti. Quando una proprietà non viene trovata su un oggetto, l'engine segue il link al successivo, e così via. Questa è la delegazione.
+Il meccanismo `[[Prototype]]` è una catena di link tra oggetti. Quando una proprietà non viene trovata su un oggetto, l'engine segue il link al successivo, e così via. Questo meccanismo si chiama delegazione.
 
 ### Class Theory vs Delegation Theory
 
 Nel design classico si definisce una classe padre `Task` con comportamento condiviso, poi si creano classi figlie `XYZ` e `ABC` che ereditano da `Task` e specializzano il comportamento tramite override e polimorfismo.
 
-Nel design a delegazione, invece, si definisce un **oggetto** `Task` con utility condivise, poi si creano oggetti `XYZ` e `ABC` collegati a `Task` via `[[Prototype]]`. Quando `XYZ` ha bisogno di un comportamento di `Task`, lo **delega** — non lo sovrascrive.
+Nel design a delegazione, invece, si definisce un **oggetto** `Task` con utility condivise, poi si creano oggetti `XYZ` e `ABC` collegati a `Task` via `[[Prototype]]`. Quando `XYZ` ha bisogno di un comportamento di `Task`, lo **delega** invece di sovrascriverlo.
 
 ```js
 var Task = {
@@ -31,13 +31,13 @@ XYZ.outputTaskDetails = function() {
 };
 ```
 
-Questo stile si chiama **OLOO** — Objects Linked to Other Objects. Non ci sono classi, costruttori, o `.prototype`: solo oggetti collegati.
+Questo stile si chiama **OLOO** (Objects Linked to Other Objects). Non ci sono classi, costruttori, o `.prototype`: solo oggetti collegati.
 
 ### Differenze chiave rispetto al pattern a classi
 
 **Stato sui delegatori**: i dati (`id`, `label`) vivono su `XYZ`, non su `Task`. Il delegate (l'oggetto superiore) contiene utility; il delegator (l'oggetto inferiore) contiene lo stato specifico.
 
-**Nomi distinti**: il design a classi promuove l'override con metodi dello stesso nome (`outputTask` su `Task` e su `XYZ`). OLOO fa il contrario — nomi diversi e descrittivi (`prepareTask`, `outputTaskDetails`) evitano conflitti e rendono il codice autoesplicativo.
+**Nomi distinti**: il design a classi promuove l'override con metodi dello stesso nome (`outputTask` su `Task` e su `XYZ`). OLOO fa il contrario: nomi diversi e descrittivi (`prepareTask`, `outputTaskDetails`) evitano conflitti e rendono il codice autoesplicativo.
 
 **`this` corretto automaticamente**: quando `XYZ.prepareTask()` chiama `this.setID()`, l'engine trova `setID` su `Task` tramite la chain, ma il `this` binding rimane `XYZ` per le regole di call-site (Cap 2). La delegazione è trasparente.
 
@@ -84,7 +84,7 @@ b1.speak();
 b2.speak();
 ```
 
-La struttura `[[Prototype]]` è identica — `b1 → Bar → Foo`. Ma il codice OLOO elimina costruttori, `.prototype`, e `new`. Il modello mentale è molto più semplice: tre oggetti collegati, niente altro.
+La struttura `[[Prototype]]` è identica: `b1 → Bar → Foo`. Ma il codice OLOO elimina costruttori, `.prototype`, e `new`. Il modello mentale è molto più semplice: tre oggetti collegati, niente altro.
 
 ---
 
@@ -158,7 +158,7 @@ class Button extends Widget {
 La sintassi è più pulita, ma il meccanismo sottostante è lo stesso `[[Prototype]]`. I problemi concettuali descritti nei capitoli 4 e 5 rimangono.
 
 > [!info|label:Oggi]
-> Il libro (scritto sulle **prime bozze di ES6**) chiamava il metodo del padre con `super($where)` dentro `render()`. Nella specifica ES6 **definitiva**, e in tutti i motori odierni, `super(...)` in forma di **chiamata** è ammesso **solo nel `constructor`** (per invocare il costruttore della classe base). Per chiamare un **metodo** del padre da un altro metodo si usa invece `super.metodo(...)` — qui `super.render($where)`. Scrivere `super($where)` in un metodo produce oggi un `SyntaxError`. Il `super(width, height)` dentro il `constructor`, invece, è corretto.
+> Il libro (scritto sulle **prime bozze di ES6**) chiamava il metodo del padre con `super($where)` dentro `render()`. Nella specifica ES6 **definitiva**, e in tutti i motori odierni, `super(...)` in forma di **chiamata** è ammesso **solo nel `constructor`** (per invocare il costruttore della classe base). Per chiamare un **metodo** del padre da un altro metodo si usa invece `super.metodo(...)`, in questo caso `super.render($where)`. Scrivere `super($where)` in un metodo produce oggi un `SyntaxError`. Il `super(width, height)` dentro il `constructor`, invece, è corretto.
 
 ### Widget/Button con OLOO
 
@@ -197,7 +197,7 @@ btn1.setup(125, 30, "Hello");
 btn1.build($body);
 ```
 
-I metodi hanno nomi distinti (`init`/`setup`, `insert`/`build`) — non c'è mai bisogno di explicit pseudopolymorphism. La separazione tra creazione (`Object.create`) e inizializzazione (`setup`) è esplicita e permette maggiore flessibilità (es. pool di oggetti pre-creati, inizializzati in un secondo momento).
+I metodi hanno nomi distinti (`init`/`setup`, `insert`/`build`), quindi non c'è mai bisogno di explicit pseudopolymorphism. La separazione tra creazione (`Object.create`) e inizializzazione (`setup`) è esplicita e permette maggiore flessibilità (es. pool di oggetti pre-creati, inizializzati in un secondo momento).
 
 ---
 
@@ -246,7 +246,7 @@ AuthController.rejected = function(err) { this.failure("Auth fallita: " + err); 
 AuthController.checkAuth();
 ```
 
-Nessuna classe base condivisa, nessuna composizione artificiale, nessun override di metodi con lo stesso nome. I metodi su `AuthController` si chiamano `accepted`/`rejected` (nomi descrittivi del compito specifico) invece di `success`/`failure` come sul livello superiore.
+Spariscono la classe base condivisa, la composizione artificiale e gli override di metodi con lo stesso nome. I metodi su `AuthController` si chiamano `accepted`/`rejected` (nomi descrittivi del compito specifico) invece di `success`/`failure` come sul livello superiore.
 
 ---
 
@@ -274,7 +274,7 @@ var AuthController = {
 Object.setPrototypeOf(AuthController, LoginController);
 ```
 
-**Attenzione — metodi concisi e auto-riferimento**: la sintassi shorthand `bar() {}` genera una function expression anonima. Se il metodo ha bisogno di riferirsi a se stesso (ricorsione, event unbinding), non esiste un identificatore lessicale. In quel caso va usata la forma esplicita con nome: `baz: function baz() { baz(x*2); }`.
+**Metodi concisi e auto-riferimento**: la sintassi shorthand `bar() {}` genera una function expression anonima. Se il metodo ha bisogno di riferirsi a se stesso (ricorsione, event unbinding), non esiste un identificatore lessicale. In quel caso va usata la forma esplicita con nome: `baz: function baz() { baz(x*2); }`.
 
 ---
 
@@ -300,9 +300,9 @@ Foo.isPrototypeOf(b1);  // true
 Object.getPrototypeOf(b1) === Bar; // true
 ```
 
-Non serve più `instanceof`, che presuppone una relazione class-like. Si usa direttamente `isPrototypeOf()` tra oggetti — la domanda è semplicemente "sei nella mia chain?".
+Non serve più `instanceof`, che presuppone una relazione class-like. Si usa direttamente `isPrototypeOf()` tra oggetti, e la domanda diventa semplicemente "sei nella mia chain?".
 
-**Duck typing**: un'alternativa pratica all'introspezione è controllare l'esistenza del comportamento invece del tipo: `if (a1.something) { a1.something(); }`. Funziona bene in casi semplici, ma è fragile quando si fanno assunzioni implicite sulle altre capacità dell'oggetto. Un esempio noto: ES6 Promises considerano qualsiasi oggetto con un metodo `.then()` come "thenable" — se un oggetto non-Promise ha un `.then()` per altri motivi, può causare comportamenti inattesi.
+**Duck typing**: un'alternativa pratica all'introspezione è controllare l'esistenza del comportamento invece del tipo: `if (a1.something) { a1.something(); }`. Funziona bene in casi semplici, ma è fragile quando si fanno assunzioni implicite sulle altre capacità dell'oggetto. Un esempio noto: ES6 Promises considerano qualsiasi oggetto con un metodo `.then()` come "thenable", quindi un oggetto non-Promise che ha un `.then()` per altri motivi può causare comportamenti inattesi.
 
 ---
 
@@ -310,7 +310,7 @@ Non serve più `instanceof`, che presuppone una relazione class-like. Si usa dir
 
 **OLOO** (Objects Linked to Other Objects): stile di codice in cui gli oggetti sono collegati direttamente tramite `Object.create()` senza costruttori, `.prototype` o `new`.
 
-**Delegazione vs ereditarietà**: la chain `[[Prototype]]` di JS è, per natura, un meccanismo di delegazione — non di copia. Usarla come tale, invece di simulare classi, produce codice più semplice e coerente con il linguaggio.
+**Delegazione vs ereditarietà**: la chain `[[Prototype]]` di JS è, per natura, un meccanismo di delegazione, non di copia. Usarla come tale, invece di simulare classi, produce codice più semplice e coerente con il linguaggio.
 
 **Nomi distinti per livelli diversi**: in OLOO si evitano metodi con lo stesso nome a livelli diversi della chain (shadowing). Nomi descrittivi e specifici sostituiscono nomi generici da sovrascrivere.
 
@@ -344,7 +344,7 @@ Task.isPrototypeOf(Job); // true
 <details>
 <summary>Cosa significa OLOO e come si differenzia dal pattern a classi?</summary>
 
-OLOO significa "Objects Linked to Other Objects" — oggetti collegati ad altri oggetti. Nel pattern a classi si definiscono gerarchie verticali: classe padre con comportamento condiviso, classi figlie che ereditano e sovrascrivono. In OLOO si creano oggetti "pari" (peer) collegati direttamente tramite `[[Prototype]]`: non ci sono classi, costruttori, né `new`. Quando un oggetto ha bisogno di un comportamento che non possiede, lo delega all'oggetto collegato superiore. La differenza concettuale fondamentale è che le classi implicano copia (del comportamento), OLOO implica collegamento (e delegazione dinamica).
+OLOO significa "Objects Linked to Other Objects", cioè oggetti collegati ad altri oggetti. Nel pattern a classi si definiscono gerarchie verticali: classe padre con comportamento condiviso, classi figlie che ereditano e sovrascrivono. In OLOO si creano oggetti "pari" (peer) collegati direttamente tramite `[[Prototype]]`: non ci sono classi, costruttori, né `new`. Quando un oggetto ha bisogno di un comportamento che non possiede, lo delega all'oggetto collegato superiore. La differenza concettuale fondamentale è che le classi implicano copia (del comportamento), OLOO implica collegamento (e delegazione dinamica).
 
 </details>
 
@@ -358,14 +358,14 @@ Nel design a classi, i nomi uguali a livelli diversi sono intenzionali: permetto
 <details>
 <summary>Perché OLOO separa la creazione dall'inizializzazione, e qual è il vantaggio?</summary>
 
-Con `new Constructor()`, creazione e inizializzazione avvengono in un unico passo atomico. Con OLOO, la creazione del link (`Object.create(Obj)`) e l'inizializzazione (`obj.setup(...)`) sono operazioni separate. Questo permette scenari che i constructor classici non supportano agevolmente: si possono pre-creare oggetti in un pool all'avvio del programma e inizializzarli solo al momento dell'uso, oppure inizializzare lo stesso oggetto più volte con parametri diversi. È un'applicazione del principio di separazione delle responsabilità — la struttura (link) e lo stato iniziale (dati) sono concetti distinti.
+Con `new Constructor()`, creazione e inizializzazione avvengono in un unico passo atomico. Con OLOO, la creazione del link (`Object.create(Obj)`) e l'inizializzazione (`obj.setup(...)`) sono operazioni separate. Questo permette scenari che i constructor classici non supportano agevolmente: si possono pre-creare oggetti in un pool all'avvio del programma e inizializzarli solo al momento dell'uso, oppure inizializzare lo stesso oggetto più volte con parametri diversi. È un'applicazione del principio di separazione delle responsabilità: la struttura (link) e lo stato iniziale (dati) sono concetti distinti.
 
 </details>
 
 <details>
 <summary>Perché `instanceof` è meno adatto all'introspezione in OLOO rispetto a `isPrototypeOf()`?</summary>
 
-`instanceof` risponde alla domanda "Il `[[Prototype]]` di `a` contiene `Foo.prototype`?" — richiede un riferimento a una funzione, non direttamente a un oggetto. Presuppone il pattern class-oriented (funzioni costruttore con `.prototype`). Con OLOO, dove non esistono funzioni costruttore, `instanceof` non può essere usato nel modo naturale. `isPrototypeOf()` risponde direttamente: "Sei nella mia chain?" — opera su due oggetti qualsiasi senza bisogno di funzioni intermedie o `.prototype`. È più diretto, più leggibile, e coerente con la natura di OLOO.
+`instanceof` risponde alla domanda "Il `[[Prototype]]` di `a` contiene `Foo.prototype`?", e richiede un riferimento a una funzione, non direttamente a un oggetto. Presuppone il pattern class-oriented (funzioni costruttore con `.prototype`). Con OLOO, dove non esistono funzioni costruttore, `instanceof` non può essere usato nel modo naturale. `isPrototypeOf()` risponde direttamente: "Sei nella mia chain?", e opera su due oggetti qualsiasi senza bisogno di funzioni intermedie o `.prototype`. È più diretto, più leggibile, e coerente con la natura di OLOO.
 
 </details>
 

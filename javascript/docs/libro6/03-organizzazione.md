@@ -40,7 +40,7 @@ it.next(); // { value: 3, done: false }
 it.next(); // { value: undefined, done: true }
 ```
 
-Regola chiave: l'ultimo valore utile viene restituito con `done: false` — la chiamata successiva restituisce `done: true` senza un valore significativo. Questo perché `for..of` scarta il valore quando `done` è `true`.
+Regola chiave: l'ultimo valore utile viene restituito con `done: false`, e la chiamata successiva restituisce `done: true` senza un valore significativo. Questo perché `for..of` scarta il valore quando `done` è `true`.
 
 ### `return()` e `throw()`
 
@@ -137,7 +137,7 @@ var o = {
 
 ### Esecuzione: il generator produce un iterator
 
-Chiamare un generator **non esegue il corpo** — restituisce un iterator che controlla l'esecuzione:
+Chiamare un generator **non esegue il corpo**: restituisce un iterator che controlla l'esecuzione:
 
 ```js
 var it = foo();    // crea l'iterator, nulla eseguito
@@ -145,7 +145,7 @@ it.next();         // { value: 10, done: false } — pausa a yield
 it.next("ciao");   // stampa "ciao", { value: undefined, done: true }
 ```
 
-**Regola N+1**: ci sarà sempre una chiamata `next()` in più rispetto al numero di `yield`. La prima `next()` avvia il generator fino al primo `yield` (senza passare valori — non c'è ancora nessuno `yield` in attesa). Ogni successiva `next(val)` completa lo `yield` corrente sostituendolo con `val`.
+**Regola N+1**: ci sarà sempre una chiamata `next()` in più rispetto al numero di `yield`. La prima `next()` avvia il generator fino al primo `yield` (senza passare valori, perché non c'è ancora nessuno `yield` in attesa). Ogni successiva `next(val)` completa lo `yield` corrente sostituendolo con `val`.
 
 ### `yield *` — delega
 
@@ -178,7 +178,7 @@ La clause `finally` viene sempre eseguita prima della terminazione, anche in cas
 
 ### Error handling
 
-Gli errori attraversano i confini dei generator — sia in entrata (`it.throw()`) sia in uscita (`throw` interno al generator) — e passano anche attraverso la delega `yield *`:
+Gli errori attraversano i confini dei generator, sia in entrata (`it.throw()`) sia in uscita (`throw` interno al generator), e passano anche attraverso la delega `yield *`:
 
 ```js
 function *foo() {
@@ -250,10 +250,10 @@ Format come AMD, UMD, CommonJS erano varianti di questo pattern.
 
 - **File-based**: un modulo = un file. Non esiste un modo standard per combinare più moduli in un unico file.
 - **Singleton**: esiste una sola istanza del modulo. Ogni `import` ottiene un riferimento alla stessa istanza.
-- **API statica**: gli export di un modulo sono definiti staticamente — non si possono aggiungere o rimuovere a runtime (vantaggio: l'engine può analizzarli e ottimizzarli staticamente).
+- **API statica**: gli export di un modulo sono definiti staticamente: non si possono aggiungere o rimuovere a runtime (vantaggio: l'engine può analizzarli e ottimizzarli staticamente).
 - **Live binding**: gli export sono binding (riferimenti) alle variabili interne, non copie. Se il modulo aggiorna una variabile esportata, chi ha importato vede il nuovo valore.
-- **Hoisting degli import**: le dichiarazioni `import` sono hoisted in cima al modulo — si può chiamare una funzione importata prima della riga `import`.
-- `import`/`export` devono trovarsi sempre al top-level del modulo — non dentro `if`, funzioni, o blocchi.
+- **Hoisting degli import**: le dichiarazioni `import` sono hoisted in cima al modulo, quindi si può chiamare una funzione importata prima della riga `import`.
+- `import`/`export` devono trovarsi sempre al top-level del modulo, non dentro `if`, funzioni, o blocchi.
 
 ### Export
 
@@ -328,7 +328,7 @@ Reflect.Loader.import("foo")
 Restituisce una Promise. Da evitare nei moduli normali perché impedisce l'ottimizzazione statica.
 
 > [!info|label:Oggi]
-> L'API `Reflect.Loader.import()` mostrata qui era **speculativa** al tempo di YDKJS — il *Module Loader* era ancora in bozza e non è mai stato standardizzato in quella forma. Il caricamento dinamico è arrivato nella specifica solo con **ES2020**, sotto forma dell'operatore `import()` (dynamic import), che si scrive come una chiamata di funzione e restituisce una Promise:
+> L'API `Reflect.Loader.import()` mostrata qui era **speculativa** al tempo di YDKJS: il *Module Loader* era ancora in bozza e non è mai stato standardizzato in quella forma. Il caricamento dinamico è arrivato nella specifica solo con **ES2020**, sotto forma dell'operatore `import()` (dynamic import), che si scrive come una chiamata di funzione e restituisce una Promise:
 > ```js
 > import("./foo.js").then(foo => foo.bar());
 > // oppure, dentro una funzione async:
@@ -367,8 +367,8 @@ Foo.prototype.gimmeXY = function() { return this.x * this.y; };
 ```
 
 **Differenze importanti rispetto a `function`:**
-- Deve essere invocato con `new` — non esiste `Foo.call(obj)`
-- Non è hoisted — deve essere dichiarato prima dell'istanziazione
+- Deve essere invocato con `new`: non esiste `Foo.call(obj)`
+- Non è hoisted, quindi deve essere dichiarato prima dell'istanziazione
 - Non crea una proprietà globale sull'oggetto `window`
 - I metodi sono non-enumerabili
 - Non ci sono virgole tra i membri del corpo
@@ -392,7 +392,7 @@ b.gimmeXYZ(); // 1875
 
 `extends` collega `Bar.prototype` a `Foo.prototype` (e `Bar` stessa a `Foo` per i metodi `static`). `super` in un constructor riferisce la funzione costruttore del parent; in un metodo riferisce il prototype del parent.
 
-**Gotcha di `super`**: è **staticamente bound** alla gerarchia dichiarata — non è dinamico come `this`. Se si "prende in prestito" un metodo di una classe e lo si invoca in un contesto diverso (tramite `.call()` o `.apply()`), il `this` verrà reindirizzato dinamicamente, ma `super` no: continuerà a puntare alla gerarchia originale del metodo.
+**Gotcha di `super`**: è **staticamente bound** alla gerarchia dichiarata, e non è dinamico come `this`. Se si "prende in prestito" un metodo di una classe e lo si invoca in un contesto diverso (tramite `.call()` o `.apply()`), il `this` verrà reindirizzato dinamicamente, ma `super` no: continuerà a puntare alla gerarchia originale del metodo.
 
 ### Subclass constructor e regola `super()` prima di `this`
 
@@ -520,21 +520,21 @@ Dog.create("Rex").speak(); // "Rex fa rumore — abbaia"
 <details>
 <summary>Qual è la differenza tra un <em>iterator</em> e un <em>iterable</em>, e perché la distinzione è importante?</summary>
 
-Un **iterable** è qualsiasi oggetto che espone un metodo `[Symbol.iterator]()` che, quando chiamato, restituisce un **iterator**. L'iterator è l'oggetto con il metodo `next()` che produce i valori uno alla volta. La distinzione è importante perché i costrutti ES6 (`for..of`, spread, destructuring) richiedono un *iterable*, non direttamente un *iterator*. Per rendere un iterator direttamente consumabile da `for..of`, basta aggiungergli `[Symbol.iterator]() { return this; }` — così diventa sia iterable che iterator. Gli Array, le String, i Map, i Set e i generator sono tutti iterabili built-in.
+Un **iterable** è qualsiasi oggetto che espone un metodo `[Symbol.iterator]()` che, quando chiamato, restituisce un **iterator**. L'iterator è l'oggetto con il metodo `next()` che produce i valori uno alla volta. La distinzione è importante perché i costrutti ES6 (`for..of`, spread, destructuring) richiedono un *iterable*, non direttamente un *iterator*. Per rendere un iterator direttamente consumabile da `for..of`, basta aggiungergli `[Symbol.iterator]() { return this; }`, così diventa sia iterable che iterator. Gli Array, le String, i Map, i Set e i generator sono tutti iterabili built-in.
 
 </details>
 
 <details>
 <summary>Perché in un generator ci sono sempre N+1 chiamate <code>next()</code> rispetto al numero di <code>yield</code>?</summary>
 
-Perché la prima chiamata a `next()` *avvia* il generator dalla sua posizione iniziale (paused) fino al primo `yield`, ma non c'è ancora nessun `yield` in attesa di un valore — quindi l'argomento passato alla prima `next()` viene ignorato. Ogni `yield expr` svolge due ruoli: *invia* un valore verso l'esterno (il `value` nel risultato), e *attende* un valore dall'esterno (la risposta della `next()` successiva). Se ci sono 3 `yield`, ci vogliono 4 `next()`: la prima per partire, poi una per completare ciascuno dei 3 `yield`. Questo può sembrare asimmetrico, ma ha senso guardandolo dall'interno: ogni `yield` "fa una domanda" e aspetta la risposta nella `next()` successiva.
+Perché la prima chiamata a `next()` *avvia* il generator dalla sua posizione iniziale (paused) fino al primo `yield`, ma non c'è ancora nessun `yield` in attesa di un valore, quindi l'argomento passato alla prima `next()` viene ignorato. Ogni `yield expr` svolge due ruoli: *invia* un valore verso l'esterno (il `value` nel risultato), e *attende* un valore dall'esterno (la risposta della `next()` successiva). Se ci sono 3 `yield`, ci vogliono 4 `next()`: la prima per partire, poi una per completare ciascuno dei 3 `yield`. Questo può sembrare asimmetrico, ma ha senso guardandolo dall'interno: ogni `yield` "fa una domanda" e aspetta la risposta nella `next()` successiva.
 
 </details>
 
 <details>
 <summary>Cosa significa che i moduli ES6 hanno una "static API" e che i loro export sono "live binding"?</summary>
 
-"Static API" significa che gli export di un modulo sono determinati staticamente al momento della definizione del file — non si possono aggiungere o rimuovere nuovi export a runtime. Questo permette all'engine di analizzare le dipendenze senza eseguire il codice, abilitando ottimizzazioni e rilevamento precoce di errori. "Live binding" significa che quando si esporta una variabile, non si esporta una *copia* del suo valore ma un *riferimento* (binding) alla variabile stessa. Se il modulo aggiorna la variabile dopo l'export, chi ha importato vede il valore aggiornato. Questo è diverso dal modo in cui funzionavano i moduli CommonJS (copia del valore). Il lato "read-only" per l'importatore: chi importa non può modificare il binding, ma il modulo sorgente sì.
+"Static API" significa che gli export di un modulo sono determinati staticamente al momento della definizione del file: non si possono aggiungere o rimuovere nuovi export a runtime. Questo permette all'engine di analizzare le dipendenze senza eseguire il codice, abilitando ottimizzazioni e rilevamento precoce di errori. "Live binding" significa che quando si esporta una variabile, non si esporta una *copia* del suo valore ma un *riferimento* (binding) alla variabile stessa. Se il modulo aggiorna la variabile dopo l'export, chi ha importato vede il valore aggiornato. Questo è diverso dal modo in cui funzionavano i moduli CommonJS (copia del valore). Il lato "read-only" per l'importatore: chi importa non può modificare il binding, ma il modulo sorgente sì.
 
 </details>
 
@@ -548,6 +548,6 @@ In ES6, quando si usa `extends`, è il constructor del parent che è responsabil
 <details>
 <summary>Cosa significa che <code>super</code> è "statically bound" in ES6 e quali problemi crea?</summary>
 
-Mentre `this` è risolto dinamicamente in base al call-site, `super` è risolto staticamente al momento della definizione della classe — è vincolato alla gerarchia dichiarata. Se si "prende in prestito" un metodo di `ChildB` (che estende `ParentB`) e lo si invoca nel contesto di un'istanza di `ChildA`, il `this` verrà reindirizzato dinamicamente tramite `.call()` o `.apply()`, ma il `super` dentro quel metodo continuerà a puntare a `ParentB` — non a `ParentA`. Non esiste una soluzione ES6 a questa limitazione. La conseguenza pratica è che i metodi con `super` non sono portabili tra gerarchie diverse. Per questo si consiglia di usare `class`/`extends`/`super` solo con gerarchie statiche e di evitare il borrowing di metodi tra classi non correlate.
+Mentre `this` è risolto dinamicamente in base al call-site, `super` è risolto staticamente al momento della definizione della classe, cioè è vincolato alla gerarchia dichiarata. Se si "prende in prestito" un metodo di `ChildB` (che estende `ParentB`) e lo si invoca nel contesto di un'istanza di `ChildA`, il `this` verrà reindirizzato dinamicamente tramite `.call()` o `.apply()`, ma il `super` dentro quel metodo continuerà a puntare a `ParentB`, non a `ParentA`. Non esiste una soluzione ES6 a questa limitazione. La conseguenza pratica è che i metodi con `super` non sono portabili tra gerarchie diverse. Per questo si consiglia di usare `class`/`extends`/`super` solo con gerarchie statiche e di evitare il borrowing di metodi tra classi non correlate.
 
 </details>

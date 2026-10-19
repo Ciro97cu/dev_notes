@@ -97,7 +97,7 @@ b.toFixed(4);      // "3.1416"
 
 ### Confronto tra valori
 
-**Coercizione esplicita** — la conversione di tipo è esplicita nel codice:
+**Coercizione esplicita**: la conversione di tipo è esplicita nel codice:
 
 ```js
 var a = "42";
@@ -105,7 +105,7 @@ var b = Number(a); // stringa → numero
 console.log(b);    // 42
 ```
 
-**Coercizione implicita** — JavaScript converte automaticamente il tipo come effetto collaterale di un'operazione:
+**Coercizione implicita**: JavaScript converte automaticamente il tipo come effetto collaterale di un'operazione:
 
 ```js
 var a = "42";
@@ -117,7 +117,7 @@ var b = a * 1; // "42" → 42
 Quando un valore non-boolean viene convertito in boolean, può diventare `true` (truthy) o `false` (falsy). I valori **falsy** in JavaScript sono esattamente:
 
 - `""` (stringa vuota)
-- `0`, `-0`, `NaN` (not a number — valore numerico non valido)
+- `0`, `-0`, `NaN` (not a number, cioè valore numerico non valido)
 - `null`, `undefined`
 - `false`
 
@@ -127,8 +127,8 @@ Qualsiasi altro valore è **truthy**: `"hello"`, `42`, `[]`, `{}`, funzioni.
 
 La distinzione corretta non è "confronta il valore" vs "confronta valore e tipo", ma:
 
-- `==` (**loose equality**) — confronta il valore **con** coercizione permessa
-- `===` (**strict equality**) — confronta il valore **senza** coercizione
+- `==` (**loose equality**): confronta il valore **con** coercizione permessa
+- `===` (**strict equality**): confronta il valore **senza** coercizione
 
 ```js
 var a = "42";
@@ -151,7 +151,7 @@ a == b;  // false — riferimenti diversi
 
 Regole pratiche per scegliere tra `==` e `===`:
 
-- se uno dei due valori può essere `true`, `false`, `0`, `""` o `[]` → usare `===`
+- se uno dei due valori può essere `true`, `false`, `0`, `""` o `[]`, usare `===`
 - in tutti gli altri casi, `==` è sicuro e può rendere il codice più leggibile
 
 ### Disuguaglianza
@@ -175,7 +175,7 @@ Un identificatore valido in JavaScript deve iniziare con `a-z`, `A-Z`, `$` o `_`
 
 ### Hoisting
 
-Quando una variabile viene dichiarata con `var` all'interno di uno scope, la dichiarazione viene "spostata" concettualmente in cima a quello scope dal compiler — questo comportamento si chiama **hoisting**. Solo la dichiarazione viene hoisted, non l'assegnamento:
+Quando una variabile viene dichiarata con `var` all'interno di uno scope, la dichiarazione viene "spostata" concettualmente in cima a quello scope dal compiler. Questo comportamento si chiama **hoisting**. Solo la dichiarazione viene hoisted, non l'assegnamento:
 
 ```js
 foo(); // funziona — la dichiarazione di foo() è hoisted
@@ -214,7 +214,7 @@ function foo() {
 foo(); // 5 7 9
 ```
 
-Dichiarare una variabile senza `var`/`let`/`const` in modalità non-strict la crea automaticamente nel global scope — una pratica da evitare sempre.
+Dichiarare una variabile senza `var`/`let`/`const` in modalità non-strict la crea automaticamente nel global scope, ed è una pratica da evitare sempre.
 
 ---
 
@@ -270,7 +270,7 @@ Usare strict mode è fortemente consigliato per tutti i programmi JavaScript.
 
 ## Funzioni come valori
 
-In JavaScript una funzione non è solo un blocco di codice con un nome: è essa stessa un **valore** che può essere assegnato a una variabile, passato come argomento o restituito da un'altra funzione.
+In JavaScript una funzione, oltre a essere un blocco di codice con un nome, è essa stessa un **valore** che può essere assegnato a una variabile, passato come argomento o restituito da un'altra funzione.
 
 ```js
 var foo = function() {
@@ -358,7 +358,7 @@ fred.login("fred", "12Battery34!");
 
 ## this
 
-Il keyword `this` all'interno di una funzione non si riferisce alla funzione stessa — è il malinteso più comune. `this` punta a un **oggetto**, e quale oggetto dipende esclusivamente da come la funzione viene chiamata.
+Contrariamente al malinteso più comune, il keyword `this` all'interno di una funzione non si riferisce alla funzione stessa. `this` punta a un **oggetto**, e quale oggetto dipende esclusivamente da come la funzione viene chiamata.
 
 Esistono quattro regole:
 
@@ -377,10 +377,10 @@ foo.call(obj2);  // "obj2"   — this punta a obj2 (call esplicita)
 new foo();       // undefined — this punta a un nuovo oggetto vuoto
 ```
 
-1. **Chiamata normale** — `this` punta all'oggetto globale (`window` nel browser); in strict mode è `undefined`
-2. **Chiamata come metodo** — `this` punta all'oggetto che precede il punto (`obj1.foo()` → `obj1`)
-3. **Chiamata con `call`/`apply`/`bind`** — `this` viene impostato esplicitamente
-4. **Chiamata con `new`** — `this` punta al nuovo oggetto creato dall'operatore
+1. **Chiamata normale**: `this` punta all'oggetto globale (`window` nel browser); in strict mode è `undefined`
+2. **Chiamata come metodo**: `this` punta all'oggetto che precede il punto (`obj1.foo()` → `obj1`)
+3. **Chiamata con `call`/`apply`/`bind`**: `this` viene impostato esplicitamente
+4. **Chiamata con `new`**: `this` punta al nuovo oggetto creato dall'operatore
 
 Il Libro III approfondisce ogni regola in dettaglio.
 
@@ -448,7 +448,7 @@ I transpiler più usati sono **Babel** (ES6+ → ES5) e **Traceur**. L'uso di un
 
 ## JavaScript non JavaScript
 
-Parte del codice che si scrive in un programma JavaScript non è controllata dal linguaggio stesso, ma dall'ambiente in cui gira. Nel browser, ad esempio, `document` è un **host object** (oggetto fornito dall'ambiente host, non dall'engine JS) che implementa la DOM API — tipicamente scritta in C/C++.
+Parte del codice che si scrive in un programma JavaScript non è controllata dal linguaggio stesso, ma dall'ambiente in cui gira. Nel browser, ad esempio, `document` è un **host object** (oggetto fornito dall'ambiente host, non dall'engine JS) che implementa la DOM API, tipicamente scritta in C/C++.
 
 ```js
 var el = document.getElementById("foo"); // DOM API — non è JS puro
@@ -485,7 +485,7 @@ var aggiungi5 = crea(5);
 aggiungi5(3); // 8
 ```
 
-**`this`**: dipende dal **call-site** (il punto da cui la funzione viene chiamata), non da dove è definita. Quattro regole: chiamata normale → global; come metodo → oggetto che precede il punto; `call`/`apply`/`bind` → oggetto passato; `new` → nuovo oggetto.
+**`this`**: dipende dal **call-site** (il punto da cui la funzione viene chiamata), non da dove è definita. Quattro regole: con la chiamata normale è l'oggetto globale; come metodo, l'oggetto che precede il punto; con `call`/`apply`/`bind`, l'oggetto passato; con `new`, il nuovo oggetto.
 
 **Prototype**: JavaScript risale la catena di prototype per trovare proprietà non presenti direttamente sull'oggetto.
 
@@ -530,6 +530,6 @@ Una closure si forma quando una funzione interna mantiene un riferimento allo sc
 <details>
 <summary>Qual è la differenza tra polyfilling e transpiling?</summary>
 
-Il polyfilling implementa in codice esistente il comportamento di API o funzioni non presenti nell'ambiente (es. `Number.isNaN` su browser vecchi). Funziona solo per funzionalità che si possono riprodurre con la sintassi già supportata. Il transpiling converte la sintassi nuova (es. `let`, arrow function, template literal) in sintassi equivalente compatibile con ambienti più vecchi — perché la nuova sintassi causa errori di parsing se usata in un engine che non la supporta. Babel è il transpiler più usato.
+Il polyfilling implementa in codice esistente il comportamento di API o funzioni non presenti nell'ambiente (es. `Number.isNaN` su browser vecchi). Funziona solo per funzionalità che si possono riprodurre con la sintassi già supportata. Il transpiling converte la sintassi nuova (es. `let`, arrow function, template literal) in sintassi equivalente compatibile con ambienti più vecchi, perché la nuova sintassi causa errori di parsing se usata in un engine che non la supporta. Babel è il transpiler più usato.
 
 </details>

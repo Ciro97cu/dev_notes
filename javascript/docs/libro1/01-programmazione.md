@@ -16,16 +16,16 @@ a = b * 2;
 
 Gli statement sono composti da una o più **espressioni**. Un'espressione è qualsiasi riferimento a una variabile, a un valore, o a una combinazione di variabili, valori e operatori. Nell'istruzione precedente ci sono quattro espressioni:
 
-- `2` — espressione letterale
-- `b` — espressione variabile (recupera il valore corrente)
-- `b * 2` — espressione aritmetica
-- `a = b * 2` — espressione di assegnamento
+- `2`: espressione letterale
+- `b`: espressione variabile (recupera il valore corrente)
+- `b * 2`: espressione aritmetica
+- `a = b * 2`: espressione di assegnamento
 
 ## Esecuzione di un programma
 
-Il codice scritto dagli sviluppatori non è direttamente comprensibile dal computer. Un componente speciale — chiamato **interpreter** (interprete) o **compiler** (compilatore) — traduce il codice in istruzioni macchina.
+Il codice scritto dagli sviluppatori non è direttamente comprensibile dal computer. Un componente speciale, chiamato **interpreter** (interprete) o **compiler** (compilatore), traduce il codice in istruzioni macchina.
 
-JavaScript è spesso descritto come linguaggio interpretato, ma non è del tutto preciso: il JavaScript engine (JavaScript engine, cioè il componente del browser o dell'ambiente di esecuzione che gestisce il codice) lo compila appena prima di eseguirlo, in un processo chiamato **just-in-time compilation**. Il risultato è lo stesso di una traduzione riga per riga, ma con prestazioni significativamente migliori.
+JavaScript è spesso descritto come linguaggio interpretato, ma non è del tutto preciso: il JavaScript engine (cioè il componente del browser o dell'ambiente di esecuzione che gestisce il codice) lo compila appena prima di eseguirlo, in un processo chiamato **just-in-time compilation**. Il risultato è lo stesso di una traduzione riga per riga, ma con prestazioni significativamente migliori.
 
 ## Output e input
 
@@ -64,9 +64,9 @@ Gli operatori permettono di compiere azioni su variabili e valori. I più usati 
 
 I valori presenti direttamente nel codice sorgente si chiamano **literal** (letterali). JavaScript ha tipi primitivi integrati:
 
-- `number` — numeri, usati per operazioni matematiche (`42`, `3.14`)
-- `string` — testo, delimitato da `"..."` o `'...'` (`"ciao"`)
-- `boolean` — vero o falso (`true`, `false`)
+- `number`: numeri, usati per operazioni matematiche (`42`, `3.14`)
+- `string`: testo, delimitato da `"..."` o `'...'` (`"ciao"`)
+- `boolean`: vero o falso (`true`, `false`)
 
 ```js
 "Sono una stringa";
@@ -106,7 +106,7 @@ Un buon commento spiega il **perché** di una scelta, non cosa fa il codice (che
 
 ## Variabili
 
-Una variabile è un contenitore simbolico che può cambiare valore nel tempo — da qui il nome. Si dichiara con `var` (o con `let`/`const` da ES6):
+Una variabile è un contenitore simbolico che può cambiare valore nel tempo (da qui il nome). Si dichiara con `var` (o con `let`/`const` da ES6):
 
 ```js
 var amount = 99.99;
@@ -134,7 +134,7 @@ console.log(amount.toFixed(2)); // "107.99"
 `toFixed(2)` è un metodo disponibile sui valori numerici che restituisce una stringa con il numero arrotondato a due decimali.
 
 > [!info|label:Oggi]
-> YDKJS (2015) descrive la riassegnazione di un `const` come *"rifiutata, e in strict mode con errore"*. Oggi il comportamento è più netto: **riassegnare un `const` lancia sempre un `TypeError`** (`Assignment to constant variable`), sia in strict sia in non-strict mode. Attenzione però: `const` vincola il **binding** (il legame nome→valore), non il valore in sé — le proprietà di un oggetto dichiarato `const` restano modificabili.
+> YDKJS (2015) descrive la riassegnazione di un `const` come *"rifiutata, e in strict mode con errore"*. Oggi il comportamento è più netto: **riassegnare un `const` lancia sempre un `TypeError`** (`Assignment to constant variable`), sia in strict sia in non-strict mode. Attenzione però: `const` vincola il **binding** (il legame nome→valore), non il valore in sé, quindi le proprietà di un oggetto dichiarato `const` restano modificabili.
 
 ## Blocchi
 
@@ -253,7 +253,7 @@ Questa caratteristica, detta **lexical scope**, è il meccanismo alla base delle
 
 **Statement ed espressioni**: un statement è un'istruzione completa (`a = b * 2;`); un'espressione è qualsiasi parte che produce un valore (`b * 2`, `a`).
 
-**Engine e compilazione**: l'engine JavaScript compila il codice just-in-time prima di eseguirlo — non lo interpreta riga per riga.
+**Engine e compilazione**: l'engine JavaScript compila il codice just-in-time prima di eseguirlo, invece di interpretarlo riga per riga.
 
 **Tipi primitivi**: `number`, `string`, `boolean` sono i tipi di base. I valori senza variabile sono detti literal.
 
@@ -292,7 +292,7 @@ Un statement è un'istruzione completa che compie un'azione (es. `a = b * 2;`). 
 <details>
 <summary>In che senso JavaScript "compila" il codice se viene definito un linguaggio interpretato?</summary>
 
-La distinzione tradizionale tra linguaggi interpretati e compilati non si applica bene a JavaScript. Il JavaScript engine (come V8 di Chrome) non esegue il codice riga per riga: lo analizza, lo compila in bytecode ottimizzato e poi lo esegue — tutto poco prima dell'esecuzione effettiva (just-in-time compilation). Il risultato visibile è simile all'interpretazione, ma le prestazioni sono molto superiori.
+La distinzione tradizionale tra linguaggi interpretati e compilati non si applica bene a JavaScript. Il JavaScript engine (come V8 di Chrome) non esegue il codice riga per riga: lo analizza e lo compila in bytecode ottimizzato poco prima dell'esecuzione effettiva (just-in-time compilation), poi lo esegue. Il risultato visibile è simile all'interpretazione, ma le prestazioni sono molto superiori.
 
 </details>
 
