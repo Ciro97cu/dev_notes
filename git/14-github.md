@@ -1,6 +1,6 @@
 # GitHub
 
-GitHub è una piattaforma online che ospita repository Git remoti e vi costruisce sopra una serie di funzioni di collaborazione, come la gestione delle issue, le pull request e la revisione del codice. Conviene tenere ben distinti i due nomi: Git è lo strumento di versionamento vero e proprio, mentre GitHub è soltanto uno dei posti in cui conservare un repository remoto.
+GitHub è una piattaforma online che ospita repository Git remoti e vi costruisce sopra una serie di funzioni di collaborazione, come la gestione delle issue, le pull request e la revisione del codice. Conviene tenere ben distinti i due nomi: Git è lo strumento di versionamento, mentre GitHub è soltanto uno dei posti in cui conservare un repository remoto.
 
 ## Repo pubblico vs privato
 Un repository su GitHub può essere pubblico o privato. Un repository **pubblico** è visibile a chiunque: tutti possono vederne il codice, scaricarlo e proporre modifiche. Un repository **privato**, al contrario, è accessibile solo al proprietario e ai collaboratori esplicitamente autorizzati.
@@ -39,24 +39,24 @@ Se il branch remoto non esiste ancora, `git push` lo crea.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 580 170" role="img" aria-label="06-locale-remoto" style="width:100%;max-width:620px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><rect x="40" y="60" width="150" height="70" rx="6" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><rect x="360" y="60" width="170" height="70" rx="6" fill="none" fill-opacity="1" stroke="currentColor" stroke-width="1.6"/><text x="115" y="90" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Locale</text><text x="115" y="110" font-size="10" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">(il tuo PC)</text><text x="445" y="90" font-size="13" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">Remoto</text><text x="445" y="110" font-size="10" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">GitHub / origin</text><line x1="360" y1="78" x2="196" y2="78" stroke="currentColor" stroke-width="1.6"/><path d="M196 74 L190 78 L196 82 Z" fill="currentColor"/><text x="275" y="68" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">clone / fetch / pull</text><line x1="190" y1="112" x2="354" y2="112" stroke="currentColor" stroke-width="1.6"/><path d="M354 108 L360 112 L354 116 Z" fill="currentColor"/><text x="275" y="132" font-size="11" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">push</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>clone</code> copia il remoto in locale; <code>fetch</code>/<code>pull</code> scaricano gli aggiornamenti; <code>push</code> invia i tuoi commit al remoto.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>clone</code> copia il remoto in locale; <code>fetch</code>/<code>pull</code> scaricano gli aggiornamenti; <code>push</code> invia i commit locali al remoto.</figcaption>
 </figure>
 
 ## Remote tracking branch
 Un remote tracking branch (es. `origin/main`) è un branch locale speciale che tiene
 traccia dello stato di un branch sul remoto. Serve a sapere se il proprio branch è
-avanti o indietro rispetto al server. `git branch -r` li elenca. È anche la chiave per capire la differenza tra `fetch` e `pull`: il primo aggiorna solo questo puntatore di tracciamento, il secondo aggiorna pure il branch su cui si lavora.
+avanti o indietro rispetto al server. `git branch -r` li elenca. Da qui si capisce anche la differenza tra `fetch` e `pull`: il primo aggiorna solo questo puntatore di tracciamento, il secondo aggiorna pure il branch su cui si lavora.
 
 <figure style="margin:1rem 0;text-align:center">
 <svg viewBox="0 0 540 150" role="img" aria-label="08-fetch-vs-pull" style="width:100%;max-width:560px;height:auto;color:inherit"><g font-family="system-ui,Arial,sans-serif"><path d="M90 86 L210 86" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M210 86 L330 86" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M330 86 L450 86" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="90" cy="86" r="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.8"/><circle cx="210" cy="86" r="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.8"/><circle cx="330" cy="86" r="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.8"/><circle cx="450" cy="86" r="9" fill="var(--bg,#ffffff)" stroke="currentColor" stroke-width="1.8"/><text x="390.0" y="60" font-size="9" text-anchor="middle" font-weight="400" opacity=".7" fill="currentColor">commit scaricati (fetch)</text><path d="M330 66 L450 66" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3"/><rect x="190" y="108" width="40" height="21" rx="5" fill="var(--link,#f05133)" fill-opacity=".14" stroke="currentColor" stroke-width="1.2"/><text x="210" y="123" font-size="10.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">main</text><path d="M210 95 L210 108" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="412" y="108" width="76" height="21" rx="5" fill="var(--link,#f05133)" fill-opacity=".14" stroke="currentColor" stroke-width="1.2"/><text x="450" y="123" font-size="10.5" text-anchor="middle" font-weight="700" opacity="1" fill="currentColor">origin/main</text><path d="M450 95 L450 108" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M210 74 L210 40 L450 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3"/><path d="M450 40 L442 35 L442 45 Z" fill="currentColor"/><text x="300" y="34" font-size="8.5" text-anchor="middle" font-weight="600" opacity=".8" fill="currentColor">git pull = fetch + merge  →  porta anche main fin qui</text></g></svg>
-<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>git fetch</code> scarica i commit nuovi e fa avanzare solo <code>origin/main</code> (il tuo <code>main</code> resta indietro); <code>git pull</code> è <code>fetch</code> + <code>merge</code>, quindi porta avanti anche <code>main</code>.</figcaption>
+<figcaption style="font-size:.82rem;opacity:.7;margin-top:.3rem"><code>git fetch</code> scarica i commit nuovi e fa avanzare solo <code>origin/main</code> (il <code>main</code> locale resta indietro); <code>git pull</code> è <code>fetch</code> + <code>merge</code>, quindi porta avanti anche <code>main</code>.</figcaption>
 </figure>
 
 ## clone vs init
 La scelta tra i due comandi dipende dal punto di partenza: per un progetto nuovo, creato da zero, si usa `git init`, mentre per un progetto che esiste già su un remoto si usa `git clone` per portarsene una copia in locale.
 
 ## Autenticazione: HTTPS o SSH
-Per clonare un repository privato o per inviare i propri commit con `push`, GitHub deve sapere chi sei: serve **autenticarsi**. Le strade sono due. Con **HTTPS** il remoto ha un URL del tipo `https://github.com/utente/repo.git` e l'accesso avviene tramite un *personal access token* (un gettone segreto che sostituisce la password dell'account). Con **SSH** il remoto ha la forma `git@github.com:utente/repo.git` e l'accesso si fonda su una **coppia di chiavi**: una chiave **privata**, che resta sul computer e non va mai condivisa né committata, e una chiave **pubblica**, che si carica una volta sola su GitHub. Al momento del collegamento GitHub verifica che le due combacino, senza che la privata lasci mai la macchina.
+Per clonare un repository privato o per inviare i propri commit con `push`, GitHub deve sapere chi sta operando: serve **autenticarsi**. Le strade sono due. Con **HTTPS** il remoto ha un URL del tipo `https://github.com/utente/repo.git` e l'accesso avviene tramite un *personal access token* (un gettone segreto che sostituisce la password dell'account). Con **SSH** il remoto ha la forma `git@github.com:utente/repo.git` e l'accesso si fonda su una **coppia di chiavi**: una chiave **privata**, che resta sul computer e non va mai condivisa né committata, e una chiave **pubblica**, che si carica una volta sola su GitHub. Al momento del collegamento GitHub verifica che le due combacino, senza che la privata lasci mai la macchina.
 
 La chiave si **crea** con `ssh-keygen`, non con `cat`: quest'ultimo si limita a *mostrare* il contenuto della pubblica (il file `.pub`) quando serve copiarla. Il nome del file segue l'algoritmo: `id_ed25519.pub` per una chiave ed25519 (quello consigliato oggi), `id_rsa.pub` per una vecchia chiave RSA.
 
@@ -64,16 +64,16 @@ La chiave si **crea** con `ssh-keygen`, non con `cat`: quest'ultimo si limita a 
 |---------|---------|
 | `ssh-keygen -t ed25519 -C "tua@email"` | **Crea** la coppia di chiavi: `~/.ssh/id_ed25519` (privata) e `id_ed25519.pub` (pubblica) |
 | `cat ~/.ssh/id_ed25519.pub` | **Mostra** la chiave pubblica, da copiare e incollare su GitHub |
-| `ssh -T git@github.com` | Verifica che GitHub riconosca la chiave (risponde col tuo username) |
+| `ssh -T git@github.com` | Verifica che GitHub riconosca la chiave (risponde con lo username dell'account) |
 | `git remote set-url origin git@github.com:utente/repo.git` | Converte un remoto esistente da HTTPS a SSH |
 
 La configurazione si fa una volta sola: **generare** la coppia con `ssh-keygen`, **copiare** la pubblica con `cat ~/.ssh/id_ed25519.pub`, **incollarla** su GitHub in *Settings → SSH and GPG keys → New SSH key*, infine **verificare** con `ssh -T git@github.com`. I dettagli sono nella [guida ufficiale di GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh).
 
 ## GitHub Gists
-I Gist di GitHub sono frammenti di codice o note che si possono condividere al volo. Ogni gist è a tutti gli effetti un piccolo repository Git, quindi è clonabile e versionato come qualsiasi altro, e può essere pubblico, visibile a tutti, oppure segreto, raggiungibile solo da chi ne ha il link.
+I Gist di GitHub sono frammenti di codice o note che si possono condividere al volo. Ogni gist è un piccolo repository Git, quindi è clonabile e versionato come qualsiasi altro, e può essere pubblico, visibile a tutti, oppure segreto, raggiungibile solo da chi ne ha il link.
 
 ## Pull Request (PR)
-Una pull request è la richiesta formale di unire un branch (tipicamente un feature branch) dentro un altro, di solito `main` o `develop`. Il suo valore è aprire uno spazio per la review del codice prima che l'integrazione avvenga davvero, e questo aiuta a mantenere la qualità e la stabilità del progetto.
+Una pull request è la richiesta formale di unire un branch (tipicamente un feature branch) dentro un altro, di solito `main` o `develop`. Serve ad aprire uno spazio per la review del codice prima che l'integrazione avvenga, e questo aiuta a mantenere la qualità e la stabilità del progetto.
 
 ## Forking
 Il fork crea una copia indipendente di un repository remoto sul proprio account, sulla quale si può lavorare liberamente senza toccare in alcun modo l'originale. È il meccanismo con cui si contribuisce ai progetti altrui: si lavora sul proprio fork e poi si propongono le modifiche al progetto di partenza tramite una pull request.
@@ -81,5 +81,5 @@ Il fork crea una copia indipendente di un repository remoto sul proprio account,
 ## Collegamenti
 - [Repository](02-repository.md)
 - [Branch](06-branch.md) e [Merge](07-merge.md)
-- [Tag](11-tag.md) — `git push origin --tags`
+- [Tag](11-tag.md): `git push origin --tags`
 - Ricetta pronta: [Playbook](playbook.md)

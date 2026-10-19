@@ -23,4 +23,4 @@ git status     # cosa è cambiato dall'ultimo commit
 
 ## Collegamenti
 - [Commit](03-commit.md)
-- [Interni di Git](12-interni-git.md) — cosa c'è dentro `.git`
+- [Interni di Git](12-interni-git.md): cosa c'è dentro `.git`

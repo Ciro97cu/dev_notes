@@ -16,7 +16,7 @@ Un merge può concludersi in due modi diversi, a seconda di come sono messi i du
 </figure>
 
 ## Merge conflict
-Un merge conflict si verifica quando le stesse righe di un file sono state modificate in modo diverso sui due branch. Git non può decidere da solo quale versione sia quella giusta, così invece di scegliere a caso si ferma e segnala un conflitto che va risolto a mano.
+Un merge conflict si verifica quando le stesse righe di un file sono state modificate in modo diverso sui due branch. Git non può decidere da solo quale versione sia quella giusta, così si ferma e segnala un conflitto che va risolto a mano.
 
 I punti in conflitto vengono marcati dentro il file con `<<<<<<<`, `=======` e `>>>>>>>`, che delimitano le due versioni contrapposte. Si modifica il file scegliendo cosa tenere e rimuovendo i marcatori, poi si completa il merge:
 ```bash
@@ -26,5 +26,5 @@ git commit            # completa il merge
 
 ## Collegamenti
 - [Branch](06-branch.md)
-- [Rebase](10-rebase.md) — alternativa al merge per una storia lineare
+- [Rebase](10-rebase.md): alternativa al merge per una storia lineare
 - Ricetta pronta: [Playbook](playbook.md)

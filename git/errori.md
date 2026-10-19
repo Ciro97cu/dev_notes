@@ -17,7 +17,7 @@ git push
 
 ### `Updates were rejected because the tip of your current branch is behind`
 Stesso caso: branch locale indietro rispetto al remoto. Stessa soluzione di sopra.
-Forzare con `git push --force` solo se necessario ⚠️ → meglio `--force-with-lease`.
+Forzare con `git push --force` solo se necessario ⚠️, e in quel caso è meglio `--force-with-lease`.
 → [Rebase](10-rebase.md)
 
 ### `fatal: remote origin already exists`

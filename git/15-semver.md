@@ -54,5 +54,5 @@ Esempio di ordine crescente:
 ```
 
 ## Collegamenti
-- [Tag](11-tag.md) — taggare le release con SemVer
+- [Tag](11-tag.md): taggare le release con SemVer
 - Spec ufficiale: https://semver.org/

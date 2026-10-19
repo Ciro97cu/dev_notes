@@ -25,4 +25,4 @@ Scriverli direttamente nel file è comodo quando gli alias sono molti o piuttost
 Senza l'opzione `--global` l'alias vale solo per il repository corrente, dove viene salvato in `.git/config`. Per le abbreviazioni di uso comune, però, si preferisce di solito la configurazione globale, così da averle a disposizione ovunque.
 
 ## Collegamenti
-- [Interni di Git](12-interni-git.md) — il file `config`
+- [Interni di Git](12-interni-git.md): il file `config`

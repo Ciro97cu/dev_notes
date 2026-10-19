@@ -1,8 +1,8 @@
 # Playbook
 
-Ricette pronte per problemi reali di lavoro. Ogni voce: problema in linguaggio
-naturale → comandi esatti → nota safe/destructive. Per la teoria, seguire i link
-ai file topic.
+Ricette pronte per problemi reali di lavoro. Ogni voce parte dal problema in
+linguaggio naturale, dà i comandi esatti e chiude con una nota safe/destructive.
+Per la teoria, seguire i link ai file topic.
 
 ## Formato di una ricetta
 
@@ -191,7 +191,7 @@ git config --local --unset user.email            # rimuove l'override, si torna 
 ```
 
 - Nota: **safe**. Riguarda l'attribuzione dei commit (chi appare come autore), non i permessi di push. Vale dai commit successivi; quelli già fatti tengono l'email con cui sono stati creati.
-- Approfondimento: [Introduzione](01-introduzione.md) — Configurare nome ed email.
+- Approfondimento: [Introduzione](01-introduzione.md), sezione «Configurare nome ed email».
 
 ### Chi ha cambiato questa riga
 

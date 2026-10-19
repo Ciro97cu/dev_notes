@@ -1,6 +1,6 @@
 # Annullare modifiche
 
-Annullare in Git non è un'operazione sola: esistono tre comandi principali (`restore`, `reset` e `revert`), ciascuno con uno scopo diverso. Quale sia quello giusto dipende soprattutto da due domande: se le modifiche sono già state salvate in un commit oppure no, e se quel commit è già stato condiviso (pushato) oppure è ancora solo locale.
+Per annullare, Git mette a disposizione tre comandi principali (`restore`, `reset` e `revert`), ciascuno con uno scopo diverso. Quale sia quello giusto dipende soprattutto da due domande: se le modifiche sono già state salvate in un commit oppure no, e se quel commit è già stato condiviso (pushato) oppure è ancora solo locale.
 
 ## Detached HEAD
 Ci si ritrova in stato di "detached HEAD" (HEAD staccato) spostandosi direttamente su un commit specifico anziché su un branch: in quella condizione `HEAD` punta a un singolo commit invece che a un ramo.
@@ -18,7 +18,7 @@ git switch -c nuovo-branch
 ```
 
 ## git restore
-Il comando `git restore` annulla le modifiche ai file nel working directory, riportandoli a una versione precedente — di norma quella dell'ultimo commit. Serve a buttare via il lavoro in corso su uno o più file quando si è deciso di non tenerlo.
+Il comando `git restore` annulla le modifiche ai file nel working directory, riportandoli a una versione precedente, di norma quella dell'ultimo commit. Serve a buttare via il lavoro in corso su uno o più file quando si è deciso di non tenerlo.
 
 | Comando | Effetto |
 |---------|---------|
@@ -68,9 +68,9 @@ git revert a1b2c3d         # annulla un commit specifico
 > `git revert` non riscrive la storia: è l'opzione sicura per i commit già pushati.
 
 ## reset vs revert (quale usare?)
-La regola pratica per scegliere è semplice: se il commit è ancora solo locale e non è stato pushato, si può usare `reset`; se invece è già stato pushato o comunque condiviso con altri, si usa `revert`.
+Per scegliere vale una regola pratica: se il commit è ancora solo locale e non è stato pushato, si può usare `reset`; se invece è già stato pushato o comunque condiviso con altri, si usa `revert`.
 
 ## Collegamenti
 - [Commit](03-commit.md)
-- [Interni di Git](12-interni-git.md) — `reflog` per recuperare dopo un `reset --hard`
+- [Interni di Git](12-interni-git.md): `reflog` per recuperare dopo un `reset --hard`
 - Ricette pronte: [Playbook](playbook.md)

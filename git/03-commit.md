@@ -38,7 +38,7 @@ git commit --amend                        # aggiunge il file al commit precedent
 ⚠️ `--amend` riscrive la storia: è sicuro solo su commit **non ancora pushati**, mentre su commit già condivisi crea conflitti agli altri. Effetto: la `history` cambia (nuovo hash), mentre working directory e staging restano invariati.
 
 ## Commit atomico
-Un commit atomico contiene **una sola modifica logica**, completa e indipendente dalle altre. Se durante il lavoro si corregge un bug e si aggiunge una feature, la scelta atomica è tenerli in due commit separati anziché fonderli in uno. Il vantaggio è concreto: la storia resta leggibile, individuare la causa di un problema (il debug) diventa più semplice, si può annullare un singolo cambiamento con un revert mirato e la revisione del codice scorre più facilmente.
+Un commit atomico contiene **una sola modifica logica**, completa e indipendente dalle altre. Se durante il lavoro si corregge un bug e si aggiunge una feature, la scelta atomica è tenerli in due commit separati anziché fonderli in uno. Così la storia resta leggibile, individuare la causa di un problema (il debug) diventa più semplice, si può annullare un singolo cambiamento con un revert mirato e la revisione del codice scorre più facilmente.
 
 ## Messaggi di commit
 La convenzione più diffusa, adottata da Git e dai progetti open source, è scrivere il messaggio in **present tense / imperative mood**: il messaggio descrive cosa fa il commit, come se fosse un comando impartito al codice.
@@ -56,6 +56,6 @@ git commit
 In vim si preme `i` per entrare in modalità inserimento, si scrive il messaggio, poi `Esc` per uscirne e infine `:wq` seguito da Invio per salvare e chiudere.
 
 ## Collegamenti
-- [Annullare modifiche](08-annullare.md) — `restore`, `reset`, `revert`
+- [Annullare modifiche](08-annullare.md): `restore`, `reset`, `revert`
 - [Log e Diff](04-log-diff.md)
 - [.gitignore](05-gitignore.md)

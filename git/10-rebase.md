@@ -45,7 +45,7 @@ Cambiando `pick` con un'altra parola si sceglie l'azione:
 | `merge` (m) | crea un commit di merge |
 
 ## merge vs rebase
-La differenza tra i due approcci sta in cosa fanno alla storia. Il **merge** unisce le storie dei due rami e, quando serve, crea un merge commit, preservando la cronologia originale così com'è avvenuta. Il **rebase** invece riscrive quella storia rendendola lineare e pulita, ma nel farlo **cambia gli hash** dei commit del feature branch, che di fatto diventano commit nuovi.
+La differenza tra i due approcci sta in cosa fanno alla storia. Il **merge** unisce le storie dei due rami e, quando serve, crea un merge commit, preservando la cronologia originale così com'è avvenuta. Il **rebase** invece riscrive quella storia rendendola lineare e pulita, ma nel farlo **cambia gli hash** dei commit del feature branch, che diventano commit nuovi.
 
 ## Quando NON usarlo
 

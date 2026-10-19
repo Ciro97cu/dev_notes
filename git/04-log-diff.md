@@ -44,7 +44,7 @@ Il comando `git blame` mostra, per ogni singola riga di un file, l'ultimo commit
 | Comando | Cosa fa |
 |---------|---------|
 | `git blame <file>` | Riga per riga: commit, autore, data |
-| `git blame -L 10,20 <file>` | Solo le righe 10–20 |
+| `git blame -L 10,20 <file>` | Solo le righe dalla 10 alla 20 |
 
 ```bash
 git blame app.js

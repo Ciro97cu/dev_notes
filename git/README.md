@@ -28,6 +28,6 @@ Appunti di studio su **Git**, da zero ad avanzato: un percorso ordinato in 15 to
 
 ## File di supporto
 
-- [Glossario](glossario.md) — termini Git (EN) spiegati in italiano semplice; è la fonte terminologica.
-- [Playbook](playbook.md) — ricette pronte: "voglio fare X" → comandi esatti.
-- [Errori comuni](errori.md) — messaggi di errore di Git → causa e fix.
+- [Glossario](glossario.md): termini Git (EN) spiegati in italiano semplice; è la fonte terminologica.
+- [Playbook](playbook.md): ricette pronte, dal "voglio fare X" ai comandi esatti.
+- [Errori comuni](errori.md): dal messaggio di errore di Git alla causa e al fix.
