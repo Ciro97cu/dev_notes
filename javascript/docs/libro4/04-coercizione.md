@@ -32,6 +32,24 @@ JSON.stringify([1, undefined, 3]);       // '[1,null,3]' — undefined→null ne
 
 Se un oggetto ha un metodo `.toJSON()`, viene invocato prima della serializzazione per ottenere il valore da stringificare. Il secondo parametro di `JSON.stringify()` è un **replacer** (array di chiavi da includere, o funzione di filtraggio); il terzo è l'indentazione.
 
+#### Quanto costa `JSON.stringify()`
+
+*➕ Fuori dal libro: YDKJS tratta `JSON.stringify()` solo per le sue regole di conversione; costo e limiti vengono dalla documentazione di Node e di MDN e da misure fatte con Node 24.*
+
+`JSON.stringify()` è **sincrono**: percorre l'intero valore, proprietà dopo proprietà e livello dopo livello, e restituisce la stringa solo alla fine. Per tutto quel tempo il thread su cui gira non può fare altro, perché JavaScript esegue un pezzo di codice alla volta e lo porta a termine prima di passare al successivo (il [run-to-completion](/docs/libro5/01-asincronia.md?id=run-to-completion)). Nel browser questo significa che la pagina smette di rispondere a clic, scorrimento e animazioni finché la serializzazione non è finita. Il costo cresce con la dimensione del valore: la [guida di Node sull'event loop](https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop) lo descrive come lineare nella dimensione dell'input, ma avverte che con input grandi può durare «sorprendentemente a lungo», e lo stesso vale per `JSON.parse()`. Per dare un ordine di grandezza, con Node 24 cento piccoli oggetti si serializzano in pochi centesimi di millisecondo, mentre un array di un milione di oggetti (circa 69 MB di testo) richiede circa 250 ms, e rileggerlo con `JSON.parse()` ancora di più. Il browser considera «lungo» un compito che occupa il thread principale per [50 millisecondi o più](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceLongTaskTiming): oltre quella soglia l'interfaccia si avverte bloccata.
+
+Oltre al costo ci sono casi in cui la chiamata non rallenta ma fallisce ([MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#exceptions)):
+
+| Caso | Che cosa succede |
+|---|---|
+| riferimento circolare: un oggetto che contiene se stesso, direttamente o tramite altri oggetti | `TypeError: Converting circular structure to JSON` |
+| un valore `BigInt` | `TypeError: Do not know how to serialize a BigInt` |
+| annidamento molto profondo (con Node 24 bastano 200.000 livelli) | `RangeError: Maximum call stack size exceeded` |
+
+Altri tipi si perdono senza alcun errore: una `Date` diventa una stringa, `Map` e `Set` diventano oggetti vuoti `{}`.
+
+Usarlo con cognizione di causa significa quindi serializzare solo ciò che serve, con il replacer o con un `toJSON()` che restituisce i soli campi utili, e tenere d'occhio la dimensione dei dati quando arrivano dall'esterno. Per copiare un oggetto in profondità esiste oggi [`structuredClone()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone), che conserva `Date`, `Map`, `Set` e i riferimenti circolari; è anch'esso sincrono, quindi il discorso sulle dimensioni resta valido. Per dati davvero grandi il lavoro si sposta in un [Web Worker](/docs/libro5/05-performance.md?id=web-workers), così il thread principale resta libero: il passaggio dei dati al worker è comunque una copia, quindi conviene quando l'elaborazione da fare è pesante.
+
 ### `ToNumber`
 
 Converte qualsiasi valore a un numero:
@@ -488,5 +506,12 @@ Perché la specifica converte prima il booleano a numero (`true` → `1`, `false
 <summary>Perché `a <= b` può essere `true` anche quando `a < b`, `a == b` e `a > b` sono tutti `false`?</summary>
 
 La specifica definisce `a <= b` non come "minore o uguale" ma come `!(b < a)`, cioè la negazione di "b è strettamente minore di a". Quando due oggetti producono la stessa stringa da `ToPrimitive` (per esempio entrambi `"[object Object]"`), `a < b` è `false` e `b < a` è anche `false`. Di conseguenza `!(b < a)` è `true`. Lo stesso ragionamento porta `a >= b` ad essere `true`. Il confronto `a == b` è `false` perché per gli oggetti `==` confronta i riferimenti (non i valori stringa), e i due oggetti sono istanze distinte. È un comportamento sorprendente ma logicamente consistente con le definizioni della specifica.
+
+</details>
+
+<details>
+<summary>Perché `JSON.stringify()` può bloccare una pagina, e in quali casi invece lancia un errore?</summary>
+
+Perché è sincrono: finché non ha percorso tutto il valore, il thread principale non esegue altro, e con dati grandi (centinaia di migliaia di oggetti) l'interfaccia si blocca per decine o centinaia di millisecondi. Lancia invece un errore con un riferimento circolare o un `BigInt` (`TypeError`) e con un annidamento estremamente profondo (`RangeError`). Si mitiga serializzando solo i campi utili, usando `structuredClone()` per le copie profonde e spostando i lavori pesanti in un Web Worker.
 
 </details>

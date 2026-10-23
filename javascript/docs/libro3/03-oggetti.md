@@ -100,6 +100,8 @@ Non esiste un `copy()` built-in perché la semantica non è univoca: shallow cop
 var newObj = JSON.parse(JSON.stringify(someObj));
 ```
 
+*➕ Fuori dal libro: oggi per la copia profonda esiste anche `structuredClone(someObj)`, che conserva `Date`, `Map`, `Set` e i riferimenti circolari. Costo e limiti di `JSON.stringify()` sono nel [capitolo sulla coercizione](/docs/libro4/04-coercizione.md?id=quanto-costa-jsonstringify).*
+
 **Shallow copy con `Object.assign()`** (ES6): copia le proprietà enumerabili proprie delle sorgenti nel target:
 
 ```js
