@@ -106,14 +106,16 @@ export PATH="$HOME/.local/bin:$PATH"   # la mia cartella vince sulle altre (in t
 export PATH="$PATH:$HOME/.local/bin"   # oppure come ultima spiaggia (in coda)
 ```
 
-Quando le righe che antepongono sono **più d'una** (com'è tipico in un `~/.zshrc`), l'effetto si ribalta: ognuna mette la sua cartella *davanti* a quelle già presenti, quindi **l'ultima riga scritta finisce prima nel PATH** ed è quella con la precedenza più alta. Per far vincere una cartella specifica, dunque, la si scrive **in fondo** al file, non in cima.
+Quando le righe che aggiungono una cartella in testa sono **più d'una**, com'è tipico in un `~/.zshrc`, entrano in gioco due ordini diversi, facili da confondere: l'ordine delle **righe nel file**, che la shell legge dall'alto in basso, e l'ordine delle **cartelle nel PATH**, che la shell scorre da sinistra quando cerca un comando. La regola di ricerca resta una sola: vince la cartella che sta **prima nel PATH**. Ogni riga, però, mette la sua cartella davanti a tutto ciò che c'è già, comprese le cartelle aggiunte dalle righe precedenti, e così la riga letta **per ultima** produce la cartella che sta **prima**. Per far vincere una cartella specifica, quindi, la si scrive **in fondo** al file.
 
 ```bash
-export PATH="/opt/A/bin:$PATH"   # A va davanti
-export PATH="/opt/B/bin:$PATH"   # B va davanti ad A → ordine finale: B, poi A, poi il resto
+# PATH di partenza:                  /usr/bin:/bin
+export PATH="/opt/A/bin:$PATH"     # ora vale /opt/A/bin:/usr/bin:/bin
+export PATH="/opt/B/bin:$PATH"     # ora vale /opt/B/bin:/opt/A/bin:/usr/bin:/bin
+# B è scritta dopo nel file, ma sta prima nel PATH: vince B
 ```
 
-Questa riga, però, vale **solo per la shell corrente** e si perde chiudendo la finestra. Perché una modifica al PATH (o un `export`, o un alias) sia **permanente**, va scritta in un file di configurazione che la shell legge a ogni avvio, argomento del [capitolo 6](06-file-configurazione-shell.md).
+Queste righe, però, valgono **solo per la shell corrente** e si perdono chiudendo la finestra. Perché una modifica al PATH (o un `export`, o un alias) sia **permanente**, va scritta in un file di configurazione che la shell legge a ogni avvio, argomento del [capitolo 6](06-file-configurazione-shell.md).
 
 > [!tip]
 > Se dopo aver installato un programma il terminale risponde `command not found`, il problema quasi sempre non è l'installazione ma il **PATH**: la cartella dove sta l'eseguibile non è (ancora) elencata nel PATH. Verificarlo con `echo $PATH` e cercare l'eseguibile con `which`/`type` è il primo passo di diagnosi.
@@ -174,7 +176,7 @@ Perché vince la **prima** cartella che contiene il comando: le successive non v
 <details>
 <summary>Nel <code>~/.zshrc</code> ho più righe che aggiungono al PATH: quale cartella vince?</summary>
 
-Quella dell'**ultima** riga che antepone (`export PATH="X:$PATH"`): ogni riga mette la sua cartella *davanti* alle precedenti, quindi l'ultima scritta finisce prima nel PATH e ha la precedenza più alta. Per far vincere di proposito una cartella specifica, la si mette **in fondo** al file.
+Vince sempre la cartella che sta **prima nel PATH**. Con più righe del tipo `export PATH="X:$PATH"`, quella cartella è la X dell'**ultima** riga del file, perché ogni riga mette la sua cartella davanti a quelle già presenti: ultima nel file, prima nel PATH. Per far vincere di proposito una cartella specifica, la si mette **in fondo** al file.
 
 </details>
 
