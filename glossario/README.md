@@ -7,6 +7,9 @@ Quando un termine è approfondito in un vault specifico, la voce lo **rimanda** 
 **[Web, browser e rete](docs/web-browser.md)**
 Dominio · Sottodominio · Cross-origin (CORS) · Cache · Motori del browser (Blink/WebKit/Gecko) · Debugger (Chrome DevTools) · Event bubbling
 
+**[Rete: indirizzi IP](docs/rete-indirizzi-ip.md)**
+Indirizzo IP · IPv4 e IPv6 · IP privato (locale) e DHCP · IP pubblico · NAT · localhost e 127.0.0.1 · Porta
+
 **[Rendering: CSR, SSR, SSG](docs/rendering-web.md)**
 Client-Side · Server-Side · Static Site Generation · prima pittura · SEO e crawler · idratazione · CDN vs server applicativo · quando scegliere quale
 

@@ -2,6 +2,7 @@
 
 - **Web e browser**
   - [Web, browser e rete](docs/web-browser.md)
+  - [Rete: indirizzi IP](docs/rete-indirizzi-ip.md)
   - [Rendering: CSR, SSR, SSG](docs/rendering-web.md)
   - [HTTP: codici di stato](docs/http-status.md)
   - [Privacy, cookie e consenso](docs/privacy-cookie.md)

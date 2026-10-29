@@ -1,6 +1,6 @@
 # 03 · Amazon VPC e network security
 
-Una **Amazon Virtual Private Cloud (VPC)** è una **rete privata e isolata** che si ritaglia dentro AWS: si sceglie l'intervallo di indirizzi IP, si divide la rete in sottoreti, si decide cosa può uscire su internet e cosa resta interno. È il luogo dove vivono le risorse (istanze, database, load balancer) e il primo perimetro di sicurezza di un'architettura. Progettare bene la rete significa decidere *chi raggiunge cosa*, e su questo si fonda la protezione dei workload nel Domain 1.
+Una **Amazon Virtual Private Cloud (VPC)** è una **rete privata e isolata** che si ritaglia dentro AWS: si sceglie l'intervallo di <a href="../glossario/#/docs/rete-indirizzi-ip?id=indirizzo-ip" target="_blank" rel="noopener">indirizzi IP</a>, si divide la rete in sottoreti, si decide cosa può uscire su internet e cosa resta interno. È il luogo dove vivono le risorse (istanze, database, load balancer) e il primo perimetro di sicurezza di un'architettura. Progettare bene la rete significa decidere *chi raggiunge cosa*, e su questo si fonda la protezione dei workload nel Domain 1.
 
 > [!info|label:SAA-C03 · D1T2, base D3T4 e D4T4]
 > Il modulo copre *Design secure workloads and applications* per la parte di rete: VPC, subnet, routing, gateway, security group, network ACL, VPC endpoint e connettività fra reti. È anche la base per le scelte di prestazioni (D3T4) e di costo (D4T4) del networking.

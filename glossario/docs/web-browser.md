@@ -4,7 +4,7 @@ Termini legati a come i siti vengono indirizzati, serviti e resi dal browser.
 
 ## Dominio
 
-Un dominio è l'identificatore leggibile che rappresenta un sito su Internet. È composto da **nome** ed **estensione** (TLD, *top-level domain*): in `google.com`, `google` è il nome e `.com` l'estensione. Serve a evitare di dover ricordare l'indirizzo IP numerico del server.
+Un dominio è l'identificatore leggibile che rappresenta un sito su Internet. È composto da **nome** ed **estensione** (TLD, *top-level domain*): in `google.com`, `google` è il nome e `.com` l'estensione. Serve a evitare di dover ricordare l'[indirizzo IP](docs/rete-indirizzi-ip.md?id=indirizzo-ip) numerico del server.
 
 Il collegamento tra dominio e server avviene tramite il **DNS** (*Domain Name System*), che traduce il nome in un indirizzo IP. Quando si digita un indirizzo, il browser interroga il DNS, ottiene l'IP del server web e gli invia la richiesta; il server risponde con i file che compongono il sito. La registrazione di un dominio passa per un *registrar* (es. Verisign, GoDaddy).
 

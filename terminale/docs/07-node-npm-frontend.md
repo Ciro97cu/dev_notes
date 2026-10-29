@@ -76,7 +76,7 @@ Con nvm i pacchetti **globali** sono legati alla **versione di Node** attiva: in
 
 ## Il server di sviluppo
 
-Il comando che si lancia più spesso è `npm run dev`: avvia un **server di sviluppo locale** (con strumenti moderni come **Vite**) che serve l'app all'indirizzo `http://localhost:5173` (la porta varia da tool a tool) e la **ricarica da solo** a ogni salvataggio (*hot reload*). Il terminale resta «occupato» a farlo girare, mostrando l'URL e i log; per **fermarlo** si preme `Ctrl-C`.
+Il comando che si lancia più spesso è `npm run dev`: avvia un **server di sviluppo locale** (con strumenti moderni come **Vite**) che serve l'app all'indirizzo `http://localhost:5173` (<a href="../glossario/#/docs/rete-indirizzi-ip?id=localhost-e-127001" target="_blank" rel="noopener">localhost</a> è il computer stesso, e la <a href="../glossario/#/docs/rete-indirizzi-ip?id=porta" target="_blank" rel="noopener">porta</a> varia da tool a tool) e la **ricarica da solo** a ogni salvataggio (*hot reload*). Il terminale resta «occupato» a farlo girare, mostrando l'URL e i log; per **fermarlo** si preme `Ctrl-C`.
 
 ```bash
 npm run dev
